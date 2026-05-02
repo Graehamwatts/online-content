@@ -46,10 +46,11 @@
   .card { background: var(--card); border: 1px solid var(--border); border-radius: var(--radius); padding: 22px 24px; margin-bottom: 18px; box-shadow: var(--shadow); }
   .card h3 { margin-top: 0; }
 
-  /* AUDIENCE NAV (3-button bar under hero) */
-  .audience-nav { display: grid; grid-template-columns: repeat(3, 1fr); gap: 12px; margin-bottom: 20px; }
-  @media (max-width: 700px) { .audience-nav { grid-template-columns: 1fr; } }
-  .aud-btn { background: #fff; border: 2px solid var(--border); border-radius: var(--radius); padding: 18px 18px; cursor: pointer; transition: transform 0.15s, box-shadow 0.15s, background 0.15s; text-align: left; font-family: inherit; display: block; }
+  /* AUDIENCE NAV (4-tab bar — Research / Eric / Peter / Show All) */
+  .audience-nav { display: grid; grid-template-columns: repeat(4, 1fr); gap: 12px; margin-bottom: 20px; position: sticky; top: 8px; z-index: 50; background: var(--bg); padding: 8px 0; }
+  @media (max-width: 800px) { .audience-nav { grid-template-columns: 1fr 1fr; } }
+  @media (max-width: 480px) { .audience-nav { grid-template-columns: 1fr; position: relative; top: 0; } }
+  .aud-btn { background: #fff; border: 2px solid var(--border); border-radius: var(--radius); padding: 16px 16px; cursor: pointer; transition: transform 0.15s, box-shadow 0.15s, background 0.15s; text-align: left; font-family: inherit; display: block; position: relative; }
   .aud-btn:hover { transform: translateY(-2px); box-shadow: 0 6px 16px rgba(0,0,0,0.08); }
   .aud-research { border-color: var(--navy); }
   .aud-research:hover { background: #f7f9fc; }
@@ -57,10 +58,34 @@
   .aud-eric:hover { background: #fef3c7; }
   .aud-peter { border-color: var(--purple); background: linear-gradient(135deg, #f3e5f5 0%, #ffffff 100%); }
   .aud-peter:hover { background: #ede7f0; }
-  .aud-icon { font-size: 26px; line-height: 1; margin-bottom: 8px; }
-  .aud-label { font-family: 'Plus Jakarta Sans', sans-serif; font-weight: 800; color: var(--navy); font-size: 15px; margin-bottom: 4px; }
-  .aud-sub { font-size: 12px; color: var(--muted); line-height: 1.4; }
-  .aud-arrow { font-size: 14px; color: var(--navy); margin-top: 8px; font-weight: 700; }
+  .aud-all { border-color: #4a5568; background: #fafbfc; }
+  .aud-all:hover { background: #edf0f4; }
+  .aud-icon { font-size: 24px; line-height: 1; margin-bottom: 6px; }
+  .aud-label { font-family: 'Plus Jakarta Sans', sans-serif; font-weight: 800; color: var(--navy); font-size: 14px; margin-bottom: 3px; }
+  .aud-sub { font-size: 11px; color: var(--muted); line-height: 1.4; }
+  .aud-arrow { display: none; }
+  /* ACTIVE TAB STATE — bold, raised, color-filled */
+  .aud-btn.aud-active { transform: translateY(-3px); box-shadow: 0 10px 24px rgba(0,0,0,0.18); }
+  .aud-btn.aud-active::after { content: '●'; position: absolute; top: 8px; right: 12px; font-size: 14px; color: rgba(255,255,255,0.9); }
+  .aud-research.aud-active { background: var(--navy); }
+  .aud-research.aud-active .aud-label, .aud-research.aud-active .aud-sub { color: #fff; }
+  .aud-research.aud-active .aud-sub { color: rgba(255,255,255,0.85); }
+  .aud-eric.aud-active { background: var(--gold); }
+  .aud-eric.aud-active .aud-label { color: var(--navy); }
+  .aud-eric.aud-active .aud-sub { color: rgba(27,42,74,0.85); }
+  .aud-eric.aud-active::after { color: var(--navy); }
+  .aud-peter.aud-active { background: var(--purple); }
+  .aud-peter.aud-active .aud-label, .aud-peter.aud-active .aud-sub { color: #fff; }
+  .aud-peter.aud-active .aud-sub { color: rgba(255,255,255,0.85); }
+  .aud-all.aud-active { background: #2d3748; }
+  .aud-all.aud-active .aud-label, .aud-all.aud-active .aud-sub { color: #fff; }
+  .aud-all.aud-active .aud-sub { color: rgba(255,255,255,0.85); }
+  /* Hidden sections (when tab filter excludes them) */
+  .aud-hidden { display: none !important; }
+  /* "Now viewing" banner that appears in non-All views */
+  .view-banner { background: #fff8e1; border: 1px solid #f5d273; border-radius: 8px; padding: 10px 14px; margin-bottom: 16px; font-size: 13px; color: #5d4a1f; display: none; }
+  .view-banner.show { display: block; }
+  .view-banner strong { color: var(--navy); }
 
   /* HOW-TO */
   .howto-steps { display: grid; grid-template-columns: repeat(3, 1fr); gap: 14px; margin-top: 12px; }
@@ -196,7 +221,7 @@
 <div class="wrap">
 
 <!-- HERO -->
-<section class="hero">
+<section class="hero" data-audience="all research eric peter">
   <h1>Woodland Park's 772-Unit Development — What It Actually Means For Your East Palo Alto Home Value</h1>
   <div class="hero-meta">
     <span class="hm-pill" title="Geographic + audience scope">📍 East Palo Alto · Sellers + Curious Owners</span>
@@ -226,30 +251,37 @@
   </details>
 </section>
 
-<!-- AUDIENCE NAV — 3 jump buttons -->
-<section class="audience-nav" aria-label="Quick jump by audience">
-  <button type="button" class="aud-btn aud-research" onclick="jumpToAudience('research')">
+<!-- AUDIENCE NAV — 4 tab buttons (filter what's visible on the page) -->
+<nav class="audience-nav" role="tablist" aria-label="View by audience">
+  <button type="button" class="aud-btn aud-research" role="tab" onclick="setView('research')">
     <div class="aud-icon">🔬</div>
     <div class="aud-label">Research Data</div>
-    <div class="aud-sub">7 sources · why this topic this week</div>
-    <div class="aud-arrow">Jump down →</div>
+    <div class="aud-sub">Sources · scoring · why this topic</div>
   </button>
-  <button type="button" class="aud-btn aud-eric" onclick="jumpToAudience('eric')">
+  <button type="button" class="aud-btn aud-eric" role="tab" onclick="setView('eric')">
     <div class="aud-icon">📝</div>
     <div class="aud-label">Eric — Blog &amp; SEO</div>
-    <div class="aud-sub">Blog post body · meta · GMB · internal linking</div>
-    <div class="aud-arrow">Jump to blog panel →</div>
+    <div class="aud-sub">Blog · GMB · Newsletter · FB</div>
   </button>
-  <button type="button" class="aud-btn aud-peter" onclick="jumpToAudience('peter')">
+  <button type="button" class="aud-btn aud-peter" role="tab" onclick="setView('peter')">
     <div class="aud-icon">🎬</div>
     <div class="aud-label">Peter — Video Production</div>
-    <div class="aud-sub">Scripts · production prompts · shot list · render</div>
-    <div class="aud-arrow">Jump to video panel →</div>
+    <div class="aud-sub">Scripts · production · shot list</div>
   </button>
-</section>
+  <button type="button" class="aud-btn aud-all aud-active" role="tab" onclick="setView('all')">
+    <div class="aud-icon">📂</div>
+    <div class="aud-label">Show Everything</div>
+    <div class="aud-sub">Full unified dashboard</div>
+  </button>
+</nav>
+
+<!-- "Now viewing" banner — shows the active tab + how to switch -->
+<div id="viewBanner" class="view-banner">
+  <strong>Now viewing:</strong> <span id="viewBannerLabel"></span>. Switch tabs above to change views, or click <strong>Show Everything</strong> for the full dashboard.
+</div>
 
 <!-- HOW-TO -->
-<section class="card">
+<section class="card" data-audience="all research eric peter">
   <h3>How to use this dashboard</h3>
   <div class="howto-steps">
     <div class="howto-step"><span class="num">1</span><strong>Eric:</strong> click any panel, then the gold "Copy Content" button. Paste into the destination platform.</div>
@@ -260,7 +292,7 @@
 </section>
 
 <!-- TIMING -->
-<section class="card">
+<section class="card" data-audience="all peter">
   <h3>Video duration — math shown</h3>
   <div class="timing-card">
     <div class="timing-math">792 words ÷ 150 WPM × 1.15 buffer = <strong>6.07 minutes</strong></div>
@@ -269,7 +301,7 @@
 </section>
 
 <!-- FAIR HOUSING -->
-<section class="card">
+<section class="card" data-audience="all research eric peter">
   <div class="fh-banner">
     <span class="fh-status">✓ Fair Housing Compliant</span>
     <span class="fh-detail">No demographic framing of the development. No school quality references. No "neighborhood character" code. Discussion limited to: unit count, density, transit impact, supply pressure, infrastructure investment, property-value math.</span>
@@ -277,7 +309,7 @@
 </section>
 
 <!-- INTELLIGENCE STACK -->
-<section class="card">
+<section class="card" data-audience="all research">
   <h2 class="sh">Intelligence Stack — Why This Topic Ships</h2>
   <p style="font-size:13px;color:var(--muted)">7 independent sources flagged this topic. Convergence rank #4 in this week's calendar.</p>
   <div class="isp-grid">
@@ -292,7 +324,7 @@
 </section>
 
 <!-- SHOW RESEARCH DATA -->
-<section class="card" id="audience-research">
+<section class="card" id="audience-research" data-audience="all research">
   <h2 class="sh">Show Full Research Data</h2>
   <button class="toggle-btn" onclick="document.getElementById('researchPanel').classList.toggle('open'); this.textContent = this.textContent.includes('Show') ? 'Hide research data' : 'Show research data ↓';">Show research data ↓</button>
   <div id="researchPanel" class="research-panel">
@@ -356,7 +388,7 @@
 </section>
 
 <!-- SCORING ARCHITECTURE PANEL (Rule 13) -->
-<section class="card">
+<section class="card" data-audience="all research">
   <h2 class="sh">Scoring Architecture — Why This Topic Ships</h2>
   <p style="font-size:13px;color:var(--muted)">Two scores answer two different questions. Opportunity Score = "should we cover this topic THIS WEEK vs other candidates?" (owned by content-calendar). Intent Score = "what's the BOFU intent for CTA/funnel decisions?" (owned by bofu-intent-scorer).</p>
   <div class="sa-grid">
@@ -399,14 +431,14 @@
 </section>
 
 <!-- CALENDAR INTEGRATION -->
-<section class="card">
+<section class="card" data-audience="all peter eric">
   <div class="cal-banner">
     <strong>Calendar slot:</strong> Wednesday 2026-04-30. Funnel tier: BOFU. GHL keyword: <code>VALUE</code>. Cross-posts: YouTube Long → Short → IG Reel #1 + Carousel + TikTok + Blog + GMB + FB. See <a href="https://graehamwatts.github.io/online-content/dashboards/weekly-calendars/2026-04-27-production-calendar-v6.html" style="color:var(--purple);font-weight:700">production calendar v6</a>.
   </div>
 </section>
 
 <!-- CONTENT DERIVATIVES -->
-<section class="card" id="content-derivatives">
+<section class="card" id="content-derivatives" data-audience="all eric peter">
   <span id="audience-eric" style="display:block;position:relative;top:-20px;visibility:hidden"></span>
   <span id="audience-peter" style="display:block;position:relative;top:-20px;visibility:hidden"></span>
   <h2 class="sh">Content Derivatives — 14 Formats</h2>
@@ -429,7 +461,7 @@
 <!-- PANELS -->
 
 <!-- YT Long Pt1 -->
-<div class="deriv-panel active" id="panel-yt-long-pt1">
+<div class="deriv-panel active" id="panel-yt-long-pt1" data-audience="all peter">
   <div class="prompt-card">
     <div class="pc-h"><div class="pc-label">YouTube Long Pt1 — Script + Voice Side</div><div class="pc-meta">8-15 min · 16:9 · 1080p</div></div>
     <div class="content-section">
@@ -465,7 +497,7 @@ The Woodland Park redevelopment is the largest housing project in EPA's history.
 </div>
 
 <!-- YT Long Pt2 -->
-<div class="deriv-panel" id="panel-yt-long-pt2">
+<div class="deriv-panel" id="panel-yt-long-pt2" data-audience="all peter">
   <div class="prompt-card">
     <div class="pc-h"><div class="pc-label">YouTube Long Pt2 — Production Package</div><div class="pc-meta">B-roll · Editing notes · Shot list · AI video prompts · SEO · Alt hooks</div></div>
     <div class="content-section">
@@ -515,7 +547,7 @@ PACING NOTES: Open energetic (1-2 sec cuts). Slow to data section (5-7 sec holds
 </div>
 
 <!-- YT Short -->
-<div class="deriv-panel" id="panel-yt-short">
+<div class="deriv-panel" id="panel-yt-short" data-audience="all peter">
   <div class="prompt-card">
     <div class="pc-h"><div class="pc-label">YouTube Short</div><div class="pc-meta">30-59 sec · 9:16 · 1080p · Hook-led</div></div>
     <div class="content-section">
@@ -551,7 +583,7 @@ PACING NOTES: Open energetic (1-2 sec cuts). Slow to data section (5-7 sec holds
 </div>
 
 <!-- IG Reel #1 -->
-<div class="deriv-panel" id="panel-ig-reel-1">
+<div class="deriv-panel" id="panel-ig-reel-1" data-audience="all peter">
   <div class="prompt-card">
     <div class="pc-h"><div class="pc-label">IG Reel #1 — Hook-led</div><div class="pc-meta">30-60 sec · 9:16 · Face-to-camera + B-roll</div></div>
     <div class="content-section">
@@ -590,7 +622,7 @@ The data isn't what most people are assuming. Comment VALUE and I'll send you th
 </div>
 
 <!-- Other panels — placeholder structure (full content in real run) -->
-<div class="deriv-panel" id="panel-ig-reel-2">
+<div class="deriv-panel" id="panel-ig-reel-2" data-audience="all peter">
   <div class="prompt-card">
     <div class="pc-h"><div class="pc-label">IG Reel #2 — Data-forward</div><div class="pc-meta">15-30 sec · 9:16 · B-roll heavy</div></div>
     <div class="content-section">
@@ -607,7 +639,7 @@ The data isn't what most people are assuming. Comment VALUE and I'll send you th
   </div>
 </div>
 
-<div class="deriv-panel" id="panel-ig-carousel">
+<div class="deriv-panel" id="panel-ig-carousel" data-audience="all peter">
   <div class="prompt-card">
     <div class="pc-h"><div class="pc-label">IG Carousel — 7 Slides</div><div class="pc-meta">1:1 or 4:5 · Stat-forward design</div></div>
     <div class="content-section">
@@ -628,7 +660,7 @@ SLIDE 7: "Comment VALUE for the full breakdown"</div>
   </div>
 </div>
 
-<div class="deriv-panel" id="panel-tiktok">
+<div class="deriv-panel" id="panel-tiktok" data-audience="all peter">
   <div class="prompt-card">
     <div class="pc-h"><div class="pc-label">TikTok</div><div class="pc-meta">30-60 sec · 9:16 · Casual</div></div>
     <div class="content-section">
@@ -644,7 +676,7 @@ SLIDE 7: "Comment VALUE for the full breakdown"</div>
   </div>
 </div>
 
-<div class="deriv-panel" id="panel-blog">
+<div class="deriv-panel" id="panel-blog" data-audience="all eric">
   <div class="prompt-card">
     <div class="pc-h"><div class="pc-label">Blog Post — AEO + JSON-LD Schema + RSS Internal Links</div><div class="pc-meta">800-1,200 words · graehamwatts.com/blog</div></div>
     <div class="content-section">
@@ -668,7 +700,7 @@ Here's what the data actually shows about how a development of this size affects
   </div>
 </div>
 
-<div class="deriv-panel" id="panel-gmb">
+<div class="deriv-panel" id="panel-gmb" data-audience="all eric">
   <div class="prompt-card">
     <div class="pc-h"><div class="pc-label">Google My Business Post</div><div class="pc-meta">100-300 words · Local SEO</div></div>
     <div class="content-section">
@@ -687,7 +719,7 @@ The City of East Palo Alto approved the 772-unit Woodland Park redevelopment in 
   </div>
 </div>
 
-<div class="deriv-panel" id="panel-facebook">
+<div class="deriv-panel" id="panel-facebook" data-audience="all eric">
   <div class="prompt-card">
     <div class="pc-h"><div class="pc-label">Facebook Post</div><div class="pc-meta">200-400 words</div></div>
     <div class="content-section">
@@ -704,7 +736,7 @@ The City of East Palo Alto approved the 772-unit Woodland Park redevelopment in 
   </div>
 </div>
 
-<div class="deriv-panel" id="panel-email">
+<div class="deriv-panel" id="panel-email" data-audience="all eric">
   <div class="prompt-card">
     <div class="pc-h"><div class="pc-label">Email Newsletter — Lead Section</div><div class="pc-meta">~400 words · graehamwatts.com mailing list</div></div>
     <div class="content-section">
@@ -726,7 +758,7 @@ Preview: "If you own in EPA, this affects your equity in three specific ways."
 </div>
 
 <!-- SHOT LIST -->
-<section class="card">
+<section class="card" data-audience="all peter">
   <h2 class="sh">Shot List — 12 Shots for Production</h2>
   <table class="shotlist-table">
     <thead><tr><th>#</th><th>Shot</th><th>Duration</th><th>Setup notes</th></tr></thead>
@@ -748,7 +780,7 @@ Preview: "If you own in EPA, this affects your equity in three specific ways."
 </section>
 
 <!-- ALT HOOKS -->
-<section class="card">
+<section class="card" data-audience="all eric peter">
   <h2 class="sh">3 Alternate Hooks for A/B Testing</h2>
   <div class="hooks-grid">
     <div class="hook-card picked">
@@ -768,7 +800,7 @@ Preview: "If you own in EPA, this affects your equity in three specific ways."
 </section>
 
 <!-- AUTO-RENDER HANDOFF -->
-<section class="render-card">
+<section class="render-card" data-audience="all peter">
   <div class="render-h">🎬 Auto-Render Hand-off — heygen-elevenlabs-renderer</div>
   <p style="font-size:13px;margin-top:8px">Once Peter approves the script, hand off to the renderer. One PowerShell command. Output: MP4 in <code>outputs/renders/woodland-park-772-units.mp4</code> + sibling meta JSON with HeyGen video_id and dashboard URL.</p>
   <div class="render-meta">python3 skills/heygen-elevenlabs-renderer/scripts/full_render.py --script outputs/content-package-2026-04-30-woodland-park-772-units.ssml.txt --slug "woodland-park-772-units" --avatar digital_twin --aspect 16:9 --resolution 1080p</div>
@@ -796,8 +828,25 @@ document.querySelectorAll('.flow-card').forEach(card => {
   });
 });
 
-// Audience jump: switches the active panel + smooth-scrolls to the right section.
-// All sections remain interchangeable — these buttons are just navigation shortcuts.
+// === TAB SYSTEM ===
+// Each major <section> has a data-audience attribute (space-separated list).
+// setView('eric') hides every section that doesn't include 'eric' in its data-audience.
+// 'all' shows everything (the default unified view).
+// URL hash updates so emails can deep-link, and back-button works.
+
+const FLOW_CARD_AUDIENCES = {
+  'yt-long-pt1': 'peter', 'yt-long-pt2': 'peter', 'yt-short': 'peter',
+  'ig-reel-1': 'peter', 'ig-reel-2': 'peter', 'ig-carousel': 'peter', 'tiktok': 'peter',
+  'blog': 'eric', 'gmb': 'eric', 'facebook': 'eric', 'email': 'eric'
+};
+
+const VIEW_LABELS = {
+  research: 'Research Data — sources, scoring, why this topic was picked',
+  eric: 'Eric — Blog & SEO content (blog post, GMB, newsletter, Facebook)',
+  peter: 'Peter — Video Production (scripts, prompts, shot list, render handoff)',
+  all: 'Everything (full unified dashboard)'
+};
+
 function activateFormatCard(targetKey) {
   document.querySelectorAll('.flow-card').forEach(c => c.classList.remove('active'));
   document.querySelectorAll('.deriv-panel').forEach(p => p.classList.remove('active'));
@@ -806,30 +855,77 @@ function activateFormatCard(targetKey) {
   if (card) card.classList.add('active');
   if (panel) panel.classList.add('active');
 }
-function jumpToAudience(audience) {
-  if (audience === 'research') {
-    const el = document.getElementById('audience-research');
-    if (el) el.scrollIntoView({behavior:'smooth', block:'start'});
-    // Also auto-open the Show Full Research Data panel for convenience
-    const rp = document.getElementById('researchPanel');
-    if (rp && !rp.classList.contains('open')) rp.classList.add('open');
-  } else if (audience === 'eric') {
+
+function setView(view, opts) {
+  opts = opts || {};
+  // 1. Show/hide every section based on data-audience match
+  document.querySelectorAll('[data-audience]').forEach(el => {
+    const audiences = (el.dataset.audience || '').split(/\s+/);
+    const visible = (view === 'all') || audiences.includes('all') || audiences.includes(view);
+    el.classList.toggle('aud-hidden', !visible);
+  });
+  // 2. Filter the flow-grid cards (only show cards relevant to this view)
+  document.querySelectorAll('.flow-card').forEach(card => {
+    const target = card.dataset.target;
+    const cardAudience = FLOW_CARD_AUDIENCES[target] || 'both';
+    const visible = (view === 'all') || (cardAudience === view);
+    card.classList.toggle('aud-hidden', !visible);
+  });
+  // 3. Auto-activate a sensible default panel for Eric/Peter so the view isn't empty
+  if (view === 'eric') {
     activateFormatCard('blog');
-    const el = document.getElementById('content-derivatives');
-    if (el) el.scrollIntoView({behavior:'smooth', block:'start'});
-  } else if (audience === 'peter') {
+  } else if (view === 'peter') {
     activateFormatCard('yt-long-pt1');
-    const el = document.getElementById('content-derivatives');
-    if (el) el.scrollIntoView({behavior:'smooth', block:'start'});
+  } else if (view === 'research') {
+    // Auto-expand the Show Full Research Data panel
+    const rp = document.getElementById('researchPanel');
+    if (rp && !rp.classList.contains('open')) {
+      rp.classList.add('open');
+      const tb = document.querySelector('.toggle-btn');
+      if (tb) tb.textContent = 'Hide research data';
+    }
+  }
+  // 4. Update tab visual state
+  document.querySelectorAll('.aud-btn').forEach(b => b.classList.remove('aud-active'));
+  const activeBtn = document.querySelector('.aud-' + view);
+  if (activeBtn) activeBtn.classList.add('aud-active');
+  // 5. Update "Now viewing" banner
+  const banner = document.getElementById('viewBanner');
+  const label = document.getElementById('viewBannerLabel');
+  if (banner && label) {
+    if (view === 'all') {
+      banner.classList.remove('show');
+    } else {
+      label.textContent = VIEW_LABELS[view] || view;
+      banner.classList.add('show');
+    }
+  }
+  // 6. Update URL hash + browser history (so back-button works)
+  if (!opts.skipHistory) {
+    const newHash = (view === 'all') ? '' : '#audience-' + view;
+    history.pushState({view}, '', window.location.pathname + window.location.search + newHash);
+  }
+  // 7. Scroll back to top of page so the view-switch is obvious
+  if (!opts.noScroll) {
+    window.scrollTo({top: 0, behavior: 'smooth'});
   }
 }
-// Hash routing: deep-link from emails (e.g. #audience-eric, #audience-peter, #audience-research)
+
+// Hash routing: deep-link from emails (e.g. #audience-eric)
 window.addEventListener('DOMContentLoaded', () => {
   const hash = window.location.hash.replace('#audience-', '');
-  if (['research','eric','peter'].includes(hash)) {
-    // Slight delay so panels are settled
-    setTimeout(() => jumpToAudience(hash), 100);
+  if (['research','eric','peter','all'].includes(hash)) {
+    setView(hash, {skipHistory: true, noScroll: true});
+  } else {
+    // Default to "all" view on initial load (no hash specified)
+    setView('all', {skipHistory: true, noScroll: true});
   }
+});
+
+// Browser back/forward navigation between tab states
+window.addEventListener('popstate', (e) => {
+  const view = (e.state && e.state.view) || 'all';
+  setView(view, {skipHistory: true, noScroll: true});
 });
 
 // Stub copy handlers — in production these read from window.PROMPT_LIBRARY / window.CONTENT_LIBRARY
