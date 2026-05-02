@@ -87,10 +87,17 @@
   .view-banner.show { display: block; }
   .view-banner strong { color: var(--navy); }
 
-  /* HOW-TO */
-  .howto-steps { display: grid; grid-template-columns: repeat(3, 1fr); gap: 14px; margin-top: 12px; }
-  .howto-step { background: #fafbfc; border: 1px solid var(--border); border-radius: 8px; padding: 14px 16px; }
+  /* HOW-TO — flex-based so when only 1 step is visible it expands to full width */
+  .howto-steps { display: flex; flex-wrap: wrap; gap: 14px; margin-top: 12px; }
+  .howto-step { background: #fafbfc; border: 1px solid var(--border); border-radius: 8px; padding: 14px 18px; flex: 1 1 220px; min-width: 0; }
   .howto-step .num { display: inline-block; width: 26px; height: 26px; background: var(--navy); color: #fff; border-radius: 50%; text-align: center; line-height: 26px; font-weight: 700; font-size: 13px; margin-bottom: 8px; }
+  .howto-step.eric-step .num { background: var(--gold); color: var(--navy); }
+  .howto-step.peter-step .num { background: var(--purple); color: #fff; }
+  .howto-step.research-step .num { background: var(--navy); color: #fff; }
+  .howto-step .step-tag { display: inline-block; padding: 2px 8px; border-radius: 100px; font-size: 10px; font-weight: 800; letter-spacing: 0.5px; text-transform: uppercase; margin-left: 8px; vertical-align: middle; }
+  .howto-step.eric-step .step-tag { background: var(--gold); color: var(--navy); }
+  .howto-step.peter-step .step-tag { background: var(--purple); color: #fff; }
+  .howto-step.research-step .step-tag { background: var(--navy); color: #fff; }
 
   /* TIMING */
   .timing-card { display: grid; grid-template-columns: 1fr 1fr; gap: 20px; align-items: center; }
@@ -261,7 +268,7 @@
   <button type="button" class="aud-btn aud-eric" role="tab" onclick="setView('eric')">
     <div class="aud-icon">📝</div>
     <div class="aud-label">Eric — Blog &amp; SEO</div>
-    <div class="aud-sub">Blog · GMB · Newsletter · FB</div>
+    <div class="aud-sub">Blog post · GMB post · meta · linking</div>
   </button>
   <button type="button" class="aud-btn aud-peter" role="tab" onclick="setView('peter')">
     <div class="aud-icon">🎬</div>
@@ -280,15 +287,24 @@
   <strong>Now viewing:</strong> <span id="viewBannerLabel"></span>. Switch tabs above to change views, or click <strong>Show Everything</strong> for the full dashboard.
 </div>
 
-<!-- HOW-TO -->
+<!-- HOW-TO — each step is filtered independently by data-audience -->
 <section class="card" data-audience="all research eric peter">
   <h3>How to use this dashboard</h3>
   <div class="howto-steps">
-    <div class="howto-step"><span class="num">1</span><strong>Eric:</strong> click any panel, then the gold "Copy Content" button. Paste into the destination platform.</div>
-    <div class="howto-step"><span class="num">2</span><strong>Peter:</strong> click a video panel, then "Copy Script Prompt" or "Copy Production Prompt." Paste into your AI tool to regenerate.</div>
-    <div class="howto-step"><span class="num">3</span><strong>Both:</strong> open "Show Full Research Data" below for the source data backing this topic.</div>
+    <div class="howto-step eric-step" data-audience="all eric">
+      <span class="num">1</span><span class="step-tag">Eric · Blog &amp; SEO</span>
+      <p style="margin:8px 0 0">Click the <strong>Blog Post</strong> panel or <strong>GMB Post</strong> panel below, then click the gold <strong>"Copy Content"</strong> button. Paste the blog body into the website CMS, or the GMB content into Google Business Profile. Use one of the SEO-scored title options from the email. The panel also has the meta description + internal linking suggestions.</p>
+    </div>
+    <div class="howto-step peter-step" data-audience="all peter">
+      <span class="num">2</span><span class="step-tag">Peter · Video</span>
+      <p style="margin:8px 0 0">Click any video panel below (YouTube Long, Reels, TikTok, etc.), then click <strong>"Copy Script Prompt"</strong> or <strong>"Copy Production Prompt"</strong>. Paste into your AI tool to regenerate the script + production package. Run script through ElevenLabs → HeyGen → hand finished MP4 to Jason for editing using the Shot List below.</p>
+    </div>
+    <div class="howto-step research-step" data-audience="all research">
+      <span class="num">3</span><span class="step-tag">Research · Both</span>
+      <p style="margin:8px 0 0">This view shows the data behind why this topic was picked — 7 sources converged on the same audience question this week. Click <strong>"Show Full Research Data"</strong> below to drill into the GSC queries, Reddit threads, YouTube comments, and Zillow Q&amp;A. The Scoring Architecture section explains the Opportunity (22/25) and Intent (21/25) breakdowns.</p>
+    </div>
   </div>
-  <p style="font-size:12px;color:var(--muted);margin-top:14px"><strong>Sections are interchangeable</strong> — the 3 buttons above are quick jumps. You can scroll freely between Research, Eric (blog), and Peter (video) at any time using the format flow grid further down.</p>
+  <p style="font-size:12px;color:var(--muted);margin-top:14px" data-audience="all"><strong>Sections are interchangeable</strong> — switch tabs at the top anytime. The format flow grid further down is also live.</p>
 </section>
 
 <!-- TIMING -->
@@ -719,7 +735,7 @@ The City of East Palo Alto approved the 772-unit Woodland Park redevelopment in 
   </div>
 </div>
 
-<div class="deriv-panel" id="panel-facebook" data-audience="all eric">
+<div class="deriv-panel" id="panel-facebook" data-audience="all">
   <div class="prompt-card">
     <div class="pc-h"><div class="pc-label">Facebook Post</div><div class="pc-meta">200-400 words</div></div>
     <div class="content-section">
@@ -736,7 +752,7 @@ The City of East Palo Alto approved the 772-unit Woodland Park redevelopment in 
   </div>
 </div>
 
-<div class="deriv-panel" id="panel-email" data-audience="all eric">
+<div class="deriv-panel" id="panel-email" data-audience="all">
   <div class="prompt-card">
     <div class="pc-h"><div class="pc-label">Email Newsletter — Lead Section</div><div class="pc-meta">~400 words · graehamwatts.com mailing list</div></div>
     <div class="content-section">
@@ -837,14 +853,16 @@ document.querySelectorAll('.flow-card').forEach(card => {
 const FLOW_CARD_AUDIENCES = {
   'yt-long-pt1': 'peter', 'yt-long-pt2': 'peter', 'yt-short': 'peter',
   'ig-reel-1': 'peter', 'ig-reel-2': 'peter', 'ig-carousel': 'peter', 'tiktok': 'peter',
-  'blog': 'eric', 'gmb': 'eric', 'facebook': 'eric', 'email': 'eric'
+  'blog': 'eric', 'gmb': 'eric'
+  // facebook + email omitted intentionally: they only appear in "Show Everything" view.
+  // Eric is scoped to blog + GMB only (per Graeham 2026-05-02). Reassign here if those move to John or Peter later.
 };
 
 const VIEW_LABELS = {
-  research: 'Research Data — sources, scoring, why this topic was picked',
-  eric: 'Eric — Blog & SEO content (blog post, GMB, newsletter, Facebook)',
+  research: 'Research Data — sources, scoring, why this topic was picked this week',
+  eric: 'Eric — Blog & SEO (blog post + GMB post only)',
   peter: 'Peter — Video Production (scripts, prompts, shot list, render handoff)',
-  all: 'Everything (full unified dashboard)'
+  all: 'Everything (full unified dashboard with all 14 derivative formats)'
 };
 
 function activateFormatCard(targetKey) {
