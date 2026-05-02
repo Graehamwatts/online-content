@@ -858,10 +858,13 @@ function activateFormatCard(targetKey) {
 
 function setView(view, opts) {
   opts = opts || {};
-  // 1. Show/hide every section based on data-audience match
+  // 1. Show/hide every section based on data-audience match.
+  // A section is visible only if its data-audience list contains the current view name.
+  // Universal sections (hero, footer, fair-housing) include all four view names so they
+  // always show. View-specific sections only list their relevant views.
   document.querySelectorAll('[data-audience]').forEach(el => {
     const audiences = (el.dataset.audience || '').split(/\s+/);
-    const visible = (view === 'all') || audiences.includes('all') || audiences.includes(view);
+    const visible = audiences.includes(view);
     el.classList.toggle('aud-hidden', !visible);
   });
   // 2. Filter the flow-grid cards (only show cards relevant to this view)
