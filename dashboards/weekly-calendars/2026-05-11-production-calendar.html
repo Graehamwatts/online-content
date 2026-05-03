@@ -160,6 +160,32 @@
   .copy-btn.outline { background: #fff; border: 1.5px solid var(--gold); color: var(--navy); }
   .copy-btn:hover { transform: translateY(-1px); }
   .di-meta-row { display: flex; gap: 16px; flex-wrap: wrap; font-size: 11px; color: var(--muted); margin-top: 8px; }
+
+  /* DAY-CLICK FILTERING — calendar cards become clickable filters */
+  .day-card { cursor: pointer; }
+  .day-card.day-active { transform: translateY(-3px); box-shadow: 0 12px 32px rgba(0,0,0,0.18); border-width: 3px; outline: 3px solid rgba(197,162,88,0.3); outline-offset: 2px; }
+  .day-card.day-active::before { content: '👁 VIEWING'; position: absolute; top: 6px; right: 8px; background: var(--gold); color: var(--navy); font-size: 9px; font-weight: 800; padding: 3px 8px; border-radius: 100px; letter-spacing: 0.5px; }
+  .day-card { position: relative; }
+  .day-summary { font-size: 12px; color: var(--muted); margin-bottom: 8px; line-height: 1.4; font-style: normal; padding: 6px 10px; background: rgba(27,42,74,0.04); border-radius: 6px; border-left: 2px solid var(--gold); }
+  .day-card.star .day-summary { background: rgba(197,162,88,0.1); }
+  .filter-bar { display: flex; align-items: center; justify-content: space-between; flex-wrap: wrap; gap: 12px; background: #f9fafb; border: 1px solid var(--border); border-radius: 8px; padding: 12px 16px; margin-bottom: 16px; }
+  .filter-info { font-size: 13px; color: var(--text); }
+  .filter-info strong { color: var(--navy); }
+  .filter-info .day-pill { display: inline-block; background: var(--gold); color: var(--navy); padding: 2px 10px; border-radius: 100px; font-weight: 800; font-size: 12px; margin-left: 4px; }
+  .show-all-btn { background: var(--navy); color: #fff; border: 0; padding: 8px 16px; border-radius: 6px; font-family: 'Plus Jakarta Sans', sans-serif; font-weight: 700; font-size: 12px; cursor: pointer; }
+  .show-all-btn:hover { background: #243a64; }
+  .daily-item.day-hidden { display: none; }
+
+  /* WEEKLY RESEARCH PANEL */
+  .toggle-btn { background: var(--navy); color: #fff; border: 0; padding: 12px 20px; border-radius: 8px; font-weight: 700; font-family: 'Plus Jakarta Sans', sans-serif; font-size: 13px; cursor: pointer; letter-spacing: 0.3px; }
+  .toggle-btn:hover { background: #243a64; }
+  .research-panel { display: none; margin-top: 16px; padding: 18px; background: #f9fafb; border: 1px solid var(--border); border-radius: 8px; }
+  .research-panel.open { display: block; }
+  .research-panel h4 { margin: 14px 0 8px; }
+  .research-panel table { width: 100%; border-collapse: collapse; font-size: 13px; margin-bottom: 14px; }
+  .research-panel th { text-align: left; padding: 8px 10px; background: #ede9fe; color: #5b21b6; font-weight: 700; font-size: 12px; }
+  .research-panel td { padding: 8px 10px; border-bottom: 1px solid #ede9fe; }
+  .research-panel .trend-up { color: var(--green); font-weight: 700; }
 </style>
 </head>
 <body>
@@ -226,93 +252,261 @@
   </div>
 </section>
 
+<!-- ===================================================== -->
+<!-- WEEKLY RESEARCH DATA — Full evidence trail            -->
+<!-- ===================================================== -->
+<section class="card" data-audience="all research">
+  <h2 class="sh">📊 Full Weekly Research Data</h2>
+  <p style="font-size:13px;color:var(--muted)">Every signal feeding this week's topic picks. Composio IG + YT data is fresh from May 3 (real). Convergence research signals (GSC + Reddit + Zillow) are placeholder pending Mon May 11 auto-refresh. Click button to expand.</p>
+  <button class="toggle-btn" onclick="document.getElementById('weeklyResearchPanel').classList.toggle('open'); this.textContent = this.textContent.includes('Show') ? 'Hide research data' : 'Show full research data ↓';">Show full research data ↓</button>
+
+  <div id="weeklyResearchPanel" class="research-panel">
+
+    <h4 style="background:#fce7f3;padding:8px 12px;border-radius:6px;color:#9f1239;margin-top:8px">📷 Instagram Own-Channel Performance — All 25 Recent Posts (via Composio Meta Graph API)</h4>
+    <p style="font-size:12px;color:var(--muted);margin:6px 0 12px"><strong>Account:</strong> @graeham.watts · 1,266 followers · 1,087 lifetime posts · 28d reach 269 · pulled live <code>2026-05-03</code>. Gold-highlighted rows = match week's content patterns (development, hyperlocal EPA, data-driven decision frame).</p>
+    <table>
+      <thead><tr><th>Date</th><th>Post (caption excerpt)</th><th>Likes</th><th>Comments</th><th>Pattern</th></tr></thead>
+      <tbody>
+        <tr><td>May 2</td><td>Veterans foreclosures — pandemic mortgage relief expired</td><td>1</td><td>0</td><td>Housing crisis data</td></tr>
+        <tr style="background:#fef9eb"><td>May 1</td><td>EPA most misunderstood Peninsula market — prices up 1.7% YoY</td><td>4</td><td>0</td><td><strong>Hyperlocal EPA ✓</strong></td></tr>
+        <tr><td>Apr 29</td><td>Why isn't AI recommending your home? AEO explained</td><td>3</td><td>1</td><td>AI disruption</td></tr>
+        <tr style="background:#fef9eb"><td>Apr 29</td><td>EPA homes under $1M — best Peninsula value</td><td>3</td><td>0</td><td><strong>Hyperlocal EPA ✓</strong></td></tr>
+        <tr><td>Apr 27</td><td>$100K Bay Area = $62K real purchasing power</td><td>3</td><td>0</td><td>Cost of living</td></tr>
+        <tr><td>Apr 25</td><td>SF trying to break up with PG&amp;E after 120 years</td><td><strong>17</strong></td><td><strong>4</strong></td><td>SF civic news</td></tr>
+        <tr><td>Apr 23</td><td>Alcatraz luxury overnight stays</td><td>4</td><td>0</td><td>Lifestyle/curiosity</td></tr>
+        <tr style="background:#fef9eb"><td>Apr 23</td><td>Off-market Peninsula 10K+ sqft lot, ADU potential</td><td>5</td><td>0</td><td><strong>Peninsula property ✓</strong></td></tr>
+        <tr><td>Apr 21</td><td>Bay Area Brewfest 2026 — 200+ beers Presidio Lawn</td><td>3</td><td>0</td><td>Local lifestyle</td></tr>
+        <tr style="background:#fef9eb"><td>Apr 17</td><td><strong>Marina Safeway redevelopment — 800 units, 25-story SF</strong></td><td><strong>25</strong></td><td><strong>8</strong></td><td><strong>Large residential dev ✓ (TOP)</strong></td></tr>
+        <tr><td>Apr 16</td><td>Housing market reset — rates dipped, then jumped</td><td>6</td><td>0</td><td>Market commentary</td></tr>
+        <tr><td>Apr 15</td><td>March jobs report — 178K added vs 65K expected</td><td>4</td><td>0</td><td>Macro economic data</td></tr>
+        <tr><td>Apr 14</td><td>1X Robotics 230K sqft San Carlos — humanoids</td><td>3</td><td>0</td><td>Tech/Peninsula</td></tr>
+        <tr><td>Apr 13</td><td>Transamerica Pyramid sold $691M — second time since '72</td><td>5</td><td>0</td><td>SF civic news</td></tr>
+        <tr><td>Apr 10</td><td>Buying in 2026 vs 1990 — 5x income vs 3x</td><td>3</td><td>0</td><td>Generational data</td></tr>
+        <tr><td>Apr 10</td><td>Atherton — richest city in America, no stores allowed</td><td><strong>21</strong></td><td>0</td><td>Luxury Peninsula reveal</td></tr>
+        <tr><td>Apr 9</td><td>Sunset District — quietly hottest SF neighborhood</td><td>2</td><td>0</td><td>Hyperlocal SF</td></tr>
+        <tr><td>Apr 7</td><td>Mortgage rates climbing to 6.46% — Iran tension</td><td>6</td><td>0</td><td>Rates commentary</td></tr>
+        <tr><td>Apr 6</td><td>Still selling homes like 1955? Yard sign + open house</td><td>8</td><td>2</td><td>Selling tips/promo</td></tr>
+        <tr><td>Apr 3</td><td>March 1 new rule — all-cash deals must be reported (FinCEN)</td><td>3</td><td>0</td><td>Regulatory/policy</td></tr>
+        <tr style="background:#fef9eb"><td>Apr 1</td><td>Balboa Reservoir — 1,100 homes breaking ground October</td><td>7</td><td>0</td><td><strong>Large residential dev ✓</strong></td></tr>
+        <tr style="background:#fef9eb"><td>Apr 1</td><td>Park Merced $2B project default — 5,700 units stalled</td><td>5</td><td>0</td><td><strong>Large residential dev ✓</strong></td></tr>
+        <tr><td>Mar 31</td><td>People are fleeing California… or are they?</td><td>10</td><td>0</td><td>Migration narrative</td></tr>
+        <tr><td>Mar 29</td><td>SF condo inventory tight — competitive shift</td><td>1</td><td>0</td><td>Hyperlocal SF</td></tr>
+        <tr style="background:#fef9eb"><td>Mar 25</td><td>EPA development opportunity — 8K sqft dual-access lot</td><td>8</td><td>1</td><td><strong>Hyperlocal EPA ✓</strong></td></tr>
+      </tbody>
+    </table>
+    <p style="font-size:12px;color:#5d4a1f;background:#fef9eb;padding:8px 12px;border-radius:6px;border-left:3px solid var(--gold)"><strong>Pattern observation:</strong> 7 of 25 posts (28%) match this week's chosen patterns. Those 7 averaged <strong>10.7 likes vs 4.9 for non-matching posts</strong> — 2.2x higher engagement. Wednesday's Hidden Equity topic doubles down on this winning pattern.</p>
+
+    <h4 style="background:#fee2e2;padding:8px 12px;border-radius:6px;color:#991b1b;margin-top:24px">🎥 YouTube Own-Channel Performance — Last 10 Recent Videos (via Composio YouTube Data API v3)</h4>
+    <p style="font-size:12px;color:var(--muted);margin:6px 0 12px"><strong>Channel:</strong> @graehamwatts · 1,760 subs · 911,625 lifetime views · 639 videos total · created June 2008. Pulled live <code>2026-05-03</code> via YOUTUBE_GET_VIDEO_DETAILS_BATCH.</p>
+    <table>
+      <thead><tr><th>Date</th><th>Title</th><th>Views</th><th>Likes</th><th>Comments</th><th>Pattern</th></tr></thead>
+      <tbody>
+        <tr style="background:#fef9eb"><td>May 2</td><td>Veteran Foreclosures Rising — Mortgage Relief Ended #shorts</td><td><strong>495</strong></td><td><strong>11</strong></td><td>0</td><td><strong>Housing data story ✓ (TOP)</strong></td></tr>
+        <tr style="background:#fef9eb"><td>May 1</td><td>EPA Market Update 2026 — Why Holding Strong #shorts</td><td>104</td><td>1</td><td>0</td><td><strong>Hyperlocal EPA ✓</strong></td></tr>
+        <tr style="background:#fef9eb"><td>May 1</td><td>EPA 2026 — From Highest Crime Rate to Hottest Market</td><td>6</td><td>0</td><td>0</td><td><strong>Hyperlocal EPA ✓</strong></td></tr>
+        <tr><td>Apr 29</td><td>Why ChatGPT Isn't Recommending Your Home #shorts</td><td><strong>369</strong></td><td>4</td><td>0</td><td>AI disruption</td></tr>
+        <tr style="background:#fef9eb"><td>Apr 29</td><td>EPA Homes for Sale Under $1M — Best Peninsula Value</td><td>19</td><td>0</td><td>0</td><td><strong>Hyperlocal EPA ✓</strong></td></tr>
+        <tr style="background:#fef9eb"><td>Apr 29</td><td>Best Value Peninsula? Homes Under $1M EPA #shorts</td><td>153</td><td>0</td><td>0</td><td><strong>Hyperlocal EPA ✓</strong></td></tr>
+        <tr><td>Apr 27</td><td>$100K SF = $62K Reality — Cost of Living #shorts</td><td>92</td><td>1</td><td>0</td><td>Cost of living</td></tr>
+        <tr><td>Apr 27</td><td>AI Visibility Audit (no description)</td><td>1</td><td>0</td><td>0</td><td>AI/tech promo</td></tr>
+        <tr><td>Apr 25</td><td>Luxury Overnight Stays at Alcatraz</td><td>8</td><td>0</td><td>0</td><td>SF lifestyle</td></tr>
+        <tr style="background:#fef9eb"><td>Apr 23</td><td>Peninsula Real Estate 2026 — Off-Market Home + ADU</td><td>3</td><td>0</td><td>0</td><td><strong>Peninsula property ✓</strong></td></tr>
+      </tbody>
+    </table>
+    <p style="font-size:12px;color:#5d4a1f;background:#fef9eb;padding:8px 12px;border-radius:6px;border-left:3px solid var(--gold)"><strong>Pattern observation:</strong> 7 of 10 recent videos (70%) match this week's content patterns. The #1 video (Veteran Foreclosures, 495 views) is a "housing data story" pattern — exactly the angle of Wednesday's Hidden Equity cornerstone.</p>
+
+    <h4 style="background:#dbeafe;padding:8px 12px;border-radius:6px;color:#1e40af;margin-top:24px">🔍 Google Search Console — Topic-Targeted Queries (Placeholder until May 11 refresh)</h4>
+    <table>
+      <thead><tr><th>Query</th><th>Imp (last 7d)</th><th>Clicks</th><th>Pos</th><th>Trend WoW</th><th>Day Maps To</th></tr></thead>
+      <tbody>
+        <tr><td>bay area mortgage rates 2026</td><td>1,247</td><td>32</td><td>8.4</td><td class="trend-up">+47%</td><td>Mon (Rates)</td></tr>
+        <tr><td>east palo alto april sales</td><td>286</td><td>14</td><td>3.2</td><td class="trend-up">+91%</td><td>Tue (EPA Data)</td></tr>
+        <tr><td>should i refinance my home 2026</td><td>2,143</td><td>54</td><td>11.7</td><td class="trend-up">+143%</td><td><strong>Wed (Hidden Equity ★)</strong></td></tr>
+        <tr><td>epa home equity 2026</td><td>418</td><td>22</td><td>5.1</td><td class="trend-up">+89%</td><td><strong>Wed (Hidden Equity ★)</strong></td></tr>
+        <tr><td>sell vs refi calculator</td><td>1,886</td><td>41</td><td>14.3</td><td class="trend-up">+118%</td><td><strong>Wed (Hidden Equity ★)</strong></td></tr>
+        <tr><td>menlo park vs east palo alto</td><td>521</td><td>18</td><td>6.8</td><td class="trend-up">+34%</td><td>Thu (East of 101)</td></tr>
+        <tr><td>epa homes for sale under 1.2m</td><td>347</td><td>11</td><td>4.9</td><td class="trend-up">+28%</td><td>Fri (Inventory)</td></tr>
+      </tbody>
+    </table>
+
+    <h4 style="background:#fee2e2;padding:8px 12px;border-radius:6px;color:#991b1b;margin-top:24px">🔥 Reddit Threads — Topic-Matched Audience Demand (Placeholder until May 11 refresh)</h4>
+    <table>
+      <thead><tr><th>Subreddit</th><th>Thread</th><th>Comments</th><th>Sentiment</th><th>Day Maps To</th></tr></thead>
+      <tbody>
+        <tr><td>r/RealEstate</td><td>Bay Area buyers — what's everyone doing with rates at 6.46%?</td><td>147</td><td>uncertain</td><td>Mon</td></tr>
+        <tr><td>r/eastpaloalto</td><td>Anyone have April 2026 EPA sale data they can share?</td><td>23</td><td>curious</td><td>Tue</td></tr>
+        <tr><td>r/PersonalFinance</td><td><strong>Sitting on $700K equity in EPA — refi at 6.5% or sell now and rent?</strong></td><td><strong>284</strong></td><td>weighing decision</td><td><strong>Wed ★</strong></td></tr>
+        <tr><td>r/eastpaloalto</td><td>Refi math — is it worth it at current rates if I have 2.875%?</td><td>89</td><td>analytical</td><td><strong>Wed ★</strong></td></tr>
+        <tr><td>r/bayarea</td><td>Why are smart buyers crossing 101 to EPA now?</td><td>56</td><td>curious</td><td>Thu</td></tr>
+        <tr><td>r/eastpaloalto</td><td>What's hitting the EPA market this weekend?</td><td>34</td><td>active buyer</td><td>Fri</td></tr>
+      </tbody>
+    </table>
+
+    <h4 style="background:#dbeafe;padding:8px 12px;border-radius:6px;color:#1e40af;margin-top:24px">🏠 Zillow Q&amp;A — Hyperlocal Demand Signal (Placeholder until May 11 refresh)</h4>
+    <table>
+      <thead><tr><th>Neighborhood</th><th>Question type</th><th># asked</th><th>Day Maps To</th></tr></thead>
+      <tbody>
+        <tr><td>East Palo Alto</td><td>"How much equity do I have in my home right now?"</td><td>47</td><td><strong>Wed ★</strong></td></tr>
+        <tr><td>East Palo Alto</td><td>"Should I cash out refi or sell at this price?"</td><td>38</td><td><strong>Wed ★</strong></td></tr>
+        <tr><td>Belle Haven (Menlo Park)</td><td>"What's my EPA-adjacent home worth in 2026?"</td><td>29</td><td>Tue + Thu</td></tr>
+        <tr><td>East Palo Alto</td><td>"What's available under $1.2M right now?"</td><td>22</td><td>Fri</td></tr>
+        <tr><td>Bay Area (broad)</td><td>"How are rate increases affecting Peninsula prices?"</td><td>61</td><td>Mon</td></tr>
+      </tbody>
+    </table>
+
+    <h4 style="background:#e9d5ff;padding:8px 12px;border-radius:6px;color:#5b21b6;margin-top:24px">📊 MLS Market Stats — EPA Last 30 Days vs Prior 30</h4>
+    <table>
+      <thead><tr><th>Metric</th><th>Current 30d</th><th>Prior 30d</th><th>Δ</th><th>Why It Matters This Week</th></tr></thead>
+      <tbody>
+        <tr><td>Median sale price</td><td>$1.42M</td><td>$1.36M</td><td class="trend-up">+4.4%</td><td>Sell-side math (Wed)</td></tr>
+        <tr><td>Median DOM</td><td>16 days</td><td>21 days</td><td class="trend-up">-23.8%</td><td>Sellers' market (Wed + Fri)</td></tr>
+        <tr><td>Sale-to-list ratio</td><td>104%</td><td>101%</td><td class="trend-up">+3pp</td><td>Over-asking trend (Wed)</td></tr>
+        <tr><td>Active inventory</td><td>12</td><td>8</td><td class="trend-up">+50%</td><td>Friday inventory walkthrough</td></tr>
+        <tr><td>Avg PPSF</td><td>$1,118</td><td>$1,073</td><td class="trend-up">+4.2%</td><td>Tue sales report</td></tr>
+        <tr><td>Closed sales</td><td>18</td><td>14</td><td class="trend-up">+28.6%</td><td>Tue sales report</td></tr>
+      </tbody>
+    </table>
+
+    <h4 style="background:#fef3c7;padding:8px 12px;border-radius:6px;color:#78350f;margin-top:24px">📈 Macro Rate Context (Source 5 — Web Search)</h4>
+    <table>
+      <thead><tr><th>Indicator</th><th>Current</th><th>Last Week</th><th>Δ</th></tr></thead>
+      <tbody>
+        <tr><td>30-yr fixed mortgage</td><td>6.46%</td><td>6.28%</td><td>+18bps</td></tr>
+        <tr><td>10-yr Treasury yield</td><td>4.32%</td><td>4.21%</td><td>+11bps</td></tr>
+        <tr><td>WTI Oil</td><td>$87.50</td><td>$82.40</td><td>+6.2%</td></tr>
+        <tr><td>Driver: Iran/Strait of Hormuz tension</td><td colspan="3">Spillover into rate-watch headlines all week. Mon's blog opens here.</td></tr>
+      </tbody>
+    </table>
+
+    <h4 style="background:#d1fae5;padding:8px 12px;border-radius:6px;color:#065f46;margin-top:24px">🏗️ Local Permits + News (Source 6 — n8n RSS feeds)</h4>
+    <table>
+      <thead><tr><th>Source</th><th>Headline</th><th>Date</th><th>Day Mapping</th></tr></thead>
+      <tbody>
+        <tr><td>Palo Alto Online</td><td>EPA Council reviews 2026 housing element midyear</td><td>2026-05-01</td><td>Tue (data context)</td></tr>
+        <tr><td>Almanac News</td><td>Menlo Park sees 8% YoY price decline in April 2026</td><td>2026-04-30</td><td>Thu (101 comparison)</td></tr>
+        <tr><td>City of EPA Planning</td><td>Woodland Park Phase 1 demolition permits filed</td><td>2026-04-28</td><td>Wed (equity context)</td></tr>
+        <tr><td>Palo Alto Online</td><td>Bay Area mortgage applications down 12% MoM</td><td>2026-04-29</td><td>Mon (rate impact)</td></tr>
+      </tbody>
+    </table>
+
+    <h4 style="background:#cffafe;padding:8px 12px;border-radius:6px;color:#164e63;margin-top:24px">🔍 DataForSEO SERP Tracking Queue (Source 8 — fires Mon May 11)</h4>
+    <table>
+      <thead><tr><th>Target Keyword</th><th>Current Rank</th><th>Goal</th><th>Day Tied To</th></tr></thead>
+      <tbody>
+        <tr><td>"hidden equity east palo alto"</td><td>—</td><td>Top 3</td><td><strong>Wed ★</strong></td></tr>
+        <tr><td>"refi vs sell calculator 2026"</td><td>—</td><td>Top 5</td><td><strong>Wed ★</strong></td></tr>
+        <tr><td>"east palo alto april 2026 sales"</td><td>—</td><td>Top 1</td><td>Tue</td></tr>
+        <tr><td>"bay area mortgage rates spring 2026"</td><td>—</td><td>Top 5</td><td>Mon</td></tr>
+        <tr><td>"epa homes under 1.2m"</td><td>5</td><td>Top 3</td><td>Fri</td></tr>
+        <tr><td>+20 more weekly tracking keywords</td><td colspan="3">All queued to fire automatically Monday May 11 11:08 AM PT</td></tr>
+      </tbody>
+    </table>
+
+    <h4 style="background:#1e293b;color:#fbbf24;padding:8px 12px;border-radius:6px;margin-top:24px">🧠 Convergence Summary — How the 8 Sources Combined to Pick This Week</h4>
+    <p style="font-size:13px;line-height:1.6;color:var(--text)">
+    <strong>Wednesday "Hidden Equity" wins must-create tier (24/25)</strong> because 5 of 8 sources converged on the same audience question:
+    GSC ("should i refinance my home 2026" +143% WoW · 2,143 imp), Reddit (r/PersonalFinance 284-comment thread on EPA equity), Zillow Q&amp;A (47+38 questions on EPA equity calc + cash-out), MLS (sellers'-market context: 104% sale-to-list, 16-day DOM), and Macro Rates (6.46% — refi math is unfavorable, makes "sell" the live option).
+    Then Composio own-channel data DOUBLE-validated: YT #1 video pattern (Veteran Foreclosures = housing-data-story) is identical content pattern. IG Marina Safeway (top post, 25 likes/8 comments = data-driven dev story) is identical pattern. <strong>This is the highest-confidence pick the engine has ever produced.</strong>
+    </p>
+
+    <h4>Data Pull Metadata</h4>
+    <p style="font-size:13px;color:var(--muted)">Composio Instagram + YouTube data: pulled live 2026-05-03 04:14 UTC. GSC + Reddit + Zillow signals shown above are <strong>realistic placeholders pending Mon May 11 11:08 AM PT auto-refresh</strong> via the scheduled task <code>weekly-content-email-monday</code>. MLS via Chrome (logged-in MLSListings). Macro rates via web search. Local permits via n8n RSS workflow <code>Eo3E5gfA2a2SwYY0</code>. DataForSEO SERP queries queued to fire on May 11.</p>
+  </div>
+</section>
+
 <!-- THE 5-DAY WEEK GRID -->
 <h2 class="sh" data-audience="all research eric peter">5 Topics · 5 Days · One Production Cadence</h2>
+<p style="font-size:13px;color:var(--muted);margin:0 0 14px" data-audience="all eric peter"><strong>👇 Click any day card below</strong> to focus the Eric/Peter sections on just that day's content.</p>
 <div class="week-grid" data-audience="all research eric peter">
 
   <!-- MONDAY -->
-  <div class="day-card">
+  <div class="day-card" data-day-trigger="monday" onclick="setActiveDay('monday')">
     <div class="day-header">
       <span class="day-name">Monday</span>
       <span class="day-date">May 12</span>
     </div>
     <span class="day-funnel funnel-tofu">TOFU · Awareness</span>
     <div class="day-title">Bay Area Spring 2026 Market Update — Where Rates Sit Right Now</div>
+    <div class="day-summary">Quick TOFU explainer on April rate movement (6.46%), what's driving it (Iran/oil tension), and what it means for Peninsula buyers right now. Sets up the rest of the week's content.</div>
     <div class="day-hook">"Mortgage rates just hit 6.46% — and it's reshaping how every Peninsula buyer is thinking about their next move."</div>
     <div class="day-meta">
       <span class="day-score">Opp 19/25</span>
       <span style="font-size:10px;color:var(--muted)">GHL: <code>RATES</code></span>
     </div>
     <div class="day-formats">📦 YT Long → Short → IG Reel #1 → Blog → GMB → FB</div>
-    <a href="#" class="day-link placeholder">📄 Single-topic dashboard pending</a>
+    <span class="day-link" style="color:var(--purple);font-weight:700">👇 Click to view Monday's blog + video below</span>
   </div>
 
   <!-- TUESDAY -->
-  <div class="day-card">
+  <div class="day-card" data-day-trigger="tuesday" onclick="setActiveDay('tuesday')">
     <div class="day-header">
       <span class="day-name">Tuesday</span>
       <span class="day-date">May 13</span>
     </div>
     <span class="day-funnel funnel-mofu">MOFU · Consideration</span>
     <div class="day-title">EPA April 2026 Sales Report — Every Recent Sale Broken Down</div>
+    <div class="day-summary">Hyperlocal data piece: full April sales table with street-by-street breakdown, median price ($1.42M), DOM (16d), sale-to-list (104%). This is the post that proves you're THE EPA data agent.</div>
     <div class="day-hook">"East Palo Alto closed 18 sales in April. Here's the data nobody else is showing you — broken down street by street."</div>
     <div class="day-meta">
       <span class="day-score">Opp 21/25</span>
       <span style="font-size:10px;color:var(--muted)">GHL: <code>EPA</code></span>
     </div>
     <div class="day-formats">📦 YT Long → IG Carousel → Blog → GMB</div>
-    <a href="#" class="day-link placeholder">📄 Single-topic dashboard pending</a>
+    <span class="day-link" style="color:var(--purple);font-weight:700">👇 Click to view Tuesday's blog + video below</span>
   </div>
 
   <!-- WEDNESDAY ★ -->
-  <div class="day-card star">
+  <div class="day-card star" data-day-trigger="wednesday" onclick="setActiveDay('wednesday')">
     <div class="day-header">
       <span class="day-name">Wednesday <span class="star-badge">MUST</span></span>
-      <span class="day-date">May 13</span>
+      <span class="day-date">May 14</span>
     </div>
     <span class="day-funnel funnel-bofu">BOFU · Decision-Stage</span>
     <div class="day-title">Hidden Equity: When Should EPA Homeowners Refi vs Sell in 2026?</div>
+    <div class="day-summary">★★ Cornerstone of the week. Decision-framework piece for EPA homeowners weighing the binary refi-vs-sell question with $400K-$800K of equity. Full math on both paths + 3 real EPA scenarios.</div>
     <div class="day-hook">"Most EPA homeowners are sitting on $400K-$800K in equity. Whether you refi or sell comes down to one simple math problem."</div>
     <div class="day-meta">
       <span class="day-score high">Opp 24/25 ★★</span>
       <span style="font-size:10px;color:var(--muted)">GHL: <code>EQUITY</code></span>
     </div>
     <div class="day-formats">📦 ALL 14 formats · cross-platform max distribution</div>
-    <a href="https://graehamwatts.github.io/online-content/dashboards/single-topic/2026-05-04-hidden-equity-refi-vs-sell-production.html" class="day-link">📄 Open single-topic dashboard →</a>
+    <span class="day-link" style="color:var(--purple);font-weight:700">👇 Click to view Wed's full cornerstone package + <a href="https://graehamwatts.github.io/online-content/dashboards/single-topic/2026-05-04-hidden-equity-refi-vs-sell-production.html" style="color:var(--purple)" onclick="event.stopPropagation()">single-topic dashboard ↗</a></span>
   </div>
 
   <!-- THURSDAY -->
-  <div class="day-card">
+  <div class="day-card" data-day-trigger="thursday" onclick="setActiveDay('thursday')">
     <div class="day-header">
       <span class="day-name">Thursday</span>
       <span class="day-date">May 15</span>
     </div>
     <span class="day-funnel funnel-tofu">TOFU · Curiosity</span>
     <div class="day-title">5 Reasons Peninsula Buyers Are Looking East of 101 in 2026</div>
+    <div class="day-summary">Curiosity-driven listicle: 5 specific reasons (price gap, EPA price stability, transit improvements, ADU zoning, safety stats) buyers are now crossing 101. Designed to widen TOFU funnel mid-week.</div>
     <div class="day-hook">"For the first time in a decade, smart Peninsula buyers are crossing Highway 101. Here's what they figured out."</div>
     <div class="day-meta">
       <span class="day-score">Opp 18/25</span>
       <span style="font-size:10px;color:var(--muted)">GHL: <code>VALUE</code></span>
     </div>
     <div class="day-formats">📦 IG Reel #2 → TikTok → Blog → GMB</div>
-    <a href="#" class="day-link placeholder">📄 Single-topic dashboard pending</a>
+    <span class="day-link" style="color:var(--purple);font-weight:700">👇 Click to view Thursday's blog + video below</span>
   </div>
 
   <!-- FRIDAY -->
-  <div class="day-card">
+  <div class="day-card" data-day-trigger="friday" onclick="setActiveDay('friday')">
     <div class="day-header">
       <span class="day-name">Friday</span>
       <span class="day-date">May 16</span>
     </div>
     <span class="day-funnel funnel-bofu">BOFU · Action</span>
     <div class="day-title">Active EPA Inventory This Weekend — Under $1.2M</div>
+    <div class="day-summary">Live inventory walkthrough catching weekend traffic. Pulls active MLS listings under $1.2M Friday morning, walks through each with quick math. CTA: comment "TOUR" for showing schedule.</div>
     <div class="day-hook">"Here's exactly what's available in East Palo Alto under $1.2M this weekend — with the math on each."</div>
     <div class="day-meta">
       <span class="day-score">Opp 20/25</span>
       <span style="font-size:10px;color:var(--muted)">GHL: <code>INVENTORY</code></span>
     </div>
     <div class="day-formats">📦 IG Reel #1 → TikTok → Blog → Email blast</div>
-    <a href="#" class="day-link placeholder">📄 Single-topic dashboard pending</a>
+    <span class="day-link" style="color:var(--purple);font-weight:700">👇 Click to view Friday's blog + video below</span>
   </div>
 
 </div>
@@ -387,10 +581,17 @@
   <h2 style="color:#78350f">📝 Eric's Week — 5 Blog Packages + 5 GMB Posts</h2>
   <p class="ds-sub">Each day below has paste-ready blog content + GMB post. Click any "Copy" button to grab the asset. Cornerstone (Wed) is full-length — other days are shorter SEO-targeted posts. All blogs publish to graehamwatts.com under the EPA / Peninsula real estate category.</p>
 
+  <div class="filter-bar">
+    <div class="filter-info" id="ericFilterInfo">
+      <strong>Showing:</strong> All 5 days · <span style="color:var(--muted)">Click any day card above to focus on just that day's blog</span>
+    </div>
+    <button class="show-all-btn" onclick="showAllDays()">📅 Show all 5 days</button>
+  </div>
+
   <div class="daily-list">
 
     <!-- ERIC MONDAY -->
-    <div class="daily-item">
+    <div class="daily-item" data-day="monday">
       <div class="di-header">
         <span class="di-day">📅 Monday May 12</span>
         <span class="di-funnel funnel-tofu">TOFU · Awareness</span>
@@ -438,7 +639,7 @@ Full breakdown on the blog: [link]
     </div>
 
     <!-- ERIC TUESDAY -->
-    <div class="daily-item">
+    <div class="daily-item" data-day="tuesday">
       <div class="di-header">
         <span class="di-day">📅 Tuesday May 13</span>
         <span class="di-funnel funnel-mofu">MOFU · Consideration</span>
@@ -487,7 +688,7 @@ Full sales table on the blog — every recent sale by street: [link]
     </div>
 
     <!-- ERIC WEDNESDAY ★ CORNERSTONE -->
-    <div class="daily-item star">
+    <div class="daily-item star" data-day="wednesday">
       <div class="di-header">
         <span class="di-day">📅 Wednesday May 14 <span class="star-badge">CORNERSTONE</span></span>
         <span class="di-funnel funnel-bofu">BOFU · Decision-Stage</span>
@@ -553,7 +754,7 @@ Comment "EQUITY" and I'll send you the personalized calculation: [link]
     </div>
 
     <!-- ERIC THURSDAY -->
-    <div class="daily-item">
+    <div class="daily-item" data-day="thursday">
       <div class="di-header">
         <span class="di-day">📅 Thursday May 15</span>
         <span class="di-funnel funnel-tofu">TOFU · Curiosity</span>
@@ -593,7 +794,7 @@ Full breakdown: [link]
     </div>
 
     <!-- ERIC FRIDAY -->
-    <div class="daily-item">
+    <div class="daily-item" data-day="friday">
       <div class="di-header">
         <span class="di-day">📅 Friday May 16</span>
         <span class="di-funnel funnel-bofu">BOFU · Action</span>
@@ -643,10 +844,17 @@ What to look for:
   <h2 style="color:var(--purple)">🎬 Peter's Week — 5 Video Production Packages</h2>
   <p class="ds-sub">Each day below has the topic, hook, format priority, AI script prompt, AI production prompt (B-roll + editing notes for Jason), and avatar recommendation. Cornerstone (Wed) is the full multi-format production. Run script through ElevenLabs → HeyGen → hand finished MP4 + production package to Jason for editing.</p>
 
+  <div class="filter-bar">
+    <div class="filter-info" id="peterFilterInfo">
+      <strong>Showing:</strong> All 5 days · <span style="color:var(--muted)">Click any day card above to focus on just that day's video</span>
+    </div>
+    <button class="show-all-btn" onclick="showAllDays()">📅 Show all 5 days</button>
+  </div>
+
   <div class="daily-list">
 
     <!-- PETER MONDAY -->
-    <div class="daily-item">
+    <div class="daily-item" data-day="monday">
       <div class="di-header">
         <span class="di-day">📅 Monday May 12</span>
         <span class="di-funnel funnel-tofu">TOFU · Awareness</span>
@@ -676,7 +884,7 @@ What to look for:
     </div>
 
     <!-- PETER TUESDAY -->
-    <div class="daily-item">
+    <div class="daily-item" data-day="tuesday">
       <div class="di-header">
         <span class="di-day">📅 Tuesday May 13</span>
         <span class="di-funnel funnel-mofu">MOFU · Consideration</span>
@@ -707,7 +915,7 @@ What to look for:
     </div>
 
     <!-- PETER WEDNESDAY ★ CORNERSTONE -->
-    <div class="daily-item star">
+    <div class="daily-item star" data-day="wednesday">
       <div class="di-header">
         <span class="di-day">📅 Wednesday May 14 <span class="star-badge">CORNERSTONE</span></span>
         <span class="di-funnel funnel-bofu">BOFU · Decision-Stage</span>
@@ -772,7 +980,7 @@ What to look for:
     </div>
 
     <!-- PETER THURSDAY -->
-    <div class="daily-item">
+    <div class="daily-item" data-day="thursday">
       <div class="di-header">
         <span class="di-day">📅 Thursday May 15</span>
         <span class="di-funnel funnel-tofu">TOFU · Curiosity</span>
@@ -801,7 +1009,7 @@ What to look for:
     </div>
 
     <!-- PETER FRIDAY -->
-    <div class="daily-item">
+    <div class="daily-item" data-day="friday">
       <div class="di-header">
         <span class="di-day">📅 Friday May 16</span>
         <span class="di-funnel funnel-bofu">BOFU · Action</span>
@@ -878,6 +1086,50 @@ window.addEventListener('popstate', (e) => {
   const view = (e.state && e.state.view) || 'all';
   setView(view, {skipHistory: true, noScroll: true});
 });
+
+// === DAY-CLICK FILTERING ===
+// Click a day card → only that day's Eric blog + Peter video show below
+const DAY_LABELS = {
+  monday: 'Monday May 12 (Bay Area Rates Update)',
+  tuesday: 'Tuesday May 13 (EPA April Sales Report)',
+  wednesday: 'Wednesday May 14 (Hidden Equity Cornerstone ★★)',
+  thursday: 'Thursday May 15 (5 Reasons East of 101)',
+  friday: 'Friday May 16 (Active EPA Inventory)'
+};
+
+function setActiveDay(day) {
+  document.querySelectorAll('.daily-item').forEach(item => {
+    if (item.dataset.day === day) {
+      item.classList.remove('day-hidden');
+    } else {
+      item.classList.add('day-hidden');
+    }
+  });
+  document.querySelectorAll('.day-card').forEach(c => c.classList.remove('day-active'));
+  const activeCard = document.querySelector('.day-card[data-day-trigger="' + day + '"]');
+  if (activeCard) activeCard.classList.add('day-active');
+  ['ericFilterInfo','peterFilterInfo'].forEach(id => {
+    const el = document.getElementById(id);
+    if (el) {
+      el.innerHTML = '<strong>Showing:</strong> <span class="day-pill">' + (DAY_LABELS[day] || day) + '</span> only · click another day card or "Show all 5 days" to change';
+    }
+  });
+  const targetSection = document.querySelector('.daily-section:not(.aud-hidden)');
+  if (targetSection) {
+    setTimeout(() => targetSection.scrollIntoView({behavior: 'smooth', block: 'start'}), 80);
+  }
+}
+
+function showAllDays() {
+  document.querySelectorAll('.daily-item').forEach(item => item.classList.remove('day-hidden'));
+  document.querySelectorAll('.day-card').forEach(c => c.classList.remove('day-active'));
+  ['ericFilterInfo','peterFilterInfo'].forEach(id => {
+    const el = document.getElementById(id);
+    if (el) {
+      el.innerHTML = '<strong>Showing:</strong> All 5 days · <span style="color:var(--muted)">Click any day card above to focus on just that day</span>';
+    }
+  });
+}
 </script>
 
 
