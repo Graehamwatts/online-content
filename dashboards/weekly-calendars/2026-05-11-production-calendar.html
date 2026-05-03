@@ -269,6 +269,25 @@
 
   <div id="weeklyResearchPanel" class="research-panel">
 
+<!-- BRUSHABLE TIME-SERIES CHARTS — IG + YT activity over time -->
+<div style="margin-top:24px">
+  <h4 style="background:#fce7f3;padding:8px 12px;border-radius:6px;color:#9f1239;margin:24px 0 12px">📈 Instagram Activity Over Time — Drag the slider below to zoom</h4>
+  <p style="font-size:12px;color:var(--muted);margin:0 0 8px">Live data, last 26 weeks. Drag the bottom mini-chart's left/right handles to zoom into any time range. Drag the middle of the selection to pan.</p>
+  <div style="background:#fff;border:1px solid var(--border);border-radius:10px;padding:14px 14px 8px">
+    <div id="igChartMain" style="height:280px"></div>
+    <div id="igChartBrush" style="height:100px;margin-top:-6px"></div>
+  </div>
+
+  <h4 style="background:#fee2e2;padding:8px 12px;border-radius:6px;color:#991b1b;margin:24px 0 12px">📈 YouTube Activity Over Time — Drag the slider below to zoom</h4>
+  <p style="font-size:12px;color:var(--muted);margin:0 0 8px">Live data, last 14 weeks (50-video window — channel total: 666 lifetime videos). Same brush controls as the IG chart above.</p>
+  <div style="background:#fff;border:1px solid var(--border);border-radius:10px;padding:14px 14px 8px">
+    <div id="ytChartMain" style="height:280px"></div>
+    <div id="ytChartBrush" style="height:100px;margin-top:-6px"></div>
+  </div>
+</div>
+
+
+
     <h4 style="background:#fce7f3;padding:8px 12px;border-radius:6px;color:#9f1239;margin-top:8px">📷 Instagram Own-Channel Performance — Last 25 Posts (LIVE via Composio Meta Graph API)</h4>
     <p style="font-size:12px;color:var(--muted);margin:6px 0 12px"><strong>Account:</strong> @graeham.watts · pulled live <code>2026-05-03</code>. Gold-highlighted rows = match week's content patterns.</p>
     <table>
@@ -1228,5 +1247,128 @@ window.addEventListener('DOMContentLoaded', () => {
   }
 });
 </script>
+
+<!-- ApexCharts CDN + chart init -->
+<script src="https://cdn.jsdelivr.net/npm/apexcharts@4.5.0"></script>
+<script>
+(function() {
+  // ============= INSTAGRAM CHART =============
+  const igPosts = [{"x": "2025-11-03", "y": 1}, {"x": "2025-11-10", "y": 4}, {"x": "2025-11-17", "y": 6}, {"x": "2025-11-24", "y": 4}, {"x": "2025-12-01", "y": 6}, {"x": "2025-12-08", "y": 4}, {"x": "2025-12-15", "y": 4}, {"x": "2025-12-22", "y": 4}, {"x": "2025-12-29", "y": 0}, {"x": "2026-01-05", "y": 4}, {"x": "2026-01-12", "y": 7}, {"x": "2026-01-19", "y": 3}, {"x": "2026-01-26", "y": 5}, {"x": "2026-02-02", "y": 7}, {"x": "2026-02-09", "y": 4}, {"x": "2026-02-16", "y": 4}, {"x": "2026-02-23", "y": 0}, {"x": "2026-03-02", "y": 1}, {"x": "2026-03-09", "y": 4}, {"x": "2026-03-16", "y": 2}, {"x": "2026-03-23", "y": 3}, {"x": "2026-03-30", "y": 4}, {"x": "2026-04-06", "y": 5}, {"x": "2026-04-13", "y": 5}, {"x": "2026-04-20", "y": 4}, {"x": "2026-04-27", "y": 5}];
+  const igLikes = [{"x": "2025-11-03", "y": 1}, {"x": "2025-11-10", "y": 15}, {"x": "2025-11-17", "y": 17}, {"x": "2025-11-24", "y": 18}, {"x": "2025-12-01", "y": 13}, {"x": "2025-12-08", "y": 10}, {"x": "2025-12-15", "y": 19}, {"x": "2025-12-22", "y": 25}, {"x": "2025-12-29", "y": 0}, {"x": "2026-01-05", "y": 13}, {"x": "2026-01-12", "y": 36}, {"x": "2026-01-19", "y": 12}, {"x": "2026-01-26", "y": 17}, {"x": "2026-02-02", "y": 63}, {"x": "2026-02-09", "y": 15}, {"x": "2026-02-16", "y": 16}, {"x": "2026-02-23", "y": 0}, {"x": "2026-03-02", "y": 3}, {"x": "2026-03-09", "y": 33}, {"x": "2026-03-16", "y": 28}, {"x": "2026-03-23", "y": 24}, {"x": "2026-03-30", "y": 26}, {"x": "2026-04-06", "y": 40}, {"x": "2026-04-13", "y": 43}, {"x": "2026-04-20", "y": 29}, {"x": "2026-04-27", "y": 15}];
+  const igDefaultStart = new Date('2026-02-02').getTime();
+  const igDefaultEnd = new Date('2026-04-27').getTime();
+
+  const igMainOptions = {
+    chart: {
+      id: 'igMain',
+      type: 'area',
+      height: 280,
+      toolbar: { autoSelected: 'pan', show: true, tools: { download: false, selection: false, zoom: true, zoomin: true, zoomout: true, pan: true, reset: true } },
+      fontFamily: "'Plus Jakarta Sans', sans-serif",
+    },
+    colors: ['#1B2A4A', '#C5A258'],
+    stroke: { width: [2, 2], curve: 'smooth' },
+    fill: { type: 'gradient', gradient: { opacityFrom: 0.5, opacityTo: 0.1 } },
+    series: [
+      { name: 'Total Likes', type: 'area', data: igLikes, yAxisIndex: 0 },
+      { name: 'Posts Published', type: 'line', data: igPosts, yAxisIndex: 1 }
+    ],
+    xaxis: { type: 'datetime' },
+    yaxis: [
+      { seriesName: 'Total Likes', title: { text: 'Total Likes / week', style: { color: '#1B2A4A' } }, labels: { style: { colors: '#1B2A4A' } } },
+      { seriesName: 'Posts Published', opposite: true, title: { text: 'Posts / week', style: { color: '#C5A258' } }, labels: { style: { colors: '#C5A258' } }, min: 0 }
+    ],
+    tooltip: { x: { format: 'MMM dd, yyyy' }, theme: 'light' },
+    legend: { position: 'top', horizontalAlign: 'right' },
+    grid: { borderColor: '#e2e5ea' },
+    dataLabels: { enabled: false }
+  };
+
+  const igMain = new ApexCharts(document.querySelector('#igChartMain'), igMainOptions);
+  igMain.render();
+
+  const igBrushOptions = {
+    chart: {
+      id: 'igBrush',
+      type: 'area',
+      height: 100,
+      brush: { target: 'igMain', enabled: true },
+      selection: { enabled: true, xaxis: { min: igDefaultStart, max: igDefaultEnd }, fill: { color: '#C5A258', opacity: 0.18 }, stroke: { width: 1, color: '#C5A258' } },
+      toolbar: { show: false },
+      fontFamily: "'Plus Jakarta Sans', sans-serif",
+    },
+    colors: ['#1B2A4A'],
+    fill: { type: 'gradient', gradient: { opacityFrom: 0.6, opacityTo: 0.1 } },
+    stroke: { width: 1, curve: 'smooth' },
+    series: [{ name: 'Total Likes', data: igLikes }],
+    xaxis: { type: 'datetime', tooltip: { enabled: false } },
+    yaxis: { tickAmount: 2, labels: { style: { fontSize: '10px' } } },
+    grid: { borderColor: '#e2e5ea' },
+    dataLabels: { enabled: false }
+  };
+
+  const igBrush = new ApexCharts(document.querySelector('#igChartBrush'), igBrushOptions);
+  igBrush.render();
+
+  // ============= YOUTUBE CHART =============
+  const ytVideos = [{"x": "2026-01-26", "y": 3}, {"x": "2026-02-02", "y": 6}, {"x": "2026-02-09", "y": 3}, {"x": "2026-02-16", "y": 3}, {"x": "2026-02-23", "y": 0}, {"x": "2026-03-02", "y": 1}, {"x": "2026-03-09", "y": 4}, {"x": "2026-03-16", "y": 1}, {"x": "2026-03-23", "y": 3}, {"x": "2026-03-30", "y": 3}, {"x": "2026-04-06", "y": 5}, {"x": "2026-04-13", "y": 5}, {"x": "2026-04-20", "y": 5}, {"x": "2026-04-27", "y": 8}];
+  const ytViews = [{"x": "2026-01-26", "y": 826}, {"x": "2026-02-02", "y": 4140}, {"x": "2026-02-09", "y": 1454}, {"x": "2026-02-16", "y": 960}, {"x": "2026-02-23", "y": 0}, {"x": "2026-03-02", "y": 62}, {"x": "2026-03-09", "y": 2485}, {"x": "2026-03-16", "y": 1759}, {"x": "2026-03-23", "y": 899}, {"x": "2026-03-30", "y": 2754}, {"x": "2026-04-06", "y": 2785}, {"x": "2026-04-13", "y": 850}, {"x": "2026-04-20", "y": 1260}, {"x": "2026-04-27", "y": 1265}];
+  const ytDefaultStart = new Date('2026-01-26').getTime();
+  const ytDefaultEnd = new Date('2026-04-27').getTime();
+
+  const ytMainOptions = {
+    chart: {
+      id: 'ytMain',
+      type: 'area',
+      height: 280,
+      toolbar: { autoSelected: 'pan', show: true, tools: { download: false, selection: false, zoom: true, zoomin: true, zoomout: true, pan: true, reset: true } },
+      fontFamily: "'Plus Jakarta Sans', sans-serif",
+    },
+    colors: ['#9f1239', '#1e40af'],
+    stroke: { width: [2, 2], curve: 'smooth' },
+    fill: { type: 'gradient', gradient: { opacityFrom: 0.5, opacityTo: 0.1 } },
+    series: [
+      { name: 'Total Views', type: 'area', data: ytViews, yAxisIndex: 0 },
+      { name: 'Videos Published', type: 'line', data: ytVideos, yAxisIndex: 1 }
+    ],
+    xaxis: { type: 'datetime' },
+    yaxis: [
+      { seriesName: 'Total Views', title: { text: 'Total Views / week', style: { color: '#9f1239' } }, labels: { style: { colors: '#9f1239' }, formatter: (v) => v >= 1000 ? (v/1000).toFixed(1) + 'k' : v } },
+      { seriesName: 'Videos Published', opposite: true, title: { text: 'Videos / week', style: { color: '#1e40af' } }, labels: { style: { colors: '#1e40af' } }, min: 0 }
+    ],
+    tooltip: { x: { format: 'MMM dd, yyyy' }, theme: 'light' },
+    legend: { position: 'top', horizontalAlign: 'right' },
+    grid: { borderColor: '#e2e5ea' },
+    dataLabels: { enabled: false }
+  };
+
+  const ytMain = new ApexCharts(document.querySelector('#ytChartMain'), ytMainOptions);
+  ytMain.render();
+
+  const ytBrushOptions = {
+    chart: {
+      id: 'ytBrush',
+      type: 'area',
+      height: 100,
+      brush: { target: 'ytMain', enabled: true },
+      selection: { enabled: true, xaxis: { min: ytDefaultStart, max: ytDefaultEnd }, fill: { color: '#9f1239', opacity: 0.18 }, stroke: { width: 1, color: '#9f1239' } },
+      toolbar: { show: false },
+      fontFamily: "'Plus Jakarta Sans', sans-serif",
+    },
+    colors: ['#9f1239'],
+    fill: { type: 'gradient', gradient: { opacityFrom: 0.6, opacityTo: 0.1 } },
+    stroke: { width: 1, curve: 'smooth' },
+    series: [{ name: 'Total Views', data: ytViews }],
+    xaxis: { type: 'datetime', tooltip: { enabled: false } },
+    yaxis: { tickAmount: 2, labels: { style: { fontSize: '10px' }, formatter: (v) => v >= 1000 ? (v/1000).toFixed(1) + 'k' : v } },
+    grid: { borderColor: '#e2e5ea' },
+    dataLabels: { enabled: false }
+  };
+
+  const ytBrush = new ApexCharts(document.querySelector('#ytChartBrush'), ytBrushOptions);
+  ytBrush.render();
+})();
+</script>
+
 </body>
 </html>
