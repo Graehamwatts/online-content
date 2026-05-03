@@ -1,0 +1,306 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Week of May 12-18, 2026 — Production Calendar</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;700&family=Plus+Jakarta+Sans:wght@500;700;800&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --navy: #1B2A4A;
+    --gold: #C5A258;
+    --teal: #00695c;
+    --purple: #6a1b9a;
+    --green: #2e7d32;
+    --red: #c62828;
+    --orange: #e65100;
+    --bg: #f4f5f7;
+    --card: #ffffff;
+    --text: #2d3748;
+    --muted: #718096;
+    --border: #e2e5ea;
+    --radius: 12px;
+    --shadow: 0 2px 8px rgba(0,0,0,0.04);
+  }
+  * { box-sizing: border-box; }
+  body { margin: 0; padding: 0; font-family: 'DM Sans', sans-serif; background: var(--bg); color: var(--text); line-height: 1.55; }
+  .wrap { max-width: 1400px; margin: 0 auto; padding: 24px; }
+  h1, h2, h3, h4 { font-family: 'Plus Jakarta Sans', sans-serif; color: var(--navy); margin: 0 0 12px; }
+  h1 { font-size: 30px; font-weight: 800; letter-spacing: -0.5px; }
+  h2.sh { font-size: 22px; margin: 28px 0 16px; padding-bottom: 8px; border-bottom: 2px solid var(--border); }
+
+  /* HERO */
+  .hero { background: linear-gradient(135deg, var(--navy) 0%, #2c3e60 100%); color: #fff; padding: 32px 32px; border-radius: var(--radius); margin-bottom: 24px; }
+  .hero h1 { color: #fff; }
+  .hero-sub { color: rgba(255,255,255,0.8); font-size: 14px; margin-top: 8px; }
+  .hero-meta { display: flex; gap: 8px; flex-wrap: wrap; margin: 18px 0 0; }
+  .hm-pill { display: inline-block; padding: 6px 12px; border-radius: 100px; font-size: 12px; font-weight: 700; text-transform: uppercase; letter-spacing: 0.5px; background: rgba(255,255,255,0.12); color: #fff; }
+  .hm-pill.preview { background: #fbbf24; color: #451a03; }
+  .hm-pill.gold { background: var(--gold); color: var(--navy); }
+
+  /* WEEK GRID — 5 day cards horizontal */
+  .week-grid { display: grid; grid-template-columns: repeat(5, 1fr); gap: 14px; margin-bottom: 24px; }
+  @media (max-width: 1100px) { .week-grid { grid-template-columns: repeat(2, 1fr); } }
+  @media (max-width: 700px) { .week-grid { grid-template-columns: 1fr; } }
+  .day-card { background: var(--card); border: 1px solid var(--border); border-radius: var(--radius); padding: 18px; box-shadow: var(--shadow); display: flex; flex-direction: column; transition: transform 0.15s, box-shadow 0.15s; }
+  .day-card:hover { transform: translateY(-3px); box-shadow: 0 8px 24px rgba(0,0,0,0.08); }
+  .day-card.star { border: 2px solid var(--gold); background: linear-gradient(135deg, #fefdfb 0%, #fef9eb 100%); }
+  .day-header { display: flex; align-items: baseline; justify-content: space-between; margin-bottom: 10px; padding-bottom: 8px; border-bottom: 1px solid var(--border); }
+  .day-name { font-family: 'Plus Jakarta Sans', sans-serif; font-weight: 800; color: var(--navy); font-size: 15px; }
+  .day-date { font-size: 12px; color: var(--muted); }
+  .day-funnel { font-size: 10px; font-weight: 800; padding: 3px 8px; border-radius: 100px; text-transform: uppercase; letter-spacing: 0.5px; align-self: flex-start; margin-bottom: 8px; }
+  .funnel-tofu { background: #dbeafe; color: #1e40af; }
+  .funnel-mofu { background: #fef3c7; color: #78350f; }
+  .funnel-bofu { background: #fce7f3; color: #9f1239; }
+  .day-title { font-size: 14px; font-weight: 700; color: var(--navy); margin-bottom: 8px; line-height: 1.35; }
+  .day-hook { font-size: 12px; color: var(--text); font-style: italic; margin-bottom: 12px; line-height: 1.5; flex-grow: 1; }
+  .day-meta { font-size: 11px; color: var(--muted); padding-top: 10px; border-top: 1px solid var(--border); display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 6px; }
+  .day-score { background: var(--gold); color: var(--navy); padding: 3px 8px; border-radius: 100px; font-weight: 800; font-size: 10px; }
+  .day-score.high { background: var(--green); color: #fff; }
+  .day-link { display: inline-block; margin-top: 10px; font-size: 11px; font-weight: 700; color: var(--purple); text-decoration: none; }
+  .day-link:hover { text-decoration: underline; }
+  .day-link.placeholder { color: var(--muted); cursor: not-allowed; }
+  .day-formats { font-size: 10px; color: var(--muted); margin-top: 4px; }
+  .star-badge { background: var(--gold); color: var(--navy); font-size: 9px; padding: 2px 6px; border-radius: 100px; font-weight: 800; margin-left: 4px; }
+
+  /* LIVE DATA LAYER (same as single-topic) */
+  .data-layer { background: linear-gradient(135deg, #0f172a 0%, #1e293b 100%); color: #e2e8f0; padding: 24px 28px; border-radius: var(--radius); margin-bottom: 24px; }
+  .dl-h { font-family: 'Plus Jakarta Sans', sans-serif; font-weight: 800; font-size: 17px; color: #fff; margin: 0 0 4px; }
+  .dl-sub { font-size: 12px; color: #94a3b8; margin-bottom: 14px; }
+  .dl-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); gap: 10px; }
+  .dl-card { background: rgba(255,255,255,0.04); border: 1px solid rgba(255,255,255,0.08); border-radius: 8px; padding: 11px 13px; position: relative; }
+  .dl-card.active { border-left: 3px solid #22c55e; }
+  .dl-card.configured { border-left: 3px solid var(--gold); }
+  .dl-icon { font-size: 16px; margin-bottom: 3px; }
+  .dl-name { font-weight: 700; font-size: 12px; color: #fff; margin-bottom: 2px; }
+  .dl-source { font-size: 9px; color: #94a3b8; text-transform: uppercase; letter-spacing: 0.5px; margin-bottom: 6px; }
+  .dl-signal { font-size: 11px; color: #cbd5e1; line-height: 1.4; }
+  .dl-status { position: absolute; top: 10px; right: 11px; font-size: 8px; font-weight: 800; letter-spacing: 0.5px; padding: 2px 6px; border-radius: 100px; text-transform: uppercase; }
+  .dl-status.active { background: #22c55e; color: #052e16; }
+  .dl-status.configured { background: var(--gold); color: var(--navy); }
+
+  /* STRATEGY CARDS */
+  .card { background: var(--card); border: 1px solid var(--border); border-radius: var(--radius); padding: 22px 24px; margin-bottom: 18px; box-shadow: var(--shadow); }
+  .strategy-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; margin-top: 14px; }
+  @media (max-width: 800px) { .strategy-grid { grid-template-columns: 1fr; } }
+  .strategy-col { background: #fafbfc; border: 1px solid var(--border); border-radius: 8px; padding: 14px 16px; }
+  .sc-h { font-weight: 800; font-size: 13px; color: var(--navy); margin-bottom: 8px; }
+  .sc-list { font-size: 12px; color: var(--text); line-height: 1.7; margin: 0; padding-left: 18px; }
+
+  /* FUNNEL MIX BAR */
+  .funnel-mix { display: flex; height: 32px; border-radius: 8px; overflow: hidden; margin: 12px 0 8px; }
+  .fm-tofu { background: #1e40af; color: #fff; }
+  .fm-mofu { background: #78350f; color: #fff; }
+  .fm-bofu { background: #9f1239; color: #fff; }
+  .fm-segment { display: flex; align-items: center; justify-content: center; font-size: 11px; font-weight: 700; }
+
+  /* FOOTER */
+  footer { padding: 20px 24px; background: var(--card); border: 1px solid var(--border); border-radius: var(--radius); font-size: 13px; color: var(--muted); margin-top: 18px; line-height: 1.5; }
+  footer strong { color: var(--navy); }
+
+  /* PREVIEW BANNER */
+  .preview-banner { background: #fef3c7; border: 1px solid #fbbf24; padding: 12px 16px; border-radius: 8px; margin-bottom: 18px; font-size: 13px; color: #451a03; line-height: 1.5; }
+  .preview-banner strong { color: #78350f; }
+</style>
+</head>
+<body>
+<div class="wrap">
+
+<!-- HERO -->
+<section class="hero">
+  <h1>📅 Week of May 12-18, 2026 — Production Calendar</h1>
+  <div class="hero-sub">5 topics · cross-posted across 14 derivative formats · scored Mon May 11 11:08 AM PT auto-run</div>
+  <div class="hero-meta">
+    <span class="hm-pill preview">⚠️ PREVIEW · Refreshes Mon May 11</span>
+    <span class="hm-pill">📍 Bay Area · East Palo Alto core market</span>
+    <span class="hm-pill gold">★★ 1 must-create · 4 strong supporting</span>
+    <span class="hm-pill">🎯 BOFU-weighted funnel mix</span>
+  </div>
+</section>
+
+<!-- PREVIEW BANNER -->
+<div class="preview-banner">
+  <strong>⚠️ This is a TEMPLATE PREVIEW.</strong> The real calendar will populate when the scheduled task fires <strong>Monday May 11 at 11:08 AM PT</strong>. The Wednesday slot (Hidden Equity) is the highest-confidence pick — it has its own preview single-topic dashboard already built. The other 4 days show the structure of what each daily topic will look like, populated with realistic candidate topics based on cross-platform pattern matching from your real Composio IG + YT performance data.
+</div>
+
+<!-- LIVE DATA LAYER -->
+<section class="data-layer">
+  <h2 class="dl-h">🔴 Live Data Layer — Powering This Week's Calendar</h2>
+  <p class="dl-sub">All 8 connected sources contribute to the weekly topic-pick scoring. 7 active, 1 configured. Composio IG + YT data is fresh from May 3.</p>
+  <div class="dl-grid">
+    <div class="dl-card active"><span class="dl-status active">Active</span><div class="dl-icon">📷</div><div class="dl-name">Composio Instagram</div><div class="dl-source">Source 7 · Own-channel</div><div class="dl-signal">1,266 followers · top post: Marina Safeway 800-unit dev (25 likes/8 comments)</div></div>
+    <div class="dl-card active"><span class="dl-status active">Active</span><div class="dl-icon">🎥</div><div class="dl-name">Composio YouTube</div><div class="dl-source">Source 7 · Own-channel</div><div class="dl-signal">1,760 subs · 911,625 lifetime views · top: Veteran Foreclosures (495 views)</div></div>
+    <div class="dl-card configured"><span class="dl-status configured">Configured</span><div class="dl-icon">🔍</div><div class="dl-name">DataForSEO</div><div class="dl-source">Source 8 · SERP + GMB</div><div class="dl-signal">$51 balance · first SERP query Mon May 11</div></div>
+    <div class="dl-card active"><span class="dl-status active">Active</span><div class="dl-icon">📰</div><div class="dl-name">n8n Local News</div><div class="dl-source">Source 6 · RSS hourly</div><div class="dl-signal">Palo Alto Online + Almanac News polling</div></div>
+    <div class="dl-card active"><span class="dl-status active">Active</span><div class="dl-icon">📊</div><div class="dl-name">GSC (via Windsor)</div><div class="dl-source">Source 2 · Search demand</div><div class="dl-signal">Refresh Mon May 11 — placeholder signals shown in day cards</div></div>
+    <div class="dl-card active"><span class="dl-status active">Active</span><div class="dl-icon">🔥</div><div class="dl-name">Reddit (via Apify)</div><div class="dl-source">Source 3 · Audience demand</div><div class="dl-signal">r/eastpaloalto + r/RealEstate scraping ready</div></div>
+    <div class="dl-card active"><span class="dl-status active">Active</span><div class="dl-icon">💬</div><div class="dl-name">YT Comment Mining</div><div class="dl-source">Source 3 · Audience signals</div><div class="dl-signal">Pulling clusters from your top videos</div></div>
+    <div class="dl-card active"><span class="dl-status active">Active</span><div class="dl-icon">🏠</div><div class="dl-name">Zillow Q&amp;A</div><div class="dl-source">Source 3 · Hyperlocal demand</div><div class="dl-signal">EPA / Belle Haven / Menlo Park pages monitored</div></div>
+  </div>
+</section>
+
+<!-- THE 5-DAY WEEK GRID -->
+<h2 class="sh">5 Topics · 5 Days · One Production Cadence</h2>
+<div class="week-grid">
+
+  <!-- MONDAY -->
+  <div class="day-card">
+    <div class="day-header">
+      <span class="day-name">Monday</span>
+      <span class="day-date">May 12</span>
+    </div>
+    <span class="day-funnel funnel-tofu">TOFU · Awareness</span>
+    <div class="day-title">Bay Area Spring 2026 Market Update — Where Rates Sit Right Now</div>
+    <div class="day-hook">"Mortgage rates just hit 6.46% — and it's reshaping how every Peninsula buyer is thinking about their next move."</div>
+    <div class="day-meta">
+      <span class="day-score">Opp 19/25</span>
+      <span style="font-size:10px;color:var(--muted)">GHL: <code>RATES</code></span>
+    </div>
+    <div class="day-formats">📦 YT Long → Short → IG Reel #1 → Blog → GMB → FB</div>
+    <a href="#" class="day-link placeholder">📄 Single-topic dashboard pending</a>
+  </div>
+
+  <!-- TUESDAY -->
+  <div class="day-card">
+    <div class="day-header">
+      <span class="day-name">Tuesday</span>
+      <span class="day-date">May 13</span>
+    </div>
+    <span class="day-funnel funnel-mofu">MOFU · Consideration</span>
+    <div class="day-title">EPA April 2026 Sales Report — Every Recent Sale Broken Down</div>
+    <div class="day-hook">"East Palo Alto closed 18 sales in April. Here's the data nobody else is showing you — broken down street by street."</div>
+    <div class="day-meta">
+      <span class="day-score">Opp 21/25</span>
+      <span style="font-size:10px;color:var(--muted)">GHL: <code>EPA</code></span>
+    </div>
+    <div class="day-formats">📦 YT Long → IG Carousel → Blog → GMB</div>
+    <a href="#" class="day-link placeholder">📄 Single-topic dashboard pending</a>
+  </div>
+
+  <!-- WEDNESDAY ★ -->
+  <div class="day-card star">
+    <div class="day-header">
+      <span class="day-name">Wednesday <span class="star-badge">MUST</span></span>
+      <span class="day-date">May 13</span>
+    </div>
+    <span class="day-funnel funnel-bofu">BOFU · Decision-Stage</span>
+    <div class="day-title">Hidden Equity: When Should EPA Homeowners Refi vs Sell in 2026?</div>
+    <div class="day-hook">"Most EPA homeowners are sitting on $400K-$800K in equity. Whether you refi or sell comes down to one simple math problem."</div>
+    <div class="day-meta">
+      <span class="day-score high">Opp 24/25 ★★</span>
+      <span style="font-size:10px;color:var(--muted)">GHL: <code>EQUITY</code></span>
+    </div>
+    <div class="day-formats">📦 ALL 14 formats · cross-platform max distribution</div>
+    <a href="https://graehamwatts.github.io/online-content/dashboards/single-topic/2026-05-04-hidden-equity-refi-vs-sell-production.html" class="day-link">📄 Open single-topic dashboard →</a>
+  </div>
+
+  <!-- THURSDAY -->
+  <div class="day-card">
+    <div class="day-header">
+      <span class="day-name">Thursday</span>
+      <span class="day-date">May 15</span>
+    </div>
+    <span class="day-funnel funnel-tofu">TOFU · Curiosity</span>
+    <div class="day-title">5 Reasons Peninsula Buyers Are Looking East of 101 in 2026</div>
+    <div class="day-hook">"For the first time in a decade, smart Peninsula buyers are crossing Highway 101. Here's what they figured out."</div>
+    <div class="day-meta">
+      <span class="day-score">Opp 18/25</span>
+      <span style="font-size:10px;color:var(--muted)">GHL: <code>VALUE</code></span>
+    </div>
+    <div class="day-formats">📦 IG Reel #2 → TikTok → Blog → GMB</div>
+    <a href="#" class="day-link placeholder">📄 Single-topic dashboard pending</a>
+  </div>
+
+  <!-- FRIDAY -->
+  <div class="day-card">
+    <div class="day-header">
+      <span class="day-name">Friday</span>
+      <span class="day-date">May 16</span>
+    </div>
+    <span class="day-funnel funnel-bofu">BOFU · Action</span>
+    <div class="day-title">Active EPA Inventory This Weekend — Under $1.2M</div>
+    <div class="day-hook">"Here's exactly what's available in East Palo Alto under $1.2M this weekend — with the math on each."</div>
+    <div class="day-meta">
+      <span class="day-score">Opp 20/25</span>
+      <span style="font-size:10px;color:var(--muted)">GHL: <code>INVENTORY</code></span>
+    </div>
+    <div class="day-formats">📦 IG Reel #1 → TikTok → Blog → Email blast</div>
+    <a href="#" class="day-link placeholder">📄 Single-topic dashboard pending</a>
+  </div>
+
+</div>
+
+<!-- WEEKLY STRATEGY -->
+<section class="card">
+  <h2 class="sh">Weekly Strategy — Funnel Mix &amp; Cross-Platform Distribution</h2>
+
+  <h3 style="font-size:14px;margin-bottom:6px">Funnel mix (5-day balance)</h3>
+  <div class="funnel-mix">
+    <div class="fm-segment fm-tofu" style="width:40%">TOFU · 2 days · 40%</div>
+    <div class="fm-segment fm-mofu" style="width:20%">MOFU · 1 day · 20%</div>
+    <div class="fm-segment fm-bofu" style="width:40%">BOFU · 2 days · 40%</div>
+  </div>
+  <p style="font-size:12px;color:var(--muted);margin:0">Healthy mix. BOFU-heavy works because your audience profile (long-tenured EPA owners + Peninsula buyers) is decision-ready. TOFU keeps the top of funnel filling.</p>
+
+  <div class="strategy-grid">
+    <div class="strategy-col">
+      <div class="sc-h">📈 What's working from your real data (Composio)</div>
+      <ul class="sc-list">
+        <li>Top IG post: Marina Safeway 800-unit dev → development news pattern</li>
+        <li>Top YT video: Veteran Foreclosures 495 views → housing data story pattern</li>
+        <li>YT #2: ChatGPT/AI homes 369 views → tech/AI in real estate pattern</li>
+        <li>EPA-specific content over-indexes (3 of top 6 cross-platform winners)</li>
+      </ul>
+    </div>
+    <div class="strategy-col">
+      <div class="sc-h">🎯 How this week's mix maps to those patterns</div>
+      <ul class="sc-list">
+        <li>Wed (Hidden Equity) = data story + decision frame ★ exact match for top 2 patterns</li>
+        <li>Tue (EPA Sales Report) = hyperlocal + data → matches EPA YT cluster</li>
+        <li>Fri (EPA Inventory) = hyperlocal + listing → matches EPA YT cluster</li>
+        <li>Mon + Thu = wider funnel coverage to keep TOFU healthy</li>
+      </ul>
+    </div>
+  </div>
+</section>
+
+<!-- TEAM HANDOFF -->
+<section class="card">
+  <h2 class="sh">Team Handoff — Who Does What This Week</h2>
+  <div class="strategy-grid">
+    <div class="strategy-col" style="background:linear-gradient(135deg,#fef9eb 0%,#ffffff 100%);border-color:var(--gold)">
+      <div class="sc-h" style="color:#78350f">📝 Eric — Blog &amp; SEO (5 deliverables)</div>
+      <ul class="sc-list">
+        <li><strong>Mon May 12:</strong> Blog post — Bay Area Rates Update (1500 words)</li>
+        <li><strong>Tue May 13:</strong> Blog post — EPA Sales Report (with sales table)</li>
+        <li><strong>Wed May 14:</strong> Blog post — Hidden Equity Refi vs Sell (cornerstone, 2500 words) ★</li>
+        <li><strong>Thu May 15:</strong> Blog post — 5 Reasons East of 101</li>
+        <li><strong>Fri May 16:</strong> Blog post — Active EPA Inventory This Weekend</li>
+        <li>Plus 5 GMB posts (one per day, paste-ready in Monday email)</li>
+      </ul>
+    </div>
+    <div class="strategy-col" style="background:linear-gradient(135deg,#f3e5f5 0%,#ffffff 100%);border-color:var(--purple)">
+      <div class="sc-h" style="color:var(--purple)">🎬 Peter — Video Production (5 video packages)</div>
+      <ul class="sc-list">
+        <li><strong>Mon:</strong> YT Short (45s) — Rates Update</li>
+        <li><strong>Tue:</strong> YT Long (8 min) — EPA Sales Report walkthrough</li>
+        <li><strong>Wed:</strong> ★ FULL package — YT Long Pt1+Pt2, IG Reel #1+#2, IG Carousel, TikTok, Shot List 12 shots</li>
+        <li><strong>Thu:</strong> IG Reel #2 (25s) — East of 101 reasons</li>
+        <li><strong>Fri:</strong> IG Reel #1 (45s) — Active inventory walkthrough</li>
+        <li>HeyGen avatar = Vaibhav Look #2 (warm desk) for Wed cornerstone</li>
+      </ul>
+    </div>
+  </div>
+</section>
+
+<!-- FOOTER -->
+<footer>
+  <strong>Graeham Watts</strong> · REALTOR · Intero Real Estate · DRE# 01466876 · 650-308-4727 · graehamwatts@gmail.com<br>
+  Production calendar generated by content-calendar skill · 2026-05-03 (PREVIEW) · Refreshes Monday May 11 at 11:08 AM PT via scheduled task <code>weekly-content-email-monday</code> · Source: Graehamwatts/skills GitHub (content-calendar SKILL.md, all 8 sources documented)
+</footer>
+
+</div>
+</body>
+</html>
