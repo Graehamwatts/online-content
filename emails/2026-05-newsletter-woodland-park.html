@@ -28,7 +28,14 @@
   }
 </style>
 <script>
-  // Tag <body> as 'browser-view' so the @media-screen styles light up only in browsers
+  // Tag <body>
+<!-- Preheader text — shows in inbox preview, hidden in email body -->
+<div style="display:none;font-size:1px;color:#f4f5f7;line-height:1px;max-height:0;max-width:0;opacity:0;overflow:hidden;mso-hide:all">
+  772 new units are coming. Here's what the data says about your home value over the next 24 months — plus 3 effects you should plan for now.
+</div>
+<!-- Spacer for Gmail-clipping prevention -->
+<div style="display:none;font-size:1px;color:#f4f5f7;line-height:1px;max-height:0;max-width:0;opacity:0;overflow:hidden">&zwnj;&nbsp;&zwnj;&nbsp;&zwnj;&nbsp;&zwnj;&nbsp;&zwnj;&nbsp;&zwnj;&nbsp;&zwnj;&nbsp;&zwnj;&nbsp;&zwnj;&nbsp;&zwnj;&nbsp;&zwnj;&nbsp;&zwnj;&nbsp;</div>
+ as 'browser-view' so the @media-screen styles light up only in browsers
   // (email clients strip scripts; this only runs in real browsers)
   document.addEventListener('DOMContentLoaded', () => document.body.classList.add('browser-view'));
 </script>
@@ -121,6 +128,16 @@
 </td></tr>
 
 <!-- WHAT THIS MEANS FOR YOU -->
+
+<!-- MID-SCROLL CTA — captures scrollers who don't reach the bottom -->
+<tr><td style="padding:14px 28px 28px;text-align:center">
+  <div style="background:linear-gradient(135deg,#1B2A4A 0%,#2c3e60 100%);border-radius:10px;padding:24px 22px;color:#fff">
+    <div style="font-size:11px;font-weight:700;letter-spacing:1px;text-transform:uppercase;color:#C5A258;margin-bottom:8px">Want the math for YOUR home?</div>
+    <div style="font-size:18px;font-weight:700;line-height:1.4;margin-bottom:14px">Get a free EPA valuation with the Woodland Park supply pressure factored in.</div>
+    <div style="font-size:13px;color:rgba(255,255,255,0.85);margin-bottom:16px">22 years Bay Area &middot; 100+ EPA transactions &middot; written report in 48 hours.</div>
+    <a href="mailto:graehamwatts@gmail.com?subject=Free%20EPA%20Home%20Valuation%20Request&body=Hi%20Graeham%2C%20I'd%20like%20a%20free%20valuation%20on%20my%20home.%20My%20address%20is%3A%20" style="display:inline-block;background:#C5A258;color:#1B2A4A;padding:14px 28px;border-radius:6px;font-weight:700;text-decoration:none;font-size:14px">Request your valuation &rarr;</a>
+  </div>
+</td></tr>
 <tr><td style="padding:28px 28px 8px;color:#2d3748;font-size:15px;line-height:1.7">
   <h2 style="margin:0 0 18px;font-size:20px;font-weight:800;color:#1B2A4A;border-bottom:2px solid #e2e5ea;padding-bottom:10px">What this means for you specifically</h2>
 
@@ -220,6 +237,18 @@
 <tr><td style="padding:24px 28px 16px;color:#2d3748;font-size:15px;line-height:1.7">
   <p style="margin:0 0 6px">&mdash; Graeham</p>
   <p style="margin:0;font-size:13px;color:#718096">Graeham Watts &middot; REALTOR &middot; Intero Real Estate &middot; DRE 01466876<br>650-308-4727 &middot; <a href="mailto:graehamwatts@gmail.com" style="color:#1B2A4A">graehamwatts@gmail.com</a></p>
+</td></tr>
+
+
+<!-- P.S. BLOCK — direct-response best practice -->
+<tr><td style="background:#fef9eb;padding:24px 28px;border-top:3px solid #B8860B">
+  <div style="font-size:14px;color:#5d4a1f;line-height:1.7">
+    <strong style="color:#78350f">P.S.</strong> &mdash; If even one of these three effects applies to your situation, the 18-month timeline matters. The pricing math is most favorable for sellers <em>before</em> Woodland Park's first units deliver. Reply with your address and I'll run the numbers for you. No obligation, no list-add &mdash; just the math.
+  </div>
+  <div style="margin-top:14px;padding-top:14px;border-top:1px dashed #B8860B;font-size:13px;color:#5d4a1f;line-height:1.6">
+    <strong style="color:#78350f">Know a neighbor considering selling?</strong>
+    <a href="mailto:?subject=Thought%20you'd%20want%20to%20see%20this%20%E2%80%94%20Woodland%20Park%20effect%20on%20EPA%20home%20values&body=Hi%20%E2%80%94%20Graeham%20Watts%20put%20together%20a%20good%20brief%20on%20what%20772%20new%20EPA%20units%20will%20do%20to%20home%20values%20over%20the%20next%2024%20months.%20Worth%205%20minutes%3A%0A%0Ahttps%3A%2F%2Fgraehamwatts.github.io%2Fonline-content%2Femails%2F2026-05-newsletter-woodland-park.html" style="color:#78350f;font-weight:700;text-decoration:underline">&rarr; Forward this brief in one click</a>
+  </div>
 </td></tr>
 
 <!-- FOOTER -->
