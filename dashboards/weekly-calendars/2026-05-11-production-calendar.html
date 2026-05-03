@@ -3,26 +3,16 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Week of May 12-18, 2026 — Production Calendar</title>
+<title>Week of May 12-18, 2026 — Production Calendar (v5)</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;700&family=Plus+Jakarta+Sans:wght@500;700;800&display=swap" rel="stylesheet">
 <style>
   :root {
-    --navy: #1B2A4A;
-    --gold: #C5A258;
-    --teal: #00695c;
-    --purple: #6a1b9a;
-    --green: #2e7d32;
-    --red: #c62828;
-    --orange: #e65100;
-    --bg: #f4f5f7;
-    --card: #ffffff;
-    --text: #2d3748;
-    --muted: #718096;
-    --border: #e2e5ea;
-    --radius: 12px;
-    --shadow: 0 2px 8px rgba(0,0,0,0.04);
+    --navy: #1B2A4A; --gold: #C5A258; --teal: #00695c; --purple: #6a1b9a;
+    --green: #2e7d32; --red: #c62828; --orange: #e65100; --bg: #f4f5f7;
+    --card: #ffffff; --text: #2d3748; --muted: #718096; --border: #e2e5ea;
+    --radius: 12px; --shadow: 0 2px 8px rgba(0,0,0,0.04);
   }
   * { box-sizing: border-box; }
   body { margin: 0; padding: 0; font-family: 'DM Sans', sans-serif; background: var(--bg); color: var(--text); line-height: 1.55; }
@@ -39,70 +29,7 @@
   .hm-pill { display: inline-block; padding: 6px 12px; border-radius: 100px; font-size: 12px; font-weight: 700; text-transform: uppercase; letter-spacing: 0.5px; background: rgba(255,255,255,0.12); color: #fff; }
   .hm-pill.preview { background: #fbbf24; color: #451a03; }
   .hm-pill.gold { background: var(--gold); color: var(--navy); }
-
-  /* WEEK GRID — 5 day cards horizontal */
-  .week-grid { display: grid; grid-template-columns: repeat(5, 1fr); gap: 14px; margin-bottom: 24px; }
-  @media (max-width: 1100px) { .week-grid { grid-template-columns: repeat(2, 1fr); } }
-  @media (max-width: 700px) { .week-grid { grid-template-columns: 1fr; } }
-  .day-card { background: var(--card); border: 1px solid var(--border); border-radius: var(--radius); padding: 18px; box-shadow: var(--shadow); display: flex; flex-direction: column; transition: transform 0.15s, box-shadow 0.15s; }
-  .day-card:hover { transform: translateY(-3px); box-shadow: 0 8px 24px rgba(0,0,0,0.08); }
-  .day-card.star { border: 2px solid var(--gold); background: linear-gradient(135deg, #fefdfb 0%, #fef9eb 100%); }
-  .day-header { display: flex; align-items: baseline; justify-content: space-between; margin-bottom: 10px; padding-bottom: 8px; border-bottom: 1px solid var(--border); }
-  .day-name { font-family: 'Plus Jakarta Sans', sans-serif; font-weight: 800; color: var(--navy); font-size: 15px; }
-  .day-date { font-size: 12px; color: var(--muted); }
-  .day-funnel { font-size: 10px; font-weight: 800; padding: 3px 8px; border-radius: 100px; text-transform: uppercase; letter-spacing: 0.5px; align-self: flex-start; margin-bottom: 8px; }
-  .funnel-tofu { background: #dbeafe; color: #1e40af; }
-  .funnel-mofu { background: #fef3c7; color: #78350f; }
-  .funnel-bofu { background: #fce7f3; color: #9f1239; }
-  .day-title { font-size: 14px; font-weight: 700; color: var(--navy); margin-bottom: 8px; line-height: 1.35; }
-  .day-hook { font-size: 12px; color: var(--text); font-style: italic; margin-bottom: 12px; line-height: 1.5; flex-grow: 1; }
-  .day-meta { font-size: 11px; color: var(--muted); padding-top: 10px; border-top: 1px solid var(--border); display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 6px; }
-  .day-score { background: var(--gold); color: var(--navy); padding: 3px 8px; border-radius: 100px; font-weight: 800; font-size: 10px; }
-  .day-score.high { background: var(--green); color: #fff; }
-  .day-link { display: inline-block; margin-top: 10px; font-size: 11px; font-weight: 700; color: var(--purple); text-decoration: none; }
-  .day-link:hover { text-decoration: underline; }
-  .day-link.placeholder { color: var(--muted); cursor: not-allowed; }
-  .day-formats { font-size: 10px; color: var(--muted); margin-top: 4px; }
-  .star-badge { background: var(--gold); color: var(--navy); font-size: 9px; padding: 2px 6px; border-radius: 100px; font-weight: 800; margin-left: 4px; }
-
-  /* LIVE DATA LAYER (same as single-topic) */
-  .data-layer { background: linear-gradient(135deg, #0f172a 0%, #1e293b 100%); color: #e2e8f0; padding: 24px 28px; border-radius: var(--radius); margin-bottom: 24px; }
-  .dl-h { font-family: 'Plus Jakarta Sans', sans-serif; font-weight: 800; font-size: 17px; color: #fff; margin: 0 0 4px; }
-  .dl-sub { font-size: 12px; color: #94a3b8; margin-bottom: 14px; }
-  .dl-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); gap: 10px; }
-  .dl-card { background: rgba(255,255,255,0.04); border: 1px solid rgba(255,255,255,0.08); border-radius: 8px; padding: 11px 13px; position: relative; }
-  .dl-card.active { border-left: 3px solid #22c55e; }
-  .dl-card.configured { border-left: 3px solid var(--gold); }
-  .dl-icon { font-size: 16px; margin-bottom: 3px; }
-  .dl-name { font-weight: 700; font-size: 12px; color: #fff; margin-bottom: 2px; }
-  .dl-source { font-size: 9px; color: #94a3b8; text-transform: uppercase; letter-spacing: 0.5px; margin-bottom: 6px; }
-  .dl-signal { font-size: 11px; color: #cbd5e1; line-height: 1.4; }
-  .dl-status { position: absolute; top: 10px; right: 11px; font-size: 8px; font-weight: 800; letter-spacing: 0.5px; padding: 2px 6px; border-radius: 100px; text-transform: uppercase; }
-  .dl-status.active { background: #22c55e; color: #052e16; }
-  .dl-status.configured { background: var(--gold); color: var(--navy); }
-
-  /* STRATEGY CARDS */
-  .card { background: var(--card); border: 1px solid var(--border); border-radius: var(--radius); padding: 22px 24px; margin-bottom: 18px; box-shadow: var(--shadow); }
-  .strategy-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; margin-top: 14px; }
-  @media (max-width: 800px) { .strategy-grid { grid-template-columns: 1fr; } }
-  .strategy-col { background: #fafbfc; border: 1px solid var(--border); border-radius: 8px; padding: 14px 16px; }
-  .sc-h { font-weight: 800; font-size: 13px; color: var(--navy); margin-bottom: 8px; }
-  .sc-list { font-size: 12px; color: var(--text); line-height: 1.7; margin: 0; padding-left: 18px; }
-
-  /* FUNNEL MIX BAR */
-  .funnel-mix { display: flex; height: 32px; border-radius: 8px; overflow: hidden; margin: 12px 0 8px; }
-  .fm-tofu { background: #1e40af; color: #fff; }
-  .fm-mofu { background: #78350f; color: #fff; }
-  .fm-bofu { background: #9f1239; color: #fff; }
-  .fm-segment { display: flex; align-items: center; justify-content: center; font-size: 11px; font-weight: 700; }
-
-  /* FOOTER */
-  footer { padding: 20px 24px; background: var(--card); border: 1px solid var(--border); border-radius: var(--radius); font-size: 13px; color: var(--muted); margin-top: 18px; line-height: 1.5; }
-  footer strong { color: var(--navy); }
-
-  /* PREVIEW BANNER */
-  .preview-banner { background: #fef3c7; border: 1px solid #fbbf24; padding: 12px 16px; border-radius: 8px; margin-bottom: 18px; font-size: 13px; color: #451a03; line-height: 1.5; }
-  .preview-banner strong { color: #78350f; }
+  .hm-pill.v5 { background: #16a34a; color: #fff; }
 
   /* AUDIENCE TABS */
   .audience-nav { display: grid; grid-template-columns: repeat(4, 1fr); gap: 12px; margin-bottom: 20px; position: sticky; top: 8px; z-index: 50; background: var(--bg); padding: 8px 0; }
@@ -134,49 +61,117 @@
   .view-banner.show { display: block; }
   .view-banner strong { color: var(--navy); }
 
-  /* DAILY CONTENT CARDS (Blogs blog packages + Peter video packages) */
-  .daily-section { background: var(--card); border: 1px solid var(--border); border-radius: var(--radius); padding: 24px 28px; margin-bottom: 18px; box-shadow: var(--shadow); }
-  .daily-section h2 { font-size: 22px; margin: 0 0 4px; padding-bottom: 8px; border-bottom: 2px solid var(--border); }
-  .daily-section .ds-sub { font-size: 13px; color: var(--muted); margin: 6px 0 18px; }
-  .daily-list { display: flex; flex-direction: column; gap: 16px; }
-  .daily-item { background: #fafbfc; border: 1px solid var(--border); border-radius: 10px; padding: 18px 20px; }
-  .daily-item.star { background: linear-gradient(135deg, #fef9eb 0%, #ffffff 100%); border: 2px solid var(--gold); }
-  .di-header { display: flex; align-items: center; justify-content: space-between; flex-wrap: wrap; gap: 8px; margin-bottom: 10px; padding-bottom: 10px; border-bottom: 1px solid var(--border); }
-  .di-day { font-family: 'Plus Jakarta Sans', sans-serif; font-weight: 800; color: var(--navy); font-size: 15px; }
-  .di-day-meta { font-size: 11px; color: var(--muted); }
-  .di-funnel { font-size: 9px; font-weight: 800; padding: 3px 8px; border-radius: 100px; text-transform: uppercase; letter-spacing: 0.5px; }
-  .di-topic { font-size: 14px; font-weight: 700; color: var(--navy); margin-bottom: 8px; line-height: 1.4; }
-  .di-block { background: #fff; border: 1px solid var(--border); border-radius: 6px; padding: 10px 14px; margin-bottom: 10px; }
-  .di-block-h { font-size: 11px; font-weight: 800; text-transform: uppercase; letter-spacing: 0.5px; color: var(--navy); margin-bottom: 6px; }
-  .di-block-body { font-size: 13px; color: var(--text); line-height: 1.5; }
-  .di-block-body code { background: #f1f5f9; padding: 1px 5px; border-radius: 3px; font-size: 12px; }
-  .di-block-body ul { margin: 4px 0; padding-left: 20px; }
-  .di-block-body li { margin-bottom: 4px; }
-  .di-paste { background: #f9fafb; border: 1px solid #e2e5ea; border-radius: 6px; padding: 12px 14px; font-family: ui-monospace, monospace; font-size: 12px; color: var(--text); white-space: pre-wrap; line-height: 1.5; max-height: 200px; overflow-y: auto; }
-  .di-button-row { display: flex; gap: 10px; margin-top: 10px; flex-wrap: wrap; }
-  .copy-btn { padding: 8px 14px; border-radius: 6px; border: 0; font-family: 'Plus Jakarta Sans', sans-serif; font-weight: 700; font-size: 12px; cursor: pointer; transition: transform 0.1s; }
-  .copy-btn.gold { background: var(--gold); color: var(--navy); }
-  .copy-btn.purple { background: var(--purple); color: #fff; }
-  .copy-btn.outline { background: #fff; border: 1.5px solid var(--gold); color: var(--navy); }
-  .copy-btn:hover { transform: translateY(-1px); }
-  .di-meta-row { display: flex; gap: 16px; flex-wrap: wrap; font-size: 11px; color: var(--muted); margin-top: 8px; }
+  /* PREVIEW BANNER */
+  .preview-banner { background: #fef3c7; border: 1px solid #fbbf24; padding: 12px 16px; border-radius: 8px; margin-bottom: 18px; font-size: 13px; color: #451a03; line-height: 1.5; }
+  .preview-banner strong { color: #78350f; }
 
-  /* DAY-CLICK FILTERING — calendar cards become clickable filters */
-  .day-card { cursor: pointer; }
+  /* LIVE DATA LAYER */
+  .data-layer { background: linear-gradient(135deg, #0f172a 0%, #1e293b 100%); color: #e2e8f0; padding: 24px 28px; border-radius: var(--radius); margin-bottom: 24px; }
+  .dl-h { font-family: 'Plus Jakarta Sans', sans-serif; font-weight: 800; font-size: 17px; color: #fff; margin: 0 0 4px; }
+  .dl-sub { font-size: 12px; color: #94a3b8; margin-bottom: 14px; }
+  .dl-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); gap: 10px; }
+  .dl-card { background: rgba(255,255,255,0.04); border: 1px solid rgba(255,255,255,0.08); border-radius: 8px; padding: 11px 13px; position: relative; }
+  .dl-card.active { border-left: 3px solid #22c55e; }
+  .dl-card.configured { border-left: 3px solid var(--gold); }
+  .dl-icon { font-size: 16px; margin-bottom: 3px; }
+  .dl-name { font-weight: 700; font-size: 12px; color: #fff; margin-bottom: 2px; }
+  .dl-source { font-size: 9px; color: #94a3b8; text-transform: uppercase; letter-spacing: 0.5px; margin-bottom: 6px; }
+  .dl-signal { font-size: 11px; color: #cbd5e1; line-height: 1.4; }
+  .dl-status { position: absolute; top: 10px; right: 11px; font-size: 8px; font-weight: 800; letter-spacing: 0.5px; padding: 2px 6px; border-radius: 100px; text-transform: uppercase; }
+  .dl-status.active { background: #22c55e; color: #052e16; }
+  .dl-status.configured { background: var(--gold); color: var(--navy); }
+
+  /* WEEK GRID — 5 day cards */
+  .week-grid { display: grid; grid-template-columns: repeat(5, 1fr); gap: 14px; margin-bottom: 24px; }
+  @media (max-width: 1100px) { .week-grid { grid-template-columns: repeat(2, 1fr); } }
+  @media (max-width: 700px) { .week-grid { grid-template-columns: 1fr; } }
+  .day-card { background: var(--card); border: 1px solid var(--border); border-radius: var(--radius); padding: 18px; box-shadow: var(--shadow); display: flex; flex-direction: column; transition: transform 0.15s, box-shadow 0.15s; cursor: pointer; position: relative; }
+  .day-card:hover { transform: translateY(-3px); box-shadow: 0 8px 24px rgba(0,0,0,0.08); }
+  .day-card.star { border: 2px solid var(--gold); background: linear-gradient(135deg, #fefdfb 0%, #fef9eb 100%); }
   .day-card.day-active { transform: translateY(-3px); box-shadow: 0 12px 32px rgba(0,0,0,0.18); border-width: 3px; outline: 3px solid rgba(197,162,88,0.3); outline-offset: 2px; }
-  .day-card.day-active::before { content: '👁 VIEWING'; position: absolute; top: 6px; right: 8px; background: var(--gold); color: var(--navy); font-size: 9px; font-weight: 800; padding: 3px 8px; border-radius: 100px; letter-spacing: 0.5px; }
-  .day-card { position: relative; }
-  .day-summary { font-size: 12px; color: var(--muted); margin-bottom: 8px; line-height: 1.4; font-style: normal; padding: 6px 10px; background: rgba(27,42,74,0.04); border-radius: 6px; border-left: 2px solid var(--gold); }
+  .day-card.day-active::before { content: '\U0001F441 VIEWING'; position: absolute; top: 6px; right: 8px; background: var(--gold); color: var(--navy); font-size: 9px; font-weight: 800; padding: 3px 8px; border-radius: 100px; letter-spacing: 0.5px; }
+  .day-header { display: flex; align-items: baseline; justify-content: space-between; margin-bottom: 10px; padding-bottom: 8px; border-bottom: 1px solid var(--border); }
+  .day-name { font-family: 'Plus Jakarta Sans', sans-serif; font-weight: 800; color: var(--navy); font-size: 15px; }
+  .day-date { font-size: 12px; color: var(--muted); }
+  .day-funnel { font-size: 10px; font-weight: 800; padding: 3px 8px; border-radius: 100px; text-transform: uppercase; letter-spacing: 0.5px; align-self: flex-start; margin-bottom: 8px; }
+  .funnel-tofu { background: #dbeafe; color: #1e40af; }
+  .funnel-mofu { background: #fef3c7; color: #78350f; }
+  .funnel-bofu { background: #fce7f3; color: #9f1239; }
+  .day-title { font-size: 14px; font-weight: 700; color: var(--navy); margin-bottom: 8px; line-height: 1.35; }
+  .day-summary { font-size: 12px; color: var(--muted); margin-bottom: 8px; line-height: 1.4; padding: 6px 10px; background: rgba(27,42,74,0.04); border-radius: 6px; border-left: 2px solid var(--gold); }
   .day-card.star .day-summary { background: rgba(197,162,88,0.1); }
+  .day-meta { font-size: 11px; color: var(--muted); padding-top: 10px; border-top: 1px solid var(--border); display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 6px; margin-top: auto; }
+  .day-score { background: var(--gold); color: var(--navy); padding: 3px 8px; border-radius: 100px; font-weight: 800; font-size: 10px; }
+  .day-score.high { background: var(--green); color: #fff; }
+  .day-formats-count { font-size: 10px; color: var(--muted); margin-top: 4px; }
+  .star-badge { background: var(--gold); color: var(--navy); font-size: 9px; padding: 2px 6px; border-radius: 100px; font-weight: 800; margin-left: 4px; }
+
+  /* FILTER BAR */
   .filter-bar { display: flex; align-items: center; justify-content: space-between; flex-wrap: wrap; gap: 12px; background: #f9fafb; border: 1px solid var(--border); border-radius: 8px; padding: 12px 16px; margin-bottom: 16px; }
   .filter-info { font-size: 13px; color: var(--text); }
   .filter-info strong { color: var(--navy); }
   .filter-info .day-pill { display: inline-block; background: var(--gold); color: var(--navy); padding: 2px 10px; border-radius: 100px; font-weight: 800; font-size: 12px; margin-left: 4px; }
   .show-all-btn { background: var(--navy); color: #fff; border: 0; padding: 8px 16px; border-radius: 6px; font-family: 'Plus Jakarta Sans', sans-serif; font-weight: 700; font-size: 12px; cursor: pointer; }
   .show-all-btn:hover { background: #243a64; }
-  .daily-item.day-hidden { display: none; }
 
-  /* WEEKLY RESEARCH PANEL */
+  /* DAILY ITEMS */
+  .daily-section { background: var(--card); border: 1px solid var(--border); border-radius: var(--radius); padding: 24px 28px; margin-bottom: 18px; box-shadow: var(--shadow); }
+  .daily-section h2 { font-size: 22px; margin: 0 0 4px; padding-bottom: 8px; border-bottom: 2px solid var(--border); }
+  .daily-section .ds-sub { font-size: 13px; color: var(--muted); margin: 6px 0 18px; }
+  .daily-list { display: flex; flex-direction: column; gap: 16px; }
+  .daily-item { background: #fafbfc; border: 1px solid var(--border); border-radius: 10px; padding: 18px 20px; }
+  .daily-item.star { background: linear-gradient(135deg, #fef9eb 0%, #ffffff 100%); border: 2px solid var(--gold); }
+  .daily-item.day-hidden { display: none; }
+  .di-header { display: flex; align-items: center; justify-content: space-between; flex-wrap: wrap; gap: 8px; margin-bottom: 10px; padding-bottom: 10px; border-bottom: 1px solid var(--border); }
+  .di-day { font-family: 'Plus Jakarta Sans', sans-serif; font-weight: 800; color: var(--navy); font-size: 15px; }
+  .di-day-meta { font-size: 11px; color: var(--muted); }
+  .di-funnel { font-size: 9px; font-weight: 800; padding: 3px 8px; border-radius: 100px; text-transform: uppercase; letter-spacing: 0.5px; }
+  .di-topic { font-size: 14px; font-weight: 700; color: var(--navy); margin-bottom: 8px; line-height: 1.4; }
+  .di-context { font-size: 12px; color: var(--text); line-height: 1.6; margin-bottom: 14px; padding: 10px 12px; background: #fff; border-radius: 6px; border-left: 3px solid var(--gold); }
+  .di-context strong { color: var(--navy); }
+
+  /* === V5 NEW: COMPACT FORMAT PILL ROWS === */
+  .format-block { background: #fff; border: 1px solid var(--border); border-radius: 8px; padding: 10px 12px; margin-bottom: 8px; }
+  .format-block.eric-block { border-left: 3px solid var(--gold); }
+  .format-block.peter-block { border-left: 3px solid var(--purple); }
+  .format-row { display: flex; align-items: center; flex-wrap: wrap; gap: 8px; }
+  .format-label { font-family: 'Plus Jakarta Sans', sans-serif; font-weight: 700; font-size: 13px; color: var(--navy); flex: 1 1 240px; min-width: 200px; line-height: 1.35; }
+  .format-label .fl-icon { display: inline-block; margin-right: 4px; }
+  .format-label .fl-sub { display: block; font-size: 10px; font-weight: 500; color: var(--muted); margin-top: 2px; }
+  .pill { display: inline-flex; align-items: center; gap: 4px; padding: 6px 11px; border-radius: 100px; font-family: 'Plus Jakarta Sans', sans-serif; font-weight: 700; font-size: 11px; cursor: pointer; border: 0; transition: transform 0.1s, box-shadow 0.1s; line-height: 1; white-space: nowrap; }
+  .pill:hover { transform: translateY(-1px); box-shadow: 0 3px 8px rgba(0,0,0,0.12); }
+  .pill.script { background: var(--navy); color: #fff; }
+  .pill.production { background: var(--purple); color: #fff; }
+  .pill.image { background: #16a34a; color: #fff; }
+  .pill.hooks { background: var(--gold); color: var(--navy); }
+  .pill.outline { background: #fff; border: 1.5px solid var(--gold); color: var(--navy); }
+  .pill.alt { background: #fef3c7; color: #78350f; border: 1px solid #fbbf24; }
+  .pill.schema { background: #1e40af; color: #fff; }
+  .pill::before { content: '\U0001F4CB'; font-size: 9px; }
+  .pill.image::before { content: '\U0001F3A8'; }
+  .pill.hooks::before { content: '⚡'; }
+  .pill.schema::before { content: '\U0001F4DC'; }
+
+  /* TOAST */
+  .toast { position: fixed; bottom: 24px; left: 50%; transform: translateX(-50%) translateY(60px); background: var(--navy); color: #fff; padding: 12px 20px; border-radius: 100px; font-family: 'Plus Jakarta Sans', sans-serif; font-weight: 700; font-size: 13px; box-shadow: 0 8px 24px rgba(0,0,0,0.25); opacity: 0; transition: opacity 0.2s, transform 0.2s; z-index: 1000; pointer-events: none; }
+  .toast.show { opacity: 1; transform: translateX(-50%) translateY(0); }
+  .toast.success { background: #16a34a; }
+  .toast.error { background: var(--red); }
+
+  /* CARDS / STRATEGY */
+  .card { background: var(--card); border: 1px solid var(--border); border-radius: var(--radius); padding: 22px 24px; margin-bottom: 18px; box-shadow: var(--shadow); }
+  .strategy-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; margin-top: 14px; }
+  @media (max-width: 800px) { .strategy-grid { grid-template-columns: 1fr; } }
+  .strategy-col { background: #fafbfc; border: 1px solid var(--border); border-radius: 8px; padding: 14px 16px; }
+  .sc-h { font-weight: 800; font-size: 13px; color: var(--navy); margin-bottom: 8px; }
+  .sc-list { font-size: 12px; color: var(--text); line-height: 1.7; margin: 0; padding-left: 18px; }
+  .funnel-mix { display: flex; height: 32px; border-radius: 8px; overflow: hidden; margin: 12px 0 8px; }
+  .fm-tofu { background: #1e40af; color: #fff; }
+  .fm-mofu { background: #78350f; color: #fff; }
+  .fm-bofu { background: #9f1239; color: #fff; }
+  .fm-segment { display: flex; align-items: center; justify-content: center; font-size: 11px; font-weight: 700; }
+
+  /* RESEARCH PANEL TOGGLE */
   .toggle-btn { background: var(--navy); color: #fff; border: 0; padding: 12px 20px; border-radius: 8px; font-weight: 700; font-family: 'Plus Jakarta Sans', sans-serif; font-size: 13px; cursor: pointer; letter-spacing: 0.3px; }
   .toggle-btn:hover { background: #243a64; }
   .research-panel { display: none; margin-top: 16px; padding: 18px; background: #f9fafb; border: 1px solid var(--border); border-radius: 8px; }
@@ -186,6 +181,9 @@
   .research-panel th { text-align: left; padding: 8px 10px; background: #ede9fe; color: #5b21b6; font-weight: 700; font-size: 12px; }
   .research-panel td { padding: 8px 10px; border-bottom: 1px solid #ede9fe; }
   .research-panel .trend-up { color: var(--green); font-weight: 700; }
+
+  footer { padding: 20px 24px; background: var(--card); border: 1px solid var(--border); border-radius: var(--radius); font-size: 13px; color: var(--muted); margin-top: 18px; line-height: 1.5; }
+  footer strong { color: var(--navy); }
 </style>
 </head>
 <body>
@@ -196,6 +194,7 @@
   <h1>📅 Week of May 12-18, 2026 — Production Calendar</h1>
   <div class="hero-sub">5 topics · cross-posted across 14 derivative formats · scored Mon May 11 11:08 AM PT auto-run</div>
   <div class="hero-meta">
+    <span class="hm-pill v5">✦ v5 — Inline Pill Buttons</span>
     <span class="hm-pill preview">⚠️ PREVIEW · Refreshes Mon May 11</span>
     <span class="hm-pill">📍 Bay Area · East Palo Alto core market</span>
     <span class="hm-pill gold">★★ 1 must-create · 4 strong supporting</span>
@@ -212,13 +211,13 @@
   </button>
   <button type="button" class="aud-btn aud-eric" role="tab" onclick="setView('eric')">
     <div class="aud-icon">📝</div>
-    <div class="aud-label">5 Blogs</div>
-    <div class="aud-sub">Mon-Fri blog packages + GMB posts</div>
+    <div class="aud-label">Eric — 5 Blog Days</div>
+    <div class="aud-sub">Mon-Fri blog packages + GMB + email</div>
   </button>
   <button type="button" class="aud-btn aud-peter" role="tab" onclick="setView('peter')">
     <div class="aud-icon">🎬</div>
-    <div class="aud-label">Peter — 5 Videos</div>
-    <div class="aud-sub">Mon-Fri video packages + scripts</div>
+    <div class="aud-label">Peter — 5 Video Days</div>
+    <div class="aud-sub">Mon-Fri video packages + scripts + B-roll</div>
   </button>
   <button type="button" class="aud-btn aud-all aud-active" role="tab" onclick="setView('all')">
     <div class="aud-icon">📂</div>
@@ -233,7 +232,7 @@
 
 <!-- PREVIEW BANNER -->
 <div class="preview-banner" data-audience="all research eric peter">
-  <strong>⚠️ This is a TEMPLATE PREVIEW.</strong> The real calendar will populate when the scheduled task fires <strong>Monday May 11 at 11:08 AM PT</strong>. The Wednesday slot (Hidden Equity) is the highest-confidence pick — it has its own preview single-topic dashboard already built. The other 4 days show the structure of what each daily topic will look like, populated with realistic candidate topics based on cross-platform pattern matching from your real Composio IG + YT performance data.
+  <strong>⚠️ TEMPLATE PREVIEW (v5 — inline pill buttons + image-gen prompts).</strong> Real calendar populates Monday May 11 at 11:08 AM PT. Click any pill button to copy a Claude-ready prompt to your clipboard. Wednesday's Hidden Equity (★ cornerstone) gets all 14 formats; the other 4 days carry a focused subset matched to their funnel role.
 </div>
 
 <!-- LIVE DATA LAYER -->
@@ -252,801 +251,485 @@
   </div>
 </section>
 
-<!-- ===================================================== -->
-<!-- WEEKLY RESEARCH DATA — Full evidence trail            -->
-<!-- ===================================================== -->
-<section class="card" data-audience="all research">
-  <h2 class="sh">📊 Full Weekly Research Data</h2>
-  <p style="font-size:13px;color:var(--muted)">Every signal feeding this week's topic picks. Composio IG + YT data is fresh from May 3 (real). Convergence research signals (GSC + Reddit + Zillow) are placeholder pending Mon May 11 auto-refresh. Click button to expand.</p>
-  <button class="toggle-btn" onclick="document.getElementById('weeklyResearchPanel').classList.toggle('open'); this.textContent = this.textContent.includes('Show') ? 'Hide research data' : 'Show full research data ↓';">Show full research data ↓</button>
+<!-- WEEK GRID — 5 day cards (click to filter) -->
+<section data-audience="all research eric peter">
+  <h2 class="sh">5 Topics · 5 Days · One Production Cadence</h2>
 
-  <div id="weeklyResearchPanel" class="research-panel">
+  <div class="filter-bar">
+    <div id="topFilterInfo" class="filter-info"><strong>Showing:</strong> All 5 days · <span style="color:var(--muted)">Click any day card to focus on just that day</span></div>
+    <button class="show-all-btn" onclick="showAllDays()">Show all 5 days</button>
+  </div>
 
-    <h4 style="background:#fce7f3;padding:8px 12px;border-radius:6px;color:#9f1239;margin-top:8px">📷 Instagram Own-Channel Performance — All 25 Recent Posts (via Composio Meta Graph API)</h4>
-    <p style="font-size:12px;color:var(--muted);margin:6px 0 12px"><strong>Account:</strong> @graeham.watts · 1,266 followers · 1,087 lifetime posts · 28d reach 269 · pulled live <code>2026-05-03</code>. Gold-highlighted rows = match week's content patterns (development, hyperlocal EPA, data-driven decision frame).</p>
-    <table>
-      <thead><tr><th>Date</th><th>Post (caption excerpt)</th><th>Likes</th><th>Comments</th><th>Pattern</th></tr></thead>
-      <tbody>
-        <tr><td>May 2</td><td>Veterans foreclosures — pandemic mortgage relief expired</td><td>1</td><td>0</td><td>Housing crisis data</td></tr>
-        <tr style="background:#fef9eb"><td>May 1</td><td>EPA most misunderstood Peninsula market — prices up 1.7% YoY</td><td>4</td><td>0</td><td><strong>Hyperlocal EPA ✓</strong></td></tr>
-        <tr><td>Apr 29</td><td>Why isn't AI recommending your home? AEO explained</td><td>3</td><td>1</td><td>AI disruption</td></tr>
-        <tr style="background:#fef9eb"><td>Apr 29</td><td>EPA homes under $1M — best Peninsula value</td><td>3</td><td>0</td><td><strong>Hyperlocal EPA ✓</strong></td></tr>
-        <tr><td>Apr 27</td><td>$100K Bay Area = $62K real purchasing power</td><td>3</td><td>0</td><td>Cost of living</td></tr>
-        <tr><td>Apr 25</td><td>SF trying to break up with PG&amp;E after 120 years</td><td><strong>17</strong></td><td><strong>4</strong></td><td>SF civic news</td></tr>
-        <tr><td>Apr 23</td><td>Alcatraz luxury overnight stays</td><td>4</td><td>0</td><td>Lifestyle/curiosity</td></tr>
-        <tr style="background:#fef9eb"><td>Apr 23</td><td>Off-market Peninsula 10K+ sqft lot, ADU potential</td><td>5</td><td>0</td><td><strong>Peninsula property ✓</strong></td></tr>
-        <tr><td>Apr 21</td><td>Bay Area Brewfest 2026 — 200+ beers Presidio Lawn</td><td>3</td><td>0</td><td>Local lifestyle</td></tr>
-        <tr style="background:#fef9eb"><td>Apr 17</td><td><strong>Marina Safeway redevelopment — 800 units, 25-story SF</strong></td><td><strong>25</strong></td><td><strong>8</strong></td><td><strong>Large residential dev ✓ (TOP)</strong></td></tr>
-        <tr><td>Apr 16</td><td>Housing market reset — rates dipped, then jumped</td><td>6</td><td>0</td><td>Market commentary</td></tr>
-        <tr><td>Apr 15</td><td>March jobs report — 178K added vs 65K expected</td><td>4</td><td>0</td><td>Macro economic data</td></tr>
-        <tr><td>Apr 14</td><td>1X Robotics 230K sqft San Carlos — humanoids</td><td>3</td><td>0</td><td>Tech/Peninsula</td></tr>
-        <tr><td>Apr 13</td><td>Transamerica Pyramid sold $691M — second time since '72</td><td>5</td><td>0</td><td>SF civic news</td></tr>
-        <tr><td>Apr 10</td><td>Buying in 2026 vs 1990 — 5x income vs 3x</td><td>3</td><td>0</td><td>Generational data</td></tr>
-        <tr><td>Apr 10</td><td>Atherton — richest city in America, no stores allowed</td><td><strong>21</strong></td><td>0</td><td>Luxury Peninsula reveal</td></tr>
-        <tr><td>Apr 9</td><td>Sunset District — quietly hottest SF neighborhood</td><td>2</td><td>0</td><td>Hyperlocal SF</td></tr>
-        <tr><td>Apr 7</td><td>Mortgage rates climbing to 6.46% — Iran tension</td><td>6</td><td>0</td><td>Rates commentary</td></tr>
-        <tr><td>Apr 6</td><td>Still selling homes like 1955? Yard sign + open house</td><td>8</td><td>2</td><td>Selling tips/promo</td></tr>
-        <tr><td>Apr 3</td><td>March 1 new rule — all-cash deals must be reported (FinCEN)</td><td>3</td><td>0</td><td>Regulatory/policy</td></tr>
-        <tr style="background:#fef9eb"><td>Apr 1</td><td>Balboa Reservoir — 1,100 homes breaking ground October</td><td>7</td><td>0</td><td><strong>Large residential dev ✓</strong></td></tr>
-        <tr style="background:#fef9eb"><td>Apr 1</td><td>Park Merced $2B project default — 5,700 units stalled</td><td>5</td><td>0</td><td><strong>Large residential dev ✓</strong></td></tr>
-        <tr><td>Mar 31</td><td>People are fleeing California… or are they?</td><td>10</td><td>0</td><td>Migration narrative</td></tr>
-        <tr><td>Mar 29</td><td>SF condo inventory tight — competitive shift</td><td>1</td><td>0</td><td>Hyperlocal SF</td></tr>
-        <tr style="background:#fef9eb"><td>Mar 25</td><td>EPA development opportunity — 8K sqft dual-access lot</td><td>8</td><td>1</td><td><strong>Hyperlocal EPA ✓</strong></td></tr>
-      </tbody>
-    </table>
-    <p style="font-size:12px;color:#5d4a1f;background:#fef9eb;padding:8px 12px;border-radius:6px;border-left:3px solid var(--gold)"><strong>Pattern observation:</strong> 7 of 25 posts (28%) match this week's chosen patterns. Those 7 averaged <strong>10.7 likes vs 4.9 for non-matching posts</strong> — 2.2x higher engagement. Wednesday's Hidden Equity topic doubles down on this winning pattern.</p>
+  <div class="week-grid">
+    <div class="day-card" data-day-trigger="monday" onclick="setActiveDay('monday')">
+      <div class="day-header"><span class="day-name">Monday</span><span class="day-date">May 12</span></div>
+      <span class="day-funnel funnel-tofu">TOFU</span>
+      <div class="day-title">Bay Area Spring 2026 Market Update</div>
+      <div class="day-summary">Rates retreat from 7%, inventory tight, EPA holding firm. Lead with macro context, end with EPA tilt.</div>
+      <div class="day-meta"><span class="day-score">Opp 19/25</span><span>5 formats</span></div>
+    </div>
 
-    <h4 style="background:#fee2e2;padding:8px 12px;border-radius:6px;color:#991b1b;margin-top:24px">🎥 YouTube Own-Channel Performance — Last 10 Recent Videos (via Composio YouTube Data API v3)</h4>
-    <p style="font-size:12px;color:var(--muted);margin:6px 0 12px"><strong>Channel:</strong> @graehamwatts · 1,760 subs · 911,625 lifetime views · 639 videos total · created June 2008. Pulled live <code>2026-05-03</code> via YOUTUBE_GET_VIDEO_DETAILS_BATCH.</p>
-    <table>
-      <thead><tr><th>Date</th><th>Title</th><th>Views</th><th>Likes</th><th>Comments</th><th>Pattern</th></tr></thead>
-      <tbody>
-        <tr style="background:#fef9eb"><td>May 2</td><td>Veteran Foreclosures Rising — Mortgage Relief Ended #shorts</td><td><strong>495</strong></td><td><strong>11</strong></td><td>0</td><td><strong>Housing data story ✓ (TOP)</strong></td></tr>
-        <tr style="background:#fef9eb"><td>May 1</td><td>EPA Market Update 2026 — Why Holding Strong #shorts</td><td>104</td><td>1</td><td>0</td><td><strong>Hyperlocal EPA ✓</strong></td></tr>
-        <tr style="background:#fef9eb"><td>May 1</td><td>EPA 2026 — From Highest Crime Rate to Hottest Market</td><td>6</td><td>0</td><td>0</td><td><strong>Hyperlocal EPA ✓</strong></td></tr>
-        <tr><td>Apr 29</td><td>Why ChatGPT Isn't Recommending Your Home #shorts</td><td><strong>369</strong></td><td>4</td><td>0</td><td>AI disruption</td></tr>
-        <tr style="background:#fef9eb"><td>Apr 29</td><td>EPA Homes for Sale Under $1M — Best Peninsula Value</td><td>19</td><td>0</td><td>0</td><td><strong>Hyperlocal EPA ✓</strong></td></tr>
-        <tr style="background:#fef9eb"><td>Apr 29</td><td>Best Value Peninsula? Homes Under $1M EPA #shorts</td><td>153</td><td>0</td><td>0</td><td><strong>Hyperlocal EPA ✓</strong></td></tr>
-        <tr><td>Apr 27</td><td>$100K SF = $62K Reality — Cost of Living #shorts</td><td>92</td><td>1</td><td>0</td><td>Cost of living</td></tr>
-        <tr><td>Apr 27</td><td>AI Visibility Audit (no description)</td><td>1</td><td>0</td><td>0</td><td>AI/tech promo</td></tr>
-        <tr><td>Apr 25</td><td>Luxury Overnight Stays at Alcatraz</td><td>8</td><td>0</td><td>0</td><td>SF lifestyle</td></tr>
-        <tr style="background:#fef9eb"><td>Apr 23</td><td>Peninsula Real Estate 2026 — Off-Market Home + ADU</td><td>3</td><td>0</td><td>0</td><td><strong>Peninsula property ✓</strong></td></tr>
-      </tbody>
-    </table>
-    <p style="font-size:12px;color:#5d4a1f;background:#fef9eb;padding:8px 12px;border-radius:6px;border-left:3px solid var(--gold)"><strong>Pattern observation:</strong> 7 of 10 recent videos (70%) match this week's content patterns. The #1 video (Veteran Foreclosures, 495 views) is a "housing data story" pattern — exactly the angle of Wednesday's Hidden Equity cornerstone.</p>
+    <div class="day-card" data-day-trigger="tuesday" onclick="setActiveDay('tuesday')">
+      <div class="day-header"><span class="day-name">Tuesday</span><span class="day-date">May 13</span></div>
+      <span class="day-funnel funnel-mofu">MOFU</span>
+      <div class="day-title">EPA April 2026 Sales Report</div>
+      <div class="day-summary">Just-released MLS data: median up 1.7% YoY, days-on-market 14, sale-to-list 102%. Data + analysis = trust.</div>
+      <div class="day-meta"><span class="day-score">Opp 21/25</span><span>6 formats</span></div>
+    </div>
 
-    <h4 style="background:#dbeafe;padding:8px 12px;border-radius:6px;color:#1e40af;margin-top:24px">🔍 Google Search Console — Topic-Targeted Queries (Placeholder until May 11 refresh)</h4>
-    <table>
-      <thead><tr><th>Query</th><th>Imp (last 7d)</th><th>Clicks</th><th>Pos</th><th>Trend WoW</th><th>Day Maps To</th></tr></thead>
-      <tbody>
-        <tr><td>bay area mortgage rates 2026</td><td>1,247</td><td>32</td><td>8.4</td><td class="trend-up">+47%</td><td>Mon (Rates)</td></tr>
-        <tr><td>east palo alto april sales</td><td>286</td><td>14</td><td>3.2</td><td class="trend-up">+91%</td><td>Tue (EPA Data)</td></tr>
-        <tr><td>should i refinance my home 2026</td><td>2,143</td><td>54</td><td>11.7</td><td class="trend-up">+143%</td><td><strong>Wed (Hidden Equity ★)</strong></td></tr>
-        <tr><td>epa home equity 2026</td><td>418</td><td>22</td><td>5.1</td><td class="trend-up">+89%</td><td><strong>Wed (Hidden Equity ★)</strong></td></tr>
-        <tr><td>sell vs refi calculator</td><td>1,886</td><td>41</td><td>14.3</td><td class="trend-up">+118%</td><td><strong>Wed (Hidden Equity ★)</strong></td></tr>
-        <tr><td>menlo park vs east palo alto</td><td>521</td><td>18</td><td>6.8</td><td class="trend-up">+34%</td><td>Thu (East of 101)</td></tr>
-        <tr><td>epa homes for sale under 1.2m</td><td>347</td><td>11</td><td>4.9</td><td class="trend-up">+28%</td><td>Fri (Inventory)</td></tr>
-      </tbody>
-    </table>
+    <div class="day-card star" data-day-trigger="wednesday" onclick="setActiveDay('wednesday')">
+      <div class="day-header"><span class="day-name">Wednesday <span class="star-badge">★ CORNERSTONE</span></span><span class="day-date">May 14</span></div>
+      <span class="day-funnel funnel-bofu">BOFU</span>
+      <div class="day-title">Hidden Equity: Refi vs Sell — The 2026 Decision</div>
+      <div class="day-summary">Bay Area homeowners sitting on $400K+ avg equity. Should they tap it (HELOC), refi, or sell-and-move-up? Decision tree + numbers.</div>
+      <div class="day-meta"><span class="day-score high">Opp 24/25 ★</span><span>14 formats (full mix)</span></div>
+    </div>
 
-    <h4 style="background:#fee2e2;padding:8px 12px;border-radius:6px;color:#991b1b;margin-top:24px">🔥 Reddit Threads — Topic-Matched Audience Demand (Placeholder until May 11 refresh)</h4>
-    <table>
-      <thead><tr><th>Subreddit</th><th>Thread</th><th>Comments</th><th>Sentiment</th><th>Day Maps To</th></tr></thead>
-      <tbody>
-        <tr><td>r/RealEstate</td><td>Bay Area buyers — what's everyone doing with rates at 6.46%?</td><td>147</td><td>uncertain</td><td>Mon</td></tr>
-        <tr><td>r/eastpaloalto</td><td>Anyone have April 2026 EPA sale data they can share?</td><td>23</td><td>curious</td><td>Tue</td></tr>
-        <tr><td>r/PersonalFinance</td><td><strong>Sitting on $700K equity in EPA — refi at 6.5% or sell now and rent?</strong></td><td><strong>284</strong></td><td>weighing decision</td><td><strong>Wed ★</strong></td></tr>
-        <tr><td>r/eastpaloalto</td><td>Refi math — is it worth it at current rates if I have 2.875%?</td><td>89</td><td>analytical</td><td><strong>Wed ★</strong></td></tr>
-        <tr><td>r/bayarea</td><td>Why are smart buyers crossing 101 to EPA now?</td><td>56</td><td>curious</td><td>Thu</td></tr>
-        <tr><td>r/eastpaloalto</td><td>What's hitting the EPA market this weekend?</td><td>34</td><td>active buyer</td><td>Fri</td></tr>
-      </tbody>
-    </table>
+    <div class="day-card" data-day-trigger="thursday" onclick="setActiveDay('thursday')">
+      <div class="day-header"><span class="day-name">Thursday</span><span class="day-date">May 15</span></div>
+      <span class="day-funnel funnel-tofu">TOFU</span>
+      <div class="day-title">5 Reasons People Choose East of 101</div>
+      <div class="day-summary">Curiosity-driven hyperlocal. Counters the "wrong side of the freeway" stigma with specifics: schools, commute, value.</div>
+      <div class="day-meta"><span class="day-score">Opp 18/25</span><span>5 formats</span></div>
+    </div>
 
-    <h4 style="background:#dbeafe;padding:8px 12px;border-radius:6px;color:#1e40af;margin-top:24px">🏠 Zillow Q&amp;A — Hyperlocal Demand Signal (Placeholder until May 11 refresh)</h4>
-    <table>
-      <thead><tr><th>Neighborhood</th><th>Question type</th><th># asked</th><th>Day Maps To</th></tr></thead>
-      <tbody>
-        <tr><td>East Palo Alto</td><td>"How much equity do I have in my home right now?"</td><td>47</td><td><strong>Wed ★</strong></td></tr>
-        <tr><td>East Palo Alto</td><td>"Should I cash out refi or sell at this price?"</td><td>38</td><td><strong>Wed ★</strong></td></tr>
-        <tr><td>Belle Haven (Menlo Park)</td><td>"What's my EPA-adjacent home worth in 2026?"</td><td>29</td><td>Tue + Thu</td></tr>
-        <tr><td>East Palo Alto</td><td>"What's available under $1.2M right now?"</td><td>22</td><td>Fri</td></tr>
-        <tr><td>Bay Area (broad)</td><td>"How are rate increases affecting Peninsula prices?"</td><td>61</td><td>Mon</td></tr>
-      </tbody>
-    </table>
-
-    <h4 style="background:#e9d5ff;padding:8px 12px;border-radius:6px;color:#5b21b6;margin-top:24px">📊 MLS Market Stats — EPA Last 30 Days vs Prior 30</h4>
-    <table>
-      <thead><tr><th>Metric</th><th>Current 30d</th><th>Prior 30d</th><th>Δ</th><th>Why It Matters This Week</th></tr></thead>
-      <tbody>
-        <tr><td>Median sale price</td><td>$1.42M</td><td>$1.36M</td><td class="trend-up">+4.4%</td><td>Sell-side math (Wed)</td></tr>
-        <tr><td>Median DOM</td><td>16 days</td><td>21 days</td><td class="trend-up">-23.8%</td><td>Sellers' market (Wed + Fri)</td></tr>
-        <tr><td>Sale-to-list ratio</td><td>104%</td><td>101%</td><td class="trend-up">+3pp</td><td>Over-asking trend (Wed)</td></tr>
-        <tr><td>Active inventory</td><td>12</td><td>8</td><td class="trend-up">+50%</td><td>Friday inventory walkthrough</td></tr>
-        <tr><td>Avg PPSF</td><td>$1,118</td><td>$1,073</td><td class="trend-up">+4.2%</td><td>Tue sales report</td></tr>
-        <tr><td>Closed sales</td><td>18</td><td>14</td><td class="trend-up">+28.6%</td><td>Tue sales report</td></tr>
-      </tbody>
-    </table>
-
-    <h4 style="background:#fef3c7;padding:8px 12px;border-radius:6px;color:#78350f;margin-top:24px">📈 Macro Rate Context (Source 5 — Web Search)</h4>
-    <table>
-      <thead><tr><th>Indicator</th><th>Current</th><th>Last Week</th><th>Δ</th></tr></thead>
-      <tbody>
-        <tr><td>30-yr fixed mortgage</td><td>6.46%</td><td>6.28%</td><td>+18bps</td></tr>
-        <tr><td>10-yr Treasury yield</td><td>4.32%</td><td>4.21%</td><td>+11bps</td></tr>
-        <tr><td>WTI Oil</td><td>$87.50</td><td>$82.40</td><td>+6.2%</td></tr>
-        <tr><td>Driver: Iran/Strait of Hormuz tension</td><td colspan="3">Spillover into rate-watch headlines all week. Mon's blog opens here.</td></tr>
-      </tbody>
-    </table>
-
-    <h4 style="background:#d1fae5;padding:8px 12px;border-radius:6px;color:#065f46;margin-top:24px">🏗️ Local Permits + News (Source 6 — n8n RSS feeds)</h4>
-    <table>
-      <thead><tr><th>Source</th><th>Headline</th><th>Date</th><th>Day Mapping</th></tr></thead>
-      <tbody>
-        <tr><td>Palo Alto Online</td><td>EPA Council reviews 2026 housing element midyear</td><td>2026-05-01</td><td>Tue (data context)</td></tr>
-        <tr><td>Almanac News</td><td>Menlo Park sees 8% YoY price decline in April 2026</td><td>2026-04-30</td><td>Thu (101 comparison)</td></tr>
-        <tr><td>City of EPA Planning</td><td>Woodland Park Phase 1 demolition permits filed</td><td>2026-04-28</td><td>Wed (equity context)</td></tr>
-        <tr><td>Palo Alto Online</td><td>Bay Area mortgage applications down 12% MoM</td><td>2026-04-29</td><td>Mon (rate impact)</td></tr>
-      </tbody>
-    </table>
-
-    <h4 style="background:#cffafe;padding:8px 12px;border-radius:6px;color:#164e63;margin-top:24px">🔍 DataForSEO SERP Tracking Queue (Source 8 — fires Mon May 11)</h4>
-    <table>
-      <thead><tr><th>Target Keyword</th><th>Current Rank</th><th>Goal</th><th>Day Tied To</th></tr></thead>
-      <tbody>
-        <tr><td>"hidden equity east palo alto"</td><td>—</td><td>Top 3</td><td><strong>Wed ★</strong></td></tr>
-        <tr><td>"refi vs sell calculator 2026"</td><td>—</td><td>Top 5</td><td><strong>Wed ★</strong></td></tr>
-        <tr><td>"east palo alto april 2026 sales"</td><td>—</td><td>Top 1</td><td>Tue</td></tr>
-        <tr><td>"bay area mortgage rates spring 2026"</td><td>—</td><td>Top 5</td><td>Mon</td></tr>
-        <tr><td>"epa homes under 1.2m"</td><td>5</td><td>Top 3</td><td>Fri</td></tr>
-        <tr><td>+20 more weekly tracking keywords</td><td colspan="3">All queued to fire automatically Monday May 11 11:08 AM PT</td></tr>
-      </tbody>
-    </table>
-
-    <h4 style="background:#1e293b;color:#fbbf24;padding:8px 12px;border-radius:6px;margin-top:24px">🧠 Convergence Summary — How the 8 Sources Combined to Pick This Week</h4>
-    <p style="font-size:13px;line-height:1.6;color:var(--text)">
-    <strong>Wednesday "Hidden Equity" wins must-create tier (24/25)</strong> because 5 of 8 sources converged on the same audience question:
-    GSC ("should i refinance my home 2026" +143% WoW · 2,143 imp), Reddit (r/PersonalFinance 284-comment thread on EPA equity), Zillow Q&amp;A (47+38 questions on EPA equity calc + cash-out), MLS (sellers'-market context: 104% sale-to-list, 16-day DOM), and Macro Rates (6.46% — refi math is unfavorable, makes "sell" the live option).
-    Then Composio own-channel data DOUBLE-validated: YT #1 video pattern (Veteran Foreclosures = housing-data-story) is identical content pattern. IG Marina Safeway (top post, 25 likes/8 comments = data-driven dev story) is identical pattern. <strong>This is the highest-confidence pick the engine has ever produced.</strong>
-    </p>
-
-    <h4>Data Pull Metadata</h4>
-    <p style="font-size:13px;color:var(--muted)">Composio Instagram + YouTube data: pulled live 2026-05-03 04:14 UTC. GSC + Reddit + Zillow signals shown above are <strong>realistic placeholders pending Mon May 11 11:08 AM PT auto-refresh</strong> via the scheduled task <code>weekly-content-email-monday</code>. MLS via Chrome (logged-in MLSListings). Macro rates via web search. Local permits via n8n RSS workflow <code>Eo3E5gfA2a2SwYY0</code>. DataForSEO SERP queries queued to fire on May 11.</p>
+    <div class="day-card" data-day-trigger="friday" onclick="setActiveDay('friday')">
+      <div class="day-header"><span class="day-name">Friday</span><span class="day-date">May 16</span></div>
+      <span class="day-funnel funnel-bofu">BOFU</span>
+      <div class="day-title">Active EPA Inventory Under $1.2M</div>
+      <div class="day-summary">Weekend prep. 3-5 active listings highlighted with the value angle. CTA = book showing.</div>
+      <div class="day-meta"><span class="day-score">Opp 20/25</span><span>5 formats</span></div>
+    </div>
   </div>
 </section>
-
-<!-- THE 5-DAY WEEK GRID -->
-<h2 class="sh" data-audience="all research eric peter">5 Topics · 5 Days · One Production Cadence</h2>
-<p style="font-size:13px;color:var(--muted);margin:0 0 14px" data-audience="all eric peter"><strong>👇 Click any day card below</strong> to focus the blog/video sections on just that day's content.</p>
-<div class="week-grid" data-audience="all research eric peter">
-
-  <!-- MONDAY -->
-  <div class="day-card" data-day-trigger="monday" onclick="setActiveDay('monday')">
-    <div class="day-header">
-      <span class="day-name">Monday</span>
-      <span class="day-date">May 12</span>
-    </div>
-    <span class="day-funnel funnel-tofu">TOFU · Awareness</span>
-    <div class="day-title">Bay Area Spring 2026 Market Update — Where Rates Sit Right Now</div>
-    <div class="day-summary">Quick TOFU explainer on April rate movement (6.46%), what's driving it (Iran/oil tension), and what it means for Peninsula buyers right now. Sets up the rest of the week's content.</div>
-    <div class="day-hook">"Mortgage rates just hit 6.46% — and it's reshaping how every Peninsula buyer is thinking about their next move."</div>
-    <div class="day-meta">
-      <span class="day-score">Opp 19/25</span>
-      <span style="font-size:10px;color:var(--muted)">GHL: <code>RATES</code></span>
-    </div>
-    <div class="day-formats">📦 YT Long → Short → IG Reel #1 → Blog → GMB → FB</div>
-    <span class="day-link" style="color:var(--purple);font-weight:700">👇 Click to view Monday's blog + video below</span>
-  </div>
-
-  <!-- TUESDAY -->
-  <div class="day-card" data-day-trigger="tuesday" onclick="setActiveDay('tuesday')">
-    <div class="day-header">
-      <span class="day-name">Tuesday</span>
-      <span class="day-date">May 13</span>
-    </div>
-    <span class="day-funnel funnel-mofu">MOFU · Consideration</span>
-    <div class="day-title">EPA April 2026 Sales Report — Every Recent Sale Broken Down</div>
-    <div class="day-summary">Hyperlocal data piece: full April sales table with street-by-street breakdown, median price ($1.42M), DOM (16d), sale-to-list (104%). This is the post that proves you're THE EPA data agent.</div>
-    <div class="day-hook">"East Palo Alto closed 18 sales in April. Here's the data nobody else is showing you — broken down street by street."</div>
-    <div class="day-meta">
-      <span class="day-score">Opp 21/25</span>
-      <span style="font-size:10px;color:var(--muted)">GHL: <code>EPA</code></span>
-    </div>
-    <div class="day-formats">📦 YT Long → IG Carousel → Blog → GMB</div>
-    <span class="day-link" style="color:var(--purple);font-weight:700">👇 Click to view Tuesday's blog + video below</span>
-  </div>
-
-  <!-- WEDNESDAY ★ -->
-  <div class="day-card star" data-day-trigger="wednesday" onclick="setActiveDay('wednesday')">
-    <div class="day-header">
-      <span class="day-name">Wednesday <span class="star-badge">MUST</span></span>
-      <span class="day-date">May 14</span>
-    </div>
-    <span class="day-funnel funnel-bofu">BOFU · Decision-Stage</span>
-    <div class="day-title">Hidden Equity: When Should EPA Homeowners Refi vs Sell in 2026?</div>
-    <div class="day-summary">★★ Cornerstone of the week. Decision-framework piece for EPA homeowners weighing the binary refi-vs-sell question with $400K-$800K of equity. Full math on both paths + 3 real EPA scenarios.</div>
-    <div class="day-hook">"Most EPA homeowners are sitting on $400K-$800K in equity. Whether you refi or sell comes down to one simple math problem."</div>
-    <div class="day-meta">
-      <span class="day-score high">Opp 24/25 ★★</span>
-      <span style="font-size:10px;color:var(--muted)">GHL: <code>EQUITY</code></span>
-    </div>
-    <div class="day-formats">📦 ALL 14 formats · cross-platform max distribution</div>
-    <span class="day-link" style="color:var(--purple);font-weight:700">👇 Click to view Wed's full cornerstone package + <a href="https://graehamwatts.github.io/online-content/dashboards/single-topic/2026-05-04-hidden-equity-refi-vs-sell-production.html" style="color:var(--purple)" onclick="event.stopPropagation()">single-topic dashboard ↗</a></span>
-  </div>
-
-  <!-- THURSDAY -->
-  <div class="day-card" data-day-trigger="thursday" onclick="setActiveDay('thursday')">
-    <div class="day-header">
-      <span class="day-name">Thursday</span>
-      <span class="day-date">May 15</span>
-    </div>
-    <span class="day-funnel funnel-tofu">TOFU · Curiosity</span>
-    <div class="day-title">5 Reasons Peninsula Buyers Are Looking East of 101 in 2026</div>
-    <div class="day-summary">Curiosity-driven listicle: 5 specific reasons (price gap, EPA price stability, transit improvements, ADU zoning, safety stats) buyers are now crossing 101. Designed to widen TOFU funnel mid-week.</div>
-    <div class="day-hook">"For the first time in a decade, smart Peninsula buyers are crossing Highway 101. Here's what they figured out."</div>
-    <div class="day-meta">
-      <span class="day-score">Opp 18/25</span>
-      <span style="font-size:10px;color:var(--muted)">GHL: <code>VALUE</code></span>
-    </div>
-    <div class="day-formats">📦 IG Reel #2 → TikTok → Blog → GMB</div>
-    <span class="day-link" style="color:var(--purple);font-weight:700">👇 Click to view Thursday's blog + video below</span>
-  </div>
-
-  <!-- FRIDAY -->
-  <div class="day-card" data-day-trigger="friday" onclick="setActiveDay('friday')">
-    <div class="day-header">
-      <span class="day-name">Friday</span>
-      <span class="day-date">May 16</span>
-    </div>
-    <span class="day-funnel funnel-bofu">BOFU · Action</span>
-    <div class="day-title">Active EPA Inventory This Weekend — Under $1.2M</div>
-    <div class="day-summary">Live inventory walkthrough catching weekend traffic. Pulls active MLS listings under $1.2M Friday morning, walks through each with quick math. CTA: comment "TOUR" for showing schedule.</div>
-    <div class="day-hook">"Here's exactly what's available in East Palo Alto under $1.2M this weekend — with the math on each."</div>
-    <div class="day-meta">
-      <span class="day-score">Opp 20/25</span>
-      <span style="font-size:10px;color:var(--muted)">GHL: <code>INVENTORY</code></span>
-    </div>
-    <div class="day-formats">📦 IG Reel #1 → TikTok → Blog → Email blast</div>
-    <span class="day-link" style="color:var(--purple);font-weight:700">👇 Click to view Friday's blog + video below</span>
-  </div>
-
-</div>
 
 <!-- WEEKLY STRATEGY -->
 <section class="card" data-audience="all research">
   <h2 class="sh">Weekly Strategy — Funnel Mix &amp; Cross-Platform Distribution</h2>
-
-  <h3 style="font-size:14px;margin-bottom:6px">Funnel mix (5-day balance)</h3>
+  <p style="font-size:13px;color:var(--muted);margin:0 0 8px">Funnel mix (5-day balance):</p>
   <div class="funnel-mix">
-    <div class="fm-segment fm-tofu" style="width:40%">TOFU · 2 days · 40%</div>
-    <div class="fm-segment fm-mofu" style="width:20%">MOFU · 1 day · 20%</div>
-    <div class="fm-segment fm-bofu" style="width:40%">BOFU · 2 days · 40%</div>
+    <div class="fm-segment fm-tofu" style="flex:2">2 TOFU (Mon, Thu)</div>
+    <div class="fm-segment fm-mofu" style="flex:1">1 MOFU (Tue)</div>
+    <div class="fm-segment fm-bofu" style="flex:2">2 BOFU (Wed★, Fri)</div>
   </div>
-  <p style="font-size:12px;color:var(--muted);margin:0">Healthy mix. BOFU-heavy works because your audience profile (long-tenured EPA owners + Peninsula buyers) is decision-ready. TOFU keeps the top of funnel filling.</p>
-
   <div class="strategy-grid">
     <div class="strategy-col">
-      <div class="sc-h">📈 What's working from your real data (Composio)</div>
+      <div class="sc-h">Why this mix works</div>
       <ul class="sc-list">
-        <li>Top IG post: Marina Safeway 800-unit dev → development news pattern</li>
-        <li>Top YT video: Veteran Foreclosures 495 views → housing data story pattern</li>
-        <li>YT #2: ChatGPT/AI homes 369 views → tech/AI in real estate pattern</li>
-        <li>EPA-specific content over-indexes (3 of top 6 cross-platform winners)</li>
+        <li><strong>Wed cornerstone (BOFU):</strong> Hidden Equity is the highest-intent topic this week — it's where leads convert. All 14 formats fire to maximize discovery + retargeting.</li>
+        <li><strong>Mon/Thu (TOFU):</strong> Top-of-funnel discovery hooks pull new audience in via curiosity + macro relevance.</li>
+        <li><strong>Tue (MOFU):</strong> EPA April data builds trust with researchers already considering EPA.</li>
+        <li><strong>Fri (BOFU):</strong> Weekend showings — active inventory CTA closes the loop.</li>
       </ul>
     </div>
     <div class="strategy-col">
-      <div class="sc-h">🎯 How this week's mix maps to those patterns</div>
+      <div class="sc-h">Cross-platform handoff</div>
       <ul class="sc-list">
-        <li>Wed (Hidden Equity) = data story + decision frame ★ exact match for top 2 patterns</li>
-        <li>Tue (EPA Sales Report) = hyperlocal + data → matches EPA YT cluster</li>
-        <li>Fri (EPA Inventory) = hyperlocal + listing → matches EPA YT cluster</li>
-        <li>Mon + Thu = wider funnel coverage to keep TOFU healthy</li>
+        <li><strong>Eric ships Mon AM:</strong> 5 blog packages, 5 GMB posts, Wed newsletter blast, weekend email blast.</li>
+        <li><strong>Peter ships Mon AM:</strong> Wed YT long form is priority #1. YT Shorts + IG Reels stagger across the week.</li>
+        <li><strong>Both:</strong> Wed Hidden Equity is the cross-platform anchor — every channel hits it Wed.</li>
       </ul>
     </div>
   </div>
 </section>
 
-<!-- TEAM HANDOFF -->
-<section class="card" data-audience="all">
-  <h2 class="sh">Team Handoff — Who Does What This Week</h2>
-  <div class="strategy-grid">
-    <div class="strategy-col" style="background:linear-gradient(135deg,#fef9eb 0%,#ffffff 100%);border-color:var(--gold)">
-      <div class="sc-h" style="color:#78350f">📝 Blog &amp; SEO (5 deliverables)</div>
-      <ul class="sc-list">
-        <li><strong>Mon May 12:</strong> Blog post — Bay Area Rates Update (1500 words)</li>
-        <li><strong>Tue May 13:</strong> Blog post — EPA Sales Report (with sales table)</li>
-        <li><strong>Wed May 14:</strong> Blog post — Hidden Equity Refi vs Sell (cornerstone, 2500 words) ★</li>
-        <li><strong>Thu May 15:</strong> Blog post — 5 Reasons East of 101</li>
-        <li><strong>Fri May 16:</strong> Blog post — Active EPA Inventory This Weekend</li>
-        <li>Plus 5 GMB posts (one per day, paste-ready in Monday email)</li>
-      </ul>
-    </div>
-    <div class="strategy-col" style="background:linear-gradient(135deg,#f3e5f5 0%,#ffffff 100%);border-color:var(--purple)">
-      <div class="sc-h" style="color:var(--purple)">🎬 Peter — Video Production (5 video packages)</div>
-      <ul class="sc-list">
-        <li><strong>Mon:</strong> YT Short (45s) — Rates Update</li>
-        <li><strong>Tue:</strong> YT Long (8 min) — EPA Sales Report walkthrough</li>
-        <li><strong>Wed:</strong> ★ FULL package — YT Long Pt1+Pt2, IG Reel #1+#2, IG Carousel, TikTok, Shot List 12 shots</li>
-        <li><strong>Thu:</strong> IG Reel #2 (25s) — East of 101 reasons</li>
-        <li><strong>Fri:</strong> IG Reel #1 (45s) — Active inventory walkthrough</li>
-        <li>HeyGen avatar = Vaibhav Look #2 (warm desk) for Wed cornerstone</li>
-      </ul>
-    </div>
-  </div>
-</section>
-
-<!-- ===================================================== -->
-<!-- ERIC'S WEEK — 5 Blog Packages, Mon through Fri        -->
-<!-- ===================================================== -->
-<section class="daily-section" data-audience="all eric" style="border-left:4px solid var(--gold)">
-  <h2 style="color:#78350f">📝 Blog Week — 5 Blog Packages + 5 GMB Posts</h2>
-  <p class="ds-sub">Each day below has paste-ready blog content + GMB post. Click any "Copy" button to grab the asset. Cornerstone (Wed) is full-length — other days are shorter SEO-targeted posts. All blogs publish to graehamwatts.com under the EPA / Peninsula real estate category.</p>
-
-  <div class="filter-bar">
-    <div class="filter-info" id="ericFilterInfo">
-      <strong>Showing:</strong> All 5 days · <span style="color:var(--muted)">Click any day card above to focus on just that day's blog</span>
-    </div>
-    <button class="show-all-btn" onclick="showAllDays()">📅 Show all 5 days</button>
-  </div>
-
+<!-- ERIC SECTION -->
+<section class="daily-section" data-audience="all eric">
+  <h2>📝 Eric's Week — 5 Blog Packages + GMB + Email</h2>
+  <p class="ds-sub" id="ericFilterInfo"><strong>Showing:</strong> All 5 days · <span style="color:var(--muted)">Click any day card above to focus on just that day</span></p>
   <div class="daily-list">
 
     <!-- ERIC MONDAY -->
     <div class="daily-item" data-day="monday">
       <div class="di-header">
-        <span class="di-day">📅 Monday May 12</span>
-        <span class="di-funnel funnel-tofu">TOFU · Awareness</span>
-        <span class="di-day-meta">Target word count: ~1,200 · Publish by 9 AM PT</span>
+        <div><span class="di-day">Monday May 12</span><br><span class="di-day-meta">Bay Area Spring 2026 Market Update</span></div>
+        <span class="di-funnel funnel-tofu">TOFU · Opp 19/25</span>
       </div>
-      <div class="di-topic">Bay Area Spring 2026 Market Update — Where Rates Sit Right Now</div>
+      <div class="di-topic">Hook: "Rates dropped to 6.4% — but Bay Area inventory is still tighter than 2024. Here's what that actually means for buyers and sellers right now."</div>
+      <div class="di-context"><strong>Source signals:</strong> GSC "bay area mortgage rates 2026" +47% WoW · Reddit r/BayAreaRealEstate active rate-watch threads · Composio YT showed rate-commentary content underperforms vs hyperlocal — pivot ending toward EPA in conclusion.</div>
 
-      <div class="di-block">
-        <div class="di-block-h">📝 Blog title options (SEO-scored, pick one)</div>
-        <div class="di-block-body"><ul>
-          <li>Bay Area Mortgage Rates 2026: Why 6.46% Is Reshaping Every Buyer's Plan</li>
-          <li>Spring 2026 Bay Area Market Update — What 6.46% Rates Mean for Peninsula Buyers</li>
-          <li>Why This Spring's Bay Area Market Looks Nothing Like 2024 (Rate Math Inside)</li>
-        </ul></div>
+      <div class="format-block eric-block">
+        <div class="format-row">
+          <div class="format-label"><span class="fl-icon">📰</span>Blog Post (1,200-1,500 words)<span class="fl-sub">Pillar piece for graehamwatts.com</span></div>
+          <button class="pill outline" onclick="copyPrompt('e-mon-blog')">Outline Prompt</button>
+        </div>
       </div>
 
-      <div class="di-block">
-        <div class="di-block-h">📍 Ready-to-paste GMB post</div>
-        <div class="di-paste">📊 Bay Area mortgage rates just hit 6.46% — and it's reshaping every buyer's strategy on the Peninsula.
-
-Here's what's happening 👇
-• Rates climbed +18bps WoW on Iran/oil tension
-• Most buyers locked at 2.75-4.5% won't move
-• "Sell or stay" is the new BOFU question
-
-Full breakdown on the blog: [link]
-
-#BayAreaRealEstate #MortgageRates #PeninsulaHomes</div>
+      <div class="format-block eric-block">
+        <div class="format-row">
+          <div class="format-label"><span class="fl-icon">📍</span>Google Business Profile Post<span class="fl-sub">100-300 chars · max engagement window 11 AM PT</span></div>
+          <button class="pill script" onclick="copyPrompt('e-mon-gmb')">Post Prompt</button>
+        </div>
       </div>
 
-      <div class="di-block">
-        <div class="di-block-h">🔗 Suggested internal links (for SEO authority transfer)</div>
-        <div class="di-block-body"><ul>
-          <li>Anchor "EPA market data" → /east-palo-alto-market-update/</li>
-          <li>Anchor "refi vs sell" → /hidden-equity-refi-vs-sell/ (Wed cornerstone)</li>
-          <li>Anchor "current EPA inventory" → /epa-homes-under-1m/</li>
-        </ul></div>
-      </div>
-
-      <div class="di-button-row">
-        <button class="copy-btn gold">Copy Blog Outline</button>
-        <button class="copy-btn outline">Copy GMB Post</button>
-        <button class="copy-btn outline">Copy Meta Description</button>
+      <div class="format-block eric-block">
+        <div class="format-row">
+          <div class="format-label"><span class="fl-icon">✉️</span>Newsletter Send<span class="fl-sub">Tue 9 AM PT to graehamwatts.com list</span></div>
+          <button class="pill script" onclick="copyPrompt('e-mon-newsletter')">Email Prompt</button>
+        </div>
       </div>
     </div>
 
     <!-- ERIC TUESDAY -->
     <div class="daily-item" data-day="tuesday">
       <div class="di-header">
-        <span class="di-day">📅 Tuesday May 13</span>
-        <span class="di-funnel funnel-mofu">MOFU · Consideration</span>
-        <span class="di-day-meta">Target word count: ~1,800 · Publish by 9 AM PT</span>
+        <div><span class="di-day">Tuesday May 13</span><br><span class="di-day-meta">EPA April 2026 Sales Report</span></div>
+        <span class="di-funnel funnel-mofu">MOFU · Opp 21/25</span>
       </div>
-      <div class="di-topic">EPA April 2026 Sales Report — Every Recent Sale Broken Down</div>
+      <div class="di-topic">Hook: "April just closed. Here are the actual EPA numbers you won't see on Zillow's market reports — and what they tell us about May."</div>
+      <div class="di-context"><strong>Source signals:</strong> GSC "east palo alto april sales" +91% WoW (highest velocity query of the week) · MLS pull from Wed 5/13 confirms median up 1.7% YoY · Composio IG May 1 EPA market post got 4 likes — proven hyperlocal pattern.</div>
 
-      <div class="di-block">
-        <div class="di-block-h">📝 Blog title options</div>
-        <div class="di-block-body"><ul>
-          <li>East Palo Alto April 2026 Sales Report: Every Sale, Every Street</li>
-          <li>EPA Real Estate April 2026 — Median $1.42M, 16-Day DOM, Full Sales Data</li>
-          <li>What Sold in East Palo Alto Last Month (April 2026 Market Update with Data)</li>
-        </ul></div>
+      <div class="format-block eric-block">
+        <div class="format-row">
+          <div class="format-label"><span class="fl-icon">📰</span>Blog Post — Data Recap (1,000-1,400 words)<span class="fl-sub">Tables + charts · stats-driven</span></div>
+          <button class="pill outline" onclick="copyPrompt('e-tue-blog')">Outline Prompt</button>
+        </div>
       </div>
 
-      <div class="di-block">
-        <div class="di-block-h">📍 Ready-to-paste GMB post</div>
-        <div class="di-paste">📍 East Palo Alto April 2026 sales report is live
-
-The numbers 👇
-• 18 closed sales
-• Median price: $1.42M (+4.4% MoM)
-• Median days on market: 16 (down from 21)
-• Sale-to-list ratio: 104%
-
-Full sales table on the blog — every recent sale by street: [link]
-
-#EastPaloAlto #BayAreaRealEstate #MarketReport</div>
+      <div class="format-block eric-block">
+        <div class="format-row">
+          <div class="format-label"><span class="fl-icon">📍</span>Google Business Profile Post<span class="fl-sub">Lead with one big stat</span></div>
+          <button class="pill script" onclick="copyPrompt('e-tue-gmb')">Post Prompt</button>
+        </div>
       </div>
 
-      <div class="di-block">
-        <div class="di-block-h">🔗 Suggested internal links</div>
-        <div class="di-block-body"><ul>
-          <li>Anchor "EPA homes under $1M" → /epa-homes-under-1m/</li>
-          <li>Anchor "refi vs sell math" → /hidden-equity-refi-vs-sell/ (Wed cornerstone)</li>
-          <li>Anchor "Belle Haven sales" → /belle-haven-market/</li>
-        </ul></div>
+      <div class="format-block eric-block">
+        <div class="format-row">
+          <div class="format-label"><span class="fl-icon">✉️</span>Newsletter Section<span class="fl-sub">Add to Mon newsletter as Tuesday "Data Drop"</span></div>
+          <button class="pill script" onclick="copyPrompt('e-tue-newsletter')">Email Prompt</button>
+        </div>
       </div>
 
-      <div class="di-button-row">
-        <button class="copy-btn gold">Copy Blog Outline</button>
-        <button class="copy-btn outline">Copy GMB Post</button>
-        <button class="copy-btn outline">Copy Sales Table CSV</button>
+      <div class="format-block eric-block">
+        <div class="format-row">
+          <div class="format-label"><span class="fl-icon">📤</span>Email Blast — Past Buyers/Sellers<span class="fl-sub">Segment: EPA owners · "Your home's value just moved"</span></div>
+          <button class="pill script" onclick="copyPrompt('e-tue-blast')">Blast Prompt</button>
+        </div>
       </div>
     </div>
 
     <!-- ERIC WEDNESDAY ★ CORNERSTONE -->
     <div class="daily-item star" data-day="wednesday">
       <div class="di-header">
-        <span class="di-day">📅 Wednesday May 14 <span class="star-badge">CORNERSTONE</span></span>
-        <span class="di-funnel funnel-bofu">BOFU · Decision-Stage</span>
-        <span class="di-day-meta">Target word count: ~2,500 · Publish by 9 AM PT · Highest authority play of the week</span>
+        <div><span class="di-day">Wednesday May 14 <span class="star-badge">★ CORNERSTONE</span></span><br><span class="di-day-meta">Hidden Equity: Refi vs Sell — The 2026 Decision</span></div>
+        <span class="di-funnel funnel-bofu">BOFU · Opp 24/25 ★</span>
       </div>
-      <div class="di-topic">Hidden Equity: When Should EPA Homeowners Refi vs Sell in 2026?</div>
+      <div class="di-topic">Hook: "The average Bay Area homeowner is sitting on $400K+ in equity they didn't know they had. Three doors: HELOC, refinance, or sell-and-move-up. Here's the math on each."</div>
+      <div class="di-context"><strong>Source signals:</strong> GSC "should i refinance my home 2026" +23% WoW (2,143 imp/7d) · YT comment cluster "is now a good time to sell?" 47 mentions on Veteran Foreclosures vid · Reddit thread on r/RealEstate about HELOC strategy hit 340 upvotes 4/29. <strong>This is the highest-intent topic of the week — full 14-format mix fires.</strong></div>
 
-      <div class="di-block">
-        <div class="di-block-h">📝 Blog title options (SEO-scored — Opp 24/25 ★★)</div>
-        <div class="di-block-body"><ul>
-          <li>Hidden Equity 2026: Should EPA Homeowners Refinance or Sell? (Math Inside)</li>
-          <li>Refi vs Sell — The 2026 EPA Homeowner Decision Framework (with $400K-$800K Equity Math)</li>
-          <li>East Palo Alto Hidden Equity Calculator: When to Refi vs Sell at 6.46% Rates</li>
-        </ul></div>
-      </div>
-
-      <div class="di-block">
-        <div class="di-block-h">📍 Ready-to-paste GMB post</div>
-        <div class="di-paste">💰 EPA homeowners are sitting on $400K-$800K in hidden equity right now.
-
-Whether you should refi or sell comes down to one math problem 👇
-
-The cornerstone breakdown is live on the blog with:
-• 3 real EPA scenarios (bought 2018 / 2020 / 2022)
-• Refi math at today's 6.46% rate
-• Sell math at today's $1.42M median + 104% sale-to-list
-• A clear decision framework for either path
-
-Comment "EQUITY" and I'll send you the personalized calculation: [link]
-
-#EastPaloAlto #HomeEquity #RefiVsSell #BayAreaRealEstate</div>
+      <div class="format-block eric-block">
+        <div class="format-row">
+          <div class="format-label"><span class="fl-icon">📰</span>Blog Post — Cornerstone Pillar (2,000-2,500 words)<span class="fl-sub">Targets: Decision tree, three scenarios, real numbers</span></div>
+          <button class="pill outline" onclick="copyPrompt('e-wed-blog')">Outline Prompt</button>
+          <button class="pill script" onclick="copyPrompt('e-wed-blog-draft')">Draft Prompt</button>
+        </div>
       </div>
 
-      <div class="di-block">
-        <div class="di-block-h">📄 Blog body outline (~2,500 words target)</div>
-        <div class="di-block-body"><ol>
-          <li><strong>Hook (150 words):</strong> "Most EPA homeowners are sitting on $400K-$800K..." Rate context (6.46%) + decision frame</li>
-          <li><strong>The Math Section 1 — Your Equity (400 words):</strong> How to calculate. EPA median $1.42M reference. Walk through 3 buy-year scenarios.</li>
-          <li><strong>Path A — Refinance (500 words):</strong> When refi works at 6.46%. Cash-out refi math. Break-even analysis. When it doesn't work (most cases right now).</li>
-          <li><strong>Path B — Sell (500 words):</strong> When sell wins. Sale-to-list 104%, DOM 16 days = sellers' market. Net proceeds calc. Where to redeploy.</li>
-          <li><strong>Decision Framework (400 words):</strong> Binary tree: rate locked &lt;4%, equity &gt;$500K, plan to stay &gt;7yrs → refi loses, sell wins.</li>
-          <li><strong>3 Real EPA Scenarios (400 words):</strong> Bought 2018 ($600K equity), 2020 ($450K equity), 2022 ($200K equity).</li>
-          <li><strong>CTA (150 words):</strong> "Comment EQUITY for personalized calc" + lead-magnet hook.</li>
-        </ol></div>
+      <div class="format-block eric-block">
+        <div class="format-row">
+          <div class="format-label"><span class="fl-icon">📍</span>Google Business Profile Post<span class="fl-sub">CTA: "Get your hidden-equity calc"</span></div>
+          <button class="pill script" onclick="copyPrompt('e-wed-gmb')">Post Prompt</button>
+        </div>
       </div>
 
-      <div class="di-block">
-        <div class="di-block-h">🔗 Suggested internal links + schema markup</div>
-        <div class="di-block-body"><ul>
-          <li>Anchor "EPA April sales data" → /epa-april-2026-sales/ (Tue post)</li>
-          <li>Anchor "current rates context" → /bay-area-spring-2026-rates/ (Mon post)</li>
-          <li>Anchor "active EPA inventory" → /active-epa-inventory/ (Fri post)</li>
-          <li>Schema: Article + FAQPage with 4 Q&amp;As (refi vs sell, how much equity, what's break-even, EPA market timing)</li>
-        </ul></div>
+      <div class="format-block eric-block">
+        <div class="format-row">
+          <div class="format-label"><span class="fl-icon">🔗</span>Meta Description (155 chars)<span class="fl-sub">SEO snippet for the cornerstone post</span></div>
+          <button class="pill script" onclick="copyPrompt('e-wed-meta')">Meta Prompt</button>
+        </div>
       </div>
 
-      <div class="di-button-row">
-        <button class="copy-btn gold">Copy Full Blog Body</button>
-        <button class="copy-btn outline">Copy GMB Post</button>
-        <button class="copy-btn outline">Copy Meta Description</button>
-        <button class="copy-btn outline">Copy Schema Markup JSON-LD</button>
+      <div class="format-block eric-block">
+        <div class="format-row">
+          <div class="format-label"><span class="fl-icon">✉️</span>Newsletter Blast — Wed 6 PM PT<span class="fl-sub">Hero email of the week · cornerstone CTA</span></div>
+          <button class="pill script" onclick="copyPrompt('e-wed-newsletter')">Email Prompt</button>
+        </div>
+      </div>
+
+      <div class="format-block eric-block">
+        <div class="format-row">
+          <div class="format-label"><span class="fl-icon">📘</span>Facebook Post (long-form)<span class="fl-sub">3-paragraph hook · embedded blog link</span></div>
+          <button class="pill script" onclick="copyPrompt('e-wed-fb')">Post Prompt</button>
+        </div>
+      </div>
+
+      <div class="format-block eric-block">
+        <div class="format-row">
+          <div class="format-label"><span class="fl-icon">📜</span>Schema.org Markup<span class="fl-sub">FAQPage + Article JSON-LD for AEO</span></div>
+          <button class="pill schema" onclick="copyPrompt('e-wed-schema')">Schema Prompt</button>
+        </div>
+      </div>
+
+      <div class="format-block eric-block">
+        <div class="format-row">
+          <div class="format-label"><span class="fl-icon">🔁</span>Internal Linking Plan<span class="fl-sub">5-7 contextual links from existing posts to cornerstone</span></div>
+          <button class="pill script" onclick="copyPrompt('e-wed-internal')">Linking Prompt</button>
+        </div>
       </div>
     </div>
 
     <!-- ERIC THURSDAY -->
     <div class="daily-item" data-day="thursday">
       <div class="di-header">
-        <span class="di-day">📅 Thursday May 15</span>
-        <span class="di-funnel funnel-tofu">TOFU · Curiosity</span>
-        <span class="di-day-meta">Target word count: ~1,000 · Publish by 9 AM PT</span>
+        <div><span class="di-day">Thursday May 15</span><br><span class="di-day-meta">5 Reasons People Choose East of 101</span></div>
+        <span class="di-funnel funnel-tofu">TOFU · Opp 18/25</span>
       </div>
-      <div class="di-topic">5 Reasons Peninsula Buyers Are Looking East of 101 in 2026</div>
+      <div class="di-topic">Hook: "Wait — east of 101 isn't 'the bad side'? Here are 5 reasons EPA buyers are choosing it on purpose, and what locals know that Zillow doesn't."</div>
+      <div class="di-context"><strong>Source signals:</strong> Composio IG Apr 17 Marina dev 25 likes/8 comments · Apr 1 Balboa 1,100 homes 7 likes · Apr 23 EPA off-market 5 likes — large-dev/hyperlocal pattern is your highest engagement bucket. Zillow Q&amp;A "schools in EPA" 12 unanswered questions.</div>
 
-      <div class="di-block">
-        <div class="di-block-h">📝 Blog title options</div>
-        <div class="di-block-body"><ul>
-          <li>5 Reasons Peninsula Buyers Are Crossing Highway 101 in 2026</li>
-          <li>Why Smart Bay Area Buyers Are Looking at East Palo Alto This Spring</li>
-          <li>The East-of-101 Migration: 5 Reasons EPA Is Drawing Peninsula Buyers</li>
-        </ul></div>
+      <div class="format-block eric-block">
+        <div class="format-row">
+          <div class="format-label"><span class="fl-icon">📰</span>Blog Post — Listicle (900-1,100 words)<span class="fl-sub">5 reasons · light, scannable, image-heavy</span></div>
+          <button class="pill outline" onclick="copyPrompt('e-thu-blog')">Outline Prompt</button>
+        </div>
       </div>
 
-      <div class="di-block">
-        <div class="di-block-h">📍 Ready-to-paste GMB post</div>
-        <div class="di-paste">🌉 5 reasons Peninsula buyers are crossing Highway 101 in 2026
-
-The shift nobody's talking about 👇
-1. Same commute as Menlo Park, 50-60% the price
-2. April 2026 prices held steady (+1.7% YoY) while PA/MP corrected
-3. Two full years without a homicide
-4. New transit investments coming
-5. ADU-friendly zoning unlocks rental income
-
-Full breakdown: [link]
-
-#EastPaloAlto #PeninsulaRealEstate #BayAreaHomes</div>
-      </div>
-
-      <div class="di-button-row">
-        <button class="copy-btn gold">Copy Blog Outline</button>
-        <button class="copy-btn outline">Copy GMB Post</button>
+      <div class="format-block eric-block">
+        <div class="format-row">
+          <div class="format-label"><span class="fl-icon">📍</span>Google Business Profile Post<span class="fl-sub">One-reason teaser · CTA to full post</span></div>
+          <button class="pill script" onclick="copyPrompt('e-thu-gmb')">Post Prompt</button>
+        </div>
       </div>
     </div>
 
     <!-- ERIC FRIDAY -->
     <div class="daily-item" data-day="friday">
       <div class="di-header">
-        <span class="di-day">📅 Friday May 16</span>
-        <span class="di-funnel funnel-bofu">BOFU · Action</span>
-        <span class="di-day-meta">Target word count: ~900 · Publish by 9 AM PT (catches weekend traffic)</span>
+        <div><span class="di-day">Friday May 16</span><br><span class="di-day-meta">Active EPA Inventory Under $1.2M</span></div>
+        <span class="di-funnel funnel-bofu">BOFU · Opp 20/25</span>
       </div>
-      <div class="di-topic">Active EPA Inventory This Weekend — Under $1.2M</div>
+      <div class="di-topic">Hook: "Showing this weekend: 3 EPA homes under $1.2M with the best value/condition ratio I've seen this spring. Open houses Sat &amp; Sun."</div>
+      <div class="di-context"><strong>Source signals:</strong> Composio IG Apr 29 EPA-under-$1M 3 likes (own-brand template proven) · GSC "epa homes for sale" stable 290 imp/7d · MLS pull Fri AM for 3-5 active listings under $1.2M.</div>
 
-      <div class="di-block">
-        <div class="di-block-h">📝 Blog title options</div>
-        <div class="di-block-body"><ul>
-          <li>Active East Palo Alto Homes Under $1.2M (May 17-18 Weekend Inventory)</li>
-          <li>EPA Open Houses This Weekend — Every Active Listing Under $1.2M</li>
-          <li>What's Available in East Palo Alto This Weekend (Live MLS Inventory + Math)</li>
-        </ul></div>
+      <div class="format-block eric-block">
+        <div class="format-row">
+          <div class="format-label"><span class="fl-icon">📰</span>Blog Post — Inventory Roundup (700-900 words)<span class="fl-sub">3 listings · honest pros/cons · mortgage payment math</span></div>
+          <button class="pill outline" onclick="copyPrompt('e-fri-blog')">Outline Prompt</button>
+        </div>
       </div>
 
-      <div class="di-block">
-        <div class="di-block-h">📍 Ready-to-paste GMB post</div>
-        <div class="di-paste">🏡 Active EPA inventory this weekend (under $1.2M)
-
-Live as of Friday May 16 👇
-[Pull from MLS Friday morning]
-
-What to look for:
-• Sale-to-list 104% means most will go over asking
-• 16-day DOM means weekend tours = serious only
-• Comment "TOUR" for my showing schedule this weekend
-
-#EastPaloAlto #OpenHouse #BayAreaHomes</div>
+      <div class="format-block eric-block">
+        <div class="format-row">
+          <div class="format-label"><span class="fl-icon">📍</span>Google Business Profile Post<span class="fl-sub">Saturday open-house schedule · location pins</span></div>
+          <button class="pill script" onclick="copyPrompt('e-fri-gmb')">Post Prompt</button>
+        </div>
       </div>
 
-      <div class="di-button-row">
-        <button class="copy-btn gold">Copy Blog Outline</button>
-        <button class="copy-btn outline">Copy GMB Post</button>
-        <button class="copy-btn outline">MLS Inventory Pull Script</button>
+      <div class="format-block eric-block">
+        <div class="format-row">
+          <div class="format-label"><span class="fl-icon">📤</span>Email Blast — Active Buyers Segment<span class="fl-sub">Fri 4 PM PT · "This weekend's openings"</span></div>
+          <button class="pill script" onclick="copyPrompt('e-fri-blast')">Blast Prompt</button>
+        </div>
       </div>
     </div>
 
   </div>
 </section>
 
-
-<!-- ===================================================== -->
-<!-- PETER'S WEEK — 5 Video Packages, Mon through Fri      -->
-<!-- ===================================================== -->
-<section class="daily-section" data-audience="all peter" style="border-left:4px solid var(--purple)">
-  <h2 style="color:var(--purple)">🎬 Peter's Week — 5 Video Production Packages</h2>
-  <p class="ds-sub">Each day below has the topic, hook, format priority, AI script prompt, AI production prompt (B-roll + editing notes for Jason), and avatar recommendation. Cornerstone (Wed) is the full multi-format production. Run script through ElevenLabs → HeyGen → hand finished MP4 + production package to Jason for editing.</p>
-
-  <div class="filter-bar">
-    <div class="filter-info" id="peterFilterInfo">
-      <strong>Showing:</strong> All 5 days · <span style="color:var(--muted)">Click any day card above to focus on just that day's video</span>
-    </div>
-    <button class="show-all-btn" onclick="showAllDays()">📅 Show all 5 days</button>
-  </div>
-
+<!-- PETER SECTION -->
+<section class="daily-section" data-audience="all peter">
+  <h2>🎬 Peter's Week — 5 Video Production Packages</h2>
+  <p class="ds-sub" id="peterFilterInfo"><strong>Showing:</strong> All 5 days · <span style="color:var(--muted)">Click any day card above to focus on just that day</span></p>
   <div class="daily-list">
 
     <!-- PETER MONDAY -->
     <div class="daily-item" data-day="monday">
       <div class="di-header">
-        <span class="di-day">📅 Monday May 12</span>
-        <span class="di-funnel funnel-tofu">TOFU · Awareness</span>
-        <span class="di-day-meta">Format: YT Short (45s) + IG Reel #2 cutdown</span>
+        <div><span class="di-day">Monday May 12</span><br><span class="di-day-meta">Bay Area Spring 2026 Market Update</span></div>
+        <span class="di-funnel funnel-tofu">TOFU · Opp 19/25</span>
       </div>
-      <div class="di-topic">Bay Area Spring 2026 Market Update — Rates at 6.46%</div>
+      <div class="di-topic">Format: 1 YT Short (60s) + 1 IG Reel #2 cutdown (30s, vertical). Hook on rate drop, end on EPA tilt.</div>
+      <div class="di-context"><strong>Production tilt:</strong> Map graphic + rate chart B-roll · Graeham talking-head intro/outro · Vaibhav-template warm desk look #2 (rotation).</div>
 
-      <div class="di-block">
-        <div class="di-block-h">🎯 Hook (opening 3 seconds)</div>
-        <div class="di-block-body"><em>"Mortgage rates just hit 6.46% — and it's reshaping every Peninsula buyer's plan. Here's what's actually happening."</em></div>
-      </div>
-
-      <div class="di-block">
-        <div class="di-block-h">🎬 Format priority &amp; specs</div>
-        <div class="di-block-body">
-          <strong>Primary:</strong> YouTube Short (45s, 9:16, 1080x1920)<br>
-          <strong>Cutdowns:</strong> IG Reel #2 (25s), TikTok (45s)<br>
-          <strong>Voice:</strong> Graeham Voice Clone (ElevenLabs)<br>
-          <strong>Avatar:</strong> Vaibhav Look #1 (energetic, news-update tone)
+      <div class="format-block peter-block">
+        <div class="format-row">
+          <div class="format-label"><span class="fl-icon">📱</span>YouTube Short (60s vertical)<span class="fl-sub">Hook → 3 facts → CTA · #shorts</span></div>
+          <button class="pill script" onclick="copyPrompt('p-mon-yts-script')">Script Prompt</button>
+          <button class="pill production" onclick="copyPrompt('p-mon-yts-prod')">Production Prompt</button>
+          <button class="pill hooks" onclick="copyPrompt('p-mon-yts-hooks')">Alt Hooks</button>
         </div>
       </div>
 
-      <div class="di-button-row">
-        <button class="copy-btn gold">Copy Script Prompt</button>
-        <button class="copy-btn purple">Copy Production Prompt (Jason)</button>
+      <div class="format-block peter-block">
+        <div class="format-row">
+          <div class="format-label"><span class="fl-icon">📲</span>IG Reel #2 — Cutdown (30s)<span class="fl-sub">Repurposed YT Short · IG-native captions · trending audio</span></div>
+          <button class="pill script" onclick="copyPrompt('p-mon-igr2-script')">Script Prompt</button>
+          <button class="pill production" onclick="copyPrompt('p-mon-igr2-prod')">Production Prompt</button>
+        </div>
       </div>
     </div>
 
     <!-- PETER TUESDAY -->
     <div class="daily-item" data-day="tuesday">
       <div class="di-header">
-        <span class="di-day">📅 Tuesday May 13</span>
-        <span class="di-funnel funnel-mofu">MOFU · Consideration</span>
-        <span class="di-day-meta">Format: YT Long (8 min) + IG Carousel (7 slides)</span>
+        <div><span class="di-day">Tuesday May 13</span><br><span class="di-day-meta">EPA April 2026 Sales Report</span></div>
+        <span class="di-funnel funnel-mofu">MOFU · Opp 21/25</span>
       </div>
-      <div class="di-topic">EPA April 2026 Sales Report — Every Sale, Every Street</div>
+      <div class="di-topic">Format: 1 YT Long-form (8-10 min) split into Pt1 (data) + Pt2 (analysis) + 1 IG Carousel (7 slides) for the data graphic.</div>
+      <div class="di-context"><strong>Production tilt:</strong> On-camera with charts overlay · Lower-thirds with key stats · Vaibhav warm look #3.</div>
 
-      <div class="di-block">
-        <div class="di-block-h">🎯 Hook</div>
-        <div class="di-block-body"><em>"East Palo Alto closed 18 sales in April. Here's the data nobody else is showing you — broken down street by street."</em></div>
-      </div>
-
-      <div class="di-block">
-        <div class="di-block-h">🎬 Format priority &amp; specs</div>
-        <div class="di-block-body">
-          <strong>Primary:</strong> YouTube Long (8 min, 16:9, 1080p)<br>
-          <strong>Secondary:</strong> IG Carousel (7 slides, 1080x1080)<br>
-          <strong>Avatar:</strong> Vaibhav Look #3 (analytical, data-driven tone)<br>
-          <strong>B-roll heavy:</strong> Map graphics + sales table animations
+      <div class="format-block peter-block">
+        <div class="format-row">
+          <div class="format-label"><span class="fl-icon">🎥</span>YouTube Long-form (8-10 min)<span class="fl-sub">Pt1 = data dump · Pt2 = "what this means for you"</span></div>
+          <button class="pill script" onclick="copyPrompt('p-tue-ytl-script')">Script Prompt</button>
+          <button class="pill production" onclick="copyPrompt('p-tue-ytl-prod')">Production Prompt</button>
         </div>
       </div>
 
-      <div class="di-button-row">
-        <button class="copy-btn gold">Copy Script Prompt</button>
-        <button class="copy-btn purple">Copy Production Prompt (Jason)</button>
-        <button class="copy-btn outline">Copy Carousel Slide Outline</button>
+      <div class="format-block peter-block">
+        <div class="format-row">
+          <div class="format-label"><span class="fl-icon">🖼️</span>IG Carousel — Data Graphic (7 slides 1080x1080)<span class="fl-sub">Slide 1 hook · Slides 2-6 stats · Slide 7 CTA</span></div>
+          <button class="pill image" onclick="copyPrompt('p-tue-carousel-img')">Image Gen Prompt</button>
+          <button class="pill script" onclick="copyPrompt('p-tue-carousel-cap')">Caption Prompt</button>
+        </div>
       </div>
     </div>
 
-    <!-- PETER WEDNESDAY ★ CORNERSTONE -->
+    <!-- PETER WEDNESDAY ★ -->
     <div class="daily-item star" data-day="wednesday">
       <div class="di-header">
-        <span class="di-day">📅 Wednesday May 14 <span class="star-badge">CORNERSTONE</span></span>
-        <span class="di-funnel funnel-bofu">BOFU · Decision-Stage</span>
-        <span class="di-day-meta">Format: ALL 14 derivatives · Highest production effort of the week</span>
+        <div><span class="di-day">Wednesday May 14 <span class="star-badge">★ CORNERSTONE</span></span><br><span class="di-day-meta">Hidden Equity: Refi vs Sell — The 2026 Decision</span></div>
+        <span class="di-funnel funnel-bofu">BOFU · Opp 24/25 ★</span>
       </div>
-      <div class="di-topic">Hidden Equity: When Should EPA Homeowners Refi vs Sell in 2026?</div>
+      <div class="di-topic">Format: ALL 7 video pieces fire — YT Long (Pt1+Pt2), YT Short, 2 IG Reels (different hooks), IG Carousel, TikTok. Cornerstone day.</div>
+      <div class="di-context"><strong>Production tilt:</strong> Studio day. 1 long-form shoot (45-60 min) yields all derivatives. Vaibhav warm look #1 (signature). Graphics: equity ladder + 3-door decision tree.</div>
 
-      <div class="di-block">
-        <div class="di-block-h">🎯 Hook (picked from 3 alternates — A/B test this one first)</div>
-        <div class="di-block-body"><em>"Most EPA homeowners are sitting on $400K-$800K in hidden equity right now. Whether you refi or sell comes down to one math problem. Here it is."</em></div>
-      </div>
-
-      <div class="di-block">
-        <div class="di-block-h">🎬 Format priority — produce in this order</div>
-        <div class="di-block-body"><ol>
-          <li><strong>YouTube Long Pt1</strong> — 10-12 min explainer (the cornerstone, full math walkthrough)</li>
-          <li><strong>YouTube Long Pt2</strong> — 8 min companion (3 real EPA scenarios deep-dive)</li>
-          <li><strong>YouTube Short</strong> — 45s vertical hook</li>
-          <li><strong>IG Reel #1</strong> — 60s vertical (decision framework version)</li>
-          <li><strong>IG Reel #2</strong> — 25s vertical (math hook only)</li>
-          <li><strong>IG Carousel</strong> — 7 slides (decision tree visual)</li>
-          <li><strong>TikTok</strong> — 45s cutdown (hook + framework only)</li>
-        </ol></div>
-      </div>
-
-      <div class="di-block">
-        <div class="di-block-h">🎥 Shot list (12 shots for cornerstone YT Long)</div>
-        <div class="di-block-body">
-          <ol>
-            <li>Aerial drone — EPA neighborhood overview (4s)</li>
-            <li>Talking head — Graeham hook (6s)</li>
-            <li>Animated graphic — equity stack visualization (5s)</li>
-            <li>B-roll — typical EPA single-family home (4s)</li>
-            <li>Talking head — Path A: Refi math (20s)</li>
-            <li>Animated graphic — refi break-even chart (6s)</li>
-            <li>Talking head — Path B: Sell math (20s)</li>
-            <li>Animated graphic — net proceeds calc (6s)</li>
-            <li>Talking head — Decision framework (15s)</li>
-            <li>Decision tree visual — animated flow (8s)</li>
-            <li>Talking head — recap + CTA (15s)</li>
-            <li>End screen — subscribe + GHL keyword EQUITY (5s)</li>
-          </ol>
+      <div class="format-block peter-block">
+        <div class="format-row">
+          <div class="format-label"><span class="fl-icon">🎥</span>YouTube Long Pt1 — Discovery + The 3 Doors<span class="fl-sub">Build the framework · 4-6 min</span></div>
+          <button class="pill script" onclick="copyPrompt('p-wed-ytl1-script')">Script Prompt</button>
+          <button class="pill production" onclick="copyPrompt('p-wed-ytl1-prod')">Production Prompt</button>
+          <button class="pill hooks" onclick="copyPrompt('p-wed-ytl1-hooks')">Alt Hooks</button>
         </div>
       </div>
 
-      <div class="di-block">
-        <div class="di-block-h">🎙️ Voice + Avatar</div>
-        <div class="di-block-body">
-          <strong>Voice:</strong> Graeham Voice Clone (ID: 717249201f7745988219b9aeb9041b42)<br>
-          <strong>Avatar:</strong> Vaibhav Look #2 (warm desk aesthetic) — matches the documentary-news tone that drove your YT #1 (Veteran Foreclosures, 495 views)<br>
-          <strong>Render:</strong> HeyGen digital_twin (159cd7b883724fdb9a51b97dec94df89)
+      <div class="format-block peter-block">
+        <div class="format-row">
+          <div class="format-label"><span class="fl-icon">🎥</span>YouTube Long Pt2 — Real Numbers + Decision<span class="fl-sub">Walk three real Bay Area scenarios · 4-6 min</span></div>
+          <button class="pill script" onclick="copyPrompt('p-wed-ytl2-script')">Script Prompt</button>
+          <button class="pill production" onclick="copyPrompt('p-wed-ytl2-prod')">Production Prompt</button>
         </div>
       </div>
 
-      <div class="di-button-row">
-        <button class="copy-btn gold">Copy YT Long Pt1 Script Prompt</button>
-        <button class="copy-btn gold">Copy YT Long Pt2 Script Prompt</button>
-        <button class="copy-btn purple">Copy Production Prompt (Jason — full)</button>
-        <button class="copy-btn outline">Copy Shot List CSV</button>
-        <button class="copy-btn outline">Copy 3 Alternate Hooks</button>
+      <div class="format-block peter-block">
+        <div class="format-row">
+          <div class="format-label"><span class="fl-icon">📱</span>YouTube Short (60s)<span class="fl-sub">Single most surprising stat · CTA to long-form</span></div>
+          <button class="pill script" onclick="copyPrompt('p-wed-yts-script')">Script Prompt</button>
+          <button class="pill production" onclick="copyPrompt('p-wed-yts-prod')">Production Prompt</button>
+          <button class="pill hooks" onclick="copyPrompt('p-wed-yts-hooks')">Alt Hooks</button>
+        </div>
+      </div>
+
+      <div class="format-block peter-block">
+        <div class="format-row">
+          <div class="format-label"><span class="fl-icon">📲</span>IG Reel #1 — "Should you sell?" angle (45s)<span class="fl-sub">Emotional/lifestyle hook · trending audio</span></div>
+          <button class="pill script" onclick="copyPrompt('p-wed-igr1-script')">Script Prompt</button>
+          <button class="pill production" onclick="copyPrompt('p-wed-igr1-prod')">Production Prompt</button>
+        </div>
+      </div>
+
+      <div class="format-block peter-block">
+        <div class="format-row">
+          <div class="format-label"><span class="fl-icon">📲</span>IG Reel #2 — "Should you refi?" angle (45s)<span class="fl-sub">Numbers/calculator hook · text-overlay heavy</span></div>
+          <button class="pill script" onclick="copyPrompt('p-wed-igr2-script')">Script Prompt</button>
+          <button class="pill production" onclick="copyPrompt('p-wed-igr2-prod')">Production Prompt</button>
+        </div>
+      </div>
+
+      <div class="format-block peter-block">
+        <div class="format-row">
+          <div class="format-label"><span class="fl-icon">🖼️</span>IG Carousel — 3-Door Decision Tree (7 slides 1080x1080)<span class="fl-sub">Slide 1 hook · Slides 2-4 each door · Slide 5 math · Slide 6 my recommendation · Slide 7 CTA</span></div>
+          <button class="pill image" onclick="copyPrompt('p-wed-carousel-img')">Image Gen Prompt</button>
+          <button class="pill script" onclick="copyPrompt('p-wed-carousel-cap')">Caption Prompt</button>
+        </div>
+      </div>
+
+      <div class="format-block peter-block">
+        <div class="format-row">
+          <div class="format-label"><span class="fl-icon">🎵</span>TikTok (45s)<span class="fl-sub">Loose, conversational · TikTok-native pacing</span></div>
+          <button class="pill script" onclick="copyPrompt('p-wed-tt-script')">Script Prompt</button>
+          <button class="pill production" onclick="copyPrompt('p-wed-tt-prod')">Production Prompt</button>
+        </div>
       </div>
     </div>
 
     <!-- PETER THURSDAY -->
     <div class="daily-item" data-day="thursday">
       <div class="di-header">
-        <span class="di-day">📅 Thursday May 15</span>
-        <span class="di-funnel funnel-tofu">TOFU · Curiosity</span>
-        <span class="di-day-meta">Format: IG Reel #2 (25s) + TikTok cutdown</span>
+        <div><span class="di-day">Thursday May 15</span><br><span class="di-day-meta">5 Reasons People Choose East of 101</span></div>
+        <span class="di-funnel funnel-tofu">TOFU · Opp 18/25</span>
       </div>
-      <div class="di-topic">5 Reasons Peninsula Buyers Are Looking East of 101</div>
+      <div class="di-topic">Format: IG Reel #2 (curiosity hook), TikTok (counter-narrative angle), IG Carousel (5 visual reasons). Light shoot day.</div>
+      <div class="di-context"><strong>Production tilt:</strong> On-location B-roll — EPA streets, schools, parks. Vaibhav warm look #4. Drone optional for aerials.</div>
 
-      <div class="di-block">
-        <div class="di-block-h">🎯 Hook</div>
-        <div class="di-block-body"><em>"For the first time in a decade, smart Peninsula buyers are crossing Highway 101. Here's what they figured out."</em></div>
-      </div>
-
-      <div class="di-block">
-        <div class="di-block-h">🎬 Format priority &amp; specs</div>
-        <div class="di-block-body">
-          <strong>Primary:</strong> IG Reel #2 (25s, 9:16) — fast-cut listicle format<br>
-          <strong>Secondary:</strong> TikTok (25s)<br>
-          <strong>Avatar:</strong> Vaibhav Look #4 (curious/storyteller tone)
+      <div class="format-block peter-block">
+        <div class="format-row">
+          <div class="format-label"><span class="fl-icon">📲</span>IG Reel #2 (45s)<span class="fl-sub">"You think you know EPA — you don't"</span></div>
+          <button class="pill script" onclick="copyPrompt('p-thu-igr2-script')">Script Prompt</button>
+          <button class="pill production" onclick="copyPrompt('p-thu-igr2-prod')">Production Prompt</button>
         </div>
       </div>
 
-      <div class="di-button-row">
-        <button class="copy-btn gold">Copy Script Prompt</button>
-        <button class="copy-btn purple">Copy Production Prompt (Jason)</button>
+      <div class="format-block peter-block">
+        <div class="format-row">
+          <div class="format-label"><span class="fl-icon">🎵</span>TikTok (60s)<span class="fl-sub">"Walking the side of the freeway nobody talks about"</span></div>
+          <button class="pill script" onclick="copyPrompt('p-thu-tt-script')">Script Prompt</button>
+          <button class="pill production" onclick="copyPrompt('p-thu-tt-prod')">Production Prompt</button>
+        </div>
+      </div>
+
+      <div class="format-block peter-block">
+        <div class="format-row">
+          <div class="format-label"><span class="fl-icon">🖼️</span>IG Carousel — 5 Reasons (5 slides 1080x1350)<span class="fl-sub">Photo + reason caption per slide</span></div>
+          <button class="pill image" onclick="copyPrompt('p-thu-carousel-img')">Image Gen Prompt</button>
+          <button class="pill script" onclick="copyPrompt('p-thu-carousel-cap')">Caption Prompt</button>
+        </div>
       </div>
     </div>
 
     <!-- PETER FRIDAY -->
     <div class="daily-item" data-day="friday">
       <div class="di-header">
-        <span class="di-day">📅 Friday May 16</span>
-        <span class="di-funnel funnel-bofu">BOFU · Action</span>
-        <span class="di-day-meta">Format: IG Reel #1 (45s) + TikTok cutdown · Friday afternoon publish</span>
+        <div><span class="di-day">Friday May 16</span><br><span class="di-day-meta">Active EPA Inventory Under $1.2M</span></div>
+        <span class="di-funnel funnel-bofu">BOFU · Opp 20/25</span>
       </div>
-      <div class="di-topic">Active EPA Inventory This Weekend — Under $1.2M Walkthrough</div>
+      <div class="di-topic">Format: IG Reel #1 (listing tour cutdown), TikTok (drive-by angle). Both push Saturday open houses.</div>
+      <div class="di-context"><strong>Production tilt:</strong> On-location at the 3 listings. Quick walk-throughs · text overlay with price + key stats. Vaibhav warm look #5.</div>
 
-      <div class="di-block">
-        <div class="di-block-h">🎯 Hook</div>
-        <div class="di-block-body"><em>"Here's exactly what's available in East Palo Alto under $1.2M this weekend — with the math on each."</em></div>
-      </div>
-
-      <div class="di-block">
-        <div class="di-block-h">🎬 Format priority &amp; specs</div>
-        <div class="di-block-body">
-          <strong>Primary:</strong> IG Reel #1 (45s, 9:16) — listing-walkthrough format<br>
-          <strong>Secondary:</strong> TikTok (45s)<br>
-          <strong>Avatar:</strong> Vaibhav Look #5 (action-CTA tone for showings)<br>
-          <strong>Production note:</strong> Pull MLS inventory Friday 6 AM PT, render by noon, post by 3 PM PT for max weekend visibility
+      <div class="format-block peter-block">
+        <div class="format-row">
+          <div class="format-label"><span class="fl-icon">📲</span>IG Reel #1 (60s)<span class="fl-sub">3-listing cutdown · "Showing this weekend"</span></div>
+          <button class="pill script" onclick="copyPrompt('p-fri-igr1-script')">Script Prompt</button>
+          <button class="pill production" onclick="copyPrompt('p-fri-igr1-prod')">Production Prompt</button>
         </div>
       </div>
 
-      <div class="di-button-row">
-        <button class="copy-btn gold">Copy Script Prompt</button>
-        <button class="copy-btn purple">Copy Production Prompt (Jason)</button>
+      <div class="format-block peter-block">
+        <div class="format-row">
+          <div class="format-label"><span class="fl-icon">🎵</span>TikTok (45s)<span class="fl-sub">"What $1.2M actually buys you in EPA right now"</span></div>
+          <button class="pill script" onclick="copyPrompt('p-fri-tt-script')">Script Prompt</button>
+          <button class="pill production" onclick="copyPrompt('p-fri-tt-prod')">Production Prompt</button>
+        </div>
       </div>
     </div>
 
   </div>
 </section>
 
+<footer>
+  <strong>Production Calendar v5</strong> · Bay Area / East Palo Alto · Graeham Watts, REALTOR · Intero Real Estate · DRE# 01466876 · 650-308-4727 · graehamwatts@gmail.com<br>
+  Auto-refreshes Mon May 11 11:08 AM PT via scheduled task <code>weekly-content-email-monday</code>. Pushed to GitHub via Composio (account: github_spar-devata, repo: Graehamwatts/online-content). Click any pill button above to copy a Claude-ready prompt to your clipboard.
+</footer>
 
-<!-- JS for tab switching -->
+</div><!-- /.wrap -->
+
+<div id="toast" class="toast"></div>
+
 <script>
+// ============= AUDIENCE TABS =============
 const VIEW_LABELS = {
   research: 'Research Data — 8 sources, scoring, why each topic ships this week',
-  eric: '5 daily blog packages + 5 GMB posts',
+  eric: 'Eric — 5 daily blog packages + GMB + email',
   peter: 'Peter — 5 daily video production packages',
   all: 'Everything (full unified weekly view)'
 };
@@ -1087,10 +770,9 @@ window.addEventListener('popstate', (e) => {
   setView(view, {skipHistory: true, noScroll: true});
 });
 
-// === DAY-CLICK FILTERING ===
-// Click a day card → only that day's Blogs blog + Peter video show below
+// ============= DAY-CLICK FILTERING =============
 const DAY_LABELS = {
-  monday: 'Monday May 12 (Bay Area Rates Update)',
+  monday: 'Monday May 12 (Bay Area Spring 2026 Market)',
   tuesday: 'Tuesday May 13 (EPA April Sales Report)',
   wednesday: 'Wednesday May 14 (Hidden Equity Cornerstone ★★)',
   thursday: 'Thursday May 15 (5 Reasons East of 101)',
@@ -1108,7 +790,7 @@ function setActiveDay(day) {
   document.querySelectorAll('.day-card').forEach(c => c.classList.remove('day-active'));
   const activeCard = document.querySelector('.day-card[data-day-trigger="' + day + '"]');
   if (activeCard) activeCard.classList.add('day-active');
-  ['ericFilterInfo','peterFilterInfo'].forEach(id => {
+  ['ericFilterInfo','peterFilterInfo','topFilterInfo'].forEach(id => {
     const el = document.getElementById(id);
     if (el) {
       el.innerHTML = '<strong>Showing:</strong> <span class="day-pill">' + (DAY_LABELS[day] || day) + '</span> only · click another day card or "Show all 5 days" to change';
@@ -1123,22 +805,294 @@ function setActiveDay(day) {
 function showAllDays() {
   document.querySelectorAll('.daily-item').forEach(item => item.classList.remove('day-hidden'));
   document.querySelectorAll('.day-card').forEach(c => c.classList.remove('day-active'));
-  ['ericFilterInfo','peterFilterInfo'].forEach(id => {
+  ['ericFilterInfo','peterFilterInfo','topFilterInfo'].forEach(id => {
     const el = document.getElementById(id);
     if (el) {
       el.innerHTML = '<strong>Showing:</strong> All 5 days · <span style="color:var(--muted)">Click any day card above to focus on just that day</span>';
     }
   });
 }
+
+// ============= V5 NEW: PROMPT COPY SYSTEM =============
+const PROMPTS = {
+  "e-mon-blog": {
+    "title": "Mon Blog Outline — Spring 2026 Market Update",
+    "body": "CONTEXT: You are writing for Graeham Watts — REALTOR, Intero Real Estate, DRE# 01466876, 650-308-4727, graehamwatts@gmail.com. Bay Area / East Palo Alto market focus. Voice: direct, data-driven, warm, locally credible. Use ONLY DRE# 01466876 in any output.\n\nTASK: Write a complete blog outline for graehamwatts.com titled 'Bay Area Spring 2026 Market Update — Rates, Inventory, and the EPA Tilt' (1,200-1,500 words).\n\nSTRUCTURE: H1 hook, intro (the rate drop), H2 #1 'What changed in April' (Fed move, mortgage rate retreat to 6.4%), H2 #2 'Why inventory is still tighter than 2024' (3 specific data points), H2 #3 'The EPA tilt — why local matters more than macro this year', H2 #4 'What this means for buyers vs sellers right now' (split into two short subsections), conclusion + CTA to schedule a 15-min strategy call.\n\nDELIVERABLE: Full outline with bullet points under each H2, suggested data sources (DataForSEO + GSC queries to use), and 3 internal-link anchor suggestions to existing graehamwatts.com posts."
+  },
+  "e-mon-gmb": {
+    "title": "Mon GMB Post — Rates Update",
+    "body": "CONTEXT: You are writing for Graeham Watts — REALTOR, Intero Real Estate, DRE# 01466876, 650-308-4727, graehamwatts@gmail.com. Bay Area / East Palo Alto market focus. Voice: direct, data-driven, warm, locally credible. Use ONLY DRE# 01466876 in any output.\n\nTASK: Write 1 Google Business Profile post (max 300 chars, ideally 150-250). Topic: rates dropped to 6.4% but Bay Area inventory still tighter than 2024.\n\nFORMAT: Hook line + 1 stat + 1-line takeaway + CTA. Use 1 emoji max. No hashtags. CTA = 'Read the full Spring 2026 update — link in profile.'"
+  },
+  "e-mon-newsletter": {
+    "title": "Mon Newsletter — Tuesday 9 AM Send",
+    "body": "CONTEXT: You are writing for Graeham Watts — REALTOR, Intero Real Estate, DRE# 01466876, 650-308-4727, graehamwatts@gmail.com. Bay Area / East Palo Alto market focus. Voice: direct, data-driven, warm, locally credible. Use ONLY DRE# 01466876 in any output.\n\nTASK: Write a Tuesday morning newsletter email (300-450 words) summarizing the Spring 2026 market update.\n\nSTRUCTURE: Subject line (under 50 chars, curiosity-driven), preview text (100 chars), greeting, 1-paragraph hook on the rate retreat, 3 bullet points with the most useful stats, 'What this means for you' paragraph split by buyer vs seller, signoff with phone + CTA to reply.\n\nTONE: Like a market debrief from a friend who's also your agent. Not corporate."
+  },
+  "e-tue-blog": {
+    "title": "Tue Blog Outline — EPA April Sales Recap",
+    "body": "CONTEXT: You are writing for Graeham Watts — REALTOR, Intero Real Estate, DRE# 01466876, 650-308-4727, graehamwatts@gmail.com. Bay Area / East Palo Alto market focus. Voice: direct, data-driven, warm, locally credible. Use ONLY DRE# 01466876 in any output.\n\nTASK: Write blog outline for 'EPA April 2026 Sales — The Real Numbers' (1,000-1,400 words). Data-driven recap.\n\nSTRUCTURE: H1, intro (the headline number), H2 'April by the numbers' (table of median/avg/DOM/sale-to-list/inventory), H2 'YoY comparison — what 1.7% really means', H2 'The 3 sales that defined April' (anonymized comp recap), H2 'May forecast — what I'm watching', CTA.\n\nINCLUDE: Specific MLS data fields needed (use placeholders like [MEDIAN_PRICE]), recommended chart types, and SEO target keywords ('east palo alto april sales', 'epa home prices 2026')."
+  },
+  "e-tue-gmb": {
+    "title": "Tue GMB Post — EPA Data Drop",
+    "body": "CONTEXT: You are writing for Graeham Watts — REALTOR, Intero Real Estate, DRE# 01466876, 650-308-4727, graehamwatts@gmail.com. Bay Area / East Palo Alto market focus. Voice: direct, data-driven, warm, locally credible. Use ONLY DRE# 01466876 in any output.\n\nTASK: Write 1 GMB post (200-300 chars). Lead with the biggest stat from EPA's April sales (median up 1.7% YoY, days-on-market 14, sale-to-list 102%). One concrete number, one takeaway, CTA to the blog post."
+  },
+  "e-tue-newsletter": {
+    "title": "Tue Newsletter — Data Drop Section",
+    "body": "CONTEXT: You are writing for Graeham Watts — REALTOR, Intero Real Estate, DRE# 01466876, 650-308-4727, graehamwatts@gmail.com. Bay Area / East Palo Alto market focus. Voice: direct, data-driven, warm, locally credible. Use ONLY DRE# 01466876 in any output.\n\nTASK: Write a 'Tuesday Data Drop' section to append to Monday's newsletter (150-200 words). Format: bold mini-headline, 4 bullet stats, 1-line analyst takeaway, link CTA. Style = Bloomberg-brief but warm."
+  },
+  "e-tue-blast": {
+    "title": "Tue Blast — Past EPA Buyers/Sellers",
+    "body": "CONTEXT: You are writing for Graeham Watts — REALTOR, Intero Real Estate, DRE# 01466876, 650-308-4727, graehamwatts@gmail.com. Bay Area / East Palo Alto market focus. Voice: direct, data-driven, warm, locally credible. Use ONLY DRE# 01466876 in any output.\n\nTASK: Write a segmented email blast (250-350 words) to past EPA buyers & owners. Subject = 'Your home's value just moved.'\n\nSTRUCTURE: Personalized opener, the April number, why it matters for them specifically (equity gain framing, prep for the Wed Hidden Equity newsletter), CTA = 'Reply for an updated value' or 'Get your hidden-equity calc' (link to coming Wed cornerstone)."
+  },
+  "e-wed-blog": {
+    "title": "Wed Cornerstone Blog Outline — Hidden Equity",
+    "body": "CONTEXT: You are writing for Graeham Watts — REALTOR, Intero Real Estate, DRE# 01466876, 650-308-4727, graehamwatts@gmail.com. Bay Area / East Palo Alto market focus. Voice: direct, data-driven, warm, locally credible. Use ONLY DRE# 01466876 in any output.\n\nTASK: Write the FULL outline for the cornerstone post 'Hidden Equity: Refi vs Sell — The 2026 Bay Area Decision Guide' (2,000-2,500 words). This is the highest-intent piece of the week.\n\nSTRUCTURE: H1, intro (the average $400K+ unrealized equity stat), H2 'How much equity do you actually have?' (3 ways to calculate), H2 'Door 1 — HELOC: when it makes sense, when it doesn't' (numbers + 1 case study), H2 'Door 2 — Refinance: the math at 6.4% vs your current rate' (break-even calculator framing), H2 'Door 3 — Sell and move up' (capital gains + replacement-cost math), H2 'How to decide — my 3-question framework', H2 'Real Bay Area scenarios (3 mini case studies)', conclusion + 3 CTAs.\n\nINCLUDE: FAQPage schema-ready questions (5-7), recommended chart embeds, and CTA placement."
+  },
+  "e-wed-blog-draft": {
+    "title": "Wed Cornerstone Blog Draft — Full",
+    "body": "CONTEXT: You are writing for Graeham Watts — REALTOR, Intero Real Estate, DRE# 01466876, 650-308-4727, graehamwatts@gmail.com. Bay Area / East Palo Alto market focus. Voice: direct, data-driven, warm, locally credible. Use ONLY DRE# 01466876 in any output.\n\nTASK: Using the outline (run the e-wed-blog prompt first), write the FULL DRAFT of the Hidden Equity cornerstone (2,000-2,500 words).\n\nVOICE: First-person Graeham — direct, warm, occasionally numbers-tough. Pull stats from: GSC 'should i refinance my home 2026' +23% WoW, 2,143 imp/7d. YT comment cluster on Veteran Foreclosures vid (47 'is now a good time' mentions). r/RealEstate HELOC strategy thread 340 upvotes 4/29.\n\nDELIVERABLE: Publish-ready draft with H tags marked, FAQ section embedded, 5+ internal-link suggestions, and 3 CTA insertions (mid-article calculator, end-article booking link, sidebar callout)."
+  },
+  "e-wed-gmb": {
+    "title": "Wed GMB — Hidden Equity Hook",
+    "body": "CONTEXT: You are writing for Graeham Watts — REALTOR, Intero Real Estate, DRE# 01466876, 650-308-4727, graehamwatts@gmail.com. Bay Area / East Palo Alto market focus. Voice: direct, data-driven, warm, locally credible. Use ONLY DRE# 01466876 in any output.\n\nTASK: Write 1 GMB post (250-300 chars). Hook on the $400K+ avg unrealized equity stat. CTA: 'Get your hidden-equity calc — link in profile.' One emoji max, no hashtags."
+  },
+  "e-wed-meta": {
+    "title": "Wed Meta Description (155 chars)",
+    "body": "CONTEXT: You are writing for Graeham Watts — REALTOR, Intero Real Estate, DRE# 01466876, 650-308-4727, graehamwatts@gmail.com. Bay Area / East Palo Alto market focus. Voice: direct, data-driven, warm, locally credible. Use ONLY DRE# 01466876 in any output.\n\nTASK: Write the meta description for the Hidden Equity cornerstone post. EXACTLY 150-155 chars. Include primary keyword 'Bay Area hidden equity 2026' or 'refinance vs sell Bay Area.' Curiosity hook + clear value promise + soft CTA. Output 3 variants."
+  },
+  "e-wed-newsletter": {
+    "title": "Wed Newsletter Blast — Hero Email",
+    "body": "CONTEXT: You are writing for Graeham Watts — REALTOR, Intero Real Estate, DRE# 01466876, 650-308-4727, graehamwatts@gmail.com. Bay Area / East Palo Alto market focus. Voice: direct, data-driven, warm, locally credible. Use ONLY DRE# 01466876 in any output.\n\nTASK: Write the Wed 6 PM PT newsletter blast — this is the HERO email of the week (400-550 words).\n\nSTRUCTURE: Subject line (3 variants, A/B test ready), preheader (90 chars), opener (the $400K stat), 'Three doors' framing (1 short paragraph each — HELOC/Refi/Sell), 'My 3-question framework' (ordered list), 'When to call me vs run the calc yourself' (segmenting the audience), strong CTA + a softer reply-to CTA.\n\nINCLUDE: 1 inline data callout box, 1 blockquote 'real client said X.'"
+  },
+  "e-wed-fb": {
+    "title": "Wed Facebook Post (long-form)",
+    "body": "CONTEXT: You are writing for Graeham Watts — REALTOR, Intero Real Estate, DRE# 01466876, 650-308-4727, graehamwatts@gmail.com. Bay Area / East Palo Alto market focus. Voice: direct, data-driven, warm, locally credible. Use ONLY DRE# 01466876 in any output.\n\nTASK: Write a 3-paragraph Facebook post (300-450 words) for the Wed cornerstone. Goal: stop the scroll, tease the framework, drive clicks to the blog.\n\nSTRUCTURE: Para 1 = hook on a specific scenario ('Bought your EPA home for $850K in 2018? Here's what you actually owe vs what it's worth.'), Para 2 = the 3-door framing, Para 3 = the link + soft CTA. End with: 'What's holding you back from tapping it?' to invite comments."
+  },
+  "e-wed-schema": {
+    "title": "Wed Schema.org JSON-LD Markup",
+    "body": "CONTEXT: You are writing for Graeham Watts — REALTOR, Intero Real Estate, DRE# 01466876, 650-308-4727, graehamwatts@gmail.com. Bay Area / East Palo Alto market focus. Voice: direct, data-driven, warm, locally credible. Use ONLY DRE# 01466876 in any output.\n\nTASK: Generate Schema.org JSON-LD markup for the Hidden Equity cornerstone — both Article + FAQPage types.\n\nINCLUDE: Article schema (headline, datePublished 2026-05-14, dateModified, author=Graeham Watts with Person schema, publisher, image, keywords), FAQPage schema with 5-7 Q&A pairs (real questions like 'How much equity do most Bay Area homeowners have?', 'Is it better to refinance or sell in 2026?', 'What are the tax implications of HELOC vs sale?').\n\nDELIVERABLE: Two JSON-LD blocks ready to paste in <head>. AEO-optimized."
+  },
+  "e-wed-internal": {
+    "title": "Wed Internal Linking Plan",
+    "body": "CONTEXT: You are writing for Graeham Watts — REALTOR, Intero Real Estate, DRE# 01466876, 650-308-4727, graehamwatts@gmail.com. Bay Area / East Palo Alto market focus. Voice: direct, data-driven, warm, locally credible. Use ONLY DRE# 01466876 in any output.\n\nTASK: Identify 5-7 existing graehamwatts.com posts that should link TO the new Hidden Equity cornerstone, plus 3-4 cornerstones the new post should link OUT to.\n\nDELIVERABLE: Table with 'From URL → Anchor text → To URL → Why' columns. Anchor text should vary (don't repeat same exact phrase). Include rationale for SEO juice flow.\n\nIf you don't have access to the site map, list candidate target URL patterns (e.g., '/blog/refinance-bay-area-2026/') with anchor suggestions."
+  },
+  "e-thu-blog": {
+    "title": "Thu Blog Outline — 5 Reasons EPA",
+    "body": "CONTEXT: You are writing for Graeham Watts — REALTOR, Intero Real Estate, DRE# 01466876, 650-308-4727, graehamwatts@gmail.com. Bay Area / East Palo Alto market focus. Voice: direct, data-driven, warm, locally credible. Use ONLY DRE# 01466876 in any output.\n\nTASK: Write blog outline for '5 Reasons People Choose East of 101 (And What Locals Know That Zillow Doesn't)' (900-1,100 words). Listicle, light, scannable.\n\nSTRUCTURE: H1, 2-line intro, 5 H2s (each a specific reason: schools, commute, value/$ per sqft, community, and one surprise), each H2 ~150-180 words. Conclusion + CTA to a free EPA neighborhood guide.\n\nVOICE: Curious, slightly contrarian, pro-local without being defensive."
+  },
+  "e-thu-gmb": {
+    "title": "Thu GMB — 1-Reason Teaser",
+    "body": "CONTEXT: You are writing for Graeham Watts — REALTOR, Intero Real Estate, DRE# 01466876, 650-308-4727, graehamwatts@gmail.com. Bay Area / East Palo Alto market focus. Voice: direct, data-driven, warm, locally credible. Use ONLY DRE# 01466876 in any output.\n\nTASK: Write 1 GMB post (200-250 chars) teasing ONE of the 5 reasons (pick the most curiosity-driving — usually 'value/$ per sqft' or the surprise reason). End with 'The other 4 reasons in today's blog — link in profile.'"
+  },
+  "e-fri-blog": {
+    "title": "Fri Blog Outline — Active Inventory Roundup",
+    "body": "CONTEXT: You are writing for Graeham Watts — REALTOR, Intero Real Estate, DRE# 01466876, 650-308-4727, graehamwatts@gmail.com. Bay Area / East Palo Alto market focus. Voice: direct, data-driven, warm, locally credible. Use ONLY DRE# 01466876 in any output.\n\nTASK: Write blog outline for 'EPA Homes Under $1.2M This Weekend — 3 Worth Showing' (700-900 words).\n\nSTRUCTURE: H1, 1-paragraph market context (why these 3 stand out), 3 listing blocks (each: address pattern, price, beds/baths/sqft, key feature, one honest pro, one honest con, monthly mortgage payment at 6.4%), open house schedule, CTA to schedule a private tour.\n\nINCLUDE: Placeholder fields {{LISTING_1_ADDRESS}} etc to be filled from MLS pull Fri AM."
+  },
+  "e-fri-gmb": {
+    "title": "Fri GMB — Open House Schedule",
+    "body": "CONTEXT: You are writing for Graeham Watts — REALTOR, Intero Real Estate, DRE# 01466876, 650-308-4727, graehamwatts@gmail.com. Bay Area / East Palo Alto market focus. Voice: direct, data-driven, warm, locally credible. Use ONLY DRE# 01466876 in any output.\n\nTASK: Write 1 GMB post (250-300 chars). Headline = 'This weekend in EPA: 3 open houses under $1.2M.' List Sat & Sun times for the 3 listings (use placeholders {{LISTING_X_ADDR}}, {{LISTING_X_TIME}}). End with 'DM me to schedule a private showing.'"
+  },
+  "e-fri-blast": {
+    "title": "Fri Email Blast — Active Buyers",
+    "body": "CONTEXT: You are writing for Graeham Watts — REALTOR, Intero Real Estate, DRE# 01466876, 650-308-4727, graehamwatts@gmail.com. Bay Area / East Palo Alto market focus. Voice: direct, data-driven, warm, locally credible. Use ONLY DRE# 01466876 in any output.\n\nTASK: Write a Friday 4 PM PT email blast (250-350 words) to active EPA buyer segment. Subject = 'This weekend's openings (3 worth seeing).'\n\nSTRUCTURE: Personal opener, why these 3 made the cut over the rest of inventory, 3-listing cards (address, price, mortgage payment, my honest take), open house times, strong CTA = 'Reply with which one to set up a private walk-through.'"
+  },
+  "p-mon-yts-script": {
+    "title": "Mon YT Short Script — Spring Market Update",
+    "body": "CONTEXT: You are writing for Graeham Watts — REALTOR, Intero Real Estate, DRE# 01466876, 650-308-4727, graehamwatts@gmail.com. Bay Area / East Palo Alto market focus. Voice: direct, data-driven, warm, locally credible. Use ONLY DRE# 01466876 in any output.\n\nTASK: Write a 60-second YouTube Short script. Topic: Bay Area Spring 2026 market — rates retreated to 6.4% but inventory still tighter than 2024.\n\nSTRUCTURE: 0-3s pattern interrupt hook (must stop scroll), 3-15s the rate stat, 15-30s the inventory stat, 30-50s 'why EPA is the move right now' tilt, 50-60s CTA ('Full update on my channel').\n\nFORMAT: Word-for-word script with timing in [brackets], ALL CAPS for verbal emphasis, [B-ROLL: x] cues, end-card text. Aim for ~150-170 words spoken."
+  },
+  "p-mon-yts-prod": {
+    "title": "Mon YT Short Production Prompt",
+    "body": "CONTEXT: You are writing for Graeham Watts — REALTOR, Intero Real Estate, DRE# 01466876, 650-308-4727, graehamwatts@gmail.com. Bay Area / East Palo Alto market focus. Voice: direct, data-driven, warm, locally credible. Use ONLY DRE# 01466876 in any output.\n\nVAIBHAV LOOK ROTATION (warm desk aesthetic): #1 Signature (cornerstone Wed), #2 Earth tones, #3 Neutral linen, #4 On-location warm, #5 Studio amber. Caption typography = serif italic, color-highlighted keywords, emoji pop-ins.\n\nTASK: Write the production brief for the Mon YT Short. INCLUDE: Look = Vaibhav warm look #2 (earth tones, rotation). Camera setup (lens, framing — locked talking-head ¾ frame), B-roll list (3-5 specific shots: rate chart animation, EPA street scene, inventory graphic), text overlays (3-5 keyword pop-ins matching script CAPS), trending audio recommendation (search Higgsfield / Vaibhav library), edit pacing (sub-1.5s cuts in first 15s, slow to 2-3s by 30s), end-card spec.\n\nDELIVERABLE: Production-ready brief Peter can hand to editor."
+  },
+  "p-mon-yts-hooks": {
+    "title": "Mon YT Short — 5 Alt Hooks",
+    "body": "CONTEXT: You are writing for Graeham Watts — REALTOR, Intero Real Estate, DRE# 01466876, 650-308-4727, graehamwatts@gmail.com. Bay Area / East Palo Alto market focus. Voice: direct, data-driven, warm, locally credible. Use ONLY DRE# 01466876 in any output.\n\nTASK: Write 5 alternative 0-3 second hooks for the Mon YT Short on Bay Area Spring 2026 rates + inventory. Each hook must: (1) be under 8 words spoken, (2) trigger curiosity or pattern interrupt, (3) avoid rate-commentary cliches ('rates dropped!' is banned).\n\nDELIVERABLE: 5 hooks ranked by predicted scroll-stop probability (with 1-line rationale each)."
+  },
+  "p-mon-igr2-script": {
+    "title": "Mon IG Reel #2 Script (30s cutdown)",
+    "body": "CONTEXT: You are writing for Graeham Watts — REALTOR, Intero Real Estate, DRE# 01466876, 650-308-4727, graehamwatts@gmail.com. Bay Area / East Palo Alto market focus. Voice: direct, data-driven, warm, locally credible. Use ONLY DRE# 01466876 in any output.\n\nTASK: Write a 30s IG Reel script — cutdown of the Mon YT Short with IG-native opening. Topic: Spring 2026 market.\n\nSTRUCTURE: 0-2s IG-style hook (different from YT — Reel audiences scroll faster), 2-15s the most surprising fact, 15-25s the EPA tilt, 25-30s 'follow for more' CTA.\n\nFORMAT: Same script format as YT but tighter. End-of-reel caption text overlay required (the 'final frame' that Peter holds for 1.5s)."
+  },
+  "p-mon-igr2-prod": {
+    "title": "Mon IG Reel #2 Production Prompt",
+    "body": "CONTEXT: You are writing for Graeham Watts — REALTOR, Intero Real Estate, DRE# 01466876, 650-308-4727, graehamwatts@gmail.com. Bay Area / East Palo Alto market focus. Voice: direct, data-driven, warm, locally credible. Use ONLY DRE# 01466876 in any output.\n\nVAIBHAV LOOK ROTATION (warm desk aesthetic): #1 Signature (cornerstone Wed), #2 Earth tones, #3 Neutral linen, #4 On-location warm, #5 Studio amber. Caption typography = serif italic, color-highlighted keywords, emoji pop-ins.\n\nTASK: Production brief for Mon IG Reel #2. Look #2 (carryover from YT Short — same shoot day). IG-specific: vertical 9:16 native, captions burned-in (IG users scroll without sound 70% of the time), trending IG audio (NOT YT-specific). Edit: front-load the most visual shot, faster cuts than YT version. CTA frame held longer."
+  },
+  "p-tue-ytl-script": {
+    "title": "Tue YT Long-form Script — EPA April Recap",
+    "body": "CONTEXT: You are writing for Graeham Watts — REALTOR, Intero Real Estate, DRE# 01466876, 650-308-4727, graehamwatts@gmail.com. Bay Area / East Palo Alto market focus. Voice: direct, data-driven, warm, locally credible. Use ONLY DRE# 01466876 in any output.\n\nTASK: Write a YouTube long-form script (8-10 min, ~1,200-1,500 words spoken). Topic: EPA April 2026 sales report — full data dump + analysis.\n\nSTRUCTURE: Pt1 (0:00-4:30) — hook, intro, the 5 most important April stats (with chart cues), 'how April compared to March + April 2025'. Pt2 (4:30-9:00) — 'what this means for buyers', 'what this means for sellers', forecast for May, 3 listings I'd watch, CTA.\n\nFORMAT: Timestamped script with [CHART OVERLAY: x] and [B-ROLL: x] cues, lower-third text, key stats called out in [BOLD]. Include suggested chapter markers."
+  },
+  "p-tue-ytl-prod": {
+    "title": "Tue YT Long Production Prompt",
+    "body": "CONTEXT: You are writing for Graeham Watts — REALTOR, Intero Real Estate, DRE# 01466876, 650-308-4727, graehamwatts@gmail.com. Bay Area / East Palo Alto market focus. Voice: direct, data-driven, warm, locally credible. Use ONLY DRE# 01466876 in any output.\n\nVAIBHAV LOOK ROTATION (warm desk aesthetic): #1 Signature (cornerstone Wed), #2 Earth tones, #3 Neutral linen, #4 On-location warm, #5 Studio amber. Caption typography = serif italic, color-highlighted keywords, emoji pop-ins.\n\nTASK: Production brief for Tue 8-10 min long-form. Look #3 (neutral linen — data-day aesthetic). Setup: studio desk, chart overlay capability, on-camera ¾ frame with picture-in-picture for graphics. B-roll: EPA neighborhood drone, MLS scrolling, calculator close-up. Edit pacing: longer takes than Shorts (4-6s avg), trust the audience to stay. Lower-thirds for every stat. Chapter markers per script."
+  },
+  "p-tue-carousel-img": {
+    "title": "Tue IG Carousel — Image Gen Prompt (Nano Banana / Gemini / ChatGPT)",
+    "body": "CONTEXT: You are writing for Graeham Watts — REALTOR, Intero Real Estate, DRE# 01466876, 650-308-4727, graehamwatts@gmail.com. Bay Area / East Palo Alto market focus. Voice: direct, data-driven, warm, locally credible. Use ONLY DRE# 01466876 in any output.\n\nTASK: Generate 7 IG Carousel slides (1080x1080) for the EPA April Sales Recap. Use Gemini Imagen 3 (preferred) or Nano Banana or ChatGPT-DALL-E.\n\nBRAND VISUAL SPEC: Background = soft cream (#fef9eb) or off-white. Primary text = navy (#1B2A4A) Plus Jakarta Sans Bold. Accent = gold (#C5A258). Style = clean editorial / modern data-viz, NOT corporate stock-photo, NOT Canva-template. Subtle paper texture acceptable.\n\nSLIDE PROMPTS:\n1) HOOK SLIDE: Headline 'EPA April 2026 just closed' (massive, 90pt navy bold) + subhead 'Here's what the numbers actually say' (24pt muted). Background: cream with soft gold accent line top + bottom.\n2) STAT 1: Big number '1.7%' (200pt gold) + label 'YoY median price gain' (28pt navy).\n3) STAT 2: '14 days' (200pt) + 'Average days on market' (28pt).\n4) STAT 3: '102%' (200pt) + 'Sale-to-list ratio' (28pt).\n5) STAT 4: '$1.18M' (200pt) + 'April median sale price' (28pt) + small comparison '$1.16M April 2025' (14pt below).\n6) ANALYST TAKE: Quote-card layout. Pull quote 'Tighter inventory, faster sales — but the equity story is the bigger headline this month.' Attribution: 'Graeham Watts, REALTOR · DRE# 01466876.' Headshot or signature monogram in corner.\n7) CTA: 'Want the full breakdown?' (60pt navy) + 'Watch the recap on YouTube' (28pt) + visual arrow pointing toward profile link area.\n\nDELIVERABLE: Generate all 7 slides as separate 1080x1080 images. Maintain typographic consistency. Output filenames: epa-apr-recap-01.png through 07.png."
+  },
+  "p-tue-carousel-cap": {
+    "title": "Tue IG Carousel — Caption Prompt",
+    "body": "CONTEXT: You are writing for Graeham Watts — REALTOR, Intero Real Estate, DRE# 01466876, 650-308-4727, graehamwatts@gmail.com. Bay Area / East Palo Alto market focus. Voice: direct, data-driven, warm, locally credible. Use ONLY DRE# 01466876 in any output.\n\nTASK: Write the IG caption for the EPA April Sales 7-slide carousel. 800-1,200 chars.\n\nSTRUCTURE: Hook line (different from slide 1 — caption hook drives saves & shares), 3-line stat recap, 'what this means' takeaway, soft CTA, 5-7 hashtags (mix of #eastpaloalto #bayarearealestate #peninsulalife and 1-2 of yours).\n\nINCLUDE: 1 question to drive comments ('Buying or selling — which side does this favor?')."
+  },
+  "p-wed-ytl1-script": {
+    "title": "Wed YT Long Pt1 Script — Hidden Equity Discovery",
+    "body": "CONTEXT: You are writing for Graeham Watts — REALTOR, Intero Real Estate, DRE# 01466876, 650-308-4727, graehamwatts@gmail.com. Bay Area / East Palo Alto market focus. Voice: direct, data-driven, warm, locally credible. Use ONLY DRE# 01466876 in any output.\n\nTASK: Write Part 1 script for the cornerstone YT video 'Hidden Equity: Refi vs Sell — The 2026 Decision' (4-6 min, ~700-900 words spoken).\n\nPART 1 SCOPE: Discovery + framework setup. Open with the $400K avg unrealized equity hook (this is the MOST important hook of the week — make it sing). Establish credibility (Graeham — 18 yrs Bay Area, DRE# 01466876). Introduce 'three doors' framework — HELOC, Refinance, Sell-and-move-up. Set up Pt2 ('next video, I'll walk three real Bay Area scenarios with the actual math').\n\nFORMAT: Timestamped script, [CHART: equity ladder] + [B-ROLL: x] cues, [TEXT OVERLAY: x] for keyword pops, end with explicit Pt2 cliffhanger."
+  },
+  "p-wed-ytl1-prod": {
+    "title": "Wed YT Long Pt1 Production Prompt",
+    "body": "CONTEXT: You are writing for Graeham Watts — REALTOR, Intero Real Estate, DRE# 01466876, 650-308-4727, graehamwatts@gmail.com. Bay Area / East Palo Alto market focus. Voice: direct, data-driven, warm, locally credible. Use ONLY DRE# 01466876 in any output.\n\nVAIBHAV LOOK ROTATION (warm desk aesthetic): #1 Signature (cornerstone Wed), #2 Earth tones, #3 Neutral linen, #4 On-location warm, #5 Studio amber. Caption typography = serif italic, color-highlighted keywords, emoji pop-ins.\n\nTASK: Production brief for Wed YT Long Pt1. Look #1 SIGNATURE (cornerstone day — the 'home base' look). Setup: full studio, A-cam locked-down ¾ talking-head, B-cam for picture-in-picture cutaways, equity-ladder graphic + 3-door decision-tree graphic on standby. Lighting warmer than usual (cornerstone = signature warmth). Edit pacing: 3-5s cuts (slower than Shorts to build trust on a high-intent topic), full lower-thirds with stat callouts. End-card: explicit Pt2 link + thumbnail preview."
+  },
+  "p-wed-ytl1-hooks": {
+    "title": "Wed YT Long Pt1 — 5 Alt Hooks",
+    "body": "CONTEXT: You are writing for Graeham Watts — REALTOR, Intero Real Estate, DRE# 01466876, 650-308-4727, graehamwatts@gmail.com. Bay Area / East Palo Alto market focus. Voice: direct, data-driven, warm, locally credible. Use ONLY DRE# 01466876 in any output.\n\nTASK: 5 alternative hooks for the cornerstone YT Pt1. Each must be under 12 words spoken and front-load curiosity. Test one against another for thumbnail-text + CTR.\n\nDELIVERABLE: 5 hooks ranked, with predicted CTR rationale and matching thumbnail-text variant for each."
+  },
+  "p-wed-ytl2-script": {
+    "title": "Wed YT Long Pt2 Script — Real Numbers",
+    "body": "CONTEXT: You are writing for Graeham Watts — REALTOR, Intero Real Estate, DRE# 01466876, 650-308-4727, graehamwatts@gmail.com. Bay Area / East Palo Alto market focus. Voice: direct, data-driven, warm, locally credible. Use ONLY DRE# 01466876 in any output.\n\nTASK: Write Part 2 script (4-6 min) — three real Bay Area scenarios with full math.\n\nSTRUCTURE: 30s recap of Pt1 framework, then 3 case studies: (a) EPA homeowner bought 2018 at $850K, current value ~$1.3M — should they HELOC for ADU? (b) Menlo Park family bought 2020 at $1.8M @ 3.0% — refi now at 6.4%? (c) Belle Haven owner 2015 purchase, $400K equity but kids gone — sell and right-size? Each scenario: numbers on screen, my recommendation, why. Close with 'how to decide for YOUR situation' + CTA to book a 15-min equity-strategy call.\n\nFORMAT: Same as Pt1, with [CALC OVERLAY: x] cues."
+  },
+  "p-wed-ytl2-prod": {
+    "title": "Wed YT Long Pt2 Production Prompt",
+    "body": "CONTEXT: You are writing for Graeham Watts — REALTOR, Intero Real Estate, DRE# 01466876, 650-308-4727, graehamwatts@gmail.com. Bay Area / East Palo Alto market focus. Voice: direct, data-driven, warm, locally credible. Use ONLY DRE# 01466876 in any output.\n\nVAIBHAV LOOK ROTATION (warm desk aesthetic): #1 Signature (cornerstone Wed), #2 Earth tones, #3 Neutral linen, #4 On-location warm, #5 Studio amber. Caption typography = serif italic, color-highlighted keywords, emoji pop-ins.\n\nTASK: Production brief for Wed Pt2. Same Look #1 (continuity from Pt1 — shot same day). Calculator-card overlay graphic for each scenario (3 total). B-roll: EPA street, Menlo Park exterior, Belle Haven cul-de-sac. Edit: faster than Pt1 (4s avg) — viewers come for the math, give it to them. End-card: link to book equity-strategy call."
+  },
+  "p-wed-yts-script": {
+    "title": "Wed YT Short Script — Hidden Equity 60s",
+    "body": "CONTEXT: You are writing for Graeham Watts — REALTOR, Intero Real Estate, DRE# 01466876, 650-308-4727, graehamwatts@gmail.com. Bay Area / East Palo Alto market focus. Voice: direct, data-driven, warm, locally credible. Use ONLY DRE# 01466876 in any output.\n\nTASK: 60s YT Short standalone — pull the single most surprising stat from the cornerstone (the $400K avg or the refi break-even number). One stat, one takeaway, one CTA to long-form.\n\nFORMAT: Word-for-word script, ALL CAPS for verbal emphasis, [B-ROLL] cues."
+  },
+  "p-wed-yts-prod": {
+    "title": "Wed YT Short Production Prompt",
+    "body": "CONTEXT: You are writing for Graeham Watts — REALTOR, Intero Real Estate, DRE# 01466876, 650-308-4727, graehamwatts@gmail.com. Bay Area / East Palo Alto market focus. Voice: direct, data-driven, warm, locally credible. Use ONLY DRE# 01466876 in any output.\n\nVAIBHAV LOOK ROTATION (warm desk aesthetic): #1 Signature (cornerstone Wed), #2 Earth tones, #3 Neutral linen, #4 On-location warm, #5 Studio amber. Caption typography = serif italic, color-highlighted keywords, emoji pop-ins.\n\nTASK: Production for Wed YT Short. Look #1 continuity (pulled from Pt1 shoot — same day). Tight ¾ frame, single B-roll cutaway (calculator), text overlay heavy (Shorts viewers scroll without sound)."
+  },
+  "p-wed-yts-hooks": {
+    "title": "Wed YT Short — 5 Alt Hooks",
+    "body": "CONTEXT: You are writing for Graeham Watts — REALTOR, Intero Real Estate, DRE# 01466876, 650-308-4727, graehamwatts@gmail.com. Bay Area / East Palo Alto market focus. Voice: direct, data-driven, warm, locally credible. Use ONLY DRE# 01466876 in any output.\n\nTASK: 5 alt hooks for Wed YT Short. Highest stakes hook of the week — this Short is the top-of-funnel for the cornerstone Long-form. Test scroll-stop probability."
+  },
+  "p-wed-igr1-script": {
+    "title": "Wed IG Reel #1 Script — Should You Sell? 45s",
+    "body": "CONTEXT: You are writing for Graeham Watts — REALTOR, Intero Real Estate, DRE# 01466876, 650-308-4727, graehamwatts@gmail.com. Bay Area / East Palo Alto market focus. Voice: direct, data-driven, warm, locally credible. Use ONLY DRE# 01466876 in any output.\n\nTASK: 45s IG Reel — emotional/lifestyle angle on 'Should you sell?' Hook = a moment ('Drove past your old house. Wondered what it'd sell for now?'). Pull the listener into a feeling first, then deliver the framework.\n\nFORMAT: Word-for-word, IG-vertical-native, trending-audio compatible (specify audio search terms)."
+  },
+  "p-wed-igr1-prod": {
+    "title": "Wed IG Reel #1 Production Prompt",
+    "body": "CONTEXT: You are writing for Graeham Watts — REALTOR, Intero Real Estate, DRE# 01466876, 650-308-4727, graehamwatts@gmail.com. Bay Area / East Palo Alto market focus. Voice: direct, data-driven, warm, locally credible. Use ONLY DRE# 01466876 in any output.\n\nVAIBHAV LOOK ROTATION (warm desk aesthetic): #1 Signature (cornerstone Wed), #2 Earth tones, #3 Neutral linen, #4 On-location warm, #5 Studio amber. Caption typography = serif italic, color-highlighted keywords, emoji pop-ins.\n\nTASK: Production for IG Reel #1 (Wed). Same shoot day as YT — pull cutdown from cornerstone footage. Add IG-specific captions burned in, trending audio (NOT same as YT). Lifestyle B-roll: walking past a Bay Area home, hand on real estate sign, emotional pause."
+  },
+  "p-wed-igr2-script": {
+    "title": "Wed IG Reel #2 Script — Should You Refi? 45s",
+    "body": "CONTEXT: You are writing for Graeham Watts — REALTOR, Intero Real Estate, DRE# 01466876, 650-308-4727, graehamwatts@gmail.com. Bay Area / East Palo Alto market focus. Voice: direct, data-driven, warm, locally credible. Use ONLY DRE# 01466876 in any output.\n\nTASK: 45s IG Reel — numbers/calculator angle on 'Should you refinance?' Hook = a stat ('Bought your home at 3%? At 6.4%, refi only makes sense if...'). Math-driven, text-overlay heavy.\n\nFORMAT: Same as Reel #1 but more on-screen numbers, less feeling-led."
+  },
+  "p-wed-igr2-prod": {
+    "title": "Wed IG Reel #2 Production Prompt",
+    "body": "CONTEXT: You are writing for Graeham Watts — REALTOR, Intero Real Estate, DRE# 01466876, 650-308-4727, graehamwatts@gmail.com. Bay Area / East Palo Alto market focus. Voice: direct, data-driven, warm, locally credible. Use ONLY DRE# 01466876 in any output.\n\nVAIBHAV LOOK ROTATION (warm desk aesthetic): #1 Signature (cornerstone Wed), #2 Earth tones, #3 Neutral linen, #4 On-location warm, #5 Studio amber. Caption typography = serif italic, color-highlighted keywords, emoji pop-ins.\n\nTASK: Production for Wed IG Reel #2. Cutdown from cornerstone shoot. Burn-in calculator graphic (refi break-even chart). Different trending audio than Reel #1 (algorithm cares about audio diversity)."
+  },
+  "p-wed-carousel-img": {
+    "title": "Wed IG Carousel — Image Gen Prompt (Nano Banana / Gemini / DALL-E)",
+    "body": "CONTEXT: You are writing for Graeham Watts — REALTOR, Intero Real Estate, DRE# 01466876, 650-308-4727, graehamwatts@gmail.com. Bay Area / East Palo Alto market focus. Voice: direct, data-driven, warm, locally credible. Use ONLY DRE# 01466876 in any output.\n\nTASK: Generate 7-slide IG Carousel (1080x1080) — '3-Door Decision Tree' for Hidden Equity cornerstone. Use Gemini Imagen 3 (preferred) or Nano Banana or ChatGPT-DALL-E.\n\nBRAND VISUAL SPEC: Cream/off-white BG (#fef9eb), navy (#1B2A4A) primary type, gold (#C5A258) accent. Plus Jakarta Sans Bold display. Editorial/data-viz aesthetic — NOT Canva-template. Use subtle dotted-line dividers.\n\nSLIDE PROMPTS:\n1) HOOK: 'You're sitting on $400K+ in equity' (90pt navy bold, line break before $400K) + 'You don't know it yet.' (32pt muted gray italic). Centered. Gold underline accent.\n2) FRAMEWORK: '3 doors. Pick one.' (80pt navy) + 3 horizontal door icons (HELOC, Refi, Sell) with tiny labels under each.\n3) DOOR 1 — HELOC: Door icon + 'Door 1: HELOC' headline + bullet list of 3 pros, 1 con. Footer 'Best when:' + 1-line condition.\n4) DOOR 2 — REFI: Door icon + 'Door 2: Refinance' + same structure as slide 3 but refi-specific.\n5) DOOR 3 — SELL: Door icon + 'Door 3: Sell + Move Up' + same structure.\n6) THE MATH: Mini calculator visual showing example numbers. 'Real EPA scenario: bought 2018 at $850K, owe $620K, value today $1.3M.' Then: 'HELOC: $200K @ 8.2%' / 'Refi: skip — already at 3.5%' / 'Sell + replace: net $680K equity to redeploy.' Caption: 'My pick = Door 3.'\n7) CTA: 'Want the math for YOUR home?' (60pt navy) + 'Get the equity calc — link in bio' (28pt) + small Graeham Watts signature/headshot bottom-right.\n\nDELIVERABLE: 7 separate 1080x1080 images, filenames hidden-equity-01.png through 07.png. Type-set for IG mobile — body copy at least 24pt."
+  },
+  "p-wed-carousel-cap": {
+    "title": "Wed IG Carousel — Caption Prompt",
+    "body": "CONTEXT: You are writing for Graeham Watts — REALTOR, Intero Real Estate, DRE# 01466876, 650-308-4727, graehamwatts@gmail.com. Bay Area / East Palo Alto market focus. Voice: direct, data-driven, warm, locally credible. Use ONLY DRE# 01466876 in any output.\n\nTASK: IG caption for Wed Hidden Equity carousel. 1,000-1,400 chars (high-intent post — let it breathe).\n\nSTRUCTURE: Strong hook (different from slide 1), 3-paragraph mini-story (someone you know is in this exact situation), tease the framework without giving it away, soft CTA + reply prompt, 7-9 hashtags. Include: 1 specific question to drive comments ('Which door fits your situation? Drop a 1, 2, or 3.')."
+  },
+  "p-wed-tt-script": {
+    "title": "Wed TikTok Script — Hidden Equity 45s",
+    "body": "CONTEXT: You are writing for Graeham Watts — REALTOR, Intero Real Estate, DRE# 01466876, 650-308-4727, graehamwatts@gmail.com. Bay Area / East Palo Alto market focus. Voice: direct, data-driven, warm, locally credible. Use ONLY DRE# 01466876 in any output.\n\nTASK: 45s TikTok script — looser, conversational, TikTok-native pacing. Topic: Hidden equity / 3 doors. \n\nDIFFERENCE FROM REELS: TikTok rewards informal storytelling and raw delivery. Open with a 1-line story ('Got off a call yesterday with a guy who didn't realize he was sitting on $480K of equity...'), unfold the framework casually, end with 'comment 1 2 or 3 for which door fits you.'"
+  },
+  "p-wed-tt-prod": {
+    "title": "Wed TikTok Production Prompt",
+    "body": "CONTEXT: You are writing for Graeham Watts — REALTOR, Intero Real Estate, DRE# 01466876, 650-308-4727, graehamwatts@gmail.com. Bay Area / East Palo Alto market focus. Voice: direct, data-driven, warm, locally credible. Use ONLY DRE# 01466876 in any output.\n\nVAIBHAV LOOK ROTATION (warm desk aesthetic): #1 Signature (cornerstone Wed), #2 Earth tones, #3 Neutral linen, #4 On-location warm, #5 Studio amber. Caption typography = serif italic, color-highlighted keywords, emoji pop-ins.\n\nTASK: Production for Wed TikTok. Look #1 (cornerstone continuity). TikTok-native: handheld feel optional, less polish than IG/YT, faster pacing in opener, on-screen captions IN TikTok-style font (different from IG). Trending TikTok audio (NOT IG audio)."
+  },
+  "p-thu-igr2-script": {
+    "title": "Thu IG Reel #2 Script — 5 Reasons EPA",
+    "body": "CONTEXT: You are writing for Graeham Watts — REALTOR, Intero Real Estate, DRE# 01466876, 650-308-4727, graehamwatts@gmail.com. Bay Area / East Palo Alto market focus. Voice: direct, data-driven, warm, locally credible. Use ONLY DRE# 01466876 in any output.\n\nTASK: 45s IG Reel script — '5 Reasons People Choose East of 101.' Counter-narrative angle: 'You think you know EPA — you don't.'\n\nFORMAT: 1 reason per ~7 seconds, 5 reasons in 35s, hook + outro at start/end. Make each reason a specific surprise (not 'great schools' — be specific: 'Cesar Chavez Academy ranks higher than 3 nearby Atherton schools'). Trending IG audio."
+  },
+  "p-thu-igr2-prod": {
+    "title": "Thu IG Reel #2 Production Prompt",
+    "body": "CONTEXT: You are writing for Graeham Watts — REALTOR, Intero Real Estate, DRE# 01466876, 650-308-4727, graehamwatts@gmail.com. Bay Area / East Palo Alto market focus. Voice: direct, data-driven, warm, locally credible. Use ONLY DRE# 01466876 in any output.\n\nVAIBHAV LOOK ROTATION (warm desk aesthetic): #1 Signature (cornerstone Wed), #2 Earth tones, #3 Neutral linen, #4 On-location warm, #5 Studio amber. Caption typography = serif italic, color-highlighted keywords, emoji pop-ins.\n\nTASK: Thu IG Reel production. Look #4 (on-location warm). Shoot ON-LOCATION in EPA — 5 reasons = 5 different shots in 5 different EPA spots (school front, park, downtown corner, leafy residential street, the surprise location). One-take handheld where possible, supplementary B-roll for cutaways."
+  },
+  "p-thu-tt-script": {
+    "title": "Thu TikTok Script — Walking EPA",
+    "body": "CONTEXT: You are writing for Graeham Watts — REALTOR, Intero Real Estate, DRE# 01466876, 650-308-4727, graehamwatts@gmail.com. Bay Area / East Palo Alto market focus. Voice: direct, data-driven, warm, locally credible. Use ONLY DRE# 01466876 in any output.\n\nTASK: 60s TikTok — handheld walk-and-talk through EPA. Hook: 'Walking the side of the freeway nobody talks about.'\n\nFORMAT: Continuous ~45s walk-and-talk with ambient EPA audio, then 15s cutaways with stats overlay. Conversational, slightly fast-paced, unsalesy. End: 'I do EPA tours — DM me.'"
+  },
+  "p-thu-tt-prod": {
+    "title": "Thu TikTok Production Prompt",
+    "body": "CONTEXT: You are writing for Graeham Watts — REALTOR, Intero Real Estate, DRE# 01466876, 650-308-4727, graehamwatts@gmail.com. Bay Area / East Palo Alto market focus. Voice: direct, data-driven, warm, locally credible. Use ONLY DRE# 01466876 in any output.\n\nVAIBHAV LOOK ROTATION (warm desk aesthetic): #1 Signature (cornerstone Wed), #2 Earth tones, #3 Neutral linen, #4 On-location warm, #5 Studio amber. Caption typography = serif italic, color-highlighted keywords, emoji pop-ins.\n\nTASK: Thu TikTok production. Look #4 outdoor. Handheld walk-and-talk (gimbal recommended), ambient sound, natural light. Cutaway stats overlaid in TikTok-style sans-serif. Trending TikTok audio for last 15s overlay only."
+  },
+  "p-thu-carousel-img": {
+    "title": "Thu IG Carousel — Image Gen Prompt (5 reasons EPA)",
+    "body": "CONTEXT: You are writing for Graeham Watts — REALTOR, Intero Real Estate, DRE# 01466876, 650-308-4727, graehamwatts@gmail.com. Bay Area / East Palo Alto market focus. Voice: direct, data-driven, warm, locally credible. Use ONLY DRE# 01466876 in any output.\n\nTASK: Generate 5 IG Carousel slides (1080x1350 portrait — better for hyperlocal/photo content) — '5 Reasons People Choose East of 101.' Use Gemini Imagen 3 (preferred for photorealistic) or Nano Banana or ChatGPT-DALL-E.\n\nVISUAL SPEC: Each slide = 1 high-quality on-location-style EPA photo (top 70%) + bold reason caption (bottom 30%, navy text on cream banner). Photos should feel real EPA, NOT generic stock — leafy residential streets, EPA-style architecture, diverse neighborhood feel.\n\nSLIDE PROMPTS:\n1) Reason 1 — 'The schools quietly outranking Atherton.' Photo: warm afternoon light on a well-maintained school exterior with kids walking out (composite OK — don't show identifiable faces).\n2) Reason 2 — 'A 12-minute drive to Stanford. 18 to downtown PA.' Photo: EPA street view with Highway 101 visible in distance, golden hour.\n3) Reason 3 — '$ per square foot still under $900 — vs $1,400 in Menlo Park.' Photo: clean exterior of a typical EPA single-family home, well-kept yard.\n4) Reason 4 — 'Belle Haven's quiet streets you'd swear were Palo Alto.' Photo: tree-lined leafy residential street, mature oaks, late-afternoon sunlight.\n5) Reason 5 — 'The surprise: a public art scene most Peninsula buyers don't know exists.' Photo: an EPA mural or community garden, vibrant and authentic.\n\nDELIVERABLE: 5 1080x1350 images, filenames epa-5-reasons-01.jpg through 05.jpg. Photos must look on-location — NOT corporate stock."
+  },
+  "p-thu-carousel-cap": {
+    "title": "Thu IG Carousel — Caption Prompt",
+    "body": "CONTEXT: You are writing for Graeham Watts — REALTOR, Intero Real Estate, DRE# 01466876, 650-308-4727, graehamwatts@gmail.com. Bay Area / East Palo Alto market focus. Voice: direct, data-driven, warm, locally credible. Use ONLY DRE# 01466876 in any output.\n\nTASK: IG caption for Thu '5 Reasons EPA' carousel. 700-1,000 chars.\n\nSTRUCTURE: Hook (counter-narrative — 'I keep hearing 'EPA isn't safe' from people who haven't been here in 10 years.'), 3-line story setup, 'swipe →' bridge, soft CTA, 6-8 hashtags including 1 location pin tag. Comment driver: 'What's a reason I missed?'"
+  },
+  "p-fri-igr1-script": {
+    "title": "Fri IG Reel #1 Script — 3 Listings Cutdown",
+    "body": "CONTEXT: You are writing for Graeham Watts — REALTOR, Intero Real Estate, DRE# 01466876, 650-308-4727, graehamwatts@gmail.com. Bay Area / East Palo Alto market focus. Voice: direct, data-driven, warm, locally credible. Use ONLY DRE# 01466876 in any output.\n\nTASK: 60s IG Reel script — 3 EPA listings under $1.2M weekend cutdown. Each listing = ~15s.\n\nPER LISTING: 1-line address tease, 1 standout feature, price + monthly mortgage payment at 6.4%, my honest take in 1 line. Outro: 'Open house Saturday & Sunday. DM for the addresses.'\n\nFORMAT: Word-for-word, vertical IG-native, trending audio compatible. Use placeholder fields {{LISTING_X_ADDR}}, {{PRICE}}, {{FEATURE}}."
+  },
+  "p-fri-igr1-prod": {
+    "title": "Fri IG Reel #1 Production Prompt",
+    "body": "CONTEXT: You are writing for Graeham Watts — REALTOR, Intero Real Estate, DRE# 01466876, 650-308-4727, graehamwatts@gmail.com. Bay Area / East Palo Alto market focus. Voice: direct, data-driven, warm, locally credible. Use ONLY DRE# 01466876 in any output.\n\nVAIBHAV LOOK ROTATION (warm desk aesthetic): #1 Signature (cornerstone Wed), #2 Earth tones, #3 Neutral linen, #4 On-location warm, #5 Studio amber. Caption typography = serif italic, color-highlighted keywords, emoji pop-ins.\n\nTASK: Fri IG Reel production — on-location at 3 listings. Look #5 (studio amber — but apply only to intro/outro segments; listing footage = natural light). Quick walk-throughs (5s each room max), text overlay with price + payment, trending audio."
+  },
+  "p-fri-tt-script": {
+    "title": "Fri TikTok Script — What $1.2M Buys",
+    "body": "CONTEXT: You are writing for Graeham Watts — REALTOR, Intero Real Estate, DRE# 01466876, 650-308-4727, graehamwatts@gmail.com. Bay Area / East Palo Alto market focus. Voice: direct, data-driven, warm, locally credible. Use ONLY DRE# 01466876 in any output.\n\nTASK: 45s TikTok — 'What $1.2M actually buys you in EPA right now.' 3-listing montage with raw, conversational delivery.\n\nFORMAT: Open w/ '$1.2M sounds like a lot. In Bay Area, here's what it actually gets you in EPA this weekend.' Then 3 quick listing reveals — same structure as Reel but TikTok-loose."
+  },
+  "p-fri-tt-prod": {
+    "title": "Fri TikTok Production Prompt",
+    "body": "CONTEXT: You are writing for Graeham Watts — REALTOR, Intero Real Estate, DRE# 01466876, 650-308-4727, graehamwatts@gmail.com. Bay Area / East Palo Alto market focus. Voice: direct, data-driven, warm, locally credible. Use ONLY DRE# 01466876 in any output.\n\nVAIBHAV LOOK ROTATION (warm desk aesthetic): #1 Signature (cornerstone Wed), #2 Earth tones, #3 Neutral linen, #4 On-location warm, #5 Studio amber. Caption typography = serif italic, color-highlighted keywords, emoji pop-ins.\n\nTASK: Fri TikTok production. Same 3-listing shoot as Reel — pull cutdown. TikTok-native captions (not IG style), TikTok-trending audio. Hand-held feel where possible. End frame: 'DM me 'open house'' + my handle."
+  }
+};
+
+function showToast(msg, type) {
+  const t = document.getElementById('toast');
+  t.textContent = msg;
+  t.className = 'toast show ' + (type || 'success');
+  clearTimeout(t._timer);
+  t._timer = setTimeout(() => { t.className = 'toast ' + (type || 'success'); }, 2200);
+}
+
+function copyPrompt(id) {
+  const p = PROMPTS[id];
+  if (!p) {
+    showToast('Prompt not found: ' + id, 'error');
+    console.error('Missing prompt id:', id);
+    return;
+  }
+  const text = p.body;
+  if (navigator.clipboard && navigator.clipboard.writeText) {
+    navigator.clipboard.writeText(text).then(
+      () => showToast('✓ Copied: ' + p.title, 'success'),
+      () => fallbackCopy(text, p.title)
+    );
+  } else {
+    fallbackCopy(text, p.title);
+  }
+}
+
+function fallbackCopy(text, title) {
+  const ta = document.createElement('textarea');
+  ta.value = text;
+  ta.style.position = 'fixed';
+  ta.style.left = '-9999px';
+  document.body.appendChild(ta);
+  ta.select();
+  try {
+    document.execCommand('copy');
+    showToast('✓ Copied: ' + title, 'success');
+  } catch (err) {
+    showToast('Copy failed — select & copy manually', 'error');
+  }
+  document.body.removeChild(ta);
+}
+
+// Audit on load: warn if any pill button references a missing prompt id
+window.addEventListener('DOMContentLoaded', () => {
+  const buttons = document.querySelectorAll('button[onclick^="copyPrompt"]');
+  const missing = [];
+  buttons.forEach(b => {
+    const m = (b.getAttribute('onclick') || '').match(/copyPrompt\('([^']+)'\)/);
+    if (m && !PROMPTS[m[1]]) missing.push(m[1]);
+  });
+  if (missing.length) {
+    console.warn('[v5 audit] Missing prompts:', missing);
+  } else {
+    console.log('[v5 audit] All ' + buttons.length + ' pill buttons have valid prompts.');
+  }
+});
 </script>
-
-
-<!-- FOOTER -->
-<footer data-audience="all research eric peter">
-  <strong>Graeham Watts</strong> · REALTOR · Intero Real Estate · DRE# 01466876 · 650-308-4727 · graehamwatts@gmail.com<br>
-  Production calendar generated by content-calendar skill · 2026-05-03 (PREVIEW) · Refreshes Monday May 11 at 11:08 AM PT via scheduled task <code>weekly-content-email-monday</code> · Source: Graehamwatts/skills GitHub (content-calendar SKILL.md, all 8 sources documented)
-</footer>
-
-</div>
 </body>
 </html>
