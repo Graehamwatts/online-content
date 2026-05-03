@@ -46,7 +46,7 @@
   .card { background: var(--card); border: 1px solid var(--border); border-radius: var(--radius); padding: 22px 24px; margin-bottom: 18px; box-shadow: var(--shadow); }
   .card h3 { margin-top: 0; }
 
-  /* AUDIENCE NAV (4-tab bar — Research / Eric / Peter / Show All) */
+  /* AUDIENCE NAV (4-tab bar — Research / Blogs / Peter / Show All) */
   .audience-nav { display: grid; grid-template-columns: repeat(4, 1fr); gap: 12px; margin-bottom: 20px; position: sticky; top: 8px; z-index: 50; background: var(--bg); padding: 8px 0; }
   @media (max-width: 800px) { .audience-nav { grid-template-columns: 1fr 1fr; } }
   @media (max-width: 480px) { .audience-nav { grid-template-columns: 1fr; position: relative; top: 0; } }
@@ -290,7 +290,7 @@
     <div style="margin-top:10px;line-height:1.7">
       <p><strong>📍 Geographic + audience pill:</strong> Tells the team which market and which audience this content is targeted at. Hyperlocal topics use a neighborhood; broader topics use city/region/state.</p>
       <p><strong>🎯 Funnel pill:</strong> TOFU (top — awareness, casual viewers), MOFU (middle — comparing options), BOFU (bottom — ready to act). Decision-Stage is the hottest part of BOFU. Determines CTA strength and lead-magnet matching.</p>
-      <p><strong>📦 Format pill:</strong> Multi-platform = single topic produces 11 derivatives. Eric posts the finished content via the gold "Copy Content" button on each panel. Peter produces the video formats using the purple "Copy Production Prompt" buttons.</p>
+      <p><strong>📦 Format pill:</strong> Multi-platform = single topic produces 11 derivatives. the blog team posts the finished content via the gold "Copy Content" button on each panel. Peter produces the video formats using the purple "Copy Production Prompt" buttons.</p>
       <p><strong>📊 Opportunity 22/25 (gold pill):</strong> Owned by <code>content-calendar</code>. Scores topics across 5 criteria (Performance Signal, Search Demand, Audience Intent, Competitive Gap, Timeliness). 22-25 = must-create. 17-21 = strong alternate. 12-16 = consider. Below 12 = skip. Answers "should we cover this WEEK?"</p>
       <p><strong>📊 Intent 21/25 (gold pill):</strong> Owned by <code>bofu-intent-scorer</code>. Scores BOFU intent across 6 criteria (Inquiry Type, Intent Matrix, Source Confirmation, Emotional Temperature, Local Relevance, Freshness ±5). ≥18 = ships. Answers "how decision-ready is the audience?" Used for CTA strength + funnel mix.</p>
       <p><strong>★ star:</strong> Top-tier weekly pick. The data thinks this is the highest-leverage topic of the week.</p>
@@ -308,7 +308,7 @@
   </button>
   <button type="button" class="aud-btn aud-eric" role="tab" onclick="setView('eric')">
     <div class="aud-icon">📝</div>
-    <div class="aud-label">Eric — Blog &amp; SEO</div>
+    <div class="aud-label">Blog &amp; SEO</div>
     <div class="aud-sub">Blog post · GMB post · meta · linking</div>
   </button>
   <button type="button" class="aud-btn aud-peter" role="tab" onclick="setView('peter')">
@@ -409,7 +409,7 @@
   <h3>How to use this dashboard</h3>
   <div class="howto-steps">
     <div class="howto-step eric-step" data-audience="all eric">
-      <span class="num">1</span><span class="step-tag">Eric · Blog &amp; SEO</span>
+      <span class="num">1</span><span class="step-tag">Blog &amp; SEO</span>
       <p style="margin:8px 0 0">Click the <strong>Blog Post</strong> panel or <strong>GMB Post</strong> panel below, then click the gold <strong>"Copy Content"</strong> button. Paste the blog body into the website CMS, or the GMB content into Google Business Profile. Use one of the SEO-scored title options from the email. The panel also has the meta description + internal linking suggestions.</p>
     </div>
     <div class="howto-step peter-step" data-audience="all peter">
@@ -703,7 +703,7 @@
   <span id="audience-eric" style="display:block;position:relative;top:-20px;visibility:hidden"></span>
   <span id="audience-peter" style="display:block;position:relative;top:-20px;visibility:hidden"></span>
   <h2 class="sh">Content Derivatives — 14 Formats</h2>
-  <p style="font-size:13px;color:var(--muted)">Click any format to see the panel. Eric posts content (gold buttons). Peter regenerates scripts + production packages (gold-outline + purple buttons).</p>
+  <p style="font-size:13px;color:var(--muted)">Click any format to see the panel. the blog team posts content (gold buttons). Peter regenerates scripts + production packages (gold-outline + purple buttons).</p>
   <div class="flow-grid">
     <div class="flow-card core active" data-target="yt-long-pt1"><div class="fc-type">CORE</div><div class="fc-title">YouTube Long Pt1</div><span class="fc-tag tag-yt">~6 min</span></div>
     <div class="flow-card core" data-target="yt-long-pt2"><div class="fc-type">CORE</div><div class="fc-title">YouTube Long Pt2</div><span class="fc-tag tag-yt">Edit+SEO</span></div>
@@ -726,7 +726,7 @@
   <div class="prompt-card">
     <div class="pc-h"><div class="pc-label">YouTube Long Pt1 — Script + Voice Side</div><div class="pc-meta">8-15 min · 16:9 · 1080p</div></div>
     <div class="content-section">
-      <div class="cs-h">Ready to Post (Eric)</div>
+      <div class="cs-h">Ready to Post</div>
       <div class="section-help"><strong>What this is:</strong> Finished YouTube description + script. Click the gold button to copy the complete deliverable. Paste into the YouTube upload page.</div>
       <div class="content-preview">If you own a home in East Palo Alto, the 772 new units coming to Woodland Park are about to do one of three things to your equity. I'm Graeham Watts, REALTOR at Intero Real Estate, and I've been watching this development since the City Council approved it in February. I want to walk you through what the actual data says — not what your neighbor said at the BBQ.
 
@@ -753,7 +753,7 @@ The Woodland Park redevelopment is the largest housing project in EPA's history.
       <div class="btn-help"><strong>Paste into:</strong> Claude/ChatGPT to regenerate B-roll list, editing notes, AI video prompts, shot list, music direction.</div>
     </div>
 
-    <div class="use-in"><strong>How to use:</strong> Eric uploads the video to YouTube and pastes the description. Peter feeds the script prompt into his AI tool to get fresh SSML for ElevenLabs, then uses HeyGen to render the avatar video. Jason edits using the production package output.</div>
+    <div class="use-in"><strong>How to use:</strong> the blog team uploads the video to YouTube and pastes the description. Peter feeds the script prompt into his AI tool to get fresh SSML for ElevenLabs, then uses HeyGen to render the avatar video. Jason edits using the production package output.</div>
   </div>
 </div>
 
@@ -762,7 +762,7 @@ The Woodland Park redevelopment is the largest housing project in EPA's history.
   <div class="prompt-card">
     <div class="pc-h"><div class="pc-label">YouTube Long Pt2 — Production Package</div><div class="pc-meta">B-roll · Editing notes · Shot list · AI video prompts · SEO · Alt hooks</div></div>
     <div class="content-section">
-      <div class="cs-h">Ready to Post (Eric)</div>
+      <div class="cs-h">Ready to Post</div>
       <div class="section-help"><strong>What this is:</strong> Production-side companion to Pt1. Editing notes for Jason, B-roll requirements, shot list, AI video prompts, YouTube SEO metadata, 3 alternate hooks for A/B testing.</div>
       <div class="content-preview">EDITING NOTES FOR JASON
 
@@ -812,7 +812,7 @@ PACING NOTES: Open energetic (1-2 sec cuts). Slow to data section (5-7 sec holds
   <div class="prompt-card">
     <div class="pc-h"><div class="pc-label">YouTube Short</div><div class="pc-meta">30-59 sec · 9:16 · 1080p · Hook-led</div></div>
     <div class="content-section">
-      <div class="cs-h">Ready to Post (Eric)</div>
+      <div class="cs-h">Ready to Post</div>
       <div class="section-help"><strong>What this is:</strong> Pre-written 45-second Short script + caption + hashtags. Direct upload to YouTube Shorts.</div>
       <div class="content-preview">[HOOK — 0:00] If you own a home in EPA, 772 new units are about to change your equity. Here's the one thing nobody is telling you.
 
@@ -848,7 +848,7 @@ PACING NOTES: Open energetic (1-2 sec cuts). Slow to data section (5-7 sec holds
   <div class="prompt-card">
     <div class="pc-h"><div class="pc-label">IG Reel #1 — Hook-led</div><div class="pc-meta">30-60 sec · 9:16 · Face-to-camera + B-roll</div></div>
     <div class="content-section">
-      <div class="cs-h">Ready to Post (Eric)</div>
+      <div class="cs-h">Ready to Post</div>
       <div class="section-help"><strong>What this is:</strong> Reel script + caption with GHL keyword CTA + hashtags.</div>
       <div class="content-preview">[Caption]
 EPA homeowners — 772 new units are coming to Woodland Park. Here's what it actually does to your home value 👇
@@ -865,338 +865,4 @@ The data isn't what most people are assuming. Comment VALUE and I'll send you th
         <button class="copy-big" onclick="copyContent('ig-reel-1')">Copy Reel #1</button>
         <span class="char-meta">Full content: 612 chars</span>
       </div>
-      <div class="btn-help"><strong>Paste into:</strong> Instagram Reel upload (caption field).</div>
-    </div>
-
-    <div class="peter-section">
-      <div class="cs-h">For Peter — Script Prompt + Production Prompt</div>
-      <div class="button-row">
-        <button class="copy-outline" onclick="copyPrompt('ig-reel-1-script')">Copy Script Prompt</button>
-        <span class="char-meta">Script prompt: 3,900 chars</span>
-      </div>
-      <div class="button-row">
-        <button class="copy-big" style="background:var(--purple);color:#fff;box-shadow:0 2px 8px rgba(106,27,154,0.25)" onclick="copyPrompt('ig-reel-1-production')">Copy Production Prompt</button>
-        <span class="char-meta">Production prompt: 3,200 chars</span>
-      </div>
-    </div>
-  </div>
-</div>
-
-<!-- Other panels — placeholder structure (full content in real run) -->
-<div class="deriv-panel" id="panel-ig-reel-2" data-audience="all peter">
-  <div class="prompt-card">
-    <div class="pc-h"><div class="pc-label">IG Reel #2 — Data-forward</div><div class="pc-meta">15-30 sec · 9:16 · B-roll heavy</div></div>
-    <div class="content-section">
-      <div class="cs-h">Ready to Post (Eric)</div>
-      <div class="content-preview">[15-second data-led hook]
-"EPA median home price up 4.4% MoM. DOM down to 16 days. Sale-to-list at 104%. And 772 units are coming. Here's why that combo is unusual..."</div>
-      <div class="button-row"><button class="copy-big" onclick="copyContent('ig-reel-2')">Copy Reel #2</button><span class="char-meta">Full content: 480 chars</span></div>
-    </div>
-    <div class="peter-section">
-      <div class="cs-h">For Peter — Script Prompt + Production Prompt</div>
-      <div class="button-row"><button class="copy-outline" onclick="copyPrompt('ig-reel-2-script')">Copy Script Prompt</button><span class="char-meta">3,800 chars</span></div>
-      <div class="button-row"><button class="copy-big" style="background:var(--purple);color:#fff" onclick="copyPrompt('ig-reel-2-production')">Copy Production Prompt</button><span class="char-meta">3,100 chars</span></div>
-    </div>
-  </div>
-</div>
-
-<div class="deriv-panel" id="panel-ig-carousel" data-audience="all peter">
-  <div class="prompt-card">
-    <div class="pc-h"><div class="pc-label">IG Carousel — 7 Slides</div><div class="pc-meta">1:1 or 4:5 · Stat-forward design</div></div>
-    <div class="content-section">
-      <div class="cs-h">Ready to Post (Eric)</div>
-      <div class="content-preview">SLIDE 1: "772 New Units in EPA — What It Does to Your Home Value"
-SLIDE 2: "The math: 772 units = 25 years of normal EPA supply, all at once"
-SLIDE 3: "Effect #1 — Supply pressure (smaller than you think)"
-SLIDE 4: "Effect #2 — Infrastructure investment (the part that helps you)"
-SLIDE 5: "Effect #3 — Neighborhood premium (where owners get it wrong)"
-SLIDE 6: "EPA median up 4.4% MoM despite the news. DOM 16 days. Sale-to-list 104%."
-SLIDE 7: "Comment VALUE for the full breakdown"</div>
-      <div class="button-row"><button class="copy-big" onclick="copyContent('ig-carousel')">Copy Carousel</button><span class="char-meta">1,180 chars</span></div>
-    </div>
-    <div class="content-section" style="margin-top:14px">
-      <div class="cs-h">Regeneration Prompt</div>
-      <div class="button-row"><button class="copy-outline" onclick="copyPrompt('ig-carousel')">Copy Prompt</button><span class="char-meta">2,800 chars</span></div>
-    </div>
-  </div>
-</div>
-
-<div class="deriv-panel" id="panel-tiktok" data-audience="all peter">
-  <div class="prompt-card">
-    <div class="pc-h"><div class="pc-label">TikTok</div><div class="pc-meta">30-60 sec · 9:16 · Casual</div></div>
-    <div class="content-section">
-      <div class="cs-h">Ready to Post (Eric)</div>
-      <div class="content-preview">"POV: you own a house in EPA and just heard about Woodland Park. Don't panic yet. The 772-unit number is scary on its own. But here's what the data actually shows in supply-constrained markets..."</div>
-      <div class="button-row"><button class="copy-big" onclick="copyContent('tiktok')">Copy TikTok</button><span class="char-meta">680 chars</span></div>
-    </div>
-    <div class="peter-section">
-      <div class="cs-h">For Peter — Script Prompt + Production Prompt</div>
-      <div class="button-row"><button class="copy-outline" onclick="copyPrompt('tiktok-script')">Copy Script Prompt</button><span class="char-meta">3,700 chars</span></div>
-      <div class="button-row"><button class="copy-big" style="background:var(--purple);color:#fff" onclick="copyPrompt('tiktok-production')">Copy Production Prompt</button><span class="char-meta">3,000 chars</span></div>
-    </div>
-  </div>
-</div>
-
-<div class="deriv-panel" id="panel-blog" data-audience="all eric">
-  <div class="prompt-card">
-    <div class="pc-h"><div class="pc-label">Blog Post — AEO + JSON-LD Schema + RSS Internal Links</div><div class="pc-meta">800-1,200 words · graehamwatts.com/blog</div></div>
-    <div class="content-section">
-      <div class="cs-h">Ready to Post (Eric)</div>
-      <div class="section-help">Includes <strong>JSON-LD Article + FAQPage + VideoObject schema</strong>, <strong>2-4 internal links</strong> scraped from graehamwatts.com RSS feed (semantically matched), and YouTube embed iframe with timestamp links.</div>
-      <div class="content-preview">**What does Woodland Park's 772-unit development mean for East Palo Alto home values?**
-
-Most East Palo Alto homeowners are reading the Woodland Park redevelopment news and hearing one number: 772 new units. That number is real. The conclusions most people are drawing from it aren't.
-
-Here's what the data actually shows about how a development of this size affects existing home values in supply-constrained Bay Area markets...
-
-[Article continues with H2 sections, embedded YouTube, internal links, FAQ section]
-
-[JSON-LD schema blocks at bottom: Article + FAQPage + VideoObject]</div>
-      <div class="button-row"><button class="copy-big" onclick="copyContent('blog')">Copy Blog Post</button><span class="char-meta">8,200 chars</span></div>
-    </div>
-    <div class="content-section" style="margin-top:14px">
-      <div class="cs-h">Regeneration Prompt</div>
-      <div class="button-row"><button class="copy-outline" onclick="copyPrompt('blog')">Copy Prompt</button><span class="char-meta">5,800 chars</span></div>
-    </div>
-  </div>
-</div>
-
-<div class="deriv-panel" id="panel-gmb" data-audience="all eric">
-  <div class="prompt-card">
-    <div class="pc-h"><div class="pc-label">Google My Business Post</div><div class="pc-meta">100-300 words · Local SEO</div></div>
-    <div class="content-section">
-      <div class="cs-h">Ready to Post (Eric)</div>
-      <div class="content-preview">**Woodland Park 772-Unit Development — What EPA Homeowners Need to Know**
-
-The City of East Palo Alto approved the 772-unit Woodland Park redevelopment in February 2026. Construction runs 2026-2029. Three real effects on existing EPA home values...
-
-[Continues 200 words with local angle]</div>
-      <div class="button-row"><button class="copy-big" onclick="copyContent('gmb')">Copy GMB Post</button><span class="char-meta">1,420 chars</span></div>
-    </div>
-    <div class="content-section" style="margin-top:14px">
-      <div class="cs-h">Regeneration Prompt</div>
-      <div class="button-row"><button class="copy-outline" onclick="copyPrompt('gmb')">Copy Prompt</button><span class="char-meta">2,400 chars</span></div>
-    </div>
-  </div>
-</div>
-
-<div class="deriv-panel" id="panel-facebook" data-audience="all">
-  <div class="prompt-card">
-    <div class="pc-h"><div class="pc-label">Facebook Post</div><div class="pc-meta">200-400 words</div></div>
-    <div class="content-section">
-      <div class="cs-h">Ready to Post (Eric)</div>
-      <div class="content-preview">If you own a home in East Palo Alto, the Woodland Park redevelopment news has probably crossed your feed. 772 new units. Construction starting 2026. Most of the takes I've seen on it are missing the data...
-
-[Continues 300 words with Facebook-native voice]</div>
-      <div class="button-row"><button class="copy-big" onclick="copyContent('facebook')">Copy Facebook Post</button><span class="char-meta">1,840 chars</span></div>
-    </div>
-    <div class="content-section" style="margin-top:14px">
-      <div class="cs-h">Regeneration Prompt</div>
-      <div class="button-row"><button class="copy-outline" onclick="copyPrompt('facebook')">Copy Prompt</button><span class="char-meta">2,600 chars</span></div>
-    </div>
-  </div>
-</div>
-
-<div class="deriv-panel" id="panel-email" data-audience="all">
-  <div class="prompt-card">
-    <div class="pc-h"><div class="pc-label">Email Newsletter — Lead Section</div><div class="pc-meta">~400 words · graehamwatts.com mailing list</div></div>
-    <div class="content-section">
-      <div class="cs-h">Ready to Post (Eric)</div>
-      <div class="content-preview">Subject options:
-- "What 772 new units do to your EPA home value"
-- "The Woodland Park news — and the math nobody's running"
-
-Preview: "If you own in EPA, this affects your equity in three specific ways."
-
-[Body continues — newsletter section formatted for Mailchimp/ConvertKit]</div>
-      <div class="button-row"><button class="copy-big" onclick="copyContent('email')">Copy Newsletter Section</button><span class="char-meta">2,200 chars</span></div>
-    </div>
-    <div class="content-section" style="margin-top:14px">
-      <div class="cs-h">Regeneration Prompt</div>
-      <div class="button-row"><button class="copy-outline" onclick="copyPrompt('email')">Copy Prompt</button><span class="char-meta">3,100 chars</span></div>
-    </div>
-  </div>
-</div>
-
-<!-- SHOT LIST -->
-<section class="card" data-audience="all peter">
-  <h2 class="sh">Shot List — 12 Shots for Production</h2>
-  <table class="shotlist-table">
-    <thead><tr><th>#</th><th>Shot</th><th>Duration</th><th>Setup notes</th></tr></thead>
-    <tbody>
-      <tr><td><span class="shot-num">1</span></td><td>Aerial drone — Woodland Park current state</td><td>4s</td><td>Drone preferred. Stock footage acceptable as fallback.</td></tr>
-      <tr><td><span class="shot-num">2</span></td><td>Talking head — Graeham, opening hook</td><td>6s</td><td>EPA office set. Eye-line camera. Energy: confident, not alarmist.</td></tr>
-      <tr><td><span class="shot-num">3</span></td><td>Map graphic — 772-unit footprint overlay</td><td>5s</td><td>After Effects motion graphic. Highlight scale relative to existing EPA.</td></tr>
-      <tr><td><span class="shot-num">4</span></td><td>B-roll — typical EPA single-family home street</td><td>5s</td><td>Drive-by shot, gimbal stabilized. Show housing stock contrast.</td></tr>
-      <tr><td><span class="shot-num">5</span></td><td>Talking head — Effect #1 (supply)</td><td>20s</td><td>Slower pacing. Lower thirds with stat callouts.</td></tr>
-      <tr><td><span class="shot-num">6</span></td><td>Construction time-lapse stock</td><td>4s</td><td>Generic high-rise construction. Iframe license OK.</td></tr>
-      <tr><td><span class="shot-num">7</span></td><td>Talking head — Effect #2 (infrastructure)</td><td>18s</td><td>Mid-shot. Reference Caltrain station improvements.</td></tr>
-      <tr><td><span class="shot-num">8</span></td><td>B-roll — Caltrain platform</td><td>4s</td><td>Palo Alto or Redwood City station. Connection to commute story.</td></tr>
-      <tr><td><span class="shot-num">9</span></td><td>Talking head — Effect #3 (premium)</td><td>20s</td><td>Slowest pacing. Most counterintuitive point.</td></tr>
-      <tr><td><span class="shot-num">10</span></td><td>Comparable case study graphic</td><td>6s</td><td>San Mateo / Foster City similar density events. Animated chart.</td></tr>
-      <tr><td><span class="shot-num">11</span></td><td>Talking head — recap + CTA</td><td>15s</td><td>Higher energy. Direct camera. Clear ask.</td></tr>
-      <tr><td><span class="shot-num">12</span></td><td>End screen — subscribe + GHL keyword</td><td>5s</td><td>Lower third "Comment VALUE for full breakdown."</td></tr>
-    </tbody>
-  </table>
-</section>
-
-<!-- ALT HOOKS -->
-<section class="card" data-audience="all eric peter">
-  <h2 class="sh">3 Alternate Hooks for A/B Testing</h2>
-  <div class="hooks-grid">
-    <div class="hook-card picked">
-      <span class="hook-tag">Picked</span>
-      <div class="hook-text">"If you own a home in East Palo Alto, the 772 new units coming to Woodland Park are about to do one of three things to your equity. Here's the data."</div>
-      <div class="hook-meta">Specific number + decision frame + data promise. Strongest BOFU pull.</div>
-    </div>
-    <div class="hook-card">
-      <div class="hook-text">"Most EPA homeowners are reading the Woodland Park news wrong. The 772-unit number isn't the story — what comes with it is."</div>
-      <div class="hook-meta">Counterintuitive frame. Tests whether contrarian hooks outperform direct ones.</div>
-    </div>
-    <div class="hook-card">
-      <div class="hook-text">"EPA median home prices are up 4.4% this month. DOM is down. Sale-to-list is 104%. And 772 units are coming. Here's why that combo is unusual."</div>
-      <div class="hook-meta">Data-led open. Tests whether stat-stacking front-loads engagement.</div>
-    </div>
-  </div>
-</section>
-
-<!-- AUTO-RENDER HANDOFF -->
-<section class="render-card" data-audience="all peter">
-  <div class="render-h">🎬 Auto-Render Hand-off — heygen-elevenlabs-renderer</div>
-  <p style="font-size:13px;margin-top:8px">Once Peter approves the script, hand off to the renderer. One PowerShell command. Output: MP4 in <code>outputs/renders/woodland-park-772-units.mp4</code> + sibling meta JSON with HeyGen video_id and dashboard URL.</p>
-  <div class="render-meta">python3 skills/heygen-elevenlabs-renderer/scripts/full_render.py --script outputs/content-package-2026-04-30-woodland-park-772-units.ssml.txt --slug "woodland-park-772-units" --avatar digital_twin --aspect 16:9 --resolution 1080p</div>
-  <div style="font-size:12px;color:#5d2f00;margin-top:8px"><strong>Voice clone:</strong> Graeham Watts (ID: 717249201f7745988219b9aeb9041b42) · <strong>Avatar:</strong> digital_twin (159cd7b883724fdb9a51b97dec94df89)</div>
-</section>
-
-<!-- FOOTER -->
-<footer>
-  <strong>Graeham Watts</strong> · REALTOR · Intero Real Estate · DRE# 01466876 · 650-308-4727 · graehamwatts@gmail.com<br>
-  Generated by content-creation-engine on 2026-04-30 · Source: Graehamwatts/skills GitHub · Topic from Monday convergence research (4-source signal) · End-to-end test run
-</footer>
-
-</div>
-
-<script>
-// Flow card → panel switching
-document.querySelectorAll('.flow-card').forEach(card => {
-  card.addEventListener('click', () => {
-    document.querySelectorAll('.flow-card').forEach(c => c.classList.remove('active'));
-    document.querySelectorAll('.deriv-panel').forEach(p => p.classList.remove('active'));
-    card.classList.add('active');
-    const target = card.getAttribute('data-target');
-    const panel = document.getElementById('panel-' + target);
-    if (panel) panel.classList.add('active');
-  });
-});
-
-// === TAB SYSTEM ===
-// Each major <section> has a data-audience attribute (space-separated list).
-// setView('eric') hides every section that doesn't include 'eric' in its data-audience.
-// 'all' shows everything (the default unified view).
-// URL hash updates so emails can deep-link, and back-button works.
-
-const FLOW_CARD_AUDIENCES = {
-  'yt-long-pt1': 'peter', 'yt-long-pt2': 'peter', 'yt-short': 'peter',
-  'ig-reel-1': 'peter', 'ig-reel-2': 'peter', 'ig-carousel': 'peter', 'tiktok': 'peter',
-  'blog': 'eric', 'gmb': 'eric'
-  // facebook + email omitted intentionally: they only appear in "Show Everything" view.
-  // Eric is scoped to blog + GMB only (per Graeham 2026-05-02). Reassign here if those move to John or Peter later.
-};
-
-const VIEW_LABELS = {
-  research: 'Research Data — sources, scoring, why this topic was picked this week',
-  eric: 'Eric — Blog & SEO (blog post + GMB post only)',
-  peter: 'Peter — Video Production (scripts, prompts, shot list, render handoff)',
-  all: 'Everything (full unified dashboard with all 14 derivative formats)'
-};
-
-function activateFormatCard(targetKey) {
-  document.querySelectorAll('.flow-card').forEach(c => c.classList.remove('active'));
-  document.querySelectorAll('.deriv-panel').forEach(p => p.classList.remove('active'));
-  const card = document.querySelector('.flow-card[data-target="' + targetKey + '"]');
-  const panel = document.getElementById('panel-' + targetKey);
-  if (card) card.classList.add('active');
-  if (panel) panel.classList.add('active');
-}
-
-function setView(view, opts) {
-  opts = opts || {};
-  // 1. Show/hide every section based on data-audience match.
-  // A section is visible only if its data-audience list contains the current view name.
-  // Universal sections (hero, footer, fair-housing) include all four view names so they
-  // always show. View-specific sections only list their relevant views.
-  document.querySelectorAll('[data-audience]').forEach(el => {
-    const audiences = (el.dataset.audience || '').split(/\s+/);
-    const visible = audiences.includes(view);
-    el.classList.toggle('aud-hidden', !visible);
-  });
-  // 2. Filter the flow-grid cards (only show cards relevant to this view)
-  document.querySelectorAll('.flow-card').forEach(card => {
-    const target = card.dataset.target;
-    const cardAudience = FLOW_CARD_AUDIENCES[target] || 'both';
-    const visible = (view === 'all') || (cardAudience === view);
-    card.classList.toggle('aud-hidden', !visible);
-  });
-  // 3. Auto-activate a sensible default panel for Eric/Peter so the view isn't empty
-  if (view === 'eric') {
-    activateFormatCard('blog');
-  } else if (view === 'peter') {
-    activateFormatCard('yt-long-pt1');
-  } else if (view === 'research') {
-    // Auto-expand the Show Full Research Data panel
-    const rp = document.getElementById('researchPanel');
-    if (rp && !rp.classList.contains('open')) {
-      rp.classList.add('open');
-      const tb = document.querySelector('.toggle-btn');
-      if (tb) tb.textContent = 'Hide research data';
-    }
-  }
-  // 4. Update tab visual state
-  document.querySelectorAll('.aud-btn').forEach(b => b.classList.remove('aud-active'));
-  const activeBtn = document.querySelector('.aud-' + view);
-  if (activeBtn) activeBtn.classList.add('aud-active');
-  // 5. Update "Now viewing" banner
-  const banner = document.getElementById('viewBanner');
-  const label = document.getElementById('viewBannerLabel');
-  if (banner && label) {
-    if (view === 'all') {
-      banner.classList.remove('show');
-    } else {
-      label.textContent = VIEW_LABELS[view] || view;
-      banner.classList.add('show');
-    }
-  }
-  // 6. Update URL hash + browser history (so back-button works)
-  if (!opts.skipHistory) {
-    const newHash = (view === 'all') ? '' : '#audience-' + view;
-    history.pushState({view}, '', window.location.pathname + window.location.search + newHash);
-  }
-  // 7. Scroll back to top of page so the view-switch is obvious
-  if (!opts.noScroll) {
-    window.scrollTo({top: 0, behavior: 'smooth'});
-  }
-}
-
-// Hash routing: deep-link from emails (e.g. #audience-eric)
-window.addEventListener('DOMContentLoaded', () => {
-  const hash = window.location.hash.replace('#audience-', '');
-  if (['research','eric','peter','all'].includes(hash)) {
-    setView(hash, {skipHistory: true, noScroll: true});
-  } else {
-    // Default to "all" view on initial load (no hash specified)
-    setView('all', {skipHistory: true, noScroll: true});
-  }
-});
-
-// Browser back/forward navigation between tab states
-window.addEventListener('popstate', (e) => {
-  const view = (e.state && e.state.view) || 'all';
-  setView(view, {skipHistory: true, noScroll: true});
-});
-
-// Stub copy handlers — in production these read from window.PROMPT_LIBRARY / window.CONTENT_LIBRARY
-function copyContent(key) { alert('Demo: would copy CONTENT_LIBRARY["' + key + '"] to clipboard. In production, the full content is loaded into a JS object and copied via navigator.clipboard.writeText().'); }
-function copyPrompt(key) { alert('Demo: would copy PROMPT_LIBRARY["' + key + '"] to clipboard. In production, the regeneration prompt is loaded into a JS object and copied via navigator.clipboard.writeText().'); }
-</script>
-</body>
-</html>
+      <div class="btn-help"><strong>Paste into:</str

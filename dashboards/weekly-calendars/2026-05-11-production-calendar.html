@@ -134,7 +134,7 @@
   .view-banner.show { display: block; }
   .view-banner strong { color: var(--navy); }
 
-  /* DAILY CONTENT CARDS (Eric blog packages + Peter video packages) */
+  /* DAILY CONTENT CARDS (Blogs blog packages + Peter video packages) */
   .daily-section { background: var(--card); border: 1px solid var(--border); border-radius: var(--radius); padding: 24px 28px; margin-bottom: 18px; box-shadow: var(--shadow); }
   .daily-section h2 { font-size: 22px; margin: 0 0 4px; padding-bottom: 8px; border-bottom: 2px solid var(--border); }
   .daily-section .ds-sub { font-size: 13px; color: var(--muted); margin: 6px 0 18px; }
@@ -212,7 +212,7 @@
   </button>
   <button type="button" class="aud-btn aud-eric" role="tab" onclick="setView('eric')">
     <div class="aud-icon">📝</div>
-    <div class="aud-label">Eric — 5 Blogs</div>
+    <div class="aud-label">5 Blogs</div>
     <div class="aud-sub">Mon-Fri blog packages + GMB posts</div>
   </button>
   <button type="button" class="aud-btn aud-peter" role="tab" onclick="setView('peter')">
@@ -416,7 +416,7 @@
 
 <!-- THE 5-DAY WEEK GRID -->
 <h2 class="sh" data-audience="all research eric peter">5 Topics · 5 Days · One Production Cadence</h2>
-<p style="font-size:13px;color:var(--muted);margin:0 0 14px" data-audience="all eric peter"><strong>👇 Click any day card below</strong> to focus the Eric/Peter sections on just that day's content.</p>
+<p style="font-size:13px;color:var(--muted);margin:0 0 14px" data-audience="all eric peter"><strong>👇 Click any day card below</strong> to focus the blog/video sections on just that day's content.</p>
 <div class="week-grid" data-audience="all research eric peter">
 
   <!-- MONDAY -->
@@ -550,7 +550,7 @@
   <h2 class="sh">Team Handoff — Who Does What This Week</h2>
   <div class="strategy-grid">
     <div class="strategy-col" style="background:linear-gradient(135deg,#fef9eb 0%,#ffffff 100%);border-color:var(--gold)">
-      <div class="sc-h" style="color:#78350f">📝 Eric — Blog &amp; SEO (5 deliverables)</div>
+      <div class="sc-h" style="color:#78350f">📝 Blog &amp; SEO (5 deliverables)</div>
       <ul class="sc-list">
         <li><strong>Mon May 12:</strong> Blog post — Bay Area Rates Update (1500 words)</li>
         <li><strong>Tue May 13:</strong> Blog post — EPA Sales Report (with sales table)</li>
@@ -578,7 +578,7 @@
 <!-- ERIC'S WEEK — 5 Blog Packages, Mon through Fri        -->
 <!-- ===================================================== -->
 <section class="daily-section" data-audience="all eric" style="border-left:4px solid var(--gold)">
-  <h2 style="color:#78350f">📝 Eric's Week — 5 Blog Packages + 5 GMB Posts</h2>
+  <h2 style="color:#78350f">📝 Blog Week — 5 Blog Packages + 5 GMB Posts</h2>
   <p class="ds-sub">Each day below has paste-ready blog content + GMB post. Click any "Copy" button to grab the asset. Cornerstone (Wed) is full-length — other days are shorter SEO-targeted posts. All blogs publish to graehamwatts.com under the EPA / Peninsula real estate category.</p>
 
   <div class="filter-bar">
@@ -1046,7 +1046,7 @@ What to look for:
 <script>
 const VIEW_LABELS = {
   research: 'Research Data — 8 sources, scoring, why each topic ships this week',
-  eric: 'Eric — 5 daily blog packages + 5 GMB posts',
+  eric: '5 daily blog packages + 5 GMB posts',
   peter: 'Peter — 5 daily video production packages',
   all: 'Everything (full unified weekly view)'
 };
@@ -1088,7 +1088,7 @@ window.addEventListener('popstate', (e) => {
 });
 
 // === DAY-CLICK FILTERING ===
-// Click a day card → only that day's Eric blog + Peter video show below
+// Click a day card → only that day's Blogs blog + Peter video show below
 const DAY_LABELS = {
   monday: 'Monday May 12 (Bay Area Rates Update)',
   tuesday: 'Tuesday May 13 (EPA April Sales Report)',

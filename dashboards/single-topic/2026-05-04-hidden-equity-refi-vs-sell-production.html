@@ -46,7 +46,7 @@
   .card { background: var(--card); border: 1px solid var(--border); border-radius: var(--radius); padding: 22px 24px; margin-bottom: 18px; box-shadow: var(--shadow); }
   .card h3 { margin-top: 0; }
 
-  /* AUDIENCE NAV (4-tab bar — Research / Eric / Peter / Show All) */
+  /* AUDIENCE NAV (4-tab bar — Research / Blogs / Peter / Show All) */
   .audience-nav { display: grid; grid-template-columns: repeat(4, 1fr); gap: 12px; margin-bottom: 20px; position: sticky; top: 8px; z-index: 50; background: var(--bg); padding: 8px 0; }
   @media (max-width: 800px) { .audience-nav { grid-template-columns: 1fr 1fr; } }
   @media (max-width: 480px) { .audience-nav { grid-template-columns: 1fr; position: relative; top: 0; } }
@@ -291,7 +291,7 @@
     <div style="margin-top:10px;line-height:1.7">
       <p><strong>📍 Geographic + audience pill:</strong> Tells the team which market and which audience this content is targeted at. Hyperlocal topics use a neighborhood; broader topics use city/region/state.</p>
       <p><strong>🎯 Funnel pill:</strong> TOFU (top — awareness, casual viewers), MOFU (middle — comparing options), BOFU (bottom — ready to act). Decision-Stage is the hottest part of BOFU. Determines CTA strength and lead-magnet matching.</p>
-      <p><strong>📦 Format pill:</strong> Multi-platform = single topic produces 11 derivatives. Eric posts the finished content via the gold "Copy Content" button on each panel. Peter produces the video formats using the purple "Copy Production Prompt" buttons.</p>
+      <p><strong>📦 Format pill:</strong> Multi-platform = single topic produces 11 derivatives. the blog team posts the finished content via the gold "Copy Content" button on each panel. Peter produces the video formats using the purple "Copy Production Prompt" buttons.</p>
       <p><strong>📊 Opportunity 22/25 (gold pill):</strong> Owned by <code>content-calendar</code>. Scores topics across 5 criteria (Performance Signal, Search Demand, Audience Intent, Competitive Gap, Timeliness). 22-25 = must-create. 17-21 = strong alternate. 12-16 = consider. Below 12 = skip. Answers "should we cover this WEEK?"</p>
       <p><strong>📊 Intent 21/25 (gold pill):</strong> Owned by <code>bofu-intent-scorer</code>. Scores BOFU intent across 6 criteria (Inquiry Type, Intent Matrix, Source Confirmation, Emotional Temperature, Local Relevance, Freshness ±5). ≥18 = ships. Answers "how decision-ready is the audience?" Used for CTA strength + funnel mix.</p>
       <p><strong>★ star:</strong> Top-tier weekly pick. The data thinks this is the highest-leverage topic of the week.</p>
@@ -309,7 +309,7 @@
   </button>
   <button type="button" class="aud-btn aud-eric" role="tab" onclick="setView('eric')">
     <div class="aud-icon">📝</div>
-    <div class="aud-label">Eric — Blog &amp; SEO</div>
+    <div class="aud-label">Blog &amp; SEO</div>
     <div class="aud-sub">Blog post · GMB post · meta · linking</div>
   </button>
   <button type="button" class="aud-btn aud-peter" role="tab" onclick="setView('peter')">
@@ -410,7 +410,7 @@
   <h3>How to use this dashboard</h3>
   <div class="howto-steps">
     <div class="howto-step eric-step" data-audience="all eric">
-      <span class="num">1</span><span class="step-tag">Eric · Blog &amp; SEO</span>
+      <span class="num">1</span><span class="step-tag">Blog &amp; SEO</span>
       <p style="margin:8px 0 0">Click the <strong>Blog Post</strong> panel or <strong>GMB Post</strong> panel below, then click the gold <strong>"Copy Content"</strong> button. Paste the blog body into the website CMS, or the GMB content into Google Business Profile. Use one of the SEO-scored title options from the email. The panel also has the meta description + internal linking suggestions.</p>
     </div>
     <div class="howto-step peter-step" data-audience="all peter">
@@ -704,7 +704,7 @@
   <span id="audience-eric" style="display:block;position:relative;top:-20px;visibility:hidden"></span>
   <span id="audience-peter" style="display:block;position:relative;top:-20px;visibility:hidden"></span>
   <h2 class="sh">Content Derivatives — 14 Formats</h2>
-  <p style="font-size:13px;color:var(--muted)">Click any format to see the panel. Eric posts content (gold buttons). Peter regenerates scripts + production packages (gold-outline + purple buttons).</p>
+  <p style="font-size:13px;color:var(--muted)">Click any format to see the panel. the blog team posts content (gold buttons). Peter regenerates scripts + production packages (gold-outline + purple buttons).</p>
   <div class="flow-grid">
     <div class="flow-card core active" data-target="yt-long-pt1"><div class="fc-type">CORE</div><div class="fc-title">YouTube Long Pt1</div><span class="fc-tag tag-yt">~6 min</span></div>
     <div class="flow-card core" data-target="yt-long-pt2"><div class="fc-type">CORE</div><div class="fc-title">YouTube Long Pt2</div><span class="fc-tag tag-yt">Edit+SEO</span></div>
@@ -727,7 +727,7 @@
   <div class="prompt-card">
     <div class="pc-h"><div class="pc-label">YouTube Long Pt1 — Script + Voice Side</div><div class="pc-meta">8-15 min · 16:9 · 1080p</div></div>
     <div class="content-section">
-      <div class="cs-h">Ready to Post (Eric)</div>
+      <div class="cs-h">Ready to Post</div>
       <div class="section-help"><strong>What this is:</strong> Finished YouTube description + script. Click the gold button to copy the complete deliverable. Paste into the YouTube upload page.</div>
       <div class="content-preview">If you own a home in East Palo Alto, the 772 new units coming to Woodland Park are about to do one of three things to your equity. I'm Graeham Watts, REALTOR at Intero Real Estate, and I've been watching this development since the City Council approved it in February. I want to walk you through what the actual data says — not what your neighbor said at the BBQ.
 
@@ -754,7 +754,7 @@ The Woodland Park redevelopment is the largest housing project in EPA's history.
       <div class="btn-help"><strong>Paste into:</strong> Claude/ChatGPT to regenerate B-roll list, editing notes, AI video prompts, shot list, music direction.</div>
     </div>
 
-    <div class="use-in"><strong>How to use:</strong> Eric uploads the video to YouTube and pastes the description. Peter feeds the script prompt into his AI tool to get fresh SSML for ElevenLabs, then uses HeyGen to render the avatar video. Jason edits using the production package output.</div>
+    <div class="use-in"><strong>How to use:</strong> the blog team uploads the video to YouTube and pastes the description. Peter feeds the script prompt into his AI tool to get fresh SSML for ElevenLabs, then uses HeyGen to render the avatar video. Jason edits using the production package output.</div>
   </div>
 </div>
 
@@ -763,7 +763,7 @@ The Woodland Park redevelopment is the largest housing project in EPA's history.
   <div class="prompt-card">
     <div class="pc-h"><div class="pc-label">YouTube Long Pt2 — Production Package</div><div class="pc-meta">B-roll · Editing notes · Shot list · AI video prompts · SEO · Alt hooks</div></div>
     <div class="content-section">
-      <div class="cs-h">Ready to Post (Eric)</div>
+      <div class="cs-h">Ready to Post</div>
       <div class="section-help"><strong>What this is:</strong> Production-side companion to Pt1. Editing notes for Jason, B-roll requirements, shot list, AI video prompts, YouTube SEO metadata, 3 alternate hooks for A/B testing.</div>
       <div class="content-preview">EDITING NOTES FOR JASON
 
@@ -813,7 +813,7 @@ PACING NOTES: Open energetic (1-2 sec cuts). Slow to data section (5-7 sec holds
   <div class="prompt-card">
     <div class="pc-h"><div class="pc-label">YouTube Short</div><div class="pc-meta">30-59 sec · 9:16 · 1080p · Hook-led</div></div>
     <div class="content-section">
-      <div class="cs-h">Ready to Post (Eric)</div>
+      <div class="cs-h">Ready to Post</div>
       <div class="section-help"><strong>What this is:</strong> Pre-written 45-second Short script + caption + hashtags. Direct upload to YouTube Shorts.</div>
       <div class="content-preview">[HOOK — 0:00] If you own a home in EPA, 772 new units are about to change your equity. Here's the one thing nobody is telling you.
 
@@ -834,36 +834,4 @@ PACING NOTES: Open energetic (1-2 sec cuts). Slow to data section (5-7 sec holds
         <button class="copy-outline" onclick="copyPrompt('yt-short-script')">Copy Script Prompt</button>
         <span class="char-meta">Script prompt: 4,100 chars</span>
       </div>
-      <div class="btn-help"><strong>Paste into:</strong> Claude/ChatGPT to regenerate script + SSML for this format.</div>
-      <div class="button-row">
-        <button class="copy-big" style="background:var(--purple);color:#fff;box-shadow:0 2px 8px rgba(106,27,154,0.25)" onclick="copyPrompt('yt-short-production')">Copy Production Prompt</button>
-        <span class="char-meta">Production prompt: 3,400 chars</span>
-      </div>
-      <div class="btn-help"><strong>Paste into:</strong> Claude/ChatGPT to regenerate B-roll, editing notes, AI video prompts, captions overlays for this format.</div>
-    </div>
-  </div>
-</div>
-
-<!-- IG Reel #1 -->
-<div class="deriv-panel" id="panel-ig-reel-1" data-audience="all peter">
-  <div class="prompt-card">
-    <div class="pc-h"><div class="pc-label">IG Reel #1 — Hook-led</div><div class="pc-meta">30-60 sec · 9:16 · Face-to-camera + B-roll</div></div>
-    <div class="content-section">
-      <div class="cs-h">Ready to Post (Eric)</div>
-      <div class="section-help"><strong>What this is:</strong> Reel script + caption with GHL keyword CTA + hashtags.</div>
-      <div class="content-preview">[Caption]
-EPA homeowners — 772 new units are coming to Woodland Park. Here's what it actually does to your home value 👇
-
-Three effects nobody is talking about:
-• Supply pressure (yes, but smaller than you think)
-• Infrastructure investment (the part that helps you)
-• Neighborhood premium (where most owners get it wrong)
-
-The data isn't what most people are assuming. Comment VALUE and I'll send you the full breakdown.
-
-#EastPaloAlto #EPA #BayAreaRealEstate #PeninsulaHomes #WoodlandPark</div>
-      <div class="button-row">
-        <button class="copy-big" onclick="copyContent('ig-reel-1')">Copy Reel #1</button>
-        <span class="char-meta">Full content: 612 chars</span>
-      </div>
-      <div class="btn-help"><strong>Paste into:</str
+      <div class="btn-help"><strong>Paste into:</strong> Claude/Cha
