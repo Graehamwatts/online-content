@@ -38,7 +38,7 @@
   .aud-btn { background: #fff; border: 2px solid var(--border); border-radius: var(--radius); padding: 16px; cursor: pointer; transition: transform 0.15s, box-shadow 0.15s, background 0.15s; text-align: left; font-family: inherit; display: block; position: relative; }
   .aud-btn:hover { transform: translateY(-2px); box-shadow: 0 6px 16px rgba(0,0,0,0.08); }
   .aud-research { border-color: var(--navy); }
-  .aud-eric { border-color: var(--gold); background: linear-gradient(135deg, #fef9eb 0%, #ffffff 100%); }
+  .aud-blog { border-color: var(--gold); background: linear-gradient(135deg, #fef9eb 0%, #ffffff 100%); }
   .aud-peter { border-color: var(--purple); background: linear-gradient(135deg, #f3e5f5 0%, #ffffff 100%); }
   .aud-all { border-color: #4a5568; background: #fafbfc; }
   .aud-icon { font-size: 22px; line-height: 1; margin-bottom: 6px; }
@@ -48,10 +48,10 @@
   .aud-btn.aud-active::after { content: '●'; position: absolute; top: 8px; right: 12px; font-size: 14px; color: rgba(255,255,255,0.9); }
   .aud-research.aud-active { background: var(--navy); }
   .aud-research.aud-active .aud-label, .aud-research.aud-active .aud-sub { color: #fff; }
-  .aud-eric.aud-active { background: var(--gold); }
-  .aud-eric.aud-active .aud-label { color: var(--navy); }
-  .aud-eric.aud-active .aud-sub { color: rgba(27,42,74,0.85); }
-  .aud-eric.aud-active::after { color: var(--navy); }
+  .aud-blog.aud-active { background: var(--gold); }
+  .aud-blog.aud-active .aud-label { color: var(--navy); }
+  .aud-blog.aud-active .aud-sub { color: rgba(27,42,74,0.85); }
+  .aud-blog.aud-active::after { color: var(--navy); }
   .aud-peter.aud-active { background: var(--purple); }
   .aud-peter.aud-active .aud-label, .aud-peter.aud-active .aud-sub { color: #fff; }
   .aud-all.aud-active { background: #2d3748; }
@@ -132,7 +132,7 @@
 
   /* === V5 NEW: COMPACT FORMAT PILL ROWS === */
   .format-block { background: #fff; border: 1px solid var(--border); border-radius: 8px; padding: 10px 12px; margin-bottom: 8px; }
-  .format-block.eric-block { border-left: 3px solid var(--gold); }
+  .format-block.blog-block { border-left: 3px solid var(--gold); }
   .format-block.peter-block { border-left: 3px solid var(--purple); }
   .format-row { display: flex; align-items: center; flex-wrap: wrap; gap: 8px; }
   .format-label { font-family: 'Plus Jakarta Sans', sans-serif; font-weight: 700; font-size: 13px; color: var(--navy); flex: 1 1 240px; min-width: 200px; line-height: 1.35; }
@@ -209,9 +209,9 @@
     <div class="aud-label">Research Data</div>
     <div class="aud-sub">8 sources · scoring · why each topic ships</div>
   </button>
-  <button type="button" class="aud-btn aud-eric" role="tab" onclick="setView('eric')">
+  <button type="button" class="aud-btn aud-blog" role="tab" onclick="setView('blog')">
     <div class="aud-icon">📝</div>
-    <div class="aud-label">Eric — 5 Blog Days</div>
+    <div class="aud-label">Blog Track — 5 Days</div>
     <div class="aud-sub">Mon-Fri blog packages + GMB + email</div>
   </button>
   <button type="button" class="aud-btn aud-peter" role="tab" onclick="setView('peter')">
@@ -231,7 +231,7 @@
 </div>
 
 <!-- PREVIEW BANNER -->
-<div class="preview-banner" data-audience="all research eric peter">
+<div class="preview-banner" data-audience="all research blog peter">
   <strong>⚠️ TEMPLATE PREVIEW (v5 — inline pill buttons + image-gen prompts).</strong> Real calendar populates Monday May 11 at 11:08 AM PT. Click any pill button to copy a Claude-ready prompt to your clipboard. Wednesday's Hidden Equity (★ cornerstone) gets all 14 formats; the other 4 days carry a focused subset matched to their funnel role.
 </div>
 
@@ -252,7 +252,7 @@
 </section>
 
 <!-- WEEK GRID — 5 day cards (click to filter) -->
-<section data-audience="all research eric peter">
+<section data-audience="all research blog peter">
   <h2 class="sh">5 Topics · 5 Days · One Production Cadence</h2>
 
   <div class="filter-bar">
@@ -325,7 +325,7 @@
     <div class="strategy-col">
       <div class="sc-h">Cross-platform handoff</div>
       <ul class="sc-list">
-        <li><strong>Eric ships Mon AM:</strong> 5 blog packages, 5 GMB posts, Wed newsletter blast, weekend email blast.</li>
+        <li><strong>Blog Track ships Mon AM:</strong> 5 blog packages, 5 GMB posts, Wed newsletter blast, weekend email blast.</li>
         <li><strong>Peter ships Mon AM:</strong> Wed YT long form is priority #1. YT Shorts + IG Reels stagger across the week.</li>
         <li><strong>Both:</strong> Wed Hidden Equity is the cross-platform anchor — every channel hits it Wed.</li>
       </ul>
@@ -334,9 +334,9 @@
 </section>
 
 <!-- ERIC SECTION -->
-<section class="daily-section" data-audience="all eric">
-  <h2>📝 Eric's Week — 5 Blog Packages + GMB + Email</h2>
-  <p class="ds-sub" id="ericFilterInfo"><strong>Showing:</strong> All 5 days · <span style="color:var(--muted)">Click any day card above to focus on just that day</span></p>
+<section class="daily-section" data-audience="all blog">
+  <h2>📝 Blog Track — 5 Daily Packages + GMB + Email</h2>
+  <p class="ds-sub" id="blogFilterInfo"><strong>Showing:</strong> All 5 days · <span style="color:var(--muted)">Click any day card above to focus on just that day</span></p>
   <div class="daily-list">
 
     <!-- ERIC MONDAY -->
@@ -348,21 +348,21 @@
       <div class="di-topic">Hook: "Rates dropped to 6.4% — but Bay Area inventory is still tighter than 2024. Here's what that actually means for buyers and sellers right now."</div>
       <div class="di-context"><strong>Source signals:</strong> GSC "bay area mortgage rates 2026" +47% WoW · Reddit r/BayAreaRealEstate active rate-watch threads · Composio YT showed rate-commentary content underperforms vs hyperlocal — pivot ending toward EPA in conclusion.</div>
 
-      <div class="format-block eric-block">
+      <div class="format-block blog-block">
         <div class="format-row">
           <div class="format-label"><span class="fl-icon">📰</span>Blog Post (1,200-1,500 words)<span class="fl-sub">Pillar piece for graehamwatts.com</span></div>
           <button class="pill outline" onclick="copyPrompt('e-mon-blog')">Outline Prompt</button>
         </div>
       </div>
 
-      <div class="format-block eric-block">
+      <div class="format-block blog-block">
         <div class="format-row">
           <div class="format-label"><span class="fl-icon">📍</span>Google Business Profile Post<span class="fl-sub">100-300 chars · max engagement window 11 AM PT</span></div>
           <button class="pill script" onclick="copyPrompt('e-mon-gmb')">Post Prompt</button>
         </div>
       </div>
 
-      <div class="format-block eric-block">
+      <div class="format-block blog-block">
         <div class="format-row">
           <div class="format-label"><span class="fl-icon">✉️</span>Newsletter Send<span class="fl-sub">Tue 9 AM PT to graehamwatts.com list</span></div>
           <button class="pill script" onclick="copyPrompt('e-mon-newsletter')">Email Prompt</button>
@@ -379,28 +379,28 @@
       <div class="di-topic">Hook: "April just closed. Here are the actual EPA numbers you won't see on Zillow's market reports — and what they tell us about May."</div>
       <div class="di-context"><strong>Source signals:</strong> GSC "east palo alto april sales" +91% WoW (highest velocity query of the week) · MLS pull from Wed 5/13 confirms median up 1.7% YoY · Composio IG May 1 EPA market post got 4 likes — proven hyperlocal pattern.</div>
 
-      <div class="format-block eric-block">
+      <div class="format-block blog-block">
         <div class="format-row">
           <div class="format-label"><span class="fl-icon">📰</span>Blog Post — Data Recap (1,000-1,400 words)<span class="fl-sub">Tables + charts · stats-driven</span></div>
           <button class="pill outline" onclick="copyPrompt('e-tue-blog')">Outline Prompt</button>
         </div>
       </div>
 
-      <div class="format-block eric-block">
+      <div class="format-block blog-block">
         <div class="format-row">
           <div class="format-label"><span class="fl-icon">📍</span>Google Business Profile Post<span class="fl-sub">Lead with one big stat</span></div>
           <button class="pill script" onclick="copyPrompt('e-tue-gmb')">Post Prompt</button>
         </div>
       </div>
 
-      <div class="format-block eric-block">
+      <div class="format-block blog-block">
         <div class="format-row">
           <div class="format-label"><span class="fl-icon">✉️</span>Newsletter Section<span class="fl-sub">Add to Mon newsletter as Tuesday "Data Drop"</span></div>
           <button class="pill script" onclick="copyPrompt('e-tue-newsletter')">Email Prompt</button>
         </div>
       </div>
 
-      <div class="format-block eric-block">
+      <div class="format-block blog-block">
         <div class="format-row">
           <div class="format-label"><span class="fl-icon">📤</span>Email Blast — Past Buyers/Sellers<span class="fl-sub">Segment: EPA owners · "Your home's value just moved"</span></div>
           <button class="pill script" onclick="copyPrompt('e-tue-blast')">Blast Prompt</button>
@@ -417,7 +417,7 @@
       <div class="di-topic">Hook: "The average Bay Area homeowner is sitting on $400K+ in equity they didn't know they had. Three doors: HELOC, refinance, or sell-and-move-up. Here's the math on each."</div>
       <div class="di-context"><strong>Source signals:</strong> GSC "should i refinance my home 2026" +23% WoW (2,143 imp/7d) · YT comment cluster "is now a good time to sell?" 47 mentions on Veteran Foreclosures vid · Reddit thread on r/RealEstate about HELOC strategy hit 340 upvotes 4/29. <strong>This is the highest-intent topic of the week — full 14-format mix fires.</strong></div>
 
-      <div class="format-block eric-block">
+      <div class="format-block blog-block">
         <div class="format-row">
           <div class="format-label"><span class="fl-icon">📰</span>Blog Post — Cornerstone Pillar (2,000-2,500 words)<span class="fl-sub">Targets: Decision tree, three scenarios, real numbers</span></div>
           <button class="pill outline" onclick="copyPrompt('e-wed-blog')">Outline Prompt</button>
@@ -425,42 +425,42 @@
         </div>
       </div>
 
-      <div class="format-block eric-block">
+      <div class="format-block blog-block">
         <div class="format-row">
           <div class="format-label"><span class="fl-icon">📍</span>Google Business Profile Post<span class="fl-sub">CTA: "Get your hidden-equity calc"</span></div>
           <button class="pill script" onclick="copyPrompt('e-wed-gmb')">Post Prompt</button>
         </div>
       </div>
 
-      <div class="format-block eric-block">
+      <div class="format-block blog-block">
         <div class="format-row">
           <div class="format-label"><span class="fl-icon">🔗</span>Meta Description (155 chars)<span class="fl-sub">SEO snippet for the cornerstone post</span></div>
           <button class="pill script" onclick="copyPrompt('e-wed-meta')">Meta Prompt</button>
         </div>
       </div>
 
-      <div class="format-block eric-block">
+      <div class="format-block blog-block">
         <div class="format-row">
           <div class="format-label"><span class="fl-icon">✉️</span>Newsletter Blast — Wed 6 PM PT<span class="fl-sub">Hero email of the week · cornerstone CTA</span></div>
           <button class="pill script" onclick="copyPrompt('e-wed-newsletter')">Email Prompt</button>
         </div>
       </div>
 
-      <div class="format-block eric-block">
+      <div class="format-block blog-block">
         <div class="format-row">
           <div class="format-label"><span class="fl-icon">📘</span>Facebook Post (long-form)<span class="fl-sub">3-paragraph hook · embedded blog link</span></div>
           <button class="pill script" onclick="copyPrompt('e-wed-fb')">Post Prompt</button>
         </div>
       </div>
 
-      <div class="format-block eric-block">
+      <div class="format-block blog-block">
         <div class="format-row">
           <div class="format-label"><span class="fl-icon">📜</span>Schema.org Markup<span class="fl-sub">FAQPage + Article JSON-LD for AEO</span></div>
           <button class="pill schema" onclick="copyPrompt('e-wed-schema')">Schema Prompt</button>
         </div>
       </div>
 
-      <div class="format-block eric-block">
+      <div class="format-block blog-block">
         <div class="format-row">
           <div class="format-label"><span class="fl-icon">🔁</span>Internal Linking Plan<span class="fl-sub">5-7 contextual links from existing posts to cornerstone</span></div>
           <button class="pill script" onclick="copyPrompt('e-wed-internal')">Linking Prompt</button>
@@ -477,14 +477,14 @@
       <div class="di-topic">Hook: "Wait — east of 101 isn't 'the bad side'? Here are 5 reasons EPA buyers are choosing it on purpose, and what locals know that Zillow doesn't."</div>
       <div class="di-context"><strong>Source signals:</strong> Composio IG Apr 17 Marina dev 25 likes/8 comments · Apr 1 Balboa 1,100 homes 7 likes · Apr 23 EPA off-market 5 likes — large-dev/hyperlocal pattern is your highest engagement bucket. Zillow Q&amp;A "schools in EPA" 12 unanswered questions.</div>
 
-      <div class="format-block eric-block">
+      <div class="format-block blog-block">
         <div class="format-row">
           <div class="format-label"><span class="fl-icon">📰</span>Blog Post — Listicle (900-1,100 words)<span class="fl-sub">5 reasons · light, scannable, image-heavy</span></div>
           <button class="pill outline" onclick="copyPrompt('e-thu-blog')">Outline Prompt</button>
         </div>
       </div>
 
-      <div class="format-block eric-block">
+      <div class="format-block blog-block">
         <div class="format-row">
           <div class="format-label"><span class="fl-icon">📍</span>Google Business Profile Post<span class="fl-sub">One-reason teaser · CTA to full post</span></div>
           <button class="pill script" onclick="copyPrompt('e-thu-gmb')">Post Prompt</button>
@@ -501,21 +501,21 @@
       <div class="di-topic">Hook: "Showing this weekend: 3 EPA homes under $1.2M with the best value/condition ratio I've seen this spring. Open houses Sat &amp; Sun."</div>
       <div class="di-context"><strong>Source signals:</strong> Composio IG Apr 29 EPA-under-$1M 3 likes (own-brand template proven) · GSC "epa homes for sale" stable 290 imp/7d · MLS pull Fri AM for 3-5 active listings under $1.2M.</div>
 
-      <div class="format-block eric-block">
+      <div class="format-block blog-block">
         <div class="format-row">
           <div class="format-label"><span class="fl-icon">📰</span>Blog Post — Inventory Roundup (700-900 words)<span class="fl-sub">3 listings · honest pros/cons · mortgage payment math</span></div>
           <button class="pill outline" onclick="copyPrompt('e-fri-blog')">Outline Prompt</button>
         </div>
       </div>
 
-      <div class="format-block eric-block">
+      <div class="format-block blog-block">
         <div class="format-row">
           <div class="format-label"><span class="fl-icon">📍</span>Google Business Profile Post<span class="fl-sub">Saturday open-house schedule · location pins</span></div>
           <button class="pill script" onclick="copyPrompt('e-fri-gmb')">Post Prompt</button>
         </div>
       </div>
 
-      <div class="format-block eric-block">
+      <div class="format-block blog-block">
         <div class="format-row">
           <div class="format-label"><span class="fl-icon">📤</span>Email Blast — Active Buyers Segment<span class="fl-sub">Fri 4 PM PT · "This weekend's openings"</span></div>
           <button class="pill script" onclick="copyPrompt('e-fri-blast')">Blast Prompt</button>
@@ -729,7 +729,7 @@
 // ============= AUDIENCE TABS =============
 const VIEW_LABELS = {
   research: 'Research Data — 8 sources, scoring, why each topic ships this week',
-  eric: 'Eric — 5 daily blog packages + GMB + email',
+  blog: 'Blog Track — 5 daily blog packages + GMB + email',
   peter: 'Peter — 5 daily video production packages',
   all: 'Everything (full unified weekly view)'
 };
@@ -758,7 +758,7 @@ function setView(view, opts) {
 
 window.addEventListener('DOMContentLoaded', () => {
   const hash = window.location.hash.replace('#audience-', '');
-  if (['research','eric','peter','all'].includes(hash)) {
+  if (['research','blog','peter','all'].includes(hash)) {
     setView(hash, {skipHistory: true, noScroll: true});
   } else {
     setView('all', {skipHistory: true, noScroll: true});
@@ -790,7 +790,7 @@ function setActiveDay(day) {
   document.querySelectorAll('.day-card').forEach(c => c.classList.remove('day-active'));
   const activeCard = document.querySelector('.day-card[data-day-trigger="' + day + '"]');
   if (activeCard) activeCard.classList.add('day-active');
-  ['ericFilterInfo','peterFilterInfo','topFilterInfo'].forEach(id => {
+  ['blogFilterInfo','peterFilterInfo','topFilterInfo'].forEach(id => {
     const el = document.getElementById(id);
     if (el) {
       el.innerHTML = '<strong>Showing:</strong> <span class="day-pill">' + (DAY_LABELS[day] || day) + '</span> only · click another day card or "Show all 5 days" to change';
@@ -805,7 +805,7 @@ function setActiveDay(day) {
 function showAllDays() {
   document.querySelectorAll('.daily-item').forEach(item => item.classList.remove('day-hidden'));
   document.querySelectorAll('.day-card').forEach(c => c.classList.remove('day-active'));
-  ['ericFilterInfo','peterFilterInfo','topFilterInfo'].forEach(id => {
+  ['blogFilterInfo','peterFilterInfo','topFilterInfo'].forEach(id => {
     const el = document.getElementById(id);
     if (el) {
       el.innerHTML = '<strong>Showing:</strong> All 5 days · <span style="color:var(--muted)">Click any day card above to focus on just that day</span>';
