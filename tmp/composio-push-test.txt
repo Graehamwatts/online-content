@@ -1,1 +1,0 @@
-<!-- Composio push test - 2026-05-03 - if you see this, Composio→GitHub push works end-to-end without GitHub Desktop -->
