@@ -281,7 +281,7 @@
   <h4 style="background:#fee2e2;padding:8px 12px;border-radius:6px;color:#991b1b;margin:24px 0 12px">📈 YouTube Activity Over Time — Drag the slider below to zoom</h4>
   <p style="font-size:12px;color:var(--muted);margin:0 0 8px">Live data, last 14 weeks (50 videos · channel total: 666 lifetime videos). Same brush controls as the IG chart above.</p>
   <div style="background:#fff;border:1px solid var(--border);border-radius:10px;padding:14px 14px 8px">
-    <div id="ytChartMain" style="height:300px"></div>
+    <div id="ytChartMain" style="height:300px;min-height:300px"></div>
     <div id="ytChartBrush" style="height:100px;margin-top:-6px"></div>
   </div>
 
@@ -1314,7 +1314,7 @@ window.addEventListener('DOMContentLoaded', () => {
   // ============= YOUTUBE CHART =============
   const ytVideos = [{"x": "2026-01-26", "y": 3}, {"x": "2026-02-02", "y": 6}, {"x": "2026-02-09", "y": 3}, {"x": "2026-02-16", "y": 3}, {"x": "2026-02-23", "y": 0}, {"x": "2026-03-02", "y": 1}, {"x": "2026-03-09", "y": 4}, {"x": "2026-03-16", "y": 1}, {"x": "2026-03-23", "y": 3}, {"x": "2026-03-30", "y": 3}, {"x": "2026-04-06", "y": 5}, {"x": "2026-04-13", "y": 5}, {"x": "2026-04-20", "y": 5}, {"x": "2026-04-27", "y": 8}];
   const ytViews = [{"x": "2026-01-26", "y": 826}, {"x": "2026-02-02", "y": 4140}, {"x": "2026-02-09", "y": 1454}, {"x": "2026-02-16", "y": 960}, {"x": "2026-02-23", "y": 0}, {"x": "2026-03-02", "y": 62}, {"x": "2026-03-09", "y": 2485}, {"x": "2026-03-16", "y": 1759}, {"x": "2026-03-23", "y": 899}, {"x": "2026-03-30", "y": 2754}, {"x": "2026-04-06", "y": 2785}, {"x": "2026-04-13", "y": 850}, {"x": "2026-04-20", "y": 1260}, {"x": "2026-04-27", "y": 1265}];
-  const ytDefaultStart = new Date('2026-01-26').getTime();
+  const ytDefaultStart = new Date('2026-03-02').getTime();  // last 8 weeks (subset of full data range)
   const ytDefaultEnd = new Date('2026-04-27').getTime();
 
   const ytMain = new ApexCharts(document.querySelector('#ytChartMain'), {
@@ -1328,7 +1328,7 @@ window.addEventListener('DOMContentLoaded', () => {
     ],
     xaxis: { type: 'datetime' },
     yaxis: [
-      { seriesName: 'Total Views', title: { text: 'Total Views / week', style: { color: '#9f1239', fontWeight: 700 } }, labels: { style: { colors: '#9f1239' }, formatter: (v) => v >= 1000 ? (v/1000).toFixed(1) + 'k' : v } },
+      { seriesName: 'Total Views', title: { text: 'Total Views / week', style: { color: '#9f1239', fontWeight: 700 } }, labels: { style: { colors: '#9f1239' }, formatter: (v) => v >= 1000 ? (v/1000).toFixed(1) + 'k' : String(v) } },
       { seriesName: 'Videos Published', opposite: true, title: { text: 'Videos / week', style: { color: '#2563EB', fontWeight: 700 } }, labels: { style: { colors: '#2563EB' } }, min: 0 }
     ],
     markers: { size: [0, 4], colors: ['#9f1239', '#2563EB'], strokeColors: '#fff', strokeWidth: 2 },
@@ -1346,7 +1346,7 @@ window.addEventListener('DOMContentLoaded', () => {
     stroke: { width: 1, curve: 'smooth' },
     series: [{ name: 'Total Views', data: ytViews }],
     xaxis: { type: 'datetime', tooltip: { enabled: false } },
-    yaxis: { tickAmount: 2, labels: { style: { fontSize: '10px' }, formatter: (v) => v >= 1000 ? (v/1000).toFixed(1) + 'k' : v } },
+    yaxis: { tickAmount: 2, labels: { style: { fontSize: '10px' }, formatter: (v) => v >= 1000 ? (v/1000).toFixed(1) + 'k' : String(v) } },
     grid: { borderColor: GRID_COLOR },
     dataLabels: { enabled: false }
   }).render();
@@ -1368,7 +1368,7 @@ window.addEventListener('DOMContentLoaded', () => {
     xaxis: { type: 'datetime' },
     yaxis: [
       { seriesName: 'IG: avg likes+comments / post', title: { text: 'IG engagement / post', style: { color: '#B8860B', fontWeight: 700 } }, labels: { style: { colors: '#B8860B' } }, min: 0 },
-      { seriesName: 'YT: avg views / video', opposite: true, title: { text: 'YT views / video', style: { color: '#9f1239', fontWeight: 700 } }, labels: { style: { colors: '#9f1239' }, formatter: (v) => v >= 1000 ? (v/1000).toFixed(1) + 'k' : v }, min: 0 }
+      { seriesName: 'YT: avg views / video', opposite: true, title: { text: 'YT views / video', style: { color: '#9f1239', fontWeight: 700 } }, labels: { style: { colors: '#9f1239' }, formatter: (v) => v >= 1000 ? (v/1000).toFixed(1) + 'k' : String(v) }, min: 0 }
     ],
     markers: { size: 5, colors: ['#B8860B', '#9f1239'], strokeColors: '#fff', strokeWidth: 2 },
     tooltip: { x: { format: 'MMM dd, yyyy' }, theme: 'light', shared: true },
