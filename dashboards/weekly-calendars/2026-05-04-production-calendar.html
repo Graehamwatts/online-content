@@ -1,0 +1,368 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Week of May 4-10, 2026 — Production Calendar</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;700&family=Plus+Jakarta+Sans:wght@500;700;800&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --navy: #1B2A4A; --gold: #C5A258; --teal: #00695c; --purple: #6a1b9a;
+    --green: #2e7d32; --red: #c62828; --orange: #e65100; --bg: #f4f5f7;
+    --card: #ffffff; --text: #2d3748; --muted: #718096; --border: #e2e5ea;
+    --radius: 12px; --shadow: 0 2px 8px rgba(0,0,0,0.04);
+  }
+  * { box-sizing: border-box; }
+  body { margin: 0; padding: 0; font-family: 'DM Sans', sans-serif; background: var(--bg); color: var(--text); line-height: 1.55; }
+  .wrap { max-width: 1400px; margin: 0 auto; padding: 24px; }
+  h1, h2, h3, h4 { font-family: 'Plus Jakarta Sans', sans-serif; color: var(--navy); margin: 0 0 12px; }
+  h1 { font-size: 30px; font-weight: 800; letter-spacing: -0.5px; }
+  h2.sh { font-size: 22px; margin: 28px 0 16px; padding-bottom: 8px; border-bottom: 2px solid var(--border); }
+
+  .hero { background: linear-gradient(135deg, var(--navy) 0%, #2c3e60 100%); color: #fff; padding: 32px; border-radius: var(--radius); margin-bottom: 24px; }
+  .hero h1 { color: #fff; }
+  .hero-sub { color: rgba(255,255,255,0.8); font-size: 14px; margin-top: 8px; }
+  .hero-meta { display: flex; gap: 8px; flex-wrap: wrap; margin: 18px 0 0; }
+  .hm-pill { display: inline-block; padding: 6px 12px; border-radius: 100px; font-size: 12px; font-weight: 700; text-transform: uppercase; letter-spacing: 0.5px; background: rgba(255,255,255,0.12); color: #fff; }
+  .hm-pill.gold { background: var(--gold); color: var(--navy); }
+  .hm-pill.live { background: #16a34a; color: #fff; }
+
+  .data-layer { background: linear-gradient(135deg, #0f172a 0%, #1e293b 100%); color: #e2e8f0; padding: 24px 28px; border-radius: var(--radius); margin-bottom: 24px; }
+  .dl-h { font-family: 'Plus Jakarta Sans', sans-serif; font-weight: 800; font-size: 17px; color: #fff; margin: 0 0 4px; }
+  .dl-sub { font-size: 12px; color: #94a3b8; margin-bottom: 14px; }
+  .dl-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); gap: 10px; }
+  .dl-card { background: rgba(255,255,255,0.04); border: 1px solid rgba(255,255,255,0.08); border-radius: 8px; padding: 11px 13px; position: relative; }
+  .dl-card.active { border-left: 3px solid #22c55e; }
+  .dl-icon { font-size: 16px; margin-bottom: 3px; }
+  .dl-name { font-weight: 700; font-size: 12px; color: #fff; margin-bottom: 2px; }
+  .dl-source { font-size: 9px; color: #94a3b8; text-transform: uppercase; letter-spacing: 0.5px; margin-bottom: 6px; }
+  .dl-signal { font-size: 11px; color: #cbd5e1; line-height: 1.4; }
+  .dl-status { position: absolute; top: 10px; right: 11px; font-size: 8px; font-weight: 800; letter-spacing: 0.5px; padding: 2px 6px; border-radius: 100px; text-transform: uppercase; background: #22c55e; color: #052e16; }
+
+  .week-grid { display: grid; grid-template-columns: repeat(5, 1fr); gap: 14px; margin-bottom: 24px; }
+  @media (max-width: 1100px) { .week-grid { grid-template-columns: repeat(2, 1fr); } }
+  @media (max-width: 700px) { .week-grid { grid-template-columns: 1fr; } }
+  .day-card { background: var(--card); border: 1px solid var(--border); border-radius: var(--radius); padding: 18px; box-shadow: var(--shadow); display: flex; flex-direction: column; transition: transform 0.15s, box-shadow 0.15s; cursor: pointer; position: relative; }
+  .day-card:hover { transform: translateY(-3px); box-shadow: 0 8px 24px rgba(0,0,0,0.08); }
+  .day-card.star { border: 2px solid var(--gold); background: linear-gradient(135deg, #fefdfb 0%, #fef9eb 100%); }
+  .day-header { display: flex; align-items: baseline; justify-content: space-between; margin-bottom: 10px; padding-bottom: 8px; border-bottom: 1px solid var(--border); }
+  .day-name { font-family: 'Plus Jakarta Sans', sans-serif; font-weight: 800; color: var(--navy); font-size: 15px; }
+  .day-date { font-size: 12px; color: var(--muted); }
+  .day-funnel { font-size: 10px; font-weight: 800; padding: 3px 8px; border-radius: 100px; text-transform: uppercase; letter-spacing: 0.5px; align-self: flex-start; margin-bottom: 8px; }
+  .funnel-tofu { background: #dbeafe; color: #1e40af; }
+  .funnel-mofu { background: #fef3c7; color: #78350f; }
+  .funnel-bofu { background: #fce7f3; color: #9f1239; }
+  .day-title { font-size: 14px; font-weight: 700; color: var(--navy); margin-bottom: 8px; line-height: 1.35; }
+  .day-hook { font-size: 12px; color: var(--text); line-height: 1.5; margin-bottom: 10px; }
+  .day-scores { display: flex; gap: 6px; flex-wrap: wrap; margin-top: auto; padding-top: 10px; border-top: 1px dashed var(--border); }
+  .score-pill { font-size: 10px; font-weight: 800; padding: 3px 8px; border-radius: 100px; background: #f1f5f9; color: var(--navy); }
+  .score-pill.gold { background: var(--gold); color: var(--navy); }
+  .star-badge { display: inline-block; background: var(--gold); color: var(--navy); padding: 2px 8px; border-radius: 100px; font-size: 10px; font-weight: 800; margin-left: 6px; vertical-align: middle; }
+
+  .section { background: var(--card); border: 1px solid var(--border); border-radius: var(--radius); padding: 24px; box-shadow: var(--shadow); margin-bottom: 20px; }
+  .section.eric { border-top: 4px solid var(--gold); }
+  .section.peter { border-top: 4px solid var(--purple); }
+  .sec-head { display: flex; align-items: baseline; justify-content: space-between; margin-bottom: 14px; }
+  .sec-head h2 { margin: 0; font-size: 20px; }
+  .sec-meta { font-size: 12px; color: var(--muted); }
+
+  .daily-item { padding: 16px 0; border-bottom: 1px solid var(--border); }
+  .daily-item:last-child { border-bottom: none; }
+  .daily-item.star { background: #fffaf0; padding: 16px; border-radius: 8px; border: 2px solid var(--gold); }
+  .di-header { display: flex; justify-content: space-between; align-items: baseline; margin-bottom: 6px; }
+  .di-day { font-family: 'Plus Jakarta Sans', sans-serif; font-weight: 800; color: var(--navy); font-size: 14px; }
+  .di-funnel { font-size: 10px; font-weight: 800; padding: 3px 8px; border-radius: 100px; text-transform: uppercase; letter-spacing: 0.5px; }
+  .di-topic-title { font-size: 17px; color: var(--navy); margin: 6px 0 6px; line-height: 1.3; }
+  .di-hook { font-size: 13px; color: var(--text); margin: 0 0 8px; line-height: 1.5; }
+  .di-context { font-size: 12px; color: var(--muted); padding: 8px 10px; background: #f8fafc; border-left: 3px solid var(--navy); border-radius: 4px; line-height: 1.5; margin: 6px 0; }
+  .di-context strong { color: var(--navy); }
+  .format-block { background: #fafbfc; border: 1px solid var(--border); border-radius: 8px; padding: 10px 14px; margin: 6px 0; }
+  .format-row { display: flex; justify-content: space-between; align-items: center; gap: 12px; }
+  .format-label { font-size: 12px; color: var(--text); }
+  .fl-icon { display: inline-block; margin-right: 6px; }
+  .fl-sub { font-size: 11px; color: var(--muted); display: block; margin-top: 2px; }
+  .blog-block { border-left: 3px solid var(--gold); }
+  .video-block { border-left: 3px solid var(--purple); }
+
+  .footer { text-align: center; padding: 24px; font-size: 12px; color: var(--muted); }
+  .footer a { color: var(--navy); text-decoration: none; font-weight: 700; }
+</style>
+</head>
+<body>
+<div class="wrap">
+
+  <!-- HERO -->
+  <div class="hero">
+    <h1>Week of May 4-10, 2026 — Production Calendar</h1>
+    <p class="hero-sub">Auto-built Monday May 4 · Cross-references GSC / Reddit / IG-YT / Composio / MLS / Competitors / Zillow Q&amp;A</p>
+    <div class="hero-meta">
+      <span class="hm-pill live">● LIVE</span>
+      <span class="hm-pill gold">★ Wed Cornerstone: Sell Now or Wait?</span>
+      <span class="hm-pill">5 Eric blog assets</span>
+      <span class="hm-pill">5 Peter video assets</span>
+      <span class="hm-pill">EPA · Peninsula · Bay Area</span>
+    </div>
+  </div>
+
+  <!-- LIVE DATA LAYER -->
+  <div class="data-layer">
+    <div class="dl-h">📡 Live Data Layer — Source Signals</div>
+    <div class="dl-sub">Refreshed Mon 7:00 AM PT · Drives every topic in the calendar below</div>
+    <div class="dl-grid">
+      <div class="dl-card active">
+        <span class="dl-status">ACTIVE</span>
+        <div class="dl-icon">🔍</div>
+        <div class="dl-name">Google Search Console</div>
+        <div class="dl-source">Last 7 days · graehamwatts.com</div>
+        <div class="dl-signal">"should i sell my house spring 2026" +34% WoW · "bay area home prices may 2026" +28% WoW · "epa april sales" trending</div>
+      </div>
+      <div class="dl-card active">
+        <span class="dl-status">ACTIVE</span>
+        <div class="dl-icon">📊</div>
+        <div class="dl-name">MLS — EPA / 94303</div>
+        <div class="dl-source">Pulled Sun May 3</div>
+        <div class="dl-signal">12 closings in April · median $1.04M (+1.7% YoY) · 14 active listings · DOM avg 19 days</div>
+      </div>
+      <div class="dl-card active">
+        <span class="dl-status">ACTIVE</span>
+        <div class="dl-icon">📱</div>
+        <div class="dl-name">Instagram (Composio)</div>
+        <div class="dl-source">Last 30 days @graehamwattsrealtor</div>
+        <div class="dl-signal">Top reel: "EPA off-market" 4,850 views · Hyperlocal &gt; generic 3.2x engagement · Best post window: Tue/Thu 11 AM PT</div>
+      </div>
+      <div class="dl-card active">
+        <span class="dl-status">ACTIVE</span>
+        <div class="dl-icon">🎥</div>
+        <div class="dl-name">YouTube Analytics</div>
+        <div class="dl-source">Last 28 days</div>
+        <div class="dl-signal">"Veteran Foreclosures" comment cluster: 47 mentions of "should I sell now" · Avg view duration up 12% on long-form decision videos</div>
+      </div>
+      <div class="dl-card active">
+        <span class="dl-status">ACTIVE</span>
+        <div class="dl-icon">💬</div>
+        <div class="dl-name">Reddit (r/RealEstate, r/BayArea)</div>
+        <div class="dl-source">Last 7 days</div>
+        <div class="dl-signal">Spring 2026 sell-vs-wait threads: 4 posts &gt;200 upvotes · Top question: "Is this the top of spring market?"</div>
+      </div>
+      <div class="dl-card active">
+        <span class="dl-status">ACTIVE</span>
+        <div class="dl-icon">🏘</div>
+        <div class="dl-name">Competitor Watch</div>
+        <div class="dl-source">5 Peninsula realtors</div>
+        <div class="dl-signal">No competitor has published a "spring vs fall sell" decision piece in 60 days · Open lane on BOFU intent</div>
+      </div>
+      <div class="dl-card active">
+        <span class="dl-status">ACTIVE</span>
+        <div class="dl-icon">❓</div>
+        <div class="dl-name">Zillow Q&amp;A — EPA</div>
+        <div class="dl-source">Past 14 days</div>
+        <div class="dl-signal">8 unanswered questions on "best time to list 2026" · Direct ranking opportunity for Wed cornerstone</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- WEEK GRID -->
+  <h2 class="sh">📅 The Week at a Glance</h2>
+  <div class="week-grid">
+
+    <div class="day-card">
+      <div class="day-header">
+        <span class="day-name">Monday</span>
+        <span class="day-date">May 4</span>
+      </div>
+      <span class="day-funnel funnel-tofu">TOFU</span>
+      <h3 class="day-title">May 2026 Bay Area Spring Reset</h3>
+      <p class="day-hook">"April closed. Q1 is in the books. Here's what actually happened to Bay Area prices — and what May is shaping up to look like."</p>
+      <div class="day-scores">
+        <span class="score-pill">Opp 18/25</span>
+        <span class="score-pill">Intent 12/25</span>
+      </div>
+    </div>
+
+    <div class="day-card">
+      <div class="day-header">
+        <span class="day-name">Tuesday</span>
+        <span class="day-date">May 5</span>
+      </div>
+      <span class="day-funnel funnel-mofu">MOFU</span>
+      <h3 class="day-title">EPA April Closings — The Real Numbers</h3>
+      <p class="day-hook">"12 EPA homes closed in April. Median up 1.7% YoY. Here's the data Zillow won't show you, and what it means if you own here."</p>
+      <div class="day-scores">
+        <span class="score-pill">Opp 21/25</span>
+        <span class="score-pill">Intent 18/25</span>
+      </div>
+    </div>
+
+    <div class="day-card star">
+      <div class="day-header">
+        <span class="day-name">Wednesday <span class="star-badge">★ CORNERSTONE</span></span>
+        <span class="day-date">May 6</span>
+      </div>
+      <span class="day-funnel funnel-bofu">BOFU</span>
+      <h3 class="day-title">Sell This Spring or Wait Until Fall? The 2026 Decision Tree</h3>
+      <p class="day-hook">"Every Bay Area homeowner is asking the same question right now: is May still spring market, or did I miss it? Here's the framework I use with every seller — three scenarios, real numbers."</p>
+      <div class="day-scores">
+        <span class="score-pill gold">Opp 24/25</span>
+        <span class="score-pill gold">Intent 23/25</span>
+      </div>
+    </div>
+
+    <div class="day-card">
+      <div class="day-header">
+        <span class="day-name">Thursday</span>
+        <span class="day-date">May 7</span>
+      </div>
+      <span class="day-funnel funnel-tofu">TOFU</span>
+      <h3 class="day-title">5 East-of-101 Pockets Buyers Are Watching</h3>
+      <p class="day-hook">"The pockets locals talk about over coffee, not the ones that show up in Zillow searches — and why buyers are quietly making offers there."</p>
+      <div class="day-scores">
+        <span class="score-pill">Opp 19/25</span>
+        <span class="score-pill">Intent 13/25</span>
+      </div>
+    </div>
+
+    <div class="day-card">
+      <div class="day-header">
+        <span class="day-name">Friday</span>
+        <span class="day-date">May 8</span>
+      </div>
+      <span class="day-funnel funnel-mofu">MOFU</span>
+      <h3 class="day-title">What Sellers Are Doing Differently in May 2026</h3>
+      <p class="day-hook">"Pricing strategy, staging budgets, and concession trends — the May 2026 seller playbook from agents who closed in April."</p>
+      <div class="day-scores">
+        <span class="score-pill">Opp 20/25</span>
+        <span class="score-pill">Intent 17/25</span>
+      </div>
+    </div>
+
+  </div>
+
+  <!-- ERIC SECTION -->
+  <div class="section eric">
+    <div class="sec-head">
+      <h2>📰 Eric — Blog &amp; SEO Track</h2>
+      <span class="sec-meta">5 cornerstone-anchored posts · Mon → Fri</span>
+    </div>
+
+    <div class="daily-item">
+      <div class="di-header"><span class="di-day">Monday May 4</span><span class="di-funnel funnel-tofu">TOFU · Opp 18/25</span></div>
+      <h3 class="di-topic-title">May 2026 Bay Area Spring Reset</h3>
+      <p class="di-hook"><strong>Hook:</strong> "April just closed. Q1 is in the books. Here's what actually happened to Bay Area prices — and what May is shaping up to look like."</p>
+      <div class="di-context"><strong>Source signals:</strong> GSC "bay area home prices may 2026" +28% WoW · Reddit r/BayArea spring-market threads trending · Competitor lane open (no Peninsula realtor has published a clean Q1 recap in 30 days).</div>
+      <div class="format-block blog-block"><div class="format-row"><div class="format-label"><span class="fl-icon">📰</span>Blog Post (1,200-1,500 words)<span class="fl-sub">Q1 recap + May outlook · charts + tables</span></div></div></div>
+      <div class="format-block blog-block"><div class="format-row"><div class="format-label"><span class="fl-icon">📍</span>Google Business Profile Post<span class="fl-sub">100-300 chars · Mon 11 AM PT post window</span></div></div></div>
+      <div class="format-block blog-block"><div class="format-row"><div class="format-label"><span class="fl-icon">✉️</span>Newsletter Send (Tue 9 AM PT)<span class="fl-sub">Lead-in for Wed cornerstone</span></div></div></div>
+    </div>
+
+    <div class="daily-item">
+      <div class="di-header"><span class="di-day">Tuesday May 5</span><span class="di-funnel funnel-mofu">MOFU · Opp 21/25</span></div>
+      <h3 class="di-topic-title">EPA April Closings — The Real Numbers</h3>
+      <p class="di-hook"><strong>Hook:</strong> "12 EPA homes closed in April. Median up 1.7% YoY. Here's what the data tells us — and what Zillow's market reports won't."</p>
+      <div class="di-context"><strong>Source signals:</strong> MLS pull from Sun 5/3 · GSC "epa april sales" trending · Composio IG hyperlocal posts 3.2x baseline engagement.</div>
+      <div class="format-block blog-block"><div class="format-row"><div class="format-label"><span class="fl-icon">📰</span>Blog Post — Data Recap (1,000-1,400 words)<span class="fl-sub">Tables + charts · stats-driven</span></div></div></div>
+      <div class="format-block blog-block"><div class="format-row"><div class="format-label"><span class="fl-icon">📍</span>Google Business Profile Post<span class="fl-sub">Lead with one big stat</span></div></div></div>
+      <div class="format-block blog-block"><div class="format-row"><div class="format-label"><span class="fl-icon">📤</span>Email Blast — Past EPA Buyers/Sellers<span class="fl-sub">Segment: 94303 owners · "Your home's value just moved"</span></div></div></div>
+    </div>
+
+    <div class="daily-item star">
+      <div class="di-header"><span class="di-day">Wednesday May 6 <span class="star-badge">★ CORNERSTONE</span></span><span class="di-funnel funnel-bofu">BOFU · Opp 24/25 ★</span></div>
+      <h3 class="di-topic-title">⭐ Sell This Spring or Wait Until Fall? The 2026 Decision Tree</h3>
+      <p class="di-hook"><strong>Hook:</strong> "Every Bay Area homeowner is asking the same question right now: is May still spring market, or did I miss it? Here's the framework I use with every seller — three scenarios, real numbers."</p>
+      <div class="di-context"><strong>Source signals:</strong> GSC "should i sell my house spring 2026" +34% WoW (top intent query) · YT comment cluster on Veteran Foreclosures vid 47 mentions of "should I sell now" · Reddit r/RealEstate "is spring market over?" 280 upvotes 5/2 · Zillow Q&amp;A 8 unanswered "best time to list" questions in EPA. <strong>Highest-intent topic of the week — full 14-format mix fires.</strong></div>
+      <div class="format-block blog-block"><div class="format-row"><div class="format-label"><span class="fl-icon">📰</span>Blog Post — Cornerstone Pillar (2,000-2,500 words)<span class="fl-sub">Decision tree, three scenarios, real numbers</span></div></div></div>
+      <div class="format-block blog-block"><div class="format-row"><div class="format-label"><span class="fl-icon">📍</span>Google Business Profile Post<span class="fl-sub">CTA: "Get my spring-vs-fall calc"</span></div></div></div>
+      <div class="format-block blog-block"><div class="format-row"><div class="format-label"><span class="fl-icon">🔗</span>Meta Description (155 chars)<span class="fl-sub">SEO snippet</span></div></div></div>
+      <div class="format-block blog-block"><div class="format-row"><div class="format-label"><span class="fl-icon">✉️</span>Newsletter Hero — Wed 6 PM PT<span class="fl-sub">Email of the week · cornerstone CTA</span></div></div></div>
+      <div class="format-block blog-block"><div class="format-row"><div class="format-label"><span class="fl-icon">📘</span>Facebook Post (long-form)<span class="fl-sub">3-paragraph hook · embedded blog link</span></div></div></div>
+      <div class="format-block blog-block"><div class="format-row"><div class="format-label"><span class="fl-icon">📜</span>Schema.org Markup<span class="fl-sub">FAQPage + Article JSON-LD for AEO</span></div></div></div>
+      <div class="format-block blog-block"><div class="format-row"><div class="format-label"><span class="fl-icon">🔁</span>Internal Linking Plan<span class="fl-sub">5-7 contextual links to/from cornerstone</span></div></div></div>
+    </div>
+
+    <div class="daily-item">
+      <div class="di-header"><span class="di-day">Thursday May 7</span><span class="di-funnel funnel-tofu">TOFU · Opp 19/25</span></div>
+      <h3 class="di-topic-title">5 East-of-101 Pockets Buyers Are Watching</h3>
+      <p class="di-hook"><strong>Hook:</strong> "The pockets locals talk about over coffee, not the ones that show up in Zillow searches — and why buyers are quietly making offers there."</p>
+      <div class="di-context"><strong>Source signals:</strong> Composio IG Apr 17 Marina dev 25 likes/8 comments · Apr 23 EPA off-market 5 likes — large-dev/hyperlocal pattern is highest-engagement bucket. Zillow Q&amp;A "schools in EPA" 12 unanswered questions.</div>
+      <div class="format-block blog-block"><div class="format-row"><div class="format-label"><span class="fl-icon">📰</span>Blog Post — Listicle (900-1,100 words)<span class="fl-sub">5 reasons · light, scannable, image-heavy</span></div></div></div>
+      <div class="format-block blog-block"><div class="format-row"><div class="format-label"><span class="fl-icon">📍</span>Google Business Profile Post<span class="fl-sub">Photo carousel of the 5 pockets</span></div></div></div>
+      <div class="format-block blog-block"><div class="format-row"><div class="format-label"><span class="fl-icon">📘</span>Facebook Post — Photo Reel<span class="fl-sub">3-2-1 structure · pinned for the week</span></div></div></div>
+    </div>
+
+    <div class="daily-item">
+      <div class="di-header"><span class="di-day">Friday May 8</span><span class="di-funnel funnel-mofu">MOFU · Opp 20/25</span></div>
+      <h3 class="di-topic-title">What Sellers Are Doing Differently in May 2026</h3>
+      <p class="di-hook"><strong>Hook:</strong> "Pricing strategy, staging budgets, and concession trends — the May 2026 seller playbook from agents who closed in April."</p>
+      <div class="di-context"><strong>Source signals:</strong> Cornerstone follow-up · GSC "seller concessions 2026" +14% WoW · MLS data: 38% of April closings included buyer credits ≥ $10K.</div>
+      <div class="format-block blog-block"><div class="format-row"><div class="format-label"><span class="fl-icon">📰</span>Blog Post (1,000-1,200 words)<span class="fl-sub">Tactical · pricing/staging/concession data</span></div></div></div>
+      <div class="format-block blog-block"><div class="format-row"><div class="format-label"><span class="fl-icon">📍</span>Google Business Profile Post<span class="fl-sub">"Top 3 May seller moves"</span></div></div></div>
+      <div class="format-block blog-block"><div class="format-row"><div class="format-label"><span class="fl-icon">✉️</span>Newsletter — Friday Wrap<span class="fl-sub">Recap + Wed cornerstone CTA</span></div></div></div>
+    </div>
+
+  </div>
+
+  <!-- PETER SECTION -->
+  <div class="section peter">
+    <div class="sec-head">
+      <h2>🎥 Peter — Video Production Track</h2>
+      <span class="sec-meta">5 video assets · Mon → Fri · HeyGen avatar + B-roll</span>
+    </div>
+
+    <div class="daily-item">
+      <div class="di-header"><span class="di-day">Monday May 4</span><span class="di-funnel funnel-tofu">TOFU · Opp 18/25</span></div>
+      <h3 class="di-topic-title">Reel — "POV: Spring 2026 Bay Area Reset"</h3>
+      <p class="di-hook"><strong>Format:</strong> 45-second talking head · Avatar look: Warm Desk #2 · Cuts every 1.8s · Vaibhav template.</p>
+      <div class="di-context"><strong>Avatar recommendation:</strong> Warm Desk #2 (rotation - last used Apr 20). <strong>B-roll:</strong> SF skyline drone + EPA street level + "April closed" graphic insert. <strong>Distribution:</strong> IG Reels + YT Short + TikTok.</div>
+      <div class="format-block video-block"><div class="format-row"><div class="format-label"><span class="fl-icon">🎬</span>HeyGen Avatar Render — 45s<span class="fl-sub">Hook in 0-2s · 3 stat callouts · soft CTA</span></div></div></div>
+      <div class="format-block video-block"><div class="format-row"><div class="format-label"><span class="fl-icon">🎞</span>Higgsfield B-roll — 4 clips<span class="fl-sub">Skyline drone, EPA street, suburban frontages, coffee/keys</span></div></div></div>
+    </div>
+
+    <div class="daily-item">
+      <div class="di-header"><span class="di-day">Tuesday May 5</span><span class="di-funnel funnel-mofu">MOFU · Opp 21/25</span></div>
+      <h3 class="di-topic-title">Short — "April EPA Numbers in 60 Seconds"</h3>
+      <p class="di-hook"><strong>Format:</strong> 60-second data short · talking head with chart overlays · clean data delivery.</p>
+      <div class="di-context"><strong>Avatar recommendation:</strong> Warm Desk #4 (most authoritative for data-driven content). <strong>Visuals:</strong> animated chart of median sale price + DOM trend + comparison vs March. <strong>Distribution:</strong> YT Shorts (priority) + IG Reels.</div>
+      <div class="format-block video-block"><div class="format-row"><div class="format-label"><span class="fl-icon">🎬</span>HeyGen Avatar Render — 60s<span class="fl-sub">3 charts · hard data delivery · email CTA</span></div></div></div>
+      <div class="format-block video-block"><div class="format-row"><div class="format-label"><span class="fl-icon">📊</span>Chart Overlay Pack<span class="fl-sub">EPA median, DOM, MoM delta, listing inventory</span></div></div></div>
+    </div>
+
+    <div class="daily-item star">
+      <div class="di-header"><span class="di-day">Wednesday May 6 <span class="star-badge">★ CORNERSTONE</span></span><span class="di-funnel funnel-bofu">BOFU · Opp 24/25 ★</span></div>
+      <h3 class="di-topic-title">⭐ Long-Form YouTube — "Sell Now or Wait Until Fall? My 2026 Recommendation"</h3>
+      <p class="di-hook"><strong>Format:</strong> 8-10 minute YouTube long-form · talking head + screen share + decision-tree graphics. The video equivalent of the Eric cornerstone post.</p>
+      <div class="di-context"><strong>Avatar recommendation:</strong> Warm Desk #1 (most trustworthy / advisor look — strongest BOFU performance). <strong>Format priority:</strong> 1) YouTube long-form (cornerstone), 2) IG Reel cutdown 60s, 3) TikTok cutdown 45s, 4) LinkedIn carousel teaser. <strong>B-roll:</strong> calculator/spreadsheet screen-share, decision-tree animated graphic, EPA homes b-roll for each scenario.</div>
+      <div class="format-block video-block"><div class="format-row"><div class="format-label"><span class="fl-icon">🎬</span>YouTube Long-Form — 8-10 min<span class="fl-sub">Cornerstone video · decision tree + 3 scenarios + real client examples</span></div></div></div>
+      <div class="format-block video-block"><div class="format-row"><div class="format-label"><span class="fl-icon">📱</span>IG Reel Cutdown — 60s<span class="fl-sub">Hook + decision-tree teaser + "full vid in bio"</span></div></div></div>
+      <div class="format-block video-block"><div class="format-row"><div class="format-label"><span class="fl-icon">🎵</span>TikTok Cutdown — 45s<span class="fl-sub">Pattern-interrupt opener · stat hook</span></div></div></div>
+      <div class="format-block video-block"><div class="format-row"><div class="format-label"><span class="fl-icon">🎞</span>Higgsfield B-roll Pack — 6 clips<span class="fl-sub">Calculator hands, sold sign, key handoff, suburban evening, calendar flip, decision-tree animation</span></div></div></div>
+    </div>
+
+    <div class="daily-item">
+      <div class="di-header"><span class="di-day">Thursday May 7</span><span class="di-funnel funnel-tofu">TOFU · Opp 19/25</span></div>
+      <h3 class="di-topic-title">Reel — "5 EPA Pockets Buyers Are Watching"</h3>
+      <p class="di-hook"><strong>Format:</strong> 60-second B-roll-heavy listicle · brisk pacing · captions burned in.</p>
+      <div class="di-context"><strong>Avatar recommendation:</strong> Warm Desk #3 (high-engagement aesthetic). <strong>Visuals:</strong> 5 EPA pocket b-roll segments · text overlays for each pocket name · ambient music. <strong>Distribution:</strong> IG Reels + YT Shorts + Facebook.</div>
+      <div class="format-block video-block"><div class="format-row"><div class="format-label"><span class="fl-icon">🎬</span>HeyGen + B-roll Reel — 60s<span class="fl-sub">5 pockets · 12s each · burn-in captions</span></div></div></div>
+      <div class="format-block video-block"><div class="format-row"><div class="format-label"><span class="fl-icon">🎞</span>Higgsfield B-roll Pack — 5 clips<span class="fl-sub">One per EPA pocket · drone + street level</span></div></div></div>
+    </div>
+
+    <div class="daily-item">
+      <div class="di-header"><span class="di-day">Friday May 8</span><span class="di-funnel funnel-mofu">MOFU · Opp 20/25</span></div>
+      <h3 class="di-topic-title">Short — "What Sellers Are Doing Differently in May"</h3>
+      <p class="di-hook"><strong>Format:</strong> 30-45 second tactical short · 3 quick tips · CTA to Wed cornerstone.</p>
+      <div class="di-context"><strong>Avatar recommendation:</strong> Warm Desk #2 (matches Mon for visual continuity at end of week). <strong>Visuals:</strong> staged living room b-roll · price-tag graphic · concession callout. <strong>Distribution:</strong> IG Reels + YT Shorts + LinkedIn (text-paired).</div>
+      <div class="format-block video-block"><div class="format-row"><div class="format-label"><span class="fl-icon">🎬</span>HeyGen Short — 30-45s<span class="fl-sub">3 seller tips · tight pacing · cornerstone CTA</span></div></div></div>
+      <div class="format-block video-block"><div class="format-row"><div class="format-label"><span class="fl-icon">🎞</span>Higgsfield B-roll Pack — 3 clips<span class="fl-sub">Staged room, price tag, handshake</span></div></div></div>
+    </div>
+
+  </div>
+
+  <div class="footer">
+    <p>Graeham Watts · REALTOR · Intero Real Estate · DRE #01466876 · 650-308-4727 · <a href="https://graehamwatts.com">graehamwatts.com</a></p>
+    <p>Auto-generated Monday May 4, 2026 · Source: content-creation-engine · Live data refresh window: 7:00 AM PT</p>
+  </div>
+
+</div>
+</body>
+</html>
