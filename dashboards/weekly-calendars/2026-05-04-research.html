@@ -247,9 +247,9 @@
 <section class="card" data-audience="all research">
   <h2 class="sh">📊 Full Weekly Research Data</h2>
   <p style="font-size:13px;color:var(--muted)">Every signal feeding this week's topic picks. Composio IG + YT data is fresh (pulled live <code>2026-05-03</code> via Composio). Convergence research signals (GSC + Reddit + Zillow + MLS + Macro) are placeholder pending Mon May 4 auto-refresh. Click button to expand.</p>
-  <button class="toggle-btn" onclick="document.getElementById('weeklyResearchPanel').classList.toggle('open'); this.textContent = this.textContent.includes('Show') ? 'Hide research data' : 'Show full research data ↓';">Show full research data ↓</button>
+  <button class="toggle-btn" onclick="document.getElementById('weeklyResearchPanel').classList.toggle('open'); this.textContent = this.textContent.includes('Show') ? 'Hide research data' : 'Hide research data ↑';">Hide research data ↑</button>
 
-  <div id="weeklyResearchPanel" class="research-panel">
+  <div id="weeklyResearchPanel" class="research-panel open">
 
 <!-- BRUSHABLE TIME-SERIES CHARTS — IG + YT activity over time -->
 <div style="margin-top:24px">
@@ -888,5 +888,12 @@ window.addEventListener('DOMContentLoaded', () => {
 })();
 </script>
 
+
+<script>
+// Belt-and-suspenders: nudge charts to re-measure dimensions after page settles
+window.addEventListener('load', () => {
+  setTimeout(() => window.dispatchEvent(new Event('resize')), 200);
+});
+</script>
 </body>
 </html>
