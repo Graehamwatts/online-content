@@ -1,0 +1,405 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>1982 W Bayshore Rd #223 — Weekly Status — May 4, 2026</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700&display=swap" rel="stylesheet">
+<style>
+  body { margin:0; padding:0; background:#eef0f4; font-family:'DM Sans', system-ui, sans-serif; color:#1a2332; line-height:1.55; -webkit-font-smoothing:antialiased; }
+  .wrap { max-width:720px; margin:0 auto; background:#ffffff; }
+
+  /* TOP BAR */
+  .top-bar { padding:14px 36px; background:#0f1729; color:#9da9c1; font-size:11px; letter-spacing:1.4px; text-transform:uppercase; font-weight:600; display:flex; justify-content:space-between; }
+  .top-bar .right { color:#5d6b85; }
+
+  /* HEADER */
+  .header { padding:32px 36px 24px; }
+  .header h1 { font-size:26px; font-weight:600; margin:0 0 4px 0; color:#0f1729; letter-spacing:-0.4px; }
+  .header .meta { font-size:13px; color:#6a7488; }
+  .header .meta strong { color:#0f1729; font-weight:600; }
+
+  /* STATUS STRIP */
+  .status { margin:0 36px; padding:16px 18px; border-radius:6px; display:flex; align-items:center; gap:14px; background:#e8f5ec; border:1px solid #a8d4b6; }
+  .status .dot { width:10px; height:10px; border-radius:50%; background:#1f7a3a; flex-shrink:0; box-shadow:0 0 0 4px rgba(31,122,58,0.15); }
+  .status .text { flex:1; }
+  .status .label { font-size:10.5px; letter-spacing:1.4px; text-transform:uppercase; font-weight:700; color:#1f5e2e; margin-bottom:2px; }
+  .status .msg { font-size:14px; color:#1a3220; font-weight:500; }
+
+  /* KPI ROW */
+  .kpi-section { padding:24px 36px 8px; }
+  .kpi-label { font-size:10.5px; letter-spacing:1.4px; text-transform:uppercase; font-weight:700; color:#5d6b85; margin-bottom:12px; }
+  .kpis { display:table; width:100%; border-collapse:separate; border-spacing:8px; margin:0 -8px; }
+  .kpi { display:table-cell; background:#f6f7fa; border-radius:6px; padding:14px 14px 12px; vertical-align:top; }
+  .kpi .k-lbl { font-size:10.5px; color:#6a7488; letter-spacing:0.6px; text-transform:uppercase; font-weight:600; margin-bottom:6px; }
+  .kpi .k-num { font-size:28px; font-weight:600; color:#0f1729; line-height:1; letter-spacing:-0.6px; }
+  .kpi .k-delta { font-size:12px; margin-top:6px; font-weight:500; }
+  .kpi .k-delta.down { color:#c44545; }
+  .kpi .k-delta.up { color:#1f7a3a; }
+  .kpi .k-delta.flat { color:#6a7488; }
+  .kpi .k-delta::before { content:""; display:inline-block; width:0; height:0; border-left:4px solid transparent; border-right:4px solid transparent; margin-right:5px; vertical-align:middle; }
+  .kpi .k-delta.down::before { border-top:5px solid #c44545; }
+  .kpi .k-delta.up::before { border-bottom:5px solid #1f7a3a; }
+  .kpi .k-delta.flat::before { border-top:5px solid transparent; border-bottom:5px solid transparent; border-left:5px solid #6a7488; }
+
+  /* SECTION */
+  section { padding:24px 36px 4px; }
+  section h2 { font-size:11px; letter-spacing:1.6px; text-transform:uppercase; font-weight:700; color:#5d6b85; margin:0 0 12px 0; padding-bottom:8px; border-bottom:1px solid #e6e9ef; }
+  section p { font-size:14.5px; color:#2a3142; margin:0 0 12px 0; line-height:1.65; }
+  section p strong { color:#0f1729; font-weight:600; }
+
+  /* DECISION BLOCK */
+  .decision { margin:8px 36px 0; padding:22px 24px; background:#0f1729; color:#fff; border-radius:6px; }
+  .decision .lbl { display:flex; align-items:center; gap:8px; font-size:10.5px; letter-spacing:1.4px; text-transform:uppercase; font-weight:700; color:#f4b955; margin-bottom:10px; }
+  .decision .lbl::before { content:"●"; color:#f4b955; font-size:14px; }
+  .decision h3 { font-size:18px; font-weight:600; color:#fff; margin:0 0 8px 0; line-height:1.3; }
+  .decision p { font-size:14px; color:#c5cee0; margin:0 0 14px 0; line-height:1.6; }
+  .decision p strong { color:#fff; }
+  .decision .btn { display:inline-block; background:#f4b955; color:#0f1729; padding:10px 18px; border-radius:4px; text-decoration:none; font-size:13px; font-weight:600; letter-spacing:0.3px; margin-right:8px; }
+  .decision .btn-secondary { background:transparent; color:#f4b955; border:1px solid #f4b955; }
+
+  /* HERO STAT — for big section openers */
+  .hero-stat { padding:28px 36px 8px; border-top:1px solid #e6e9ef; margin-top:12px; }
+  .hero-stat .hs-num { font-size:72px; font-weight:700; color:#0f1729; line-height:0.95; letter-spacing:-3px; margin-bottom:4px; }
+  .hero-stat .hs-num .unit { font-size:32px; color:#6a7488; font-weight:500; letter-spacing:-1px; margin-left:8px; }
+  .hero-stat .hs-title { font-size:20px; font-weight:600; color:#0f1729; line-height:1.25; margin-bottom:6px; letter-spacing:-0.3px; }
+  .hero-stat .hs-sub { font-size:13.5px; color:#6a7488; line-height:1.55; }
+  .hero-stat .hs-sub strong { color:#2a3142; font-weight:600; }
+
+  /* AGENT TABLE */
+  .agent-table { width:100%; border-collapse:collapse; margin-top:8px; }
+  .agent-table th { text-align:left; font-size:10.5px; letter-spacing:1px; text-transform:uppercase; color:#6a7488; font-weight:700; padding:8px 10px 8px 0; border-bottom:1.5px solid #e6e9ef; }
+  .agent-table td { padding:9px 10px 9px 0; border-bottom:1px solid #f0f2f6; vertical-align:top; }
+  .agent-table td:first-child { font-weight:600; color:#0f1729; font-size:13.5px; white-space:nowrap; width:110px; }
+  .agent-table td:last-child { font-size:13px; color:#3a4154; line-height:1.55; }
+  .agent-table tr:last-child td { border-bottom:0; }
+  .agent-table .empty { color:#9aa3b5; font-style:italic; }
+  .agent-table .win { background:#e8f5ec; }
+  .agent-table .warm { background:#fff8e6; }
+  .agent-table .legend { font-size:11px; color:#6a7488; margin-top:8px; display:flex; gap:14px; }
+  .agent-table .legend .key { display:inline-flex; align-items:center; gap:5px; }
+  .agent-table .legend .swatch { width:10px; height:10px; border-radius:2px; display:inline-block; }
+  .agent-table .legend .swatch.win { background:#a8d4b6; }
+  .agent-table .legend .swatch.warm { background:#f0c98a; }
+
+  /* GRAPH */
+  .graph-wrap { background:#f6f7fa; border-radius:6px; padding:18px 18px 14px; margin-top:8px; }
+  .graph-wrap .gtitle { font-size:10.5px; color:#6a7488; letter-spacing:1px; text-transform:uppercase; font-weight:700; margin-bottom:12px; }
+  .graph svg { width:100%; height:auto; display:block; }
+  .glegend { display:flex; gap:16px; margin-top:10px; flex-wrap:wrap; font-size:11px; color:#6a7488; }
+  .glegend .gdot { display:inline-block; width:9px; height:9px; border-radius:2px; margin-right:5px; vertical-align:middle; }
+
+  /* CONCERN CARDS */
+  .concerns-stack { margin-top:18px; }
+  .concern-card { display:flex; gap:18px; padding:18px 20px; background:#f6f7fa; border-radius:6px; margin-bottom:10px; align-items:flex-start; }
+  .concern-card:last-child { margin-bottom:0; }
+  .concern-card .rank { font-size:36px; font-weight:700; color:#c5cee0; line-height:0.9; flex-shrink:0; min-width:38px; letter-spacing:-1.5px; }
+  .concern-card .body { flex:1; }
+  .concern-card .head { display:flex; justify-content:space-between; align-items:baseline; gap:12px; margin-bottom:6px; flex-wrap:wrap; }
+  .concern-card .name { font-size:17px; font-weight:700; color:#0f1729; line-height:1.25; letter-spacing:-0.2px; }
+  .concern-card .count { font-size:10.5px; color:#6a7488; font-weight:600; letter-spacing:0.5px; text-transform:uppercase; background:#fff; padding:3px 9px; border-radius:11px; white-space:nowrap; }
+  .concern-card p { font-size:13.5px; color:#3a4154; margin:0; line-height:1.6; }
+  .concern-card.urgent { background:#fef5e6; }
+  .concern-card.urgent .rank { color:#f0c98a; }
+  .concern-card.critical { background:#0f1729; }
+  .concern-card.critical .rank { color:#f4b955; }
+  .concern-card.critical .name { color:#fff; }
+  .concern-card.critical .count { background:#2a3a55; color:#c5cee0; }
+  .concern-card.critical p { color:#c5cee0; }
+
+  /* ACTIONS */
+  .my-actions { list-style:none; padding:0; margin:8px 0 0 0; }
+  .my-actions li { padding:10px 0 10px 26px; font-size:14px; color:#2a3142; border-bottom:1px solid #f0f2f6; position:relative; line-height:1.55; }
+  .my-actions li:last-child { border-bottom:0; }
+  .my-actions li::before { content:""; position:absolute; left:0; top:13px; width:14px; height:14px; border:1.5px solid #5d6b85; border-radius:3px; background:#5d6b85; }
+
+  /* APPENDIX */
+  .appendix { margin:8px 36px 0; padding:18px 22px; background:#f6f7fa; border-radius:6px; }
+  .appendix h2 { font-size:10.5px; letter-spacing:1.4px; text-transform:uppercase; font-weight:700; color:#5d6b85; margin:0 0 12px 0; padding:0; border:0; }
+  .appendix-table { width:100%; border-collapse:collapse; font-size:13px; }
+  .appendix-table td { padding:6px 0; color:#3a4154; vertical-align:top; }
+  .appendix-table td:first-child { color:#6a7488; font-weight:500; padding-right:14px; width:170px; }
+  .appendix-table td strong { color:#0f1729; font-weight:600; }
+
+  /* SIGNATURE */
+  .sig { padding:32px 36px 28px; }
+  .sig p { font-size:14.5px; color:#2a3142; margin:0 0 12px 0; line-height:1.65; }
+  .sig .signoff { font-size:15px; color:#0f1729; margin-top:20px; }
+  .sig-block { margin-top:20px; padding-top:20px; border-top:1px solid #e6e9ef; display:table; width:100%; }
+  .sig-photo, .sig-info { display:table-cell; vertical-align:top; }
+  .sig-photo { width:64px; padding-right:16px; }
+  .sig-photo .ph { width:64px; height:64px; background:#0f1729; color:#f4b955; display:flex; align-items:center; justify-content:center; font-size:20px; font-weight:600; border-radius:50%; }
+  .sig-info .name { font-size:15px; font-weight:600; color:#0f1729; line-height:1.2; }
+  .sig-info .role { font-size:12px; color:#6a7488; margin-bottom:6px; }
+  .sig-info .firm { font-size:13px; color:#2a3142; margin-bottom:6px; font-weight:500; }
+  .sig-info .contact { font-size:12.5px; color:#3a4154; line-height:1.7; }
+  .sig-info .contact a { color:#0f1729; text-decoration:none; border-bottom:1px solid #c5cee0; }
+  .sig-info .dre { font-size:11px; color:#6a7488; margin-top:6px; }
+
+  /* FOOTER */
+  .footer { padding:14px 36px 22px; background:#0f1729; color:#5d6b85; font-size:11px; text-align:center; line-height:1.6; letter-spacing:0.3px; }
+
+  @media (max-width:540px) {
+    .top-bar, .header, .kpi-section, section, .sig, .footer, .hero-stat { padding-left:20px; padding-right:20px; }
+    .status, .decision, .appendix { margin-left:20px; margin-right:20px; }
+    .kpis { display:block; margin:0; }
+    .kpi { display:block; margin-bottom:8px; }
+    .header h1 { font-size:22px; }
+    .agent-table td:first-child { width:90px; font-size:12.5px; }
+    .agent-table td:last-child { font-size:12.5px; }
+    .hero-stat .hs-num { font-size:56px; }
+    .hero-stat .hs-num .unit { font-size:24px; }
+  }
+</style>
+</head>
+<body>
+  <div class="wrap">
+
+    <!-- TOP BAR -->
+    <div class="top-bar">
+      <span>Weekly Status Report</span>
+      <span class="right">No. 01 · May 4, 2026</span>
+    </div>
+
+    <!-- HEADER -->
+    <div class="header">
+      <h1>1982 W Bayshore Road #223</h1>
+      <div class="meta">East Palo Alto, CA · 2-story condo / no elevator · Reporting period: <strong>April 28 – May 4, 2026</strong></div>
+    </div>
+
+    <!-- STATUS STRIP — green: positive momentum -->
+    <div class="status">
+      <div class="dot"></div>
+      <div class="text">
+        <div class="label">Status · Activity Picking Up</div>
+        <div class="msg">After a quiet stretch through Q1, three buyer-side agents engaged this period. A confirmed showing is on the books for tomorrow (May 5) — the first new tour in over a month.</div>
+      </div>
+    </div>
+
+    <!-- KPIs THIS WEEK -->
+    <div class="kpi-section">
+      <div class="kpi-label">This Week (Apr 28 – May 4)</div>
+      <div class="kpis">
+        <div class="kpi">
+          <div class="k-lbl">Active Showings</div>
+          <div class="k-num">1</div>
+          <div class="k-delta up">first showing in 30+ days</div>
+        </div>
+        <div class="kpi">
+          <div class="k-lbl">Buyer Agents Engaged</div>
+          <div class="k-num">3</div>
+          <div class="k-delta up">+2 vs. prior 2-wk avg</div>
+        </div>
+        <div class="kpi">
+          <div class="k-lbl">Disclosure Pulls</div>
+          <div class="k-num">2</div>
+          <div class="k-delta flat">cumulative since launch</div>
+        </div>
+        <div class="kpi">
+          <div class="k-lbl">Open Houses Held</div>
+          <div class="k-num">4</div>
+          <div class="k-delta flat">none scheduled this week</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- THE READ -->
+    <section>
+      <h2>The Read</h2>
+      <p>Hi Bruce — short version: <strong>activity is waking back up.</strong> Three buyer-side agents engaged this week — a confirmed showing tomorrow with Madeleine James, an investor-style inquiry from Thiat Ling about rental restrictions, and continued interest signals around the floor plan. The stairs / no-elevator question came up again as a buyer-fit issue, which keeps shaping our ideal-buyer profile away from accessibility-sensitive buyers and toward younger working professionals or investors.</p>
+    </section>
+
+    <!-- DECISION REQUIRED -->
+    <div class="decision">
+      <div class="lbl">Decision Required From You</div>
+      <h3>Confirm tomorrow's showing window + post-showing follow-up plan</h3>
+      <p>Madeleine James (J&amp;L Real Estate Group) is showing the unit <strong>tomorrow, Tuesday May 5, between 12–4PM.</strong> Exact time will be confirmed by her in the morning. Two things to lock in: (1) you've already approved the 12–4 window — confirming that holds, and (2) how you'd like me to handle post-showing feedback collection and follow-up. Let's spend 10 minutes on the phone today or tomorrow.</p>
+      <a href="[PASTE-GHL-CALENDAR-URL-HERE]" class="btn">Schedule the call</a>
+      <a href="tel:6503084727" class="btn btn-secondary">Or call: (650) 308-4727</a>
+    </div>
+
+    <!-- ACTIVITY TREND GRAPH -->
+    <section>
+      <h2>Activity Trend · Last 8 Weeks</h2>
+      <div class="graph-wrap">
+        <div class="gtitle">Buyer Engagement By Week</div>
+        <div class="graph">
+          <svg viewBox="0 0 600 200" xmlns="http://www.w3.org/2000/svg" preserveAspectRatio="xMidYMid meet" role="img" aria-label="Activity bar chart over last 8 weeks">
+            <line x1="40" y1="20" x2="580" y2="20" stroke="#e6e9ef" stroke-width="1"/>
+            <line x1="40" y1="60" x2="580" y2="60" stroke="#e6e9ef" stroke-width="1" stroke-dasharray="2,3"/>
+            <line x1="40" y1="100" x2="580" y2="100" stroke="#e6e9ef" stroke-width="1" stroke-dasharray="2,3"/>
+            <line x1="40" y1="140" x2="580" y2="140" stroke="#e6e9ef" stroke-width="1" stroke-dasharray="2,3"/>
+            <line x1="40" y1="170" x2="580" y2="170" stroke="#c5cee0" stroke-width="1.5"/>
+
+            <text x="32" y="174" text-anchor="end" font-size="10" fill="#9aa3b5">0</text>
+            <text x="32" y="144" text-anchor="end" font-size="10" fill="#9aa3b5">1</text>
+            <text x="32" y="104" text-anchor="end" font-size="10" fill="#9aa3b5">2</text>
+            <text x="32" y="64" text-anchor="end" font-size="10" fill="#9aa3b5">3</text>
+
+            <rect x="55" y="170" width="50" height="0" fill="#c5cee0" rx="2"/>
+            <rect x="120" y="170" width="50" height="0" fill="#c5cee0" rx="2"/>
+            <rect x="185" y="170" width="50" height="0" fill="#c5cee0" rx="2"/>
+            <rect x="250" y="170" width="50" height="0" fill="#c5cee0" rx="2"/>
+            <rect x="315" y="140" width="50" height="30" fill="#9da9c1" rx="2"/>
+            <text x="340" y="135" text-anchor="middle" font-size="10" fill="#5d6b85" font-weight="600">1</text>
+            <rect x="380" y="170" width="50" height="0" fill="#c5cee0" rx="2"/>
+            <rect x="445" y="110" width="50" height="60" fill="#f0c98a" rx="2"/>
+            <text x="470" y="105" text-anchor="middle" font-size="10" fill="#a06a14" font-weight="700">2</text>
+            <rect x="510" y="140" width="50" height="30" fill="#a8d4b6" rx="2"/>
+            <text x="535" y="135" text-anchor="middle" font-size="10" fill="#1f5e2e" font-weight="700">1</text>
+
+            <text x="80" y="188" text-anchor="middle" font-size="9" fill="#6a7488">Mar 16</text>
+            <text x="145" y="188" text-anchor="middle" font-size="9" fill="#6a7488">Mar 23</text>
+            <text x="210" y="188" text-anchor="middle" font-size="9" fill="#6a7488">Mar 30</text>
+            <text x="275" y="188" text-anchor="middle" font-size="9" fill="#6a7488">Apr 6</text>
+            <text x="340" y="188" text-anchor="middle" font-size="9" fill="#6a7488">Apr 13</text>
+            <text x="405" y="188" text-anchor="middle" font-size="9" fill="#6a7488">Apr 20</text>
+            <text x="470" y="188" text-anchor="middle" font-size="9" fill="#6a7488">Apr 27</text>
+            <text x="535" y="188" text-anchor="middle" font-size="9" fill="#6a7488" font-weight="700">May 4</text>
+          </svg>
+        </div>
+        <div class="glegend">
+          <span><span class="gdot" style="background:#c5cee0"></span>No activity</span>
+          <span><span class="gdot" style="background:#9da9c1"></span>Follow-up</span>
+          <span><span class="gdot" style="background:#f0c98a"></span>New inquiry</span>
+          <span><span class="gdot" style="background:#a8d4b6"></span>Confirmed showing</span>
+        </div>
+      </div>
+    </section>
+
+    <!-- DISCLOSURE ACTIVITY HERO -->
+    <div class="hero-stat">
+      <div class="hs-num">2<span class="unit">agents</span></div>
+      <div class="hs-title">downloaded the disclosure package</div>
+      <div class="hs-sub">Tracked via Glide. Both agents are real EPA buyer-side reps with active client lists. Below: every agent and their follow-up feedback.</div>
+    </div>
+    <section>
+      <table class="agent-table">
+        <thead>
+          <tr><th>Agent</th><th>Feedback</th></tr>
+        </thead>
+        <tbody>
+          <tr><td>Susan H.</td><td>Visited the unit and FaceTimed with her client. Likes the floor plan (laundry + AC), but the upstairs with stairs (no elevator) is a concern for her handicapped friend — buyer will not consider this as her retirement home.</td></tr>
+          <tr><td>Kimberly L.</td><td>Same buyer she brought to 828 Weeks St and 1908 Cooley Ave — already closed on Clarke Ave. Repeat active EPA buyer agent.</td></tr>
+        </tbody>
+      </table>
+    </section>
+
+    <!-- SHOWING / INQUIRY ACTIVITY HERO -->
+    <div class="hero-stat">
+      <div class="hs-num">3<span class="unit">agents</span></div>
+      <div class="hs-title">have shown or inquired about the property</div>
+      <div class="hs-sub">Includes confirmed showings, scheduled showings, and direct buyer-side inquiries. Highlighted rows: <strong>green = confirmed showing</strong>, <strong>amber = active warm lead</strong>.</div>
+    </div>
+    <section>
+      <table class="agent-table">
+        <thead>
+          <tr><th>Agent</th><th>Feedback</th></tr>
+        </thead>
+        <tbody>
+          <tr class="win"><td>Madeleine J.</td><td><strong>Confirmed showing tomorrow May 5, 12–4PM.</strong> J&amp;L Real Estate Group. First inquired Apr 27, client deliberation in late Apr, confirmed May 4. Strongest active lead in the pipeline.</td></tr>
+          <tr class="warm"><td>Thiat L.</td><td><strong>Apr 30:</strong> Asked specifically if there are any rental restrictions. <strong>Investor-buyer profile.</strong> Active follow-up.</td></tr>
+          <tr><td>Susan H.</td><td>Toured + FaceTimed Dec 29 — see disclosure feedback above. Buyer ruled out due to stairs.</td></tr>
+        </tbody>
+      </table>
+      <div class="legend">
+        <span class="key"><span class="swatch win"></span> Confirmed showing</span>
+        <span class="key"><span class="swatch warm"></span> Active warm lead</span>
+      </div>
+    </section>
+
+    <!-- OPEN HOUSE ACTIVITY HERO -->
+    <div class="hero-stat">
+      <div class="hs-num">4+<span class="unit">groups</span></div>
+      <div class="hs-title">attended open houses to date</div>
+      <div class="hs-sub">Across 4 open houses (Nov 22, Nov 23, Dec 13–14, Dec 20). Two of those groups requested disclosures from the Nov 22–23 weekend. No open houses are scheduled for this period.</div>
+    </div>
+
+    <!-- FEEDBACK PATTERNS -->
+    <div class="hero-stat">
+      <div class="hs-num">2<span class="unit">themes</span></div>
+      <div class="hs-title">define the buyer feedback so far</div>
+      <div class="hs-sub">Across showings, inquiries, and open-house follow-ups, two clear patterns emerge — they tell us exactly who the right buyer for this unit is.</div>
+    </div>
+
+    <section>
+      <div class="concerns-stack">
+        <div class="concern-card critical">
+          <div class="rank">01</div>
+          <div class="body">
+            <div class="head">
+              <div class="name">Stairs &amp; no-elevator access</div>
+              <div class="count">2 mentions · the recurring objection</div>
+            </div>
+            <p>Surfaced again this period from Susan H.'s buyer (handicapped friend ruled it out as a retirement home). The unit's strongest features — floor plan, in-unit laundry, AC — resonate, but mobility shapes our ideal-buyer profile <strong>away from older or accessibility-sensitive buyers</strong> and toward younger working professionals or investors.</p>
+          </div>
+        </div>
+
+        <div class="concern-card urgent">
+          <div class="rank">02</div>
+          <div class="body">
+            <div class="head">
+              <div class="name">Investor-buyer signal</div>
+              <div class="count">1 mention · worth leaning into</div>
+            </div>
+            <p>Thiat L. specifically asked about rental restrictions — almost always a buy-to-rent evaluation rather than a primary-residence one. Combined with the no-elevator finding, <strong>investor positioning may be the unlock</strong> for this unit's audience this quarter.</p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- WHAT I'M DOING -->
+    <section>
+      <h2>What I'm Doing This Week (No Action Needed)</h2>
+      <ul class="my-actions">
+        <li>Tomorrow morning: confirm exact showing time with Madeleine J., prep property for 12–4PM window.</li>
+        <li>By Friday: direct outreach to Thiat L. on the rental-restriction question — leaning into investor positioning.</li>
+        <li>Post-showing: collect Madeleine's feedback and assess offer signal.</li>
+        <li>If we hit 8 weeks without an offer signal, I'll come back to you with a price-posture conversation.</li>
+      </ul>
+    </section>
+
+    <!-- APPENDIX -->
+    <div class="appendix">
+      <h2>Appendix · Cumulative Numbers Since Launch</h2>
+      <table class="appendix-table">
+        <tr><td>Property</td><td>2-story condo, no elevator · 1982 W Bayshore Rd #223</td></tr>
+        <tr><td>Open houses held</td><td><strong>4</strong> (Nov 22, Nov 23, Dec 13–14, Dec 20)</td></tr>
+        <tr><td>Open house attendance</td><td><strong>4+</strong> buyer groups</td></tr>
+        <tr><td>Cumulative disclosure pulls</td><td><strong>2</strong> unique agents</td></tr>
+        <tr><td>Cumulative buyer-side inquiries</td><td><strong>3</strong> agents this period</td></tr>
+        <tr><td>Showings this period</td><td><strong>1</strong> confirmed (Madeleine J. — May 5)</td></tr>
+        <tr><td>Active warm leads</td><td>Madeleine J., Thiat L.</td></tr>
+        <tr><td>Most recent activity</td><td>May 4, 2026 (Madeleine confirmed)</td></tr>
+      </table>
+    </div>
+
+    <!-- SIGNATURE -->
+    <div class="sig">
+      <p style="margin-top:24px;">Reply with a few times that work this week and I'll send a calendar invite — or use the Schedule the call button above. Anything else you want me looking at, let me know.</p>
+      <div class="signoff">— Graeham</div>
+
+      <div class="sig-block">
+        <div class="sig-photo"><div class="ph">GW</div></div>
+        <div class="sig-info">
+          <div class="name">Graeham Watts</div>
+          <div class="role">REALTOR</div>
+          <div class="firm">Intero Real Estate</div>
+          <div class="contact">
+            +1 (650) 308-4727 · <a href="mailto:graehamwatts@gmail.com">graehamwatts@gmail.com</a>
+          </div>
+          <div class="dre">DRE # 01466876</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- FOOTER -->
+    <div class="footer">
+      Confidential weekly status report prepared for Bruce regarding 1982 W Bayshore Road #223, East Palo Alto.
+    </div>
+
+  </div>
+</body>
+</html>
