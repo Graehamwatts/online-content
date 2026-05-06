@@ -13,6 +13,7 @@
     --gray: #6b7280;
     --gray-bg: #f3f4f6;
     --line: #e5e7eb;
+    --line-soft: #f1f5f9;
     --bg: #f8fafc;
     --text: #1f2937;
     --muted: #6b7280;
@@ -24,72 +25,103 @@
   .header h1 { font-size: 18px; font-weight: 600; margin-bottom: 2px; }
   .header p { font-size: 12px; opacity: .65; }
 
-  .flow { background: #fff; border-bottom: 1px solid var(--line); padding: 14px 22px; }
-  .flow-svg { display: block; width: 100%; max-width: 1100px; margin: 0 auto; height: auto; }
+  .toolbar { background: #fff; border-bottom: 1px solid var(--line); padding: 8px 22px; display: flex; flex-wrap: wrap; gap: 6px; align-items: center; position: sticky; top: 0; z-index: 100; box-shadow: 0 1px 3px rgba(0,0,0,.04); }
+  .toolbar-label { font-size: 10px; font-weight: 700; color: var(--muted); text-transform: uppercase; letter-spacing: .06em; padding: 0 4px; }
+  .btn { padding: 5px 12px; border-radius: 5px; border: 1px solid var(--line); font-size: 11px; cursor: pointer; background: #fff; color: #4b5563; transition: all .12s; white-space: nowrap; font-family: inherit; font-weight: 600; }
+  .btn:hover { background: var(--gray-bg); color: var(--slate); border-color: #cbd5e1; }
+  .btn.primary { background: var(--slate); color: #fff; border-color: var(--slate); }
+  .btn.primary:hover { background: #2d4278; border-color: #2d4278; color: #fff; }
+  .btn.active { background: var(--slate); color: #fff; border-color: var(--slate); }
+  .toolbar-spacer { flex: 1; }
+  .scope-jump { display: inline-flex; gap: 3px; }
+  .scope-jump button { padding: 4px 8px; border-radius: 4px; font-size: 10px; }
+
+  .sticky-trail { background: rgba(26,39,68,.96); color: #fff; padding: 6px 22px; font-size: 11px; font-weight: 500; position: sticky; top: 41px; z-index: 99; display: none; box-shadow: 0 1px 3px rgba(0,0,0,.1); }
+  .sticky-trail.show { display: block; }
+  .sticky-trail .crumb { opacity: .7; }
+  .sticky-trail .crumb-current { opacity: 1; font-weight: 600; }
+
+  .content { max-width: 1100px; margin: 0 auto; padding: 16px 22px 60px; }
+
+  .flow-region { background: #fff; border: 1px solid var(--line); border-radius: 8px; padding: 14px 18px; margin-bottom: 16px; display: none; }
+  .flow-region.show { display: block; }
+  .flow-svg { display: block; width: 100%; max-width: 1060px; margin: 0 auto; height: auto; }
   .flow-legend { font-size: 10px; color: var(--muted); text-align: center; margin-top: 6px; letter-spacing: .03em; }
 
-  .nav { background: #fff; border-bottom: 1px solid var(--line); padding: 8px 22px; display: flex; flex-wrap: wrap; gap: 4px; position: sticky; top: 0; z-index: 100; box-shadow: 0 1px 3px rgba(0,0,0,.04); }
-  .nav-group { display: flex; align-items: center; gap: 3px; padding: 0 4px; border-right: 1px solid var(--line); }
-  .nav-group:last-child { border-right: none; }
-  .nav-label { font-size: 10px; font-weight: 700; color: var(--muted); text-transform: uppercase; letter-spacing: .06em; padding: 0 4px; }
-  .nav button { padding: 4px 9px; border-radius: 5px; border: 1px solid var(--line); font-size: 11px; cursor: pointer; background: #fff; color: #4b5563; transition: all .12s; white-space: nowrap; font-family: inherit; }
-  .nav button:hover { background: var(--gray-bg); color: var(--slate); }
-  .nav button.active { background: var(--slate); color: #fff; border-color: var(--slate); font-weight: 600; }
+  /* Tree structure using <details>/<summary> */
 
-  .content { max-width: 1000px; margin: 0 auto; padding: 16px 22px; }
-  .panel { display: none; }
-  .panel.active { display: block; }
-  .panel-title { font-size: 17px; font-weight: 600; color: var(--slate); margin-bottom: 4px; letter-spacing: -.01em; }
-  .panel-sub { font-size: 11px; color: var(--muted); margin-bottom: 10px; font-weight: 500; text-transform: uppercase; letter-spacing: .04em; }
-  .panel-desc { font-size: 12px; color: #4b5563; line-height: 1.6; background: #f0f4ff; border-left: 3px solid var(--slate-2); padding: 8px 12px; border-radius: 0 4px 4px 0; margin-bottom: 12px; }
-  .panel-note { font-size: 12px; background: var(--amber-bg); border-left: 3px solid var(--amber); color: #78350f; padding: 8px 12px; border-radius: 0 4px 4px 0; margin-bottom: 12px; line-height: 1.5; }
+  /* Pipeline (level 1) */
+  details.pl1 { background: #fff; border: 1px solid var(--line); border-radius: 8px; margin-bottom: 10px; box-shadow: 0 1px 2px rgba(0,0,0,.03); }
+  details.pl1 > summary { padding: 12px 16px; cursor: pointer; user-select: none; list-style: none; display: flex; align-items: center; gap: 10px; font-weight: 600; color: var(--slate); font-size: 15px; border-radius: 8px; }
+  details.pl1[open] > summary { border-bottom: 1px solid var(--line); border-radius: 8px 8px 0 0; background: #f8fafc; }
+  details.pl1 > summary::-webkit-details-marker { display: none; }
+  details.pl1 > summary::before { content: '▸'; display: inline-block; transition: transform .12s; color: var(--slate-2); font-size: 14px; width: 12px; }
+  details.pl1[open] > summary::before { transform: rotate(90deg); }
+  details.pl1 > summary .meta { font-size: 11px; font-weight: 500; color: var(--muted); margin-left: auto; }
 
-  table { width: 100%; border-collapse: collapse; background: #fff; border-radius: 6px; overflow: hidden; box-shadow: 0 1px 2px rgba(0,0,0,.04); border: 1px solid var(--line); }
-  thead th { background: var(--slate); color: #fff; text-align: left; padding: 7px 11px; font-size: 10px; font-weight: 600; text-transform: uppercase; letter-spacing: .05em; }
-  tbody td { padding: 7px 11px; border-bottom: 1px solid #f1f5f9; vertical-align: top; line-height: 1.45; }
-  tbody tr:last-child td { border-bottom: none; }
-  tbody tr:nth-child(even) { background: #fafbfc; }
+  .pl1-body { padding: 10px 16px 14px; }
 
-  .day { font-weight: 600; white-space: nowrap; min-width: 70px; color: var(--slate); font-size: 12px; }
-  .sub { display: block; font-size: 9px; color: var(--muted); font-weight: 400; margin-top: 1px; }
+  /* Stage (level 2) */
+  details.pl2 { background: #fafbfc; border: 1px solid var(--line-soft); border-radius: 6px; margin-bottom: 6px; }
+  details.pl2 > summary { padding: 8px 12px; cursor: pointer; user-select: none; list-style: none; display: flex; align-items: center; gap: 8px; font-weight: 600; color: var(--slate); font-size: 13px; border-radius: 6px; }
+  details.pl2[open] > summary { border-bottom: 1px solid var(--line-soft); border-radius: 6px 6px 0 0; }
+  details.pl2 > summary::-webkit-details-marker { display: none; }
+  details.pl2 > summary::before { content: '▸'; display: inline-block; transition: transform .12s; color: var(--gray); font-size: 11px; width: 10px; }
+  details.pl2[open] > summary::before { transform: rotate(90deg); }
+  details.pl2 > summary .meta { font-size: 10px; font-weight: 500; color: var(--muted); margin-left: auto; text-transform: uppercase; letter-spacing: .04em; }
 
-  /* Touch type tags — minimalist, type-only */
-  .t { display: inline-block; padding: 1px 6px; border-radius: 3px; font-size: 10px; font-weight: 600; text-transform: uppercase; letter-spacing: .04em; margin: 1px 2px 1px 0; white-space: nowrap; border: 1px solid; background: #fff; }
-  .t-call    { color: #b45309; border-color: #fed7aa; }   /* manual touch family — amber tints */
-  .t-vip     { color: var(--slate); border-color: #c7d2fe; background: #eef2ff; }  /* Lipdub VIP */
-  .t-static  { color: #475569; border-color: #cbd5e1; }  /* Static GIF MMS */
-  .t-heygen  { color: #475569; border-color: #cbd5e1; }
-  .t-email   { color: #475569; border-color: #cbd5e1; }
-  .t-aitext  { color: var(--gray); border-color: var(--line); }
-  .t-aicall  { color: var(--gray); border-color: var(--line); }
-  .t-vm      { color: var(--gray); border-color: var(--line); }
-  .t-mc      { color: var(--gray); border-color: var(--line); }
+  .pl2-body { padding: 8px 12px 10px; }
+  .pl2-desc { font-size: 12px; color: #4b5563; line-height: 1.55; margin-bottom: 8px; padding: 6px 10px; background: #f0f4ff; border-left: 3px solid var(--slate-2); border-radius: 0 4px 4px 0; }
+  .pl2-note { font-size: 11px; background: var(--amber-bg); border-left: 3px solid var(--amber); color: #78350f; padding: 6px 10px; border-radius: 0 4px 4px 0; margin-bottom: 8px; line-height: 1.5; }
+
+  /* Day item (level 3) */
+  details.pl3 { background: #fff; border: 1px solid var(--line-soft); border-radius: 4px; margin-bottom: 3px; }
+  details.pl3 > summary { padding: 6px 10px; cursor: pointer; user-select: none; list-style: none; display: flex; align-items: center; gap: 8px; font-size: 12px; border-radius: 4px; }
+  details.pl3:hover > summary { background: #fafbfc; }
+  details.pl3[open] > summary { background: #f8fafc; border-bottom: 1px solid var(--line-soft); border-radius: 4px 4px 0 0; }
+  details.pl3 > summary::-webkit-details-marker { display: none; }
+  details.pl3 > summary::before { content: '▸'; display: inline-block; transition: transform .12s; color: #cbd5e1; font-size: 10px; width: 10px; }
+  details.pl3[open] > summary::before { transform: rotate(90deg); }
+  .day-tag { font-weight: 600; color: var(--slate); min-width: 64px; font-size: 11px; }
+  .day-types { display: inline-flex; flex-wrap: wrap; gap: 3px; }
+
+  .pl3-body { padding: 8px 12px 10px; font-size: 12px; color: #374151; line-height: 1.55; }
+  .pl3-body strong { color: var(--slate); }
+
+  /* Touch type tags — minimalist */
+  .t { display: inline-block; padding: 1px 6px; border-radius: 3px; font-size: 10px; font-weight: 600; text-transform: uppercase; letter-spacing: .04em; white-space: nowrap; border: 1px solid; background: #fff; line-height: 1.4; }
+  .t-call    { color: #b45309; border-color: #fed7aa; }
+  .t-vip     { color: var(--slate); border-color: #c7d2fe; background: #eef2ff; }
+  .t-static, .t-heygen, .t-email { color: #475569; border-color: #cbd5e1; }
+  .t-aitext, .t-aicall, .t-vm, .t-mc { color: var(--gray); border-color: var(--line); }
   .t-task    { color: #b45309; border-color: #fed7aa; background: var(--amber-bg); }
 
   /* Mode badge */
-  .m { font-size: 9px; padding: 1px 5px; border-radius: 3px; font-weight: 600; text-transform: uppercase; letter-spacing: .05em; }
+  .m { font-size: 9px; padding: 1px 5px; border-radius: 3px; font-weight: 600; text-transform: uppercase; letter-spacing: .05em; margin-left: auto; }
   .m-auto   { color: var(--gray); background: var(--gray-bg); }
   .m-manual { color: #b45309; background: var(--amber-bg); }
 
-  .legend { display: flex; flex-wrap: wrap; gap: 10px; margin-bottom: 12px; padding: 10px 14px; background: #fff; border-radius: 6px; border: 1px solid var(--line); font-size: 11px; }
-  .legend span { color: #4b5563; display: inline-flex; align-items: center; gap: 4px; }
-
-  .tk-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; }
+  /* Toolkit (level 1, special) */
+  .tk-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; padding: 4px 0; }
   .tk-card { background: #fff; border: 1px solid var(--line); border-radius: 6px; padding: 10px 12px; }
   .tk-card h4 { font-size: 12px; font-weight: 600; color: var(--slate); margin-bottom: 4px; }
   .tk-card p { font-size: 11px; color: #4b5563; line-height: 1.5; }
 
-  .stub { background: #fff; border: 1px dashed var(--line); border-radius: 6px; padding: 12px 14px; color: var(--muted); font-size: 12px; }
-  .stub strong { color: var(--slate); }
+  .stub-row { background: #fafbfc; border: 1px dashed var(--line); border-radius: 4px; padding: 8px 12px; color: var(--muted); font-size: 12px; line-height: 1.5; }
+  .stub-row strong { color: var(--slate); }
 
-  /* GHL stage name pill */
-  .stage-pill { display: inline-block; font-size: 10px; padding: 2px 8px; border-radius: 10px; background: var(--gray-bg); color: var(--slate); font-weight: 600; letter-spacing: .03em; margin-left: 8px; vertical-align: middle; }
+  .legend { display: flex; flex-wrap: wrap; gap: 10px; margin-bottom: 10px; padding: 10px 14px; background: #fff; border-radius: 6px; border: 1px solid var(--line); font-size: 11px; }
+  .legend span { color: #4b5563; display: inline-flex; align-items: center; gap: 4px; }
+
+  /* Stage summary line — type pills shown next to day */
+  .day-types .t { font-size: 9px; padding: 0 5px; }
 
   @media (max-width: 700px) {
     .tk-grid { grid-template-columns: 1fr; }
-    .nav { padding: 6px 12px; }
+    .toolbar { padding: 6px 12px; }
     .content { padding: 12px 14px; }
     .header { padding: 12px 14px; }
+    details.pl1 > summary { font-size: 14px; }
   }
 </style>
 </head>
@@ -97,10 +129,37 @@
 
 <div class="header">
   <h1>Graeham Watts — Pipeline Sequences</h1>
-  <p>Touchpoint cadences mapped to actual GHL pipelines &amp; stages • 7 pipelines, 36 stages</p>
+  <p>7 pipelines · 36 stages · click any pipeline to drill into its stages and per-day touchpoints</p>
 </div>
 
-<div class="flow">
+<div class="toolbar">
+  <span class="toolbar-label">View</span>
+  <button class="btn primary" id="btn-flow" onclick="toggleFlow()">⤴ Show Flow Diagram</button>
+  <span class="toolbar-label" style="margin-left:8px">Expand</span>
+  <button class="btn" onclick="expandAll()">Expand all</button>
+  <button class="btn" onclick="collapseAll()">Collapse all</button>
+  <button class="btn" onclick="expandLevel(1)">Pipelines only</button>
+  <button class="btn" onclick="expandLevel(2)">+ Stages</button>
+  <span class="toolbar-spacer"></span>
+  <span class="toolbar-label">Jump to</span>
+  <span class="scope-jump">
+    <button class="btn" onclick="jumpTo('pl-toolkit')">Toolkit</button>
+    <button class="btn" onclick="jumpTo('pl-newleads')">New Leads</button>
+    <button class="btn" onclick="jumpTo('pl-buyer')">Buyer</button>
+    <button class="btn" onclick="jumpTo('pl-seller')">Seller</button>
+    <button class="btn" onclick="jumpTo('pl-investor')">Investor</button>
+    <button class="btn" onclick="jumpTo('pl-pastbuyers')">Past Buyers</button>
+    <button class="btn" onclick="jumpTo('pl-pastsellers')">Past Sellers</button>
+    <button class="btn" onclick="jumpTo('pl-lost')">Lost</button>
+  </span>
+</div>
+
+<div class="sticky-trail" id="trail"></div>
+
+<div class="content">
+
+<!-- FLOW DIAGRAM (toggle) -->
+<div class="flow-region" id="flow-region">
   <svg class="flow-svg" viewBox="0 0 1100 240" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Lead lifecycle flow">
     <defs>
       <marker id="arr" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse">
@@ -110,548 +169,659 @@
         <path d="M 0 0 L 10 5 L 0 10 z" fill="#1a2744"/>
       </marker>
     </defs>
-
-    <!-- Entry -->
     <rect x="20" y="100" width="140" height="44" rx="6" fill="#1a2744"/>
     <text x="90" y="120" text-anchor="middle" fill="#fff" font-size="12" font-weight="600">New Leads</text>
     <text x="90" y="135" text-anchor="middle" fill="#fff" font-size="10" opacity=".7">12-day sprint</text>
-
-    <!-- Active pipelines -->
     <rect x="220" y="40" width="160" height="38" rx="6" fill="#fff" stroke="#cbd5e1"/>
     <text x="300" y="64" text-anchor="middle" fill="#1f2937" font-size="12" font-weight="600">Buyer Pipeline</text>
     <rect x="220" y="100" width="160" height="38" rx="6" fill="#fff" stroke="#cbd5e1"/>
     <text x="300" y="124" text-anchor="middle" fill="#1f2937" font-size="12" font-weight="600">Seller Pipeline</text>
     <rect x="220" y="160" width="160" height="38" rx="6" fill="#fff" stroke="#cbd5e1"/>
     <text x="300" y="184" text-anchor="middle" fill="#1f2937" font-size="12" font-weight="600">Investor / Flipper</text>
-
-    <!-- Appointment / Under Contract -->
     <rect x="440" y="70" width="160" height="38" rx="6" fill="#fff" stroke="#cbd5e1"/>
     <text x="520" y="89" text-anchor="middle" fill="#1f2937" font-size="11" font-weight="600">Appointment</text>
     <text x="520" y="102" text-anchor="middle" fill="#6b7280" font-size="10">Scheduled / Rescheduled</text>
-
     <rect x="440" y="135" width="160" height="38" rx="6" fill="#fff" stroke="#cbd5e1"/>
     <text x="520" y="159" text-anchor="middle" fill="#1f2937" font-size="12" font-weight="600">Under Contract</text>
-
-    <!-- Outcomes -->
     <rect x="660" y="40" width="160" height="38" rx="6" fill="#fef3c7" stroke="#fcd34d"/>
     <text x="740" y="64" text-anchor="middle" fill="#78350f" font-size="12" font-weight="600">Cold / Unqualified</text>
-
     <rect x="660" y="100" width="160" height="38" rx="6" fill="#1a2744"/>
     <text x="740" y="119" text-anchor="middle" fill="#fff" font-size="12" font-weight="600">Past Buyer / Seller</text>
     <text x="740" y="132" text-anchor="middle" fill="#fff" font-size="9" opacity=".7">annual cycle, never ends</text>
-
     <rect x="660" y="160" width="160" height="38" rx="6" fill="#fff" stroke="#fca5a5"/>
     <text x="740" y="184" text-anchor="middle" fill="#991b1b" font-size="12" font-weight="600">Lost (other agent)</text>
-
-    <!-- Loop back: past clients → referrals/repeat -->
     <rect x="880" y="100" width="200" height="38" rx="6" fill="#eef2ff" stroke="#c7d2fe"/>
     <text x="980" y="119" text-anchor="middle" fill="#1a2744" font-size="11" font-weight="600">Referral / Repeat Business</text>
     <text x="980" y="132" text-anchor="middle" fill="#6b7280" font-size="9">feeds back to New Leads</text>
-
-    <!-- Arrows: New Leads → 3 active pipelines -->
     <path d="M 160 122 Q 190 122 190 60 L 220 60" fill="none" stroke="#9ca3af" stroke-width="1.5" marker-end="url(#arr)"/>
     <path d="M 160 122 L 220 122" fill="none" stroke="#9ca3af" stroke-width="1.5" marker-end="url(#arr)"/>
     <path d="M 160 122 Q 190 122 190 180 L 220 180" fill="none" stroke="#9ca3af" stroke-width="1.5" marker-end="url(#arr)"/>
-
-    <!-- Arrows: pipelines → appointment -->
     <path d="M 380 60 Q 410 60 410 89 L 440 89" fill="none" stroke="#9ca3af" stroke-width="1.5" marker-end="url(#arr)"/>
     <path d="M 380 122 Q 410 122 410 89 L 440 89" fill="none" stroke="#9ca3af" stroke-width="1.5" marker-end="url(#arr)"/>
     <path d="M 380 180 Q 410 180 410 154 L 440 154" fill="none" stroke="#9ca3af" stroke-width="1.5" marker-end="url(#arr)"/>
-
-    <!-- Arrows: appointment → under contract -->
     <path d="M 520 108 L 520 135" fill="none" stroke="#9ca3af" stroke-width="1.5" marker-end="url(#arr)"/>
-
-    <!-- Arrows: under contract → past client -->
     <path d="M 600 154 Q 630 154 630 119 L 660 119" fill="none" stroke="#9ca3af" stroke-width="1.5" marker-end="url(#arr)"/>
-
-    <!-- Arrows: pipelines → cold/lost -->
     <path d="M 380 50 Q 520 30 660 60" fill="none" stroke="#9ca3af" stroke-width="1.5" stroke-dasharray="3,3" marker-end="url(#arr)"/>
     <path d="M 380 188 Q 520 200 660 180" fill="none" stroke="#9ca3af" stroke-width="1.5" stroke-dasharray="3,3" marker-end="url(#arr)"/>
-
-    <!-- Past Client → Referral/Repeat -->
     <path d="M 820 119 L 880 119" fill="none" stroke="#1a2744" stroke-width="2" marker-end="url(#arr-loop)"/>
-
-    <!-- Loop back arrow: Referral/Repeat → New Leads (top arc) -->
     <path d="M 980 100 Q 980 10 90 10 L 90 100" fill="none" stroke="#1a2744" stroke-width="2" stroke-dasharray="4,3" marker-end="url(#arr-loop)"/>
     <text x="540" y="22" text-anchor="middle" fill="#1a2744" font-size="10" font-weight="600">Referrals + Repeat Business re-enter as New Leads</text>
   </svg>
   <div class="flow-legend">Solid = primary path • Dashed = exit / re-entry • Dark arrows = the loop that compounds</div>
 </div>
 
-<div class="nav">
-  <div class="nav-group">
-    <div class="nav-label">Ref</div>
-    <button class="active" onclick="sw(this,'tk')">Toolkit</button>
-  </div>
-  <div class="nav-group">
-    <div class="nav-label">New Leads</div>
-    <button onclick="sw(this,'nl_uncontacted')">New — Uncontacted</button>
-    <button onclick="sw(this,'nl_no_response')">Contacted — No Response</button>
-    <button onclick="sw(this,'nl_responded')">Contacted — Responded</button>
-    <button onclick="sw(this,'nl_email_only')">Email/Text Only</button>
-    <button onclick="sw(this,'nl_cold')">Cold</button>
-    <button onclick="sw(this,'nl_unqualified')">Unqualified</button>
-  </div>
-  <div class="nav-group">
-    <div class="nav-label">Buyer Pipeline</div>
-    <button onclick="sw(this,'b_active')">Active Buyer</button>
-    <button onclick="sw(this,'b_3mo')">Within 3 Months</button>
-    <button onclick="sw(this,'b_under9')">Under 9 Months</button>
-    <button onclick="sw(this,'b_over9')">Over 9 Months</button>
-    <button onclick="sw(this,'b_flipper')">Buyer Flipper</button>
-    <button onclick="sw(this,'b_appt')">Appointment Scheduled</button>
-    <button onclick="sw(this,'b_resched')">Appointment Rescheduled</button>
-    <button onclick="sw(this,'b_uc')">Under Contract</button>
-    <button onclick="sw(this,'b_cold')">Cold</button>
-    <button onclick="sw(this,'b_unq')">Unqualified</button>
-  </div>
-  <div class="nav-group">
-    <div class="nav-label">Seller Pipeline</div>
-    <button onclick="sw(this,'s_active')">Active Seller</button>
-    <button onclick="sw(this,'s_3mo')">Within 3 Months</button>
-    <button onclick="sw(this,'s_under9')">Under 9 Months</button>
-    <button onclick="sw(this,'s_over9')">Over 9 Months</button>
-    <button onclick="sw(this,'s_appt')">Appointment Scheduled</button>
-    <button onclick="sw(this,'s_resched')">Appointment Rescheduled</button>
-    <button onclick="sw(this,'s_uc')">Under Contract</button>
-    <button onclick="sw(this,'s_cold')">Cold</button>
-    <button onclick="sw(this,'s_unq')">Unqualified</button>
-  </div>
-  <div class="nav-group">
-    <div class="nav-label">Investor</div>
-    <button onclick="sw(this,'inv')">Investor / Flipper</button>
-  </div>
-  <div class="nav-group">
-    <div class="nav-label">Past Buyers</div>
-    <button onclick="sw(this,'pb_closed')">Closed</button>
-    <button onclick="sw(this,'pb_past')">Past Buyer</button>
-    <button onclick="sw(this,'pb_lookbuy')">Looking to buy</button>
-    <button onclick="sw(this,'pb_looksell')">Looking to sell</button>
-  </div>
-  <div class="nav-group">
-    <div class="nav-label">Past Sellers</div>
-    <button onclick="sw(this,'ps_closed')">Closed</button>
-    <button onclick="sw(this,'ps_past')">Past Seller</button>
-    <button onclick="sw(this,'ps_looksell')">Looking to sell</button>
-    <button onclick="sw(this,'ps_lookbuy')">Looking to buy</button>
-  </div>
-  <div class="nav-group">
-    <div class="nav-label">Lost</div>
-    <button onclick="sw(this,'lost_buy')">Bought w/ other agent</button>
-    <button onclick="sw(this,'lost_sell')">Sold w/ other agent</button>
-  </div>
-</div>
-
-<div class="content">
-
 <!-- TOOLKIT -->
-<div id="tk" class="panel active">
-  <div class="panel-title">Universal Touchpoint Toolkit</div>
-  <div class="panel-desc">Every pipeline draws from these tools. <strong>Auto</strong> fires through GHL/N8N automatically. <strong>Manual</strong> requires Adrian or Graeham action.</div>
-  <div class="panel-note">RCS NOTE: GHL does not natively support RCS. Video GIFs send as MMS via Twilio. True RCS is a PropFlow build target.</div>
-  <div class="legend">
-    <span><span class="t t-call">Live Call</span> Adrian or Graeham</span>
-    <span><span class="t t-vip">Lipdub MMS</span> Personalized video — VIP touch</span>
-    <span><span class="t t-static">Static GIF MMS</span> Pre-recorded video</span>
-    <span><span class="t t-heygen">HeyGen Email</span> AI avatar video</span>
-    <span><span class="t t-aitext">AI Text</span> GHL automated</span>
-    <span><span class="t t-aicall">AI Call</span> GHL automated</span>
-    <span><span class="t t-vm">VM Drop</span> Slybroadcast / N8N</span>
-    <span><span class="t t-task">Task</span> Manual review</span>
+<details class="pl1" id="pl-toolkit">
+  <summary>Universal Touchpoint Toolkit <span class="meta">Reference · 10 tools</span></summary>
+  <div class="pl1-body">
+    <div class="legend">
+      <span><span class="t t-call">Live Call</span> Adrian or Graeham</span>
+      <span><span class="t t-vip">Lipdub</span> Personalized video — VIP touch</span>
+      <span><span class="t t-static">Static GIF</span> Pre-recorded video</span>
+      <span><span class="t t-heygen">HeyGen</span> AI avatar video</span>
+      <span><span class="t t-aitext">AI Text</span> GHL automated</span>
+      <span><span class="t t-aicall">AI Call</span> GHL automated</span>
+      <span><span class="t t-vm">VM</span> Slybroadcast / N8N</span>
+      <span><span class="t t-task">Task</span> Manual review</span>
+    </div>
+    <div class="tk-grid">
+      <div class="tk-card"><h4>Live Call</h4><p>Adrian or Graeham dials directly. Always the first attempt on any new lead. Most powerful touch — used at the highest-intent moments.</p></div>
+      <div class="tk-card"><h4>Voicemail Drop</h4><p>Slybroadcast via N8N — fires within 2 minutes of a missed call automatically. Pre-recorded message from Graeham. Do NOT use GHL native VM.</p></div>
+      <div class="tk-card"><h4>Lipdub GIF MMS</h4><p>Personalized video — Lipdub changes the name Graeham says while keeping the same recording. Sent as animated GIF + calendar link. Per-video cost — use surgically.</p></div>
+      <div class="tk-card"><h4>Static Video GIF MMS</h4><p>Pre-recorded "feels personal" video, no name called out. Jason builds a library of 6–8. Free to send at scale.</p></div>
+      <div class="tk-card"><h4>HeyGen Video Email</h4><p>AI avatar video for market updates, process explainers, buyer/seller guides. Cheaper than Lipdub for educational content at scale.</p></div>
+      <div class="tk-card"><h4>AI Agent Text</h4><p>GHL AI sends automated texts. Mid-drip check-ins, listing alerts, casual GIF touches. Adrian only steps in if lead responds.</p></div>
+      <div class="tk-card"><h4>AI Agent Call</h4><p>GHL AI outbound call. If no answer, Slybroadcast VM fires automatically via N8N. Adrian steps in only if lead engages.</p></div>
+      <div class="tk-card"><h4>ManyChat Messenger</h4><p>Meta ad leads only. Instant Messenger message on form submit (80–90% open rate). Qualifying flow → phone captured → N8N → GHL.</p></div>
+      <div class="tk-card"><h4>Email (GHL)</h4><p>GHL email builder. Educational content, CMAs, market updates, testimonials. Always include a video GIF thumbnail and calendar link.</p></div>
+      <div class="tk-card"><h4>Manual Task</h4><p>Adrian reviews and acts. Routing decisions, pipeline moves, live calls, review asks, showing arrangements. Always log outcome as a Note.</p></div>
+    </div>
   </div>
-  <div class="tk-grid">
-    <div class="tk-card"><h4>Live Call</h4><p>Adrian or Graeham dials directly. Always the first attempt on any new lead or re-engagement. Most powerful touch — used at the highest-intent moments.</p></div>
-    <div class="tk-card"><h4>Voicemail Drop</h4><p>Slybroadcast via N8N — fires within 2 minutes of a missed call automatically. Pre-recorded message from Graeham. Do NOT use GHL native voicemail.</p></div>
-    <div class="tk-card"><h4>Lipdub GIF MMS</h4><p>Personalized video — Lipdub changes the name Graeham says while keeping the same recording. Sent as animated GIF with calendar link. Per-video cost — use surgically. Post-close can be fully automated via N8N + Lipdub API.</p></div>
-    <div class="tk-card"><h4>Static Video GIF MMS</h4><p>Pre-recorded "feels personal" video, no name called out. Sent as animated GIF + calendar link. Jason builds a library of 6–8. Free to send at scale.</p></div>
-    <div class="tk-card"><h4>HeyGen Video Email</h4><p>AI avatar video for market updates, process explainers, buyer/seller guides. Cheaper than Lipdub for educational content at scale. Jason and Ellie produce the library.</p></div>
-    <div class="tk-card"><h4>AI Agent Text</h4><p>GHL AI sends automated texts. Mid-drip check-ins, listing alerts, casual GIF touches. Adrian only steps in if lead responds.</p></div>
-    <div class="tk-card"><h4>AI Agent Call</h4><p>GHL AI outbound call. If no answer, Slybroadcast VM fires automatically via N8N. Adrian steps in only if lead engages.</p></div>
-    <div class="tk-card"><h4>ManyChat Messenger</h4><p>Meta ad leads only. Instant Messenger message on form submit (80–90% open rate). Qualifying flow → phone captured → N8N → GHL → Adrian notified.</p></div>
-    <div class="tk-card"><h4>Email (GHL)</h4><p>GHL email builder. Educational content, CMAs, market updates, testimonials. Always include a video GIF thumbnail and calendar link where relevant.</p></div>
-    <div class="tk-card"><h4>Manual Task</h4><p>Adrian reviews and acts. Routing decisions, pipeline moves, live calls, review asks, showing arrangements. Always log outcome as a Note in GHL.</p></div>
+</details>
+
+<!-- ============ NEW LEADS ============ -->
+<details class="pl1" id="pl-newleads">
+  <summary>New Leads Pipeline <span class="meta">6 stages · entry funnel · 12-day sprint</span></summary>
+  <div class="pl1-body">
+
+    <details class="pl2">
+      <summary>New Lead — Uncontacted <span class="meta">14 day items</span></summary>
+      <div class="pl2-body">
+        <div class="pl2-desc">Every new lead enters here regardless of source. Nobody goes directly to Buyer or Seller. 12-day sprint to qualify and route. Fully automated except Day 1 live call and Day 12 review task.</div>
+
+        <details class="pl3"><summary><span class="day-tag">Day 0</span><span class="day-types"><span class="t t-mc">ManyChat</span></span><span class="m m-auto">auto</span></summary><div class="pl3-body">Meta leads only. Instant Messenger fires on form submit with GIF intro + "Are you looking to buy or sell?" Qualifying flow captures phone → N8N → GHL → Adrian notified. All other sources skip to Day 1.</div></details>
+        <details class="pl3"><summary><span class="day-tag">Day 1 · 5min</span><span class="day-types"><span class="t t-call">Live Call</span></span><span class="m m-manual">manual</span></summary><div class="pl3-body">Adrian calls immediately. Use Buyer or Seller script depending on form type. <strong>Goal:</strong> qualify timeline, understand intent, book appointment if possible.</div></details>
+        <details class="pl3"><summary><span class="day-tag">Day 1 · No ans</span><span class="day-types"><span class="t t-vm">VM</span><span class="t t-vip">Lipdub</span></span><span class="m m-auto">auto</span></summary><div class="pl3-body">Slybroadcast VM fires via N8N + simultaneous Lipdub GIF: <em>"Hi [Name], this is Graeham — I just tried to reach you. I'd love to connect and help."</em> + calendar link.</div></details>
+        <details class="pl3"><summary><span class="day-tag">Day 1 · +1hr</span><span class="day-types"><span class="t t-email">Email</span></span><span class="m m-auto">auto</span></summary><div class="pl3-body">Same Lipdub video embedded as GIF + intro to Graeham + graehamwatts.com + calendar link. <strong>Subject:</strong> "I just tried to reach you — quick video inside."</div></details>
+        <details class="pl3"><summary><span class="day-tag">Day 2</span><span class="day-types"><span class="t t-aitext">AI Text</span></span><span class="m m-auto">auto</span></summary><div class="pl3-body"><em>"Hey [Name], did you get a chance to watch the video? Happy to answer any questions — just reply or grab a time."</em> + calendar link.</div></details>
+        <details class="pl3"><summary><span class="day-tag">Day 3</span><span class="day-types"><span class="t t-aicall">AI Call</span><span class="t t-vm">VM</span></span><span class="m m-auto">auto</span></summary><div class="pl3-body">AI agent call. If no answer: Slybroadcast VM with different angle, mentions a recent sale or listing in their area.</div></details>
+        <details class="pl3"><summary><span class="day-tag">Day 4</span><span class="day-types"><span class="t t-static">Static GIF</span></span><span class="m m-auto">auto</span></summary><div class="pl3-body"><em>"Hey, wanted to share a quick video about how we work with [buyers/sellers] in EPA."</em> Jason library asset — no name needed. + calendar link.</div></details>
+        <details class="pl3"><summary><span class="day-tag">Day 5</span><span class="day-types"><span class="t t-heygen">HeyGen</span></span><span class="m m-auto">auto</span></summary><div class="pl3-body">HeyGen market update for their target area embedded as GIF. <strong>Subject:</strong> "What the EPA market looks like right now." Educational, no pitch.</div></details>
+        <details class="pl3"><summary><span class="day-tag">Day 7</span><span class="day-types"><span class="t t-aicall">AI Call</span><span class="t t-vm">VM</span></span><span class="m m-auto">auto</span></summary><div class="pl3-body">Second AI call + Slybroadcast VM. Different message — timely market stat or new listing in their target area.</div></details>
+        <details class="pl3"><summary><span class="day-tag">Day 8</span><span class="day-types"><span class="t t-email">Email</span></span><span class="m m-auto">auto</span></summary><div class="pl3-body">Testimonial video matching their type. YouTube GIF thumbnail. <strong>Subject:</strong> "How we helped a family just like yours."</div></details>
+        <details class="pl3"><summary><span class="day-tag">Day 9</span><span class="day-types"><span class="t t-aitext">AI Text</span></span><span class="m m-auto">auto</span></summary><div class="pl3-body">GIF text — casual. <em>"Still thinking about [buying/selling]? No rush — here's my calendar if you ever want to chat."</em></div></details>
+        <details class="pl3"><summary><span class="day-tag">Day 10</span><span class="day-types"><span class="t t-call">Live Call</span></span><span class="m m-manual">manual</span></summary><div class="pl3-body">Adrian second personal call. Different time of day from Day 1. Use buyer or seller script — note any responses received.</div></details>
+        <details class="pl3"><summary><span class="day-tag">Day 11</span><span class="day-types"><span class="t t-static">Static GIF</span></span><span class="m m-auto">auto</span></summary><div class="pl3-body"><em>"Here's how we've helped families in the area find success."</em> YouTube video as GIF + calendar link.</div></details>
+        <details class="pl3"><summary><span class="day-tag">Day 12</span><span class="day-types"><span class="t t-aitext">AI Text</span></span><span class="m m-auto">auto</span></summary><div class="pl3-body"><em>"Last reach out for now — if your plans change, I'd love to help. Should I keep you in the loop on the market? Reply Yes or No."</em></div></details>
+        <details class="pl3"><summary><span class="day-tag">Day 12 · EOD</span><span class="day-types"><span class="t t-task">Task</span></span><span class="m m-manual">manual</span></summary><div class="pl3-body"><strong>ADRIAN:</strong> Review all data. Route to correct pipeline. Active/Within 3mo/Under 9mo/Over 9mo Buyer or Seller. Cold if no engagement. Unqualified if spam/wrong number. Nobody stays in New Leads after Day 12.</div></details>
+      </div>
+    </details>
+
+    <details class="pl2">
+      <summary>Contacted — No Response <span class="meta">continues sprint</span></summary>
+      <div class="pl2-body">
+        <div class="pl2-desc">Adrian reached the contact (call answered or message replied) but they didn't engage meaningfully. Continues the 12-day sprint cadence with adjusted messaging. Persistent no-response → Cold (within New Leads).</div>
+        <div class="stub-row"><strong>Cadence:</strong> Continues Days 2–12 of the New — Uncontacted sequence. <strong>Adjustment:</strong> Adrian's Day 10 call references the prior contact attempt explicitly ("we connected briefly on [date], wanted to follow up").</div>
+      </div>
+    </details>
+
+    <details class="pl2">
+      <summary>Contacted — Responded <span class="meta">5 day items · highest priority</span></summary>
+      <div class="pl2-body">
+        <div class="pl2-desc">Lead replied with intent. Highest-priority stage in New Leads. Adrian's goal: book consultation in next 48 hours and route to correct active pipeline. Cadence accelerates.</div>
+        <details class="pl3"><summary><span class="day-tag">+15 min</span><span class="day-types"><span class="t t-call">Live Call</span></span><span class="m m-manual">manual</span></summary><div class="pl3-body">Adrian calls back immediately. Discovery: timeline, criteria, motivation. Push for consultation booking.</div></details>
+        <details class="pl3"><summary><span class="day-tag">+1 hr</span><span class="day-types"><span class="t t-aitext">AI Text</span></span><span class="m m-auto">auto</span></summary><div class="pl3-body">If no live answer: <em>"Hey [Name], thanks for the reply — Adrian here. Grabbed a few options for you. When works for a quick 15-min call?"</em> + calendar link.</div></details>
+        <details class="pl3"><summary><span class="day-tag">Day 1</span><span class="day-types"><span class="t t-vip">Lipdub</span></span><span class="m m-auto">auto</span></summary><div class="pl3-body">Personalized Lipdub from Graeham. <em>"Hi [Name], excited you reached out — here's how I help [buyers/sellers] in EPA."</em> + calendar link.</div></details>
+        <details class="pl3"><summary><span class="day-tag">Day 2</span><span class="day-types"><span class="t t-call">Live Call</span></span><span class="m m-manual">manual</span></summary><div class="pl3-body">Adrian second attempt if no booking yet.</div></details>
+        <details class="pl3"><summary><span class="day-tag">Day 3</span><span class="day-types"><span class="t t-task">Task</span></span><span class="m m-manual">manual</span></summary><div class="pl3-body"><strong>ADRIAN:</strong> If consultation booked → Appointment Scheduled. If qualified but not yet booked → route to active pipeline by timeline. If unresponsive after responding → back to Contacted - No Response.</div></details>
+      </div>
+    </details>
+
+    <details class="pl2">
+      <summary>Email/Text Only <span class="meta">drip — no calls</span></summary>
+      <div class="pl2-body">
+        <div class="pl2-desc">Lead engages via email or text but refuses calls. Long-cadence drip — pure value, no calls. After 14 days of sustained engagement → route to active pipeline.</div>
+        <div class="stub-row"><strong>Cadence:</strong> AI Text every 5 days, HeyGen Email every 10 days, Static GIF MMS every 14 days. <strong>No live calls.</strong> If they break silence and ask to talk, Adrian responds within 15 minutes. Day 14 task: Adrian re-evaluates, routes if engaged.</div>
+      </div>
+    </details>
+
+    <details class="pl2">
+      <summary>Cold <span class="meta">quarterly nurture</span></summary>
+      <div class="pl2-body">
+        <div class="pl2-desc">Sprint completed with zero meaningful engagement. Quarterly low-touch nurture — they may warm up with time. After 365 days zero engagement → Unqualified.</div>
+        <div class="stub-row"><strong>Cadence:</strong> 1 touch every 90 days — alternating HeyGen market video and Static GIF MMS.</div>
+      </div>
+    </details>
+
+    <details class="pl2">
+      <summary>Unqualified <span class="meta">archive</span></summary>
+      <div class="pl2-body">
+        <div class="pl2-desc">Spam, wrong number, bad email, or explicitly not interested. No further automated touches. DND tag applied where applicable. Kept in CRM for record only.</div>
+        <div class="stub-row"><strong>No cadence.</strong> Holding stage — no further outbound.</div>
+      </div>
+    </details>
+
   </div>
-</div>
-
-<!-- ============ NEW LEADS PIPELINE ============ -->
-
-<!-- New Lead - Uncontacted -->
-<div id="nl_uncontacted" class="panel">
-  <div class="panel-title">New Lead — Uncontacted <span class="stage-pill">New Leads pipeline</span></div>
-  <div class="panel-sub">Stage 1 of 6 • Entry funnel</div>
-  <div class="panel-desc">Every new lead enters here regardless of source. Nobody goes directly to Buyer or Seller. 12-day sprint — qualify and route within 12 days. Fully automated except Day 1 live call and Day 12 review task.</div>
-  <table>
-    <thead><tr><th>Day</th><th>Type</th><th>Action</th><th>Mode</th></tr></thead>
-    <tbody>
-      <tr><td class="day">Day 0<span class="sub">Instant</span></td><td><span class="t t-mc">ManyChat</span></td><td>Meta leads only: Instant Messenger fires on form submit. GIF intro + "Are you looking to buy or sell?" Qualifying flow captures phone → N8N → GHL → Adrian notified. All other sources skip to Day 1.</td><td><span class="m m-auto">auto</span></td></tr>
-      <tr><td class="day">Day 1<span class="sub">5 min</span></td><td><span class="t t-call">Live Call</span></td><td>Adrian calls immediately. Use Buyer or Seller script depending on form type. Goal: qualify timeline, understand intent, book appointment if possible.</td><td><span class="m m-manual">manual</span></td></tr>
-      <tr><td class="day">Day 1<span class="sub">No answer</span></td><td><span class="t t-vm">VM Drop</span> <span class="t t-vip">Lipdub</span></td><td>Slybroadcast VM fires via N8N + simultaneous Lipdub GIF: "Hi [Name], this is Graeham — I just tried to reach you. I'd love to connect and help." + calendar link.</td><td><span class="m m-auto">auto</span></td></tr>
-      <tr><td class="day">Day 1<span class="sub">+1 hr</span></td><td><span class="t t-email">Email</span></td><td>Same Lipdub video embedded as GIF + intro to Graeham + graehamwatts.com + calendar link. Subject: "I just tried to reach you — quick video inside."</td><td><span class="m m-auto">auto</span></td></tr>
-      <tr><td class="day">Day 2</td><td><span class="t t-aitext">AI Text</span></td><td>"Hey [Name], did you get a chance to watch the video? Happy to answer any questions — just reply or grab a time." + calendar link.</td><td><span class="m m-auto">auto</span></td></tr>
-      <tr><td class="day">Day 3</td><td><span class="t t-aicall">AI Call</span> <span class="t t-vm">VM</span></td><td>AI agent call. If no answer: Slybroadcast VM — different angle, mentions a recent sale or listing in their area.</td><td><span class="m m-auto">auto</span></td></tr>
-      <tr><td class="day">Day 4</td><td><span class="t t-static">Static GIF</span></td><td>"Hey, wanted to share a quick video about how we work with [buyers/sellers] in EPA." Jason library asset — no name needed. + calendar link.</td><td><span class="m m-auto">auto</span></td></tr>
-      <tr><td class="day">Day 5</td><td><span class="t t-heygen">HeyGen</span></td><td>HeyGen market update for their target area embedded as GIF. Subject: "What the EPA market looks like right now." Educational, no pitch.</td><td><span class="m m-auto">auto</span></td></tr>
-      <tr><td class="day">Day 7</td><td><span class="t t-aicall">AI Call</span> <span class="t t-vm">VM</span></td><td>Second AI call + Slybroadcast VM. Different message — timely market stat or new listing in their target area.</td><td><span class="m m-auto">auto</span></td></tr>
-      <tr><td class="day">Day 8</td><td><span class="t t-email">Email</span></td><td>Testimonial video matching their type. YouTube GIF thumbnail. Subject: "How we helped a family just like yours."</td><td><span class="m m-auto">auto</span></td></tr>
-      <tr><td class="day">Day 9</td><td><span class="t t-aitext">AI Text</span></td><td>GIF text — casual. "Still thinking about [buying/selling]? No rush — here's my calendar if you ever want to chat."</td><td><span class="m m-auto">auto</span></td></tr>
-      <tr><td class="day">Day 10</td><td><span class="t t-call">Live Call</span></td><td>Adrian second personal call. Different time of day from Day 1. Use buyer or seller script — note any responses received.</td><td><span class="m m-manual">manual</span></td></tr>
-      <tr><td class="day">Day 11</td><td><span class="t t-static">Static GIF</span></td><td>"Here's how we've helped families in the area find success." YouTube video as GIF + calendar link.</td><td><span class="m m-auto">auto</span></td></tr>
-      <tr><td class="day">Day 12</td><td><span class="t t-aitext">AI Text</span></td><td>"Last reach out for now — if your plans change, I'd love to help. Should I keep you in the loop on the market? Reply Yes or No."</td><td><span class="m m-auto">auto</span></td></tr>
-      <tr><td class="day">Day 12<span class="sub">EOD</span></td><td><span class="t t-task">Task</span></td><td><strong>ADRIAN:</strong> Review all data. Route to correct pipeline. Active/Within 3mo/Under 9mo/Over 9mo Buyer or Seller. Cold if no engagement. Unqualified if spam/wrong number. Nobody stays in New Leads after Day 12.</td><td><span class="m m-manual">manual</span></td></tr>
-    </tbody>
-  </table>
-</div>
-
-<div id="nl_no_response" class="panel">
-  <div class="panel-title">Contacted — No Response <span class="stage-pill">New Leads pipeline</span></div>
-  <div class="panel-sub">Stage 2 of 6</div>
-  <div class="panel-desc">Adrian reached the contact (call answered or message replied) but they didn't engage meaningfully. Continues the 12-day sprint cadence above with adjusted messaging. After Day 12, Adrian re-evaluates; persistent no-response → Cold (within New Leads).</div>
-  <div class="stub"><strong>Cadence:</strong> Continues Days 2–12 of the New — Uncontacted sequence. <strong>Adjustment:</strong> Adrian's Day 10 call references the prior contact attempt explicitly ("we connected briefly on [date], wanted to follow up").</div>
-</div>
-
-<div id="nl_responded" class="panel">
-  <div class="panel-title">Contacted — Responded <span class="stage-pill">New Leads pipeline</span></div>
-  <div class="panel-sub">Stage 3 of 6</div>
-  <div class="panel-desc">Lead replied with intent. Highest-priority stage in New Leads. Adrian's goal: book a consultation in the next 48 hours and route to the correct active pipeline. Cadence accelerates.</div>
-  <table>
-    <thead><tr><th>Timing</th><th>Type</th><th>Action</th><th>Mode</th></tr></thead>
-    <tbody>
-      <tr><td class="day">+15 min</td><td><span class="t t-call">Live Call</span></td><td>Adrian calls back immediately. Discovery: timeline, criteria, motivation. Push for consultation booking.</td><td><span class="m m-manual">manual</span></td></tr>
-      <tr><td class="day">+1 hr</td><td><span class="t t-aitext">AI Text</span></td><td>If no live answer: "Hey [Name], thanks for the reply — Adrian here. Grabbed a few options for you. When works for a quick 15-min call?" + calendar link.</td><td><span class="m m-auto">auto</span></td></tr>
-      <tr><td class="day">Day 1</td><td><span class="t t-vip">Lipdub</span></td><td>Personalized Lipdub from Graeham. "Hi [Name], excited you reached out — here's how I help [buyers/sellers] in EPA." + calendar link.</td><td><span class="m m-auto">auto</span></td></tr>
-      <tr><td class="day">Day 2</td><td><span class="t t-call">Live Call</span></td><td>Adrian second attempt if no booking yet.</td><td><span class="m m-manual">manual</span></td></tr>
-      <tr><td class="day">Day 3</td><td><span class="t t-task">Task</span></td><td><strong>ADRIAN:</strong> If consultation booked → Appointment Scheduled. If qualified but not yet booked → route to active pipeline by timeline. If unresponsive after responding → back to Contacted - No Response.</td><td><span class="m m-manual">manual</span></td></tr>
-    </tbody>
-  </table>
-</div>
-
-<div id="nl_email_only" class="panel">
-  <div class="panel-title">Email/Text Only <span class="stage-pill">New Leads pipeline</span></div>
-  <div class="panel-sub">Stage 4 of 6</div>
-  <div class="panel-desc">Lead engages via email or text but refuses calls. Long-cadence drip — pure value, no calls. After 14 days of sustained engagement → route to active pipeline at appropriate timeline tier.</div>
-  <div class="stub"><strong>Cadence:</strong> AI Text every 5 days, HeyGen Email every 10 days, Static GIF MMS every 14 days. <strong>No live calls.</strong> If they break silence and ask to talk, Adrian responds within 15 minutes. Day 14 task: Adrian re-evaluates, routes if engaged.</div>
-</div>
-
-<div id="nl_cold" class="panel">
-  <div class="panel-title">Cold <span class="stage-pill">New Leads pipeline</span></div>
-  <div class="panel-sub">Stage 5 of 6</div>
-  <div class="panel-desc">Sprint completed with zero meaningful engagement. Quarterly low-touch nurture — they may warm up with time. Same as Cold Buyer/Seller but no active pipeline tag yet.</div>
-  <div class="stub"><strong>Cadence:</strong> 1 touch every 90 days — alternating HeyGen market video and Static GIF MMS. After 365 days zero engagement → Unqualified.</div>
-</div>
-
-<div id="nl_unqualified" class="panel">
-  <div class="panel-title">Unqualified <span class="stage-pill">New Leads pipeline</span></div>
-  <div class="panel-sub">Stage 6 of 6</div>
-  <div class="panel-desc">Spam, wrong number, bad email, or explicitly not interested. No further automated touches. DND tag applied where applicable. Kept in CRM for record only.</div>
-  <div class="stub"><strong>No cadence.</strong> Holding stage — no further outbound.</div>
-</div>
+</details>
 
 <!-- ============ BUYER PIPELINE ============ -->
+<details class="pl1" id="pl-buyer">
+  <summary>Buyer Pipeline <span class="meta">10 stages · active buyer track</span></summary>
+  <div class="pl1-body">
 
-<div id="b_active" class="panel">
-  <div class="panel-title">Active Buyer <span class="stage-pill">Buyer Pipeline</span></div>
-  <div class="panel-sub">Highest-intent buyer, immediate</div>
-  <div class="panel-desc">Confirmed buyer who completed New Leads sprint with strong intent and clear timeline. Routing destination from "Contacted - Responded" with a booked or imminent consultation. High-frequency cadence.</div>
-  <table>
-    <thead><tr><th>Day</th><th>Type</th><th>Action</th><th>Mode</th></tr></thead>
-    <tbody>
-      <tr><td class="day">Day 1</td><td><span class="t t-call">Live Call</span></td><td>Adrian confirms timeline + criteria, sets expectations, books consultation with Graeham within 7 days.</td><td><span class="m m-manual">manual</span></td></tr>
-      <tr><td class="day">Day 2</td><td><span class="t t-heygen">HeyGen</span></td><td>"How we work with active buyers" — what to expect, how Graeham operates. Calendar link.</td><td><span class="m m-auto">auto</span></td></tr>
-      <tr><td class="day">Day 3</td><td><span class="t t-aitext">AI Text</span></td><td>Saved search confirmation + first matching listings.</td><td><span class="m m-auto">auto</span></td></tr>
-      <tr><td class="day">Day 5</td><td><span class="t t-vip">Lipdub</span></td><td>"Hi [Name], excited to help you find your home. I have some great options I'm eyeing for you." + calendar link.</td><td><span class="m m-auto">auto</span></td></tr>
-      <tr><td class="day">Day 7</td><td><span class="t t-task">Task</span></td><td><strong>ADRIAN:</strong> Push for consultation booking. If booked → Appointment Scheduled. If timeline solidifies into 0–3mo → Within 3 Months. If softens → Under 9 Months.</td><td><span class="m m-manual">manual</span></td></tr>
-    </tbody>
-  </table>
-</div>
+    <details class="pl2">
+      <summary>Active Buyer <span class="meta">5 day items · highest intent immediate</span></summary>
+      <div class="pl2-body">
+        <div class="pl2-desc">Confirmed buyer who completed New Leads sprint with strong intent and clear timeline. High-frequency cadence to consultation.</div>
+        <details class="pl3"><summary><span class="day-tag">Day 1</span><span class="day-types"><span class="t t-call">Live Call</span></span><span class="m m-manual">manual</span></summary><div class="pl3-body">Adrian confirms timeline + criteria, sets expectations, books consultation with Graeham within 7 days.</div></details>
+        <details class="pl3"><summary><span class="day-tag">Day 2</span><span class="day-types"><span class="t t-heygen">HeyGen</span></span><span class="m m-auto">auto</span></summary><div class="pl3-body">"How we work with active buyers" — what to expect, how Graeham operates. Calendar link.</div></details>
+        <details class="pl3"><summary><span class="day-tag">Day 3</span><span class="day-types"><span class="t t-aitext">AI Text</span></span><span class="m m-auto">auto</span></summary><div class="pl3-body">Saved search confirmation + first matching listings.</div></details>
+        <details class="pl3"><summary><span class="day-tag">Day 5</span><span class="day-types"><span class="t t-vip">Lipdub</span></span><span class="m m-auto">auto</span></summary><div class="pl3-body"><em>"Hi [Name], excited to help you find your home. I have some great options I'm eyeing for you."</em> + calendar link.</div></details>
+        <details class="pl3"><summary><span class="day-tag">Day 7</span><span class="day-types"><span class="t t-task">Task</span></span><span class="m m-manual">manual</span></summary><div class="pl3-body"><strong>ADRIAN:</strong> Push for consultation booking. Booked → Appointment Scheduled. Timeline 0–3mo → Within 3 Months. Softens → Under 9 Months.</div></details>
+      </div>
+    </details>
 
-<div id="b_3mo" class="panel">
-  <div class="panel-title">Buyer – Within 3 Months <span class="stage-pill">Buyer Pipeline</span></div>
-  <div class="panel-sub">High intent, 0–3 month timeline</div>
-  <div class="panel-desc">Real urgency. Goal: get to consultation within 30 days. High frequency — every 5–7 days. 90-day sequence.</div>
-  <table>
-    <thead><tr><th>Day</th><th>Type</th><th>Action</th><th>Mode</th></tr></thead>
-    <tbody>
-      <tr><td class="day">Day 1</td><td><span class="t t-call">Live Call</span></td><td>Adrian. Confirm timeline, must-haves, offer saved search, push for consultation.</td><td><span class="m m-manual">manual</span></td></tr>
-      <tr><td class="day">Day 1<span class="sub">No ans</span></td><td><span class="t t-vm">VM</span> <span class="t t-vip">Lipdub</span></td><td>Slybroadcast VM + Lipdub: "Hi [Name], excited to help you find your home in EPA — I already have some great options in mind." + calendar link.</td><td><span class="m m-auto">auto</span></td></tr>
-      <tr><td class="day">Day 3</td><td><span class="t t-heygen">HeyGen</span></td><td>"How we work with buyers" process video. Sets expectations, builds trust.</td><td><span class="m m-auto">auto</span></td></tr>
-      <tr><td class="day">Day 5</td><td><span class="t t-aitext">AI Text</span></td><td>Saved search confirmation + first listing alert. "Just set up your home search — first matches inside."</td><td><span class="m m-auto">auto</span></td></tr>
-      <tr><td class="day">Day 7</td><td><span class="t t-static">Static GIF</span></td><td>"Hey, I've been keeping an eye out for properties matching what you want." + calendar link.</td><td><span class="m m-auto">auto</span></td></tr>
-      <tr><td class="day">Day 10</td><td><span class="t t-email">Email</span></td><td>Buyer testimonial. GIF thumbnail. Subject: "How [first name] found their home in EPA in 6 weeks."</td><td><span class="m m-auto">auto</span></td></tr>
-      <tr><td class="day">Day 14</td><td><span class="t t-aicall">AI Call</span> <span class="t t-vm">VM</span></td><td>References a current listing matching their criteria.</td><td><span class="m m-auto">auto</span></td></tr>
-      <tr><td class="day">Day 17</td><td><span class="t t-aitext">AI Text</span></td><td>New listing alert — GIF thumbnail. "Just hit the market — matches your criteria."</td><td><span class="m m-auto">auto</span></td></tr>
-      <tr><td class="day">Day 21</td><td><span class="t t-heygen">HeyGen</span></td><td>Market update for their target area. Stats, trends, inventory.</td><td><span class="m m-auto">auto</span></td></tr>
-      <tr><td class="day">Day 25</td><td><span class="t t-call">Live Call</span></td><td>Adrian second personal call. Reference listings sent. Soft push toward tour or consultation.</td><td><span class="m m-manual">manual</span></td></tr>
-      <tr><td class="day">Day 30</td><td><span class="t t-vip">Lipdub</span></td><td>"Hi [Name], checking in on your home search — market is moving, want to make sure you don't miss anything."</td><td><span class="m m-auto">auto</span></td></tr>
-      <tr><td class="day">Day 35</td><td><span class="t t-email">Email</span></td><td>Educational — mortgage tips, inspection overview, how to win in competitive market. Pure value.</td><td><span class="m m-auto">auto</span></td></tr>
-      <tr><td class="day">Day 42</td><td><span class="t t-aicall">AI Call</span> <span class="t t-vm">VM</span></td><td>Different angle — interest rate update or market shift relevant now.</td><td><span class="m m-auto">auto</span></td></tr>
-      <tr><td class="day">Day 45</td><td><span class="t t-static">Static GIF</span></td><td>"I have a property I think you'd love." Walkthrough video + calendar link.</td><td><span class="m m-auto">auto</span></td></tr>
-      <tr><td class="day">Day 52</td><td><span class="t t-aitext">AI Text</span></td><td>GIF casual. "Any properties caught your eye lately? Happy to arrange a showing."</td><td><span class="m m-auto">auto</span></td></tr>
-      <tr><td class="day">Day 60</td><td><span class="t t-email">Email</span></td><td>Second buyer testimonial — different profile.</td><td><span class="m m-auto">auto</span></td></tr>
-      <tr><td class="day">Day 67</td><td><span class="t t-aicall">AI Call</span> <span class="t t-vm">VM</span></td><td>Market is competitive — worth getting ahead of it.</td><td><span class="m m-auto">auto</span></td></tr>
-      <tr><td class="day">Day 75</td><td><span class="t t-call">Live Call</span></td><td>Adrian third personal call. Timeline check.</td><td><span class="m m-manual">manual</span></td></tr>
-      <tr><td class="day">Day 82</td><td><span class="t t-vip">Lipdub</span></td><td>"Hi [Name], market is moving — let's connect soon." + calendar link.</td><td><span class="m m-auto">auto</span></td></tr>
-      <tr><td class="day">Day 90</td><td><span class="t t-task">Task</span></td><td><strong>ADRIAN:</strong> Booked → Appointment Scheduled. Timeline extended → Under 9 Months. Silent 60+ → Cold.</td><td><span class="m m-manual">manual</span></td></tr>
-    </tbody>
-  </table>
-</div>
+    <details class="pl2">
+      <summary>Buyer – Within 3 Months <span class="meta">20 day items · 90-day sequence</span></summary>
+      <div class="pl2-body">
+        <div class="pl2-desc">Real urgency. Goal: get to consultation within 30 days. High frequency — every 5–7 days.</div>
+        <details class="pl3"><summary><span class="day-tag">Day 1</span><span class="day-types"><span class="t t-call">Live Call</span></span><span class="m m-manual">manual</span></summary><div class="pl3-body">Adrian. Confirm timeline, must-haves, offer saved search, push for consultation.</div></details>
+        <details class="pl3"><summary><span class="day-tag">Day 1 · No ans</span><span class="day-types"><span class="t t-vm">VM</span><span class="t t-vip">Lipdub</span></span><span class="m m-auto">auto</span></summary><div class="pl3-body"><em>"Hi [Name], excited to help you find your home in EPA — I already have some great options in mind."</em> + calendar link.</div></details>
+        <details class="pl3"><summary><span class="day-tag">Day 3</span><span class="day-types"><span class="t t-heygen">HeyGen</span></span><span class="m m-auto">auto</span></summary><div class="pl3-body">"How we work with buyers" process video. Sets expectations, builds trust.</div></details>
+        <details class="pl3"><summary><span class="day-tag">Day 5</span><span class="day-types"><span class="t t-aitext">AI Text</span></span><span class="m m-auto">auto</span></summary><div class="pl3-body">Saved search confirmation + first listing alert. <em>"Just set up your home search — first matches inside."</em></div></details>
+        <details class="pl3"><summary><span class="day-tag">Day 7</span><span class="day-types"><span class="t t-static">Static GIF</span></span><span class="m m-auto">auto</span></summary><div class="pl3-body"><em>"Hey, I've been keeping an eye out for properties matching what you want."</em> + calendar link.</div></details>
+        <details class="pl3"><summary><span class="day-tag">Day 10</span><span class="day-types"><span class="t t-email">Email</span></span><span class="m m-auto">auto</span></summary><div class="pl3-body">Buyer testimonial. <strong>Subject:</strong> "How [first name] found their home in EPA in 6 weeks."</div></details>
+        <details class="pl3"><summary><span class="day-tag">Day 14</span><span class="day-types"><span class="t t-aicall">AI Call</span><span class="t t-vm">VM</span></span><span class="m m-auto">auto</span></summary><div class="pl3-body">References a current listing matching their criteria.</div></details>
+        <details class="pl3"><summary><span class="day-tag">Day 17</span><span class="day-types"><span class="t t-aitext">AI Text</span></span><span class="m m-auto">auto</span></summary><div class="pl3-body">New listing alert — GIF thumbnail. <em>"Just hit the market — matches your criteria."</em></div></details>
+        <details class="pl3"><summary><span class="day-tag">Day 21</span><span class="day-types"><span class="t t-heygen">HeyGen</span></span><span class="m m-auto">auto</span></summary><div class="pl3-body">Market update for their target area. Stats, trends, inventory.</div></details>
+        <details class="pl3"><summary><span class="day-tag">Day 25</span><span class="day-types"><span class="t t-call">Live Call</span></span><span class="m m-manual">manual</span></summary><div class="pl3-body">Adrian second personal call. Reference listings sent. Soft push toward tour or consultation.</div></details>
+        <details class="pl3"><summary><span class="day-tag">Day 30</span><span class="day-types"><span class="t t-vip">Lipdub</span></span><span class="m m-auto">auto</span></summary><div class="pl3-body"><em>"Hi [Name], checking in on your home search — market is moving, want to make sure you don't miss anything."</em></div></details>
+        <details class="pl3"><summary><span class="day-tag">Day 35</span><span class="day-types"><span class="t t-email">Email</span></span><span class="m m-auto">auto</span></summary><div class="pl3-body">Educational — mortgage tips, inspection overview, how to win in competitive market. Pure value.</div></details>
+        <details class="pl3"><summary><span class="day-tag">Day 42</span><span class="day-types"><span class="t t-aicall">AI Call</span><span class="t t-vm">VM</span></span><span class="m m-auto">auto</span></summary><div class="pl3-body">Different angle — interest rate update or market shift relevant now.</div></details>
+        <details class="pl3"><summary><span class="day-tag">Day 45</span><span class="day-types"><span class="t t-static">Static GIF</span></span><span class="m m-auto">auto</span></summary><div class="pl3-body"><em>"I have a property I think you'd love."</em> Walkthrough video + calendar link.</div></details>
+        <details class="pl3"><summary><span class="day-tag">Day 52</span><span class="day-types"><span class="t t-aitext">AI Text</span></span><span class="m m-auto">auto</span></summary><div class="pl3-body">GIF casual. <em>"Any properties caught your eye lately? Happy to arrange a showing."</em></div></details>
+        <details class="pl3"><summary><span class="day-tag">Day 60</span><span class="day-types"><span class="t t-email">Email</span></span><span class="m m-auto">auto</span></summary><div class="pl3-body">Second buyer testimonial — different profile.</div></details>
+        <details class="pl3"><summary><span class="day-tag">Day 67</span><span class="day-types"><span class="t t-aicall">AI Call</span><span class="t t-vm">VM</span></span><span class="m m-auto">auto</span></summary><div class="pl3-body">Market is competitive — worth getting ahead of it.</div></details>
+        <details class="pl3"><summary><span class="day-tag">Day 75</span><span class="day-types"><span class="t t-call">Live Call</span></span><span class="m m-manual">manual</span></summary><div class="pl3-body">Adrian third personal call. Timeline check.</div></details>
+        <details class="pl3"><summary><span class="day-tag">Day 82</span><span class="day-types"><span class="t t-vip">Lipdub</span></span><span class="m m-auto">auto</span></summary><div class="pl3-body"><em>"Hi [Name], market is moving — let's connect soon."</em> + calendar link.</div></details>
+        <details class="pl3"><summary><span class="day-tag">Day 90</span><span class="day-types"><span class="t t-task">Task</span></span><span class="m m-manual">manual</span></summary><div class="pl3-body"><strong>ADRIAN:</strong> Booked → Appointment Scheduled. Timeline extended → Under 9 Months. Silent 60+ → Cold.</div></details>
+      </div>
+    </details>
 
-<div id="b_under9" class="panel">
-  <div class="panel-title">Buyer - Under 9 Months <span class="stage-pill">Buyer Pipeline</span></div>
-  <div class="panel-sub">Real intent, 3–9 month timeline</div>
-  <div class="panel-desc">Stay top of mind. Moderate frequency — every 10–15 days. 150-day sequence.</div>
-  <table>
-    <thead><tr><th>Day</th><th>Type</th><th>Action</th><th>Mode</th></tr></thead>
-    <tbody>
-      <tr><td class="day">Day 1</td><td><span class="t t-heygen">HeyGen</span></td><td>Welcome + market overview video. Sets expectations. Calendar link.</td><td><span class="m m-auto">auto</span></td></tr>
-      <tr><td class="day">Day 7</td><td><span class="t t-aitext">AI Text</span></td><td>Saved search confirmation. "Just making sure your home alerts are dialed in — anything to adjust?"</td><td><span class="m m-auto">auto</span></td></tr>
-      <tr><td class="day">Day 14</td><td><span class="t t-static">Static GIF</span></td><td>"Hey, keeping you posted while you plan your move." + calendar link.</td><td><span class="m m-auto">auto</span></td></tr>
-      <tr><td class="day">Day 21</td><td><span class="t t-aicall">AI Call</span> <span class="t t-vm">VM</span></td><td>Timeline check — anything changed?</td><td><span class="m m-auto">auto</span></td></tr>
-      <tr><td class="day">Day 30</td><td><span class="t t-heygen">HeyGen</span></td><td>Market update + listings matching criteria. Subject: "What the market looks like this month."</td><td><span class="m m-auto">auto</span></td></tr>
-      <tr><td class="day">Day 45</td><td><span class="t t-aitext">AI Text</span></td><td>"How's the search going? Anything I can help with — even just answering questions?"</td><td><span class="m m-auto">auto</span></td></tr>
-      <tr><td class="day">Day 60</td><td><span class="t t-vip">Lipdub</span></td><td>"Hi [Name], personally checking in — good movement in your target area." + calendar link.</td><td><span class="m m-auto">auto</span></td></tr>
-      <tr><td class="day">Day 75</td><td><span class="t t-email">Email</span></td><td>Buyer testimonial. Subject: "A story that might feel familiar."</td><td><span class="m m-auto">auto</span></td></tr>
-      <tr><td class="day">Day 90</td><td><span class="t t-aicall">AI Call</span> <span class="t t-vm">VM</span></td><td>Getting closer? Pre-approval early matters in this market.</td><td><span class="m m-auto">auto</span></td></tr>
-      <tr><td class="day">Day 105</td><td><span class="t t-static">Static GIF</span></td><td>Specific stat or trend for their target area.</td><td><span class="m m-auto">auto</span></td></tr>
-      <tr><td class="day">Day 120</td><td><span class="t t-heygen">HeyGen</span></td><td>"Here's exactly what working with us looks like." Re-introduces the process.</td><td><span class="m m-auto">auto</span></td></tr>
-      <tr><td class="day">Day 135</td><td><span class="t t-aitext">AI Text</span></td><td>"Still planning to make a move this year? Happy to connect when timing is right."</td><td><span class="m m-auto">auto</span></td></tr>
-      <tr><td class="day">Day 150</td><td><span class="t t-task">Task</span></td><td><strong>ADRIAN:</strong> Timeline shortened → Within 3 Months. Quiet → Over 9 Months. Silent 60+ → Cold.</td><td><span class="m m-manual">manual</span></td></tr>
-    </tbody>
-  </table>
-</div>
+    <details class="pl2">
+      <summary>Buyer - Under 9 Months <span class="meta">13 day items · 150-day sequence</span></summary>
+      <div class="pl2-body">
+        <div class="pl2-desc">Stay top of mind. Moderate frequency — every 10–15 days.</div>
+        <details class="pl3"><summary><span class="day-tag">Day 1</span><span class="day-types"><span class="t t-heygen">HeyGen</span></span><span class="m m-auto">auto</span></summary><div class="pl3-body">Welcome + market overview video. Sets expectations. Calendar link.</div></details>
+        <details class="pl3"><summary><span class="day-tag">Day 7</span><span class="day-types"><span class="t t-aitext">AI Text</span></span><span class="m m-auto">auto</span></summary><div class="pl3-body">Saved search confirmation. <em>"Just making sure your home alerts are dialed in — anything to adjust?"</em></div></details>
+        <details class="pl3"><summary><span class="day-tag">Day 14</span><span class="day-types"><span class="t t-static">Static GIF</span></span><span class="m m-auto">auto</span></summary><div class="pl3-body"><em>"Hey, keeping you posted while you plan your move."</em> + calendar link.</div></details>
+        <details class="pl3"><summary><span class="day-tag">Day 21</span><span class="day-types"><span class="t t-aicall">AI Call</span><span class="t t-vm">VM</span></span><span class="m m-auto">auto</span></summary><div class="pl3-body">Timeline check — anything changed?</div></details>
+        <details class="pl3"><summary><span class="day-tag">Day 30</span><span class="day-types"><span class="t t-heygen">HeyGen</span></span><span class="m m-auto">auto</span></summary><div class="pl3-body">Market update + listings matching criteria. <strong>Subject:</strong> "What the market looks like this month."</div></details>
+        <details class="pl3"><summary><span class="day-tag">Day 45</span><span class="day-types"><span class="t t-aitext">AI Text</span></span><span class="m m-auto">auto</span></summary><div class="pl3-body"><em>"How's the search going? Anything I can help with — even just answering questions?"</em></div></details>
+        <details class="pl3"><summary><span class="day-tag">Day 60</span><span class="day-types"><span class="t t-vip">Lipdub</span></span><span class="m m-auto">auto</span></summary><div class="pl3-body"><em>"Hi [Name], personally checking in — good movement in your target area."</em> + calendar link.</div></details>
+        <details class="pl3"><summary><span class="day-tag">Day 75</span><span class="day-types"><span class="t t-email">Email</span></span><span class="m m-auto">auto</span></summary><div class="pl3-body">Buyer testimonial. <strong>Subject:</strong> "A story that might feel familiar."</div></details>
+        <details class="pl3"><summary><span class="day-tag">Day 90</span><span class="day-types"><span class="t t-aicall">AI Call</span><span class="t t-vm">VM</span></span><span class="m m-auto">auto</span></summary><div class="pl3-body">Getting closer? Pre-approval early matters in this market.</div></details>
+        <details class="pl3"><summary><span class="day-tag">Day 105</span><span class="day-types"><span class="t t-static">Static GIF</span></span><span class="m m-auto">auto</span></summary><div class="pl3-body">Specific stat or trend for their target area.</div></details>
+        <details class="pl3"><summary><span class="day-tag">Day 120</span><span class="day-types"><span class="t t-heygen">HeyGen</span></span><span class="m m-auto">auto</span></summary><div class="pl3-body">"Here's exactly what working with us looks like." Re-introduces the process.</div></details>
+        <details class="pl3"><summary><span class="day-tag">Day 135</span><span class="day-types"><span class="t t-aitext">AI Text</span></span><span class="m m-auto">auto</span></summary><div class="pl3-body"><em>"Still planning to make a move this year? Happy to connect when timing is right."</em></div></details>
+        <details class="pl3"><summary><span class="day-tag">Day 150</span><span class="day-types"><span class="t t-task">Task</span></span><span class="m m-manual">manual</span></summary><div class="pl3-body"><strong>ADRIAN:</strong> Timeline shortened → Within 3 Months. Quiet → Over 9 Months. Silent 60+ → Cold.</div></details>
+      </div>
+    </details>
 
-<div id="b_over9" class="panel">
-  <div class="panel-title">Buyer – Over 9 Months <span class="stage-pill">Buyer Pipeline</span></div>
-  <div class="panel-sub">Genuine interest, distant timeline</div>
-  <div class="panel-desc">Patient, low-frequency approach. 990-day sequence — quarterly to semi-annual touches.</div>
-  <table>
-    <thead><tr><th>Day</th><th>Type</th><th>Action</th><th>Mode</th></tr></thead>
-    <tbody>
-      <tr><td class="day">Day 1</td><td><span class="t t-email">Email</span></td><td>Check-in + comprehensive market guide. "No rush — here's some reading for when the time is right."</td><td><span class="m m-auto">auto</span></td></tr>
-      <tr><td class="day">Day 90</td><td><span class="t t-heygen">HeyGen</span></td><td>Buyer resource — mortgage prep, what to look for.</td><td><span class="m m-auto">auto</span></td></tr>
-      <tr><td class="day">Day 180</td><td><span class="t t-aitext">AI Text</span></td><td>"Hope you're doing well — the market has had some interesting shifts."</td><td><span class="m m-auto">auto</span></td></tr>
-      <tr><td class="day">Day 270</td><td><span class="t t-heygen">HeyGen</span></td><td>Quarterly market report — data-driven, authoritative.</td><td><span class="m m-auto">auto</span></td></tr>
-      <tr><td class="day">Day 360</td><td><span class="t t-email">Email</span></td><td>Buyer success stories. "A year goes fast — here's what buyers who started where you are accomplished."</td><td><span class="m m-auto">auto</span></td></tr>
-      <tr><td class="day">Day 450</td><td><span class="t t-aicall">AI Call</span> <span class="t t-vm">VM</span></td><td>Timeline check — getting closer?</td><td><span class="m m-auto">auto</span></td></tr>
-      <tr><td class="day">Day 540</td><td><span class="t t-aitext">AI Text</span></td><td>"How are your buying plans coming along?"</td><td><span class="m m-auto">auto</span></td></tr>
-      <tr><td class="day">Day 630</td><td><span class="t t-heygen">HeyGen</span></td><td>Market trends — what's changed in the past year.</td><td><span class="m m-auto">auto</span></td></tr>
-      <tr><td class="day">Day 720</td><td><span class="t t-static">Static GIF</span></td><td>Re-engagement. "Hey, been a while — wanted to personally check in."</td><td><span class="m m-auto">auto</span></td></tr>
-      <tr><td class="day">Day 810</td><td><span class="t t-aicall">AI Call</span> <span class="t t-vm">VM</span></td><td>Warm and direct.</td><td><span class="m m-auto">auto</span></td></tr>
-      <tr><td class="day">Day 900</td><td><span class="t t-email">Email</span></td><td>Strategic buyer guide.</td><td><span class="m m-auto">auto</span></td></tr>
-      <tr><td class="day">Day 990</td><td><span class="t t-vip">Lipdub</span></td><td>"Hi [Name], are you still thinking about making a move?"</td><td><span class="m m-auto">auto</span></td></tr>
-      <tr><td class="day">Day 990</td><td><span class="t t-task">Task</span></td><td><strong>ADRIAN:</strong> Re-engaged → Under 9 Months or Within 3 Months. No engagement → archive or restart.</td><td><span class="m m-manual">manual</span></td></tr>
-    </tbody>
-  </table>
-</div>
+    <details class="pl2">
+      <summary>Buyer – Over 9 Months <span class="meta">13 day items · 990-day sequence</span></summary>
+      <div class="pl2-body">
+        <div class="pl2-desc">Patient, low-frequency approach. Quarterly to semi-annual touches.</div>
+        <details class="pl3"><summary><span class="day-tag">Day 1</span><span class="day-types"><span class="t t-email">Email</span></span><span class="m m-auto">auto</span></summary><div class="pl3-body">Check-in + comprehensive market guide. <em>"No rush — here's some reading for when the time is right."</em></div></details>
+        <details class="pl3"><summary><span class="day-tag">Day 90</span><span class="day-types"><span class="t t-heygen">HeyGen</span></span><span class="m m-auto">auto</span></summary><div class="pl3-body">Buyer resource — mortgage prep, what to look for.</div></details>
+        <details class="pl3"><summary><span class="day-tag">Day 180</span><span class="day-types"><span class="t t-aitext">AI Text</span></span><span class="m m-auto">auto</span></summary><div class="pl3-body"><em>"Hope you're doing well — the market has had some interesting shifts."</em></div></details>
+        <details class="pl3"><summary><span class="day-tag">Day 270</span><span class="day-types"><span class="t t-heygen">HeyGen</span></span><span class="m m-auto">auto</span></summary><div class="pl3-body">Quarterly market report — data-driven, authoritative.</div></details>
+        <details class="pl3"><summary><span class="day-tag">Day 360</span><span class="day-types"><span class="t t-email">Email</span></span><span class="m m-auto">auto</span></summary><div class="pl3-body">Buyer success stories. <em>"A year goes fast — here's what buyers who started where you are accomplished."</em></div></details>
+        <details class="pl3"><summary><span class="day-tag">Day 450</span><span class="day-types"><span class="t t-aicall">AI Call</span><span class="t t-vm">VM</span></span><span class="m m-auto">auto</span></summary><div class="pl3-body">Timeline check — getting closer?</div></details>
+        <details class="pl3"><summary><span class="day-tag">Day 540</span><span class="day-types"><span class="t t-aitext">AI Text</span></span><span class="m m-auto">auto</span></summary><div class="pl3-body"><em>"How are your buying plans coming along?"</em></div></details>
+        <details class="pl3"><summary><span class="day-tag">Day 630</span><span class="day-types"><span class="t t-heygen">HeyGen</span></span><span class="m m-auto">auto</span></summary><div class="pl3-body">Market trends — what's changed in the past year.</div></details>
+        <details class="pl3"><summary><span class="day-tag">Day 720</span><span class="day-types"><span class="t t-static">Static GIF</span></span><span class="m m-auto">auto</span></summary><div class="pl3-body">Re-engagement. <em>"Hey, been a while — wanted to personally check in."</em></div></details>
+        <details class="pl3"><summary><span class="day-tag">Day 810</span><span class="day-types"><span class="t t-aicall">AI Call</span><span class="t t-vm">VM</span></span><span class="m m-auto">auto</span></summary><div class="pl3-body">Warm and direct.</div></details>
+        <details class="pl3"><summary><span class="day-tag">Day 900</span><span class="day-types"><span class="t t-email">Email</span></span><span class="m m-auto">auto</span></summary><div class="pl3-body">Strategic buyer guide.</div></details>
+        <details class="pl3"><summary><span class="day-tag">Day 990</span><span class="day-types"><span class="t t-vip">Lipdub</span></span><span class="m m-auto">auto</span></summary><div class="pl3-body"><em>"Hi [Name], are you still thinking about making a move?"</em></div></details>
+        <details class="pl3"><summary><span class="day-tag">Day 990</span><span class="day-types"><span class="t t-task">Task</span></span><span class="m m-manual">manual</span></summary><div class="pl3-body"><strong>ADRIAN:</strong> Re-engaged → Under 9 Months or Within 3 Months. No engagement → archive or restart.</div></details>
+      </div>
+    </details>
 
-<div id="b_flipper" class="panel">
-  <div class="panel-title">Buyer Flipper <span class="stage-pill">Buyer Pipeline</span></div>
-  <div class="panel-sub">Investor-focused buyer</div>
-  <div class="panel-desc">Buyer purchasing for investment / flip, not personal residence. Different content focus — ROI, deal flow, off-market opportunities. Lower frequency than Within 3 Months but more business-tone messaging.</div>
-  <div class="stub"><strong>Cadence overview:</strong> Every 10 days, alternating off-market deal alerts (when available), ROI-focused HeyGen videos, and quarterly market analysis emails. Live call from Adrian every 30 days. <strong>Deferred — full cadence to be defined.</strong> Coordinate with Investor/Flipper pipeline content.</div>
-</div>
+    <details class="pl2">
+      <summary>Buyer Flipper <span class="meta">to be defined</span></summary>
+      <div class="pl2-body">
+        <div class="pl2-desc">Buyer purchasing for investment / flip, not personal residence. Different content focus — ROI, deal flow, off-market opportunities.</div>
+        <div class="stub-row"><strong>Cadence overview:</strong> Every 10 days, alternating off-market deal alerts (when available), ROI-focused HeyGen videos, and quarterly market analysis. Live call from Adrian every 30 days. Coordinate with Investor/Flipper pipeline content. <strong>Full cadence — to be defined.</strong></div>
+      </div>
+    </details>
 
-<div id="b_appt" class="panel">
-  <div class="panel-title">Appointment Scheduled <span class="stage-pill">Buyer Pipeline</span></div>
-  <div class="panel-sub">Buyer consultation booked</div>
-  <div class="panel-desc">Confirmed consultation. Short pre-meeting sequence — builds confidence so the buyer walks in already trusting Graeham.</div>
-  <table>
-    <thead><tr><th>Timing</th><th>Type</th><th>Action</th><th>Mode</th></tr></thead>
-    <tbody>
-      <tr><td class="day">Immediately</td><td><span class="t t-aitext">AI Text</span></td><td>"Your consultation with Graeham is confirmed for [Date] at [Time]. Looking forward to it!" + Calendly link.</td><td><span class="m m-auto">auto</span></td></tr>
-      <tr><td class="day">Same day</td><td><span class="t t-heygen">HeyGen</span></td><td>"What to expect in your buyer consultation." Subject: "Before we meet — a quick video to get you ready."</td><td><span class="m m-auto">auto</span></td></tr>
-      <tr><td class="day">Day 2</td><td><span class="t t-static">Static GIF</span></td><td>Static intro from Graeham — "Hey, looking forward to meeting you. I've been doing some homework on your target area."</td><td><span class="m m-auto">auto</span></td></tr>
-      <tr><td class="day">Day before</td><td><span class="t t-aitext">AI Text</span></td><td>"See you tomorrow at [Time]! Let me know if anything comes up." + reschedule link.</td><td><span class="m m-auto">auto</span></td></tr>
-      <tr><td class="day">Day of</td><td><span class="t t-aitext">AI Text</span></td><td>"Looking forward to our conversation today at [Time]. See you soon!"</td><td><span class="m m-auto">auto</span></td></tr>
-      <tr><td class="day">After</td><td><span class="t t-task">Task</span></td><td><strong>GRAEHAM + ADRIAN:</strong> Agreement signed → Active Buyer + Giselle notified. Timeline pushed → Within 3 / Under 9 Months. No-show → back to Active Buyer drip.</td><td><span class="m m-manual">manual</span></td></tr>
-    </tbody>
-  </table>
-</div>
+    <details class="pl2">
+      <summary>Appointment Scheduled <span class="meta">6 day items · pre-meeting</span></summary>
+      <div class="pl2-body">
+        <div class="pl2-desc">Confirmed consultation. Short pre-meeting sequence — buyer walks in already trusting Graeham.</div>
+        <details class="pl3"><summary><span class="day-tag">Immediately</span><span class="day-types"><span class="t t-aitext">AI Text</span></span><span class="m m-auto">auto</span></summary><div class="pl3-body"><em>"Your consultation with Graeham is confirmed for [Date] at [Time]. Looking forward to it!"</em> + Calendly link.</div></details>
+        <details class="pl3"><summary><span class="day-tag">Same day</span><span class="day-types"><span class="t t-heygen">HeyGen</span></span><span class="m m-auto">auto</span></summary><div class="pl3-body">"What to expect in your buyer consultation." <strong>Subject:</strong> "Before we meet — a quick video to get you ready."</div></details>
+        <details class="pl3"><summary><span class="day-tag">Day 2</span><span class="day-types"><span class="t t-static">Static GIF</span></span><span class="m m-auto">auto</span></summary><div class="pl3-body">Static intro from Graeham — <em>"Hey, looking forward to meeting you. I've been doing some homework on your target area."</em></div></details>
+        <details class="pl3"><summary><span class="day-tag">Day before</span><span class="day-types"><span class="t t-aitext">AI Text</span></span><span class="m m-auto">auto</span></summary><div class="pl3-body"><em>"See you tomorrow at [Time]! Let me know if anything comes up."</em> + reschedule link.</div></details>
+        <details class="pl3"><summary><span class="day-tag">Day of</span><span class="day-types"><span class="t t-aitext">AI Text</span></span><span class="m m-auto">auto</span></summary><div class="pl3-body"><em>"Looking forward to our conversation today at [Time]."</em></div></details>
+        <details class="pl3"><summary><span class="day-tag">After</span><span class="day-types"><span class="t t-task">Task</span></span><span class="m m-manual">manual</span></summary><div class="pl3-body"><strong>GRAEHAM + ADRIAN:</strong> Agreement signed → Active Buyer + Giselle notified. Timeline pushed → Within 3 / Under 9 Months. No-show → back to Active Buyer drip.</div></details>
+      </div>
+    </details>
 
-<div id="b_resched" class="panel">
-  <div class="panel-title">Appointment Rescheduled <span class="stage-pill">Buyer Pipeline</span></div>
-  <div class="panel-sub">Buyer rebooked after cancel/no-show</div>
-  <div class="panel-desc">Intent is still there — handle with warmth, no guilt.</div>
-  <table>
-    <thead><tr><th>Timing</th><th>Type</th><th>Action</th><th>Mode</th></tr></thead>
-    <tbody>
-      <tr><td class="day">Immediately</td><td><span class="t t-aitext">AI Text</span></td><td>"No problem — looking forward to [New Date] at [New Time]!" + updated Calendly link. Warm tone.</td><td><span class="m m-auto">auto</span></td></tr>
-      <tr><td class="day">Same day</td><td><span class="t t-email">Email</span></td><td>Reschedule confirmation + "What to expect" HeyGen video.</td><td><span class="m m-auto">auto</span></td></tr>
-      <tr><td class="day">Day 2</td><td><span class="t t-static">Static GIF</span></td><td>"All set for [New Date] — really looking forward to it."</td><td><span class="m m-auto">auto</span></td></tr>
-      <tr><td class="day">Day before</td><td><span class="t t-aitext">AI Text</span></td><td>"See you tomorrow at [Time]!"</td><td><span class="m m-auto">auto</span></td></tr>
-      <tr><td class="day">Day of</td><td><span class="t t-aitext">AI Text</span></td><td>"Looking forward to our meeting today at [Time]."</td><td><span class="m m-auto">auto</span></td></tr>
-      <tr><td class="day">2nd reschedule</td><td><span class="t t-task">Task</span></td><td><strong>GRAEHAM:</strong> Adrian flags Graeham. Graeham calls personally or lead moves back to Within 3 / Under 9 Months.</td><td><span class="m m-manual">manual</span></td></tr>
-    </tbody>
-  </table>
-</div>
+    <details class="pl2">
+      <summary>Appointment Rescheduled <span class="meta">6 day items · rebooked</span></summary>
+      <div class="pl2-body">
+        <div class="pl2-desc">Buyer rebooked after cancel/no-show. Intent is still there — handle with warmth, no guilt.</div>
+        <details class="pl3"><summary><span class="day-tag">Immediately</span><span class="day-types"><span class="t t-aitext">AI Text</span></span><span class="m m-auto">auto</span></summary><div class="pl3-body"><em>"No problem — looking forward to [New Date] at [New Time]!"</em> + updated Calendly link.</div></details>
+        <details class="pl3"><summary><span class="day-tag">Same day</span><span class="day-types"><span class="t t-email">Email</span></span><span class="m m-auto">auto</span></summary><div class="pl3-body">Reschedule confirmation + "What to expect" HeyGen video.</div></details>
+        <details class="pl3"><summary><span class="day-tag">Day 2</span><span class="day-types"><span class="t t-static">Static GIF</span></span><span class="m m-auto">auto</span></summary><div class="pl3-body"><em>"All set for [New Date] — really looking forward to it."</em></div></details>
+        <details class="pl3"><summary><span class="day-tag">Day before</span><span class="day-types"><span class="t t-aitext">AI Text</span></span><span class="m m-auto">auto</span></summary><div class="pl3-body"><em>"See you tomorrow at [Time]!"</em></div></details>
+        <details class="pl3"><summary><span class="day-tag">Day of</span><span class="day-types"><span class="t t-aitext">AI Text</span></span><span class="m m-auto">auto</span></summary><div class="pl3-body"><em>"Looking forward to our meeting today at [Time]."</em></div></details>
+        <details class="pl3"><summary><span class="day-tag">2nd reschedule</span><span class="day-types"><span class="t t-task">Task</span></span><span class="m m-manual">manual</span></summary><div class="pl3-body"><strong>GRAEHAM:</strong> Adrian flags Graeham. Personal call or move back to Within 3 / Under 9 Months.</div></details>
+      </div>
+    </details>
 
-<div id="b_uc" class="panel">
-  <div class="panel-title">Under Contract <span class="stage-pill">Buyer Pipeline</span></div>
-  <div class="panel-sub">Offer accepted, in escrow</div>
-  <div class="panel-desc">Giselle owns transaction coordination. This sequence handles emotional / relationship side — keeping the buyer calm, informed, excited. Milestone-triggered, not day-based.</div>
-  <table>
-    <thead><tr><th>Trigger</th><th>Type</th><th>Action</th><th>Mode</th></tr></thead>
-    <tbody>
-      <tr><td class="day">Offer accepted</td><td><span class="t t-aitext">AI Text</span></td><td>"Congratulations [Name] — your offer was accepted! Giselle will reach out shortly with next steps."</td><td><span class="m m-auto">auto</span></td></tr>
-      <tr><td class="day">Day 1</td><td><span class="t t-heygen">HeyGen</span></td><td>"What to expect during escrow." Timeline overview. Subject: "Here's your roadmap to closing day."</td><td><span class="m m-auto">auto</span></td></tr>
-      <tr><td class="day">Day 7</td><td><span class="t t-aitext">AI Text</span></td><td>"How are you feeling? Totally normal to have questions — we're here for anything."</td><td><span class="m m-auto">auto</span></td></tr>
-      <tr><td class="day">Day 14</td><td><span class="t t-email">Email</span></td><td>Inspection-process video. Reduces anxiety.</td><td><span class="m m-auto">auto</span></td></tr>
-      <tr><td class="day">Contingency</td><td><span class="t t-aitext">AI Text</span></td><td>Milestone update — Giselle provides dates to Adrian. "Quick update — your [contingency] is due [Date]."</td><td><span class="m m-auto">auto</span></td></tr>
-      <tr><td class="day">Day before COE</td><td><span class="t t-static">Static GIF</span></td><td>"Almost there — one more day! Here's what closing day looks like."</td><td><span class="m m-auto">auto</span></td></tr>
-      <tr><td class="day">Day of COE</td><td><span class="t t-vip">Lipdub</span></td><td>"Hi [Name], today's the day — congratulations on your new home!" Most impactful Lipdub in the buyer sequence.</td><td><span class="m m-auto">auto</span></td></tr>
-      <tr><td class="day">Post-close</td><td><span class="t t-task">Task</span></td><td><strong>GISELLE → ADRIAN:</strong> Enroll in Past Buyers immediately. Schedule 48-hour call. Closing gift confirmed. Climbo review primed.</td><td><span class="m m-manual">manual</span></td></tr>
-    </tbody>
-  </table>
-</div>
+    <details class="pl2">
+      <summary>Under Contract <span class="meta">8 milestone items · in escrow</span></summary>
+      <div class="pl2-body">
+        <div class="pl2-desc">Giselle owns transaction coordination. This sequence handles emotional / relationship side. Milestone-triggered, not day-based.</div>
+        <details class="pl3"><summary><span class="day-tag">Offer accepted</span><span class="day-types"><span class="t t-aitext">AI Text</span></span><span class="m m-auto">auto</span></summary><div class="pl3-body"><em>"Congratulations [Name] — your offer was accepted! Giselle will reach out shortly with next steps."</em></div></details>
+        <details class="pl3"><summary><span class="day-tag">Day 1</span><span class="day-types"><span class="t t-heygen">HeyGen</span></span><span class="m m-auto">auto</span></summary><div class="pl3-body">"What to expect during escrow." Timeline overview. <strong>Subject:</strong> "Here's your roadmap to closing day."</div></details>
+        <details class="pl3"><summary><span class="day-tag">Day 7</span><span class="day-types"><span class="t t-aitext">AI Text</span></span><span class="m m-auto">auto</span></summary><div class="pl3-body"><em>"How are you feeling? Totally normal to have questions — we're here for anything."</em></div></details>
+        <details class="pl3"><summary><span class="day-tag">Day 14</span><span class="day-types"><span class="t t-email">Email</span></span><span class="m m-auto">auto</span></summary><div class="pl3-body">Inspection-process video. Reduces anxiety.</div></details>
+        <details class="pl3"><summary><span class="day-tag">Contingency</span><span class="day-types"><span class="t t-aitext">AI Text</span></span><span class="m m-auto">auto</span></summary><div class="pl3-body">Milestone update — Giselle provides dates to Adrian. <em>"Quick update — your [contingency] is due [Date]."</em></div></details>
+        <details class="pl3"><summary><span class="day-tag">Day before COE</span><span class="day-types"><span class="t t-static">Static GIF</span></span><span class="m m-auto">auto</span></summary><div class="pl3-body"><em>"Almost there — one more day! Here's what closing day looks like."</em></div></details>
+        <details class="pl3"><summary><span class="day-tag">Day of COE</span><span class="day-types"><span class="t t-vip">Lipdub</span></span><span class="m m-auto">auto</span></summary><div class="pl3-body"><em>"Hi [Name], today's the day — congratulations on your new home!"</em> Most impactful Lipdub in the buyer sequence.</div></details>
+        <details class="pl3"><summary><span class="day-tag">Post-close</span><span class="day-types"><span class="t t-task">Task</span></span><span class="m m-manual">manual</span></summary><div class="pl3-body"><strong>GISELLE → ADRIAN:</strong> Enroll in Past Buyers immediately. Schedule 48-hour call. Closing gift confirmed. Climbo review primed.</div></details>
+      </div>
+    </details>
 
-<div id="b_cold" class="panel">
-  <div class="panel-title">Cold <span class="stage-pill">Buyer Pipeline</span></div>
-  <div class="panel-sub">Previously active buyer, silent 60+ days</div>
-  <div class="panel-desc">Re-engagement focused. 180-day sequence then a hard decision.</div>
-  <table>
-    <thead><tr><th>Day</th><th>Type</th><th>Action</th><th>Mode</th></tr></thead>
-    <tbody>
-      <tr><td class="day">Day 1</td><td><span class="t t-vip">Lipdub</span></td><td>"Hi [Name], it's been a while — still thinking about buying?" Lead with Lipdub to break silence.</td><td><span class="m m-auto">auto</span></td></tr>
-      <tr><td class="day">Day 7</td><td><span class="t t-heygen">HeyGen</span></td><td>No-pressure market update. Pure value, no pitch.</td><td><span class="m m-auto">auto</span></td></tr>
-      <tr><td class="day">Day 14</td><td><span class="t t-aitext">AI Text</span></td><td>"Hey [Name], still thinking about buying? No pressure — just checking in."</td><td><span class="m m-auto">auto</span></td></tr>
-      <tr><td class="day">Day 30</td><td><span class="t t-static">Static GIF</span></td><td>"The market has shifted — here's what I'm seeing for buyers right now."</td><td><span class="m m-auto">auto</span></td></tr>
-      <tr><td class="day">Day 45</td><td><span class="t t-aicall">AI Call</span> <span class="t t-vm">VM</span></td><td>Warm, not desperate.</td><td><span class="m m-auto">auto</span></td></tr>
-      <tr><td class="day">Day 60</td><td><span class="t t-email">Email</span></td><td>Testimonial — someone who took their time and found the right home.</td><td><span class="m m-auto">auto</span></td></tr>
-      <tr><td class="day">Day 90</td><td><span class="t t-vip">Lipdub</span></td><td>"Hi [Name], checking in one more time — interesting things happening I thought of you."</td><td><span class="m m-auto">auto</span></td></tr>
-      <tr><td class="day">Day 120</td><td><span class="t t-aitext">AI Text</span></td><td>"If you're still thinking about buying, I'm here. No pressure."</td><td><span class="m m-auto">auto</span></td></tr>
-      <tr><td class="day">Day 150</td><td><span class="t t-call">Live Call</span></td><td>Adrian final personal attempt. Genuinely warm.</td><td><span class="m m-manual">manual</span></td></tr>
-      <tr><td class="day">Day 180</td><td><span class="t t-task">Task</span></td><td><strong>ADRIAN:</strong> Re-engaged → appropriate buyer stage. Zero engagement → Unqualified.</td><td><span class="m m-manual">manual</span></td></tr>
-    </tbody>
-  </table>
-</div>
+    <details class="pl2">
+      <summary>Cold <span class="meta">10 day items · 180-day re-engagement</span></summary>
+      <div class="pl2-body">
+        <div class="pl2-desc">Previously active buyer, silent 60+ days. Re-engagement focused. 180-day sequence then a hard decision.</div>
+        <details class="pl3"><summary><span class="day-tag">Day 1</span><span class="day-types"><span class="t t-vip">Lipdub</span></span><span class="m m-auto">auto</span></summary><div class="pl3-body"><em>"Hi [Name], it's been a while — still thinking about buying?"</em> Lead with Lipdub to break silence.</div></details>
+        <details class="pl3"><summary><span class="day-tag">Day 7</span><span class="day-types"><span class="t t-heygen">HeyGen</span></span><span class="m m-auto">auto</span></summary><div class="pl3-body">No-pressure market update. Pure value, no pitch.</div></details>
+        <details class="pl3"><summary><span class="day-tag">Day 14</span><span class="day-types"><span class="t t-aitext">AI Text</span></span><span class="m m-auto">auto</span></summary><div class="pl3-body"><em>"Hey [Name], still thinking about buying? No pressure."</em></div></details>
+        <details class="pl3"><summary><span class="day-tag">Day 30</span><span class="day-types"><span class="t t-static">Static GIF</span></span><span class="m m-auto">auto</span></summary><div class="pl3-body"><em>"The market has shifted — here's what I'm seeing for buyers right now."</em></div></details>
+        <details class="pl3"><summary><span class="day-tag">Day 45</span><span class="day-types"><span class="t t-aicall">AI Call</span><span class="t t-vm">VM</span></span><span class="m m-auto">auto</span></summary><div class="pl3-body">Warm, not desperate.</div></details>
+        <details class="pl3"><summary><span class="day-tag">Day 60</span><span class="day-types"><span class="t t-email">Email</span></span><span class="m m-auto">auto</span></summary><div class="pl3-body">Testimonial — someone who took their time and found the right home.</div></details>
+        <details class="pl3"><summary><span class="day-tag">Day 90</span><span class="day-types"><span class="t t-vip">Lipdub</span></span><span class="m m-auto">auto</span></summary><div class="pl3-body"><em>"Hi [Name], checking in one more time."</em></div></details>
+        <details class="pl3"><summary><span class="day-tag">Day 120</span><span class="day-types"><span class="t t-aitext">AI Text</span></span><span class="m m-auto">auto</span></summary><div class="pl3-body"><em>"If you're still thinking about buying, I'm here. No pressure."</em></div></details>
+        <details class="pl3"><summary><span class="day-tag">Day 150</span><span class="day-types"><span class="t t-call">Live Call</span></span><span class="m m-manual">manual</span></summary><div class="pl3-body">Adrian final personal attempt. Genuinely warm.</div></details>
+        <details class="pl3"><summary><span class="day-tag">Day 180</span><span class="day-types"><span class="t t-task">Task</span></span><span class="m m-manual">manual</span></summary><div class="pl3-body"><strong>ADRIAN:</strong> Re-engaged → appropriate buyer stage. Zero engagement → Unqualified.</div></details>
+      </div>
+    </details>
 
-<div id="b_unq" class="panel">
-  <div class="panel-title">Unqualified <span class="stage-pill">Buyer Pipeline</span></div>
-  <div class="panel-sub">Archived buyer — no further outreach</div>
-  <div class="panel-desc">Buyer who completed Cold sequence with zero engagement, or explicitly removed themselves. Held in CRM for record only.</div>
-  <div class="stub"><strong>No cadence.</strong> Holding stage. Annual audit by Adrian to confirm no accidental archives.</div>
-</div>
+    <details class="pl2">
+      <summary>Unqualified <span class="meta">archive</span></summary>
+      <div class="pl2-body">
+        <div class="pl2-desc">Buyer who completed Cold sequence with zero engagement, or explicitly removed themselves. Held in CRM for record only.</div>
+        <div class="stub-row"><strong>No cadence.</strong> Holding stage. Annual audit by Adrian to confirm no accidental archives.</div>
+      </div>
+    </details>
+
+  </div>
+</details>
 
 <!-- ============ SELLER PIPELINE ============ -->
+<details class="pl1" id="pl-seller">
+  <summary>Seller Pipeline <span class="meta">9 stages · active seller track</span></summary>
+  <div class="pl1-body">
 
-<div id="s_active" class="panel">
-  <div class="panel-title">Active Seller <span class="stage-pill">Seller Pipeline</span></div>
-  <div class="panel-sub">Highest-intent seller, immediate</div>
-  <div class="panel-desc">Confirmed seller from "Contacted - Responded" with strong intent. Goal: book listing consultation within 7 days. High-frequency cadence.</div>
-  <table>
-    <thead><tr><th>Day</th><th>Type</th><th>Action</th><th>Mode</th></tr></thead>
-    <tbody>
-      <tr><td class="day">Day 1</td><td><span class="t t-call">Live Call</span></td><td>Adrian confirms timeline + property, offers CMA, books consultation with Graeham.</td><td><span class="m m-manual">manual</span></td></tr>
-      <tr><td class="day">Day 1</td><td><span class="t t-email">Email</span></td><td>CMA preview + market video. Subject: "Your home's value in today's market."</td><td><span class="m m-auto">auto</span></td></tr>
-      <tr><td class="day">Day 3</td><td><span class="t t-vip">Lipdub</span></td><td>"Hi [Name], excited about positioning your home in this market." + calendar link.</td><td><span class="m m-auto">auto</span></td></tr>
-      <tr><td class="day">Day 5</td><td><span class="t t-heygen">HeyGen</span></td><td>"How we sell homes for top dollar." Process video.</td><td><span class="m m-auto">auto</span></td></tr>
-      <tr><td class="day">Day 7</td><td><span class="t t-task">Task</span></td><td><strong>ADRIAN:</strong> Booked → Appointment Scheduled. Timeline 0–3mo → Within 3 Months. Softens → Under 9 Months.</td><td><span class="m m-manual">manual</span></td></tr>
-    </tbody>
-  </table>
+    <details class="pl2">
+      <summary>Active Seller <span class="meta">5 day items · highest intent</span></summary>
+      <div class="pl2-body">
+        <div class="pl2-desc">Confirmed seller from Contacted - Responded with strong intent. Goal: book listing consultation within 7 days.</div>
+        <details class="pl3"><summary><span class="day-tag">Day 1</span><span class="day-types"><span class="t t-call">Live Call</span></span><span class="m m-manual">manual</span></summary><div class="pl3-body">Adrian confirms timeline + property, offers CMA, books consultation with Graeham.</div></details>
+        <details class="pl3"><summary><span class="day-tag">Day 1</span><span class="day-types"><span class="t t-email">Email</span></span><span class="m m-auto">auto</span></summary><div class="pl3-body">CMA preview + market video. <strong>Subject:</strong> "Your home's value in today's market."</div></details>
+        <details class="pl3"><summary><span class="day-tag">Day 3</span><span class="day-types"><span class="t t-vip">Lipdub</span></span><span class="m m-auto">auto</span></summary><div class="pl3-body"><em>"Hi [Name], excited about positioning your home in this market."</em> + calendar link.</div></details>
+        <details class="pl3"><summary><span class="day-tag">Day 5</span><span class="day-types"><span class="t t-heygen">HeyGen</span></span><span class="m m-auto">auto</span></summary><div class="pl3-body">"How we sell homes for top dollar." Process video.</div></details>
+        <details class="pl3"><summary><span class="day-tag">Day 7</span><span class="day-types"><span class="t t-task">Task</span></span><span class="m m-manual">manual</span></summary><div class="pl3-body"><strong>ADRIAN:</strong> Booked → Appointment Scheduled. Timeline 0–3mo → Within 3 Months. Softens → Under 9 Months.</div></details>
+      </div>
+    </details>
+
+    <details class="pl2">
+      <summary>Seller – Within 3 Months <span class="meta">18 day items · 78-day sequence</span></summary>
+      <div class="pl2-body">
+        <div class="pl2-desc">Goal: signed listing agreement. High frequency.</div>
+        <details class="pl3"><summary><span class="day-tag">Day 1</span><span class="day-types"><span class="t t-call">Live Call</span></span><span class="m m-manual">manual</span></summary><div class="pl3-body">Adrian. Timeline, property, CMA offer, push for listing consultation.</div></details>
+        <details class="pl3"><summary><span class="day-tag">Day 1 · No ans</span><span class="day-types"><span class="t t-vm">VM</span><span class="t t-vip">Lipdub</span></span><span class="m m-auto">auto</span></summary><div class="pl3-body"><em>"Hi [Name], I have exciting data about your home's value."</em> + calendar link.</div></details>
+        <details class="pl3"><summary><span class="day-tag">Day 1 · +1hr</span><span class="day-types"><span class="t t-email">Email</span></span><span class="m m-auto">auto</span></summary><div class="pl3-body">CMA report + HeyGen market video. <strong>Subject:</strong> "Your home's value in today's market."</div></details>
+        <details class="pl3"><summary><span class="day-tag">Day 3</span><span class="day-types"><span class="t t-aitext">AI Text</span></span><span class="m m-auto">auto</span></summary><div class="pl3-body"><em>"Did you review the market data? Happy to walk through it."</em> + calendar link.</div></details>
+        <details class="pl3"><summary><span class="day-tag">Day 5</span><span class="day-types"><span class="t t-static">Static GIF</span></span><span class="m m-auto">auto</span></summary><div class="pl3-body"><em>"Quick thought about the best time to list your home."</em> Strategy video.</div></details>
+        <details class="pl3"><summary><span class="day-tag">Day 8</span><span class="day-types"><span class="t t-email">Email</span></span><span class="m m-auto">auto</span></summary><div class="pl3-body">Seller testimonial — past seller who got top dollar.</div></details>
+        <details class="pl3"><summary><span class="day-tag">Day 14</span><span class="day-types"><span class="t t-aicall">AI Call</span><span class="t t-vm">VM</span></span><span class="m m-auto">auto</span></summary><div class="pl3-body">Specific recent comparable sale showing strong pricing.</div></details>
+        <details class="pl3"><summary><span class="day-tag">Day 15</span><span class="day-types"><span class="t t-aitext">AI Text</span></span><span class="m m-auto">auto</span></summary><div class="pl3-body">Market stat for their neighborhood that sparks curiosity.</div></details>
+        <details class="pl3"><summary><span class="day-tag">Day 21</span><span class="day-types"><span class="t t-vip">Lipdub</span></span><span class="m m-auto">auto</span></summary><div class="pl3-body"><em>"Hi [Name], checking in on your selling timeline."</em> + calendar link.</div></details>
+        <details class="pl3"><summary><span class="day-tag">Day 22</span><span class="day-types"><span class="t t-heygen">HeyGen</span></span><span class="m m-auto">auto</span></summary><div class="pl3-body">"How to attract top dollar." Staging, pricing, timing.</div></details>
+        <details class="pl3"><summary><span class="day-tag">Day 29</span><span class="day-types"><span class="t t-aicall">AI Call</span><span class="t t-vm">VM</span></span><span class="m m-auto">auto</span></summary><div class="pl3-body">Is now a good time?</div></details>
+        <details class="pl3"><summary><span class="day-tag">Day 36</span><span class="day-types"><span class="t t-static">Static GIF</span></span><span class="m m-auto">auto</span></summary><div class="pl3-body"><em>"Here's what I'm seeing in EPA right now."</em> Market video.</div></details>
+        <details class="pl3"><summary><span class="day-tag">Day 43</span><span class="day-types"><span class="t t-email">Email</span></span><span class="m m-auto">auto</span></summary><div class="pl3-body">Seller prep checklist — repairs, staging, photography.</div></details>
+        <details class="pl3"><summary><span class="day-tag">Day 50</span><span class="day-types"><span class="t t-aitext">AI Text</span></span><span class="m m-auto">auto</span></summary><div class="pl3-body"><em>"When are you thinking about making the move? Even a rough timeline helps me plan."</em></div></details>
+        <details class="pl3"><summary><span class="day-tag">Day 57</span><span class="day-types"><span class="t t-call">Live Call</span></span><span class="m m-manual">manual</span></summary><div class="pl3-body">Adrian. Push for listing consultation. <em>"30 minutes to put a full plan together."</em></div></details>
+        <details class="pl3"><summary><span class="day-tag">Day 64</span><span class="day-types"><span class="t t-email">Email</span></span><span class="m m-auto">auto</span></summary><div class="pl3-body">"Why timing matters." Inventory levels, optimal listing windows.</div></details>
+        <details class="pl3"><summary><span class="day-tag">Day 71</span><span class="day-types"><span class="t t-vip">Lipdub</span></span><span class="m m-auto">auto</span></summary><div class="pl3-body"><em>"Hi [Name], let's put together a full plan — even if you're not ready to list yet."</em></div></details>
+        <details class="pl3"><summary><span class="day-tag">Day 78</span><span class="day-types"><span class="t t-task">Task</span></span><span class="m m-manual">manual</span></summary><div class="pl3-body"><strong>ADRIAN:</strong> Booked → Appointment Scheduled. Extended → Under 9 Months. Silent 60+ → Cold.</div></details>
+      </div>
+    </details>
+
+    <details class="pl2">
+      <summary>Seller - Under 9 Months <span class="meta">13 day items · 150-day sequence</span></summary>
+      <div class="pl2-body">
+        <div class="pl2-desc">Stay top of mind. Moderate frequency.</div>
+        <details class="pl3"><summary><span class="day-tag">Day 1</span><span class="day-types"><span class="t t-heygen">HeyGen</span></span><span class="m m-auto">auto</span></summary><div class="pl3-body">Market overview. <em>"Here's what the EPA market looks like and what it means for your home."</em></div></details>
+        <details class="pl3"><summary><span class="day-tag">Day 8</span><span class="day-types"><span class="t t-aitext">AI Text</span></span><span class="m m-auto">auto</span></summary><div class="pl3-body"><em>"Have you been keeping an eye on what homes are selling for in your neighborhood?"</em></div></details>
+        <details class="pl3"><summary><span class="day-tag">Day 15</span><span class="day-types"><span class="t t-static">Static GIF</span></span><span class="m m-auto">auto</span></summary><div class="pl3-body"><em>"Keeping you updated on the market while you plan."</em></div></details>
+        <details class="pl3"><summary><span class="day-tag">Day 22</span><span class="day-types"><span class="t t-aicall">AI Call</span><span class="t t-vm">VM</span></span><span class="m m-auto">auto</span></summary><div class="pl3-body">Timeline check.</div></details>
+        <details class="pl3"><summary><span class="day-tag">Day 29</span><span class="day-types"><span class="t t-email">Email</span></span><span class="m m-auto">auto</span></summary><div class="pl3-body">Market check — current comparable sales for their property type.</div></details>
+        <details class="pl3"><summary><span class="day-tag">Day 43</span><span class="day-types"><span class="t t-aitext">AI Text</span></span><span class="m m-auto">auto</span></summary><div class="pl3-body"><em>"Still thinking about selling this year? Even knowing your options can help."</em></div></details>
+        <details class="pl3"><summary><span class="day-tag">Day 57</span><span class="day-types"><span class="t t-vip">Lipdub</span></span><span class="m m-auto">auto</span></summary><div class="pl3-body"><em>"Hi [Name], market has had some interesting movements."</em> + calendar link.</div></details>
+        <details class="pl3"><summary><span class="day-tag">Day 71</span><span class="day-types"><span class="t t-heygen">HeyGen</span></span><span class="m m-auto">auto</span></summary><div class="pl3-body">"How to prepare your home for sale."</div></details>
+        <details class="pl3"><summary><span class="day-tag">Day 85</span><span class="day-types"><span class="t t-aicall">AI Call</span><span class="t t-vm">VM</span></span><span class="m m-auto">auto</span></summary><div class="pl3-body">Mention recent successful sale in their area.</div></details>
+        <details class="pl3"><summary><span class="day-tag">Day 100</span><span class="day-types"><span class="t t-static">Static GIF</span></span><span class="m m-auto">auto</span></summary><div class="pl3-body">Equity/market positioning video.</div></details>
+        <details class="pl3"><summary><span class="day-tag">Day 120</span><span class="day-types"><span class="t t-email">Email</span></span><span class="m m-auto">auto</span></summary><div class="pl3-body">Seller testimonial. <strong>Subject:</strong> "How timing made all the difference."</div></details>
+        <details class="pl3"><summary><span class="day-tag">Day 135</span><span class="day-types"><span class="t t-aitext">AI Text</span></span><span class="m m-auto">auto</span></summary><div class="pl3-body"><em>"Whenever you're ready to talk options, I'm here."</em></div></details>
+        <details class="pl3"><summary><span class="day-tag">Day 150</span><span class="day-types"><span class="t t-task">Task</span></span><span class="m m-manual">manual</span></summary><div class="pl3-body"><strong>ADRIAN:</strong> Shortened → Within 3 Months. Distant → Over 9 Months. Silent 60+ → Cold.</div></details>
+      </div>
+    </details>
+
+    <details class="pl2">
+      <summary>Seller – Over 9 Months <span class="meta">13 day items · 990-day sequence</span></summary>
+      <div class="pl2-body">
+        <div class="pl2-desc">Low frequency, high value.</div>
+        <details class="pl3"><summary><span class="day-tag">Day 1</span><span class="day-types"><span class="t t-email">Email</span></span><span class="m m-auto">auto</span></summary><div class="pl3-body">Comprehensive seller education guide.</div></details>
+        <details class="pl3"><summary><span class="day-tag">Day 90</span><span class="day-types"><span class="t t-aitext">AI Text</span></span><span class="m m-auto">auto</span></summary><div class="pl3-body"><em>"The [area] market has had some interesting movement."</em></div></details>
+        <details class="pl3"><summary><span class="day-tag">Day 180</span><span class="day-types"><span class="t t-aitext">AI Text</span></span><span class="m m-auto">auto</span></summary><div class="pl3-body"><em>"Just a reminder I'm here whenever you're ready."</em></div></details>
+        <details class="pl3"><summary><span class="day-tag">Day 270</span><span class="day-types"><span class="t t-aitext">AI Text</span></span><span class="m m-auto">auto</span></summary><div class="pl3-body"><em>"Want a fresh market analysis so you know exactly where you stand?"</em></div></details>
+        <details class="pl3"><summary><span class="day-tag">Day 360</span><span class="day-types"><span class="t t-heygen">HeyGen</span></span><span class="m m-auto">auto</span></summary><div class="pl3-body">Annual market update video.</div></details>
+        <details class="pl3"><summary><span class="day-tag">Day 450</span><span class="day-types"><span class="t t-aicall">AI Call</span><span class="t t-vm">VM</span></span><span class="m m-auto">auto</span></summary><div class="pl3-body">Timeline check.</div></details>
+        <details class="pl3"><summary><span class="day-tag">Day 540</span><span class="day-types"><span class="t t-aitext">AI Text</span></span><span class="m m-auto">auto</span></summary><div class="pl3-body">Equity review offer.</div></details>
+        <details class="pl3"><summary><span class="day-tag">Day 630</span><span class="day-types"><span class="t t-aitext">AI Text</span></span><span class="m m-auto">auto</span></summary><div class="pl3-body"><em>"Inventory in your area is [low/shifting] — worth knowing how that affects you."</em></div></details>
+        <details class="pl3"><summary><span class="day-tag">Day 720</span><span class="day-types"><span class="t t-static">Static GIF</span></span><span class="m m-auto">auto</span></summary><div class="pl3-body">CMA / equity check static video.</div></details>
+        <details class="pl3"><summary><span class="day-tag">Day 810</span><span class="day-types"><span class="t t-aicall">AI Call</span><span class="t t-vm">VM</span></span><span class="m m-auto">auto</span></summary><div class="pl3-body">AI call + VM.</div></details>
+        <details class="pl3"><summary><span class="day-tag">Day 900</span><span class="day-types"><span class="t t-email">Email</span></span><span class="m m-auto">auto</span></summary><div class="pl3-body">Strategy reminder — how to maximize sale price.</div></details>
+        <details class="pl3"><summary><span class="day-tag">Day 990</span><span class="day-types"><span class="t t-vip">Lipdub</span></span><span class="m m-auto">auto</span></summary><div class="pl3-body"><em>"Hi [Name], are you getting closer to making your move?"</em></div></details>
+        <details class="pl3"><summary><span class="day-tag">Day 990</span><span class="day-types"><span class="t t-task">Task</span></span><span class="m m-manual">manual</span></summary><div class="pl3-body"><strong>ADRIAN:</strong> Re-engaged → Within 3 / Under 9. Zero engagement → Unqualified.</div></details>
+      </div>
+    </details>
+
+    <details class="pl2">
+      <summary>Appointment Scheduled <span class="meta">6 day items · pre-meeting</span></summary>
+      <div class="pl2-body">
+        <div class="pl2-desc">Listing consultation booked. Pre-meeting sequence builds confidence in Graeham.</div>
+        <details class="pl3"><summary><span class="day-tag">Immediately</span><span class="day-types"><span class="t t-aitext">AI Text</span></span><span class="m m-auto">auto</span></summary><div class="pl3-body"><em>"Your listing consultation is confirmed for [Date] at [Time]."</em></div></details>
+        <details class="pl3"><summary><span class="day-tag">Same day</span><span class="day-types"><span class="t t-heygen">HeyGen</span></span><span class="m m-auto">auto</span></summary><div class="pl3-body">"What to expect in your listing consultation." Recent sales data, approach.</div></details>
+        <details class="pl3"><summary><span class="day-tag">Day 2</span><span class="day-types"><span class="t t-static">Static GIF</span></span><span class="m m-auto">auto</span></summary><div class="pl3-body"><em>"Hey, looking forward to meeting you. Already pulling data on your neighborhood."</em></div></details>
+        <details class="pl3"><summary><span class="day-tag">Day before</span><span class="day-types"><span class="t t-aitext">AI Text</span></span><span class="m m-auto">auto</span></summary><div class="pl3-body"><em>"See you tomorrow at [Time]!"</em> + reschedule link.</div></details>
+        <details class="pl3"><summary><span class="day-tag">Day of</span><span class="day-types"><span class="t t-aitext">AI Text</span></span><span class="m m-auto">auto</span></summary><div class="pl3-body"><em>"Looking forward to our meeting today at [Time]."</em></div></details>
+        <details class="pl3"><summary><span class="day-tag">After</span><span class="day-types"><span class="t t-task">Task</span></span><span class="m m-manual">manual</span></summary><div class="pl3-body"><strong>GRAEHAM + GISELLE:</strong> Listing signed → Giselle initiates listing intake. No agreement → Adrian moves to Within 3 / Under 9 Months.</div></details>
+      </div>
+    </details>
+
+    <details class="pl2">
+      <summary>Appointment Rescheduled <span class="meta">6 day items</span></summary>
+      <div class="pl2-body">
+        <div class="pl2-desc">Seller rebooked after cancel/no-show. Intent is still there — handle with warmth.</div>
+        <details class="pl3"><summary><span class="day-tag">Immediately</span><span class="day-types"><span class="t t-aitext">AI Text</span></span><span class="m m-auto">auto</span></summary><div class="pl3-body"><em>"No problem — looking forward to [New Date] at [New Time]."</em></div></details>
+        <details class="pl3"><summary><span class="day-tag">Same day</span><span class="day-types"><span class="t t-email">Email</span></span><span class="m m-auto">auto</span></summary><div class="pl3-body">Reschedule confirmation + "What to expect" video.</div></details>
+        <details class="pl3"><summary><span class="day-tag">Day 2</span><span class="day-types"><span class="t t-static">Static GIF</span></span><span class="m m-auto">auto</span></summary><div class="pl3-body"><em>"All set for [New Date] — really looking forward to it."</em></div></details>
+        <details class="pl3"><summary><span class="day-tag">Day before</span><span class="day-types"><span class="t t-aitext">AI Text</span></span><span class="m m-auto">auto</span></summary><div class="pl3-body"><em>"See you tomorrow at [Time]!"</em></div></details>
+        <details class="pl3"><summary><span class="day-tag">Day of</span><span class="day-types"><span class="t t-aitext">AI Text</span></span><span class="m m-auto">auto</span></summary><div class="pl3-body"><em>"Looking forward to our meeting today."</em></div></details>
+        <details class="pl3"><summary><span class="day-tag">2nd reschedule</span><span class="day-types"><span class="t t-task">Task</span></span><span class="m m-manual">manual</span></summary><div class="pl3-body"><strong>GRAEHAM:</strong> Adrian flags Graeham. Personal call or move back to Within 3 / Under 9 Months.</div></details>
+      </div>
+    </details>
+
+    <details class="pl2">
+      <summary>Under Contract <span class="meta">10 milestone items · in escrow</span></summary>
+      <div class="pl2-body">
+        <div class="pl2-desc">Giselle owns transaction coordination. This sequence handles relationship + emotional support.</div>
+        <details class="pl3"><summary><span class="day-tag">Listing live</span><span class="day-types"><span class="t t-aitext">AI Text</span></span><span class="m m-auto">auto</span></summary><div class="pl3-body"><em>"We're live — your home is officially on the market! Excited to get this sold for you."</em></div></details>
+        <details class="pl3"><summary><span class="day-tag">Day 1</span><span class="day-types"><span class="t t-heygen">HeyGen</span></span><span class="m m-auto">auto</span></summary><div class="pl3-body">"What to expect during the listing process." Sets realistic expectations.</div></details>
+        <details class="pl3"><summary><span class="day-tag">Day 7</span><span class="day-types"><span class="t t-aitext">AI Text</span></span><span class="m m-auto">auto</span></summary><div class="pl3-body"><em>"How are you feeling? Totally normal to have questions."</em></div></details>
+        <details class="pl3"><summary><span class="day-tag">Showings</span><span class="day-types"><span class="t t-aitext">AI Text</span></span><span class="m m-auto">auto</span></summary><div class="pl3-body"><em>"Showings are happening — great sign. Giselle will compile feedback into your weekly seller report."</em></div></details>
+        <details class="pl3"><summary><span class="day-tag">Offer received</span><span class="day-types"><span class="t t-aitext">AI Text</span></span><span class="m m-auto">auto</span></summary><div class="pl3-body"><em>"Great news — we have an offer coming in! Graeham will reach out to walk you through it."</em></div></details>
+        <details class="pl3"><summary><span class="day-tag">Offer accepted</span><span class="day-types"><span class="t t-vip">Lipdub</span></span><span class="m m-auto">auto</span></summary><div class="pl3-body"><em>"Hi [Name], your offer is accepted — congratulations!"</em></div></details>
+        <details class="pl3"><summary><span class="day-tag">Contingency</span><span class="day-types"><span class="t t-aitext">AI Text</span></span><span class="m m-auto">auto</span></summary><div class="pl3-body"><em>"Quick update — [contingency] cleared. On track for [COE date]."</em></div></details>
+        <details class="pl3"><summary><span class="day-tag">Day before COE</span><span class="day-types"><span class="t t-static">Static GIF</span></span><span class="m m-auto">auto</span></summary><div class="pl3-body"><em>"One more day — you've done it!"</em></div></details>
+        <details class="pl3"><summary><span class="day-tag">Day of COE</span><span class="day-types"><span class="t t-vip">Lipdub</span></span><span class="m m-auto">auto</span></summary><div class="pl3-body"><em>"Hi [Name], congratulations — you did it! It's been an honor representing you."</em></div></details>
+        <details class="pl3"><summary><span class="day-tag">Post-close</span><span class="day-types"><span class="t t-task">Task</span></span><span class="m m-manual">manual</span></summary><div class="pl3-body"><strong>GISELLE → ADRIAN:</strong> Enroll in Past Sellers. 48-hr call. Closing gift confirmed. Climbo review primed.</div></details>
+      </div>
+    </details>
+
+    <details class="pl2">
+      <summary>Cold <span class="meta">10 day items · 180-day re-engagement</span></summary>
+      <div class="pl2-body">
+        <div class="pl2-desc">Previously active seller, silent 60+ days. Re-engagement focused.</div>
+        <details class="pl3"><summary><span class="day-tag">Day 1</span><span class="day-types"><span class="t t-vip">Lipdub</span></span><span class="m m-auto">auto</span></summary><div class="pl3-body"><em>"Hi [Name], it's been a while — checking in on your selling plans. Market has moved since we last spoke."</em></div></details>
+        <details class="pl3"><summary><span class="day-tag">Day 7</span><span class="day-types"><span class="t t-heygen">HeyGen</span></span><span class="m m-auto">auto</span></summary><div class="pl3-body">Current market data for their area. Pure value.</div></details>
+        <details class="pl3"><summary><span class="day-tag">Day 14</span><span class="day-types"><span class="t t-aitext">AI Text</span></span><span class="m m-auto">auto</span></summary><div class="pl3-body"><em>"Still thinking about selling? No pressure."</em></div></details>
+        <details class="pl3"><summary><span class="day-tag">Day 30</span><span class="day-types"><span class="t t-static">Static GIF</span></span><span class="m m-auto">auto</span></summary><div class="pl3-body"><em>"Market has shifted — here's what it means for your home's value right now."</em></div></details>
+        <details class="pl3"><summary><span class="day-tag">Day 45</span><span class="day-types"><span class="t t-aicall">AI Call</span><span class="t t-vm">VM</span></span><span class="m m-auto">auto</span></summary><div class="pl3-body">Warm tone — not desperate.</div></details>
+        <details class="pl3"><summary><span class="day-tag">Day 60</span><span class="day-types"><span class="t t-email">Email</span></span><span class="m m-auto">auto</span></summary><div class="pl3-body">Testimonial — someone who waited for the right moment and sold.</div></details>
+        <details class="pl3"><summary><span class="day-tag">Day 90</span><span class="day-types"><span class="t t-vip">Lipdub</span></span><span class="m m-auto">auto</span></summary><div class="pl3-body"><em>"Hi [Name], checking in one more time."</em></div></details>
+        <details class="pl3"><summary><span class="day-tag">Day 120</span><span class="day-types"><span class="t t-aitext">AI Text</span></span><span class="m m-auto">auto</span></summary><div class="pl3-body"><em>"If you're ever ready to talk options, I'm here."</em></div></details>
+        <details class="pl3"><summary><span class="day-tag">Day 150</span><span class="day-types"><span class="t t-call">Live Call</span></span><span class="m m-manual">manual</span></summary><div class="pl3-body">Adrian final personal attempt.</div></details>
+        <details class="pl3"><summary><span class="day-tag">Day 180</span><span class="day-types"><span class="t t-task">Task</span></span><span class="m m-manual">manual</span></summary><div class="pl3-body"><strong>ADRIAN:</strong> Re-engaged → seller stage. Zero engagement → Unqualified.</div></details>
+      </div>
+    </details>
+
+    <details class="pl2">
+      <summary>Unqualified <span class="meta">archive</span></summary>
+      <div class="pl2-body">
+        <div class="pl2-desc">Seller who completed Cold sequence with zero engagement. Held in CRM for record only.</div>
+        <div class="stub-row"><strong>No cadence.</strong> Holding stage.</div>
+      </div>
+    </details>
+
+  </div>
+</details>
+
+<!-- ============ INVESTOR / FLIPPER ============ -->
+<details class="pl1" id="pl-investor">
+  <summary>Investor / Flipper Pipeline <span class="meta">1 stage</span></summary>
+  <div class="pl1-body">
+    <details class="pl2">
+      <summary>Investor / Flipper <span class="meta">to be defined</span></summary>
+      <div class="pl2-body">
+        <div class="pl2-desc">Investors looking for off-market deals, distressed properties, flip opportunities. Different content focus — ROI, deal flow, pocket listings, market inefficiencies. Lower frequency, more business-tone.</div>
+        <div class="stub-row"><strong>Cadence (proposed):</strong> Off-market deal alerts as available. Quarterly market analysis email focused on investor metrics. Live call from Adrian/Graeham every 30 days. Coordinate content with Buyer Flipper stage. <strong>Full cadence — to be defined.</strong></div>
+      </div>
+    </details>
+  </div>
+</details>
+
+<!-- ============ PAST BUYERS ============ -->
+<details class="pl1" id="pl-pastbuyers">
+  <summary>Past Buyers Pipeline <span class="meta">4 stages · annual cycle, never ends</span></summary>
+  <div class="pl1-body">
+
+    <details class="pl2">
+      <summary>Closed <span class="meta">first 30 days</span></summary>
+      <div class="pl2-body">
+        <div class="pl2-desc">Within 30 days of close. Welcome cadence + Climbo review request + closing gift confirmation. After 30 days → Past Buyer stage.</div>
+        <div class="stub-row"><strong>Cadence:</strong> Day 0 Lipdub on close + Climbo link. Day 2 Adrian 48-hr call. Day 7 closing gift confirmation. Day 14 testimonial request. Day 30 → Past Buyer stage.</div>
+      </div>
+    </details>
+
+    <details class="pl2">
+      <summary>Past Buyer <span class="meta">12 month items · annual cycle</span></summary>
+      <div class="pl2-body">
+        <div class="pl2-desc">Enters on close + 30 days. Runs forever — 12-month cycle anchored to closing anniversary. One main touch per month plus a monthly farming postcard as background touch.</div>
+        <div class="pl2-note"><strong>SETUP:</strong> Tag 'Past Client' in GHL. Record exact closing date. Birthday on file enables Birthday Video months. Farming postcards run monthly (Jason designs, Giselle coordinates).</div>
+        <details class="pl3"><summary><span class="day-tag">Month 1</span><span class="day-types"><span class="t t-aitext">AI Text</span></span><span class="m m-auto">auto</span></summary><div class="pl3-body">Seasonal text — casual and warm. <em>"Hope you're settling in well!"</em> + farming postcard.</div></details>
+        <details class="pl3"><summary><span class="day-tag">Month 2</span><span class="day-types"><span class="t t-email">Email</span></span><span class="m m-auto">auto</span></summary><div class="pl3-body">CMA — current value estimate. <em>"Here's what your home is worth today."</em> + farming postcard.</div></details>
+        <details class="pl3"><summary><span class="day-tag">Month 3</span><span class="day-types"><span class="t t-vip">Lipdub</span></span><span class="m m-auto">auto</span></summary><div class="pl3-body">Birthday video on actual birthday if on file. Otherwise: farming postcard only.</div></details>
+        <details class="pl3"><summary><span class="day-tag">Month 4</span><span class="day-types"><span class="t t-call">Live Call</span></span><span class="m m-manual">manual</span></summary><div class="pl3-body">Seasonal call — Adrian. Check in, natural referral ask. + farming postcard.</div></details>
+        <details class="pl3"><summary><span class="day-tag">Month 5</span><span class="day-types"><span class="t t-heygen">HeyGen</span></span><span class="m m-auto">auto</span></summary><div class="pl3-body">Quarterly market update video. + farming postcard.</div></details>
+        <details class="pl3"><summary><span class="day-tag">Month 6</span><span class="day-types"><span class="t t-static">Static GIF</span></span><span class="m m-auto">auto</span></summary><div class="pl3-body">Referral request video. <em>"If you know anyone thinking about buying or selling..."</em> + farming postcard.</div></details>
+        <details class="pl3"><summary><span class="day-tag">Month 7</span><span class="day-types"><span class="t t-aitext">AI Text</span></span><span class="m m-auto">auto</span></summary><div class="pl3-body">Second seasonal text. + farming postcard.</div></details>
+        <details class="pl3"><summary><span class="day-tag">Month 8</span><span class="day-types"><span class="t t-email">Email</span></span><span class="m m-auto">auto</span></summary><div class="pl3-body">6-month CMA update. + farming postcard.</div></details>
+        <details class="pl3"><summary><span class="day-tag">Month 9</span><span class="day-types"><span class="t t-vip">Lipdub</span></span><span class="m m-auto">auto</span></summary><div class="pl3-body">Birthday video if applicable. Otherwise farming postcard only.</div></details>
+        <details class="pl3"><summary><span class="day-tag">Month 10</span><span class="day-types"><span class="t t-call">Live Call</span></span><span class="m m-manual">manual</span></summary><div class="pl3-body">Second seasonal call. Referral ask. + farming postcard.</div></details>
+        <details class="pl3"><summary><span class="day-tag">Month 11</span><span class="day-types"><span class="t t-heygen">HeyGen</span></span><span class="m m-auto">auto</span></summary><div class="pl3-body">Year-end market wrap. + farming postcard.</div></details>
+        <details class="pl3"><summary><span class="day-tag">Month 12</span><span class="day-types"><span class="t t-static">Static GIF</span></span><span class="m m-auto">auto</span></summary><div class="pl3-body">Second referral request + farming postcard. Cycle restarts on next anniversary.</div></details>
+      </div>
+    </details>
+
+    <details class="pl2">
+      <summary>Looking to buy <span class="meta">repeat business — flag &amp; route</span></summary>
+      <div class="pl2-body">
+        <div class="pl2-desc">Past buyer signaled they want to buy again (repeat business). Highest-value path in the entire system — they already trust Graeham.</div>
+        <div class="stub-row"><strong>Action:</strong> Adrian flags. Graeham personal call within 24 hours. Move to Buyer Pipeline (Active Buyer or appropriate timeline). Tag "Repeat Business — Buyer" for attribution. Past Buyers cycle pauses.</div>
+      </div>
+    </details>
+
+    <details class="pl2">
+      <summary>Looking to sell <span class="meta">repeat business — flag &amp; route</span></summary>
+      <div class="pl2-body">
+        <div class="pl2-desc">Past buyer of a home now wants to sell that same home (or another). Move to Seller Pipeline immediately.</div>
+        <div class="stub-row"><strong>Action:</strong> Adrian flags. Graeham personal call within 24 hours. Move to Seller Pipeline. Tag "Repeat Business — Seller". Past Buyers cycle pauses.</div>
+      </div>
+    </details>
+
+  </div>
+</details>
+
+<!-- ============ PAST SELLERS ============ -->
+<details class="pl1" id="pl-pastsellers">
+  <summary>Past Sellers Pipeline <span class="meta">4 stages · annual cycle, never ends</span></summary>
+  <div class="pl1-body">
+
+    <details class="pl2">
+      <summary>Closed <span class="meta">first 30 days</span></summary>
+      <div class="pl2-body">
+        <div class="pl2-desc">Within 30 days of close. Welcome cadence + Climbo review + closing gift. After 30 days → Past Seller stage.</div>
+        <div class="stub-row"><strong>Cadence:</strong> Day 0 Lipdub on close + Climbo link. Day 2 Adrian 48-hr call. Day 7 closing gift. Day 14 testimonial request. Day 30 → Past Seller stage.</div>
+      </div>
+    </details>
+
+    <details class="pl2">
+      <summary>Past Seller <span class="meta">12 month items · annual cycle</span></summary>
+      <div class="pl2-body">
+        <div class="pl2-desc">Identical structure to Past Buyer cycle. CMA reports track the neighborhood market and validate their timing decision.</div>
+        <div class="pl2-note"><strong>SETUP:</strong> Tag 'Past Client', record closing date and birthday. Farming postcards run monthly independently.</div>
+        <details class="pl3"><summary><span class="day-tag">Month 1</span><span class="day-types"><span class="t t-aitext">AI Text</span></span><span class="m m-auto">auto</span></summary><div class="pl3-body"><em>"Hope the move went smoothly! Let us know if we can help with anything."</em> + farming postcard.</div></details>
+        <details class="pl3"><summary><span class="day-tag">Month 2</span><span class="day-types"><span class="t t-email">Email</span></span><span class="m m-auto">auto</span></summary><div class="pl3-body">CMA for their sold property's neighborhood. Validates their timing. + farming postcard.</div></details>
+        <details class="pl3"><summary><span class="day-tag">Month 3</span><span class="day-types"><span class="t t-vip">Lipdub</span></span><span class="m m-auto">auto</span></summary><div class="pl3-body">Birthday video if applicable. Otherwise farming postcard only.</div></details>
+        <details class="pl3"><summary><span class="day-tag">Month 4</span><span class="day-types"><span class="t t-call">Live Call</span></span><span class="m m-manual">manual</span></summary><div class="pl3-body">Seasonal call. Referral ask. Ask if buying again. + farming postcard.</div></details>
+        <details class="pl3"><summary><span class="day-tag">Month 5</span><span class="day-types"><span class="t t-heygen">HeyGen</span></span><span class="m m-auto">auto</span></summary><div class="pl3-body">Market update — quarterly. + farming postcard.</div></details>
+        <details class="pl3"><summary><span class="day-tag">Month 6</span><span class="day-types"><span class="t t-static">Static GIF</span></span><span class="m m-auto">auto</span></summary><div class="pl3-body">Referral request video. + farming postcard.</div></details>
+        <details class="pl3"><summary><span class="day-tag">Month 7</span><span class="day-types"><span class="t t-aitext">AI Text</span></span><span class="m m-auto">auto</span></summary><div class="pl3-body">Second seasonal text. + farming postcard.</div></details>
+        <details class="pl3"><summary><span class="day-tag">Month 8</span><span class="day-types"><span class="t t-email">Email</span></span><span class="m m-auto">auto</span></summary><div class="pl3-body">Neighborhood market update — what's sold since their sale. + farming postcard.</div></details>
+        <details class="pl3"><summary><span class="day-tag">Month 9</span><span class="day-types"><span class="t t-vip">Lipdub</span></span><span class="m m-auto">auto</span></summary><div class="pl3-body">Birthday video if applicable. Otherwise farming postcard only.</div></details>
+        <details class="pl3"><summary><span class="day-tag">Month 10</span><span class="day-types"><span class="t t-call">Live Call</span></span><span class="m m-manual">manual</span></summary><div class="pl3-body">Second seasonal call. + farming postcard.</div></details>
+        <details class="pl3"><summary><span class="day-tag">Month 11</span><span class="day-types"><span class="t t-heygen">HeyGen</span></span><span class="m m-auto">auto</span></summary><div class="pl3-body">Year-end market wrap. + farming postcard.</div></details>
+        <details class="pl3"><summary><span class="day-tag">Month 12</span><span class="day-types"><span class="t t-static">Static GIF</span></span><span class="m m-auto">auto</span></summary><div class="pl3-body">Second referral request. + farming postcard. Cycle restarts.</div></details>
+      </div>
+    </details>
+
+    <details class="pl2">
+      <summary>Looking to sell <span class="meta">repeat business — flag &amp; route</span></summary>
+      <div class="pl2-body">
+        <div class="pl2-desc">Past seller signaled they want to sell another property. Move to Seller Pipeline immediately.</div>
+        <div class="stub-row"><strong>Action:</strong> Adrian flags. Graeham personal call within 24 hours. Move to Seller Pipeline. Tag "Repeat Business — Seller". Past Sellers cycle pauses.</div>
+      </div>
+    </details>
+
+    <details class="pl2">
+      <summary>Looking to buy <span class="meta">repeat business — flag &amp; route</span></summary>
+      <div class="pl2-body">
+        <div class="pl2-desc">Past seller now wants to buy. Common with downsizers, relocators, second-property buyers.</div>
+        <div class="stub-row"><strong>Action:</strong> Adrian flags. Graeham personal call within 24 hours. Move to Buyer Pipeline. Tag "Repeat Business — Buyer". Past Sellers cycle pauses.</div>
+      </div>
+    </details>
+
+  </div>
+</details>
+
+<!-- ============ LOST ============ -->
+<details class="pl1" id="pl-lost">
+  <summary>Lost Deal Pipeline <span class="meta">2 stages · outcome tracking</span></summary>
+  <div class="pl1-body">
+    <details class="pl2">
+      <summary>Bought with another agent <span class="meta">closed loss</span></summary>
+      <div class="pl2-body">
+        <div class="pl2-desc">Lead bought through a different agent. Holding stage for tracking only — no further marketing. Useful for source attribution analysis (which lead sources have high loss rate).</div>
+        <div class="stub-row"><strong>No cadence.</strong> Light annual touch (1 holiday HeyGen email) keeps the door open without being pushy. Tracked for analytics — never re-marketed actively.</div>
+      </div>
+    </details>
+    <details class="pl2">
+      <summary>Sold with another agent <span class="meta">closed loss</span></summary>
+      <div class="pl2-body">
+        <div class="pl2-desc">Lead sold through a different agent. Same handling as bought-with-other-agent. Important for source-quality analysis.</div>
+        <div class="stub-row"><strong>No cadence.</strong> Light annual touch only. Tracked for analytics.</div>
+      </div>
+    </details>
+  </div>
+</details>
+
 </div>
 
-<div id="s_3mo" class="panel">
-  <div class="panel-title">Seller – Within 3 Months <span class="stage-pill">Seller Pipeline</span></div>
-  <div class="panel-sub">High intent, listing within 90 days</div>
-  <div class="panel-desc">Goal: signed listing agreement. High frequency. 78-day sequence.</div>
-  <table>
-    <thead><tr><th>Day</th><th>Type</th><th>Action</th><th>Mode</th></tr></thead>
-    <tbody>
-      <tr><td class="day">Day 1</td><td><span class="t t-call">Live Call</span></td><td>Adrian. Timeline, property, CMA offer, push for listing consultation.</td><td><span class="m m-manual">manual</span></td></tr>
-      <tr><td class="day">Day 1<span class="sub">No ans</span></td><td><span class="t t-vm">VM</span> <span class="t t-vip">Lipdub</span></td><td>VM + Lipdub: "Hi [Name], I have exciting data about your home's value." + calendar link.</td><td><span class="m m-auto">auto</span></td></tr>
-      <tr><td class="day">Day 1<span class="sub">+1 hr</span></td><td><span class="t t-email">Email</span></td><td>CMA report + HeyGen market video. Subject: "Your home's value in today's market."</td><td><span class="m m-auto">auto</span></td></tr>
-      <tr><td class="day">Day 3</td><td><span class="t t-aitext">AI Text</span></td><td>"Did you review the market data? Happy to walk through it." + calendar link.</td><td><span class="m m-auto">auto</span></td></tr>
-      <tr><td class="day">Day 5</td><td><span class="t t-static">Static GIF</span></td><td>"Quick thought about the best time to list your home." Strategy video.</td><td><span class="m m-auto">auto</span></td></tr>
-      <tr><td class="day">Day 8</td><td><span class="t t-email">Email</span></td><td>Seller testimonial — past seller who got top dollar.</td><td><span class="m m-auto">auto</span></td></tr>
-      <tr><td class="day">Day 14</td><td><span class="t t-aicall">AI Call</span> <span class="t t-vm">VM</span></td><td>Specific recent comparable sale showing strong pricing.</td><td><span class="m m-auto">auto</span></td></tr>
-      <tr><td class="day">Day 15</td><td><span class="t t-aitext">AI Text</span></td><td>Market stat for their neighborhood that sparks curiosity.</td><td><span class="m m-auto">auto</span></td></tr>
-      <tr><td class="day">Day 21</td><td><span class="t t-vip">Lipdub</span></td><td>"Hi [Name], checking in on your selling timeline." + calendar link.</td><td><span class="m m-auto">auto</span></td></tr>
-      <tr><td class="day">Day 22</td><td><span class="t t-heygen">HeyGen</span></td><td>"How to attract top dollar." Staging, pricing, timing.</td><td><span class="m m-auto">auto</span></td></tr>
-      <tr><td class="day">Day 29</td><td><span class="t t-aicall">AI Call</span> <span class="t t-vm">VM</span></td><td>Is now a good time?</td><td><span class="m m-auto">auto</span></td></tr>
-      <tr><td class="day">Day 36</td><td><span class="t t-static">Static GIF</span></td><td>"Here's what I'm seeing in EPA right now." Market video.</td><td><span class="m m-auto">auto</span></td></tr>
-      <tr><td class="day">Day 43</td><td><span class="t t-email">Email</span></td><td>Seller prep checklist — repairs, staging, photography.</td><td><span class="m m-auto">auto</span></td></tr>
-      <tr><td class="day">Day 50</td><td><span class="t t-aitext">AI Text</span></td><td>"When are you thinking about making the move? Even a rough timeline helps me plan."</td><td><span class="m m-auto">auto</span></td></tr>
-      <tr><td class="day">Day 57</td><td><span class="t t-call">Live Call</span></td><td>Adrian. Push for listing consultation. "30 minutes to put a full plan together."</td><td><span class="m m-manual">manual</span></td></tr>
-      <tr><td class="day">Day 64</td><td><span class="t t-email">Email</span></td><td>"Why timing matters." Inventory levels, optimal listing windows.</td><td><span class="m m-auto">auto</span></td></tr>
-      <tr><td class="day">Day 71</td><td><span class="t t-vip">Lipdub</span></td><td>"Hi [Name], let's put together a full plan — even if you're not ready to list yet."</td><td><span class="m m-auto">auto</span></td></tr>
-      <tr><td class="day">Day 78</td><td><span class="t t-task">Task</span></td><td><strong>ADRIAN:</strong> Booked → Appointment Scheduled. Extended → Under 9 Months. Silent 60+ → Cold.</td><td><span class="m m-manual">manual</span></td></tr>
-    </tbody>
-  </table>
-</div>
+<script>
+function toggleFlow() {
+  const r = document.getElementById('flow-region');
+  const btn = document.getElementById('btn-flow');
+  r.classList.toggle('show');
+  btn.textContent = r.classList.contains('show') ? '⤵ Hide Flow Diagram' : '⤴ Show Flow Diagram';
+}
+function expandAll() {
+  document.querySelectorAll('details').forEach(d => d.open = true);
+}
+function collapseAll() {
+  document.querySelectorAll('details').forEach(d => d.open = false);
+}
+function expandLevel(level) {
+  document.querySelectorAll('details').forEach(d => d.open = false);
+  document.querySelectorAll('details.pl1').forEach(d => d.open = true);
+  if (level >= 2) document.querySelectorAll('details.pl2').forEach(d => d.open = true);
+  if (level >= 3) document.querySelectorAll('details.pl3').forEach(d => d.open = true);
+}
+function jumpTo(id) {
+  const el = document.getElementById(id);
+  if (!el) return;
+  el.open = true;
+  el.scrollIntoView({behavior: 'smooth', block: 'start'});
+}
 
-<div id="s_under9" class="panel">
-  <div class="panel-title">Seller - Under 9 Months <span class="stage-pill">Seller Pipeline</span></div>
-  <div class="panel-sub">Real intent, 3–9 month timeline</div>
-  <div class="panel-desc">Stay top of mind. Moderate frequency. 150-day sequence.</div>
-  <table>
-    <thead><tr><th>Day</th><th>Type</th><th>Action</th><th>Mode</th></tr></thead>
-    <tbody>
-      <tr><td class="day">Day 1</td><td><span class="t t-heygen">HeyGen</span></td><td>Market overview. "Here's what the EPA market looks like and what it means for your home."</td><td><span class="m m-auto">auto</span></td></tr>
-      <tr><td class="day">Day 8</td><td><span class="t t-aitext">AI Text</span></td><td>"Have you been keeping an eye on what homes are selling for in your neighborhood?"</td><td><span class="m m-auto">auto</span></td></tr>
-      <tr><td class="day">Day 15</td><td><span class="t t-static">Static GIF</span></td><td>"Keeping you updated on the market while you plan."</td><td><span class="m m-auto">auto</span></td></tr>
-      <tr><td class="day">Day 22</td><td><span class="t t-aicall">AI Call</span> <span class="t t-vm">VM</span></td><td>Timeline check.</td><td><span class="m m-auto">auto</span></td></tr>
-      <tr><td class="day">Day 29</td><td><span class="t t-email">Email</span></td><td>Market check — current comparable sales for their property type.</td><td><span class="m m-auto">auto</span></td></tr>
-      <tr><td class="day">Day 43</td><td><span class="t t-aitext">AI Text</span></td><td>"Still thinking about selling this year? Even knowing your options can help."</td><td><span class="m m-auto">auto</span></td></tr>
-      <tr><td class="day">Day 57</td><td><span class="t t-vip">Lipdub</span></td><td>"Hi [Name], market has had some interesting movements." + calendar link.</td><td><span class="m m-auto">auto</span></td></tr>
-      <tr><td class="day">Day 71</td><td><span class="t t-heygen">HeyGen</span></td><td>"How to prepare your home for sale."</td><td><span class="m m-auto">auto</span></td></tr>
-      <tr><td class="day">Day 85</td><td><span class="t t-aicall">AI Call</span> <span class="t t-vm">VM</span></td><td>Mention recent successful sale in their area.</td><td><span class="m m-auto">auto</span></td></tr>
-      <tr><td class="day">Day 100</td><td><span class="t t-static">Static GIF</span></td><td>Equity/market positioning video.</td><td><span class="m m-auto">auto</span></td></tr>
-      <tr><td class="day">Day 120</td><td><span class="t t-email">Email</span></td><td>Seller testimonial. Subject: "How timing made all the difference."</td><td><span class="m m-auto">auto</span></td></tr>
-      <tr><td class="day">Day 135</td><td><span class="t t-aitext">AI Text</span></td><td>"Whenever you're ready to talk options, I'm here."</td><td><span class="m m-auto">auto</span></td></tr>
-      <tr><td class="day">Day 150</td><td><span class="t t-task">Task</span></td><td><strong>ADRIAN:</strong> Shortened → Within 3 Months. Distant → Over 9 Months. Silent 60+ → Cold.</td><td><span class="m m-manual">manual</span></td></tr>
-    </tbody>
-  </table>
-</div>
-
-<div id="s_over9" class="panel">
-  <div class="panel-title">Seller – Over 9 Months <span class="stage-pill">Seller Pipeline</span></div>
-  <div class="panel-sub">Genuine intent, long horizon</div>
-  <div class="panel-desc">Low frequency, high value. 990-day sequence.</div>
-  <table>
-    <thead><tr><th>Day</th><th>Type</th><th>Action</th><th>Mode</th></tr></thead>
-    <tbody>
-      <tr><td class="day">Day 1</td><td><span class="t t-email">Email</span></td><td>Comprehensive seller education guide.</td><td><span class="m m-auto">auto</span></td></tr>
-      <tr><td class="day">Day 90</td><td><span class="t t-aitext">AI Text</span></td><td>"The [area] market has had some interesting movement."</td><td><span class="m m-auto">auto</span></td></tr>
-      <tr><td class="day">Day 180</td><td><span class="t t-aitext">AI Text</span></td><td>"Just a reminder I'm here whenever you're ready."</td><td><span class="m m-auto">auto</span></td></tr>
-      <tr><td class="day">Day 270</td><td><span class="t t-aitext">AI Text</span></td><td>"Want a fresh market analysis so you know exactly where you stand?"</td><td><span class="m m-auto">auto</span></td></tr>
-      <tr><td class="day">Day 360</td><td><span class="t t-heygen">HeyGen</span></td><td>Annual market update video.</td><td><span class="m m-auto">auto</span></td></tr>
-      <tr><td class="day">Day 450</td><td><span class="t t-aicall">AI Call</span> <span class="t t-vm">VM</span></td><td>Timeline check.</td><td><span class="m m-auto">auto</span></td></tr>
-      <tr><td class="day">Day 540</td><td><span class="t t-aitext">AI Text</span></td><td>Equity review offer.</td><td><span class="m m-auto">auto</span></td></tr>
-      <tr><td class="day">Day 630</td><td><span class="t t-aitext">AI Text</span></td><td>"Inventory in your area is [low/shifting] — worth knowing how that affects you."</td><td><span class="m m-auto">auto</span></td></tr>
-      <tr><td class="day">Day 720</td><td><span class="t t-static">Static GIF</span></td><td>CMA / equity check static video.</td><td><span class="m m-auto">auto</span></td></tr>
-      <tr><td class="day">Day 810</td><td><span class="t t-aicall">AI Call</span> <span class="t t-vm">VM</span></td><td>AI call + VM.</td><td><span class="m m-auto">auto</span></td></tr>
-      <tr><td class="day">Day 900</td><td><span class="t t-email">Email</span></td><td>Strategy reminder — how to maximize sale price.</td><td><span class="m m-auto">auto</span></td></tr>
-      <tr><td class="day">Day 990</td><td><span class="t t-vip">Lipdub</span></td><td>"Hi [Name], are you getting closer to making your move?"</td><td><span class="m m-auto">auto</span></td></tr>
-      <tr><td class="day">Day 990</td><td><span class="t t-task">Task</span></td><td><strong>ADRIAN:</strong> Re-engaged → Within 3 / Under 9. Zero engagement → Unqualified.</td><td><span class="m m-manual">manual</span></td></tr>
-    </tbody>
-  </table>
-</div>
-
-<div id="s_appt" class="panel">
-  <div class="panel-title">Appointment Scheduled <span class="stage-pill">Seller Pipeline</span></div>
-  <div class="panel-sub">Listing consultation booked</div>
-  <div class="panel-desc">Pre-meeting sequence — builds confidence in Graeham before he walks in.</div>
-  <table>
-    <thead><tr><th>Timing</th><th>Type</th><th>Action</th><th>Mode</th></tr></thead>
-    <tbody>
-      <tr><td class="day">Immediately</td><td><span class="t t-aitext">AI Text</span></td><td>"Your listing consultation is confirmed for [Date] at [Time]."</td><td><span class="m m-auto">auto</span></td></tr>
-      <tr><td class="day">Same day</td><td><span class="t t-heygen">HeyGen</span></td><td>"What to expect in your listing consultation." Recent sales data, approach, things to think about.</td><td><span class="m m-auto">auto</span></td></tr>
-      <tr><td class="day">Day 2</td><td><span class="t t-static">Static GIF</span></td><td>"Hey, looking forward to meeting you. Already pulling data on your neighborhood."</td><td><span class="m m-auto">auto</span></td></tr>
-      <tr><td class="day">Day before</td><td><span class="t t-aitext">AI Text</span></td><td>"See you tomorrow at [Time]!" + reschedule link.</td><td><span class="m m-auto">auto</span></td></tr>
-      <tr><td class="day">Day of</td><td><span class="t t-aitext">AI Text</span></td><td>"Looking forward to our meeting today at [Time]."</td><td><span class="m m-auto">auto</span></td></tr>
-      <tr><td class="day">After</td><td><span class="t t-task">Task</span></td><td><strong>GRAEHAM + GISELLE:</strong> Listing signed → Giselle initiates listing intake. No agreement → Adrian moves to Within 3 / Under 9 Months.</td><td><span class="m m-manual">manual</span></td></tr>
-    </tbody>
-  </table>
-</div>
-
-<div id="s_resched" class="panel">
-  <div class="panel-title">Appointment Rescheduled <span class="stage-pill">Seller Pipeline</span></div>
-  <div class="panel-sub">Seller rebooked after cancel/no-show</div>
-  <div class="panel-desc">Intent is still there — handle with warmth.</div>
-  <table>
-    <thead><tr><th>Timing</th><th>Type</th><th>Action</th><th>Mode</th></tr></thead>
-    <tbody>
-      <tr><td class="day">Immediately</td><td><span class="t t-aitext">AI Text</span></td><td>"No problem — looking forward to [New Date] at [New Time]." Warm tone.</td><td><span class="m m-auto">auto</span></td></tr>
-      <tr><td class="day">Same day</td><td><span class="t t-email">Email</span></td><td>Reschedule confirmation + "What to expect" video.</td><td><span class="m m-auto">auto</span></td></tr>
-      <tr><td class="day">Day 2</td><td><span class="t t-static">Static GIF</span></td><td>"All set for [New Date] — really looking forward to it."</td><td><span class="m m-auto">auto</span></td></tr>
-      <tr><td class="day">Day before</td><td><span class="t t-aitext">AI Text</span></td><td>"See you tomorrow at [Time]!"</td><td><span class="m m-auto">auto</span></td></tr>
-      <tr><td class="day">Day of</td><td><span class="t t-aitext">AI Text</span></td><td>
+/* Sticky breadcrumb that updates as you scroll */
+const trail = document.getElementById('trail');
+function updateTrail() {
+  const pl1s = document.querySelectorAll('details.pl1[open]');
+  let current = null;
+  for (const d of pl1s) {
+    const r = d.getBoundingClientRect();
+    if (r.top < 80 && r.bottom > 80) { current = d; break; }
+  }
+  if (!current) {
+    trail.classList.remove('show');
+    return;
+  }
+  let crumbs = [current.querySelector('summary').firstChild.textContent.trim()];
+  const pl2s = current.querySelectorAll('details.pl2[open]');
+  for (const d of pl2s) {
+    const r = d.getBoundingClientRect();
+    if (r.top < 100 && r.bottom > 60) {
+      crumbs.push(d.querySelector('summary').firstChild.textContent.trim());
+      break;
+    }
+  }
+  trail.innerHTML = crumbs.map((c, i) => `<span class="${i === crumbs.length-1 ? 'crumb-current' : 'crumb'}">${c}</span>`).join(' <span class="crumb">▸</span> ');
+  trail.classList.add('show');
+}
+window.addEventListener('scroll', updateTrail, {passive: true});
+document.querySelectorAll('details').forEach(d => d.addEventListener('toggle', updateTrail));
+</script>
+</body>
+</html>
