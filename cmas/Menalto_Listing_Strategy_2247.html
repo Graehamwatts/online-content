@@ -1,0 +1,372 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>2247 Menalto — Listing Strategy &amp; Market Reality | Graeham Watts</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&family=Montserrat:wght@500;600;700;800&display=swap" rel="stylesheet">
+<style>
+:root{--black:#1A1A1A;--gold:#C5A55A;--gold-deep:#A88B3D;--cream:#F5EFDC;--gray-soft:#F0F0F0;--gray-text:#666;--green:#4a7c59;--coral:#d97757;--nav-bg:#343955}
+*{box-sizing:border-box;margin:0;padding:0}
+html{scroll-behavior:smooth}
+body{font-family:'Inter',sans-serif;color:var(--black);background:#fafafa;line-height:1.6}
+.site-nav{position:fixed;top:0;left:0;right:0;background:var(--nav-bg);height:72px;display:flex;align-items:center;justify-content:space-between;padding:0 32px;z-index:1000;box-shadow:0 2px 8px rgba(0,0,0,.2)}
+.site-nav .logo{height:48px}
+.site-nav ul{list-style:none;display:flex;gap:22px;flex-wrap:wrap}
+.site-nav a{color:#fff;text-decoration:none;font-weight:500;font-size:13px;letter-spacing:.5px;text-transform:uppercase;transition:color .2s}
+.site-nav a:hover{color:var(--gold)}
+.cma-nav{position:fixed;top:72px;left:0;right:0;background:#fff;border-bottom:2px solid var(--gold);z-index:999;display:flex;justify-content:center;gap:22px;padding:14px 20px;font-size:12px;font-weight:600;letter-spacing:.4px;text-transform:uppercase;box-shadow:0 1px 6px rgba(0,0,0,.06);flex-wrap:wrap}
+.cma-nav a{color:var(--black);text-decoration:none;transition:color .2s}
+.cma-nav a:hover{color:var(--gold)}
+main{padding-top:148px}
+
+.hero{background:linear-gradient(135deg,#1A1A1A 0%,#262626 100%);color:#fff;padding:80px 40px;text-align:center;position:relative;overflow:hidden}
+.hero::before,.hero::after{content:"";position:absolute;left:0;right:0;height:6px;background:var(--gold)}
+.hero::before{top:0}.hero::after{bottom:0}
+.hero .brand{font-family:'Montserrat',sans-serif;font-weight:800;font-size:42px;letter-spacing:8px;color:var(--gold);margin-bottom:8px}
+.hero .realtor-tag{font-size:13px;letter-spacing:14px;color:var(--gold);margin-bottom:48px}
+.hero .label{font-size:14px;letter-spacing:6px;color:var(--gold);margin-bottom:6px;text-transform:uppercase}
+.hero h1{font-family:'Montserrat',sans-serif;font-size:38px;font-weight:700;line-height:1.2;margin:18px auto 14px;letter-spacing:.5px;max-width:900px}
+.hero .sub{font-size:17px;color:#ddd;font-weight:300;letter-spacing:1.5px;margin-bottom:8px}
+.hero .meta{font-size:13px;color:var(--gold);margin-top:18px;letter-spacing:.6px}
+
+section{max-width:1200px;margin:60px auto;padding:0 32px}
+.section-header{background:var(--black);color:var(--gold);padding:18px 28px;font-family:'Montserrat',sans-serif;font-weight:700;letter-spacing:5px;text-transform:uppercase;font-size:17px;margin-bottom:18px;border-left:6px solid var(--gold)}
+.section-sub{font-size:15px;color:var(--gray-text);margin-bottom:30px;max-width:920px}
+.divider{height:2px;background:linear-gradient(90deg,transparent 0,var(--gold) 30%,var(--gold) 70%,transparent 100%);margin:60px 0}
+
+/* Validation panel */
+.validation{background:#fff;border-left:6px solid var(--green);padding:32px 38px;border-radius:8px;box-shadow:0 4px 14px rgba(0,0,0,.05)}
+.validation .lead{font-size:18px;font-weight:600;color:var(--black);margin-bottom:14px}
+.validation p{font-size:15.5px;line-height:1.75;color:#333;margin-bottom:14px}
+.validation p:last-child{margin-bottom:0}
+.validation strong{color:var(--gold-deep)}
+
+/* Photo grid for $1.2M tier */
+.tier-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(280px,1fr));gap:22px}
+.tier-card{background:#fff;border-radius:10px;overflow:hidden;box-shadow:0 4px 14px rgba(0,0,0,.06)}
+.tier-card .photo{position:relative;width:100%;aspect-ratio:4/3;background:#e8e2d0 url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 75"><rect width="100" height="75" fill="%23E8E2D0"/><text x="50" y="40" text-anchor="middle" font-family="sans-serif" font-size="6" fill="%23A88B3D">PHOTO PLACEHOLDER</text></svg>') center/cover no-repeat}
+.tier-card .photo img{width:100%;height:100%;object-fit:cover;display:block}
+.tier-card .badge{position:absolute;top:12px;left:12px;background:var(--green);color:#fff;font-size:11px;font-weight:700;letter-spacing:1px;padding:4px 10px;border-radius:4px;text-transform:uppercase}
+.tier-card .body{padding:18px 20px}
+.tier-card h4{font-family:'Montserrat',sans-serif;font-size:16px;font-weight:700;letter-spacing:.5px;margin-bottom:6px}
+.tier-card .price{font-size:22px;font-weight:800;color:var(--gold-deep);margin-bottom:10px}
+.tier-card .stats{font-size:13px;color:#555;line-height:1.6}
+.tier-card .stats span{font-weight:600;color:var(--black)}
+
+/* Side-by-side compare */
+.compare{display:grid;grid-template-columns:1fr 1fr;gap:24px;margin-top:18px}
+@media(max-width:780px){.compare{grid-template-columns:1fr}}
+.compare-col{background:#fff;border-radius:10px;overflow:hidden;box-shadow:0 4px 14px rgba(0,0,0,.06)}
+.compare-col.subject{border:3px solid var(--gold)}
+.compare-col h3{padding:16px 22px;font-family:'Montserrat',sans-serif;font-weight:700;font-size:14px;letter-spacing:2px;text-transform:uppercase;background:var(--cream);color:var(--black)}
+.compare-col.subject h3{background:var(--black);color:var(--gold)}
+.compare-row{display:grid;grid-template-columns:1fr 1fr;gap:0}
+.compare-row .photo{aspect-ratio:4/3;background:#e8e2d0 url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 75"><rect width="100" height="75" fill="%23E8E2D0"/><text x="50" y="40" text-anchor="middle" font-family="sans-serif" font-size="6" fill="%23A88B3D">PHOTO</text></svg>') center/cover no-repeat;border:1px solid #f3f3f3}
+.compare-row .photo img{width:100%;height:100%;object-fit:cover}
+.compare-stats{padding:18px 22px;font-size:13.5px;line-height:1.85;color:#333}
+.compare-stats div{display:flex;justify-content:space-between;border-bottom:1px solid #f0f0f0;padding:5px 0}
+.compare-stats div:last-child{border-bottom:none}
+.compare-stats .lbl{color:#777;font-size:12.5px;letter-spacing:.4px;text-transform:uppercase}
+.compare-stats .val{font-weight:700;color:var(--black)}
+
+/* Probability section */
+.prob{display:grid;grid-template-columns:1fr 1fr;gap:30px;align-items:center}
+@media(max-width:780px){.prob{grid-template-columns:1fr}}
+.prob-stat{background:linear-gradient(135deg,#1A1A1A,#262626);color:#fff;padding:48px 40px;border-radius:14px;text-align:center;border-top:6px solid var(--gold)}
+.prob-stat .big{font-family:'Montserrat',sans-serif;font-size:90px;font-weight:800;color:var(--gold);line-height:1;margin-bottom:8px}
+.prob-stat .lbl{font-size:13px;letter-spacing:3px;text-transform:uppercase;color:#fff;font-weight:500;margin-bottom:14px}
+.prob-stat .desc{font-size:14px;color:#ccc;line-height:1.5;max-width:300px;margin:0 auto}
+.prob-text{font-size:15.5px;line-height:1.78;color:#222}
+.prob-text p{margin-bottom:14px}
+.prob-text strong{color:var(--gold-deep)}
+
+/* Strategy cards */
+.strategy-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(260px,1fr));gap:20px;margin-top:18px}
+.strategy-card{background:#fff;border-radius:10px;padding:26px 28px;box-shadow:0 4px 14px rgba(0,0,0,.05);border-top:5px solid var(--gold)}
+.strategy-card .icon{font-family:'Montserrat',sans-serif;font-weight:800;font-size:32px;color:var(--gold);margin-bottom:10px}
+.strategy-card h4{font-family:'Montserrat',sans-serif;font-size:15px;font-weight:700;letter-spacing:1.5px;text-transform:uppercase;margin-bottom:10px;color:var(--black)}
+.strategy-card p{font-size:14px;line-height:1.7;color:#333}
+
+/* Dashboard mock */
+.dashboard{background:#fff;border-radius:12px;overflow:hidden;box-shadow:0 6px 20px rgba(0,0,0,.06);margin-top:18px}
+.dashboard .head{background:var(--black);color:var(--gold);padding:18px 28px;font-family:'Montserrat',sans-serif;font-weight:700;letter-spacing:2px;text-transform:uppercase;font-size:14px;display:flex;justify-content:space-between;align-items:center}
+.dashboard .head .pill{background:var(--gold);color:var(--black);padding:4px 12px;border-radius:20px;font-size:11px;letter-spacing:1px}
+.dash-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(170px,1fr));gap:0}
+.dash-cell{padding:24px 22px;border-right:1px solid #f0f0f0;border-bottom:1px solid #f0f0f0;text-align:center}
+.dash-cell .v{font-family:'Montserrat',sans-serif;font-size:28px;font-weight:800;color:var(--black);display:block}
+.dash-cell .l{font-size:11px;letter-spacing:1.4px;text-transform:uppercase;color:#666;margin-top:4px}
+.dash-cell .trend{font-size:12px;color:var(--green);margin-top:6px;font-weight:600}
+.dash-cell .trend.down{color:var(--coral)}
+.dashboard .insight{background:#fbf8ed;padding:18px 28px;font-size:14px;color:#333;font-style:italic;border-top:2px solid var(--gold)}
+.dashboard .insight strong{font-style:normal;color:var(--gold-deep)}
+
+/* Net sheet scenarios */
+.scenarios{display:grid;grid-template-columns:repeat(auto-fit,minmax(280px,1fr));gap:20px}
+.scenario{background:#fff;border-radius:10px;padding:28px 30px;box-shadow:0 4px 14px rgba(0,0,0,.05);border-left:6px solid var(--gold)}
+.scenario.optimistic{border-left-color:var(--green)}
+.scenario.pessimistic{border-left-color:var(--coral)}
+.scenario h4{font-family:'Montserrat',sans-serif;font-size:13px;letter-spacing:2px;text-transform:uppercase;color:#666;margin-bottom:6px}
+.scenario .price{font-family:'Montserrat',sans-serif;font-size:28px;font-weight:800;color:var(--black);margin-bottom:14px}
+.scenario table{width:100%;font-size:13px}
+.scenario td{padding:5px 0}
+.scenario td:first-child{color:#555}
+.scenario td:last-child{text-align:right;font-weight:600;color:var(--black)}
+.scenario .net{border-top:2px solid var(--gold);padding-top:8px;margin-top:8px;font-weight:700}
+.scenario .net td{font-size:15px}
+
+footer{background:var(--black);color:#ddd;padding:42px 32px;text-align:center;margin-top:60px}
+footer .name{font-family:'Montserrat',sans-serif;font-size:18px;font-weight:700;letter-spacing:3px;color:var(--gold);margin-bottom:8px}
+footer .info{font-size:13px;color:#bbb;margin-bottom:18px}
+footer .closing{font-size:14px;color:#ddd;margin:18px auto;max-width:680px;font-style:italic}
+footer .disclaimer{font-size:11px;color:#888;margin-top:18px;letter-spacing:.3px;max-width:780px;margin-left:auto;margin-right:auto}
+</style>
+</head>
+<body>
+
+<nav class="site-nav">
+  <a href="https://graehamwatts.com/"><img class="logo" src="https://images.leadconnectorhq.com/image/f_webp/q_80/r_1200/u_https://assets.cdn.filesafe.space/6wuU3haUH7uNeT20E3UZ/media/691256870b647e40e3c2e105.png" alt="Graeham Watts"></a>
+  <ul>
+    <li><a href="https://graehamwatts.com/">Home</a></li>
+    <li><a href="https://graehamwatts.com/sell">Sell</a></li>
+    <li><a href="https://graehamwatts.com/the-bay-market">The Bay Market</a></li>
+    <li><a href="https://graehamwatts.com/about">About</a></li>
+    <li><a href="https://graehamwatts.com/contact">Contact</a></li>
+  </ul>
+</nav>
+
+<nav class="cma-nav">
+  <a href="#validation">Where We Are</a>
+  <a href="#tier">$1.2M Tier</a>
+  <a href="#sidebyside">Side by Side</a>
+  <a href="#competition">Competition</a>
+  <a href="#probability">Data Reality</a>
+  <a href="#strategy">My Strategy</a>
+  <a href="#dashboard">How We Track</a>
+  <a href="#scenarios">Net at Each Price</a>
+</nav>
+
+<main>
+
+<header class="hero">
+  <div class="brand">GRAEHAM WATTS</div>
+  <div class="realtor-tag">R E A L T O R</div>
+  <div class="label">Listing Strategy &amp; Market Reality</div>
+  <h1>2247 Menalto Avenue, East Palo Alto</h1>
+  <div class="sub">A side-by-side look at where the home stands, where it could go, and how I'd run the listing</div>
+  <div class="meta">PREPARED FOR THE OWNERS · MAY 7, 2026 · GRAEHAM WATTS · INTERO REAL ESTATE · DRE #01466876</div>
+</header>
+
+<!-- VALIDATION -->
+<section id="validation">
+  <div class="section-header">WHERE WE ARE TODAY</div>
+  <div class="section-sub">Starting with the good news, then the honest part.</div>
+  <div class="validation">
+    <div class="lead">Two offers in 90 days proves there is real, transactable demand for this property.</div>
+    <p>Listed January 8 at $1,098,000. Into contract January 22 — fourteen days. Fell out February 18 in contingencies. Re-contracted March 13. That's not a property nobody wants. That's a property that produced two qualified buyers in a fully balanced market — and a market where the typical home is closing at 100–101% of asking, not 110%.</p>
+    <p>The fall-out is the data point that matters most. When deals fall through in a balanced market like this one, it is almost always inspections, appraisal, or both. The MLS public remarks on this listing say <strong>"buyer to verify permits, building square footage, and lot size."</strong> That language paired with a self-contained rear unit tells the appraiser and the lender exactly what they need to know — and it tells us where the $1.2M target meets resistance.</p>
+    <p>So the question is not "is this house worth selling." It clearly is. The question is: <strong>at what number, with what marketing, and how do we make sure round three closes.</strong></p>
+  </div>
+</section>
+
+<div class="divider"></div>
+
+<!-- TIER GRID -->
+<section id="tier">
+  <div class="section-header">WHAT $1.2M LOOKS LIKE IN EAST PALO ALTO</div>
+  <div class="section-sub">Every East Palo Alto single-family home that sold or went pending at $1.2M+ in the last six months. Five total. Photos and stats below — no commentary.</div>
+  <div class="tier-grid" id="tier-grid">
+    <!-- populated by photo data -->
+    <div class="tier-card"><div class="photo" data-mls="ML82028217"></div><div class="body"><span class="badge">SOLD</span><h4>2296 Pulgas Avenue</h4><div class="price">$1,350,000</div><div class="stats"><span>3 bed / 2 bath</span> · 1,480 sqft · <span>11,422 lot</span> · 8 DOM · 72 yrs</div></div></div>
+    <div class="tier-card"><div class="photo" data-mls="ML82033977"></div><div class="body"><span class="badge">SOLD</span><h4>2512 Farrington Way</h4><div class="price">$1,325,000</div><div class="stats"><span>3 bed / 2 bath</span> · 1,100 sqft · 5,000 lot · 10 DOM · 70 yrs</div></div></div>
+    <div class="tier-card"><div class="photo" data-mls="ML82036402"></div><div class="body"><span class="badge" style="background:var(--gold-deep)">PENDING</span><h4>1371 Camellia Drive</h4><div class="price">$1,248,000</div><div class="stats"><span>3 bed / 2 bath</span> · 1,020 sqft · <span>7,679 lot</span> · 19 DOM · 72 yrs</div></div></div>
+    <div class="tier-card"><div class="photo" data-mls="ML82023029"></div><div class="body"><span class="badge">SOLD</span><h4>1523 Ursula Way</h4><div class="price">$1,220,000</div><div class="stats"><span>3 bed / 2 bath</span> · 1,100 sqft · 6,160 lot · 50 DOM · 69 yrs</div></div></div>
+    <div class="tier-card"><div class="photo" data-mls="ML82025697"></div><div class="body"><span class="badge">SOLD</span><h4>2550 Annapolis Street</h4><div class="price">$1,200,000</div><div class="stats"><span>3 bed / 2 bath</span> · 1,030 sqft · 5,000 lot · 11 DOM · 74 yrs</div></div></div>
+  </div>
+  <p style="margin-top:24px;font-size:15px;color:#444;line-height:1.7;background:#fbf8ed;padding:18px 24px;border-left:4px solid var(--gold);border-radius:4px"><strong style="color:var(--gold-deep)">The pattern:</strong> Every home above is a true 3 bed / 2 bath, fully updated, with permitted square footage. None has an unpermitted rear unit. None is a 3/1.</p>
+</section>
+
+<div class="divider"></div>
+
+<!-- SIDE BY SIDE -->
+<section id="sidebyside">
+  <div class="section-header">2247 MENALTO IN CONTEXT</div>
+  <div class="section-sub">Subject property next to the closest renovated 3/2 comp at the same square footage. Photos do the talking.</div>
+
+  <div class="compare">
+    <div class="compare-col subject">
+      <h3>2247 Menalto Avenue · Subject</h3>
+      <div class="compare-row" id="subject-photos">
+        <div class="photo" data-mls="ML82030610" data-slot="hero"></div>
+        <div class="photo" data-mls="ML82030610" data-slot="kitchen"></div>
+        <div class="photo" data-mls="ML82030610" data-slot="bath"></div>
+        <div class="photo" data-mls="ML82030610" data-slot="exterior"></div>
+      </div>
+      <div class="compare-stats">
+        <div><span class="lbl">List Price</span><span class="val">$1,098,000</span></div>
+        <div><span class="lbl">$ / SqFt</span><span class="val">$998</span></div>
+        <div><span class="lbl">Beds / Baths</span><span class="val">3 / 1</span></div>
+        <div><span class="lbl">Living Area</span><span class="val">1,100 sqft (permitted)</span></div>
+        <div><span class="lbl">Bonus Unit</span><span class="val">Yes — unpermitted</span></div>
+        <div><span class="lbl">Lot</span><span class="val">6,500 sqft</span></div>
+        <div><span class="lbl">Year Built</span><span class="val">1948</span></div>
+        <div><span class="lbl">Condition</span><span class="val">Original / lightly updated</span></div>
+        <div><span class="lbl">DOM</span><span class="val">33 (one fall-out)</span></div>
+      </div>
+    </div>
+    <div class="compare-col">
+      <h3>2512 Farrington Way · Closest 3/2 Comp at 1,100 sqft</h3>
+      <div class="compare-row" id="comp-photos">
+        <div class="photo" data-mls="ML82033977" data-slot="hero"></div>
+        <div class="photo" data-mls="ML82033977" data-slot="kitchen"></div>
+        <div class="photo" data-mls="ML82033977" data-slot="bath"></div>
+        <div class="photo" data-mls="ML82033977" data-slot="exterior"></div>
+      </div>
+      <div class="compare-stats">
+        <div><span class="lbl">Sold Price</span><span class="val" style="color:var(--green)">$1,325,000</span></div>
+        <div><span class="lbl">$ / SqFt</span><span class="val">$1,205</span></div>
+        <div><span class="lbl">Beds / Baths</span><span class="val">3 / 2</span></div>
+        <div><span class="lbl">Living Area</span><span class="val">1,100 sqft (permitted)</span></div>
+        <div><span class="lbl">Bonus Unit</span><span class="val">No</span></div>
+        <div><span class="lbl">Lot</span><span class="val">5,000 sqft</span></div>
+        <div><span class="lbl">Year Built</span><span class="val">1956</span></div>
+        <div><span class="lbl">Condition</span><span class="val">Fully renovated</span></div>
+        <div><span class="lbl">DOM</span><span class="val">10</span></div>
+      </div>
+    </div>
+  </div>
+
+  <p style="margin-top:24px;font-size:15px;color:#444;line-height:1.7;background:#fbf8ed;padding:18px 24px;border-left:4px solid var(--gold);border-radius:4px">Same size. Same era of construction. Same East Palo Alto location. <strong style="color:var(--gold-deep)">$227,000 difference</strong> driven by the second bathroom and the level of finish. This is the gap we're working with.</p>
+</section>
+
+<div class="divider"></div>
+
+<!-- COMPETITION -->
+<section id="competition">
+  <div class="section-header">THE COMPETITION RIGHT NOW</div>
+  <div class="section-sub">Active and pending listings the property is competing against today.</div>
+
+  <div class="tier-grid">
+    <div class="tier-card"><div class="photo" data-active="menalto-active"></div><div class="body"><span class="badge" style="background:var(--coral)">ACTIVE — SAME STREET</span><h4>Menalto Avenue (Active)</h4><div class="price">~$1,199,000</div><div class="stats"><span>~1,460 sqft</span> · <span>~7,000 lot</span> · 3 bed / 2 bath · Just up the road</div><p style="font-size:12.5px;margin-top:10px;color:#666;line-height:1.5;font-style:italic">Bigger square footage and bigger lot than 2247, asking just under $1.2M. The buyer pool comparing $1.2M EPA homes will see this property side-by-side.</p></div></div>
+    <div class="tier-card"><div class="photo" data-mls="ML82036402"></div><div class="body"><span class="badge" style="background:var(--gold-deep)">PENDING</span><h4>1371 Camellia Drive</h4><div class="price">$1,248,000</div><div class="stats"><span>3 bed / 2 bath</span> · 1,020 sqft · 7,679 lot · 19 DOM · 72 yrs</div><p style="font-size:12.5px;margin-top:10px;color:#666;line-height:1.5;font-style:italic">Smaller home but bigger lot than 2247, with a permitted 2nd bath. Pending after only 19 days.</p></div></div>
+    <div class="tier-card"><div class="photo" data-mls="ML82040440"></div><div class="body"><span class="badge" style="background:var(--gold-deep)">PENDING</span><h4>151 Verbena Drive</h4><div class="price">$1,068,000</div><div class="stats"><span>3 bed / 2 bath</span> · 1,110 sqft · 5,737 lot · 7 DOM · 76 yrs</div><p style="font-size:12.5px;margin-top:10px;color:#666;line-height:1.5;font-style:italic">Almost identical square footage to 2247, with a 2nd bath. Pending in 7 days at $1.068M.</p></div></div>
+  </div>
+</section>
+
+<div class="divider"></div>
+
+<!-- DATA REALITY -->
+<section id="probability">
+  <div class="section-header">THE DATA REALITY — 3 BED / 1 BATH AT $1.2M</div>
+  <div class="section-sub">The honest probability picture for the subject's exact configuration.</div>
+  <div class="prob">
+    <div class="prob-stat">
+      <div class="big">0</div>
+      <div class="lbl">3/1 EPA homes</div>
+      <div class="lbl">sold at $1.2M+</div>
+      <div class="lbl">in the last 6 months</div>
+      <div class="desc" style="margin-top:18px">Of 24 East Palo Alto comps in the last 6 months, zero were 3 bed / 1 bath that closed at $1,200,000 or higher.</div>
+    </div>
+    <div class="prob-text">
+      <p>Of 24 East Palo Alto single-family comps in the last 6 months, six were 3 bed / 1 bath. Their range was <strong>$771,000 to $1,125,000</strong>, with a median around $958,000.</p>
+      <p>The closest 3/1 to break the $1.2M ceiling was 2544 Illinois Street at $1,125,000 — and that one only got there with a full renovation, sold in 24 days.</p>
+      <p>The five comps that hit $1.2M+ all share the same recipe: <strong>3 bed / 2 bath, permitted, fully updated.</strong> The bonus square footage in 2247 Menalto's rear unit is real value to a buyer who wants flexible living space — but it does not appraise, and the appraisal is what determines whether financing closes.</p>
+      <p>The data does not say "you can't sell at $1.2M." It says: <strong>at $1.2M, the buyer pool narrows to cash buyers and buyers who can absorb an appraisal gap with cash down.</strong> That pool exists. It's just smaller, slower, and harder to reach with a generic listing.</p>
+    </div>
+  </div>
+</section>
+
+<div class="divider"></div>
+
+<!-- MY STRATEGY -->
+<section id="strategy">
+  <div class="section-header">HOW I'D MARKET 2247 MENALTO</div>
+  <div class="section-sub">A specific plan for reaching the smaller, slower, harder-to-reach buyer pool that pays the top of the range.</div>
+  <div class="strategy-grid">
+    <div class="strategy-card"><div class="icon">01</div><h4>Premium Visual Package</h4><p>Twilight photography, drone aerial showing the full lot and rear unit footprint, professional video walkthrough, dedicated single-property website. The current listing photos are competent but not premium — and at this price point, premium is the table stakes.</p></div>
+    <div class="strategy-card"><div class="icon">02</div><h4>Geofenced Digital Campaign</h4><p>Programmatic ads served to phones inside Belle Haven, Menlo Park, Stanford employee zones, and the Meta corporate campus. Plus retargeting for anyone who clicks. This puts the listing in front of the high-income buyer pool that values flex space.</p></div>
+    <div class="strategy-card"><div class="icon">03</div><h4>6% Rate Buy-Down</h4><p>Through preferred lender, qualifying buyers get a 6.0% rate vs the current 6.4–6.5% market rate, with closing costs covered. On a $1M loan, that saves a buyer roughly $250/month — which directly translates into payment-power that can lift the offer ceiling.</p></div>
+    <div class="strategy-card"><div class="icon">04</div><h4>Direct Cash-Buyer Outreach</h4><p>Curated list of EPA investor buyers and 1031 exchange clients. The unpermitted rear unit is a positive for cash buyers (rental income, no appraisal sensitivity). I'll get the listing in front of 30–50 of them in week one before the broader market campaign even runs.</p></div>
+    <div class="strategy-card"><div class="icon">05</div><h4>Permit-Cost Credit Option</h4><p>Listed in remarks as a buyer-elected option: "Seller will credit estimated permit cost (TBD) for buyer to pursue JADU permit post-close." This addresses the appraisal concern that killed the first deal — without forcing the seller to spend money before listing.</p></div>
+    <div class="strategy-card"><div class="icon">06</div><h4>Honest, Compliant Disclosure</h4><p>Living area on MLS reflects permitted square footage. The rear unit is described in remarks and disclosures with full transparency. This protects the seller legally, protects the listing from future complaints, and positions the property correctly for the buyer pool that values it.</p></div>
+  </div>
+</section>
+
+<div class="divider"></div>
+
+<!-- DASHBOARD -->
+<section id="dashboard">
+  <div class="section-header">HOW WE'LL KNOW WHAT'S WORKING — WEEKLY</div>
+  <div class="section-sub">Every week, you and I look at the same numbers. The data tells us what to adjust before either of us has to argue about it.</div>
+  <div class="dashboard">
+    <div class="head"><span>WEEKLY LISTING DASHBOARD — SAMPLE</span><span class="pill">UPDATED EVERY MONDAY</span></div>
+    <div class="dash-grid">
+      <div class="dash-cell"><span class="v">312</span><span class="l">Online Views</span><span class="trend">+24% vs prior week</span></div>
+      <div class="dash-cell"><span class="v">47</span><span class="l">Disclosure Downloads</span><span class="trend">+8% vs prior week</span></div>
+      <div class="dash-cell"><span class="v">14</span><span class="l">Showings Scheduled</span><span class="trend">+2 vs prior week</span></div>
+      <div class="dash-cell"><span class="v">3</span><span class="l">Repeat Showings</span><span class="trend">+1 vs prior week</span></div>
+      <div class="dash-cell"><span class="v">0</span><span class="l">Offers This Week</span><span class="trend down">No change</span></div>
+    </div>
+    <div class="insight"><strong>What this pattern means:</strong> high traffic + strong downloads + decent showings + zero offers tells us the marketing is working but the buyer is hesitating at the price. After week 3 of this pattern, the data says it's price, not exposure. That's when we'd discuss the step-down.</div>
+  </div>
+
+  <p style="margin-top:30px;font-size:15px;color:#444;line-height:1.75;max-width:900px">The point of the dashboard is that <strong>you see the same numbers I see, every week, before I tell you anything.</strong> If we've got high views and zero offers, the data tells us it's price. If we've got low views, the data tells us it's exposure. If we've got high views and high downloads but no showings, the data tells us it's the photography. We make decisions together based on what's actually happening — not on what either of us thinks should be happening.</p>
+</section>
+
+<div class="divider"></div>
+
+<!-- NET SCENARIOS -->
+<section id="scenarios">
+  <div class="section-header">YOUR NET AT EACH PRICE POINT</div>
+  <div class="section-sub">What lands in your pocket after commission, transfer tax, escrow, and standard sell-side closing costs. Mortgage payoff not included.</div>
+  <div class="scenarios">
+    <div class="scenario pessimistic">
+      <h4>Conservative Sale</h4>
+      <div class="price">$1,049,000</div>
+      <table>
+        <tr><td>Gross sale</td><td>$1,049,000</td></tr>
+        <tr><td>Commission (6%)</td><td>($62,940)</td></tr>
+        <tr><td>Transfer tax</td><td>($1,154)</td></tr>
+        <tr><td>Escrow + title + misc</td><td>($5,000)</td></tr>
+        <tr class="net"><td>Net before mortgage</td><td>~$979,906</td></tr>
+      </table>
+    </div>
+    <div class="scenario">
+      <h4>Current Pending Price</h4>
+      <div class="price">$1,098,000</div>
+      <table>
+        <tr><td>Gross sale</td><td>$1,098,000</td></tr>
+        <tr><td>Commission (6%)</td><td>($65,880)</td></tr>
+        <tr><td>Transfer tax</td><td>($1,208)</td></tr>
+        <tr><td>Escrow + title + misc</td><td>($5,000)</td></tr>
+        <tr class="net"><td>Net before mortgage</td><td>~$1,025,912</td></tr>
+      </table>
+    </div>
+    <div class="scenario optimistic">
+      <h4>Stretch Goal</h4>
+      <div class="price">$1,200,000</div>
+      <table>
+        <tr><td>Gross sale</td><td>$1,200,000</td></tr>
+        <tr><td>Commission (6%)</td><td>($72,000)</td></tr>
+        <tr><td>Transfer tax</td><td>($1,320)</td></tr>
+        <tr><td>Escrow + title + misc</td><td>($5,000)</td></tr>
+        <tr class="net"><td>Net before mortgage</td><td>~$1,121,680</td></tr>
+      </table>
+    </div>
+  </div>
+  <p style="margin-top:24px;font-size:14px;color:#666;line-height:1.7;font-style:italic">Reaching the $1.2M tier under current market conditions requires either (a) a permitted second bath plus full renovation, (b) a cash buyer who values the flex space subjectively, or (c) significantly lower interest rates. The 6% buy-down lender program partially addresses (c).</p>
+</section>
+
+<footer>
+  <div class="name">GRAEHAM WATTS · INTERO REAL ESTATE</div>
+  <div class="info">DRE #01466876 · 650-308-4727 · graehamwatts@gmail.com · graehamwatts.com</div>
+  <div class="closing">My job isn't to tell you what you want to hear. It's to give you the data, the strategy, and the honest probability — and then execute the plan we agree on, every week, with numbers we both see.</div>
+  <div class="disclaimer">Comparable sales data sourced from MLSListings (East Palo Alto, last 6 months as of May 7, 2026). Aculist 94303 ZIP 90-day market overview referenced. Net proceed estimates assume 6% total commission and standard sell-side closing costs; do not include mortgage payoff. This document is not a formal appraisal and does not constitute investment, legal, or tax advice. Photos are placeholders pending final MLS image extraction.</div>
+</footer>
+
+</main>
+
+</body>
+</html>
