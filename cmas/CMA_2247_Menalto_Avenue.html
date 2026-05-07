@@ -8,7 +8,6 @@
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&family=Montserrat:wght@500;600;700;800&display=swap" rel="stylesheet">
 <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.0/dist/chart.umd.min.js"></script>
-<script src="https://cdn.jsdelivr.net/npm/chartjs-plugin-datalabels@2.2.0"></script>
 <style>
 :root{
   --black:#1A1A1A;
@@ -532,112 +531,134 @@ footer .disclaimer{font-size:11px;color:#888;margin-top:18px;letter-spacing:.3px
 </main>
 
 <script>
-Chart.register(ChartDataLabels);
-const goldGrad = (ctx) => { const g = ctx.chart.ctx.createLinearGradient(0,0,0,330); g.addColorStop(0,'#C5A55A'); g.addColorStop(1,'#A88B3D'); return g; };
+window.addEventListener('load', function(){
+  if (typeof Chart === 'undefined') { console.error('Chart.js failed to load'); return; }
 
-// $/sqft chart
-const psfData = [
-  {a:'2782 Fordham',v:796},{a:'228 Wisteria',v:543},{a:'2754 Gorgetown',v:782},
-  {a:'1024 Laurel',v:995},{a:'2280 Brentwood',v:787},{a:'2210 Menalto',v:924},
-  {a:'2352 Menalto',v:891},{a:'128 Grace',v:907},{a:'120 Gardenia',v:838},
-  {a:'2280 Brentwood',v:787},{a:'2509 Illinois',v:927},{a:'1007 Newbridge',v:691},
-  {a:'2243 Cooley',v:671},{a:'2055 Oakwood',v:1045},{a:'801 Weeks',v:700},
-  {a:'151 Verbena',v:962},{a:'2060 Pulgas',v:808},{a:'1183 Saratoga',v:750},
-  {a:'2544 Illinois',v:1160},{a:'2115 Clarke',v:883},{a:'2550 Annapolis',v:1165},
-  {a:'1523 Ursula',v:1109},{a:'1371 Camellia',v:1224},{a:'2512 Farrington',v:1205},
-  {a:'2296 Pulgas',v:912},{a:'2247 MENALTO (subj)',v:998}
-];
-psfData.sort((a,b)=>a.v-b.v);
-new Chart(document.getElementById('psfChart'),{
-  type:'bar',
-  data:{labels:psfData.map(d=>d.a),datasets:[{
-    data:psfData.map(d=>d.v),
-    backgroundColor:psfData.map(d=>d.a.includes('subj')?'#1A1A1A':goldGrad),
-    borderColor:psfData.map(d=>d.a.includes('subj')?'#C5A55A':'#A88B3D'),
-    borderWidth:psfData.map(d=>d.a.includes('subj')?3:0)
-  }]},
-  options:{
-    responsive:true,maintainAspectRatio:false,
-    plugins:{legend:{display:false},datalabels:{display:false},
-      tooltip:{callbacks:{label:c=>'$'+c.parsed.y+' / sqft'}}},
-    scales:{x:{ticks:{font:{size:9},maxRotation:75,minRotation:55}},
-      y:{beginAtZero:false,title:{display:true,text:'$ / SqFt'}}}
+  var GOLD = '#C5A55A', GOLD_DEEP = '#A88B3D', BLACK = '#1A1A1A', GREEN = '#4a7c59', CORAL = '#d97757';
+
+  function colorFor(label, val, mode){
+    if (label.indexOf('subj') !== -1) return BLACK;
+    if (mode === 'dom'){
+      if (val < 15) return GREEN;
+      if (val <= 30) return GOLD;
+      return CORAL;
+    }
+    return GOLD;
   }
-});
+  function borderFor(label){ return label.indexOf('subj') !== -1 ? GOLD : 'transparent'; }
+  function borderWFor(label){ return label.indexOf('subj') !== -1 ? 3 : 0; }
 
-// DOM chart
-const domData = [
-  {a:'2754 Gorgetown',v:0},{a:'151 Verbena',v:7},{a:'2055 Oakwood',v:8},
-  {a:'2115 Clarke',v:8},{a:'2296 Pulgas',v:8},{a:'2512 Farrington',v:10},
-  {a:'2550 Annapolis',v:11},{a:'1183 Saratoga',v:17},{a:'2509 Illinois',v:19},
-  {a:'1371 Camellia',v:19},{a:'2210 Menalto',v:23},{a:'2544 Illinois',v:24},
-  {a:'120 Gardenia',v:27},{a:'1007 Newbridge',v:28},{a:'2352 Menalto',v:30},
-  {a:'801 Weeks',v:32},{a:'2247 MENALTO (subj)',v:33},{a:'2280 Brentwood',v:37},
-  {a:'1024 Laurel',v:39},{a:'1523 Ursula',v:50},{a:'2243 Cooley',v:52},
-  {a:'2060 Pulgas',v:55},{a:'228 Wisteria',v:122},{a:'128 Grace',v:138},
-  {a:'2782 Fordham',v:369}
-];
-new Chart(document.getElementById('domChart'),{
-  type:'bar',
-  data:{labels:domData.map(d=>d.a),datasets:[{
-    data:domData.map(d=>d.v),
-    backgroundColor:domData.map(d=>{
-      if(d.a.includes('subj')) return '#1A1A1A';
-      if(d.v<15) return '#4a7c59';
-      if(d.v<=30) return '#C5A55A';
-      return '#d97757';
-    })
-  }]},
-  options:{
-    responsive:true,maintainAspectRatio:false,
-    plugins:{legend:{display:false},datalabels:{display:false},
-      tooltip:{callbacks:{label:c=>c.parsed.y+' DOM'}}},
-    scales:{x:{ticks:{font:{size:9},maxRotation:75,minRotation:55}},
-      y:{beginAtZero:true,title:{display:true,text:'Days on Market'}}}
-  }
-});
+  // 1. $/sqft
+  try {
+    var psf = [
+      {a:'2782 Fordham',v:796},{a:'228 Wisteria',v:543},{a:'2754 Gorgetown',v:782},
+      {a:'1024 Laurel',v:995},{a:'2280 Brentwood',v:787},{a:'2210 Menalto',v:924},
+      {a:'2352 Menalto',v:891},{a:'128 Grace',v:907},{a:'120 Gardenia',v:838},
+      {a:'2509 Illinois',v:927},{a:'1007 Newbridge',v:691},{a:'2243 Cooley',v:671},
+      {a:'2055 Oakwood',v:1045},{a:'801 Weeks',v:700},{a:'151 Verbena',v:962},
+      {a:'2060 Pulgas',v:808},{a:'1183 Saratoga',v:750},{a:'2544 Illinois',v:1160},
+      {a:'2115 Clarke',v:883},{a:'2550 Annapolis',v:1165},{a:'1523 Ursula',v:1109},
+      {a:'1371 Camellia',v:1224},{a:'2512 Farrington',v:1205},{a:'2296 Pulgas',v:912},
+      {a:'2247 MENALTO (subj)',v:998}
+    ];
+    psf.sort(function(a,b){return a.v-b.v;});
+    new Chart(document.getElementById('psfChart'), {
+      type:'bar',
+      data:{labels:psf.map(function(d){return d.a;}),datasets:[{
+        data:psf.map(function(d){return d.v;}),
+        backgroundColor:psf.map(function(d){return colorFor(d.a,d.v,'psf');}),
+        borderColor:psf.map(function(d){return borderFor(d.a);}),
+        borderWidth:psf.map(function(d){return borderWFor(d.a);})
+      }]},
+      options:{
+        responsive:true,maintainAspectRatio:false,
+        plugins:{legend:{display:false},tooltip:{callbacks:{label:function(c){return '$'+c.parsed.y+' / sqft';}}}},
+        scales:{x:{ticks:{font:{size:9},maxRotation:75,minRotation:55}},
+          y:{beginAtZero:false,title:{display:true,text:'$ / SqFt'}}}
+      }
+    });
+  } catch(e){ console.error('psf chart failed:', e); }
 
-// Price chart
-const priceData = [
-  {a:'2782 Fordham',v:771000},{a:'228 Wisteria',v:776520},{a:'2754 Gorgetown',v:790000},
-  {a:'1024 Laurel',v:805950},{a:'2210 Menalto',v:850000},{a:'2352 Menalto',v:900000},
-  {a:'128 Grace',v:925000},{a:'120 Gardenia',v:930000},{a:'2280 Brentwood',v:948888},
-  {a:'2509 Illinois',v:955000},{a:'1007 Newbridge',v:960000},{a:'2243 Cooley',v:1000000},
-  {a:'2055 Oakwood',v:1035000},{a:'801 Weeks',v:1050000},{a:'151 Verbena',v:1068000},
-  {a:'2060 Pulgas',v:1075000},{a:'1183 Saratoga',v:1080000},{a:'2247 MENALTO (subj)',v:1098000},
-  {a:'2544 Illinois',v:1125000},{a:'2115 Clarke',v:1130000},{a:'2550 Annapolis',v:1200000},
-  {a:'1523 Ursula',v:1220000},{a:'1371 Camellia',v:1248000},{a:'2512 Farrington',v:1325000},
-  {a:'2296 Pulgas',v:1350000}
-];
-new Chart(document.getElementById('priceChart'),{
-  type:'bar',
-  data:{labels:priceData.map(d=>d.a),datasets:[{
-    data:priceData.map(d=>d.v),
-    backgroundColor:priceData.map(d=>d.a.includes('subj')?'#1A1A1A':goldGrad),
-    borderColor:priceData.map(d=>d.a.includes('subj')?'#C5A55A':'#A88B3D'),
-    borderWidth:priceData.map(d=>d.a.includes('subj')?3:0)
-  }]},
-  options:{
-    responsive:true,maintainAspectRatio:false,
-    plugins:{legend:{display:false},datalabels:{display:false},
-      tooltip:{callbacks:{label:c=>'$'+c.parsed.y.toLocaleString()}}},
-    scales:{x:{ticks:{font:{size:9},maxRotation:75,minRotation:55}},
-      y:{beginAtZero:false,ticks:{callback:v=>'$'+(v/1000)+'k'},title:{display:true,text:'Sale / List Price'}}}
-  }
-});
+  // 2. DOM
+  try {
+    var dom = [
+      {a:'2754 Gorgetown',v:0},{a:'151 Verbena',v:7},{a:'2055 Oakwood',v:8},
+      {a:'2115 Clarke',v:8},{a:'2296 Pulgas',v:8},{a:'2512 Farrington',v:10},
+      {a:'2550 Annapolis',v:11},{a:'1183 Saratoga',v:17},{a:'2509 Illinois',v:19},
+      {a:'1371 Camellia',v:19},{a:'2210 Menalto',v:23},{a:'2544 Illinois',v:24},
+      {a:'120 Gardenia',v:27},{a:'1007 Newbridge',v:28},{a:'2352 Menalto',v:30},
+      {a:'801 Weeks',v:32},{a:'2247 MENALTO (subj)',v:33},{a:'2280 Brentwood',v:37},
+      {a:'1024 Laurel',v:39},{a:'1523 Ursula',v:50},{a:'2243 Cooley',v:52},
+      {a:'2060 Pulgas',v:55},{a:'228 Wisteria',v:122},{a:'128 Grace',v:138},
+      {a:'2782 Fordham',v:369}
+    ];
+    new Chart(document.getElementById('domChart'), {
+      type:'bar',
+      data:{labels:dom.map(function(d){return d.a;}),datasets:[{
+        data:dom.map(function(d){return d.v;}),
+        backgroundColor:dom.map(function(d){return colorFor(d.a,d.v,'dom');})
+      }]},
+      options:{
+        responsive:true,maintainAspectRatio:false,
+        plugins:{legend:{display:false},tooltip:{callbacks:{label:function(c){return c.parsed.y+' DOM';}}}},
+        scales:{x:{ticks:{font:{size:9},maxRotation:75,minRotation:55}},
+          y:{beginAtZero:true,title:{display:true,text:'Days on Market'}}}
+      }
+    });
+  } catch(e){ console.error('dom chart failed:', e); }
 
-// Strategy DOM chart
-new Chart(document.getElementById('strategyChart'),{
-  type:'bar',
-  data:{
-    labels:['Below Market\n(<$950k)','At Market\n($950k-$1.1M)','Premium\n($1.1M-$1.35M)'],
-    datasets:[
-      {label:'Median DOM',data:[63,21,16],backgroundColor:'#C5A55A',yAxisID:'y',datalabels:{anchor:'end',align:'top',color:'#1A1A1A',font:{weight:'bold'},formatter:v=>v+' days'}},
-      {label:'List-to-Sale Ratio %',data:[99,101,102],backgroundColor:'#1A1A1A',yAxisID:'y1',datalabels:{anchor:'end',align:'top',color:'#1A1A1A',font:{weight:'bold'},formatter:v=>v+'%'}}
-    ]
-  },
-  options:{
-    responsive:true,maintainAspectRatio:false,
-    plugins:{legend:{position:'bottom'},tooltip:{callbacks:{label:c=>c.dataset.label+': '+c.parsed.y+(c.dataset.label.includes('%')?'%':' days')}}},
-    scales:{
-      y:{beginAtZero:true,position:'left',title:{display:true,tex
+  // 3. Price
+  try {
+    var price = [
+      {a:'2782 Fordham',v:771000},{a:'228 Wisteria',v:776520},{a:'2754 Gorgetown',v:790000},
+      {a:'1024 Laurel',v:805950},{a:'2210 Menalto',v:850000},{a:'2352 Menalto',v:900000},
+      {a:'128 Grace',v:925000},{a:'120 Gardenia',v:930000},{a:'2280 Brentwood',v:948888},
+      {a:'2509 Illinois',v:955000},{a:'1007 Newbridge',v:960000},{a:'2243 Cooley',v:1000000},
+      {a:'2055 Oakwood',v:1035000},{a:'801 Weeks',v:1050000},{a:'151 Verbena',v:1068000},
+      {a:'2060 Pulgas',v:1075000},{a:'1183 Saratoga',v:1080000},{a:'2247 MENALTO (subj)',v:1098000},
+      {a:'2544 Illinois',v:1125000},{a:'2115 Clarke',v:1130000},{a:'2550 Annapolis',v:1200000},
+      {a:'1523 Ursula',v:1220000},{a:'1371 Camellia',v:1248000},{a:'2512 Farrington',v:1325000},
+      {a:'2296 Pulgas',v:1350000}
+    ];
+    new Chart(document.getElementById('priceChart'), {
+      type:'bar',
+      data:{labels:price.map(function(d){return d.a;}),datasets:[{
+        data:price.map(function(d){return d.v;}),
+        backgroundColor:price.map(function(d){return colorFor(d.a,d.v,'price');}),
+        borderColor:price.map(function(d){return borderFor(d.a);}),
+        borderWidth:price.map(function(d){return borderWFor(d.a);})
+      }]},
+      options:{
+        responsive:true,maintainAspectRatio:false,
+        plugins:{legend:{display:false},tooltip:{callbacks:{label:function(c){return '$'+c.parsed.y.toLocaleString();}}}},
+        scales:{x:{ticks:{font:{size:9},maxRotation:75,minRotation:55}},
+          y:{beginAtZero:false,ticks:{callback:function(v){return '$'+(v/1000)+'k';}},title:{display:true,text:'Sale / List Price'}}}
+      }
+    });
+  } catch(e){ console.error('price chart failed:', e); }
+
+  // 4. Strategy
+  try {
+    new Chart(document.getElementById('strategyChart'), {
+      type:'bar',
+      data:{
+        labels:['Below Market (<$950k)','At Market ($950k-$1.1M)','Premium ($1.1M-$1.35M)'],
+        datasets:[
+          {label:'Median DOM',data:[63,21,16],backgroundColor:GOLD,yAxisID:'y'},
+          {label:'List-to-Sale Ratio %',data:[99,101,102],backgroundColor:BLACK,yAxisID:'y1'}
+        ]
+      },
+      options:{
+        responsive:true,maintainAspectRatio:false,
+        plugins:{legend:{position:'bottom'},tooltip:{callbacks:{label:function(c){return c.dataset.label+': '+c.parsed.y+(c.dataset.label.indexOf('%')!==-1?'%':' days');}}}},
+        scales:{
+          y:{beginAtZero:true,position:'left',title:{display:true,text:'Median Days on Market'}},
+          y1:{beginAtZero:false,min:90,max:110,position:'right',grid:{drawOnChartArea:false},title:{display:true,text:'List-to-Sale %'}}
+        }
+      }
+    });
+  } catch(e){ console.error('strategy chart failed:', e); }
+});
+</script>
+</body>
+</html>
