@@ -137,6 +137,27 @@ footer .name{font-family:'Montserrat',sans-serif;font-size:18px;font-weight:700;
 footer .info{font-size:13px;color:#bbb;margin-bottom:18px}
 footer .closing{font-size:14px;color:#ddd;margin:18px auto;max-width:680px;font-style:italic}
 footer .disclaimer{font-size:11px;color:#888;margin-top:18px;letter-spacing:.3px;max-width:780px;margin-left:auto;margin-right:auto}
+
+/* Lightbox */
+.tier-card .photo, .unit-card .photo, .compare-row .photo, .subject-card .photo{cursor:pointer;transition:transform .15s}
+.tier-card .photo:hover, .unit-card .photo:hover, .compare-row .photo:hover, .subject-card .photo:hover{transform:scale(1.01)}
+.tier-card .photo::after, .unit-card .photo::after{content:"\1F50D Click to view all photos";position:absolute;bottom:10px;right:10px;background:rgba(0,0,0,.75);color:#fff;font-size:11px;padding:4px 10px;border-radius:4px;letter-spacing:.5px;opacity:0;transition:opacity .2s;pointer-events:none;font-family:'Inter',sans-serif}
+.tier-card:hover .photo::after, .unit-card:hover .photo::after{opacity:1}
+
+.lightbox{display:none;position:fixed;top:0;left:0;right:0;bottom:0;background:rgba(0,0,0,.92);z-index:9999;align-items:center;justify-content:center;flex-direction:column}
+.lightbox.open{display:flex}
+.lightbox .lb-img{max-width:90vw;max-height:75vh;display:block;box-shadow:0 10px 40px rgba(0,0,0,.5)}
+.lightbox .lb-caption{color:#fff;font-size:14px;margin-top:18px;letter-spacing:.6px}
+.lightbox .lb-counter{color:var(--gold);font-size:13px;margin-top:6px;font-family:'Montserrat',sans-serif;letter-spacing:2px}
+.lightbox .lb-close{position:absolute;top:24px;right:32px;background:transparent;border:none;color:#fff;font-size:36px;cursor:pointer;line-height:1}
+.lightbox .lb-close:hover{color:var(--gold)}
+.lightbox .lb-prev,.lightbox .lb-next{position:absolute;top:50%;transform:translateY(-50%);background:transparent;border:none;color:#fff;font-size:48px;cursor:pointer;padding:0 24px;line-height:1}
+.lightbox .lb-prev{left:14px}
+.lightbox .lb-next{right:14px}
+.lightbox .lb-prev:hover,.lightbox .lb-next:hover{color:var(--gold)}
+.lightbox .lb-thumbs{position:absolute;bottom:24px;left:50%;transform:translateX(-50%);display:flex;gap:8px;max-width:80vw;overflow-x:auto;padding:8px}
+.lightbox .lb-thumbs img{width:50px;height:36px;object-fit:cover;border-radius:3px;cursor:pointer;opacity:.5;transition:opacity .15s}
+.lightbox .lb-thumbs img.active,.lightbox .lb-thumbs img:hover{opacity:1;outline:2px solid var(--gold)}
 </style>
 </head>
 <body>
@@ -158,8 +179,9 @@ footer .disclaimer{font-size:11px;color:#888;margin-top:18px;letter-spacing:.3px
   <a href="#unicorns">The 2 That Did It</a>
   <a href="#tier">Top of Market</a>
   <a href="#sidebyside">Side by Side</a>
+  <a href="#timing">Timing</a>
   <a href="#active">Competition</a>
-  <a href="#strategy">My Strategy</a>
+  <a href="#strategy">Strategy</a>
   <a href="#dashboard">Tracking</a>
   <a href="#story">My Read</a>
 </nav>
@@ -182,7 +204,6 @@ footer .disclaimer{font-size:11px;color:#888;margin-top:18px;letter-spacing:.3px
     <div class="photo"><img src="https://media.mlslmedia.com/property/MLSL/82030610/44a2f4577fd44ad18f767f953ce93488/2/1" alt="2247 Menalto Avenue"></div>
     <div class="body">
       <h3>2247 Menalto Avenue, EPA 94303</h3>
-      <div class="price-line">Currently Pending at $1,098,000 · COE 04/29/2026</div>
       <table>
         <tr><td>Beds / Baths</td><td>3 / 1</td></tr>
         <tr><td>Living Area (permitted)</td><td>1,100 sqft</td></tr>
@@ -190,8 +211,6 @@ footer .disclaimer{font-size:11px;color:#888;margin-top:18px;letter-spacing:.3px
         <tr><td>Lot</td><td>6,500 sqft</td></tr>
         <tr><td>Year Built</td><td>1948</td></tr>
         <tr><td>Schools</td><td>Ravenswood / Sequoia Union</td></tr>
-        <tr><td>Listing History</td><td>Listed 1/8 · Pending 1/22 · Re-listed 2/18 · Pending 3/13</td></tr>
-        <tr><td>Both Fall-Outs</td><td>Buyer-side personal financing</td></tr>
         <tr><td>Owner Cost Basis</td><td>$1,020,000 (Dec 2021)</td></tr>
       </table>
     </div>
@@ -249,7 +268,10 @@ footer .disclaimer{font-size:11px;color:#888;margin-top:18px;letter-spacing:.3px
     </div>
   </div>
 
-  <p style="font-size:15.5px;line-height:1.7;color:#222;background:var(--cream);padding:20px 26px;border-left:5px solid var(--gold);border-radius:6px;margin-top:24px"><strong style="color:var(--gold-deep);font-size:17px">The takeaway:</strong> $1.2M is reachable for 2247 Menalto. It is not impossible. It is just rare — twice in two years — and it requires the marketing strategy, buyer-financing pre-vetting, and lender programs to put the property in front of the small buyer pool willing to pay it.</p>
+  <div style="margin-top:30px;background:linear-gradient(135deg,#1A1A1A,#2a2a2a);color:#fff;padding:36px 42px;border-radius:14px;border-left:8px solid var(--gold);box-shadow:0 8px 26px rgba(0,0,0,.15)">
+    <div style="font-family:'Montserrat',sans-serif;font-size:13px;letter-spacing:3px;color:var(--gold);text-transform:uppercase;margin-bottom:14px">The Takeaway</div>
+    <p style="font-size:20px;line-height:1.55;color:#fff;font-weight:300">$1.2M is <strong style="color:var(--gold);font-weight:700">reachable</strong> for 2247 Menalto. It is not impossible. It is just <strong style="color:var(--gold);font-weight:700">rare</strong> — twice in two years — and it requires the right marketing, the right buyer pre-vetting, and lender programs to put the property in front of the small buyer pool willing to pay it.</p>
+  </div>
 </section>
 
 <div class="divider"></div>
@@ -257,7 +279,7 @@ footer .disclaimer{font-size:11px;color:#888;margin-top:18px;letter-spacing:.3px
 <!-- 4. TOP OF MARKET (3/2 reference) -->
 <section id="tier">
   <div class="section-header">FOR REFERENCE — WHAT $1.2M+ BOUGHT IN EPA (LAST 6 MONTHS)</div>
-  <div class="section-sub">All five $1.2M+ EPA single-family closings in the last 6 months were 3 bed / 2 bath — fully renovated. Useful as a ceiling reference, not a direct comp.</div>
+  <div class="section-sub"><strong>Criteria:</strong> All East Palo Alto single-family residences (3 bed and up, 2+ bathrooms) that closed at $1,200,000 or higher in the last six months. Five total. Every one of them was a 3 bed / 2 bath, fully renovated. Useful as a ceiling reference for what buyers expect to see at this price point — not as a direct comp for 2247 Menalto, which is 3 bed / 1 bath.</div>
   <div class="tier-grid">
     <div class="tier-card"><div class="photo"><img src="https://media.mlslmedia.com/property/MLSL/82028217/1bb144234b9148bdb25ab077361f9047/2/1" alt="2296 Pulgas"></div><div class="body"><h4>2296 Pulgas Avenue</h4><div class="price">$1,350,000</div><div class="stats"><span>3 / 2</span> · 1,480 sqft · <span>11,422 lot</span> · 8 DOM</div></div></div>
     <div class="tier-card"><div class="photo"><img src="https://media.mlslmedia.com/property/MLSL/82033977/50ce8459d994442e957103dbd9cbebff/2/1" alt="2512 Farrington"></div><div class="body"><h4>2512 Farrington Way</h4><div class="price">$1,325,000</div><div class="stats"><span>3 / 2</span> · 1,100 sqft · 5,000 lot · 10 DOM</div></div></div>
@@ -311,7 +333,45 @@ footer .disclaimer{font-size:11px;color:#888;margin-top:18px;letter-spacing:.3px
       </div>
     </div>
   </div>
-  <p style="margin-top:24px;font-size:15px;color:#444;line-height:1.7;background:#fbf8ed;padding:18px 24px;border-left:4px solid var(--gold);border-radius:4px"><strong style="color:var(--gold-deep)">$102,000 gap</strong> between subject's current pending price ($1,098k) and Westminster's clearing price ($1,200k). Westminster has 40 more sqft and a smaller lot — the $1.2M outcome was about marketing reach and buyer match, not significantly more home.</p>
+  <p style="margin-top:24px;font-size:15px;color:#444;line-height:1.7;background:#fbf8ed;padding:18px 24px;border-left:4px solid var(--gold);border-radius:4px"><strong style="color:var(--gold-deep)">$102,000 gap</strong> between 2247 Menalto's $1,098,000 valuation and Westminster's $1,200,000 clearing price. Westminster has 40 more sqft and a smaller lot — the $1.2M outcome was about marketing reach and buyer match, not significantly more home.</p>
+</section>
+
+<div class="divider"></div>
+
+<!-- 5b. MARKET TIMING — Then vs Now -->
+<section id="timing">
+  <div class="section-header">THE TIMING QUESTION — JULY 2024 VS TODAY</div>
+  <div class="section-sub">Westminster sold July 2, 2024 at $1,200,000. Was the market hotter then? Were rates lower? Here's what the data says about why this matters.</div>
+
+  <div style="display:grid;grid-template-columns:1fr 1fr;gap:24px;margin-top:14px" class="compare">
+    <div style="background:#fff;border-radius:10px;padding:28px 32px;box-shadow:0 4px 14px rgba(0,0,0,.05);border-top:5px solid var(--gold-deep)">
+      <h4 style="font-family:'Montserrat',sans-serif;font-size:14px;letter-spacing:2px;text-transform:uppercase;color:#666;margin-bottom:6px">When Westminster Sold</h4>
+      <div style="font-family:'Montserrat',sans-serif;font-size:24px;font-weight:800;color:var(--black);margin-bottom:18px">July 2024</div>
+      <table style="width:100%;font-size:14px;border-collapse:collapse">
+        <tr><td style="padding:8px 0;color:#666;border-bottom:1px solid #f0f0f0">30-yr Mortgage Rate</td><td style="padding:8px 0;font-weight:700;text-align:right;border-bottom:1px solid #f0f0f0">~6.85%</td></tr>
+        <tr><td style="padding:8px 0;color:#666;border-bottom:1px solid #f0f0f0">EPA Median Sale Price (SFH)</td><td style="padding:8px 0;font-weight:700;text-align:right;border-bottom:1px solid #f0f0f0">~$1.18M</td></tr>
+        <tr><td style="padding:8px 0;color:#666;border-bottom:1px solid #f0f0f0">EPA Median DOM</td><td style="padding:8px 0;font-weight:700;text-align:right;border-bottom:1px solid #f0f0f0">~14 days</td></tr>
+        <tr><td style="padding:8px 0;color:#666;border-bottom:1px solid #f0f0f0">EPA List-to-Sale Ratio</td><td style="padding:8px 0;font-weight:700;text-align:right;border-bottom:1px solid #f0f0f0">~102%</td></tr>
+        <tr><td style="padding:8px 0;color:#666">Market Posture</td><td style="padding:8px 0;font-weight:700;text-align:right">Slight buyer competition</td></tr>
+      </table>
+    </div>
+    <div style="background:#fff;border-radius:10px;padding:28px 32px;box-shadow:0 4px 14px rgba(0,0,0,.05);border-top:5px solid var(--gold)">
+      <h4 style="font-family:'Montserrat',sans-serif;font-size:14px;letter-spacing:2px;text-transform:uppercase;color:#666;margin-bottom:6px">Today</h4>
+      <div style="font-family:'Montserrat',sans-serif;font-size:24px;font-weight:800;color:var(--black);margin-bottom:18px">May 2026</div>
+      <table style="width:100%;font-size:14px;border-collapse:collapse">
+        <tr><td style="padding:8px 0;color:#666;border-bottom:1px solid #f0f0f0">30-yr Mortgage Rate</td><td style="padding:8px 0;font-weight:700;text-align:right;border-bottom:1px solid #f0f0f0;color:var(--green)">~6.45% (lower)</td></tr>
+        <tr><td style="padding:8px 0;color:#666;border-bottom:1px solid #f0f0f0">EPA Median Sale Price (SFH)</td><td style="padding:8px 0;font-weight:700;text-align:right;border-bottom:1px solid #f0f0f0">$1,218,500 (Mar) · $1,195,000 (Feb)</td></tr>
+        <tr><td style="padding:8px 0;color:#666;border-bottom:1px solid #f0f0f0">EPA Median DOM</td><td style="padding:8px 0;font-weight:700;text-align:right;border-bottom:1px solid #f0f0f0">12 days (Mar) · 15 (Feb)</td></tr>
+        <tr><td style="padding:8px 0;color:#666;border-bottom:1px solid #f0f0f0">EPA List-to-Sale Ratio</td><td style="padding:8px 0;font-weight:700;text-align:right;border-bottom:1px solid #f0f0f0">100–101%</td></tr>
+        <tr><td style="padding:8px 0;color:#666">Market Posture</td><td style="padding:8px 0;font-weight:700;text-align:right">Balanced / at asking</td></tr>
+      </table>
+    </div>
+  </div>
+
+  <div style="margin-top:26px;background:linear-gradient(135deg,#1A1A1A,#2a2a2a);color:#fff;padding:30px 36px;border-radius:12px;border-left:6px solid var(--green)">
+    <div style="font-family:'Montserrat',sans-serif;font-size:13px;letter-spacing:3px;color:var(--gold);text-transform:uppercase;margin-bottom:12px">What This Tells Us</div>
+    <p style="font-size:16px;line-height:1.65;color:#fff">Mortgage rates today are <strong style="color:var(--gold)">~40 basis points lower</strong> than when Westminster cleared $1.2M. Median EPA prices are <strong style="color:var(--gold)">slightly higher</strong>. Median DOM is <strong style="color:var(--gold)">essentially the same</strong>. <br><br>The $1.2M outcome was not a fluke driven by frenzy-era rates or runaway prices — it happened in a measurably similar market to today's. That actually argues for the chance to repeat. The constraint is not the calendar. It's putting the property in front of the right buyer with the right financing package.</p>
+  </div>
 </section>
 
 <div class="divider"></div>
@@ -319,75 +379,25 @@ footer .disclaimer{font-size:11px;color:#888;margin-top:18px;letter-spacing:.3px
 <!-- 6. ACTIVE COMPETITION -->
 <section id="active">
   <div class="section-header">CURRENT COMPETITION — ACTIVE EPA INVENTORY</div>
-  <div class="section-sub">Active EPA single-family listings in 2247 Menalto's competitive band right now (3 bed range, $1.0M-$1.3M). Pulled from MLS today.</div>
-  <div class="active-row" style="background:var(--cream);font-weight:700;color:var(--black);font-size:13px;letter-spacing:.5px;text-transform:uppercase"><span>Address</span><span>Price</span><span>Bed/Bath</span><span>SqFt / Lot</span><span>DOM</span></div>
-  <div class="active-row"><span class="addr">1226 Laurel Avenue</span><span class="price">$1,299,000</span><span class="stat">4 / 3</span><span class="stat">1,274 / 6,000</span><span class="stat">9</span></div>
-  <div class="active-row"><span class="addr">1908 Cooley Avenue</span><span class="price">$1,095,000</span><span class="stat">3 / 1</span><span class="stat">1,210 / 6,321</span><span class="stat">177</span></div>
-  <div class="active-row"><span class="addr">2170 Ralmar Avenue</span><span class="price">$1,099,000</span><span class="stat">3 / 1</span><span class="stat">1,120 / 5,000</span><span class="stat">7</span></div>
-  <div class="active-row"><span class="addr">2260 Pulgas Avenue</span><span class="price">$1,000,000</span><span class="stat">3 / 1</span><span class="stat">1,028 / 5,096</span><span class="stat">50</span></div>
-  <div class="active-row"><span class="addr">2656 Gonzaga Street</span><span class="price">$1,030,750</span><span class="stat">3 / 1</span><span class="stat">1,010 / 5,427</span><span class="stat">63</span></div>
-  <p style="margin-top:18px;font-size:14.5px;color:#444;line-height:1.7"><strong style="color:var(--gold-deep)">Reading the competition:</strong> 1908 Cooley at 177 days on market is the cautionary tale — a 3/1 priced just under 2247 Menalto that hasn't moved. 2170 Ralmar (almost identical configuration to subject) is 7 DOM at $1,099k — early days, no offers yet. There is no active 3/1 SFH east of 101 in EPA priced at $1.2M+ today. The closest active is 1226 Laurel at $1,299,000 — but it's a 4/3 with significantly different appeal.</p>
-</section>
+  <div class="section-sub">Active EPA single-family listings in 2247 Menalto's competitive band right now. Pulled from MLS today.</div>
 
-<div class="divider"></div>
-
-<!-- 7. STRATEGY -->
-<section id="strategy">
-  <div class="section-header">HOW I'D MARKET 2247 MENALTO</div>
-  <div class="section-sub">A specific plan for reaching the small buyer pool that closed Westminster and Wisteria at $1.2M.</div>
-  <div class="strategy-grid">
-    <div class="strategy-card"><div class="icon">01</div><h4>Premium Visual Package</h4><p>Twilight photography, drone aerial, professional video walkthrough, dedicated single-property website. At $1.2M+ pricing, premium visuals are the table stakes.</p></div>
-    <div class="strategy-card"><div class="icon">02</div><h4>Geofenced Digital Campaign</h4><p>Programmatic ads served to phones inside Belle Haven, Menlo Park, Stanford employee zones, and the Meta corporate campus, plus retargeting. This reaches the high-income buyer pool that values flexible living space.</p></div>
-    <div class="strategy-card"><div class="icon">03</div><h4>6% Rate Buy-Down Through Lender</h4><p>Through preferred lender, qualifying buyers get a 6.0% rate vs the 6.4–6.5% market rate, with closing costs covered. On a $1M loan, that's roughly $250/month payment savings — directly translates to higher offer ceilings.</p></div>
-    <div class="strategy-card"><div class="icon">04</div><h4>Direct Cash &amp; Investor Outreach</h4><p>Curated list of EPA investor buyers and 1031 exchange clients. The rear unit is a positive for cash buyers (rental income, no financing fragility). Listing in front of 30–50 qualified cash/investor buyers in week one.</p></div>
-    <div class="strategy-card"><div class="icon">05</div><h4>Pre-Vetted Buyer Financing</h4><p>Every offer goes through preferred-lender pre-flight check before acceptance. The two prior contracts collapsed in buyer underwriting — that's the single thing we have to prevent on round three.</p></div>
-    <div class="strategy-card"><div class="icon">06</div><h4>Honest, Compliant Disclosure</h4><p>Permitted square footage in the Living Area field. Rear unit prominently described in remarks: "self-contained rear cottage with full kitchen, bath, and separate entry — buyer to verify permits and square footage." Captures value without compliance risk.</p></div>
-  </div>
-</section>
-
-<div class="divider"></div>
-
-<!-- 8. DASHBOARD -->
-<section id="dashboard">
-  <div class="section-header">HOW WE'LL KNOW WHAT'S WORKING — WEEKLY</div>
-  <div class="section-sub">Every week, we look at the same numbers together. The data tells us what to adjust before either of us has to argue about it.</div>
-  <div class="dashboard">
-    <div class="head"><span>WEEKLY LISTING DASHBOARD — SAMPLE</span><span class="pill">UPDATED EVERY MONDAY</span></div>
-    <div class="dash-grid">
-      <div class="dash-cell"><span class="v">312</span><span class="l">Online Views</span><span class="trend">+24% vs prior week</span></div>
-      <div class="dash-cell"><span class="v">47</span><span class="l">Disclosure Downloads</span><span class="trend">+8% vs prior week</span></div>
-      <div class="dash-cell"><span class="v">14</span><span class="l">Showings Scheduled</span><span class="trend">+2 vs prior week</span></div>
-      <div class="dash-cell"><span class="v">3</span><span class="l">Repeat Showings</span><span class="trend">+1 vs prior week</span></div>
-      <div class="dash-cell"><span class="v">0</span><span class="l">Offers This Week</span><span class="trend down">No change</span></div>
+  <!-- 2383 Menalto callout — the SAME-STREET competitor that just went pending -->
+  <div class="unit-card" style="border-left-color:var(--coral);margin-bottom:32px">
+    <div class="photo"><img src="https://media.mlslmedia.com/property/MLSL/82041156/2c0eeb9826a94f6ba4616a70758bf9f5/2/1" alt="2383 Menalto Avenue"></div>
+    <div class="body">
+      <h4>2383 Menalto Avenue · Just Up the Road · Just Went Pending</h4>
+      <div class="price-row"><div class="price">$1,175,000</div><span class="badge" style="background:var(--coral)">CONTINGENT · 22 DOM</span></div>
+      <div class="stat-row">
+        <div class="stat"><span class="v">4 / 2</span><span class="l">Bed / Bath</span></div>
+        <div class="stat"><span class="v">1,460</span><span class="l">SqFt</span></div>
+        <div class="stat"><span class="v">7,252</span><span class="l">Lot</span></div>
+        <div class="stat"><span class="v">85 yrs</span><span class="l">Built</span></div>
+        <div class="stat"><span class="v">$805</span><span class="l">$/SqFt</span></div>
+      </div>
+      <div class="why"><strong>Why this is the most important data point in this entire document:</strong> Same street. 4 bedrooms (one more than 2247 Menalto). 2 permitted bathrooms (one more). 1,460 sqft (33% more living area). 7,252 sqft lot (12% bigger). Fully remodeled. Started at $1,198,000 → reduced to $1,175,000 → went pending. <strong>The buyer pool just told the market what a bigger, better, fully-remodeled home on Menalto is worth: less than $1,200,000.</strong> Any buyer evaluating 2247 Menalto at $1.2M will compare it to what 2383 Menalto just went pending at — and 2383 is structurally the better property. That is the single biggest obstacle to a $1.2M outcome on the subject.</div>
     </div>
-    <div class="insight"><strong>What this pattern means:</strong> high traffic + strong downloads + decent showings + zero offers = marketing is working but buyer hesitating at price. After week 3 of this pattern, the data says it's price, not exposure. That's when we'd discuss a step-down together.</div>
   </div>
-</section>
 
-<div class="divider"></div>
-
-<!-- 9. STORY -->
-<section id="story">
-  <div class="section-header">MY READ ON THE SITUATION</div>
-  <div class="story">
-    <p>Here is what the data is saying when you put it all together. <strong>The current pending price of $1,098,000 is exactly where the broad market is willing to transact for this property.</strong> Two qualified buyers came in at this number in 90 days. Both fall-outs were on the buyer's personal financing — not anything about the property's value, condition, or appraisal. The home is doing exactly what a correctly priced home should do: attract qualified offers.</p>
-    <p>Your $1,200,000 target is technically reachable. Two homes proved it in the last 24 months — Westminster and Wisteria. Both 3 bed / 1 bath, both east of 101, both at almost identical size and lot to yours, both sold at exactly $1,200,000. That's the recipe. But the recipe is rare. Twice in two years. And one of those was Westminster's same-week sale, which signals an off-market or pre-arranged buyer rather than an open-market exposure win.</p>
-    <p><strong>The honest read:</strong> at $1,098,000 you have a sale that closes Wednesday. At $1,200,000 you have a real but narrow path that requires premium marketing, the right buyer pre-vetting, and luck on timing. Anything between the two becomes a function of how long the seller is willing to hold for the right buyer to appear.</p>
-    <p><strong>If this Wednesday's sale closes,</strong> you take the $1,025,912 net (after standard sell-side costs at $1.098M), this conversation never happens, and we move on. If it falls out a third time — or if you cancel before closing because you want to swing for $1.2M — these are the three things I'd want signed before re-listing:</p>
-    <p style="padding-left:24px"><strong>1.</strong> A net-sheet acknowledgment at $1,049,000 (we know what the realistic floor looks like). <strong>2.</strong> A 14-day step-down clause: list at $1,149,000, drop automatically to $1,089,000 if no acceptable offer in 14 days. <strong>3.</strong> A pre-vetted buyer financing requirement on every accepted offer.</p>
-    <p>That structure protects your reputation, my reputation, and gives us 14 days to fish in the small pool that paid $1.2M for Westminster and Wisteria. If we hit it, you go above your break-even. If we don't, the step-down runs automatically and we close at the realistic number without a slow-bleed price-reduction conversation.</p>
-    <p>That's the play I'd run. Happy to walk through any piece of it in more detail.</p>
-  </div>
-</section>
-
-<footer>
-  <div class="name">GRAEHAM WATTS · INTERO REAL ESTATE</div>
-  <div class="info">DRE #01466876 · 650-308-4727 · graehamwatts@gmail.com · graehamwatts.com</div>
-  <div class="closing">My job isn't to tell you what you want to hear. It's to give you the data, the strategy, and the honest probability — and then execute the plan we agree on, every week, with numbers we both see.</div>
-  <div class="disclaimer">Comparable sales sourced from MLSListings (East Palo Alto, last 6 months and last 24 months as of May 7, 2026). 24-month $1.2M+ 3 bed / 1 bath SFH search excluded west-of-101 properties (Circle Drive sold at $1,350,000 in a premium pocket not comparable to subject's east-of-101 Bay Road location). Net proceed estimates assume 6% total commission and standard sell-side closing costs; do not include mortgage payoff. Photos sourced from MLSListings public listing pages. This document is not a formal appraisal and does not constitute investment, legal, or tax advice.</div>
-</footer>
-
-</main>
-
-</body>
-</html>
+  <h3 style="font-family:'Montserrat',sans-serif;font-size:14px;letter-spacing:2px;text-transform:uppercase;color:#666;margin:30px 0 14px">Other actives in the band</h3>
+  <div class="active-row" style="background:var(--cream);font-weight:700;color:var(--black);font-size:13px;letter-spacing:.5px;text-transform:uppercase"><span>Address</span><span>Price</span><span>Bed/Bath</span><span>SqFt / Lot</span><span>DOM</span></div>
+  <div class=
