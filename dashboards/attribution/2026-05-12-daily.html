@@ -1,0 +1,138 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>Daily Attribution Brief — 2026-05-12 — Setup Required</title>
+<style>
+  body { margin:0; padding:0; background:#f4f5f7; font-family:'DM Sans','Helvetica Neue',Arial,sans-serif; color:#0f1729; }
+  .wrap { max-width:720px; margin:0 auto; background:#ffffff; }
+  .topbar { background:#0f1729; color:#f4b955; padding:14px 28px; font-size:13px; letter-spacing:0.08em; text-transform:uppercase; font-weight:600; }
+  .header { padding:32px 28px 18px; border-bottom:1px solid #eceef2; }
+  .header h1 { margin:0 0 6px; font-size:28px; font-weight:700; line-height:1.2; }
+  .header p  { margin:0; color:#475066; font-size:15px; }
+  .status { display:flex; align-items:center; gap:10px; margin:18px 28px 0; padding:14px 18px; background:#fff3e0; border-left:4px solid #f08a3e; border-radius:6px; }
+  .status .dot { width:10px; height:10px; border-radius:50%; background:#f08a3e; }
+  .status .txt { font-size:14px; color:#5d3b00; font-weight:600; }
+  .kpis { display:grid; grid-template-columns:repeat(4,1fr); gap:12px; padding:24px 28px 8px; }
+  .kpi { background:#f8f9fb; border:1px solid #eceef2; border-radius:10px; padding:14px; }
+  .kpi .label { font-size:11px; letter-spacing:0.06em; text-transform:uppercase; color:#6b7589; font-weight:600; }
+  .kpi .val { font-size:24px; font-weight:700; margin-top:4px; color:#0f1729; }
+  .kpi .sub { font-size:11px; color:#9aa1b2; margin-top:2px; }
+  .section { padding:22px 28px; }
+  .section h2 { margin:0 0 10px; font-size:13px; letter-spacing:0.08em; text-transform:uppercase; color:#6b7589; font-weight:600; }
+  .read { background:#fffbf2; border-left:3px solid #f4b955; padding:14px 18px; border-radius:4px; font-size:15px; line-height:1.55; color:#2e3548; }
+  .actions { margin-top:6px; }
+  .actions ol { margin:0; padding-left:20px; font-size:14px; line-height:1.65; color:#2e3548; }
+  .actions code { background:#f1f3f6; padding:2px 6px; border-radius:4px; font-size:13px; font-family:'JetBrains Mono',Menlo,monospace; }
+  .errblock { background:#0f1729; color:#f4b955; padding:14px 18px; border-radius:8px; font-family:'JetBrains Mono',Menlo,monospace; font-size:12px; line-height:1.55; white-space:pre-wrap; word-break:break-word; }
+  table { width:100%; border-collapse:collapse; margin-top:8px; }
+  th { text-align:left; font-size:11px; letter-spacing:0.06em; text-transform:uppercase; color:#6b7589; font-weight:600; padding:8px 6px; border-bottom:2px solid #eceef2; }
+  td { padding:10px 6px; border-bottom:1px solid #eceef2; font-size:14px; color:#2e3548; }
+  td.n { font-variant-numeric:tabular-nums; font-weight:600; }
+  .footer { padding:20px 28px 32px; border-top:1px solid #eceef2; font-size:12px; color:#9aa1b2; line-height:1.6; }
+  .sig { font-size:13px; color:#475066; }
+  .sig b { color:#0f1729; }
+</style>
+</head>
+<body>
+<div class="wrap">
+  <div class="topbar">Daily Attribution Brief · 2026-05-12</div>
+
+  <div class="header">
+    <h1>Yesterday's lead activity</h1>
+    <p>Monday, May 11, 2026 · Pacific · vs. prior Mon May 4 baseline</p>
+  </div>
+
+  <div class="status">
+    <span class="dot"></span>
+    <span class="txt">Setup required — GHL pull did not run today. Action items below.</span>
+  </div>
+
+  <div class="kpis">
+    <div class="kpi"><div class="label">Total Leads</div><div class="val">—</div><div class="sub">awaiting GHL connection</div></div>
+    <div class="kpi"><div class="label">New Opps</div><div class="val">—</div><div class="sub">awaiting GHL connection</div></div>
+    <div class="kpi"><div class="label">Closed Wins</div><div class="val">—</div><div class="sub">awaiting GHL connection</div></div>
+    <div class="kpi"><div class="label">Top Source</div><div class="val">—</div><div class="sub">awaiting GHL connection</div></div>
+  </div>
+
+  <div class="section">
+    <h2>The Read</h2>
+    <div class="read">
+      Today's brief couldn't pull GHL data — the Cowork sandbox is firewalled away from <code>services.leadconnectorhq.com</code> (HTTP 000 / blocked), and the GitHub Action fallback path isn't installed yet in <b>Graehamwatts/online-content</b>. No data was silently zeroed; this is a configuration gap, not a slow day. Three short setup steps below will get tomorrow's 7:15 AM brief running on real data.
+    </div>
+  </div>
+
+  <div class="section">
+    <h2>What blocked the run</h2>
+    <div class="errblock">REQUEST  GET https://services.leadconnectorhq.com/contacts/search
+RESULT   HTTP 000 (connection refused — proxy allowlist)
+
+REPO     Graehamwatts/online-content
+SECRETS  GHL_PIT             not set
+         GHL_LOCATION_ID     not set
+         GMAIL_APP_PASSWORD  not set
+WORKFLOW .github/workflows/daily-attribution-brief.yml  not present
+         (current PATs only have `repo` scope; `workflow` scope is
+          required to commit files under .github/workflows/)</div>
+  </div>
+
+  <div class="section">
+    <h2>Action items (≈10 minutes total)</h2>
+    <div class="actions">
+      <ol>
+        <li>Generate a fine-grained PAT (or classic PAT with <code>repo</code> + <code>workflow</code> scopes) for <b>Graehamwatts/online-content</b>. Save to <code>C:\Users\Graeham Watts\Documents\GitHub Credentials\pat-skills-and-pages.txt</code> — that's the path this skill expects.</li>
+        <li>In repo → Settings → Secrets and variables → Actions, add three repository secrets: <code>GHL_PIT</code> (value: contents of <code>ghl-pit.txt</code> line 1), <code>GHL_LOCATION_ID</code> = <code>6wuU3haUH7uNeT20E3UZ</code>, and <code>GMAIL_APP_PASSWORD</code> (Gmail app-specific password for graehamwatts@gmail.com).</li>
+        <li>Drop the workflow file at <code>.github/workflows/daily-attribution-brief.yml</code> — the YAML is attached in the outputs folder of this run, plus a copy is included in the email signature below. The cron is set to <code>15 14 * * 1-5</code> (7:15 AM Pacific Mon-Fri).</li>
+      </ol>
+    </div>
+  </div>
+
+  <div class="section">
+    <h2>What this brief will look like once data flows</h2>
+    <table>
+      <thead><tr><th>Source bucket</th><th class="n">Count</th><th class="n">vs Prior Wk</th><th>Notable Names</th></tr></thead>
+      <tbody>
+        <tr><td>Organic search / SEO</td><td class="n">—</td><td class="n">—</td><td>—</td></tr>
+        <tr><td>Google Business Profile</td><td class="n">—</td><td class="n">—</td><td>—</td></tr>
+        <tr><td>Paid ads (Google / Meta)</td><td class="n">—</td><td class="n">—</td><td>—</td></tr>
+        <tr><td>Social organic (IG / FB / YT / TikTok)</td><td class="n">—</td><td class="n">—</td><td>—</td></tr>
+        <tr><td>Referral (sphere / past clients)</td><td class="n">—</td><td class="n">—</td><td>—</td></tr>
+        <tr><td>Direct / website forms</td><td class="n">—</td><td class="n">—</td><td>—</td></tr>
+        <tr><td>Unknown / no attribution</td><td class="n">—</td><td class="n">—</td><td>—</td></tr>
+        <tr><td>Cold (manually added)</td><td class="n">—</td><td class="n">—</td><td>—</td></tr>
+      </tbody>
+    </table>
+  </div>
+
+  <div class="section">
+    <h2>Funnel snapshot (template)</h2>
+    <svg width="100%" viewBox="0 0 600 180" xmlns="http://www.w3.org/2000/svg" style="background:#f8f9fb;border-radius:8px;">
+      <g font-family="DM Sans,Helvetica,Arial,sans-serif" font-size="11" fill="#6b7589">
+        <text x="60"  y="170" text-anchor="middle">Leads</text>
+        <text x="200" y="170" text-anchor="middle">Appts Booked</text>
+        <text x="340" y="170" text-anchor="middle">Opps Created</text>
+        <text x="480" y="170" text-anchor="middle">Wins</text>
+      </g>
+      <g fill="#f4b955">
+        <rect x="30"  y="40"  width="60" height="110" rx="4" opacity="0.35"/>
+        <rect x="170" y="60"  width="60" height="90"  rx="4" opacity="0.35"/>
+        <rect x="310" y="80"  width="60" height="70"  rx="4" opacity="0.35"/>
+        <rect x="450" y="110" width="60" height="40"  rx="4" opacity="0.35"/>
+      </g>
+      <g font-family="DM Sans,Helvetica,Arial,sans-serif" font-size="18" fill="#0f1729" font-weight="700" text-anchor="middle">
+        <text x="60"  y="30">—</text>
+        <text x="200" y="30">—</text>
+        <text x="340" y="30">—</text>
+        <text x="480" y="30">—</text>
+      </g>
+    </svg>
+  </div>
+
+  <div class="footer">
+    <p class="sig"><b>Graeham Watts</b> · REALTOR® · Intero Real Estate · DRE# 02015066<br>
+    Brief generated 2026-05-12 07:15 PT · scheduled task <code>daily-attribution-brief</code> · run mode: fallback (setup required)</p>
+    <p>Dashboard archive: <code>dashboards/attribution/2026-05-12-daily.html</code> in <code>Graehamwatts/online-content</code></p>
+  </div>
+</div>
+</body>
+</html>
