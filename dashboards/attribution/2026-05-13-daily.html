@@ -1,0 +1,92 @@
+<!doctype html>
+<html><head><meta charset="utf-8"><title>Daily Attribution Brief — 2026-05-13 (Setup Run)</title>
+<style>
+  body { margin:0; padding:0; background:#f4f2ed; font-family:'DM Sans',-apple-system,BlinkMacSystemFont,sans-serif; color:#0f1729; }
+  .wrap { max-width:720px; margin:0 auto; background:#ffffff; }
+  .topbar { background:#0f1729; color:#f4b955; padding:14px 28px; font-size:13px; letter-spacing:.08em; text-transform:uppercase; font-weight:600; }
+  .header { padding:28px 28px 8px; }
+  .h-date { font-size:13px; color:#6b7280; letter-spacing:.02em; }
+  .h-title { font-size:28px; font-weight:700; margin:6px 0 4px; line-height:1.2; }
+  .h-sub { font-size:14px; color:#475569; }
+  .status { margin:16px 28px 0; padding:10px 14px; border-radius:8px; font-size:13px; font-weight:600; background:#fef3c7; color:#92400e; }
+  .kpis { display:grid; grid-template-columns:repeat(4,1fr); gap:12px; padding:18px 28px 4px; }
+  .kpi { background:#f8fafc; border:1px solid #e2e8f0; border-radius:10px; padding:14px; }
+  .kpi-label { font-size:11px; text-transform:uppercase; letter-spacing:.05em; color:#64748b; font-weight:600; }
+  .kpi-value { font-size:26px; font-weight:700; margin-top:4px; color:#0f1729; }
+  .kpi-sub { font-size:11px; color:#94a3b8; margin-top:2px; }
+  .section { padding:18px 28px; }
+  .section h2 { font-size:13px; text-transform:uppercase; letter-spacing:.08em; color:#0f1729; margin:0 0 10px; font-weight:700; }
+  .read { background:#fffbeb; border-left:3px solid #f4b955; padding:14px 16px; border-radius:6px; font-size:14px; line-height:1.55; color:#1e293b; }
+  .read.warn { background:#fee2e2; border-left-color:#dc2626; }
+  .steps { background:#f8fafc; border:1px solid #e2e8f0; border-radius:8px; padding:6px 0; }
+  .step { display:flex; gap:14px; padding:14px 18px; border-bottom:1px solid #e2e8f0; align-items:flex-start; }
+  .step:last-child { border-bottom:none; }
+  .step-num { flex:0 0 28px; height:28px; background:#0f1729; color:#f4b955; border-radius:50%; display:flex; align-items:center; justify-content:center; font-weight:700; font-size:13px; }
+  .step-body { flex:1; font-size:13.5px; line-height:1.55; color:#334155; }
+  .step-body strong { color:#0f1729; }
+  code { background:#0f1729; color:#f4b955; padding:2px 6px; border-radius:3px; font-size:12px; font-family:'SF Mono',Menlo,monospace; }
+  .footer { padding:24px 28px 36px; border-top:1px solid #e2e8f0; font-size:12px; color:#64748b; }
+  .signature { margin-top:8px; font-weight:600; color:#0f1729; font-size:13px; }
+  .dre { color:#94a3b8; font-size:11px; margin-top:2px; }
+  @media (max-width:600px){ .kpis{grid-template-columns:repeat(2,1fr);} }
+</style></head><body>
+<div class="wrap">
+  <div class="topbar">Daily Attribution Brief · 2026-05-13 · First-run setup</div>
+  <div class="header">
+    <div class="h-date">Tuesday, May 13, 2026 · 7:15 AM PT</div>
+    <div class="h-title">Setup needed before tomorrow's run</div>
+    <div class="h-sub">This is the first scheduled run. The infrastructure is now wired — two repo secrets unlock the daily pull.</div>
+  </div>
+  <div class="status">Setup mode — GHL pull skipped (secrets not yet present in <code>Graehamwatts/online-content</code>)</div>
+
+  <div class="kpis">
+    <div class="kpi"><div class="kpi-label">Workflow</div><div class="kpi-value" style="font-size:14px; padding-top:8px">Installed</div><div class="kpi-sub">.github/workflows</div></div>
+    <div class="kpi"><div class="kpi-label">Script</div><div class="kpi-value" style="font-size:14px; padding-top:8px">Ready</div><div class="kpi-sub">GHL pull + render</div></div>
+    <div class="kpi"><div class="kpi-label">Secrets</div><div class="kpi-value" style="font-size:14px; padding-top:8px; color:#dc2626">Missing</div><div class="kpi-sub">2 needed</div></div>
+    <div class="kpi"><div class="kpi-label">Next run</div><div class="kpi-value" style="font-size:14px; padding-top:8px">Wed 7:15 AM</div><div class="kpi-sub">cron is live</div></div>
+  </div>
+
+  <div class="section">
+    <h2>The Read</h2>
+    <div class="read">
+      I ran this task autonomously this morning and discovered three blockers: <strong>(1)</strong> the Cowork sandbox blocks <code>services.leadconnectorhq.com</code> as documented, so the pull must run from GitHub's network. <strong>(2)</strong> the <code>daily-attribution-brief.yml</code> workflow didn't exist yet — I built it and committed it. <strong>(3)</strong> the repo has zero secrets configured, so the Action can't authenticate. Add the two secrets below and tomorrow's 7:15 AM run will fire automatically with real data.
+    </div>
+  </div>
+
+  <div class="section">
+    <h2>What's been set up</h2>
+    <div class="steps">
+      <div class="step"><div class="step-num">1</div><div class="step-body"><strong>Workflow file</strong> — <code>.github/workflows/daily-attribution-brief.yml</code> committed. Runs Mon-Fri at 14:15 UTC (7:15 AM PDT) plus on-demand via Run workflow button.</div></div>
+      <div class="step"><div class="step-num">2</div><div class="step-body"><strong>Pull + render script</strong> — <code>.github/scripts/daily_attribution_brief.py</code> committed. Hits <code>/contacts/search</code>, <code>/opportunities/search</code>, <code>/opportunities/pipelines</code>, and <code>/locations/{id}/customFields</code> — same endpoints as the pipeline-dashboard skill — paginated, with the Pacific midnight-to-midnight window.</div></div>
+      <div class="step"><div class="step-num">3</div><div class="step-body"><strong>Source bucketing</strong> — encoded the 8 buckets you specified: Organic search, GMB, Paid ads, Social organic, Referral / sphere, Direct / website, Unknown, Cold.</div></div>
+      <div class="step"><div class="step-num">4</div><div class="step-body"><strong>Email sender</strong> — <code>.github/scripts/send_brief_email.py</code> uses Gmail SMTP (app password) and ships to graehamwatts@gmail.com.</div></div>
+      <div class="step"><div class="step-num">5</div><div class="step-body"><strong>Dashboard path</strong> — every run commits to <code>dashboards/attribution/{YYYY-MM-DD}-daily.html</code>, viewable on GitHub Pages.</div></div>
+    </div>
+  </div>
+
+  <div class="section">
+    <h2>Two secrets to add (5 min)</h2>
+    <div class="steps">
+      <div class="step"><div class="step-num">1</div><div class="step-body">Open <strong>github.com/Graehamwatts/online-content/settings/secrets/actions</strong></div></div>
+      <div class="step"><div class="step-num">2</div><div class="step-body">Click <strong>New repository secret</strong>. Name: <code>GHL_PIT</code>. Value: line 1 of <code>C:\Users\Graeham Watts\Documents\Claude\Skills\ghl-pit.txt</code> (starts <code>pit-...</code>).</div></div>
+      <div class="step"><div class="step-num">3</div><div class="step-body">Click <strong>New repository secret</strong> again. Name: <code>GHL_LOCATION_ID</code>. Value: <code>6wuU3haUH7uNeT20E3UZ</code></div></div>
+      <div class="step"><div class="step-num">4</div><div class="step-body"><strong>(Optional but recommended)</strong> Add <code>GMAIL_USER</code> = graehamwatts@gmail.com and <code>GMAIL_APP_PASSWORD</code> = a Gmail app password from <strong>myaccount.google.com/apppasswords</strong>. Without these, the brief still commits to GitHub but won't auto-email.</div></div>
+      <div class="step"><div class="step-num">5</div><div class="step-body">Open <strong>Actions</strong> tab → <strong>Daily Attribution Brief</strong> → <strong>Run workflow</strong> to smoke-test today before cron fires tomorrow.</div></div>
+    </div>
+  </div>
+
+  <div class="section">
+    <h2>What tomorrow's brief will look like</h2>
+    <div class="read">
+      Once secrets are in: 4 KPI cards (Total Leads · New Opps · Closed Wins · Top Source) → "The Read" exec summary → source breakdown table with vs-prior-week deltas → vertical funnel snapshot (Leads → Opps → Wins). Same DM Sans + slate #0f1729 + amber #f4b955 brand the html-email skill uses.
+    </div>
+  </div>
+
+  <div class="footer">
+    First-run setup brief · Generated by Claude scheduled task <strong>daily-attribution-brief</strong> on Cowork.<br>
+    Source code: <code>Graehamwatts/online-content/.github/workflows/daily-attribution-brief.yml</code>
+    <div class="signature">Graeham Watts</div>
+    <div class="dre">REALTOR® · Intero Real Estate · DRE# 02015066</div>
+  </div>
+</div>
+</body></html>
