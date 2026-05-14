@@ -1,5 +1,5 @@
 <!doctype html>
-<html><head><meta charset="utf-8"><title>Daily Attribution Brief — 2026-05-13 (Setup Run)</title>
+<html><head><meta charset="utf-8"><title>Daily Attribution Brief — 2026-05-13 (Setup still blocked)</title>
 <style>
   body { margin:0; padding:0; background:#f4f2ed; font-family:'DM Sans',-apple-system,BlinkMacSystemFont,sans-serif; color:#0f1729; }
   .wrap { max-width:720px; margin:0 auto; background:#ffffff; }
@@ -8,7 +8,7 @@
   .h-date { font-size:13px; color:#6b7280; letter-spacing:.02em; }
   .h-title { font-size:28px; font-weight:700; margin:6px 0 4px; line-height:1.2; }
   .h-sub { font-size:14px; color:#475569; }
-  .status { margin:16px 28px 0; padding:10px 14px; border-radius:8px; font-size:13px; font-weight:600; background:#fef3c7; color:#92400e; }
+  .status { margin:16px 28px 0; padding:10px 14px; border-radius:8px; font-size:13px; font-weight:600; background:#fee2e2; color:#991b1b; }
   .kpis { display:grid; grid-template-columns:repeat(4,1fr); gap:12px; padding:18px 28px 4px; }
   .kpi { background:#f8fafc; border:1px solid #e2e8f0; border-radius:10px; padding:14px; }
   .kpi-label { font-size:11px; text-transform:uppercase; letter-spacing:.05em; color:#64748b; font-weight:600; }
@@ -31,62 +31,49 @@
   @media (max-width:600px){ .kpis{grid-template-columns:repeat(2,1fr);} }
 </style></head><body>
 <div class="wrap">
-  <div class="topbar">Daily Attribution Brief · 2026-05-13 · First-run setup</div>
+  <div class="topbar">Daily Attribution Brief · 2026-05-13 · Day 2 — still blocked</div>
   <div class="header">
-    <div class="h-date">Tuesday, May 13, 2026 · 7:15 AM PT</div>
-    <div class="h-title">Setup needed before tomorrow's run</div>
-    <div class="h-sub">This is the first scheduled run. The infrastructure is now wired — two repo secrets unlock the daily pull.</div>
+    <div class="h-date">Thursday, May 14, 2026 · 7:15 AM PT</div>
+    <div class="h-title">Same blocker as yesterday — 5 min of manual setup unlocks it</div>
+    <div class="h-sub">The pipeline is fully built. It's gated on one missing piece: a PAT with <code>workflow</code> scope. The current PAT only has <code>repo</code>.</div>
   </div>
-  <div class="status">Setup mode — GHL pull skipped (secrets not yet present in <code>Graehamwatts/online-content</code>)</div>
+  <div class="status">Blocked — GHL pull did not run. Yesterday's data is still unattributed in this brief because the GitHub Action isn't installed.</div>
 
   <div class="kpis">
-    <div class="kpi"><div class="kpi-label">Workflow YAML</div><div class="kpi-value" style="font-size:14px; padding-top:8px; color:#92400e">Stashed</div><div class="kpi-sub">in runbooks/</div></div>
-    <div class="kpi"><div class="kpi-label">Pull script</div><div class="kpi-value" style="font-size:14px; padding-top:8px; color:#16a34a">Pushed</div><div class="kpi-sub">.github/scripts/</div></div>
-    <div class="kpi"><div class="kpi-label">Secrets</div><div class="kpi-value" style="font-size:14px; padding-top:8px; color:#dc2626">Missing</div><div class="kpi-sub">2 needed</div></div>
-    <div class="kpi"><div class="kpi-label">Next run</div><div class="kpi-value" style="font-size:14px; padding-top:8px">After setup</div><div class="kpi-sub">~5 min of work</div></div>
+    <div class="kpi"><div class="kpi-label">Yesterday's leads</div><div class="kpi-value" style="font-size:14px; padding-top:8px; color:#94a3b8">Unknown</div><div class="kpi-sub">workflow not installed</div></div>
+    <div class="kpi"><div class="kpi-label">Workflow YAML</div><div class="kpi-value" style="font-size:14px; padding-top:8px; color:#16a34a">Drafted</div><div class="kpi-sub">in repo locally + runbooks/</div></div>
+    <div class="kpi"><div class="kpi-label">PAT scope</div><div class="kpi-value" style="font-size:14px; padding-top:8px; color:#dc2626">repo only</div><div class="kpi-sub">needs +workflow</div></div>
+    <div class="kpi"><div class="kpi-label">Secrets</div><div class="kpi-value" style="font-size:14px; padding-top:8px; color:#dc2626">Missing</div><div class="kpi-sub">4 needed</div></div>
   </div>
 
   <div class="section">
     <h2>The Read</h2>
-    <div class="read">
-      I ran this task autonomously this morning and surfaced four things to fix before tomorrow's 7:15 AM cron: <strong>(1)</strong> the Cowork sandbox blocks <code>services.leadconnectorhq.com</code> as documented, so the pull must run from GitHub. <strong>(2)</strong> the workflow didn't exist yet — I wrote it (currently stashed at <code>runbooks/daily-attribution-brief-workflow.yml</code>). <strong>(3)</strong> the PAT in the repo has <code>repo</code> scope but not <code>workflow</code> scope, so I couldn't drop the YAML directly into <code>.github/workflows/</code>. <strong>(4)</strong> the repo has zero secrets configured. The pull script and email sender did push successfully — see commits below. Walk through the 4-step setup and you'll get a real data brief tomorrow.
+    <div class="read warn">
+      Today's 7:15 AM run hit the same wall as yesterday: the sandbox-side PAT only has <code>repo</code> scope, so it cannot create <code>.github/workflows/daily-attribution-brief.yml</code> in the repo. Without that workflow file, there's no scheduled job, no GHL pull, no real data. The workflow YAML, the Python pull script, and the SMTP sender script are all sitting in the repo or staged locally — everything is ready except the one file that GitHub blocks unless you have <code>workflow</code> scope on your token. Five minutes of manual work on your end unblocks every future run.
     </div>
   </div>
 
   <div class="section">
-    <h2>What's been set up</h2>
+    <h2>Unblock — do these once</h2>
     <div class="steps">
-      <div class="step"><div class="step-num">1</div><div class="step-body"><strong>Workflow file</strong> — <code>runbooks/daily-attribution-brief-workflow.yml</code> committed. <strong>Important:</strong> your GitHub PAT (<code>ghp_2whHvi…</code>) has <code>repo</code> scope but not <code>workflow</code> scope, so GitHub blocked me from writing into <code>.github/workflows/</code>. The YAML is parked in <code>runbooks/</code> — copy it into <code>.github/workflows/daily-attribution-brief.yml</code> manually (one drag-and-drop in the GitHub web UI), or re-issue the PAT with <code>workflow</code> scope checked and I'll auto-install it next time.</div></div>
-      <div class="step"><div class="step-num">2</div><div class="step-body"><strong>Pull + render script</strong> — <code>.github/scripts/daily_attribution_brief.py</code> committed. Hits <code>/contacts/search</code>, <code>/opportunities/search</code>, <code>/opportunities/pipelines</code>, and <code>/locations/{id}/customFields</code> — same endpoints as the pipeline-dashboard skill — paginated, with the Pacific midnight-to-midnight window.</div></div>
-      <div class="step"><div class="step-num">3</div><div class="step-body"><strong>Source bucketing</strong> — encoded the 8 buckets you specified: Organic search, GMB, Paid ads, Social organic, Referral / sphere, Direct / website, Unknown, Cold.</div></div>
-      <div class="step"><div class="step-num">4</div><div class="step-body"><strong>Email sender</strong> — <code>.github/scripts/send_brief_email.py</code> uses Gmail SMTP (app password) and ships to graehamwatts@gmail.com.</div></div>
-      <div class="step"><div class="step-num">5</div><div class="step-body"><strong>Dashboard path</strong> — every run commits to <code>dashboards/attribution/{YYYY-MM-DD}-daily.html</code>, viewable on GitHub Pages.</div></div>
+      <div class="step"><div class="step-num">1</div><div class="step-body"><strong>Upload the workflow file manually.</strong> Go to <a href="https://github.com/Graehamwatts/online-content/new/main/.github/workflows" style="color:#0f1729; text-decoration:underline;">github.com → online-content → .github/workflows → Add file</a>. Name it <code>daily-attribution-brief.yml</code>. Paste the contents of <code>runbooks/daily-attribution-brief-workflow.yml</code> (already in the repo). Commit to <code>main</code>.</div></div>
+      <div class="step"><div class="step-num">2</div><div class="step-body"><strong>Add 4 repo secrets.</strong> Repo → Settings → Secrets and variables → Actions → New repository secret. Add: <code>GHL_PIT</code> (value from your local <code>ghl-pit.txt</code> line 1), <code>GHL_LOCATION_ID</code> = <code>6wuU3haUH7uNeT20E3UZ</code>, <code>GMAIL_USER</code> = your Gmail address used for sending, <code>GMAIL_APP_PASSWORD</code> = a 16-char Gmail app password.</div></div>
+      <div class="step"><div class="step-num">3</div><div class="step-body"><strong>(Optional) Upgrade the PAT so I can automate this next time.</strong> github.com → Settings → Developer settings → Personal access tokens → Tokens (classic) → Edit the PAT in <code>github-token.txt</code> → check the <code>workflow</code> scope → Update. Once that's done, I can ship workflow files on my own and won't ever ask you to copy-paste a YAML again.</div></div>
+      <div class="step"><div class="step-num">4</div><div class="step-body"><strong>Smoke-test the action.</strong> Repo → Actions → "Daily Attribution Brief" → Run workflow → leave date blank → Run. You should see a green run within 60 seconds and an email land in your inbox.</div></div>
     </div>
   </div>
 
   <div class="section">
-    <h2>Two secrets to add (5 min)</h2>
-    <div class="steps">
-      <div class="step"><div class="step-num">1</div><div class="step-body">Open <strong>github.com/Graehamwatts/online-content/settings/secrets/actions</strong></div></div>
-      <div class="step"><div class="step-num">2</div><div class="step-body">Click <strong>New repository secret</strong>. Name: <code>GHL_PIT</code>. Value: line 1 of <code>C:\Users\Graeham Watts\Documents\Claude\Skills\ghl-pit.txt</code> (starts <code>pit-...</code>).</div></div>
-      <div class="step"><div class="step-num">3</div><div class="step-body">Click <strong>New repository secret</strong> again. Name: <code>GHL_LOCATION_ID</code>. Value: <code>6wuU3haUH7uNeT20E3UZ</code></div></div>
-      <div class="step"><div class="step-num">4</div><div class="step-body"><strong>(Optional but recommended)</strong> Add <code>GMAIL_USER</code> = graehamwatts@gmail.com and <code>GMAIL_APP_PASSWORD</code> = a Gmail app password from <strong>myaccount.google.com/apppasswords</strong>. Without these, the brief still commits to GitHub but won't auto-email.</div></div>
-      <div class="step"><div class="step-num">5</div><div class="step-body">Open <strong>Actions</strong> tab → <strong>Daily Attribution Brief</strong> → <strong>Run workflow</strong> to smoke-test today before cron fires tomorrow.</div></div>
-    </div>
-  </div>
-
-  <div class="section">
-    <h2>What tomorrow's brief will look like</h2>
+    <h2>What runs once unblocked</h2>
     <div class="read">
-      Once secrets are in: 4 KPI cards (Total Leads · New Opps · Closed Wins · Top Source) → "The Read" exec summary → source breakdown table with vs-prior-week deltas → vertical funnel snapshot (Leads → Opps → Wins). Same DM Sans + slate #0f1729 + amber #f4b955 brand the html-email skill uses.
+      Mon–Fri at 7:15 AM PT, GitHub Actions pulls yesterday's <strong>contacts created</strong>, <strong>opportunities created</strong>, and <strong>wins</strong> from GHL via the PIT. It groups by source (organic search, GMB, paid, social organic, referral, direct, unknown, cold), compares to same-day prior week + 7-day average, renders a branded HTML brief with 4 KPI cards, a "Read" summary, a source table, and an inline funnel chart, commits it to <code>dashboards/attribution/{YYYY-MM-DD}-daily.html</code>, and emails it to you via Gmail SMTP. If GHL returns zero leads or the PIT 401s, you still get an email — never silently zero out.
     </div>
   </div>
 
   <div class="footer">
-    First-run setup brief · Generated by Claude scheduled task <strong>daily-attribution-brief</strong> on Cowork.<br>
-    Source code: <code>Graehamwatts/online-content/.github/workflows/daily-attribution-brief.yml</code>
-    <div class="signature">Graeham Watts</div>
-    <div class="dre">REALTOR® · Intero Real Estate · DRE# 01466876</div>
+    Auto-generated by the daily-attribution-brief scheduled task.<br>
+    <span class="signature">Graeham Watts · Intero Real Estate</span>
+    <div class="dre">DRE# 01466876</div>
   </div>
 </div>
 </body></html>
