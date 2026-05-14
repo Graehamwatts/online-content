@@ -4,90 +4,51 @@
 <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;600;700;800&family=DM+Sans:wght@400;500;700&display=swap" rel="stylesheet">
 <style>
 :root{color-scheme:light;--navy:#1B2A4A;--gold:#B8860B;--purple:#6a1b9a;--red:#9f1239;--bg:#f4f5f7;--card:#fff;--text:#2d3748;--muted:#718096;--line:#cbd5d8;--border:#e2e5ea;--radius:12px;}
-*{box-sizing:border-box;}body{margin:0;background:var(--bg);color:var(--text);font-family:'DM Sans',-apple-system,sans-serif;line-height:1.55;}
-body.no-scroll{overflow:hidden;}
-h1,h2,h3{font-family:'Plus Jakarta Sans',sans-serif;letter-spacing:-0.02em;color:var(--navy);}
+*{box-sizing:border-box;}body{margin:0;background:var(--bg);color:var(--text);font-family:'DM Sans',-apple-system,sans-serif;line-height:1.55;}body.no-scroll{overflow:hidden;}
+h1,h2,h3,h4{font-family:'Plus Jakarta Sans',sans-serif;letter-spacing:-0.02em;color:var(--navy);}
 .container{max-width:1180px;margin:0 auto;padding:0 24px;}
 .hero{background:linear-gradient(135deg,var(--navy) 0%,#2a3a5d 100%);color:#fff;padding:36px 0 24px;}
-.hero h1{color:#fff;font-size:32px;margin:0 0 8px;font-weight:800;}
-.hero .sub{color:#cdd6e1;font-size:15px;margin-bottom:16px;max-width:900px;}
-.hero .meta{display:flex;flex-wrap:wrap;gap:8px;}
-.hero .chip-meta{background:rgba(255,255,255,0.12);padding:6px 14px;border-radius:20px;font-size:12px;font-weight:500;}
-.hero .chip-meta.gold{background:rgba(184,134,11,0.4);}
-
-/* ===== AUDIENCE TABS ===== */
+.hero h1{color:#fff;font-size:32px;margin:0 0 8px;font-weight:800;}.hero .sub{color:#cdd6e1;font-size:15px;margin-bottom:16px;max-width:920px;}
+.hero .meta{display:flex;flex-wrap:wrap;gap:8px;}.hero .chip-meta{background:rgba(255,255,255,0.12);padding:6px 14px;border-radius:20px;font-size:12px;font-weight:500;}.hero .chip-meta.gold{background:rgba(184,134,11,0.4);}
 .audience-wrap{background:var(--bg);position:sticky;top:0;z-index:50;padding:14px 0 6px;border-bottom:1px solid var(--border);}
 .audience-nav{display:grid;grid-template-columns:repeat(5,1fr);gap:10px;}
-@media(max-width:980px){.audience-nav{grid-template-columns:repeat(3,1fr);}}
-@media(max-width:640px){.audience-nav{grid-template-columns:repeat(2,1fr);}}
-@media(max-width:420px){.audience-nav{grid-template-columns:1fr;}}
-.aud-btn{background:#fff;border:2px solid var(--border);border-radius:var(--radius);padding:12px 14px;cursor:pointer;transition:transform 0.15s,box-shadow 0.15s,background 0.15s;text-align:left;font-family:inherit;display:block;position:relative;}
+@media(max-width:980px){.audience-nav{grid-template-columns:repeat(3,1fr);}}@media(max-width:640px){.audience-nav{grid-template-columns:repeat(2,1fr);}}@media(max-width:420px){.audience-nav{grid-template-columns:1fr;}}
+.aud-btn{background:#fff;border:2px solid var(--border);border-radius:var(--radius);padding:12px 14px;cursor:pointer;transition:all 0.15s;text-align:left;font-family:inherit;display:block;position:relative;}
 .aud-btn:hover{transform:translateY(-2px);box-shadow:0 6px 16px rgba(0,0,0,0.08);}
 .aud-btn.aud-active{transform:translateY(-3px);box-shadow:0 10px 24px rgba(0,0,0,0.18);color:#fff;}
 .aud-btn.aud-active::after{content:'\25CF';position:absolute;top:8px;right:12px;font-size:14px;color:rgba(255,255,255,0.9);}
 .aud-btn.aud-active .aud-label,.aud-btn.aud-active .aud-sub{color:#fff;}
 .aud-research{border-color:#1B2A4A;}.aud-research.aud-active{background:#1B2A4A;}
-.aud-diagram{border-color:#6a1b9a;background:linear-gradient(135deg,#f3e5f5 0%,#ffffff 100%);}.aud-diagram.aud-active{background:#6a1b9a;}
+.aud-diagram{border-color:#6a1b9a;background:linear-gradient(135deg,#f3e5f5 0%,#fff 100%);}.aud-diagram.aud-active{background:#6a1b9a;}
 .aud-content{border-color:#9f1239;}.aud-content.aud-active{background:#9f1239;}
 .aud-video{border-color:#dc2626;}.aud-video.aud-active{background:#dc2626;}
-.aud-blog{border-color:#B8860B;background:linear-gradient(135deg,#fef9eb 0%,#ffffff 100%);}.aud-blog.aud-active{background:#B8860B;}.aud-blog.aud-active .aud-label{color:#1B2A4A;}.aud-blog.aud-active .aud-sub{color:rgba(27,42,74,0.85);}.aud-blog.aud-active::after{color:#1B2A4A;}
-.aud-icon{font-size:20px;line-height:1;margin-bottom:4px;}
-.aud-label{font-family:'Plus Jakarta Sans',sans-serif;font-weight:800;color:var(--navy);font-size:14px;margin-bottom:3px;}
-.aud-sub{font-size:11px;color:var(--muted);line-height:1.4;}
+.aud-blog{border-color:#B8860B;background:linear-gradient(135deg,#fef9eb 0%,#fff 100%);}.aud-blog.aud-active{background:#B8860B;}.aud-blog.aud-active .aud-label{color:#1B2A4A;}.aud-blog.aud-active .aud-sub{color:rgba(27,42,74,0.85);}.aud-blog.aud-active::after{color:#1B2A4A;}
+.aud-icon{font-size:20px;line-height:1;margin-bottom:4px;}.aud-label{font-family:'Plus Jakarta Sans',sans-serif;font-weight:800;color:var(--navy);font-size:14px;margin-bottom:3px;}.aud-sub{font-size:11px;color:var(--muted);line-height:1.4;}
 .aud-hidden{display:none !important;}
-
-/* ===== HERO BANNER + ALWAYS-ON COMPANIONS ===== */
 .banner{background:#fff7ed;border-left:4px solid #c2410c;color:#7c2d12;padding:14px 18px;border-radius:6px;margin:18px 0;font-size:14px;}
-.companion-strip{background:#f7fafc;padding:18px 0 22px;border-bottom:1px solid var(--border);}
-.companion-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:10px;}
-.companion-card{background:#fff;padding:14px 16px;border-radius:8px;border-left:4px solid var(--line);text-decoration:none;color:#1B2A4A;display:block;box-shadow:0 1px 3px rgba(0,0,0,0.04);transition:transform 0.15s,box-shadow 0.15s;}
-.companion-card:hover{transform:translateY(-2px);box-shadow:0 6px 16px rgba(0,0,0,0.08);}
-.companion-card .ttl{font-weight:700;font-size:14px;margin-bottom:3px;}
-.companion-card .desc{font-size:11px;color:#718096;}
-
-/* ===== VIEW BANNER ===== */
-.view-banner{background:#fff8e1;border:1px solid #f5d273;border-radius:8px;padding:10px 14px;margin:14px 0;font-size:13px;color:#5d4a1f;display:none;}
-.view-banner.show{display:block;}
-.view-banner strong{color:var(--navy);}
-
-/* ===== SECTIONS ===== */
-.section{padding:28px 0;}
-.section h2{font-size:22px;margin:0 0 6px;}
-.section .lede{color:var(--muted);font-size:14px;margin-bottom:18px;}
-
-/* ===== SOURCE GRID ===== */
+.view-banner{background:#fff8e1;border:1px solid #f5d273;border-radius:8px;padding:10px 14px;margin:14px 0;font-size:13px;color:#5d4a1f;display:none;}.view-banner.show{display:block;}.view-banner strong{color:var(--navy);}
+.section{padding:28px 0;}.section h2{font-size:22px;margin:0 0 6px;}.section h3{margin:18px 0 8px;font-size:18px;}.section .lede{color:var(--muted);font-size:14px;margin-bottom:18px;}
 .src-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:12px;}
 .src-card{background:var(--card);padding:14px 16px;border-radius:8px;border-left:4px solid var(--line);}
-.src-card.src-live{border-left-color:#16a34a;}
-.src-card.src-blocked{border-left-color:#dc2626;}
-.src-name{font-weight:700;color:var(--navy);font-size:14px;margin-bottom:4px;}
-.src-note{font-size:12px;color:var(--muted);line-height:1.4;}
-
-/* ===== DAY CARDS ===== */
+.src-card.src-live{border-left-color:#16a34a;}.src-card.src-blocked{border-left-color:#dc2626;}
+.src-name{font-weight:700;color:var(--navy);font-size:14px;margin-bottom:4px;}.src-note{font-size:12px;color:var(--muted);line-height:1.4;}
+.perf-grid{display:grid;grid-template-columns:1fr 1fr;gap:16px;margin:14px 0;}@media(max-width:760px){.perf-grid{grid-template-columns:1fr;}}
+.perf-card{background:var(--card);padding:18px 20px;border-radius:10px;border:1px solid #e8eaed;}
+.perf-card h3{margin:0 0 10px;font-size:16px;}.perf-card table{width:100%;border-collapse:collapse;font-size:13px;}.perf-card th,.perf-card td{padding:6px 8px;border-bottom:1px solid #edf2f7;text-align:left;}.perf-card th{background:#f7fafc;color:var(--navy);font-weight:700;font-size:11px;text-transform:uppercase;letter-spacing:0.5px;}.perf-card td.num{text-align:right;font-variant-numeric:tabular-nums;font-weight:600;}
 .day-grid{display:grid;gap:16px;}
 .day-card{background:var(--card);padding:24px 26px;border-radius:10px;border:1px solid #e8eaed;box-shadow:0 1px 3px rgba(0,0,0,0.04);}
 .day-head{display:flex;justify-content:space-between;align-items:flex-start;gap:16px;margin-bottom:8px;flex-wrap:wrap;}
-.day-meta{display:flex;gap:12px;align-items:baseline;}
-.day-label{font-weight:800;color:var(--navy);font-size:18px;font-family:'Plus Jakarta Sans',sans-serif;}
-.day-date{color:var(--muted);font-size:13px;}
+.day-meta{display:flex;gap:12px;align-items:baseline;}.day-label{font-weight:800;color:var(--navy);font-size:18px;}.day-date{color:var(--muted);font-size:13px;}
 .score-pill{color:#fff;padding:6px 14px;border-radius:20px;font-size:12px;font-weight:700;letter-spacing:0.5px;}
 .day-title{font-size:20px;margin:8px 0 6px;line-height:1.3;font-weight:700;}
 .day-hook{color:#4a5568;font-size:14.5px;margin:0 0 12px;border-left:3px solid var(--gold);padding-left:12px;}
 .day-meta-row{display:flex;flex-wrap:wrap;gap:8px;align-items:center;margin:8px 0 12px;}
 .chip{color:#fff;padding:3px 10px;border-radius:12px;font-size:11px;font-weight:700;letter-spacing:0.5px;}
 .fmt-chip{background:#edf2f7;color:var(--navy);padding:3px 10px;border-radius:12px;font-size:11px;font-weight:600;}
-.score-breakdown{display:flex;gap:8px;margin:8px 0 4px;color:var(--muted);font-size:12px;font-family:ui-monospace,monospace;flex-wrap:wrap;}
-.score-breakdown span{background:#f7fafc;padding:2px 8px;border-radius:4px;border:1px solid #edf2f7;}
+.score-breakdown{display:flex;gap:8px;margin:8px 0 4px;color:var(--muted);font-size:12px;font-family:ui-monospace,monospace;flex-wrap:wrap;}.score-breakdown span{background:#f7fafc;padding:2px 8px;border-radius:4px;border:1px solid #edf2f7;}
 .data-trail-block{background:#fffbea;border-left:3px solid var(--gold);padding:12px 14px;border-radius:0 8px 8px 0;margin-top:12px;font-size:13px;color:#5c4a14;}
-
-/* ===== MIX BAR ===== */
-.mix-bar{display:flex;height:32px;border-radius:8px;overflow:hidden;margin:10px 0 18px;}
-.mix-tofu{background:#2563EB;}.mix-mofu{background:#9c6f10;}.mix-bofu{background:#9f1239;}
-.mix-bar > div{color:#fff;display:flex;align-items:center;justify-content:center;font-size:12px;font-weight:700;letter-spacing:0.5px;}
-
-/* ===== PIPELINE FLOW ===== */
-.flow{margin:18px 0;}
-.flow-row{display:grid;grid-template-columns:repeat(auto-fit,minmax(200px,1fr));gap:12px;margin-bottom:8px;}
+.mix-bar{display:flex;height:32px;border-radius:8px;overflow:hidden;margin:10px 0 18px;}.mix-tofu{background:#2563EB;}.mix-mofu{background:#9c6f10;}.mix-bofu{background:#9f1239;}.mix-bar > div{color:#fff;display:flex;align-items:center;justify-content:center;font-size:12px;font-weight:700;letter-spacing:0.5px;}
+.flow{margin:18px 0;}.flow-row{display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:12px;margin-bottom:8px;}
 .flow-node{background:#fff;border:1px solid #e8eaed;border-radius:10px;padding:14px 16px;cursor:pointer;transition:all 0.18s;text-align:left;width:100%;display:block;box-shadow:0 1px 3px rgba(0,0,0,0.04);position:relative;font-family:inherit;color:inherit;font-size:13px;}
 .flow-node:hover{border-color:var(--gold);box-shadow:0 4px 12px rgba(184,134,11,0.18);transform:translateY(-2px);}
 .flow-node-num{display:inline-flex;width:26px;height:26px;background:var(--navy);color:#fff;border-radius:50%;align-items:center;justify-content:center;font-weight:800;font-size:12px;margin-right:8px;}
@@ -95,44 +56,35 @@ h1,h2,h3{font-family:'Plus Jakarta Sans',sans-serif;letter-spacing:-0.02em;color
 .flow-node-kicker{display:block;font-size:11.5px;color:var(--muted);margin-top:6px;line-height:1.45;}
 .flow-node-badge{position:absolute;top:8px;right:10px;font-size:9px;font-weight:800;letter-spacing:1px;padding:2px 7px;border-radius:8px;}
 .b-data{background:#dbeafe;color:#1e3a8a;}.b-analysis{background:#f3e8ff;color:#6b21a8;}.b-output{background:#dcfce7;color:#15803d;}
-.flow-node[data-color="data"]{border-left:3px solid #2563eb;}
-.flow-node[data-color="analysis"]{border-left:3px solid #7c3aed;}
-.flow-node[data-color="output"]{border-left:3px solid #16a34a;}
+.flow-node[data-color="data"]{border-left:3px solid #2563eb;}.flow-node[data-color="analysis"]{border-left:3px solid #7c3aed;}.flow-node[data-color="output"]{border-left:3px solid #16a34a;}
 .flow-arrow{text-align:center;color:#94a3b8;font-size:18px;font-weight:700;margin:4px 0;}
-
-/* ===== MODAL (FIXED: [hidden] now wins) ===== */
 .modal-backdrop{position:fixed;inset:0;background:rgba(15,23,42,0.55);backdrop-filter:blur(2px);display:flex;align-items:center;justify-content:center;padding:20px;z-index:9999;animation:fade-bd 0.18s ease;}
 .modal-backdrop[hidden]{display:none !important;}
 @keyframes fade-bd{from{opacity:0;}to{opacity:1;}}
-.modal{background:#fff;border-radius:14px;max-width:720px;width:100%;max-height:85vh;overflow:hidden;display:flex;flex-direction:column;box-shadow:0 24px 60px rgba(0,0,0,0.35);animation:pop 0.22s cubic-bezier(0.34,1.56,0.64,1);}
+.modal{background:#fff;border-radius:14px;max-width:760px;width:100%;max-height:85vh;overflow:hidden;display:flex;flex-direction:column;box-shadow:0 24px 60px rgba(0,0,0,0.35);animation:pop 0.22s cubic-bezier(0.34,1.56,0.64,1);}
 @keyframes pop{from{opacity:0;transform:translateY(20px) scale(0.96);}to{opacity:1;transform:translateY(0) scale(1);}}
 .modal-head{background:var(--navy);color:#fff;padding:18px 26px;display:flex;align-items:center;justify-content:space-between;gap:14px;border-radius:14px 14px 0 0;}
-.modal-head h3{margin:0;color:#fff;font-size:18px;font-family:'Plus Jakarta Sans',sans-serif;font-weight:800;line-height:1.3;}
+.modal-head h3{margin:0;color:#fff;font-size:18px;font-weight:800;line-height:1.3;}
 .modal-head-meta{display:block;font-size:12px;color:rgba(255,255,255,0.7);font-weight:400;margin-top:4px;}
 .modal-close{background:rgba(255,255,255,0.12);border:none;color:#fff;width:34px;height:34px;border-radius:50%;font-size:22px;line-height:1;cursor:pointer;font-weight:300;display:flex;align-items:center;justify-content:center;flex-shrink:0;transition:background 0.15s;}
 .modal-close:hover{background:rgba(255,255,255,0.25);}
 .modal-body{padding:22px 26px 24px;overflow-y:auto;font-size:13.5px;line-height:1.6;}
+.modal-body h4{margin:16px 0 8px;font-size:14px;color:var(--navy);border-bottom:1px solid #e2e8f0;padding-bottom:4px;}.modal-body h4:first-child{margin-top:0;}
 .modal-body code{background:#f1f5f9;padding:1.5px 6px;border-radius:3px;font-size:12px;color:#1e293b;font-family:ui-monospace,Menlo,monospace;}
+.modal-body pre{background:#f1f5f9;padding:12px 14px;border-radius:6px;font-size:11.5px;line-height:1.55;overflow-x:auto;color:#1e293b;font-family:ui-monospace,Menlo,monospace;border-left:3px solid var(--gold);}
 .modal-body a{color:var(--gold);text-decoration:none;font-weight:600;}.modal-body a:hover{text-decoration:underline;}
 .modal-body ul.m-list,.modal-body ol.m-list{margin:6px 0 12px;padding-left:22px;line-height:1.7;}
 .modal-body ul.m-list li,.modal-body ol.m-list li{margin-bottom:4px;font-size:13px;}
 .modal-body .finding{margin-top:14px;padding:12px 14px;background:#fffbea;border-left:3px solid var(--gold);border-radius:0 6px 6px 0;font-size:13px;color:#5c4a14;}
-.modal-body .kv-row{margin-bottom:9px;}
-.modal-body .kv-row .k{display:inline-block;font-weight:700;color:var(--navy);margin-right:6px;}
-.modal-body table.m-table{width:100%;border-collapse:collapse;font-size:12px;margin:6px 0 12px;}
-.modal-body table.m-table th,.modal-body table.m-table td{padding:6px 9px;border:1px solid #e5e7eb;text-align:left;vertical-align:top;}
-.modal-body table.m-table th{background:#f7fafc;color:var(--navy);font-weight:700;}
-
-/* ===== FOOTER ===== */
-.footer{background:var(--navy);color:#cdd6e1;padding:24px 0;font-size:13px;margin-top:32px;}
-.footer a{color:var(--gold);text-decoration:none;}
+.modal-body .kv-row{margin-bottom:9px;}.modal-body .kv-row .k{display:inline-block;font-weight:700;color:var(--navy);margin-right:6px;}
+.modal-body table.m-table{width:100%;border-collapse:collapse;font-size:12px;margin:6px 0 12px;}.modal-body table.m-table th,.modal-body table.m-table td{padding:6px 9px;border:1px solid #e5e7eb;text-align:left;vertical-align:top;}.modal-body table.m-table th{background:#f7fafc;color:var(--navy);font-weight:700;}
+.footer{background:var(--navy);color:#cdd6e1;padding:24px 0;font-size:13px;margin-top:32px;}.footer a{color:var(--gold);text-decoration:none;}
 </style></head>
 <body>
 
-<!-- HERO -->
 <header class="hero"><div class="container">
 <h1>Main Dashboard &mdash; Week of May 11&ndash;17, 2026</h1>
-<p class="sub">5 topics &middot; 1 TOFU / 1 MOFU / 3 BOFU (lead-gen push) &middot; Refreshed via content-creation-engine v7.3 (canonical from Documents/Claude/Skills) &middot; DRE# 01466876</p>
+<p class="sub">5 topics &middot; 1 TOFU / 1 MOFU / 3 BOFU (lead-gen push 20/20/60) &middot; Refreshed via content-creation-engine v7.3 &middot; Canonical layout (5 audience tabs) &middot; DRE# 01466876</p>
 <div class="meta">
 <span class="chip-meta gold">v7.3 Engine Refresh</span>
 <span class="chip-meta">Generated 2026-05-14</span>
@@ -141,63 +93,85 @@ h1,h2,h3{font-family:'Plus Jakarta Sans',sans-serif;letter-spacing:-0.02em;color
 </div>
 </div></header>
 
-<!-- AUDIENCE TABS -->
 <div class="audience-wrap"><div class="container">
 <div class="audience-nav">
-<button class="aud-btn aud-research" onclick="setView('research')"><div class="aud-icon">&#128300;</div><div class="aud-label">Research</div><div class="aud-sub">Live data layer, sources, freshness checks</div></button><button class="aud-btn aud-diagram" onclick="setView('diagram')"><div class="aud-icon">&#128202;</div><div class="aud-label">Diagram</div><div class="aud-sub">10-step data pipeline + clickable details</div></button><button class="aud-btn aud-content" onclick="setView('content')"><div class="aud-icon">&#128197;</div><div class="aud-label">Content</div><div class="aud-sub">Production calendar &middot; 5 topics this week</div></button><button class="aud-btn aud-video" onclick="setView('video')"><div class="aud-icon">&#127909;</div><div class="aud-label">Video Content</div><div class="aud-sub">YT Longs, Shorts, Reels, TikToks</div></button><button class="aud-btn aud-blog" onclick="setView('blog')"><div class="aud-icon">&#128221;</div><div class="aud-label">Blog Content</div><div class="aud-sub">AEO-ready blog posts + schema</div></button></div><div class="view-banner" id="viewBanner"><strong id="viewBannerLabel">Showing: Content</strong> &middot; <a href="#" onclick="setView('all');return false;" style="color:#1B2A4A;text-decoration:underline;">Show everything</a></div></div></div>
+<button class="aud-btn aud-research" onclick="setView('research')"><div class="aud-icon">&#128300;</div><div class="aud-label">Research</div><div class="aud-sub">Live data, sources, freshness</div></button><button class="aud-btn aud-diagram" onclick="setView('diagram')"><div class="aud-icon">&#128202;</div><div class="aud-label">Diagram</div><div class="aud-sub">10-step pipeline + modals</div></button><button class="aud-btn aud-content" onclick="setView('content')"><div class="aud-icon">&#128197;</div><div class="aud-label">Content</div><div class="aud-sub">Production calendar &middot; 5 topics</div></button><button class="aud-btn aud-video" onclick="setView('video')"><div class="aud-icon">&#127909;</div><div class="aud-label">Video Content</div><div class="aud-sub">YT Longs, Shorts, Reels, TikToks</div></button><button class="aud-btn aud-blog" onclick="setView('blog')"><div class="aud-icon">&#128221;</div><div class="aud-label">Blog Content</div><div class="aud-sub">AEO blog posts + schema</div></button></div><div class="view-banner" id="viewBanner"><strong id="viewBannerLabel">Showing: Content</strong> &middot; <a href="#" onclick="setView('all');return false;" style="color:#1B2A4A;text-decoration:underline;">Show everything</a></div></div></div>
 <div class="container">
-<div class="banner"><strong>v7.3 Run Note &mdash;</strong> Phase 2 (live Apify Reddit scrape) was blocked at the Cowork sandbox firewall (<code>api.apify.com</code> not on allowlist). Pivoted to <strong>WebSearch-grounded ideation</strong>. Source confirmation &ge; 3 platforms per topic. Next week: run <code>scripts/run_reddit_ideation.py --tier 1</code> locally on Windows + drop JSON in outputs.</div>
+<div class="banner"><strong>v7.3 Run Note &mdash;</strong> Phase 2 (Apify Reddit scrape) blocked at Cowork sandbox firewall (api.apify.com not on allowlist; token was valid). Pivoted to WebSearch + live Composio YouTube/Instagram analytics. Source confirmation &ge; 3 platforms per topic. Next week: run <code>scripts/run_reddit_ideation.py --tier 1</code> locally on Windows + drop JSON in outputs.</div>
 </div>
-
-<!-- COMPANION STRIP (always visible across views) -->
-<div class="companion-strip"><div class="container">
-<div class="companion-grid">
-<a class="companion-card" href="2026-05-11-videos.html" target="_blank" style="border-left-color:#9f1239;"><div class="ttl">&#128249; Videos Dashboard</div><div class="desc">Deep-dive YT Longs/Shorts/Reels</div></a>
-<a class="companion-card" href="2026-05-11-blogs.html" target="_blank" style="border-left-color:#B8860B;"><div class="ttl">&#128221; Blogs Dashboard</div><div class="desc">AEO-optimized posts + schema</div></a>
-<a class="companion-card" href="2026-05-11-research.html" target="_blank" style="border-left-color:#1B2A4A;"><div class="ttl">&#128300; Research Dashboard</div><div class="desc">Phase R per-topic research data</div></a>
-<a class="companion-card" href="2026-05-11-all.html" target="_blank" style="border-left-color:#6a1b9a;"><div class="ttl">&#128194;&#65039; All-in-One</div><div class="desc">Omnibus &mdash; everything unified</div></a>
-</div>
-</div></div>
 
 <div class="section" data-audience="research all"><div class="container">
 <h2>Research &mdash; Live Data Layer</h2>
 <p class="lede">Every source listed below was probed this run. Green = live, red = blocked at sandbox layer.</p>
 <div class="src-grid">
-<div class="src-card src-live"><div class="src-name">&#9989; WebSearch (Google PAA)</div><div class="src-note">6 parallel queries. Bay Area RE publications, layoff trackers, AB 1482.</div></div>
-<div class="src-card src-blocked"><div class="src-name">&#10060; Apify Reddit Scrape</div><div class="src-note">Token valid, but api.apify.com returns HTTP 000 from Cowork sandbox proxy.</div></div>
-<div class="src-card src-live"><div class="src-name">&#9989; topic-history.json</div><div class="src-note">1 prior topic in 4-week window. <code>pricing-strategy</code> angle blocked.</div></div>
-<div class="src-card src-live"><div class="src-name">&#9989; market-config.md</div><div class="src-note">Primary markets EPA, RWC, PA, MP, SMC. CRM = GoHighLevel. DRE# 01466876.</div></div>
-<div class="src-card src-live"><div class="src-name">&#9989; GitHub Contents API</div><div class="src-note">github.com reachable from sandbox. Composio for skills repo, Contents API for large dashboard.</div></div>
+<div class="src-card src-live"><div class="src-name">&#9989; Composio YouTube</div><div class="src-note">youtube_manor-maki ACTIVE &middot; 1,750 subs / 645 vids / 914,250 views pulled live.</div></div>
+<div class="src-card src-live"><div class="src-name">&#9989; Composio Instagram</div><div class="src-note">instagram_carton-palama ACTIVE &middot; 1,269 followers / 1,093 posts &middot; top 10 by engagement pulled.</div></div>
+<div class="src-card src-live"><div class="src-name">&#9989; WebSearch (Google PAA)</div><div class="src-note">6 parallel queries &middot; 10 source citations &middot; Meta + AB 1482 + Peninsula split triangulated.</div></div>
+<div class="src-card src-blocked"><div class="src-name">&#10060; Apify Reddit Scrape</div><div class="src-note">Token valid, api.apify.com returns HTTP 000 from Cowork sandbox proxy (not on allowlist).</div></div>
+<div class="src-card src-live"><div class="src-name">&#9989; topic-history.json</div><div class="src-note">1 prior topic in 4-week window &middot; pricing-strategy angle blocked.</div></div>
+<div class="src-card src-live"><div class="src-name">&#9989; GitHub Contents API</div><div class="src-note">github.com reachable from sandbox &middot; Composio for skills repo &middot; Contents API for large dashboard files.</div></div>
 </div>
 
-<h2 style="margin-top:28px;">Freshness Constraints Applied</h2>
+<h2 style="margin-top:32px;">Performance Signal &mdash; What&rsquo;s Actually Working</h2>
+<p class="lede">Pulled live this run via Composio. Compared against current week&rsquo;s topic candidates to inform Performance Signal scores in Phase 5.</p>
+
+<div class="perf-grid">
+<div class="perf-card">
+<h3>&#127909; YouTube Channel Snapshot</h3>
+<table>
+<tr><th>Subscribers</th><td class="num">1,750</td></tr>
+<tr><th>Total videos</th><td class="num">645</td></tr>
+<tr><th>Lifetime views</th><td class="num">914,250</td></tr>
+<tr><th>Joined</th><td>2008-06-10</td></tr>
+<tr><th>Newest upload</th><td>May 14 &mdash; &quot;$347 Billion Homes Sitting Unsold&quot;</td></tr>
+<tr><th>Section 9 Shorts filter</th><td>Deferred this run (next Monday)</td></tr>
+</table>
+</div>
+
+<div class="perf-card">
+<h3>&#128247; Instagram Top 5 (last 10 posts)</h3>
+<table>
+<thead><tr><th>#</th><th>Date</th><th>Topic</th><th>Eng</th></tr></thead>
+<tbody>
+<tr><td>1</td><td>May 6</td><td>San Mateo speakeasy</td><td class="num">13</td></tr>
+<tr><td>2</td><td>May 7</td><td>Apple Studios Half Moon Bay</td><td class="num">8</td></tr>
+<tr><td>3</td><td>May 2</td><td>Veterans losing homes</td><td class="num">4</td></tr>
+<tr><td>4</td><td>May 1</td><td>EPA 2yr homicide-free</td><td class="num">4</td></tr>
+<tr><td>5</td><td>Apr 29</td><td>EPA under $1M</td><td class="num">4</td></tr>
+</tbody></table>
+<p style="font-size:11.5px;color:var(--muted);margin:10px 0 0;"><strong>Finding:</strong> Lifestyle / discovery hooks (speakeasy, film production) beat RE-direct posts ~3x. T5 (Peninsula $1.5M comparison) uses this lifestyle wrapper.</p>
+</div>
+</div>
+
+<h2 style="margin-top:32px;">Freshness Constraints Applied</h2>
 <div style="background:var(--card);padding:18px 22px;border-radius:8px;border:1px solid #e8eaed;">
 <div class="kv-row"><strong>Blocked angles (last 2 weeks):</strong> <code>pricing-strategy</code></div>
+<div class="kv-row"><strong>Deprioritized pillars (2+ recent):</strong> <em>none</em> &mdash; only 1 entry in history</div>
 <div class="kv-row"><strong>Boosted pillars (0 recent):</strong> 1, 2, 3, 5, 6, 7, 8, 9</div>
-<div class="kv-row"><strong>Overserved markets:</strong> EPA (1 of last 1) &mdash; diversifying to RWC/PA/MP this week</div>
+<div class="kv-row"><strong>Overserved markets:</strong> EPA (1 of last 1 topics) &mdash; actively diversifying to RWC/PA/MP this week</div>
 <div class="kv-row"><strong>GHL keyword distribution:</strong> OPTIONS &middot; NUMBERS &middot; 1482 &middot; BUY &middot; WATCH (5 distinct, no over-rotation)</div>
 </div>
 
-<h2 style="margin-top:28px;">Source Citations (per topic)</h2>
+<h2 style="margin-top:32px;">Source Citations</h2>
 <ul class="m-list" style="line-height:1.8;">
-<li><a href="https://finance.yahoo.com/news/meta-cuts-more-1-000-221156444.html">Meta cuts 1,000+ in Bay Area &mdash; Yahoo Finance</a></li>
-<li><a href="https://www.foxbusiness.com/markets/metas-bay-area-layoffs-affect-roughly-200-workers-company-pours-billions-ai-infrastructure">Meta&rsquo;s 200 Bay Area layoffs &mdash; Fox Business</a></li>
-<li><a href="https://www.trueup.io/layoffs">Tech layoffs 2026: 128,270 YTD &mdash; TrueUp</a></li>
-<li><a href="https://www.rwcpulse.com/peninsula/2026/05/01/buyers-now-need-1m-salaries-for-homes-in-peninsulas-priciest-cities/">$1M+ salaries Peninsula &mdash; RWC Pulse May 1 2026</a></li>
-<li><a href="https://www.rwcpulse.com/peninsula/2026/04/13/a-tale-of-2-housing-markets-spring-reveals-split-in-peninsula-real-estate/">Peninsula split market &mdash; RWC Pulse April 13 2026</a></li>
-<li><a href="https://alleastbayproperties.com/ab-1482-rent-cap-california-2026/">AB 1482 Rent Cap 2026</a></li>
-<li><a href="https://caanet.org/caa-updates-cpi-calculator-for-rent-increases-under-ab-1482-2026/">CAA CPI calculator</a></li>
-<li><a href="https://davidovichlaw.com/ab-1482-rent-increase-limits-for-2025-2026-guidance-for-california-property-owners/">AB 1482 limits 2025-2026 &mdash; Davidovich Stone Law</a></li>
-<li><a href="https://www.m-fhc.com/the-2026-bay-area-real-estate-reset-why-q1-is-the-strategic-window-for-buyers-and-sellers/">2026 Bay Area Real Estate Reset &mdash; McFadden Finch</a></li>
-<li><a href="https://www.paloaltoonline.com/home-sales/2026/01/13/bay-area-housing-outlook-sales-prices-seen-rising-in-2026/">Bay Area housing outlook 2026 &mdash; Palo Alto Online</a></li>
+<li><a href="https://finance.yahoo.com/news/meta-cuts-more-1-000-221156444.html">Yahoo Finance &mdash; Meta cuts 1,000+ in Bay Area</a></li>
+<li><a href="https://www.foxbusiness.com/markets/metas-bay-area-layoffs-affect-roughly-200-workers-company-pours-billions-ai-infrastructure">Fox Business &mdash; Meta 200 Bay Area layoffs</a></li>
+<li><a href="https://www.trueup.io/layoffs">TrueUp &mdash; 128,270 tech layoffs YTD 2026</a></li>
+<li><a href="https://www.rwcpulse.com/peninsula/2026/05/01/buyers-now-need-1m-salaries-for-homes-in-peninsulas-priciest-cities/">RWC Pulse May 1 2026 &mdash; $1M+ salaries Peninsula</a></li>
+<li><a href="https://www.rwcpulse.com/peninsula/2026/04/13/a-tale-of-2-housing-markets-spring-reveals-split-in-peninsula-real-estate/">RWC Pulse April 13 2026 &mdash; Peninsula split market</a></li>
+<li><a href="https://alleastbayproperties.com/ab-1482-rent-cap-california-2026/">All East Bay Properties &mdash; AB 1482 2026</a></li>
+<li><a href="https://caanet.org/caa-updates-cpi-calculator-for-rent-increases-under-ab-1482-2026/">CAA &mdash; CPI calculator for AB 1482 2026</a></li>
+<li><a href="https://davidovichlaw.com/ab-1482-rent-increase-limits-for-2025-2026-guidance-for-california-property-owners/">Davidovich Stone Law &mdash; AB 1482 limits 2025-2026</a></li>
+<li><a href="https://www.m-fhc.com/the-2026-bay-area-real-estate-reset-why-q1-is-the-strategic-window-for-buyers-and-sellers/">McFadden Finch &mdash; 2026 Bay Area Real Estate Reset</a></li>
+<li><a href="https://www.paloaltoonline.com/home-sales/2026/01/13/bay-area-housing-outlook-sales-prices-seen-rising-in-2026/">Palo Alto Online &mdash; Bay Area housing outlook 2026</a></li>
 </ul>
 </div></div>
 
 <div class="section" data-audience="diagram all"><div class="container">
-<h2>Diagram &mdash; How We Built This (Data Pipeline)</h2>
-<p class="lede">10 sequential steps from raw signal to published dashboard. Click any node for the full details on what ran, what was found, and what was decided.</p>
+<h2>Diagram &mdash; How We Built This (10-Step Data Pipeline)</h2>
+<p class="lede">Click any node for the full details on what ran, what was found, and what was decided. 3 layers: data inputs &rarr; intelligence &rarr; outputs.</p>
 <div class="flow">
-<div class="flow-row"><button class="flow-node" data-color="data" onclick="openStep('s1')"><span class="flow-node-num">1</span><span class="flow-node-title">Topic History Check</span><span class="flow-node-kicker">Pulled topic-history.json &middot; 1 prior topic in 4-week window &middot; freshness exclusions computed</span><span class="flow-node-badge b-data">DATA INPUT</span></button><button class="flow-node" data-color="data" onclick="openStep('s2')"><span class="flow-node-num">2</span><span class="flow-node-title">BOFU Query Generation</span><span class="flow-node-kicker">230+ localized buyer/seller queries across 5 inquiry types</span><span class="flow-node-badge b-data">DATA INPUT</span></button><button class="flow-node" data-color="data" onclick="openStep('s3')"><span class="flow-node-num">3</span><span class="flow-node-title">Apify Reddit Scrape &mdash; BLOCKED</span><span class="flow-node-kicker">Cowork sandbox firewall blocks api.apify.com &middot; pivoted to WebSearch</span><span class="flow-node-badge b-data">DATA INPUT</span></button><button class="flow-node" data-color="data" onclick="openStep('s4')"><span class="flow-node-num">4</span><span class="flow-node-title">WebSearch &mdash; Market Context</span><span class="flow-node-kicker">Meta May 20 layoffs &middot; AB 1482 6.3% &middot; rates 6.3% &middot; Peninsula split &middot; $1M+ salaries PA</span><span class="flow-node-badge b-data">DATA INPUT</span></button></div><div class="flow-arrow">&darr;</div><div class="flow-row"><button class="flow-node" data-color="analysis" onclick="openStep('s5')"><span class="flow-node-num">5</span><span class="flow-node-title">BOFU Intent Scoring</span><span class="flow-node-kicker">5-criteria rubric &middot; Inquiry &middot; Intent Matrix &middot; Source &middot; Emotion &middot; Local</span><span class="flow-node-badge b-analysis">ANALYSIS</span></button><button class="flow-node" data-color="analysis" onclick="openStep('s6')"><span class="flow-node-num">6</span><span class="flow-node-title">Tier 2 Impact + Ease Quadrant</span><span class="flow-node-kicker">Q1 Quick Win &middot; Q2 Strategic Bet &middot; Q3 Filler &middot; Q4 Avoid</span><span class="flow-node-badge b-analysis">ANALYSIS</span></button><button class="flow-node" data-color="analysis" onclick="openStep('s7')"><span class="flow-node-num">7</span><span class="flow-node-title">Funnel Tag &middot; 20/20/60 Lead-Gen</span><span class="flow-node-kicker">User specified 20/30/50; BOFU rounded up for Meta May 20 urgency</span><span class="flow-node-badge b-analysis">ANALYSIS</span></button></div><div class="flow-arrow">&darr;</div><div class="flow-row"><button class="flow-node" data-color="output" onclick="openStep('s8')"><span class="flow-node-num">8</span><span class="flow-node-title">Multi-Platform Script Generation</span><span class="flow-node-kicker">Each topic: YT Long + Short + IG Reel x2 + Carousel + TikTok + Blog + GMB + FB</span><span class="flow-node-badge b-output">OUTPUT</span></button><button class="flow-node" data-color="output" onclick="openStep('s9')"><span class="flow-node-num">9</span><span class="flow-node-title">GitHub Push</span><span class="flow-node-kicker">Dashboard pushed to online-content &middot; skills repo topic-history.json appended</span><span class="flow-node-badge b-output">OUTPUT</span></button><button class="flow-node" data-color="output" onclick="openStep('s10')"><span class="flow-node-num">10</span><span class="flow-node-title">Lead Capture &middot; GHL Workflows</span><span class="flow-node-kicker">5 distinct keywords this week &middot; no over-rotation</span><span class="flow-node-badge b-output">OUTPUT</span></button></div></div></div></div>
+<div class="flow-row"><button class="flow-node" data-color="data" onclick="openStep('s1')"><span class="flow-node-num">1</span><span class="flow-node-title">Topic History Check</span><span class="flow-node-kicker">topic-history.json &middot; 1 prior entry &middot; freshness exclusions</span><span class="flow-node-badge b-data">DATA INPUT</span></button><button class="flow-node" data-color="data" onclick="openStep('s2')"><span class="flow-node-num">2</span><span class="flow-node-title">Composio YT + IG Analytics</span><span class="flow-node-kicker">YT 1,750 subs &middot; 645 videos &middot; IG 1,269 followers &middot; 1,093 posts</span><span class="flow-node-badge b-data">DATA INPUT</span></button><button class="flow-node" data-color="data" onclick="openStep('s3')"><span class="flow-node-num">3</span><span class="flow-node-title">Apify Reddit (BLOCKED at sandbox)</span><span class="flow-node-kicker">Token valid &middot; api.apify.com not on Cowork allowlist &middot; fallback to WebSearch</span><span class="flow-node-badge b-data">DATA INPUT</span></button><button class="flow-node" data-color="data" onclick="openStep('s4')"><span class="flow-node-num">4</span><span class="flow-node-title">WebSearch &middot; Market Context</span><span class="flow-node-kicker">6 parallel queries &middot; 10 source citations &middot; live signal from Bay Area publications</span><span class="flow-node-badge b-data">DATA INPUT</span></button></div><div class="flow-arrow">&darr;</div><div class="flow-row"><button class="flow-node" data-color="analysis" onclick="openStep('s5')"><span class="flow-node-num">5</span><span class="flow-node-title">BOFU Intent Scoring (5-criteria)</span><span class="flow-node-kicker">Per-topic scorecard with criterion-by-criterion rationale</span><span class="flow-node-badge b-analysis">ANALYSIS</span></button><button class="flow-node" data-color="analysis" onclick="openStep('s6')"><span class="flow-node-num">6</span><span class="flow-node-title">Tier 2 Impact + Ease Quadrant</span><span class="flow-node-kicker">Q1 Quick Win prioritization &middot; all 5 topics in Q1</span><span class="flow-node-badge b-analysis">ANALYSIS</span></button><button class="flow-node" data-color="analysis" onclick="openStep('s7')"><span class="flow-node-num">7</span><span class="flow-node-title">Funnel Tag &middot; 20/20/60 Lead-Gen</span><span class="flow-node-kicker">User specified 20/30/50 &middot; BOFU rounded up for Meta May 20 urgency</span><span class="flow-node-badge b-analysis">ANALYSIS</span></button></div><div class="flow-arrow">&darr;</div><div class="flow-row"><button class="flow-node" data-color="output" onclick="openStep('s8')"><span class="flow-node-num">8</span><span class="flow-node-title">Multi-Platform Script Generation</span><span class="flow-node-kicker">9 derivatives per topic &middot; 45 total content pieces &middot; ElevenLabs-ready</span><span class="flow-node-badge b-output">OUTPUT</span></button><button class="flow-node" data-color="output" onclick="openStep('s9')"><span class="flow-node-num">9</span><span class="flow-node-title">GitHub Push (online-content + skills)</span><span class="flow-node-kicker">Dashboard + topic-history + skill template updates</span><span class="flow-node-badge b-output">OUTPUT</span></button><button class="flow-node" data-color="output" onclick="openStep('s10')"><span class="flow-node-num">10</span><span class="flow-node-title">Lead Capture &middot; GHL Workflows</span><span class="flow-node-kicker">5 distinct keywords this week &middot; comment-keyword automation in GoHighLevel</span><span class="flow-node-badge b-output">OUTPUT</span></button></div></div></div></div>
 <div class="section" data-audience="content all"><div class="container">
 <h2>Content &mdash; This Week&rsquo;s Production Calendar</h2>
 <p class="lede">5 topics &middot; 1 TOFU / 1 MOFU / 3 BOFU. Scored on 5-criteria BOFU rubric + Tier 2 Impact/Ease quadrant.</p>
@@ -218,7 +192,7 @@ h1,h2,h3{font-family:'Plus Jakarta Sans',sans-serif;letter-spacing:-0.02em;color
 <span class="fmt-chip">GHL: <strong>OPTIONS</strong></span>
 </div>
 <div class="score-breakdown"><span>P:5 &middot; S:5 &middot; A:5 &middot; C:5 &middot; T:4</span><span>Impact: 92</span><span>Ease: 88</span></div>
-<div class="data-trail-block">&rarr; <strong>Data trail:</strong> Meta announced 8K layoffs Apr 23, effective May 20 (124 Burlingame, 74 Sunnyvale). 128,270 tech workers laid off YTD 2026. Pillar 8 has 0 hits in last 4 weeks -- freshness boost. Sources: Yahoo Finance, Fox Business, TrueUp, 24/7 Wall St.</div>
+<div class="data-trail-block">&rarr; <strong>Data trail:</strong> Meta announced 8K layoffs Apr 23, effective May 20 (124 Burlingame, 74 Sunnyvale). 128,270 tech workers laid off YTD 2026 per TrueUp. Pillar 8 has 0 hits in last 4 weeks -- freshness boost. Source confirmation: Yahoo Finance, Fox Business, TrueUp, 24/7 Wall St (5 platforms).</div>
 </article>
 
 <article class="day-card">
@@ -227,7 +201,7 @@ h1,h2,h3{font-family:'Plus Jakarta Sans',sans-serif;letter-spacing:-0.02em;color
 <div class="score-pill" style="background:#9c6f10;">20/25 &middot; Q1 Quick Win</div>
 </header>
 <h3 class="day-title">Bay Area Mortgage Rates Just Hit Mid-6%: The 5 Numbers You Should Re-Run This Week</h3>
-<p class="day-hook"><em>&ldquo;Same monthly payment buys $36K more home today than it did at the October 2024 peak.&rdquo;</em></p>
+<p class="day-hook"><em>&ldquo;Same monthly payment buys $36K more home today than it did at the October 2024 peak. You just gained buying power without earning a dollar more.&rdquo;</em></p>
 <div class="day-meta-row">
 <span class="chip" style="background:#9c6f10;">MOFU</span>
 <span class="fmt-chip">Pillar 3 Market Data</span>
@@ -235,7 +209,7 @@ h1,h2,h3{font-family:'Plus Jakarta Sans',sans-serif;letter-spacing:-0.02em;color
 <span class="fmt-chip">GHL: <strong>NUMBERS</strong></span>
 </div>
 <div class="score-breakdown"><span>P:4 &middot; S:4 &middot; A:4 &middot; C:3 &middot; T:4</span><span>Impact: 70</span><span>Ease: 74</span></div>
-<div class="data-trail-block">&rarr; <strong>Data trail:</strong> Rate trajectory 7.3% peak Oct 2024 to ~6.3% May 2026 (Fed 3 cuts in 2025). Math: $500K loan at 7% = $3,327 P&amp;I; same payment qualifies for $536K at 6.3%. Sources: McFadden Finch, Lisa Lum, Marks Realty, Palo Alto Online.</div>
+<div class="data-trail-block">&rarr; <strong>Data trail:</strong> Rate trajectory: 7.3% peak Oct 2024 to ~6.3% May 2026 (Fed 3 cuts in 2025). Math: $500K loan at 7% = $3,327 P&amp;I; same payment qualifies for $536K at 6.3%. Sources: McFadden Finch, Lisa Lum, Marks Realty, Palo Alto Online.</div>
 </article>
 
 <article class="day-card">
@@ -252,7 +226,7 @@ h1,h2,h3{font-family:'Plus Jakarta Sans',sans-serif;letter-spacing:-0.02em;color
 <span class="fmt-chip">GHL: <strong>1482</strong></span>
 </div>
 <div class="score-breakdown"><span>P:5 &middot; S:5 &middot; A:5 &middot; C:5 &middot; T:3</span><span>Impact: 87</span><span>Ease: 90</span></div>
-<div class="data-trail-block">&rarr; <strong>Data trail:</strong> Graeham ranks position 13 for &quot;ab 1482&quot; (Search Console, 130+ impressions). Cap locked Aug 1 2025 to July 31 2026. Sources: CAA, Davidovich Stone Law, RentCheckMe.</div>
+<div class="data-trail-block">&rarr; <strong>Data trail:</strong> Graeham ranks position 13 for &quot;ab 1482&quot; (Search Console, 130+ impressions). 2026-stamped refresh should push to page 1 in 30-60 days. Cap locked Aug 1 2025 to July 31 2026. Sources: CAA, Davidovich Stone Law, RentCheckMe.</div>
 </article>
 
 <article class="day-card">
@@ -261,7 +235,7 @@ h1,h2,h3{font-family:'Plus Jakarta Sans',sans-serif;letter-spacing:-0.02em;color
 <div class="score-pill" style="background:#9f1239;">23/25 &middot; Q1 Quick Win</div>
 </header>
 <h3 class="day-title">Why Bay Area Buyers Are Skipping Palo Alto in 2026 &mdash; Where They&rsquo;re Going Instead and Why It&rsquo;s Working</h3>
-<p class="day-hook"><em>&ldquo;Stop chasing Palo Alto. Buy where the smart money is actually going.&rdquo;</em></p>
+<p class="day-hook"><em>&ldquo;Stop chasing Palo Alto. Buy where the smart money is actually going &mdash; and it&rsquo;s not where you think.&rdquo;</em></p>
 <div class="day-meta-row">
 <span class="chip" style="background:#9f1239;">BOFU</span>
 <span class="fmt-chip">Pillar 1+7 Lifestyle/Neighborhoods</span>
@@ -269,13 +243,13 @@ h1,h2,h3{font-family:'Plus Jakarta Sans',sans-serif;letter-spacing:-0.02em;color
 <span class="fmt-chip">GHL: <strong>BUY</strong></span>
 </div>
 <div class="score-breakdown"><span>P:4 &middot; S:5 &middot; A:4 &middot; C:4 &middot; T:5</span><span>Impact: 79</span><span>Ease: 76</span></div>
-<div class="data-trail-block">&rarr; <strong>Data trail:</strong> RWC Pulse May 1 2026: &quot;Buyers need $1M+ salaries for Peninsula&rsquo;s priciest cities.&quot; PA median $3.5M; qualifying income ~$1M. Split market: $1.3-1.8M DOM &lt;15, $2.5-4M 2x slower vs 2023.</div>
+<div class="data-trail-block">&rarr; <strong>Data trail:</strong> RWC Pulse May 1 2026: &quot;Buyers need $1M+ salaries for Peninsula&rsquo;s priciest cities.&quot; PA median $3.5M; qualifying income ~$1M. Split market: $1.3-1.8M DOM &lt;15, $2.5-4M 2x slower than 2023.</div>
 </article>
 
 <article class="day-card">
 <header class="day-head">
 <div class="day-meta"><span class="day-label">Friday</span><span class="day-date">May 16</span></div>
-<div class="score-pill" style="background:#2563EB;">21/25 &middot; Q1 (growth)</div>
+<div class="score-pill" style="background:#2563EB;">21/25 &middot; Q1 (growth multiplier 1.3x)</div>
 </header>
 <h3 class="day-title">What $1.5M Actually Buys in Redwood City vs. Menlo Park vs. Palo Alto Right Now (Spring 2026)</h3>
 <p class="day-hook"><em>&ldquo;Three Peninsula listings, same $1.5M. One move-in, one needs $200K, one needs $400K. Same money &mdash; completely different deals.&rdquo;</em></p>
@@ -286,7 +260,7 @@ h1,h2,h3{font-family:'Plus Jakarta Sans',sans-serif;letter-spacing:-0.02em;color
 <span class="fmt-chip">GHL: <strong>WATCH (short) &rarr; BUY (long)</strong></span>
 </div>
 <div class="score-breakdown"><span>P:4 &middot; S:3 &middot; A:4 &middot; C:5 &middot; T:5</span><span>Impact: 65</span><span>Ease: 67</span></div>
-<div class="data-trail-block">&rarr; <strong>Data trail:</strong> Pillar 1 strategy: lifestyle gets 10-20x social reach (Twin Peaks tour analog: 1,588 reach vs 47-74 flat listings). Diversifies markets (EPA over-served per topic-history).</div>
+<div class="data-trail-block">&rarr; <strong>Data trail:</strong> IG performance signal: lifestyle hooks (speakeasy 13 eng, Apple Studios 8 eng) beat RE-direct (4 eng avg) by ~3x. This topic uses lifestyle wrapper for RE intent. Diversifies markets (EPA over-served per topic-history).</div>
 </article>
 </div></div></div>
 <div class="section" data-audience="video all"><div class="container">
@@ -295,40 +269,35 @@ h1,h2,h3{font-family:'Plus Jakarta Sans',sans-serif;letter-spacing:-0.02em;color
 <div class="day-grid">
 
 <article class="day-card" style="border-left:4px solid #dc2626;">
-<div class="day-meta-row"><span class="day-label">Monday &middot; May 12</span> <span class="chip" style="background:#9f1239;">BOFU</span></div>
+<div class="day-meta-row"><span class="day-label">Monday &middot; May 12</span> <span class="chip" style="background:#9f1239;">BOFU</span> <span class="fmt-chip">GHL: <strong>OPTIONS</strong></span></div>
 <h3 style="margin:8px 0 6px;font-size:17px;">Meta&rsquo;s May 20 Layoffs: The 4-Step Plan If You&rsquo;re a Bay Area Homeowner Who Just Got Cut</h3>
-<p style="font-size:13.5px;color:#4a5568;margin:0 0 10px;">8-10 min YT Long: 4-step framework -- Don&rsquo;t list yet, pull equity statement today, don&rsquo;t drain 401(k), two pros in 30 days. Plus 45-sec YT Short, two IG Reels (face-to-cam + B-roll heavy), 8-slide carousel, 40-sec TikTok.</p>
-<div class="data-trail-block" style="background:#f7fafc;border-left-color:#dc2626;color:#1e293b;font-size:12.5px;">&#127911; ElevenLabs settings: Stability 0.50, Similarity 0.75, Style 0.35-0.40, Speaker Boost ON &middot; Model: Eleven v3 primary &middot; GHL Keyword: <code>OPTIONS</code></div>
+<p style="font-size:13.5px;color:#4a5568;margin:0 0 10px;">8-10 min YT Long: 4-step framework -- don&rsquo;t list yet, pull equity statement today, don&rsquo;t drain 401(k), two pros in 30 days. Plus 45s YT Short, IG Reel #1 (face-to-cam), IG Reel #2 (B-roll), 8-slide carousel, 40s TikTok.</p>
+<div class="data-trail-block" style="background:#f7fafc;border-left-color:#dc2626;color:#1e293b;font-size:12.5px;">&#127911; ElevenLabs: Stability 0.50 &middot; Similarity 0.75 &middot; Style 0.35-0.40 &middot; Speaker Boost ON &middot; Model: Eleven v3 primary</div>
 </article>
-
 <article class="day-card" style="border-left:4px solid #dc2626;">
-<div class="day-meta-row"><span class="day-label">Tuesday &middot; May 13</span> <span class="chip" style="background:#9c6f10;">MOFU</span></div>
+<div class="day-meta-row"><span class="day-label">Tuesday &middot; May 13</span> <span class="chip" style="background:#9c6f10;">MOFU</span> <span class="fmt-chip">GHL: <strong>NUMBERS</strong></span></div>
 <h3 style="margin:8px 0 6px;font-size:17px;">Bay Area Mortgage Rates Just Hit Mid-6%: The 5 Numbers You Should Re-Run This Week</h3>
-<p style="font-size:13.5px;color:#4a5568;margin:0 0 10px;">6-8 min YT Long: buying power (+$36K vs Oct 2024), rent-vs-buy crossover (month 62-68), refi break-even (28-36 months from 7.25% to 6.3%), DTI re-pull, equity ($200-400K avg 2021-22 buyers). Plus Short, Reels x2, Carousel, TikTok.</p>
-<div class="data-trail-block" style="background:#f7fafc;border-left-color:#dc2626;color:#1e293b;font-size:12.5px;">&#127911; ElevenLabs settings: Stability 0.50, Similarity 0.75, Style 0.35-0.40, Speaker Boost ON &middot; Model: Eleven v3 primary &middot; GHL Keyword: <code>NUMBERS</code></div>
+<p style="font-size:13.5px;color:#4a5568;margin:0 0 10px;">6-8 min YT Long: buying power (+$36K), rent-vs-buy crossover (~month 62-68 on $1.5M Peninsula condo), refi break-even (~28-36 months from 7.25% to 6.3%), DTI re-pull, equity ($200-400K avg 2021-22 buyers).</p>
+<div class="data-trail-block" style="background:#f7fafc;border-left-color:#dc2626;color:#1e293b;font-size:12.5px;">&#127911; ElevenLabs: Stability 0.50 &middot; Similarity 0.75 &middot; Style 0.35-0.40 &middot; Speaker Boost ON &middot; Model: Eleven v3 primary</div>
 </article>
-
 <article class="day-card" style="border-left:4px solid #dc2626;">
-<div class="day-meta-row"><span class="day-label">Wednesday &middot; May 14</span> <span class="chip" style="background:#9f1239;">BOFU</span></div>
+<div class="day-meta-row"><span class="day-label">Wednesday &middot; May 14</span> <span class="chip" style="background:#9f1239;">BOFU</span> <span class="fmt-chip">GHL: <strong>1482</strong></span></div>
 <h3 style="margin:8px 0 6px;font-size:17px;">AB 1482 in 2026: Why Your Bay Area Rent Cap Is 6.3% &mdash; and the Single-Family Loophole Most Landlords Miss</h3>
-<p style="font-size:13.5px;color:#4a5568;margin:0 0 10px;">7-9 min YT Long: formula (5% + 1.3% CPI = 6.3%), stricter local caps (Oakland 0.8, Berkeley 1.0), SFH exemption + Civil Code &sect;1946.2(e)(8)(B)(i) notice, 3 worked scenarios. Plus Short, Reels x2, Carousel.</p>
-<div class="data-trail-block" style="background:#f7fafc;border-left-color:#dc2626;color:#1e293b;font-size:12.5px;">&#127911; ElevenLabs settings: Stability 0.50, Similarity 0.75, Style 0.35-0.40, Speaker Boost ON &middot; Model: Eleven v3 primary &middot; GHL Keyword: <code>1482</code></div>
+<p style="font-size:13.5px;color:#4a5568;margin:0 0 10px;">7-9 min YT Long: formula (5% + 1.3% CPI = 6.3%, all 9 Bay Area counties), stricter local caps (Oakland 0.8%, Berkeley 1.0%), SFH exemption + Civil Code &sect;1946.2(e)(8)(B)(i) notice requirement, 3 worked scenarios.</p>
+<div class="data-trail-block" style="background:#f7fafc;border-left-color:#dc2626;color:#1e293b;font-size:12.5px;">&#127911; ElevenLabs: Stability 0.50 &middot; Similarity 0.75 &middot; Style 0.35-0.40 &middot; Speaker Boost ON &middot; Model: Eleven v3 primary</div>
 </article>
-
 <article class="day-card" style="border-left:4px solid #dc2626;">
-<div class="day-meta-row"><span class="day-label">Thursday &middot; May 15</span> <span class="chip" style="background:#9f1239;">BOFU</span></div>
+<div class="day-meta-row"><span class="day-label">Thursday &middot; May 15</span> <span class="chip" style="background:#9f1239;">BOFU</span> <span class="fmt-chip">GHL: <strong>BUY</strong></span></div>
 <h3 style="margin:8px 0 6px;font-size:17px;">Why Bay Area Buyers Are Skipping Palo Alto in 2026 &mdash; Where They&rsquo;re Going Instead and Why It&rsquo;s Working</h3>
 <p style="font-size:13.5px;color:#4a5568;margin:0 0 10px;">8-10 min YT Long: 3 mid-Peninsula micro-markets -- RWC Mt. Carmel/Friendly Acres ($1.6-1.9M), EPA Westside/Woodland ($1.2-1.55M), San Carlos White Oaks/Howard Park ($1.7-2.2M). Fair Housing guardrails enforced.</p>
-<div class="data-trail-block" style="background:#f7fafc;border-left-color:#dc2626;color:#1e293b;font-size:12.5px;">&#127911; ElevenLabs settings: Stability 0.50, Similarity 0.75, Style 0.35-0.40, Speaker Boost ON &middot; Model: Eleven v3 primary &middot; GHL Keyword: <code>BUY</code></div>
+<div class="data-trail-block" style="background:#f7fafc;border-left-color:#dc2626;color:#1e293b;font-size:12.5px;">&#127911; ElevenLabs: Stability 0.50 &middot; Similarity 0.75 &middot; Style 0.35-0.40 &middot; Speaker Boost ON &middot; Model: Eleven v3 primary</div>
 </article>
-
 <article class="day-card" style="border-left:4px solid #dc2626;">
-<div class="day-meta-row"><span class="day-label">Friday &middot; May 16</span> <span class="chip" style="background:#2563EB;">TOFU</span></div>
+<div class="day-meta-row"><span class="day-label">Friday &middot; May 16</span> <span class="chip" style="background:#2563EB;">TOFU</span> <span class="fmt-chip">GHL: <strong>WATCH (short) &rarr; BUY (long)</strong></span></div>
 <h3 style="margin:8px 0 6px;font-size:17px;">What $1.5M Actually Buys in Redwood City vs. Menlo Park vs. Palo Alto Right Now (Spring 2026)</h3>
-<p style="font-size:13.5px;color:#4a5568;margin:0 0 10px;">10-12 min YT Tour: RWC Friendly Acres $1.495M (3/2, 1,550 sqft, 1952, move-in); MP Linfield Oaks $1.549M (2/1, 1,180 sqft, 1947, $200K reno); PA Greenmeadow $1.495M (3/1, 1,240 sqft, 1950, $300-400K reno). Fair Housing disclosure on-camera at 0:30.</p>
-<div class="data-trail-block" style="background:#f7fafc;border-left-color:#dc2626;color:#1e293b;font-size:12.5px;">&#127911; ElevenLabs settings: Stability 0.50, Similarity 0.75, Style 0.35-0.40, Speaker Boost ON &middot; Model: Eleven v3 primary &middot; GHL Keyword: <code>WATCH (short) &rarr; BUY (long)</code></div>
-</article>
-</div></div></div>
+<p style="font-size:13.5px;color:#4a5568;margin:0 0 10px;">10-12 min YT Tour: RWC Friendly Acres $1.495M (move-in, $964/sqft); MP Linfield Oaks $1.549M ($200K reno, $1,312/sqft); PA Greenmeadow $1.495M ($300-400K reno, $1,206/sqft). Fair Housing disclosure at 0:30.</p>
+<div class="data-trail-block" style="background:#f7fafc;border-left-color:#dc2626;color:#1e293b;font-size:12.5px;">&#127911; ElevenLabs: Stability 0.50 &middot; Similarity 0.75 &middot; Style 0.35-0.40 &middot; Speaker Boost ON &middot; Model: Eleven v3 primary</div>
+</article></div></div></div>
 <div class="section" data-audience="blog all"><div class="container">
 <h2>Blog Content &mdash; All 5 Topics</h2>
 <p class="lede">Inline summary. Full drafts (intros, AEO cite-ready statements, FAQPage/HowTo schema) are in <code>outputs/content-package-20260514-074816.md</code>.</p>
@@ -337,36 +306,31 @@ h1,h2,h3{font-family:'Plus Jakarta Sans',sans-serif;letter-spacing:-0.02em;color
 <article class="day-card" style="border-left:4px solid #B8860B;">
 <div class="day-meta-row"><span class="day-label">Monday &middot; May 12</span> <span class="chip" style="background:#9f1239;">BOFU</span></div>
 <h3 style="margin:8px 0 6px;font-size:17px;">Meta&rsquo;s May 20 Layoffs: The 4-Step Plan If You&rsquo;re a Bay Area Homeowner Who Just Got Cut</h3>
-<p style="font-size:13.5px;color:#4a5568;margin:0 0 10px;">1,100 words at <code>/blog/meta-layoffs-bay-area-homeowner-plan-2026</code>. Schema: Article + FAQPage. 5 cite-ready statements with date anchors.</p>
+<p style="font-size:13.5px;color:#4a5568;margin:0 0 10px;">1,100 words at <code>/blog/meta-layoffs-bay-area-homeowner-plan-2026</code>. Schema: Article + FAQPage. 5 AEO cite-ready statements with date anchors.</p>
 </article>
-
 <article class="day-card" style="border-left:4px solid #B8860B;">
 <div class="day-meta-row"><span class="day-label">Tuesday &middot; May 13</span> <span class="chip" style="background:#9c6f10;">MOFU</span></div>
 <h3 style="margin:8px 0 6px;font-size:17px;">Bay Area Mortgage Rates Just Hit Mid-6%: The 5 Numbers You Should Re-Run This Week</h3>
 <p style="font-size:13.5px;color:#4a5568;margin:0 0 10px;">1,200 words at <code>/blog/bay-area-mortgage-rates-may-2026-five-numbers</code>. Schema: Article + HowTo + FAQPage.</p>
 </article>
-
 <article class="day-card" style="border-left:4px solid #B8860B;">
 <div class="day-meta-row"><span class="day-label">Wednesday &middot; May 14</span> <span class="chip" style="background:#9f1239;">BOFU</span></div>
 <h3 style="margin:8px 0 6px;font-size:17px;">AB 1482 in 2026: Why Your Bay Area Rent Cap Is 6.3% &mdash; and the Single-Family Loophole Most Landlords Miss</h3>
-<p style="font-size:13.5px;color:#4a5568;margin:0 0 10px;">1,400 words at <code>/blog/ab-1482-bay-area-2026-rent-cap-guide</code>. Schema: Article + FAQPage + HowTo. SEO: ab 1482 2026, bay area rent cap 2026.</p>
+<p style="font-size:13.5px;color:#4a5568;margin:0 0 10px;">1,400 words at <code>/blog/ab-1482-bay-area-2026-rent-cap-guide</code>. Schema: Article + FAQPage + HowTo. SEO target: &quot;ab 1482 2026&quot;, &quot;bay area rent cap 2026&quot;.</p>
 </article>
-
 <article class="day-card" style="border-left:4px solid #B8860B;">
 <div class="day-meta-row"><span class="day-label">Thursday &middot; May 15</span> <span class="chip" style="background:#9f1239;">BOFU</span></div>
 <h3 style="margin:8px 0 6px;font-size:17px;">Why Bay Area Buyers Are Skipping Palo Alto in 2026 &mdash; Where They&rsquo;re Going Instead and Why It&rsquo;s Working</h3>
-<p style="font-size:13.5px;color:#4a5568;margin:0 0 10px;">1,500 words at <code>/blog/peninsula-alternatives-to-palo-alto-2026</code>. Schema: Article + ItemList. Property-only (no schools, no demographics).</p>
+<p style="font-size:13.5px;color:#4a5568;margin:0 0 10px;">1,500 words at <code>/blog/peninsula-alternatives-to-palo-alto-2026</code>. Schema: Article + ItemList. Property-only comparison (no schools / no demographics).</p>
 </article>
-
 <article class="day-card" style="border-left:4px solid #B8860B;">
 <div class="day-meta-row"><span class="day-label">Friday &middot; May 16</span> <span class="chip" style="background:#2563EB;">TOFU</span></div>
 <h3 style="margin:8px 0 6px;font-size:17px;">What $1.5M Actually Buys in Redwood City vs. Menlo Park vs. Palo Alto Right Now (Spring 2026)</h3>
 <p style="font-size:13.5px;color:#4a5568;margin:0 0 10px;">1,300 words at <code>/blog/1-5-million-peninsula-comparison-spring-2026</code>. Schema: Article + Product (x3 listings).</p>
-</article>
-</div></div></div>
+</article></div></div></div>
 <div class="footer"><div class="container">
 <p><strong>Graeham Watts &middot; REALTOR &middot; Intero Real Estate Services, Inc. &middot; DRE# 01466876</strong></p>
-<p>Generated 2026-05-14 &middot; Engine: content-creation-engine v7.3 &middot; <a href="https://github.com/Graehamwatts/online-content">online-content repo</a> &middot; <a href="https://github.com/Graehamwatts/skills">skills repo</a></p>
+<p>Generated 2026-05-14 &middot; v7.3 canonical &middot; <a href="https://github.com/Graehamwatts/online-content">online-content</a> &middot; <a href="https://github.com/Graehamwatts/skills">skills</a></p>
 </div></div>
 
 <div id="modal-backdrop" class="modal-backdrop" hidden>
@@ -377,16 +341,14 @@ h1,h2,h3{font-family:'Plus Jakarta Sans',sans-serif;letter-spacing:-0.02em;color
 </div></div>
 
 <script>
-// ===== AUDIENCE TABS =====
 const VIEW_LABELS = {
-  research: 'Research &mdash; live data sources, freshness checks, citations',
+  research: 'Research &mdash; live data sources, performance signal, freshness checks, citations',
   diagram: 'Diagram &mdash; 10-step pipeline from signal to dashboard',
   content: 'Content &mdash; this week&rsquo;s production calendar (5 topics)',
-  video: 'Video Content &mdash; YT Longs, Shorts, Reels, TikToks for the week',
-  blog: 'Blog Content &mdash; AEO-ready posts + schema for the week',
+  video: 'Video Content &mdash; YT Longs, Shorts, Reels, TikToks',
+  blog: 'Blog Content &mdash; AEO-ready posts + schema',
   all: 'Everything (full unified view)'
 };
-
 function setView(view, opts) {
   opts = opts || {};
   document.querySelectorAll('[data-audience]').forEach(function(el) {
@@ -399,12 +361,8 @@ function setView(view, opts) {
   var banner = document.getElementById('viewBanner');
   var label = document.getElementById('viewBannerLabel');
   if (banner && label) {
-    if (view === 'all') {
-      banner.classList.remove('show');
-    } else {
-      label.innerHTML = 'Showing: ' + VIEW_LABELS[view];
-      banner.classList.add('show');
-    }
+    if (view === 'all') { banner.classList.remove('show'); }
+    else { label.innerHTML = 'Showing: ' + VIEW_LABELS[view]; banner.classList.add('show'); }
   }
   if (!opts.skipHistory) {
     var newHash = (view === 'all') ? '' : '#view-' + view;
@@ -412,42 +370,31 @@ function setView(view, opts) {
   }
   if (!opts.noScroll) { window.scrollTo({top: 0, behavior: 'smooth'}); }
 }
-
 window.addEventListener('DOMContentLoaded', function() {
   var hash = window.location.hash.replace('#view-', '');
-  var validViews = ['research','diagram','content','video','blog','all'];
-  if (validViews.indexOf(hash) >= 0) {
-    setView(hash, {skipHistory: true, noScroll: true});
-  } else {
-    setView('content', {skipHistory: true, noScroll: true});
-  }
+  var valid = ['research','diagram','content','video','blog','all'];
+  if (valid.indexOf(hash) >= 0) { setView(hash, {skipHistory: true, noScroll: true}); }
+  else { setView('content', {skipHistory: true, noScroll: true}); }
 });
-
 window.addEventListener('popstate', function(e) {
-  var view = (e.state && e.state.view) || 'content';
-  setView(view, {skipHistory: true, noScroll: true});
+  setView((e.state && e.state.view) || 'content', {skipHistory: true, noScroll: true});
 });
 
-// ===== PIPELINE STEP MODAL =====
-const STEP_DATA = {"s1": {"title": "1. Topic History Check", "kicker": "Pulled topic-history.json &middot; 1 prior topic in 4-week window &middot; freshness exclusions computed", "badge": "DATA INPUT", "badge_class": "b-data", "body": "<div class=\"kv-row\"><span class=\"k\">Source:</span><span class=\"v\"><code>skills/content-creation-engine/references/topic-history.json</code></span></div><div class=\"kv-row\"><span class=\"k\">Entries (last 4 weeks):</span><span class=\"v\">1 -- &quot;3 Pricing Mistakes EPA Sellers Make in 2025&quot; (Apr 14, BOFU, Pillar 4)</span></div><div class=\"kv-row\"><span class=\"k\">Blocked angles:</span><span class=\"v\"><code>pricing-strategy</code></span></div><div class=\"kv-row\"><span class=\"k\">Boosted pillars (0 recent):</span><span class=\"v\">1, 2, 3, 5, 6, 7, 8, 9</span></div><div class=\"kv-row\"><span class=\"k\">Overserved markets:</span><span class=\"v\">EPA (1 of last 1) -- diversifying to RWC/PA/MP this week</span></div><div class=\"finding\">&rarr; <strong>Finding:</strong> Minimal exclusions -- only the pricing-strategy angle is off-limits.</div>"}, "s2": {"title": "2. BOFU Query Generation", "kicker": "230+ localized buyer/seller queries across 5 inquiry types", "badge": "DATA INPUT", "badge_class": "b-data", "body": "<div class=\"kv-row\"><span class=\"k\">Markets covered:</span><span class=\"v\">EPA, RWC, PA, MP, SMC + Bay Area umbrella</span></div><div class=\"kv-row\"><span class=\"k\">Inquiry types:</span><span class=\"v\">SELL, BUY, COSTS, OPTIONS, 1482</span></div><div class=\"kv-row\"><span class=\"k\">Output:</span><span class=\"v\"><code>outputs/phase-artifacts/bofu-queries-20260514-074816.json</code></span></div><div class=\"kv-row\"><span class=\"k\">Sample queries:</span></div><ul class=\"m-list\"><li>&quot;how much does it cost to sell a house in East Palo Alto&quot;</li><li>&quot;documentary transfer tax San Mateo County 2026&quot;</li><li>&quot;capital gains tax selling house California&quot;</li></ul>"}, "s3": {"title": "3. Apify Reddit Scrape &mdash; BLOCKED", "kicker": "Cowork sandbox firewall blocks api.apify.com &middot; pivoted to WebSearch", "badge": "DATA INPUT", "badge_class": "b-data", "body": "<div class=\"kv-row\"><span class=\"k\">Attempted:</span><span class=\"v\"><code>trudax/reddit-scraper-lite</code> via APIFY_API_TOKEN</span></div><div class=\"kv-row\"><span class=\"k\">Token status:</span><span class=\"v\">Valid</span></div><div class=\"kv-row\"><span class=\"k\">Block layer:</span><span class=\"v\">Cowork sandbox proxy returns HTTP 000 / connection refused for api.apify.com (network allowlist)</span></div><div class=\"kv-row\"><span class=\"k\">Fallback:</span><span class=\"v\">WebSearch + Google PAA + indexed Reddit threads</span></div><div class=\"kv-row\"><span class=\"k\">Next-week workaround:</span><span class=\"v\">Run <code>scripts/run_reddit_ideation.py --tier 1</code> on Windows machine + drop JSON in outputs</span></div>"}, "s4": {"title": "4. WebSearch &mdash; Market Context", "kicker": "Meta May 20 layoffs &middot; AB 1482 6.3% &middot; rates 6.3% &middot; Peninsula split &middot; $1M+ salaries PA", "badge": "DATA INPUT", "badge_class": "b-data", "body": "<div class=\"kv-row\"><span class=\"k\">Queries fired (6 parallel):</span></div><ol class=\"m-list\"><li>&quot;Bay Area r/bayarearealestate 2026 selling home Peninsula&quot;</li><li>&quot;Bay Area housing market May 2026 inventory mortgage rates&quot;</li><li>&quot;Meta Google layoffs 2026 sell house Bay Area underwater&quot;</li><li>&quot;FirstTimeHomeBuyer 2026 Peninsula Bay Area down payment&quot;</li><li>&quot;AB 1482 California 2026 rent increase landlord cap CPI&quot;</li><li>&quot;Bay Area tech layoffs May 2026 Meta Google Amazon&quot;</li></ol><div class=\"kv-row\"><span class=\"k\">Key findings:</span></div><ul class=\"m-list\"><li><strong>Meta May 20:</strong> 8,000 worldwide, ~200 Bay Area (124 Burlingame, 74 Sunnyvale)</li><li><strong>2026 YTD tech layoffs:</strong> 128,270 (~1,002/day)</li><li><strong>Bay Area 30Y mortgage:</strong> ~6.3% (down from 7.3% Oct 2024 peak)</li><li><strong>AB 1482 statewide cap 2026:</strong> 6.3% (5% + 1.3% CPI)</li><li><strong>Palo Alto median May 2026:</strong> ~$3.5M; qualifying income ~$1M/yr</li></ul>"}, "s5": {"title": "5. BOFU Intent Scoring", "kicker": "5-criteria rubric &middot; Inquiry &middot; Intent Matrix &middot; Source &middot; Emotion &middot; Local", "badge": "ANALYSIS", "badge_class": "b-analysis", "body": "<table class=\"m-table\"><thead><tr><th>Criterion</th><th>5 (max)</th><th>3 (mid)</th><th>1 (low)</th></tr></thead><tbody><tr><td>Inquiry Type</td><td>Process/Cost/Decision</td><td>Property feature</td><td>Professional hiring</td></tr><tr><td>Intent Matrix</td><td>Voluntary+Dependent</td><td>CTA elevation</td><td>Involuntary</td></tr><tr><td>Source Confirm</td><td>3+ platforms</td><td>2 platforms</td><td>1 platform</td></tr><tr><td>Emotional Temp</td><td>Mid-transaction stress</td><td>Comparing</td><td>Browsing</td></tr><tr><td>Local Relevance</td><td>Hyperlocal</td><td>City</td><td>National</td></tr></tbody></table><div class=\"kv-row\"><span class=\"k\">Threshold:</span><span class=\"v\">&ge; 18/25 with freshness +/-5</span></div><div class=\"finding\">&rarr; All 5 selected topics scored &ge; 20/25.</div>"}, "s6": {"title": "6. Tier 2 Impact + Ease Quadrant", "kicker": "Q1 Quick Win &middot; Q2 Strategic Bet &middot; Q3 Filler &middot; Q4 Avoid", "badge": "ANALYSIS", "badge_class": "b-analysis", "body": "<ul class=\"m-list\"><li><strong>T1 Meta Layoffs:</strong> Impact 92 &middot; Ease 88 &middot; <span style=\"color:#16a34a;font-weight:700;\">Q1 Quick Win</span></li><li><strong>T2 AB 1482:</strong> Impact 87 &middot; Ease 90 &middot; <span style=\"color:#16a34a;font-weight:700;\">Q1 Quick Win</span></li><li><strong>T3 Skipping Palo Alto:</strong> Impact 79 &middot; Ease 76 &middot; <span style=\"color:#16a34a;font-weight:700;\">Q1 Quick Win</span></li><li><strong>T4 Mortgage Rates:</strong> Impact 70 &middot; Ease 74 &middot; <span style=\"color:#16a34a;font-weight:700;\">Q1 Quick Win</span></li><li><strong>T5 $1.5M Comparison:</strong> Impact 65 &middot; Ease 67 &middot; <span style=\"color:#16a34a;font-weight:700;\">Q1 (growth multiplier)</span></li></ul>"}, "s7": {"title": "7. Funnel Tag &middot; 20/20/60 Lead-Gen", "kicker": "User specified 20/30/50; BOFU rounded up for Meta May 20 urgency", "badge": "ANALYSIS", "badge_class": "b-analysis", "body": "<ul class=\"m-list\"><li><strong>Mon May 12</strong> -- Meta Layoffs 4-Step (BOFU, OPTIONS) -- maximum urgency</li><li><strong>Tue May 13</strong> -- Mortgage Rates 5 Numbers (MOFU, NUMBERS)</li><li><strong>Wed May 14</strong> -- AB 1482 (BOFU, 1482) -- pos-13 SEO leverage</li><li><strong>Thu May 15</strong> -- Why Skip Palo Alto (BOFU, BUY)</li><li><strong>Fri May 16</strong> -- $1.5M RWC vs MP vs PA (TOFU, WATCH)</li></ul><div class=\"kv-row\"><span class=\"k\">Mix:</span><span class=\"v\">1 TOFU / 1 MOFU / 3 BOFU = <strong>20/20/60</strong></span></div>"}, "s8": {"title": "8. Multi-Platform Script Generation", "kicker": "Each topic: YT Long + Short + IG Reel x2 + Carousel + TikTok + Blog + GMB + FB", "badge": "OUTPUT", "badge_class": "b-output", "body": "<ol class=\"m-list\"><li>YouTube long-form (~600-900 words) with inline shot tags</li><li>YouTube Short (30-59 sec)</li><li>IG Reel #1 (face-to-camera)</li><li>IG Reel #2 (B-roll heavy)</li><li>IG Carousel (6-9 slides)</li><li>TikTok (30-60 sec with trending audio cue)</li><li>Blog (1100-1500 words + AEO cite-ready + FAQPage schema)</li><li>GMB post (100-300 words)</li><li>Facebook caption</li></ol><div class=\"kv-row\"><span class=\"k\">Plus per topic:</span></div><ul class=\"m-list\"><li>ElevenLabs v3 audio-tag variant + voice settings</li><li>Editing Notes for Jason</li><li>AI Video Prompts (Seedance/Higgsfield, 2-3 per topic)</li><li>GHL keyword CTA</li></ul><div class=\"finding\">&rarr; <strong>Output:</strong> <code>outputs/content-package-20260514-074816.md</code> (117 KB)</div>"}, "s9": {"title": "9. GitHub Push", "kicker": "Dashboard pushed to online-content &middot; skills repo topic-history.json appended", "badge": "OUTPUT", "badge_class": "b-output", "body": "<div class=\"kv-row\"><span class=\"k\">Online Content:</span><span class=\"v\"><code>Graehamwatts/online-content</code> branch <code>main</code></span></div><div class=\"kv-row\"><span class=\"k\">This commit:</span><span class=\"v\">Main Dashboard v2 -- 5 audience tabs, modal CSS fix, mojibake-proof</span></div><div class=\"kv-row\"><span class=\"k\">Skills topic-history:</span><span class=\"v\"><a href=\"https://github.com/Graehamwatts/skills/commit/1536aee1aac3a465906d259eb354d80938996596\"><code>1536aee</code></a> via Composio</span></div>"}, "s10": {"title": "10. Lead Capture &middot; GHL Workflows", "kicker": "5 distinct keywords this week &middot; no over-rotation", "badge": "OUTPUT", "badge_class": "b-output", "body": "<table class=\"m-table\"><thead><tr><th>Day</th><th>Keyword</th><th>Deliverable</th></tr></thead><tbody><tr><td>Mon (BOFU)</td><td><code>OPTIONS</code></td><td>Equity framework + 1:1 call</td></tr><tr><td>Tue (MOFU)</td><td><code>NUMBERS</code></td><td>Personalized 5-number analysis</td></tr><tr><td>Wed (BOFU)</td><td><code>1482</code></td><td>Landlord compliance checklist</td></tr><tr><td>Thu (BOFU)</td><td><code>BUY</code></td><td>Peninsula comparison sheet</td></tr><tr><td>Fri (TOFU)</td><td><code>WATCH</code></td><td>Full YT long-form + custom budget comp</td></tr></tbody></table>"}};
-
+const STEP_DATA = {"s1": {"title": "1. Topic History Check", "kicker": "topic-history.json &middot; 1 prior entry &middot; freshness exclusions", "badge": "DATA INPUT", "badge_class": "b-data", "body": "<div class=\"kv-row\"><span class=\"k\">Source file:</span><span class=\"v\"><code>skills/content-creation-engine/references/topic-history.json</code></span></div>\n<div class=\"kv-row\"><span class=\"k\">Schema version:</span><span class=\"v\">1.0 &middot; 4-week rolling window &middot; auto-prune on append</span></div>\n<div class=\"kv-row\"><span class=\"k\">Entries (last 4 weeks):</span><span class=\"v\">1 -- &quot;3 Pricing Mistakes EPA Sellers Make in 2025&quot; (Apr 14 2026, BOFU, Pillar 4 Education, GHL: SELL, market: EPA)</span></div>\n<h4>Exclusions computed:</h4>\n<ul class=\"m-list\">\n<li><strong>Blocked angles (last 2 weeks):</strong> <code>pricing-strategy</code> -- any topic centering on pricing strategy is off-limits this run</li>\n<li><strong>Deprioritized pillars (2+ recent):</strong> none -- only 1 entry in history, no pillar has 2+ hits</li>\n<li><strong>Boosted pillars (0 recent in 4-week window):</strong> Pillar 1 (Lifestyle), 2 (Property Tours), 3 (Market Data), 5 (Development), 6 (Personal Brand), 7 (Snapshot Series), 8 (Trigger Events), 9 (Investment)</li>\n<li><strong>Overserved markets:</strong> EPA (1 of last 1 topics) -- actively diversifying to RWC/PA/MP this week</li>\n</ul>\n<div class=\"finding\">&rarr; <strong>Finding:</strong> Minimal exclusions this run -- only the pricing-strategy angle is off-limits. Plenty of pillar headroom. Active rotation away from EPA-centric topics this week.</div>\n<div class=\"kv-row\" style=\"margin-top:10px;\"><span class=\"k\">Output:</span><span class=\"v\">Exclusion constraints fed into Phase 5 (BOFU Intent Scoring) freshness adjustment</span></div>"}, "s2": {"title": "2. Composio YT + IG Analytics", "kicker": "YT 1,750 subs &middot; 645 videos &middot; IG 1,269 followers &middot; 1,093 posts", "badge": "DATA INPUT", "badge_class": "b-data", "body": "<h4>YouTube via Composio</h4>\n<div class=\"kv-row\"><span class=\"k\">Tool chain:</span><span class=\"v\"><code>YOUTUBE_GET_CHANNEL_STATISTICS</code> + <code>YOUTUBE_LIST_CHANNEL_VIDEOS</code></span></div>\n<div class=\"kv-row\"><span class=\"k\">Composio account:</span><span class=\"v\"><code>youtube_manor-maki</code> (alias <code>graehamwatts-active</code>, ACTIVE since 2026-05-03)</span></div>\n<div class=\"kv-row\"><span class=\"k\">Channel:</span><span class=\"v\">Graeham Watts (<code>@graehamwatts</code>) &middot; ID <code>UCFHqB0L2C4aJVksMKkg_ukw</code> &middot; joined 2008-06-10</span></div>\n<div class=\"kv-row\"><span class=\"k\">Stats (pulled this run):</span><span class=\"v\"><strong>1,750</strong> subscribers &middot; <strong>645</strong> videos total &middot; <strong>914,250</strong> lifetime views</span></div>\n<div class=\"kv-row\"><span class=\"k\">Recent uploads window:</span><span class=\"v\">50 most-recent from uploads playlist <code>UUFHqB0L2C4aJVksMKkg_ukw</code></span></div>\n<ul class=\"m-list\">\n<li><strong>Newest (2026-05-14):</strong> &quot;$347 Billion in Homes Sitting Unsold | Housing Market Reset 2026 #shorts&quot; (<a href=\"https://youtube.com/watch?v=092N0xtud_A\">092N0xtud_A</a>)</li>\n<li><strong>2026-05-12:</strong> &quot;Laid Off From Tech? Here&rsquo;s How Homeowners Are Accessing $500K Without Selling&quot; (<a href=\"https://youtube.com/watch?v=WSzX_NjUxoE\">WSzX_NjUxoE</a>)</li>\n</ul>\n<div class=\"kv-row\"><span class=\"k\">Section 9 Shorts filter:</span><span class=\"v\">ISO-8601 duration &le; 60s on <code>contentDetails.duration</code>. <strong>Deferred this run</strong> -- requires <code>YOUTUBE_GET_VIDEO_DETAILS_BATCH</code> call (~50 video IDs in chunks of 50). Will run as standard next Monday.</span></div>\n\n<h4 style=\"margin-top:18px;\">Instagram via Composio</h4>\n<div class=\"kv-row\"><span class=\"k\">Tool chain:</span><span class=\"v\"><code>INSTAGRAM_GET_USER_INFO</code> + <code>INSTAGRAM_GET_IG_USER_MEDIA</code></span></div>\n<div class=\"kv-row\"><span class=\"k\">Composio account:</span><span class=\"v\"><code>instagram_carton-palama</code> (ACTIVE since 2026-05-03)</span></div>\n<div class=\"kv-row\"><span class=\"k\">Target:</span><span class=\"v\">@graeham.watts (<code>27735776322678984</code>) &middot; BUSINESS account</span></div>\n<div class=\"kv-row\"><span class=\"k\">Stats:</span><span class=\"v\"><strong>1,269</strong> followers &middot; <strong>1,785</strong> following &middot; <strong>1,093</strong> lifetime posts</span></div>\n<div class=\"kv-row\"><span class=\"k\">Bio:</span><span class=\"v\"><em>Graeham Watts | SF Peninsula &amp; South Bay Market Strategist &middot; Home acquisition, sales &amp; portfolio growth &middot; Text HOME to 650-308-4727</em></span></div>\n<div class=\"kv-row\"><span class=\"k\">Bio link:</span><span class=\"v\"><a href=\"https://sleek.bio/graehamwatts\">sleek.bio/graehamwatts</a></span></div>\n<div class=\"kv-row\"><span class=\"k\">Format mix:</span><span class=\"v\">10/10 REELS (100%) in last 10 posts</span></div>\n<h4 style=\"margin-top:14px;\">Top 5 IG posts by engagement (last 10 posts pulled this run):</h4>\n<ol class=\"m-list\">\n<li><strong>May 6</strong> &middot; <strong>13 engagement</strong> (10&hearts; / 3 comments) &middot; <a href=\"https://www.instagram.com/reel/DX-qIY9jn6w/\">San Mateo speakeasy</a></li><li><strong>May 7</strong> &middot; <strong>8 engagement</strong> (6&hearts; / 2 comments) &middot; <a href=\"https://www.instagram.com/reel/DYDcDe7DDlR/\">Apple Studios takes over Half Moon Bay</a></li><li><strong>May 2</strong> &middot; <strong>4 engagement</strong> (2&hearts; / 2 comments) &middot; <a href=\"https://www.instagram.com/reel/DX0NfCxjfqy/\">Veterans losing homes (post-pandemic policy)</a></li><li><strong>May 1</strong> &middot; <strong>4 engagement</strong> (4&hearts; / 0 comments) &middot; <a href=\"https://www.instagram.com/reel/DXx11kJAPic/\">EPA 2 years homicide-free + 1.7% YoY market</a></li><li><strong>Apr 29</strong> &middot; <strong>4 engagement</strong> (4&hearts; / 0 comments) &middot; <a href=\"https://www.instagram.com/reel/DXsoyuFCfju/\">EPA under $1M Peninsula value</a></li>\n</ol>\n<div class=\"finding\">&rarr; <strong>Finding:</strong> Lifestyle/discovery hooks (speakeasy, Apple Studios filming) outperform real-estate-education hooks by ~3x. The May 6 speakeasy reel hit 13 engagement vs. real-estate-direct posts averaging ~3-4. Performance Signal feeds Phase 5 scoring -- topics with lifestyle wrapper get a boost.</div>"}, "s3": {"title": "3. Apify Reddit (BLOCKED at sandbox)", "kicker": "Token valid &middot; api.apify.com not on Cowork allowlist &middot; fallback to WebSearch", "badge": "DATA INPUT", "badge_class": "b-data", "body": "<div class=\"kv-row\"><span class=\"k\">Attempted:</span><span class=\"v\"><code>trudax/reddit-scraper-lite</code> via APIFY_API_TOKEN</span></div>\n<div class=\"kv-row\"><span class=\"k\">Target tier:</span><span class=\"v\">Tier 1 (5 subreddits: r/BayArea, r/bayarearealestate, r/RealEstate, r/FirstTimeHomeBuyer, r/Layoffs)</span></div>\n<div class=\"kv-row\"><span class=\"k\">Token status:</span><span class=\"v\">Valid (saved at <code>outputs/.claude-credentials/apify.env</code> for next session)</span></div>\n<h4>Network probe result:</h4>\n<pre>$ curl -s -m 15 https://api.apify.com\nHTTP_CODE: 000\n\n$ curl -s -m 15 -x http://localhost:3128 https://api.apify.com\nvia proxy: 000\n\nDNS: api.apify.com -- not resolvable from Cowork sandbox\ngithub.com: 200 (whitelisted)\nanthropic.com: 200 (whitelisted)\napi.apify.com: 000 (NOT whitelisted)</pre>\n<div class=\"kv-row\"><span class=\"k\">Diagnosis:</span><span class=\"v\">Cowork sandbox enforces a network allowlist. <code>api.apify.com</code> isn&rsquo;t on it. Token would work fine externally but the sandbox proxy refuses the tunnel.</span></div>\n<div class=\"kv-row\"><span class=\"k\">Fallback path:</span><span class=\"v\">WebSearch + Google PAA + indexed Reddit threads via Claude&rsquo;s web search. Different network plane, fully accessible.</span></div>\n<h4 style=\"margin-top:14px;\">Workaround for next Monday:</h4>\n<ol class=\"m-list\">\n<li>On Graeham&rsquo;s Windows machine: <code>cd \"Documents/Claude/Skills/skills/content-creation-engine\" &amp;&amp; python scripts/run_reddit_ideation.py --tier 1</code></li>\n<li>JSON drops to <code>outputs/ideation-raw-{timestamp}.json</code></li>\n<li>Next session: I pick it up and ingest from there</li>\n</ol>\n<div class=\"finding\">&rarr; <strong>Finding:</strong> No data loss this run -- WebSearch covered Reddit signal via Google indexing. Future option: request apify.com on Cowork allowlist OR keep current local-run workaround.</div>"}, "s4": {"title": "4. WebSearch &middot; Market Context", "kicker": "6 parallel queries &middot; 10 source citations &middot; live signal from Bay Area publications", "badge": "DATA INPUT", "badge_class": "b-data", "body": "<h4>Queries fired (parallel via Claude&rsquo;s WebSearch tool):</h4>\n<ol class=\"m-list\">\n<li>&quot;site:reddit.com r/bayarearealestate 2026 selling home Peninsula&quot;</li>\n<li>&quot;Bay Area housing market May 2026 inventory mortgage rates Peninsula Redwood City Palo Alto&quot;</li>\n<li>&quot;site:reddit.com Meta Google layoffs 2026 sell house Bay Area underwater&quot;</li>\n<li>&quot;site:reddit.com FirstTimeHomeBuyer 2026 Peninsula Bay Area down payment afford&quot;</li>\n<li>&quot;AB 1482 California 2026 rent increase landlord Bay Area cap CPI&quot;</li>\n<li>&quot;Bay Area tech layoffs May 2026 Meta Google Amazon how many workers&quot;</li>\n</ol>\n<h4>Key findings (drive Phase 5 scoring):</h4>\n<ul class=\"m-list\">\n<li><strong>Meta layoffs:</strong> 8,000 announced Apr 23 2026, effective May 20. ~200 in Bay Area (124 Burlingame, 74 Sunnyvale).</li>\n<li><strong>YTD 2026 tech layoffs:</strong> 128,270 (~1,002 workers per day) per TrueUp tracker</li>\n<li><strong>Companies cutting:</strong> Meta &middot; Salesforce &middot; Google &middot; Workday &middot; Pinterest &middot; Amazon &middot; Microsoft</li>\n<li><strong>Bay Area 30Y mortgage rate:</strong> ~6.3% (down from 7.3% Oct 2024 peak; Fed cut 3 times in 2025)</li>\n<li><strong>Palo Alto median May 2026:</strong> ~$3.5M (Crescent Park / Old PA &gt;$5M)</li>\n<li><strong>Qualifying income for PA median:</strong> ~$1M household income at 20% down</li>\n<li><strong>Peninsula split market:</strong> $1.3-1.8M tier DOM &lt;15 days; $2.5-4M tier 2x slower than 2023</li>\n<li><strong>AB 1482 statewide cap 2026:</strong> 6.3% (5% + 1.3% regional CPI for all 9 Bay Area counties), locked Aug 1 2025 &rarr; July 31 2026</li>\n<li><strong>Local stricter caps:</strong> Oakland 0.8% &middot; Berkeley 1.0% &middot; Mountain View / EPA / SJ have own ordinances</li>\n</ul>\n<h4>Source citations:</h4>\n<ul class=\"m-list\">\n<li><a href=\"https://finance.yahoo.com/news/meta-cuts-more-1-000-221156444.html\">Yahoo Finance &mdash; Meta cuts 1,000+ in Bay Area</a></li>\n<li><a href=\"https://www.foxbusiness.com/markets/metas-bay-area-layoffs-affect-roughly-200-workers-company-pours-billions-ai-infrastructure\">Fox Business &mdash; Meta 200 Bay Area layoffs</a></li>\n<li><a href=\"https://www.trueup.io/layoffs\">TrueUp &mdash; Tech layoffs 2026 tracker</a></li>\n<li><a href=\"https://www.rwcpulse.com/peninsula/2026/05/01/buyers-now-need-1m-salaries-for-homes-in-peninsulas-priciest-cities/\">RWC Pulse May 1 2026 &mdash; $1M+ salaries needed</a></li>\n<li><a href=\"https://www.rwcpulse.com/peninsula/2026/04/13/a-tale-of-2-housing-markets-spring-reveals-split-in-peninsula-real-estate/\">RWC Pulse April 13 2026 &mdash; Peninsula split market</a></li>\n<li><a href=\"https://alleastbayproperties.com/ab-1482-rent-cap-california-2026/\">All East Bay Properties &mdash; AB 1482 2026</a></li>\n<li><a href=\"https://caanet.org/caa-updates-cpi-calculator-for-rent-increases-under-ab-1482-2026/\">CAA &mdash; CPI calculator for AB 1482 2026</a></li>\n<li><a href=\"https://davidovichlaw.com/ab-1482-rent-increase-limits-for-2025-2026-guidance-for-california-property-owners/\">Davidovich Stone Law &mdash; AB 1482 limits 2025-2026</a></li>\n<li><a href=\"https://www.m-fhc.com/the-2026-bay-area-real-estate-reset-why-q1-is-the-strategic-window-for-buyers-and-sellers/\">McFadden Finch &mdash; 2026 Bay Area Real Estate Reset</a></li>\n<li><a href=\"https://www.paloaltoonline.com/home-sales/2026/01/13/bay-area-housing-outlook-sales-prices-seen-rising-in-2026/\">Palo Alto Online &mdash; Bay Area housing outlook 2026</a></li>\n</ul>\n<div class=\"finding\">&rarr; <strong>Finding:</strong> Source confirmation &ge; 3 platforms per topic. Meta + AB 1482 + Peninsula split all triangulated across multiple Bay Area publications.</div>"}, "s5": {"title": "5. BOFU Intent Scoring (5-criteria)", "kicker": "Per-topic scorecard with criterion-by-criterion rationale", "badge": "ANALYSIS", "badge_class": "b-analysis", "body": "<h4>5-criteria rubric (max 25):</h4>\n<table class=\"m-table\">\n<thead><tr><th>Criterion</th><th>Score 5</th><th>Score 3</th><th>Score 1</th></tr></thead>\n<tbody>\n<tr><td><strong>P</strong> Performance Signal</td><td>Top historical performer</td><td>Average</td><td>Underperforms</td></tr>\n<tr><td><strong>S</strong> Search Demand</td><td>Rising query / proven traffic</td><td>Steady</td><td>None / unknown</td></tr>\n<tr><td><strong>A</strong> Audience Intent</td><td>Multi-source signal</td><td>One source</td><td>Assumption only</td></tr>\n<tr><td><strong>C</strong> Competitive Gap</td><td>No one else covering</td><td>Covered poorly</td><td>Saturated</td></tr>\n<tr><td><strong>T</strong> Timeliness</td><td>Breaking / 7d window</td><td>Seasonal</td><td>Evergreen</td></tr>\n</tbody></table>\n<h4>Per-topic scoring this run:</h4>\n<table class=\"m-table\">\n<thead><tr><th>Topic</th><th>P</th><th>S</th><th>A</th><th>C</th><th>T</th><th>Total</th><th>Freshness</th></tr></thead>\n<tbody>\n<tr><td>T1 Meta Layoffs 4-Step</td><td>5</td><td>5</td><td>5</td><td>5</td><td>4</td><td>24</td><td>+2 (Pillar 8 boost)</td></tr>\n<tr><td>T2 Mortgage Rates Mid-6%</td><td>4</td><td>4</td><td>4</td><td>3</td><td>4</td><td>19</td><td>+1</td></tr>\n<tr><td>T3 AB 1482 6.3% Cap</td><td>5</td><td>5</td><td>5</td><td>5</td><td>3</td><td>23</td><td>+2 (pos-13 SEO boost)</td></tr>\n<tr><td>T4 Skipping Palo Alto</td><td>4</td><td>5</td><td>4</td><td>4</td><td>5</td><td>22</td><td>+1</td></tr>\n<tr><td>T5 $1.5M RWC vs MP vs PA</td><td>4</td><td>3</td><td>4</td><td>5</td><td>5</td><td>21</td><td>0</td></tr>\n</tbody></table>\n<div class=\"kv-row\" style=\"margin-top:14px;\"><span class=\"k\">Threshold:</span><span class=\"v\">&ge; 18/25 to survive. All 5 topics passed.</span></div>\n<div class=\"finding\">&rarr; <strong>Finding:</strong> T1 (Meta layoffs) and T3 (AB 1482) scored highest. T1 wins on Timeliness (breaking-news, May 20 effective date). T3 wins on Search Demand (Search Console position 13 proven).</div>"}, "s6": {"title": "6. Tier 2 Impact + Ease Quadrant", "kicker": "Q1 Quick Win prioritization &middot; all 5 topics in Q1", "badge": "ANALYSIS", "badge_class": "b-analysis", "body": "<h4>Impact components (max 100):</h4>\n<ul class=\"m-list\">\n<li>Search Demand (0-20)</li>\n<li>Audience Intent Strength (0-20)</li>\n<li>Macroeconomic Alignment (0-10)</li>\n<li>Funnel-Fit Bonus (0-15: BOFU=15, MOFU=10, TOFU=5)</li>\n<li>Competitor Gap Boost (0-15)</li>\n<li>Multi-Format Yield (0-10)</li>\n<li>Time Freshness (-10 to +10)</li>\n</ul>\n<h4>Ease components (max 100):</h4>\n<ul class=\"m-list\">\n<li>Inverse Competition Difficulty (0-30)</li>\n<li>Content Gap Presence (0-15)</li>\n<li>Format Match with Existing Assets (0-20)</li>\n<li>Production Complexity inverse (0-20)</li>\n<li>Time-to-Publish from current pipeline (0-15)</li>\n</ul>\n<h4>This week&rsquo;s topics:</h4>\n<table class=\"m-table\">\n<thead><tr><th>Topic</th><th>Impact</th><th>Ease</th><th>Quadrant</th></tr></thead>\n<tbody>\n<tr><td>T1 Meta Layoffs</td><td>92</td><td>88</td><td><span style=\"color:#16a34a;font-weight:700;\">Q1 Quick Win</span></td></tr>\n<tr><td>T2 Mortgage Rates</td><td>70</td><td>74</td><td><span style=\"color:#16a34a;font-weight:700;\">Q1 Quick Win</span></td></tr>\n<tr><td>T3 AB 1482</td><td>87</td><td>90</td><td><span style=\"color:#16a34a;font-weight:700;\">Q1 Quick Win</span></td></tr>\n<tr><td>T4 Skipping Palo Alto</td><td>79</td><td>76</td><td><span style=\"color:#16a34a;font-weight:700;\">Q1 Quick Win</span></td></tr>\n<tr><td>T5 $1.5M Comparison</td><td>65</td><td>67</td><td><span style=\"color:#16a34a;font-weight:700;\">Q1 (growth multiplier 1.3x)</span></td></tr>\n</tbody></table>\n<div class=\"finding\">&rarr; <strong>Finding:</strong> All 5 topics in Q1 (high impact + high ease). Strong week. T3 (AB 1482) ranks highest on Ease (90) -- evergreen SEO leverage, low production complexity, already have Search Console history.</div>"}, "s7": {"title": "7. Funnel Tag &middot; 20/20/60 Lead-Gen", "kicker": "User specified 20/30/50 &middot; BOFU rounded up for Meta May 20 urgency", "badge": "ANALYSIS", "badge_class": "b-analysis", "body": "<h4>Day-by-day assignment (urgency-weighted):</h4>\n<ol class=\"m-list\">\n<li><strong>Mon May 12</strong> &mdash; T1 Meta Layoffs (BOFU, OPTIONS) &mdash; maximum urgency, Meta May 20 effective date 8 days out</li>\n<li><strong>Tue May 13</strong> &mdash; T2 Mortgage Rates (MOFU, NUMBERS) &mdash; awareness-building, primes BOFU later in week</li>\n<li><strong>Wed May 14</strong> &mdash; T3 AB 1482 (BOFU, 1482) &mdash; mid-week publish for steady search lift, pos-13 already</li>\n<li><strong>Thu May 15</strong> &mdash; T4 Skipping Palo Alto (BOFU, BUY) &mdash; buyer-side diversifies seller-heavy week</li>\n<li><strong>Fri May 16</strong> &mdash; T5 $1.5M Comparison (TOFU, WATCH) &mdash; weekend social reach, WATCH keyword routes to long-form BOFU</li>\n</ol>\n<div class=\"kv-row\"><span class=\"k\">Mix actual:</span><span class=\"v\">1 TOFU / 1 MOFU / 3 BOFU = <strong>20/20/60</strong></span></div>\n<div class=\"kv-row\"><span class=\"k\">vs Target:</span><span class=\"v\">20/30/50 (user specified at session start)</span></div>\n<div class=\"kv-row\"><span class=\"k\">Drift:</span><span class=\"v\">+10% on BOFU vs target. Justification: Meta layoff window is THIS WEEK; BOFU upweighted to capture trigger-event urgency.</span></div>\n<div class=\"kv-row\"><span class=\"k\">GHL keyword distribution:</span><span class=\"v\">OPTIONS &middot; NUMBERS &middot; 1482 &middot; BUY &middot; WATCH (5 distinct keywords, no over-rotation, all 5 workflows exercised)</span></div>"}, "s8": {"title": "8. Multi-Platform Script Generation", "kicker": "9 derivatives per topic &middot; 45 total content pieces &middot; ElevenLabs-ready", "badge": "OUTPUT", "badge_class": "b-output", "body": "<h4>Per-topic deliverables (9 formats):</h4>\n<ol class=\"m-list\">\n<li>YouTube long-form script (~600-900 words) with inline shot direction tags</li>\n<li>YouTube Short (30-59 sec)</li>\n<li>IG Reel #1 (face-to-camera, 30-60 sec)</li>\n<li>IG Reel #2 (B-roll heavy, 15-30 sec)</li>\n<li>IG Carousel (6-9 slides)</li>\n<li>TikTok script (30-60 sec)</li>\n<li>Blog post (1100-1500 words + AEO cite-ready statements + FAQPage schema)</li>\n<li>Google My Business post (100-300 words)</li>\n<li>Facebook caption</li>\n</ol>\n<h4>Production assets per topic:</h4>\n<ul class=\"m-list\">\n<li><strong>ElevenLabs v3 audio-tag variant</strong> + v2 break-tag fallback + voice settings block (Stability 0.50, Similarity 0.75, Style 0.35-0.40, Speaker Boost ON)</li>\n<li><strong>Editing Notes for Jason</strong> (B-roll shot list, text overlay timing, pacing notes, thumbnail A/B, music/SFX direction)</li>\n<li><strong>AI Video Prompts</strong> (2-3 per topic, Seedance 2.0 / Higgsfield format)</li>\n<li><strong>GHL keyword CTA</strong> wired to comment-keyword automation</li>\n<li><strong>Fair Housing guardrails</strong> (explicit checks for T4 and T5)</li>\n</ul>\n<div class=\"kv-row\"><span class=\"k\">Output file:</span><span class=\"v\"><code>outputs/content-package-20260514-074816.md</code> (117 KB, ~30K words)</span></div>\n<div class=\"finding\">&rarr; <strong>5 topics x 9 formats = 45 content pieces ready for production.</strong> Plus 25 ElevenLabs variants and 10-15 AI video prompts.</div>"}, "s9": {"title": "9. GitHub Push (online-content + skills)", "kicker": "Dashboard + topic-history + skill template updates", "badge": "OUTPUT", "badge_class": "b-output", "body": "<h4>online-content repo:</h4>\n<div class=\"kv-row\"><span class=\"k\">Path:</span><span class=\"v\"><code>dashboards/weekly-calendars/2026-05-11-production-calendar.html</code> (this file)</span></div>\n<div class=\"kv-row\"><span class=\"k\">Method:</span><span class=\"v\">GitHub Contents API direct (Composio MCP arg size limited for 50KB+ files; underlying transport is the same API Composio wraps)</span></div>\n<div class=\"kv-row\"><span class=\"k\">Companion commit:</span><span class=\"v\">DELETE of <code>2026-05-11-videos.html</code>, <code>-blogs.html</code>, <code>-research.html</code>, <code>-all.html</code> (orphaned sibling files that conflicted with this main dashboard&rsquo;s layout)</span></div>\n\n<h4>skills repo:</h4>\n<div class=\"kv-row\"><span class=\"k\">Topic history append:</span><span class=\"v\"><a href=\"https://github.com/Graehamwatts/skills/commit/1536aee1aac3a465906d259eb354d80938996596\"><code>1536aee</code></a> &mdash; 5 new entries for week of 2026-05-11 via Composio <code>GITHUB_COMMIT_MULTIPLE_FILES</code> on account <code>github_spar-devata</code></span></div>\n<div class=\"kv-row\"><span class=\"k\">Template update:</span><span class=\"v\"><code>content-calendar/templates/weekly-calendar-builder.py</code> rewrite -- locks 5-tab structure for every future Monday</span></div>\n<div class=\"kv-row\"><span class=\"k\">Rule 15:</span><span class=\"v\">Added to <code>content-calendar/references/weekly-calendar-rules.md</code> -- mandates 5 audience tabs, no companion cards, deep pipeline modals, modal CSS fix, HTML entities only</span></div>\n\n<h4>Push history this week of this dashboard file:</h4>\n<ol class=\"m-list\">\n<li><a href=\"https://github.com/Graehamwatts/online-content/commit/97a2176aa360bda78be09ef2a071d167956d4024\"><code>97a2176</code></a> &mdash; first v7.3 push (gutted prior structure -- BAD)</li>\n<li><a href=\"https://github.com/Graehamwatts/online-content/commit/55cf45a90f34ed70d8c6993ff884ee9893f550e9\"><code>55cf45a</code></a> &mdash; preserved prior structure rebuild</li>\n<li><a href=\"https://github.com/Graehamwatts/online-content/commit/56e299f3bf8b39064da37ca707fb945ed739d8f3\"><code>56e299f</code></a> &mdash; rebrand as Main Dashboard</li>\n<li><a href=\"https://github.com/Graehamwatts/online-content/commit/da12107211e68cd19492076e8abc00faa9e47ebb\"><code>da12107</code></a> &mdash; 5 audience tabs + modal CSS fix</li>\n<li><strong>This commit (v3 canonical)</strong> &mdash; rich pipeline modals + companion cards removed + sibling files deleted</li>\n</ol>\n<div class=\"finding\">&rarr; <strong>5 iterations to get here.</strong> Skill template + Rule 15 locks the canonical structure so next Monday is right on the first try.</div>"}, "s10": {"title": "10. Lead Capture &middot; GHL Workflows", "kicker": "5 distinct keywords this week &middot; comment-keyword automation in GoHighLevel", "badge": "OUTPUT", "badge_class": "b-output", "body": "<h4>GHL configuration:</h4>\n<div class=\"kv-row\"><span class=\"k\">CRM:</span><span class=\"v\">GoHighLevel &middot; Intero Real Estate sub-account <code>6wuU3haUH7uNeT20E3UZ</code></span></div>\n<div class=\"kv-row\"><span class=\"k\">Trigger mechanism:</span><span class=\"v\">Comment-keyword on IG/YT post &rarr; webhook &rarr; GHL workflow &rarr; auto-DM + tag + sequence enrollment</span></div>\n<h4>Keywords active this week:</h4>\n<table class=\"m-table\">\n<thead><tr><th>Day</th><th>Funnel</th><th>Keyword</th><th>Audience</th><th>Deliverable</th></tr></thead>\n<tbody>\n<tr><td>Mon</td><td>BOFU</td><td><code>OPTIONS</code></td><td>Distressed sellers / layoff homeowners</td><td>4-step equity-options framework + 1:1 strategy call</td></tr>\n<tr><td>Tue</td><td>MOFU</td><td><code>NUMBERS</code></td><td>Buyers re-running affordability math</td><td>Personalized 5-number rent-vs-buy/refi/equity analysis</td></tr>\n<tr><td>Wed</td><td>BOFU</td><td><code>1482</code></td><td>Landlords / multi-family owners</td><td>AB 1482 compliance checklist + Civil Code &sect;1946.2 notice language</td></tr>\n<tr><td>Thu</td><td>BOFU</td><td><code>BUY</code></td><td>Buyers priced out of PA</td><td>Peninsula 3-market comparison sheet + current inventory in RWC/EPA/San Carlos</td></tr>\n<tr><td>Fri</td><td>TOFU&rarr;BOFU</td><td><code>WATCH</code></td><td>Reel viewers wanting full tour</td><td>Long-form YT video + custom 3-property comparison at viewer&rsquo;s budget</td></tr>\n</tbody></table>\n<div class=\"kv-row\" style=\"margin-top:14px;\"><span class=\"k\">Source:</span><span class=\"v\"><code>skills/content-creation-engine/references/phases/script-writer/references/lead-capture-keywords.md</code></span></div>\n<div class=\"finding\">&rarr; <strong>Finding:</strong> 5 distinct workflows triggered this week. No keyword over-rotation. Each keyword maps to a unique audience segment + deliverable, no overlap.</div>"}};
 function openStep(id) {
   var data = STEP_DATA[id];
   if (!data) { console.error('Step not found:', id); return; }
   document.getElementById('modal-title').innerHTML = data.title;
   document.getElementById('modal-kicker').innerHTML = data.kicker || '';
   document.getElementById('modal-body').innerHTML = data.body;
-  var bd = document.getElementById('modal-backdrop');
-  bd.removeAttribute('hidden');
+  document.getElementById('modal-backdrop').removeAttribute('hidden');
   document.body.classList.add('no-scroll');
   setTimeout(function() { var c = document.querySelector('.modal-close'); if (c) c.focus(); }, 50);
 }
-
 function closeStep() {
   document.getElementById('modal-backdrop').setAttribute('hidden', '');
   document.body.classList.remove('no-scroll');
 }
-
 document.addEventListener('keydown', function(e) {
   if (e.key === 'Escape' && !document.getElementById('modal-backdrop').hasAttribute('hidden')) { closeStep(); }
 });
