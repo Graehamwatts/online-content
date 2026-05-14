@@ -1,0 +1,391 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Graeham Watts · Production Calendar · Week of May 11, 2026</title>
+<link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;600;700;800&family=DM+Sans:wght@400;500;700&display=swap" rel="stylesheet">
+<style>
+:root { color-scheme: light; --navy:#1B2A4A; --gold:#B8860B; --bg:#f4f5f7; --card:#fff; --text:#2d3748; --muted:#718096; --line:#cbd5d8; }
+*{box-sizing:border-box;}
+body{margin:0;background:var(--bg);color:var(--text);font-family:'DM Sans',-apple-system,BlinkMacSystemFont,sans-serif;line-height:1.55;}
+h1,h2,h3,.hd{font-family:'Plus Jakarta Sans',sans-serif;letter-spacing:-0.02em;color:var(--navy);}
+.container{max-width:1180px;margin:0 auto;padding:0 24px;}
+.hero{background:linear-gradient(135deg, var(--navy) 0%, #2a3a5d 100%);color:#fff;padding:40px 0 32px;}
+.hero h1{color:#fff;font-size:32px;margin:0 0 8px;font-weight:800;}
+.hero .sub{color:#cdd6e1;font-size:15px;margin-bottom:20px;}
+.hero .meta{display:flex;flex-wrap:wrap;gap:12px;margin-top:8px;}
+.hero .chip-meta{background:rgba(255,255,255,0.12);padding:6px 14px;border-radius:20px;font-size:13px;font-weight:500;}
+.section{padding:32px 0;}
+.section h2{font-size:22px;margin:0 0 16px;}
+.section .lede{color:var(--muted);font-size:14px;margin-bottom:20px;}
+.src-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(260px,1fr));gap:12px;}
+.src-card{background:var(--card);padding:14px 16px;border-radius:8px;border-left:4px solid var(--line);}
+.src-card.src-live{border-left-color:#16a34a;}
+.src-card.src-gap{border-left-color:#eab308;}
+.src-card.src-dead{border-left-color:#dc2626;}
+.src-card.src-stale{border-left-color:#eab308;}
+.src-head{display:flex;align-items:center;gap:8px;margin-bottom:4px;}
+.src-name{font-weight:600;color:var(--navy);font-size:14px;}
+.src-note{font-size:12px;color:var(--muted);}
+.day-grid{display:grid;grid-template-columns:1fr;gap:16px;}
+.day-card{background:var(--card);padding:24px 26px;border-radius:10px;border:1px solid #e8eaed;box-shadow:0 1px 3px rgba(0,0,0,0.04);}
+.day-head{display:flex;justify-content:space-between;align-items:flex-start;gap:16px;margin-bottom:8px;flex-wrap:wrap;}
+.day-meta{display:flex;gap:12px;align-items:baseline;}
+.day-label{font-weight:800;color:var(--navy);font-size:18px;font-family:'Plus Jakarta Sans',sans-serif;}
+.day-date{color:var(--muted);font-size:13px;}
+.score-pill{color:#fff;padding:6px 14px;border-radius:20px;font-size:12px;font-weight:700;letter-spacing:0.5px;}
+.day-title{font-size:20px;margin:8px 0 6px;line-height:1.3;font-weight:700;}
+.day-hook{color:#4a5568;font-size:14.5px;margin:0 0 12px;border-left:3px solid var(--gold);padding-left:12px;}
+.day-meta-row{display:flex;flex-wrap:wrap;gap:8px;align-items:center;margin:8px 0 12px;}
+.chip{color:#fff;padding:3px 10px;border-radius:12px;font-size:11px;font-weight:700;letter-spacing:0.5px;}
+.fmt-chip{background:#edf2f7;color:var(--navy);padding:3px 10px;border-radius:12px;font-size:11px;font-weight:600;}
+.src-badge{font-size:10px;padding:2px 8px;border-radius:10px;font-weight:700;letter-spacing:0.5px;text-transform:uppercase;}
+.src-badge.src-perf{background:#dcfce7;color:#16a34a;}
+.src-badge.src-news{background:#fee2e2;color:#dc2626;}
+.src-badge.src-reddit{background:#ffedd5;color:#c2410c;}
+.src-badge.src-trend{background:#f3e8ff;color:#7c3aed;}
+.src-badge.src-gsc{background:#dbeafe;color:#2563eb;}
+.score-breakdown{display:flex;gap:8px;margin:8px 0 4px;color:var(--muted);font-size:12px;font-family:'DM Mono',ui-monospace,monospace;}
+.score-breakdown span{background:#f7fafc;padding:2px 8px;border-radius:4px;border:1px solid #edf2f7;}
+.reasoning{margin-top:14px;border-top:1px solid #edf2f7;padding-top:12px;}
+.reasoning summary{cursor:pointer;font-weight:600;color:var(--navy);font-size:13px;}
+.reasoning p{font-size:13.5px;color:#4a5568;margin:10px 0 0;line-height:1.6;}
+table.perf{width:100%;border-collapse:collapse;background:var(--card);border-radius:8px;overflow:hidden;font-size:13px;}
+table.perf th, table.perf td{padding:8px 12px;border-bottom:1px solid #edf2f7;text-align:left;}
+table.perf th{background:#f7fafc;color:var(--navy);font-weight:700;font-size:12px;text-transform:uppercase;letter-spacing:0.5px;}
+table.perf td.num{text-align:right;font-variant-numeric:tabular-nums;font-weight:600;}
+.insights ul{margin:0;padding-left:20px;}
+.insights li{margin-bottom:8px;color:#3c4858;font-size:14px;}
+.insights strong{color:var(--navy);}
+.footer{background:var(--navy);color:#cdd6e1;padding:24px 0;font-size:13px;margin-top:32px;}
+.footer a{color:var(--gold);text-decoration:none;}
+details summary::-webkit-details-marker{color:var(--gold);}
+.mix-bar{display:flex;height:32px;border-radius:8px;overflow:hidden;margin:10px 0;}
+.mix-tofu{background:#2563EB;} .mix-mofu{background:#9c6f10;} .mix-bofu{background:#9f1239;}
+.mix-bar > div{color:#fff;display:flex;align-items:center;justify-content:center;font-size:12px;font-weight:700;letter-spacing:0.5px;}
+</style>
+</head>
+<body>
+
+<div class="hero">
+  <div class="container">
+    <h1>Weekly Production Calendar — May 11–17, 2026</h1>
+    <p class="sub">Data-driven content plan for Graeham Watts · Bay Area / East Palo Alto Real Estate · DRE# 01466876</p>
+    <div class="meta">
+      <span class="chip-meta">📊 6 topics scored</span>
+      <span class="chip-meta">⭐ Avg score 21/25</span>
+      <span class="chip-meta">📈 Mix: 2 TOFU · 2 MOFU · 2 BOFU</span>
+      <span class="chip-meta">🆕 Live: Composio IG + YT (Section 9)</span>
+    </div>
+  </div>
+</div>
+
+<div class="section">
+  <div class="container">
+    <h2>Live Data Layer — What We Pulled</h2>
+    <p class="lede">Every source listed below was probed before this calendar was assembled. Green = live, returned real data. Yellow = partial/stale. Red = unavailable (documented gap, not silently skipped).</p>
+    <div class="src-grid">
+      
+    <div class="src-card src-live">
+      <div class="src-head"><span class="src-dot">🟢</span><span class="src-name">Composio Instagram</span></div>
+      <div class="src-note">50 posts pulled, IG ID 27735776322678984</div>
+    </div>
+    
+    <div class="src-card src-live">
+      <div class="src-head"><span class="src-dot">🟢</span><span class="src-name">Composio YouTube + Section 9</span></div>
+      <div class="src-note">49/50 videos with stats; Shorts filter operational</div>
+    </div>
+    
+    <div class="src-card src-live">
+      <div class="src-head"><span class="src-dot">🟢</span><span class="src-name">Competitor YT (Transform RE)</span></div>
+      <div class="src-note">89,100 subs, 25 latest titles pulled</div>
+    </div>
+    
+    <div class="src-card src-gap">
+      <div class="src-head"><span class="src-dot">🟡</span><span class="src-name">Competitor YT (Danny Gould — Selling Silicon Valley)</span></div>
+      <div class="src-note">Handle did not resolve; needs re-discovery</div>
+    </div>
+    
+    <div class="src-card src-live">
+      <div class="src-head"><span class="src-dot">🟢</span><span class="src-name">Web Search (Market Context)</span></div>
+      <div class="src-note">Meta layoffs May 22+29, EPA DOM 32d, rates 6.3%</div>
+    </div>
+    
+    <div class="src-card src-dead">
+      <div class="src-head"><span class="src-dot">🔴</span><span class="src-name">Google Search Console</span></div>
+      <div class="src-note">Not connected via Composio; was via Windsor (dead)</div>
+    </div>
+    
+    <div class="src-card src-dead">
+      <div class="src-head"><span class="src-dot">🔴</span><span class="src-name">Windsor (FB / GHL CRM)</span></div>
+      <div class="src-note">License expired — verified empirically 2026-05-13</div>
+    </div>
+    
+    <div class="src-card src-stale">
+      <div class="src-head"><span class="src-dot">🟡</span><span class="src-name">Reddit Ideation (Apify)</span></div>
+      <div class="src-note">No fresh scrape run this session; data older than 7d</div>
+    </div>
+    
+    </div>
+  </div>
+</div>
+
+<div class="section" style="background:#fff;">
+  <div class="container">
+    <h2>Performance Signal — What's Actually Working</h2>
+    <p class="lede">Pulled from Composio direct connections. <strong>Section 9 (the YouTube enumeration capability committed today)</strong> made the Shorts breakdown below possible — same channel, same API key, but now we can isolate Shorts from long-form via duration filter.</p>
+
+    <h3 style="margin-top:20px;font-size:16px;">YouTube — Top Shorts (Last ~50 Uploads, Section 9 Filter Applied)</h3>
+    <table class="perf">
+      <thead><tr><th>Date</th><th>Views</th><th>Likes</th><th>Duration</th><th>Title</th></tr></thead>
+      <tbody><tr><td>2026-03-19</td><td class="num">1,759</td><td class="num">2</td><td>11s</td><td>This Bay Area Duplex Might Be a Hidden Investment Gem #shorts</td></tr><tr><td>2026-02-06</td><td class="num">1,389</td><td class="num">26</td><td>30s</td><td>Why Helicopters Were Scanning San Francisco for Radiation</td></tr><tr><td>2026-03-14</td><td class="num">1,023</td><td class="num">6</td><td>39s</td><td>Best Fresh Pasta Spot in the Bay Area</td></tr><tr><td>2026-04-01</td><td class="num">1,003</td><td class="num">4</td><td>31s</td><td>🏗️ Big trouble for one of San Francisco’s largest housing projects…  The $2B Par</td></tr><tr><td>2026-02-07</td><td class="num">1,003</td><td class="num">9</td><td>50s</td><td>SF’s Financial District Is Beating Pandemic Home Prices</td></tr><tr><td>2026-03-13</td><td class="num">992</td><td class="num">6</td><td>52s</td><td>Tesla Building Massive Charging Station in East Palo Alto</td></tr><tr><td>2026-04-22</td><td class="num">978</td><td class="num">25</td><td>49s</td><td>Luxury Overnight Stays at Alcatraz? New San Francisco Experience Explained #shor</td></tr></tbody>
+    </table>
+    <p style="font-size:12px;color:var(--muted);margin-top:8px;">Source: Composio YOUTUBE_LIST_PLAYLIST_ITEMS + YOUTUBE_GET_VIDEO_DETAILS_BATCH, filtered to duration ≤ 60s per <code>research-sources.md</code> Section 9. Channel: <code>UCFHqB0L2C4aJVksMKkg_ukw</code>. Verified 2026-05-13.</p>
+
+    <h3 style="margin-top:28px;font-size:16px;">Instagram — Top Posts by Engagement (Last 50, Last 3 Months)</h3>
+    <table class="perf">
+      <thead><tr><th>Date</th><th>Eng (♥+💬)</th><th>Likes</th><th>Type</th><th>Caption preview</th></tr></thead>
+      <tbody><tr><td>2026-04-17</td><td class="num">33</td><td class="num">25</td><td>REELS</td><td>🏗️ One of San Francisco’s most talked-about projects just moved forward…  The Marina Safew</td></tr><tr><td>2026-03-22</td><td class="num">26</td><td class="num">24</td><td>REELS</td><td>🏡 Twin Peaks property tour in San Francisco. This home was purchased a few years ago for $</td></tr><tr><td>2026-04-10</td><td class="num">22</td><td class="num">22</td><td>REELS</td><td>🏡 The richest city in America… and almost no one knows it  It’s not New York. Not Miami. N</td></tr><tr><td>2026-04-25</td><td class="num">21</td><td class="num">17</td><td>REELS</td><td>⚡ San Francisco is trying to break up with PG&E… after 120 years  A new bill could allow t</td></tr><tr><td>2026-03-13</td><td class="num">19</td><td class="num">18</td><td>REELS</td><td>🏙️ Taking a look at a triplex in Nob Hill, one of San Francisco’s most iconic neighborhood</td></tr><tr><td>2026-02-08</td><td class="num">19</td><td class="num">19</td><td>REELS</td><td>Downtown San Francisco is getting something new and it’s a big win.    Empire Records has </td></tr><tr><td>2026-03-24</td><td class="num">17</td><td class="num">16</td><td>REELS</td><td>🍽️ The Bay Area food scene just got a surprising shake-up…  The The New York Times just re</td></tr></tbody>
+    </table>
+    <p style="font-size:12px;color:var(--muted);margin-top:8px;">Source: Composio INSTAGRAM_GET_IG_USER_MEDIA, IG user 27735776322678984 (@graeham.watts). 90% of recent posts are REELS, 10% FEED — Reels dominate top performers.</p>
+  </div>
+</div>
+
+<div class="section">
+  <div class="container">
+    <h2>How We're Crunching It — Insights Feeding This Week's Picks</h2>
+    <div class="insights">
+<ul>
+  <li><strong>Shorts dramatically outperform long-form</strong> — Shorts avg 480 views, long-form median 6. Calendar weighted Shorts-first.</li>
+  <li><strong>Curiosity/discovery hooks crush</strong> — helicopter mystery (1,389), hidden duplex (1,759), Atherton "richest city" (1,832). Top 4 topics use this framing.</li>
+  <li><strong>EPA direct-listing long-form is bleeding</strong> — "EPA Homes Under $1M" got 25 views. Pivot EPA content to Short-first format.</li>
+  <li><strong>Investor angle undertapped</strong> — 3 videos, avg 743 views (highest per-video). Topic #4 (Hidden Duplex) is below the top 6 but worth queuing.</li>
+  <li><strong>Layoff content too new to evaluate internally</strong> — Graeham just posted May 12. But external timing (Burlingame May 22) + Transform RE's audience validation makes this a must-create regardless.</li>
+</ul>
+</div>
+  </div>
+</div>
+
+<div class="section" style="background:#fff;">
+  <div class="container">
+    <h2>This Week's Production Calendar</h2>
+    <p class="lede">Each topic below was scored on the 5-criterion Opportunity Score (25 pts max). Click "Why this topic" to see the exact data trail that produced the score.</p>
+    <div class="mix-bar">
+      <div class="mix-tofu" style="flex:2;">TOFU 33%</div>
+      <div class="mix-mofu" style="flex:2;">MOFU 33%</div>
+      <div class="mix-bofu" style="flex:2;">BOFU 33%</div>
+    </div>
+    <div class="day-grid">
+      
+    <article class="day-card" id="day-monday">
+      <header class="day-head">
+        <div class="day-meta">
+          <span class="day-label">Monday</span>
+          <span class="day-date">May 11</span>
+        </div>
+        <div class="score-pill" style="background:#1B2A4A;">
+          21/25 · STRONG
+        </div>
+      </header>
+      <h2 class="day-title" id="topic-meta-burlingame-layoff-homeowner-playbook">Meta Burlingame Layoffs Hit May 22 — What Homeowners Should Do This Week</h2>
+      <p class="day-hook"><em>"You've got 9 days before 124 of your Burlingame coworkers get walked out. Here's what to do with your house BEFORE the severance check hits."</em></p>
+      <div class="day-meta-row">
+        <span class="chip" style="background:#9c6f10;">MOFU</span>
+        <span class="fmt-chip">YouTube Long + IG Reel + Short</span>
+        <span class="src-badge src-news">news</span> <span class="src-badge src-perf">perf</span> <span class="src-badge src-reddit">reddit</span>
+      </div>
+      <div class="score-breakdown">
+        <span title="Performance Signal">P:3</span>
+        <span title="Search Demand">S:4</span>
+        <span title="Audience Intent">A:5</span>
+        <span title="Competitive Gap">C:4</span>
+        <span title="Timeliness">T:5</span>
+      </div>
+      <details class="reasoning">
+        <summary>Why this topic — the data trail</summary>
+        <p>Meta announced 8K layoffs Apr 23 (Burlingame May 22, Sunnyvale May 29). Graeham JUST published a related YT long-form (May 12, 4 views — too new). Transform RE built her brand on this exact narrative. White-hot timing.</p>
+      </details>
+    </article>
+    
+    <article class="day-card" id="day-tuesday">
+      <header class="day-head">
+        <div class="day-meta">
+          <span class="day-label">Tuesday</span>
+          <span class="day-date">May 12</span>
+        </div>
+        <div class="score-pill" style="background:#9c6f10;">
+          22/25 · MUST CREATE
+        </div>
+      </header>
+      <h2 class="day-title" id="topic-401k-vs-heloc-laid-off-decision-framework">401(k) Cash-Out vs HELOC: The Math For Laid-Off Bay Area Homeowners</h2>
+      <p class="day-hook"><em>"$50K from your 401(k) costs you $90K in retirement. $50K from your home costs ~$3.5K/year. Run the numbers."</em></p>
+      <div class="day-meta-row">
+        <span class="chip" style="background:#9c6f10;">MOFU</span>
+        <span class="fmt-chip">Blog + Email + IG Carousel</span>
+        <span class="src-badge src-news">news</span> <span class="src-badge src-reddit">reddit</span>
+      </div>
+      <div class="score-breakdown">
+        <span title="Performance Signal">P:4</span>
+        <span title="Search Demand">S:4</span>
+        <span title="Audience Intent">A:5</span>
+        <span title="Competitive Gap">C:4</span>
+        <span title="Timeliness">T:5</span>
+      </div>
+      <details class="reasoning">
+        <summary>Why this topic — the data trail</summary>
+        <p>Companion piece to #1. Same audience (laid-off Bay Area homeowners) but practical decision framework. Graeham's May 12 video touched this but didn't run the actual math. Strong evergreen + timely hybrid.</p>
+      </details>
+    </article>
+    
+    <article class="day-card" id="day-wednesday">
+      <header class="day-head">
+        <div class="day-meta">
+          <span class="day-label">Wednesday</span>
+          <span class="day-date">May 13</span>
+        </div>
+        <div class="score-pill" style="background:#1B2A4A;">
+          21/25 · STRONG
+        </div>
+      </header>
+      <h2 class="day-title" id="topic-tesla-epa-charging-station-property-value">Tesla's Secret East Palo Alto Charging Station — What It Means For Property Values</h2>
+      <p class="day-hook"><em>"Nobody talked about this when Tesla picked the location. The map tells you why this is a 3-block radius play."</em></p>
+      <div class="day-meta-row">
+        <span class="chip" style="background:#2563EB;">TOFU</span>
+        <span class="fmt-chip">YT Short + IG Reel + Carousel</span>
+        <span class="src-badge src-perf">perf</span> <span class="src-badge src-news">news</span>
+      </div>
+      <div class="score-breakdown">
+        <span title="Performance Signal">P:5</span>
+        <span title="Search Demand">S:3</span>
+        <span title="Audience Intent">A:4</span>
+        <span title="Competitive Gap">C:5</span>
+        <span title="Timeliness">T:4</span>
+      </div>
+      <details class="reasoning">
+        <summary>Why this topic — the data trail</summary>
+        <p>Existing 39s Short on this topic = 992 views (top decile). EPA-Tesla intersection is undertapped. Expand from "did this happen?" to "what does it mean for my property?"</p>
+      </details>
+    </article>
+    
+    <article class="day-card" id="day-thursday">
+      <header class="day-head">
+        <div class="day-meta">
+          <span class="day-label">Thursday</span>
+          <span class="day-date">May 14</span>
+        </div>
+        <div class="score-pill" style="background:#1B2A4A;">
+          20/25 · STRONG
+        </div>
+      </header>
+      <h2 class="day-title" id="topic-epa-32-day-market-thaw">EPA Homes Now Sell in 32 Days vs 66 Last Year — Here's What Changed</h2>
+      <p class="day-hook"><em>"Your house would have sat for 2 months last spring. Now it sells in a month. Why now?"</em></p>
+      <div class="day-meta-row">
+        <span class="chip" style="background:#9f1239;">BOFU</span>
+        <span class="fmt-chip">YT Short + IG Reel + Blog</span>
+        <span class="src-badge src-news">news</span> <span class="src-badge src-perf">perf</span>
+      </div>
+      <div class="score-breakdown">
+        <span title="Performance Signal">P:3</span>
+        <span title="Search Demand">S:4</span>
+        <span title="Audience Intent">A:4</span>
+        <span title="Competitive Gap">C:5</span>
+        <span title="Timeliness">T:4</span>
+      </div>
+      <details class="reasoning">
+        <summary>Why this topic — the data trail</summary>
+        <p>Real market data (Redfin EPA market trends): DOM 66→32 YoY. Strong seller-side BOFU hook. Graeham's EPA long-form has been bombing (25 views), so try a Short-first format pivot. No competitor covering this micro-trend.</p>
+      </details>
+    </article>
+    
+    <article class="day-card" id="day-friday">
+      <header class="day-head">
+        <div class="day-meta">
+          <span class="day-label">Friday</span>
+          <span class="day-date">May 15</span>
+        </div>
+        <div class="score-pill" style="background:#1B2A4A;">
+          21/25 · STRONG
+        </div>
+      </header>
+      <h2 class="day-title" id="topic-apple-studios-half-moon-bay-smc-impact">Apple Studios Takes Over Half Moon Bay — What It Means for SMC Real Estate</h2>
+      <p class="day-hook"><em>"When Apple shoots a thriller in your backyard, the comps shift fast. Here's the 3-mile pattern."</em></p>
+      <div class="day-meta-row">
+        <span class="chip" style="background:#2563EB;">TOFU</span>
+        <span class="fmt-chip">YT Short + IG Reel</span>
+        <span class="src-badge src-perf">perf</span> <span class="src-badge src-news">news</span>
+      </div>
+      <div class="score-breakdown">
+        <span title="Performance Signal">P:5</span>
+        <span title="Search Demand">S:3</span>
+        <span title="Audience Intent">A:4</span>
+        <span title="Competitive Gap">C:5</span>
+        <span title="Timeliness">T:4</span>
+      </div>
+      <details class="reasoning">
+        <summary>Why this topic — the data trail</summary>
+        <p>May 7 Short on this = 900 views, 31 likes (high engagement). Pure curiosity hook. Expand from entertainment angle to real-estate-implications angle.</p>
+      </details>
+    </article>
+    
+    <article class="day-card" id="day-saturday">
+      <header class="day-head">
+        <div class="day-meta">
+          <span class="day-label">Saturday</span>
+          <span class="day-date">May 16</span>
+        </div>
+        <div class="score-pill" style="background:#1B2A4A;">
+          19/25 · STRONG
+        </div>
+      </header>
+      <h2 class="day-title" id="topic-first-time-buyer-6-percent-down-secret">Bay Area First-Time Buyers Put Down Only 6% — How They Actually Do It</h2>
+      <p class="day-hook"><em>"Everyone says you need 20% down for a Bay Area home. Most first-time buyers put down 6%. Here's the math."</em></p>
+      <div class="day-meta-row">
+        <span class="chip" style="background:#9f1239;">BOFU</span>
+        <span class="fmt-chip">YT Short + IG Carousel + Email</span>
+        <span class="src-badge src-reddit">reddit</span> <span class="src-badge src-trend">trend</span>
+      </div>
+      <div class="score-breakdown">
+        <span title="Performance Signal">P:4</span>
+        <span title="Search Demand">S:5</span>
+        <span title="Audience Intent">A:5</span>
+        <span title="Competitive Gap">C:3</span>
+        <span title="Timeliness">T:2</span>
+      </div>
+      <details class="reasoning">
+        <summary>Why this topic — the data trail</summary>
+        <p>Search demand for "first-time home buyer Bay Area" is consistently strong. The 6% surprise is a curiosity hook. Many agents cover this — content gap is the SPECIFIC Bay Area programs (CalHFA, EPA BMR).</p>
+      </details>
+    </article>
+    
+    </div>
+  </div>
+</div>
+
+<div class="section">
+  <div class="container">
+    <h2>Scoring Rubric (Opportunity Score · 25 pts)</h2>
+    <p class="lede">Same rubric on every topic. Threshold: 22+ = must_create, 17–21 = strong, 12–16 = consider, &lt;12 = skip.</p>
+    <table class="perf">
+      <thead><tr><th>Criterion</th><th style="text-align:left">5 pts</th><th style="text-align:left">3 pts</th><th style="text-align:left">1 pt</th></tr></thead>
+      <tbody>
+        <tr><td><strong>Performance Signal (P)</strong></td><td>Top-performing format/topic for Graeham historically</td><td>Average historical performance</td><td>Underperforming</td></tr>
+        <tr><td><strong>Search Demand (S)</strong></td><td>Rising GSC query OR external search demand verified</td><td>Steady demand</td><td>No search data / unknown</td></tr>
+        <tr><td><strong>Audience Intent (A)</strong></td><td>Multiple sources confirming demand (Reddit + competitor + news)</td><td>One source</td><td>Assumption only</td></tr>
+        <tr><td><strong>Competitive Gap (C)</strong></td><td>No one covering it / blue ocean</td><td>Covered but poorly</td><td>Saturated</td></tr>
+        <tr><td><strong>Timeliness (T)</strong></td><td>Breaking news / 7-day window</td><td>Seasonal relevance</td><td>Evergreen</td></tr>
+      </tbody>
+    </table>
+    <p style="font-size:12px;color:var(--muted);margin-top:8px;"><em>Note: Search Demand (S) is partially inferred this week because Google Search Console is not connected to Composio. Once that connection is added, S scores will be grounded in actual rising-query data.</em></p>
+  </div>
+</div>
+
+<div class="footer">
+  <div class="container">
+    <p><strong>Graeham Watts · REALTOR · Intero Real Estate Services, Inc. · DRE# 01466876</strong></p>
+    <p>Generated 2026-05-14 00:08 UTC · Built by <code>content-calendar</code> via Composio direct connections (IG + YT) · Section 9 (YouTube Shorts enumeration) committed to <a href="https://github.com/Graehamwatts/skills/commit/abee0a06a11bf8f3f1ead91b33761c0c07ca993b">Graehamwatts/skills @ abee0a0</a> earlier this session.</p>
+  </div>
+</div>
+
+</body>
+</html>
