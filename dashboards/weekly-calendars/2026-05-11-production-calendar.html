@@ -126,6 +126,13 @@ h1,h2,h3,h4{font-family:'Plus Jakarta Sans',sans-serif;letter-spacing:-0.02em;co
 
 /* Footer */
 .footer{background:var(--navy);color:#cdd6e1;padding:24px 0;font-size:13px;margin-top:32px;}.footer a{color:var(--gold);text-decoration:none;}
+
+.chart-controls-group{display:flex;gap:8px;flex-wrap:wrap;align-items:center;margin-bottom:10px;}
+.chart-label{font-size:11px;font-weight:800;color:var(--navy);letter-spacing:0.5px;text-transform:uppercase;margin-right:4px;min-width:60px;}
+.chan-btn[data-chan="ig"]{border-color:#B8860B;}.chan-btn[data-chan="ig"].active{background:#B8860B;color:#fff;}
+.chan-btn[data-chan="yt"]{border-color:#dc2626;}.chan-btn[data-chan="yt"].active{background:#dc2626;color:#fff;}
+.chan-btn[data-chan="both"]{border-color:#1B2A4A;}.chan-btn[data-chan="both"].active{background:#1B2A4A;color:#fff;}
+.met-btn.active,.per-btn.active{background:var(--navy);color:#fff;border-color:var(--navy);}
 </style></head>
 <body>
 <header class="hero"><div class="container">
@@ -137,7 +144,45 @@ h1,h2,h3,h4{font-family:'Plus Jakarta Sans',sans-serif;letter-spacing:-0.02em;co
 <span class="chip-meta">REALTOR &middot; Intero Real Estate</span>
 <span class="chip-meta">Lead-Gen 20/30/50</span>
 </div>
-</div></header><div class="audience-wrap"><div class="container"><div class="audience-nav"><button class="aud-btn aud-research" onclick="setView('research')"><div class="aud-icon">&#128300;</div><div class="aud-label">Research</div><div class="aud-sub">Sources, performance, charts, citations</div></button><button class="aud-btn aud-diagram" onclick="setView('diagram')"><div class="aud-icon">&#128202;</div><div class="aud-label">Diagram</div><div class="aud-sub">10-step pipeline + data interlay</div></button><button class="aud-btn aud-calendar" onclick="setView('calendar')"><div class="aud-icon">&#128197;</div><div class="aud-label">Calendar</div><div class="aud-sub">Week-of grid &middot; click a day</div></button><button class="aud-btn aud-video" onclick="setView('video')"><div class="aud-icon">&#127909;</div><div class="aud-label">Video Content</div><div class="aud-sub">Per-topic with copy-to-Claude buttons</div></button><button class="aud-btn aud-blog" onclick="setView('blog')"><div class="aud-icon">&#128221;</div><div class="aud-label">Blog Content</div><div class="aud-sub">Per-topic with copy-to-Claude buttons</div></button></div><div class="view-banner" id="viewBanner"><strong id="viewBannerLabel">Showing: Calendar</strong> &middot; <a href="#" onclick="setView('all');return false;" style="color:#1B2A4A;text-decoration:underline;">Show everything</a></div></div></div><div class="container"><div class="banner"><strong>v7.3 Run Note &mdash;</strong> Phase 3 (Apify Reddit scrape) blocked at Cowork sandbox firewall (api.apify.com not on allowlist; token valid). Pivoted to WebSearch + live Composio YT/IG analytics. Source confirmation &ge; 3 platforms per topic.</div></div><div class="section" data-audience="research all"><div class="container"><h2>Research &mdash; Live Data Layer</h2><p class="lede">Every source probed this run. Green = live, red = blocked.</p><div class="src-grid"><div class="src-card src-live"><div class="src-name">&#9989; Composio YouTube</div><div class="src-note">youtube_manor-maki ACTIVE &middot; 1,750 subs / 645 vids / 914,250 views pulled live.</div></div><div class="src-card src-live"><div class="src-name">&#9989; Composio Instagram</div><div class="src-note">instagram_carton-palama ACTIVE &middot; 1,269 followers / 1,093 posts &middot; 89 days reach data pulled.</div></div><div class="src-card src-live"><div class="src-name">&#9989; WebSearch (Google PAA)</div><div class="src-note">6 parallel queries &middot; 10 source citations.</div></div><div class="src-card src-blocked"><div class="src-name">&#10060; Apify Reddit Scrape</div><div class="src-note">Token valid, api.apify.com HTTP 000 from Cowork proxy.</div></div><div class="src-card src-live"><div class="src-name">&#9989; topic-history.json</div><div class="src-note">1 prior topic in 4-week window &middot; pricing-strategy blocked.</div></div><div class="src-card src-live"><div class="src-name">&#9989; GitHub Contents API</div><div class="src-note">github.com reachable &middot; Composio + Contents API for pushes.</div></div></div><h2 style="margin-top:32px;">Performance Signal &mdash; What&rsquo;s Actually Working</h2><p class="lede">Pulled live this run via Composio. Daily IG reach for last 30 days + weekly aggregation for full 13-week window.</p><div class="chart-wrap"><h3>&#128200; IG Reach Over Time (live data)</h3><div class="chart-controls"><button class="chart-btn active" onclick="setChartPeriod('daily30')">Last 30 days</button><button class="chart-btn" onclick="setChartPeriod('weekly')">Last 13 weeks</button></div><div class="chart-canvas-wrap"><canvas id="reachChart"></canvas></div><p style="font-size:12px;color:var(--muted);margin:8px 0 0;">Peak reach: week of Apr 20 (W17) at 4,571. This week so far (W20): 251. Decline aligns with the May calendar shifting more BOFU-heavy + less lifestyle/discovery content. Friday TOFU (Peninsula tour) is corrective.</p></div><div class="perf-grid"><div class="perf-card"><h3>&#127909; YouTube Channel Snapshot</h3><table><tr><th>Subscribers</th><td class="num">1,750</td></tr><tr><th>Total videos</th><td class="num">645</td></tr><tr><th>Lifetime views</th><td class="num">914,250</td></tr><tr><th>Joined</th><td>2008-06-10</td></tr><tr><th>Newest upload</th><td>May 14 &mdash; $347B Homes Sitting Unsold</td></tr><tr><th>Section 9 filter</th><td>Deferred this run (next Monday)</td></tr></table></div><div class="perf-card"><h3>&#128247; IG Top 5 (last 20 posts)</h3><div class="ig-thumb-row"><a href="https://www.instagram.com/reel/DXPuASugkgy/" target="_blank"><img src="https://scontent-iad3-2.cdninstagram.com/v/t51.82787-15/673002086_18177224140387757_5657081034335944443_n.jpg?stp=dst-jpg_e35_tt6&_nc_cat=103&ccb=7-5&_nc_sid=18de74&_nc_ohc=3DoPqx9GsVIQ7kNvwGUYgGh&_nc_zt=23&oh=00_Af4DFgpxiu2WD_JXyV22Lx55HVuZnidUJKKpwbKLII5F_w&oe=6A0BEDE7" alt="" onerror="this.style.display='none'"/></a><div><strong>#1 2026-04-17 &middot; 33 eng</strong> (25&hearts; / 8 comments)<br><span style="font-size:11.5px;color:#718096;">SF construction project announcement</span></div></div><div class="ig-thumb-row"><a href="https://www.instagram.com/reel/DXiU_A_E1zx/" target="_blank"><img src="https://scontent-iad3-1.cdninstagram.com/v/t51.82787-15/673074435_18178004113387757_2973386147584233465_n.jpg?stp=dst-jpg_e35_tt6&_nc_cat=101&_nc_ohc=Nqupzv9IPxUQ7kNvwGcU3wZ&oh=00_Af6QHjSLgn1rB9wP_DVTtpJNyKbjemb8bmVqnz9k7_iwmw&oe=6A0C1C40" alt="" onerror="this.style.display='none'"/></a><div><strong>#2 2026-04-25 &middot; 21 eng</strong> (17&hearts; / 4 comments)<br><span style="font-size:11.5px;color:#718096;">SF break up with PG&amp;E after 120 years</span></div></div><div class="ig-thumb-row"><a href="https://www.instagram.com/reel/DX-qIY9jn6w/" target="_blank"><img src="https://scontent-iad6-1.cdninstagram.com/v/t51.82787-15/684579097_18179128486387757_248328325003261499_n.jpg?stp=dst-jpg_e35_tt6&_nc_cat=100&oh=00_Af6QUL-vslsCYqPot8zh0CdtFot-T8N-0aLdAS_Xwd61hA&oe=6A0C1730" alt="" onerror="this.style.display='none'"/></a><div><strong>#3 2026-05-06 &middot; 13 eng</strong> (10&hearts; / 3 comments)<br><span style="font-size:11.5px;color:#718096;">San Mateo hidden speakeasy</span></div></div><div class="ig-thumb-row"><a href="https://www.instagram.com/reel/DYDcDe7DDlR/" target="_blank"><img src="https://scontent-iad6-1.cdninstagram.com/v/t51.82787-15/696180573_18179318251387757_5192708506355899410_n.jpg?stp=dst-jpg_e35_tt6&_nc_cat=109&oh=00_AfXXX&oe=6A0C0000" alt="" onerror="this.style.display='none'"/></a><div><strong>#4 2026-05-07 &middot; 8 eng</strong> (6&hearts; / 2 comments)<br><span style="font-size:11.5px;color:#718096;">Apple Studios Half Moon Bay shoot</span></div></div><div class="ig-thumb-row"><a href="https://www.instagram.com/reel/DXNXXXX/" target="_blank"><img src="https://scontent-iad3-2.cdninstagram.com/v/t51.82787-15/670646289_18177125221387757_XXXXX.jpg" alt="" onerror="this.style.display='none'"/></a><div><strong>#5 2026-04-16 &middot; 6 eng</strong> (6&hearts; / 0 comments)<br><span style="font-size:11.5px;color:#718096;">Housing market reset (not a crash)</span></div></div><p style="font-size:11.5px;color:var(--muted);margin:10px 0 0;"><strong>Finding:</strong> Lifestyle / discovery hooks (SF construction 33, PG&amp;E 21, Speakeasy 13) beat RE-direct (housing reset 6) by 3-5x.</p></div></div><h2 style="margin-top:32px;">Freshness Constraints + Citations</h2>
+</div></header><div class="audience-wrap"><div class="container"><div class="audience-nav"><button class="aud-btn aud-research" onclick="setView('research')"><div class="aud-icon">&#128300;</div><div class="aud-label">Research</div><div class="aud-sub">Sources, performance, charts, citations</div></button><button class="aud-btn aud-diagram" onclick="setView('diagram')"><div class="aud-icon">&#128202;</div><div class="aud-label">Diagram</div><div class="aud-sub">10-step pipeline + data interlay</div></button><button class="aud-btn aud-calendar" onclick="setView('calendar')"><div class="aud-icon">&#128197;</div><div class="aud-label">Calendar</div><div class="aud-sub">Week-of grid &middot; click a day</div></button><button class="aud-btn aud-video" onclick="setView('video')"><div class="aud-icon">&#127909;</div><div class="aud-label">Video Content</div><div class="aud-sub">Per-topic with copy-to-Claude buttons</div></button><button class="aud-btn aud-blog" onclick="setView('blog')"><div class="aud-icon">&#128221;</div><div class="aud-label">Blog Content</div><div class="aud-sub">Per-topic with copy-to-Claude buttons</div></button></div><div class="view-banner" id="viewBanner"><strong id="viewBannerLabel">Showing: Calendar</strong> &middot; <a href="#" onclick="setView('all');return false;" style="color:#1B2A4A;text-decoration:underline;">Show everything</a></div></div></div><div class="container"><div class="banner"><strong>v7.3 Run Note &mdash;</strong> Phase 3 (Apify Reddit scrape) blocked at Cowork sandbox firewall (api.apify.com not on allowlist; token valid). Pivoted to WebSearch + live Composio YT/IG analytics. Source confirmation &ge; 3 platforms per topic.</div></div><div class="section" data-audience="research all"><div class="container"><h2>Research &mdash; Live Data Layer</h2><p class="lede">Every source probed this run. Green = live, red = blocked.</p><div class="src-grid"><div class="src-card src-live"><div class="src-name">&#9989; Composio YouTube</div><div class="src-note">youtube_manor-maki ACTIVE &middot; 1,750 subs / 645 vids / 914,250 views pulled live.</div></div><div class="src-card src-live"><div class="src-name">&#9989; Composio Instagram</div><div class="src-note">instagram_carton-palama ACTIVE &middot; 1,269 followers / 1,093 posts &middot; 89 days reach data pulled.</div></div><div class="src-card src-live"><div class="src-name">&#9989; WebSearch (Google PAA)</div><div class="src-note">6 parallel queries &middot; 10 source citations.</div></div><div class="src-card src-blocked"><div class="src-name">&#10060; Apify Reddit Scrape</div><div class="src-note">Token valid, api.apify.com HTTP 000 from Cowork proxy.</div></div><div class="src-card src-live"><div class="src-name">&#9989; topic-history.json</div><div class="src-note">1 prior topic in 4-week window &middot; pricing-strategy blocked.</div></div><div class="src-card src-live"><div class="src-name">&#9989; GitHub Contents API</div><div class="src-note">github.com reachable &middot; Composio + Contents API for pushes.</div></div></div><h2 style="margin-top:32px;">Performance Signal &mdash; What&rsquo;s Actually Working</h2>
+<p class="lede">Live data from Composio YT + IG. Use the toggles to flip channel, metric, and period -- chart redraws instantly.</p>
+
+<div class="chart-wrap"><h3>&#128200; Engagement Over Time (live data)</h3>
+
+<div class="chart-controls-group"><span class="chart-label">Channel:</span>
+<button class="chart-btn chan-btn active" data-chan="ig" onclick="setChan('ig')">&#128247; Instagram</button>
+<button class="chart-btn chan-btn" data-chan="yt" onclick="setChan('yt')">&#127909; YouTube</button>
+<button class="chart-btn chan-btn" data-chan="both" onclick="setChan('both')">&#128279; Both</button>
+</div>
+
+<div class="chart-controls-group"><span class="chart-label">Metric:</span>
+<button class="chart-btn met-btn active" data-met="primary" onclick="setMet('primary')" id="metPrimary">Reach</button>
+<button class="chart-btn met-btn" data-met="likes" onclick="setMet('likes')">Likes</button>
+<button class="chart-btn met-btn" data-met="comments" onclick="setMet('comments')">Comments</button>
+<button class="chart-btn met-btn" data-met="posts" onclick="setMet('posts')" id="metPosts" style="display:none;">Posts/day</button>
+</div>
+
+<div class="chart-controls-group"><span class="chart-label">Period:</span>
+<button class="chart-btn per-btn" data-per="7d" onclick="setPer('7d')">Last 7 days</button>
+<button class="chart-btn per-btn active" data-per="30d" onclick="setPer('30d')">Last 30 days</button>
+<button class="chart-btn per-btn" data-per="90d" onclick="setPer('90d')">Last 90 days</button>
+<button class="chart-btn per-btn" data-per="all" onclick="setPer('all')">All available</button>
+</div>
+
+<div class="chart-canvas-wrap" style="height:340px;"><canvas id="reachChart"></canvas></div>
+<p style="font-size:12px;color:var(--muted);margin:8px 0 0;" id="chartFooter">IG Reach &middot; Last 30 days &middot; Click any toggle above to flip view.</p>
+</div>
+
+<div class="perf-grid">
+<div class="perf-card"><h3>&#127909; YouTube Top 5 (last 99 videos)</h3>
+<table><thead><tr><th>#</th><th>Date</th><th>Title</th><th>Views</th><th>Fmt</th></tr></thead><tbody><tr><td>1</td><td>12-19</td><td style="font-size:11.5px;">Home Prices Are Cooling in Some Cities</td><td class="num">1,908</td><td><span style="background:#dc2626;color:#fff;padding:1px 6px;border-radius:4px;font-size:10px;font-weight:700;">SHORT</span></td></tr><tr><td>2</td><td>04-10</td><td style="font-size:11.5px;">The richest city in America (Atherton)</td><td class="num">1,832</td><td><span style="background:#6a1b9a;color:#fff;padding:1px 6px;border-radius:4px;font-size:10px;font-weight:700;">LONG</span></td></tr><tr><td>3</td><td>03-19</td><td style="font-size:11.5px;">Bay Area Duplex Hidden Investment Gem</td><td class="num">1,759</td><td><span style="background:#dc2626;color:#fff;padding:1px 6px;border-radius:4px;font-size:10px;font-weight:700;">SHORT</span></td></tr><tr><td>4</td><td>11-19</td><td style="font-size:11.5px;">Brightline West Rail Delay (CA to Vegas)</td><td class="num">1,586</td><td><span style="background:#dc2626;color:#fff;padding:1px 6px;border-radius:4px;font-size:10px;font-weight:700;">SHORT</span></td></tr><tr><td>5</td><td>02-06</td><td style="font-size:11.5px;">Why Helicopters Were Scanning SF for Radiation</td><td class="num">1,389</td><td><span style="background:#dc2626;color:#fff;padding:1px 6px;border-radius:4px;font-size:10px;font-weight:700;">SHORT</span></td></tr></tbody></table>
+<p style="font-size:11px;color:var(--muted);margin:8px 0 0;"><strong>75 Shorts</strong>: mean 443 views, median 226, top 1,908 &middot; <strong>24 Long-form</strong>: mean 276, median <strong style="color:#dc2626;">32</strong>, top 1,832<br><strong>Critical finding:</strong> Long-form median 32 views vs Shorts median 226 = <strong>Shorts crush long-form 7x</strong>. The one long-form outlier (Atherton "richest city") was lifestyle wrapper, not RE-direct.</p>
+</div>
+
+<div class="perf-card"><h3>&#128247; IG Top 5 (last 20 posts)</h3><div class="ig-thumb-row"><a href="https://www.instagram.com/reel/DXPuASugkgy/" target="_blank"><img src="https://scontent-iad3-2.cdninstagram.com/v/t51.82787-15/673002086_18177224140387757_5657081034335944443_n.jpg?stp=dst-jpg_e35_tt6&_nc_cat=103&ccb=7-5&_nc_sid=18de74&_nc_ohc=3DoPqx9GsVIQ7kNvwGUYgGh&_nc_zt=23&oh=00_Af4DFgpxiu2WD_JXyV22Lx55HVuZnidUJKKpwbKLII5F_w&oe=6A0BEDE7" alt="" onerror="this.style.display='none'"/></a><div><strong>#1 2026-04-17 &middot; 33 eng</strong> (25&hearts; / 8 comments)<br><span style="font-size:11.5px;color:#718096;">SF construction project announcement</span></div></div><div class="ig-thumb-row"><a href="https://www.instagram.com/reel/DXiU_A_E1zx/" target="_blank"><img src="https://scontent-iad3-1.cdninstagram.com/v/t51.82787-15/673074435_18178004113387757_2973386147584233465_n.jpg?stp=dst-jpg_e35_tt6&_nc_cat=101&_nc_ohc=Nqupzv9IPxUQ7kNvwGcU3wZ&oh=00_Af6QHjSLgn1rB9wP_DVTtpJNyKbjemb8bmVqnz9k7_iwmw&oe=6A0C1C40" alt="" onerror="this.style.display='none'"/></a><div><strong>#2 2026-04-25 &middot; 21 eng</strong> (17&hearts; / 4 comments)<br><span style="font-size:11.5px;color:#718096;">SF break up with PG&amp;E after 120 years</span></div></div><div class="ig-thumb-row"><a href="https://www.instagram.com/reel/DX-qIY9jn6w/" target="_blank"><img src="https://scontent-iad6-1.cdninstagram.com/v/t51.82787-15/684579097_18179128486387757_248328325003261499_n.jpg?stp=dst-jpg_e35_tt6&_nc_cat=100&oh=00_Af6QUL-vslsCYqPot8zh0CdtFot-T8N-0aLdAS_Xwd61hA&oe=6A0C1730" alt="" onerror="this.style.display='none'"/></a><div><strong>#3 2026-05-06 &middot; 13 eng</strong> (10&hearts; / 3 comments)<br><span style="font-size:11.5px;color:#718096;">San Mateo hidden speakeasy</span></div></div><div class="ig-thumb-row"><a href="https://www.instagram.com/reel/DYDcDe7DDlR/" target="_blank"><img src="https://scontent-iad6-1.cdninstagram.com/v/t51.82787-15/696180573_18179318251387757_5192708506355899410_n.jpg?stp=dst-jpg_e35_tt6&_nc_cat=109&oh=00_AfXXX&oe=6A0C0000" alt="" onerror="this.style.display='none'"/></a><div><strong>#4 2026-05-07 &middot; 8 eng</strong> (6&hearts; / 2 comments)<br><span style="font-size:11.5px;color:#718096;">Apple Studios Half Moon Bay shoot</span></div></div><div class="ig-thumb-row"><a href="https://www.instagram.com/reel/DXNXXXX/" target="_blank"><img src="https://scontent-iad3-2.cdninstagram.com/v/t51.82787-15/670646289_18177125221387757_XXXXX.jpg" alt="" onerror="this.style.display='none'"/></a><div><strong>#5 2026-04-16 &middot; 6 eng</strong> (6&hearts; / 0 comments)<br><span style="font-size:11.5px;color:#718096;">Housing market reset (not a crash)</span></div></div><p style="font-size:11.5px;color:var(--muted);margin:10px 0 0;"><strong>Finding:</strong> Lifestyle/discovery hooks (SF construction 33, PG&amp;E 21) beat RE-direct (housing reset 6) by 3-5x on IG, mirroring the YT Shorts pattern.</p></div>
+</div>
+
+<h2 style="margin-top:32px;">Freshness Constraints + Citations</h2>
 <div style="background:var(--card);padding:18px 22px;border-radius:8px;border:1px solid #e8eaed;margin-bottom:14px;">
 <div class="kv-row"><strong>Blocked angles (last 2 weeks):</strong> <code>pricing-strategy</code></div>
 <div class="kv-row"><strong>Boosted pillars (0 recent):</strong> 1, 2, 3, 5, 6, 7, 8, 9</div>
@@ -362,12 +407,174 @@ function copyData(topicId,kind,btn){var data=COPY_DATA[topicId];if(!data){return
 document.addEventListener('keydown',function(e){if(e.key==='Escape'&&!document.getElementById('modal-backdrop').hasAttribute('hidden')){closeModal();}});
 document.addEventListener('click',function(e){if(e.target.id==='modal-backdrop')closeModal();});
 
-// === CHART.JS ===
-const DAILY_DATA=[{"d": "04-14", "v": 726}, {"d": "04-15", "v": 657}, {"d": "04-16", "v": 650}, {"d": "04-17", "v": 631}, {"d": "04-18", "v": 721}, {"d": "04-19", "v": 726}, {"d": "04-20", "v": 320}, {"d": "04-21", "v": 426}, {"d": "04-22", "v": 1061}, {"d": "04-23", "v": 710}, {"d": "04-24", "v": 604}, {"d": "04-25", "v": 838}, {"d": "04-26", "v": 612}, {"d": "04-27", "v": 539}, {"d": "04-28", "v": 511}, {"d": "04-29", "v": 324}, {"d": "04-30", "v": 156}, {"d": "05-01", "v": 145}, {"d": "05-02", "v": 132}, {"d": "05-03", "v": 99}, {"d": "05-04", "v": 214}, {"d": "05-05", "v": 255}, {"d": "05-06", "v": 162}, {"d": "05-07", "v": 229}, {"d": "05-08", "v": 202}, {"d": "05-09", "v": 95}, {"d": "05-10", "v": 99}, {"d": "05-11", "v": 49}, {"d": "05-12", "v": 145}, {"d": "05-13", "v": 57}];
-const WEEKLY_DATA=[{"w": "W07", "label": "Feb 9", "v": 348}, {"w": "W08", "label": "Feb 16", "v": 695}, {"w": "W09", "label": "Feb 23", "v": 373}, {"w": "W10", "label": "Mar 2", "v": 298}, {"w": "W11", "label": "Mar 9", "v": 1020}, {"w": "W12", "label": "Mar 16", "v": 767}, {"w": "W13", "label": "Mar 23", "v": 3024}, {"w": "W14", "label": "Mar 30", "v": 794}, {"w": "W15", "label": "Apr 6", "v": 2290}, {"w": "W16", "label": "Apr 13", "v": 4399}, {"w": "W17", "label": "Apr 20", "v": 4571}, {"w": "W18", "label": "Apr 27", "v": 1906}, {"w": "W19", "label": "May 4", "v": 1256}, {"w": "W20", "label": "May 11", "v": 251}];
-let chartInstance=null;let currentPeriod='daily30';
-function initChart(){if(chartInstance)return;var ctx=document.getElementById('reachChart');if(!ctx)return;renderChart('daily30');}
-function setChartPeriod(p){currentPeriod=p;document.querySelectorAll('.chart-btn').forEach(function(b){b.classList.remove('active');});event.target.classList.add('active');renderChart(p);}
-function renderChart(period){var ctx=document.getElementById('reachChart');if(!ctx)return;if(chartInstance){chartInstance.destroy();}var labels,values;if(period==='daily30'){labels=DAILY_DATA.map(function(p){return p.d;});values=DAILY_DATA.map(function(p){return p.v;});}else{labels=WEEKLY_DATA.map(function(p){return p.label;});values=WEEKLY_DATA.map(function(p){return p.v;});}chartInstance=new Chart(ctx,{type:'line',data:{labels:labels,datasets:[{label:'IG Reach',data:values,borderColor:'#B8860B',backgroundColor:'rgba(184,134,11,0.15)',tension:0.3,fill:true,pointRadius:3,pointHoverRadius:6}]},options:{responsive:true,maintainAspectRatio:false,plugins:{legend:{display:false},tooltip:{backgroundColor:'#1B2A4A',titleColor:'#fff',bodyColor:'#fff'}},scales:{y:{beginAtZero:true,grid:{color:'#edf2f7'}},x:{grid:{display:false},ticks:{maxRotation:45,minRotation:0}}}}});}
+// === INTERACTIVE CHART v5 ===
+const IG_DAILY = [{"d": "04-14", "v": 726}, {"d": "04-15", "v": 657}, {"d": "04-16", "v": 650}, {"d": "04-17", "v": 631}, {"d": "04-18", "v": 721}, {"d": "04-19", "v": 726}, {"d": "04-20", "v": 320}, {"d": "04-21", "v": 426}, {"d": "04-22", "v": 1061}, {"d": "04-23", "v": 710}, {"d": "04-24", "v": 604}, {"d": "04-25", "v": 838}, {"d": "04-26", "v": 612}, {"d": "04-27", "v": 539}, {"d": "04-28", "v": 511}, {"d": "04-29", "v": 324}, {"d": "04-30", "v": 156}, {"d": "05-01", "v": 145}, {"d": "05-02", "v": 132}, {"d": "05-03", "v": 99}, {"d": "05-04", "v": 214}, {"d": "05-05", "v": 255}, {"d": "05-06", "v": 162}, {"d": "05-07", "v": 229}, {"d": "05-08", "v": 202}, {"d": "05-09", "v": 95}, {"d": "05-10", "v": 99}, {"d": "05-11", "v": 49}, {"d": "05-12", "v": 145}, {"d": "05-13", "v": 57}];
+const IG_WEEKLY = [{"w": "W07", "label": "Feb 9", "v": 348}, {"w": "W08", "label": "Feb 16", "v": 695}, {"w": "W09", "label": "Feb 23", "v": 373}, {"w": "W10", "label": "Mar 2", "v": 298}, {"w": "W11", "label": "Mar 9", "v": 1020}, {"w": "W12", "label": "Mar 16", "v": 767}, {"w": "W13", "label": "Mar 23", "v": 3024}, {"w": "W14", "label": "Mar 30", "v": 794}, {"w": "W15", "label": "Apr 6", "v": 2290}, {"w": "W16", "label": "Apr 13", "v": 4399}, {"w": "W17", "label": "Apr 20", "v": 4571}, {"w": "W18", "label": "Apr 27", "v": 1906}, {"w": "W19", "label": "May 4", "v": 1256}, {"w": "W20", "label": "May 11", "v": 251}];
+const YT_DAILY = [{"d": "2025-11-18", "views": 842, "likes": 12, "comments": 0}, {"d": "2025-11-19", "views": 1586, "likes": 16, "comments": 11}, {"d": "2025-11-20", "views": 62, "likes": 0, "comments": 0}, {"d": "2025-11-21", "views": 1258, "likes": 10, "comments": 0}, {"d": "2025-11-25", "views": 738, "likes": 12, "comments": 0}, {"d": "2025-11-29", "views": 16, "likes": 1, "comments": 0}, {"d": "2025-12-02", "views": 117, "likes": 0, "comments": 0}, {"d": "2025-12-03", "views": 264, "likes": 1, "comments": 0}, {"d": "2025-12-04", "views": 93, "likes": 1, "comments": 0}, {"d": "2025-12-08", "views": 23, "likes": 0, "comments": 0}, {"d": "2025-12-10", "views": 137, "likes": 0, "comments": 0}, {"d": "2025-12-11", "views": 479, "likes": 1, "comments": 0}, {"d": "2025-12-12", "views": 111, "likes": 1, "comments": 0}, {"d": "2025-12-17", "views": 250, "likes": 3, "comments": 1}, {"d": "2025-12-19", "views": 1908, "likes": 2, "comments": 0}, {"d": "2025-12-20", "views": 407, "likes": 1, "comments": 0}, {"d": "2025-12-23", "views": 1126, "likes": 19, "comments": 1}, {"d": "2025-12-25", "views": 39, "likes": 1, "comments": 1}, {"d": "2026-01-06", "views": 913, "likes": 3, "comments": 0}, {"d": "2026-01-08", "views": 851, "likes": 6, "comments": 2}, {"d": "2026-01-10", "views": 9, "likes": 0, "comments": 0}, {"d": "2026-01-12", "views": 133, "likes": 2, "comments": 0}, {"d": "2026-01-13", "views": 865, "likes": 6, "comments": 1}, {"d": "2026-01-15", "views": 89, "likes": 0, "comments": 0}, {"d": "2026-01-16", "views": 273, "likes": 0, "comments": 0}, {"d": "2026-01-17", "views": 905, "likes": 18, "comments": 0}, {"d": "2026-01-19", "views": 128, "likes": 1, "comments": 0}, {"d": "2026-01-20", "views": 136, "likes": 3, "comments": 0}, {"d": "2026-01-23", "views": 1013, "likes": 5, "comments": 0}, {"d": "2026-01-27", "views": 257, "likes": 1, "comments": 0}, {"d": "2026-01-28", "views": 548, "likes": 0, "comments": 0}, {"d": "2026-01-29", "views": 128, "likes": 1, "comments": 0}, {"d": "2026-01-31", "views": 805, "likes": 14, "comments": 0}, {"d": "2026-02-02", "views": 22, "likes": 1, "comments": 1}, {"d": "2026-02-04", "views": 904, "likes": 16, "comments": 0}, {"d": "2026-02-05", "views": 15, "likes": 0, "comments": 0}, {"d": "2026-02-06", "views": 1389, "likes": 26, "comments": 2}, {"d": "2026-02-07", "views": 1003, "likes": 9, "comments": 0}, {"d": "2026-02-08", "views": 809, "likes": 13, "comments": 1}, {"d": "2026-02-09", "views": 870, "likes": 8, "comments": 2}, {"d": "2026-02-14", "views": 71, "likes": 0, "comments": 0}, {"d": "2026-02-15", "views": 518, "likes": 4, "comments": 0}, {"d": "2026-02-16", "views": 5, "likes": 0, "comments": 0}, {"d": "2026-02-17", "views": 809, "likes": 5, "comments": 0}, {"d": "2026-02-21", "views": 146, "likes": 0, "comments": 0}, {"d": "2026-03-03", "views": 62, "likes": 1, "comments": 0}, {"d": "2026-03-12", "views": 465, "likes": 1, "comments": 0}, {"d": "2026-03-13", "views": 998, "likes": 6, "comments": 0}, {"d": "2026-03-14", "views": 1023, "likes": 6, "comments": 0}, {"d": "2026-03-19", "views": 1759, "likes": 2, "comments": 0}, {"d": "2026-03-24", "views": 900, "likes": 13, "comments": 1}, {"d": "2026-04-01", "views": 1973, "likes": 7, "comments": 2}, {"d": "2026-04-03", "views": 786, "likes": 6, "comments": 0}, {"d": "2026-04-06", "views": 348, "likes": 5, "comments": 0}, {"d": "2026-04-07", "views": 259, "likes": 1, "comments": 0}, {"d": "2026-04-09", "views": 152, "likes": 1, "comments": 0}, {"d": "2026-04-10", "views": 2028, "likes": 19, "comments": 0}, {"d": "2026-04-13", "views": 353, "likes": 3, "comments": 0}, {"d": "2026-04-14", "views": 330, "likes": 9, "comments": 1}, {"d": "2026-04-16", "views": 30, "likes": 0, "comments": 0}, {"d": "2026-04-17", "views": 145, "likes": 0, "comments": 0}, {"d": "2026-04-21", "views": 79, "likes": 1, "comments": 0}, {"d": "2026-04-22", "views": 978, "likes": 25, "comments": 1}, {"d": "2026-04-23", "views": 200, "likes": 1, "comments": 0}, {"d": "2026-04-25", "views": 12, "likes": 0, "comments": 0}, {"d": "2026-04-27", "views": 103, "likes": 1, "comments": 0}, {"d": "2026-04-29", "views": 558, "likes": 4, "comments": 0}, {"d": "2026-05-01", "views": 143, "likes": 1, "comments": 0}, {"d": "2026-05-02", "views": 520, "likes": 11, "comments": 0}, {"d": "2026-05-05", "views": 308, "likes": 11, "comments": 0}, {"d": "2026-05-07", "views": 900, "likes": 31, "comments": 1}, {"d": "2026-05-08", "views": 909, "likes": 15, "comments": 0}, {"d": "2026-05-12", "views": 112, "likes": 2, "comments": 0}, {"d": "2026-05-14", "views": 328, "likes": 2, "comments": 0}];
+const YT_WEEKLY = [{"w": "2025-W47", "views": 3748, "likes": 38, "comments": 11, "count": 5, "shorts": 4, "longs": 1}, {"w": "2025-W48", "views": 754, "likes": 13, "comments": 0, "count": 5, "shorts": 1, "longs": 4}, {"w": "2025-W49", "views": 474, "likes": 2, "comments": 0, "count": 4, "shorts": 2, "longs": 2}, {"w": "2025-W50", "views": 750, "likes": 2, "comments": 0, "count": 4, "shorts": 2, "longs": 2}, {"w": "2025-W51", "views": 2565, "likes": 6, "comments": 1, "count": 4, "shorts": 4, "longs": 0}, {"w": "2025-W52", "views": 1165, "likes": 20, "comments": 2, "count": 4, "shorts": 4, "longs": 0}, {"w": "2026-W02", "views": 1773, "likes": 9, "comments": 2, "count": 3, "shorts": 2, "longs": 1}, {"w": "2026-W03", "views": 2265, "likes": 26, "comments": 1, "count": 6, "shorts": 3, "longs": 3}, {"w": "2026-W04", "views": 1277, "likes": 9, "comments": 0, "count": 4, "shorts": 2, "longs": 2}, {"w": "2026-W05", "views": 1738, "likes": 16, "comments": 0, "count": 7, "shorts": 6, "longs": 1}, {"w": "2026-W06", "views": 4142, "likes": 65, "comments": 4, "count": 6, "shorts": 5, "longs": 1}, {"w": "2026-W07", "views": 1459, "likes": 12, "comments": 2, "count": 3, "shorts": 3, "longs": 0}, {"w": "2026-W08", "views": 960, "likes": 5, "comments": 0, "count": 3, "shorts": 3, "longs": 0}, {"w": "2026-W10", "views": 62, "likes": 1, "comments": 0, "count": 1, "shorts": 1, "longs": 0}, {"w": "2026-W11", "views": 2486, "likes": 13, "comments": 0, "count": 4, "shorts": 3, "longs": 1}, {"w": "2026-W12", "views": 1759, "likes": 2, "comments": 0, "count": 1, "shorts": 1, "longs": 0}, {"w": "2026-W13", "views": 900, "likes": 13, "comments": 1, "count": 3, "shorts": 1, "longs": 2}, {"w": "2026-W14", "views": 2759, "likes": 13, "comments": 2, "count": 3, "shorts": 3, "longs": 0}, {"w": "2026-W15", "views": 2787, "likes": 26, "comments": 0, "count": 5, "shorts": 4, "longs": 1}, {"w": "2026-W16", "views": 858, "likes": 12, "comments": 1, "count": 5, "shorts": 5, "longs": 0}, {"w": "2026-W17", "views": 1269, "likes": 27, "comments": 1, "count": 5, "shorts": 5, "longs": 0}, {"w": "2026-W18", "views": 1324, "likes": 17, "comments": 0, "count": 8, "shorts": 6, "longs": 2}, {"w": "2026-W19", "views": 2117, "likes": 57, "comments": 1, "count": 3, "shorts": 3, "longs": 0}, {"w": "2026-W20", "views": 440, "likes": 4, "comments": 0, "count": 3, "shorts": 2, "longs": 1}];
+
+let chartInstance = null;
+let cur = {chan: 'ig', met: 'primary', per: '30d'};
+
+function metricLabel(chan, met) {
+  if (met === 'primary') return chan === 'ig' ? 'Reach' : 'Views';
+  if (met === 'likes') return 'Likes';
+  if (met === 'comments') return 'Comments';
+  if (met === 'posts') return 'Posts/day';
+  return met;
+}
+
+function getDailyValue(point, chan, met) {
+  if (chan === 'ig') {
+    if (met === 'primary') return point.v;
+    return 0; // IG doesn't have daily likes/comments from this pull
+  }
+  if (chan === 'yt') {
+    if (met === 'primary') return point.views || 0;
+    if (met === 'likes') return point.likes || 0;
+    if (met === 'comments') return point.comments || 0;
+    if (met === 'posts') return 1;
+  }
+  return 0;
+}
+
+function getWeeklyValue(point, chan, met) {
+  if (chan === 'ig') {
+    if (met === 'primary') return point.v;
+    return 0;
+  }
+  if (chan === 'yt') {
+    if (met === 'primary') return point.views || 0;
+    if (met === 'likes') return point.likes || 0;
+    if (met === 'comments') return point.comments || 0;
+    if (met === 'posts') return point.count || 0;
+  }
+  return 0;
+}
+
+function filterDailyByPeriod(arr, per) {
+  if (per === 'all') return arr;
+  const days = per === '7d' ? 7 : per === '30d' ? 30 : 90;
+  return arr.slice(-days);
+}
+
+function filterWeeklyByPeriod(arr, per) {
+  if (per === 'all') return arr;
+  const weeks = per === '7d' ? 1 : per === '30d' ? 5 : 13;
+  return arr.slice(-weeks);
+}
+
+function buildDataset(chan, met, per, useDaily) {
+  let labels = [], values = [];
+  
+  if (chan === 'ig' || chan === 'both') {
+    const arr = useDaily ? filterDailyByPeriod(IG_DAILY, per) : filterWeeklyByPeriod(IG_WEEKLY, per);
+    const igVals = arr.map(p => useDaily ? getDailyValue(p, 'ig', met) : getWeeklyValue(p, 'ig', met));
+    const igLabels = arr.map(p => useDaily ? p.d.slice(-5) : (p.label || p.w));
+    if (chan === 'ig') {
+      labels = igLabels;
+      values = igVals;
+    } else {
+      labels = igLabels;
+      values = {ig: igVals};
+    }
+  }
+  
+  if (chan === 'yt' || chan === 'both') {
+    const arr = useDaily ? filterDailyByPeriod(YT_DAILY, per) : filterWeeklyByPeriod(YT_WEEKLY, per);
+    const ytVals = arr.map(p => useDaily ? getDailyValue(p, 'yt', met) : getWeeklyValue(p, 'yt', met));
+    const ytLabels = arr.map(p => useDaily ? p.d.slice(-5) : p.w);
+    if (chan === 'yt') {
+      labels = ytLabels;
+      values = ytVals;
+    } else {
+      // Both: use IG labels as primary, align YT where possible
+      values.yt = ytVals;
+      // Use longest label set
+      if (ytLabels.length > labels.length) labels = ytLabels;
+    }
+  }
+  
+  return {labels, values};
+}
+
+function renderChart() {
+  const ctx = document.getElementById('reachChart');
+  if (!ctx) return;
+  if (chartInstance) chartInstance.destroy();
+  
+  // For 7d/30d, use daily; for 90d/all, use weekly
+  const useDaily = (cur.per === '7d' || cur.per === '30d');
+  const data = buildDataset(cur.chan, cur.met, cur.per, useDaily);
+  
+  let datasets = [];
+  if (cur.chan === 'ig') {
+    datasets = [{label: 'IG ' + metricLabel('ig', cur.met), data: data.values, borderColor: '#B8860B', backgroundColor: 'rgba(184,134,11,0.15)', tension: 0.3, fill: true, pointRadius: 3, pointHoverRadius: 6}];
+  } else if (cur.chan === 'yt') {
+    datasets = [{label: 'YT ' + metricLabel('yt', cur.met), data: data.values, borderColor: '#dc2626', backgroundColor: 'rgba(220,38,38,0.15)', tension: 0.3, fill: true, pointRadius: 3, pointHoverRadius: 6}];
+  } else {
+    datasets = [
+      {label: 'IG ' + metricLabel('ig', cur.met), data: data.values.ig || [], borderColor: '#B8860B', backgroundColor: 'rgba(184,134,11,0.10)', tension: 0.3, fill: false, pointRadius: 3, pointHoverRadius: 6},
+      {label: 'YT ' + metricLabel('yt', cur.met), data: data.values.yt || [], borderColor: '#dc2626', backgroundColor: 'rgba(220,38,38,0.10)', tension: 0.3, fill: false, pointRadius: 3, pointHoverRadius: 6},
+    ];
+  }
+  
+  chartInstance = new Chart(ctx, {
+    type: 'line',
+    data: {labels: data.labels, datasets: datasets},
+    options: {
+      responsive: true,
+      maintainAspectRatio: false,
+      plugins: {
+        legend: {display: cur.chan === 'both', position: 'top'},
+        tooltip: {backgroundColor:'#1B2A4A',titleColor:'#fff',bodyColor:'#fff'}
+      },
+      scales: {
+        y: {beginAtZero: true, grid: {color: '#edf2f7'}},
+        x: {grid: {display: false}, ticks: {maxRotation: 45, minRotation: 0}}
+      }
+    }
+  });
+  
+  // Update footer
+  const chanLabel = cur.chan === 'ig' ? 'Instagram' : cur.chan === 'yt' ? 'YouTube' : 'IG + YouTube';
+  const metLbl = metricLabel(cur.chan === 'both' ? 'yt' : cur.chan, cur.met);
+  const perLbl = {'7d':'Last 7 days','30d':'Last 30 days','90d':'Last 90 days','all':'All available data'}[cur.per];
+  const footer = document.getElementById('chartFooter');
+  if (footer) footer.innerHTML = `<strong>${chanLabel}</strong> &middot; ${metLbl} &middot; ${perLbl} &middot; ${useDaily ? 'daily' : 'weekly'} resolution`;
+}
+
+function setChan(c) {
+  cur.chan = c;
+  document.querySelectorAll('.chan-btn').forEach(b => b.classList.toggle('active', b.dataset.chan === c));
+  // Update metric button labels based on channel
+  const mp = document.getElementById('metPrimary');
+  const mPosts = document.getElementById('metPosts');
+  if (mp) mp.textContent = c === 'ig' ? 'Reach' : 'Views';
+  if (mPosts) mPosts.style.display = (c === 'yt' || c === 'both') ? 'inline-flex' : 'none';
+  // If IG and current metric is 'likes' or 'comments' (no IG daily data), reset to primary
+  if (c === 'ig' && (cur.met === 'likes' || cur.met === 'comments' || cur.met === 'posts')) {
+    cur.met = 'primary';
+    document.querySelectorAll('.met-btn').forEach(b => b.classList.toggle('active', b.dataset.met === 'primary'));
+  }
+  renderChart();
+}
+
+function setMet(m) {
+  cur.met = m;
+  document.querySelectorAll('.met-btn').forEach(b => b.classList.toggle('active', b.dataset.met === m));
+  renderChart();
+}
+
+function setPer(p) {
+  cur.per = p;
+  document.querySelectorAll('.per-btn').forEach(b => b.classList.toggle('active', b.dataset.per === p));
+  renderChart();
+}
+
+function initChart() {
+  renderChart();
+}
+
 </script>
 </body></html>
