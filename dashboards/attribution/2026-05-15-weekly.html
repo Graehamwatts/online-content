@@ -1,0 +1,196 @@
+<!doctype html>
+<html><head><meta charset="utf-8"><title>Weekly Attribution Review — Week of 2026-05-11 (GHL pull failed)</title>
+<style>
+  body { margin:0; padding:0; background:#f4f2ed; font-family:'DM Sans',-apple-system,BlinkMacSystemFont,sans-serif; color:#0f1729; }
+  .wrap { max-width:720px; margin:0 auto; background:#ffffff; }
+  .topbar { background:#0f1729; color:#f4b955; padding:14px 28px; font-size:13px; letter-spacing:.08em; text-transform:uppercase; font-weight:600; }
+  .header { padding:28px 28px 8px; }
+  .h-date { font-size:13px; color:#6b7280; letter-spacing:.02em; }
+  .h-title { font-size:28px; font-weight:700; margin:6px 0 4px; line-height:1.2; }
+  .h-sub { font-size:14px; color:#475569; }
+  .status { margin:16px 28px 0; padding:10px 14px; border-radius:8px; font-size:13px; font-weight:600; background:#fee2e2; color:#991b1b; }
+  .kpis { display:grid; grid-template-columns:repeat(5,1fr); gap:10px; padding:18px 28px 4px; }
+  .kpi { background:#f8fafc; border:1px solid #e2e8f0; border-radius:10px; padding:12px; }
+  .kpi-label { font-size:10px; text-transform:uppercase; letter-spacing:.05em; color:#64748b; font-weight:600; }
+  .kpi-value { font-size:24px; font-weight:700; margin-top:4px; color:#0f1729; }
+  .kpi-sub { font-size:10px; color:#94a3b8; margin-top:2px; }
+  .section { padding:18px 28px; }
+  .section h2 { font-size:13px; text-transform:uppercase; letter-spacing:.08em; color:#0f1729; margin:0 0 10px; font-weight:700; }
+  .read { background:#fffbeb; border-left:3px solid #f4b955; padding:14px 16px; border-radius:6px; font-size:14px; line-height:1.55; color:#1e293b; }
+  .read.warn { background:#fee2e2; border-left-color:#dc2626; }
+  .decide { background:#0f1729; color:#fef3c7; padding:14px 16px; border-radius:8px; font-size:13.5px; line-height:1.55; border-left:4px solid #f4b955; }
+  .decide strong { color:#f4b955; }
+  .steps { background:#f8fafc; border:1px solid #e2e8f0; border-radius:8px; padding:6px 0; }
+  .step { display:flex; gap:14px; padding:14px 18px; border-bottom:1px solid #e2e8f0; align-items:flex-start; }
+  .step:last-child { border-bottom:none; }
+  .step-num { flex:0 0 28px; height:28px; background:#0f1729; color:#f4b955; border-radius:50%; display:flex; align-items:center; justify-content:center; font-weight:700; font-size:13px; }
+  .step-body { flex:1; font-size:13.5px; line-height:1.55; color:#334155; }
+  .step-body strong { color:#0f1729; }
+  code { background:#0f1729; color:#f4b955; padding:2px 6px; border-radius:3px; font-size:12px; font-family:'SF Mono',Menlo,monospace; }
+  .errblock { background:#0f1729; color:#fca5a5; padding:14px 16px; border-radius:6px; font-family:'SF Mono',Menlo,monospace; font-size:12px; line-height:1.6; white-space:pre-wrap; word-break:break-word; }
+  .errblock .ok { color:#86efac; }
+  .errblock .label { color:#94a3b8; }
+  .errblock .warn { color:#fbbf24; }
+  table.src { width:100%; border-collapse:collapse; font-size:12.5px; }
+  table.src th { text-align:left; background:#f1f5f9; padding:9px; font-weight:600; color:#475569; font-size:10px; letter-spacing:.04em; text-transform:uppercase; }
+  table.src td { padding:9px; border-top:1px solid #e2e8f0; vertical-align:top; color:#64748b; }
+  .placeholder { background:#f8fafc; border:1px dashed #cbd5e1; border-radius:8px; padding:18px; color:#94a3b8; font-size:13px; line-height:1.6; text-align:center; }
+  .placeholder strong { display:block; color:#475569; margin-bottom:4px; font-size:13px; }
+  .funnel-svg { width:100%; max-width:560px; margin:8px auto; display:block; }
+  .footer { padding:24px 28px 36px; border-top:1px solid #e2e8f0; font-size:12px; color:#64748b; }
+  .signature { margin-top:8px; font-weight:600; color:#0f1729; font-size:13px; }
+  .dre { color:#94a3b8; font-size:11px; margin-top:2px; }
+  @media (max-width:600px){ .kpis{grid-template-columns:repeat(2,1fr);} }
+</style></head><body>
+<div class="wrap">
+  <div class="topbar">Weekly Attribution Review · Week of 2026-05-11 · GHL pull failed</div>
+  <div class="header">
+    <div class="h-date">Monday May 11 → Friday May 15, 2026 · review generated Fri May 15, 4:00 PM PT</div>
+    <div class="h-title">Same blocker the daily brief has flagged all week — your CRM data still isn't reaching the dashboard</div>
+    <div class="h-sub">No GHL data was pulled this week. Mon/Tue/Wed/Thu daily briefs all surfaced the same root cause. This is week one of the weekly review and it's blocked for the same reason.</div>
+  </div>
+  <div class="status">Friday Attribution Review — GHL pull failed. Same root cause as Tue/Wed/Thu daily briefs: workflow file not on remote (<code style="background:#7f1d1d;color:#fecaca">.github/workflows/</code>) and zero repo secrets configured.</div>
+
+  <div class="kpis">
+    <div class="kpi"><div class="kpi-label">Total leads</div><div class="kpi-value" style="color:#dc2626">—</div><div class="kpi-sub">pull never ran</div></div>
+    <div class="kpi"><div class="kpi-label">Appointments</div><div class="kpi-value" style="color:#dc2626">—</div><div class="kpi-sub">no data</div></div>
+    <div class="kpi"><div class="kpi-label">Opportunities</div><div class="kpi-value" style="color:#dc2626">—</div><div class="kpi-sub">no data</div></div>
+    <div class="kpi"><div class="kpi-label">Closed wins</div><div class="kpi-value" style="color:#dc2626">—</div><div class="kpi-sub">no data</div></div>
+    <div class="kpi"><div class="kpi-label">Days unblocked</div><div class="kpi-value" style="color:#dc2626">3</div><div class="kpi-sub">since Tue brief</div></div>
+  </div>
+
+  <div class="section">
+    <h2>The Read</h2>
+    <div class="read warn">
+      I ran the Friday Weekly Attribution Review autonomously at 4:00 PM PT and hit the exact same wall the daily brief has flagged three days running. The skill instructions are correct, the Python that would generate the weekly funnel is straightforward, and the GitHub PAT has <code>repo</code> scope so it CAN commit a dashboard file to the repo — but the entire attribution pipeline is gated on two things that aren't done yet: <strong>(1)</strong> the workflow YAML isn't deployed to <code>.github/workflows/</code> on <code>origin/main</code>, and <strong>(2)</strong> the four repo secrets (<code>GHL_PIT</code>, <code>GHL_LOCATION_ID</code>, <code>GMAIL_USER</code>, <code>GMAIL_APP_PASSWORD</code>) are still empty. Until both are fixed, every scheduled run — daily AND weekly — will keep landing in your inbox as a "setup not done" report instead of a real-data dashboard. The fix is the same 5 minutes I described Tuesday. I committed this Friday report to the repo at <code>dashboards/attribution/2026-05-15-weekly.html</code> and created a Gmail draft you can send to yourself, since the SMTP send step lives inside the GitHub Action and that Action doesn't exist yet.
+    </div>
+  </div>
+
+  <div class="section">
+    <h2>Decision required</h2>
+    <div class="decide">
+      <strong>Spend 5 minutes today before Monday's brief fires.</strong> Three options ranked best to worst: <strong>(A)</strong> Regenerate the GitHub PAT at <code>github.com/settings/tokens</code> with the <code>workflow</code> scope checked, paste it over <code>Documents\Claude\Online Content\github-token.txt</code>, and I'll auto-deploy both workflow files (daily + weekly) on my next run. <strong>(B)</strong> Manually paste the two YAML files into <code>.github/workflows/</code> via the GitHub web UI and add the four secrets — 5 minutes, no PAT regen needed. <strong>(C)</strong> Leave it broken — Monday's daily brief and next Friday's weekly review will both be another setup-failure email. Recommended: A or B. The four secrets to add are listed in step 3 below.
+    </div>
+  </div>
+
+  <div class="section">
+    <h2>Diagnostic — exactly what I tried this afternoon</h2>
+    <div class="errblock"><span class="label">[16:00:01 PT]</span> Loading credentials path: Documents\Claude\Skills\ghl-pit.txt
+   <span class="warn">↳ File not present in mounted folders (Skills dir not synced to Cowork mount).</span>
+
+<span class="label">[16:00:02 PT]</span> POST https://services.leadconnectorhq.com/contacts/search
+   <span class="warn">↳ Sandbox egress blocked (services.leadconnectorhq.com is on Cowork allowlist denylist).</span>
+   <span class="label">→ Pivoting to GitHub Action path per skill instructions.</span>
+
+<span class="label">[16:00:03 PT]</span> GET  /repos/Graehamwatts/online-content    HTTP 200 <span class="ok">OK</span> (PAT auth works)
+<span class="label">[16:00:03 PT]</span> HEAD /repos/.../ → x-oauth-scopes: <span class="warn">repo</span>   (workflow scope MISSING)
+
+<span class="label">[16:00:04 PT]</span> PUT  /repos/Graehamwatts/online-content/contents/.github/workflows/__scope_probe__.yml
+   ↳ HTTP 404 — {"message":"Not Found"}
+   <span class="label">→ Same behavior as Tue/Wed/Thu — PAT lacks "workflow" scope.</span>
+
+<span class="label">[16:00:05 PT]</span> POST /repos/Graehamwatts/online-content/actions/workflows/friday-attribution-review.yml/dispatches
+   ↳ HTTP 404 — workflow file not present on remote, cannot dispatch.
+
+<span class="label">[16:00:06 PT]</span> GET  /repos/Graehamwatts/online-content/actions/secrets
+   ↳ HTTP 200 — <span class="warn">total_count: 0</span>   (GHL_PIT, GHL_LOCATION_ID, GMAIL_USER, GMAIL_APP_PASSWORD all unconfigured)
+
+<span class="label">[16:00:07 PT]</span> GET  /repos/Graehamwatts/online-content/git/trees/main?recursive=1
+   ↳ HTTP 200 <span class="ok">OK</span>
+   <span class="label">Workflow YAMLs found on remote:</span> <span class="warn">none</span>
+   <span class="label">Workflow YAMLs in /runbooks/:</span> <span class="ok">daily-attribution-brief-workflow.yml</span> (wrong path — not in .github/workflows/)
+
+<span class="label">[16:00:08 PT]</span> Falling back to "send the failure brief" path per skill failure-handling clause.
+<span class="label">[16:00:09 PT]</span> PUT  /repos/.../contents/dashboards/attribution/2026-05-15-weekly.html
+   <span class="ok">↳ HTTP 201 — file committed to main.</span>
+<span class="label">[16:00:10 PT]</span> Creating Gmail draft to graehamwatts@gmail.com ........ <span class="ok">OK</span>
+
+<span class="label">Net result:</span> 0 GHL calls made. 0 lead/opp/win data collected. Failure email delivered as draft.</div>
+  </div>
+
+  <div class="section">
+    <h2>5-minute fix — same as the daily brief, still unresolved</h2>
+    <div class="steps">
+      <div class="step"><div class="step-num">1</div><div class="step-body"><strong>Re-issue the GitHub PAT with <code>workflow</code> scope.</strong> Open <code>github.com/settings/tokens</code> → find the token starting <code>ghp_wVVM…</code> → <strong>Regenerate</strong> → check BOTH <code>repo</code> AND <code>workflow</code>. Paste the new token over <code>Documents\Claude\Online Content\github-token.txt</code> and <code>Documents\Claude\Scheduled\property-os-daily-backup\github-pat.txt</code>. On my next run I'll auto-deploy the workflow files.</div></div>
+      <div class="step"><div class="step-num">2</div><div class="step-body"><strong>OR — one-shot manual install (no PAT regen).</strong> Open <code>Documents\Claude\Online Content\runbooks\daily-attribution-brief-workflow.yml</code>, copy contents, paste into a new file at <code>.github/workflows/daily-attribution-brief.yml</code> in the GitHub web UI → commit. Do the same for the Friday workflow once it's drafted (I can hand-draft it on my next run if step 1 is done).</div></div>
+      <div class="step"><div class="step-num">3</div><div class="step-body"><strong>Add the 4 repo secrets</strong> at <code>github.com/Graehamwatts/online-content/settings/secrets/actions</code>:
+        <br>• <code>GHL_PIT</code> = line 1 of <code>Documents\Claude\Skills\ghl-pit.txt</code> (Private Integration Token starting <code>pit-</code>)
+        <br>• <code>GHL_LOCATION_ID</code> = <code>6wuU3haUH7uNeT20E3UZ</code>
+        <br>• <code>GMAIL_USER</code> = <code>graehamwatts@gmail.com</code>
+        <br>• <code>GMAIL_APP_PASSWORD</code> = 16-char app password generated at <code>myaccount.google.com/apppasswords</code></div></div>
+      <div class="step"><div class="step-num">4</div><div class="step-body"><strong>Re-sync the Skills folder to Cowork.</strong> The <code>Documents\Claude\Skills\ghl-pit.txt</code> file isn't currently visible in the Cowork mount, only the Online Content and Scheduled folders are. Re-select the Skills folder in the Cowork picker, or move the PIT file into one of the already-mounted folders.</div></div>
+      <div class="step"><div class="step-num">5</div><div class="step-body"><strong>Smoke-test before Monday 7:15 AM.</strong> After steps 1-3, open the repo → <strong>Actions</strong> → run <strong>Daily Attribution Brief</strong> manually with date blank. You should get a real-data brief in &lt;90 seconds. Friday's weekly will then auto-fire next Friday at 4:00 PM with real numbers.</div></div>
+    </div>
+  </div>
+
+  <div class="section">
+    <h2>Source performance — placeholder (real data starts next week)</h2>
+    <table class="src">
+      <thead><tr><th>Source</th><th>Leads</th><th>Apt</th><th>Opp</th><th>Won</th><th>L→A %</th><th>A→O %</th><th>O→W %</th></tr></thead>
+      <tbody>
+        <tr><td colspan="8" style="text-align:center; padding:20px; color:#94a3b8;">No GHL data pulled this week. Once the workflow is live, this table will show: Organic / GMB / Paid / Social Organic / Referral / Direct / Unknown / Cold, with conversion percentages at each funnel stage and color-coded variance vs prior week.</td></tr>
+      </tbody>
+    </table>
+  </div>
+
+  <div class="section">
+    <h2>Funnel snapshot — placeholder</h2>
+    <svg class="funnel-svg" viewBox="0 0 560 220" xmlns="http://www.w3.org/2000/svg">
+      <defs>
+        <linearGradient id="g" x1="0" x2="0" y1="0" y2="1">
+          <stop offset="0" stop-color="#cbd5e1"/>
+          <stop offset="1" stop-color="#94a3b8"/>
+        </linearGradient>
+      </defs>
+      <polygon points="40,20 520,20 460,70 100,70" fill="url(#g)" opacity="0.35"/>
+      <polygon points="100,80 460,80 410,130 150,130" fill="url(#g)" opacity="0.45"/>
+      <polygon points="150,140 410,140 360,180 200,180" fill="url(#g)" opacity="0.55"/>
+      <polygon points="200,190 360,190 320,215 240,215" fill="url(#g)" opacity="0.7"/>
+      <text x="280" y="48" fill="#475569" font-family="DM Sans" font-size="13" text-anchor="middle" font-weight="600">Leads — pending</text>
+      <text x="280" y="108" fill="#475569" font-family="DM Sans" font-size="13" text-anchor="middle" font-weight="600">Appointments — pending</text>
+      <text x="280" y="165" fill="#475569" font-family="DM Sans" font-size="13" text-anchor="middle" font-weight="600">Opportunities — pending</text>
+      <text x="280" y="207" fill="#0f1729" font-family="DM Sans" font-size="12" text-anchor="middle" font-weight="700">Closed wins — pending</text>
+    </svg>
+    <div class="placeholder">Once GHL is wired, this becomes a real four-stage funnel with stage-to-stage drop-off percentages overlaid on each band.</div>
+  </div>
+
+  <div class="section">
+    <h2>Week-over-week comparison — placeholder</h2>
+    <div class="placeholder">
+      <strong>Will populate next Friday.</strong>
+      Side-by-side table per source: this week vs prior week leads, conversion-rate delta, and an anomaly flag for any source that spiked or dropped &gt;50%. Needs at least two consecutive successful pulls before the comparison is meaningful.
+    </div>
+  </div>
+
+  <div class="section">
+    <h2>ROI section — paid ad data</h2>
+    <div class="placeholder">
+      <strong>Not configured.</strong>
+      No Meta Ads or Google Ads MCP is connected. ROI section is skipped per skill spec. To unlock cost-per-lead and cost-per-closed-deal by campaign, connect one of: <code>meta-ads</code> MCP (Facebook/Instagram Ads) or <code>google-ads</code> MCP. utm_campaign matching is already coded; it just needs a spend source.
+    </div>
+  </div>
+
+  <div class="section">
+    <h2>Top 3 / Bottom 3 sources</h2>
+    <div class="placeholder">
+      <strong>Will identify next Friday.</strong>
+      Top 3 = highest closed-wins OR best lead→appointment conversion. Bottom 3 = lowest conversion or producing leads that never convert. Anomaly callouts for any &gt;50% WoW swing in either direction.
+    </div>
+  </div>
+
+  <div class="section">
+    <h2>What you'll see next Friday once it's working</h2>
+    <div class="read">
+      Green status strip. Five KPI cards showing real Mon-Fri totals: leads, appointments, opportunities, closed wins, revenue if available. The Read paragraph will be a 2-3 sentence narrative comparing this week's funnel to last week's. Decision Required will surface clear actions like "Kill the underperforming Google Ads campaign" or "Double down on Organic — it produced 60% of your closes this week." The source table will show real numbers with red/green color coding for WoW deltas. The funnel SVG will show real stage-to-stage drop-off. And if you've connected an ads MCP by then, you'll also see CPL and CPA per campaign.
+    </div>
+  </div>
+
+  <div class="footer">
+    Auto-generated by the Friday Weekly Attribution Review scheduled task · <code style="font-size:11px;">friday-attribution-review</code><br>
+    Data source: GoHighLevel (Location <code style="font-size:11px;">6wuU3h…</code>) — pull failed; setup incomplete<br>
+    Committed at: <code style="font-size:11px;">dashboards/attribution/2026-05-15-weekly.html</code> on <code style="font-size:11px;">origin/main</code>
+    <div class="signature">Graeham Watts</div>
+    <div class="dre">REALTOR® · Intero Real Estate · DRE# 01466876</div>
+  </div>
+</div>
+</body></html>
