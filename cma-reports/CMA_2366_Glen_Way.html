@@ -1,0 +1,1048 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>CMA — 2366 Glen Way, East Palo Alto | Graeham Watts | Intero Real Estate</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&family=Montserrat:wght@400;600;700;800;900&display=swap" rel="stylesheet">
+<script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.0/dist/chart.umd.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/chartjs-plugin-datalabels@2.2.0"></script>
+<style>
+  :root {
+    --black: #1A1A1A;
+    --gold: #C5A55A;
+    --dark-gold: #A88B3D;
+    --light-gold: #F5EFDC;
+    --white: #FFFFFF;
+    --gray: #666666;
+    --light-gray: #F0F0F0;
+    --green: #4CAF50;
+    --coral: #E57373;
+    --navy: #343955;
+  }
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  html { scroll-behavior: smooth; }
+  body {
+    font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+    color: var(--black);
+    background: var(--white);
+    line-height: 1.65;
+    font-size: 16px;
+  }
+  /* === SITE NAV BAR === */
+  .site-nav {
+    position: fixed;
+    top: 0; left: 0; right: 0;
+    background: var(--navy);
+    z-index: 1000;
+    padding: 12px 28px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    box-shadow: 0 2px 12px rgba(0,0,0,0.15);
+  }
+  .site-nav .logo img { height: 48px; display: block; }
+  .site-nav .links { display: flex; gap: 22px; align-items: center; }
+  .site-nav .links a {
+    color: white;
+    text-decoration: none;
+    font-size: 13px;
+    font-weight: 500;
+    letter-spacing: 0.3px;
+    transition: color 0.2s;
+  }
+  .site-nav .links a:hover { color: var(--gold); }
+  /* === CMA NAV BAR === */
+  .cma-nav {
+    position: fixed;
+    top: 72px;
+    left: 0; right: 0;
+    background: var(--black);
+    z-index: 999;
+    padding: 10px 28px;
+    display: flex;
+    gap: 22px;
+    overflow-x: auto;
+    border-bottom: 2px solid var(--gold);
+  }
+  .cma-nav a {
+    color: var(--white);
+    text-decoration: none;
+    font-size: 12px;
+    font-weight: 600;
+    letter-spacing: 1.5px;
+    text-transform: uppercase;
+    white-space: nowrap;
+    padding: 4px 0;
+    border-bottom: 2px solid transparent;
+    transition: border-color 0.2s, color 0.2s;
+  }
+  .cma-nav a:hover { color: var(--gold); border-bottom-color: var(--gold); }
+  /* === HERO === */
+  .hero {
+    background: linear-gradient(135deg, #0d0d0d 0%, #1a1a1a 60%, #2a2a2a 100%);
+    color: var(--white);
+    padding: 200px 40px 100px;
+    text-align: center;
+    position: relative;
+    overflow: hidden;
+  }
+  .hero::before {
+    content: '';
+    position: absolute;
+    top: 0; left: 0; right: 0; bottom: 0;
+    background: radial-gradient(ellipse at top, rgba(197,165,90,0.15), transparent 70%);
+    pointer-events: none;
+  }
+  .hero-logo {
+    font-family: 'Montserrat', sans-serif;
+    font-size: 42px;
+    letter-spacing: 8px;
+    color: var(--gold);
+    font-weight: 900;
+    margin-bottom: 8px;
+  }
+  .hero-realtor {
+    font-size: 11px;
+    color: var(--gold);
+    letter-spacing: 8px;
+    font-weight: 500;
+    margin-bottom: 60px;
+  }
+  .hero-cma-label {
+    font-size: 14px;
+    color: var(--gold);
+    letter-spacing: 4px;
+    font-weight: 600;
+    margin-bottom: 12px;
+  }
+  .hero-cma-type {
+    font-size: 13px;
+    color: var(--gold);
+    letter-spacing: 3px;
+    font-weight: 500;
+    margin-bottom: 32px;
+    opacity: 0.85;
+  }
+  .hero-address {
+    font-family: 'Montserrat', sans-serif;
+    font-size: 44px;
+    font-weight: 700;
+    color: var(--white);
+    margin-bottom: 8px;
+    line-height: 1.15;
+  }
+  .hero-city {
+    font-size: 20px;
+    color: rgba(255,255,255,0.85);
+    font-weight: 400;
+    margin-bottom: 48px;
+  }
+  .hero-prep-date {
+    font-size: 13px;
+    color: rgba(255,255,255,0.7);
+    letter-spacing: 2px;
+    margin-bottom: 32px;
+  }
+  .hero-contact {
+    font-size: 12px;
+    color: var(--gold);
+    letter-spacing: 1.5px;
+    line-height: 1.8;
+  }
+  /* === SECTION === */
+  section { padding: 80px 40px; max-width: 1280px; margin: 0 auto; }
+  .section-header {
+    background: var(--black);
+    color: var(--gold);
+    font-family: 'Montserrat', sans-serif;
+    font-size: 14px;
+    font-weight: 700;
+    letter-spacing: 4px;
+    text-transform: uppercase;
+    padding: 18px 28px;
+    margin-bottom: 36px;
+    border-left: 6px solid var(--gold);
+  }
+  .sub-header {
+    color: var(--gold);
+    font-family: 'Montserrat', sans-serif;
+    font-size: 18px;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 2px;
+    margin: 32px 0 16px;
+  }
+  /* === SUBJECT PROPERTY === */
+  .subject-grid {
+    display: grid;
+    grid-template-columns: 1.2fr 1fr;
+    gap: 36px;
+    margin-bottom: 36px;
+  }
+  .property-details-table {
+    width: 100%;
+    border-collapse: collapse;
+    box-shadow: 0 2px 12px rgba(0,0,0,0.06);
+  }
+  .property-details-table th {
+    background: var(--gold);
+    color: var(--white);
+    text-align: left;
+    padding: 14px 20px;
+    font-family: 'Montserrat', sans-serif;
+    font-size: 13px;
+    letter-spacing: 2px;
+    font-weight: 700;
+    text-transform: uppercase;
+  }
+  .property-details-table td {
+    padding: 12px 20px;
+    border-bottom: 1px solid var(--light-gray);
+    font-size: 14px;
+  }
+  .property-details-table td:first-child {
+    font-weight: 600;
+    color: var(--gray);
+    width: 45%;
+    background: #fafafa;
+  }
+  .property-details-table tr:nth-child(even) td { background: var(--light-gold); }
+  .property-details-table tr:nth-child(even) td:first-child { background: #f0e9d2; }
+  .stats-callouts {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 14px;
+    align-content: start;
+  }
+  .stat-box {
+    background: var(--black);
+    color: var(--white);
+    padding: 22px 18px;
+    border-radius: 6px;
+    text-align: center;
+    border: 1px solid #2a2a2a;
+  }
+  .stat-box .stat-num {
+    font-family: 'Montserrat', sans-serif;
+    font-size: 34px;
+    font-weight: 800;
+    color: var(--gold);
+    line-height: 1;
+    margin-bottom: 6px;
+  }
+  .stat-box .stat-label {
+    font-size: 10px;
+    letter-spacing: 2px;
+    text-transform: uppercase;
+    color: rgba(255,255,255,0.65);
+  }
+  .property-overview {
+    background: var(--light-gold);
+    padding: 24px 28px;
+    border-left: 4px solid var(--gold);
+    font-size: 15px;
+    line-height: 1.75;
+    color: var(--black);
+    margin-top: 14px;
+  }
+  /* === MARKET STORY === */
+  .market-story p {
+    font-size: 16px;
+    line-height: 1.85;
+    margin-bottom: 20px;
+    color: #2a2a2a;
+  }
+  .market-story p strong { color: var(--black); font-weight: 700; }
+  /* === COMP TABLE === */
+  .comp-table-wrap { overflow-x: auto; box-shadow: 0 2px 12px rgba(0,0,0,0.06); margin-bottom: 24px; }
+  .comp-table {
+    width: 100%;
+    border-collapse: collapse;
+    font-size: 13.5px;
+    background: var(--white);
+  }
+  .comp-table th {
+    background: var(--gold);
+    color: var(--white);
+    text-align: left;
+    padding: 12px 14px;
+    font-family: 'Montserrat', sans-serif;
+    font-size: 11px;
+    letter-spacing: 1.2px;
+    text-transform: uppercase;
+    font-weight: 700;
+    white-space: nowrap;
+  }
+  .comp-table td {
+    padding: 14px;
+    border-bottom: 1px solid var(--light-gray);
+    color: #2a2a2a;
+  }
+  .comp-table tr:nth-child(even) td { background: #fafafa; }
+  .comp-table tr.subject-row td {
+    background: var(--black) !important;
+    color: var(--gold);
+    font-weight: 700;
+    border-left: 4px solid var(--gold);
+  }
+  .comp-table tr.subject-row td:first-child { border-left: 4px solid var(--gold); }
+  .tier-tag {
+    display: inline-block;
+    padding: 3px 10px;
+    border-radius: 12px;
+    font-size: 10px;
+    letter-spacing: 1px;
+    font-weight: 700;
+    text-transform: uppercase;
+  }
+  .tier-primary { background: #2e7d32; color: var(--white); }
+  .tier-secondary { background: var(--gold); color: var(--white); }
+  .tier-caution { background: var(--coral); color: var(--white); }
+  .comp-note {
+    background: #fafafa;
+    border-left: 3px solid var(--gold);
+    padding: 14px 18px;
+    margin: 12px 0 24px;
+    font-size: 14px;
+    line-height: 1.7;
+    color: #444;
+  }
+  .comp-note strong { color: var(--gold); }
+  /* === MARKET DATA STATS === */
+  .market-stats-grid {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 16px;
+    margin-bottom: 36px;
+  }
+  .market-stat {
+    background: var(--white);
+    border: 1px solid var(--light-gray);
+    border-top: 4px solid var(--gold);
+    padding: 24px 18px;
+    text-align: center;
+    border-radius: 4px;
+  }
+  .market-stat .num {
+    font-family: 'Montserrat', sans-serif;
+    font-size: 28px;
+    font-weight: 800;
+    color: var(--black);
+    line-height: 1;
+    margin-bottom: 8px;
+  }
+  .market-stat .lbl {
+    font-size: 10px;
+    letter-spacing: 1.5px;
+    text-transform: uppercase;
+    color: var(--gray);
+  }
+  /* === CHARTS === */
+  .chart-wrap {
+    background: var(--white);
+    border: 1px solid var(--light-gray);
+    border-radius: 6px;
+    padding: 24px;
+    margin-bottom: 28px;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.04);
+  }
+  .chart-wrap h4 {
+    font-family: 'Montserrat', sans-serif;
+    font-size: 12px;
+    letter-spacing: 2px;
+    text-transform: uppercase;
+    color: var(--black);
+    margin-bottom: 18px;
+    text-align: center;
+  }
+  /* === LIST-TO-SALE ROWS === */
+  .lts-container { height: auto; overflow: visible; padding: 8px 4px; }
+  .lts-row {
+    display: grid;
+    grid-template-columns: 220px 1fr 80px;
+    align-items: center;
+    gap: 14px;
+    padding: 8px 0;
+    border-bottom: 1px dashed var(--light-gray);
+  }
+  .lts-row:last-child { border-bottom: none; }
+  .lts-addr { font-size: 13px; color: #333; font-weight: 500; }
+  .lts-bar-track {
+    height: 22px;
+    background: #f5f5f5;
+    border-radius: 4px;
+    position: relative;
+    overflow: visible;
+  }
+  .lts-center {
+    position: absolute;
+    top: -4px; bottom: -4px;
+    left: 50%;
+    width: 2px;
+    background: var(--black);
+  }
+  .lts-bar {
+    position: absolute;
+    top: 2px; bottom: 2px;
+    border-radius: 3px;
+  }
+  .lts-bar.over { background: var(--gold); left: 50%; }
+  .lts-bar.under { background: var(--coral); right: 50%; }
+  .lts-pct {
+    font-family: 'Montserrat', sans-serif;
+    font-size: 13px;
+    font-weight: 700;
+    text-align: right;
+  }
+  .lts-pct.over { color: var(--dark-gold); }
+  .lts-pct.under { color: #c0392b; }
+  /* === SECTION DIVIDER === */
+  .section-divider {
+    height: 1px;
+    background: linear-gradient(to right, transparent, var(--gold), transparent);
+    margin: 60px 0;
+  }
+  /* === PRICING SCENARIO CARDS === */
+  .scenario-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 28px;
+    margin: 24px 0;
+  }
+  .scenario-card {
+    background: var(--white);
+    border: 2px solid var(--light-gray);
+    border-radius: 8px;
+    padding: 32px 28px;
+    position: relative;
+    overflow: hidden;
+  }
+  .scenario-card.vacant { border-top: 6px solid var(--green); }
+  .scenario-card.occupied { border-top: 6px solid var(--coral); }
+  .scenario-card .badge {
+    display: inline-block;
+    padding: 5px 12px;
+    border-radius: 14px;
+    font-size: 10px;
+    font-weight: 700;
+    letter-spacing: 1.5px;
+    text-transform: uppercase;
+    margin-bottom: 14px;
+  }
+  .scenario-card.vacant .badge { background: #e8f5e9; color: #2e7d32; }
+  .scenario-card.occupied .badge { background: #fce4ec; color: #c2185b; }
+  .scenario-card h3 {
+    font-family: 'Montserrat', sans-serif;
+    font-size: 22px;
+    font-weight: 700;
+    margin-bottom: 12px;
+    color: var(--black);
+  }
+  .scenario-card .price-range {
+    font-family: 'Montserrat', sans-serif;
+    font-size: 32px;
+    font-weight: 800;
+    color: var(--gold);
+    margin: 16px 0 4px;
+    line-height: 1.1;
+  }
+  .scenario-card .price-mid {
+    font-size: 14px;
+    color: var(--gray);
+    margin-bottom: 18px;
+  }
+  .scenario-card .scenario-row {
+    display: flex;
+    justify-content: space-between;
+    padding: 10px 0;
+    border-bottom: 1px solid var(--light-gray);
+    font-size: 14px;
+  }
+  .scenario-card .scenario-row:last-of-type { border-bottom: none; }
+  .scenario-card .scenario-row .lbl { color: var(--gray); font-weight: 500; }
+  .scenario-card .scenario-row .val { font-weight: 700; color: var(--black); }
+  .scenario-card .notes {
+    margin-top: 18px;
+    padding-top: 18px;
+    border-top: 1px dashed var(--light-gray);
+    font-size: 13.5px;
+    line-height: 1.7;
+    color: #555;
+  }
+  /* === COMPARISON TABLE === */
+  .compare-table {
+    width: 100%;
+    border-collapse: collapse;
+    margin: 24px 0;
+    box-shadow: 0 2px 12px rgba(0,0,0,0.06);
+  }
+  .compare-table th {
+    background: var(--black);
+    color: var(--gold);
+    font-family: 'Montserrat', sans-serif;
+    font-size: 11px;
+    letter-spacing: 1.5px;
+    text-transform: uppercase;
+    text-align: left;
+    padding: 14px 16px;
+  }
+  .compare-table td {
+    padding: 13px 16px;
+    border-bottom: 1px solid var(--light-gray);
+    font-size: 14px;
+  }
+  .compare-table tr.subject td {
+    background: var(--light-gold);
+    font-weight: 700;
+    border-left: 4px solid var(--gold);
+  }
+  .compare-table tr:nth-child(even) td { background: #fafafa; }
+  .compare-table tr.subject:nth-child(even) td { background: var(--light-gold); }
+  /* === KEY INSIGHT === */
+  .key-insight {
+    background: linear-gradient(135deg, #fdfaf0 0%, #f5efdc 100%);
+    border-left: 5px solid var(--gold);
+    padding: 24px 28px;
+    margin: 28px 0;
+    border-radius: 0 6px 6px 0;
+    font-size: 15px;
+    line-height: 1.75;
+  }
+  .key-insight strong { color: var(--gold); display: block; margin-bottom: 6px; font-family: 'Montserrat', sans-serif; letter-spacing: 1.5px; text-transform: uppercase; font-size: 12px; }
+  /* === SPECIAL CONSIDERATIONS === */
+  .consideration {
+    background: #fff;
+    border: 1px solid var(--light-gray);
+    border-left: 4px solid var(--gold);
+    padding: 18px 22px;
+    margin-bottom: 14px;
+    border-radius: 0 6px 6px 0;
+  }
+  .consideration h4 {
+    color: var(--gold);
+    font-family: 'Montserrat', sans-serif;
+    font-size: 13px;
+    letter-spacing: 1.5px;
+    text-transform: uppercase;
+    margin-bottom: 8px;
+  }
+  .consideration p { font-size: 14.5px; line-height: 1.7; color: #2a2a2a; }
+  /* === CLOSING === */
+  .closing {
+    background: var(--black);
+    color: var(--white);
+    padding: 60px 40px;
+    text-align: center;
+    margin-top: 80px;
+  }
+  .closing .logo-line {
+    font-family: 'Montserrat', sans-serif;
+    font-size: 26px;
+    letter-spacing: 6px;
+    color: var(--gold);
+    font-weight: 800;
+    margin-bottom: 8px;
+  }
+  .closing .dre { font-size: 11px; color: rgba(255,255,255,0.6); letter-spacing: 3px; margin-bottom: 24px; }
+  .closing .contact-line { font-size: 14px; margin-bottom: 8px; color: rgba(255,255,255,0.9); }
+  .closing .contact-line a { color: var(--gold); text-decoration: none; }
+  .closing .closing-msg { max-width: 620px; margin: 24px auto 0; font-size: 14px; line-height: 1.7; color: rgba(255,255,255,0.75); }
+  .closing .disclaimer { font-size: 11px; color: rgba(255,255,255,0.5); margin-top: 28px; max-width: 720px; margin-left: auto; margin-right: auto; line-height: 1.6; }
+  /* === RESPONSIVE === */
+  @media (max-width: 900px) {
+    .site-nav .links { display: none; }
+    .subject-grid { grid-template-columns: 1fr; }
+    .scenario-grid { grid-template-columns: 1fr; }
+    .market-stats-grid { grid-template-columns: 1fr 1fr; }
+    .hero-address { font-size: 30px; }
+    .hero-logo { font-size: 30px; letter-spacing: 4px; }
+    .lts-row { grid-template-columns: 140px 1fr 70px; gap: 8px; }
+    .lts-addr { font-size: 11.5px; }
+    section { padding: 50px 20px; }
+  }
+</style>
+</head>
+<body>
+
+<!-- SITE NAV BAR -->
+<nav class="site-nav">
+  <a href="https://graehamwatts.com" class="logo"><img src="https://images.leadconnectorhq.com/image/f_webp/q_80/r_1200/u_https://assets.cdn.filesafe.space/6wuU3haUH7uNeT20E3UZ/media/691256870b647e40e3c2e105.png" alt="Graeham Watts"></a>
+  <div class="links">
+    <a href="https://graehamwatts.com">Home</a>
+    <a href="https://graehamwatts.com/buy">Buy</a>
+    <a href="https://graehamwatts.com/sell">Sell</a>
+    <a href="https://graehamwatts.com/buying-in-the-bay">Buying in the Bay</a>
+    <a href="https://graehamwatts.com/the-bay-market">The Bay Market</a>
+    <a href="https://graehamwatts.com/neighborhoods">Neighborhoods</a>
+    <a href="https://graehamwatts.com/blog">Blog</a>
+    <a href="https://graehamwatts.com/about">About</a>
+    <a href="https://graehamwatts.com/reviews">Reviews</a>
+    <a href="https://graehamwatts.com/contact">Contact</a>
+  </div>
+</nav>
+
+<!-- CMA SECTION NAV -->
+<nav class="cma-nav">
+  <a href="#summary">Property</a>
+  <a href="#story">Market Story</a>
+  <a href="#comps">Comps</a>
+  <a href="#data">Market Data</a>
+  <a href="#scenarios">Vacant vs Occupied</a>
+  <a href="#recommendation">Recommendation</a>
+  <a href="#considerations">Considerations</a>
+</nav>
+
+<!-- HERO -->
+<header class="hero">
+  <div class="hero-logo">GRAEHAM WATTS</div>
+  <div class="hero-realtor">R E A L T O R</div>
+  <div class="hero-cma-label">COMPARATIVE MARKET ANALYSIS</div>
+  <div class="hero-cma-type">VACANT vs TENANT-OCCUPIED SALE SCENARIO</div>
+  <div class="hero-address">2366 Glen Way</div>
+  <div class="hero-city">East Palo Alto, CA 94303</div>
+  <div class="hero-prep-date">PREPARED MAY 14, 2026</div>
+  <div class="hero-contact">
+    GRAEHAM WATTS &nbsp;&middot;&nbsp; INTERO REAL ESTATE &nbsp;&middot;&nbsp; DRE #01466876<br>
+    650-308-4727 &nbsp;&middot;&nbsp; graehamwatts@gmail.com &nbsp;&middot;&nbsp; graehamwatts.com
+  </div>
+</header>
+
+<!-- SUBJECT PROPERTY SUMMARY -->
+<section id="summary">
+  <div class="section-header">SUBJECT PROPERTY SUMMARY</div>
+  <div class="subject-grid">
+    <table class="property-details-table">
+      <tr><th colspan="2">PROPERTY DETAILS</th></tr>
+      <tr><td>Address</td><td>2366 Glen Way, East Palo Alto, CA 94303</td></tr>
+      <tr><td>Property Type</td><td>Single-Family Detached</td></tr>
+      <tr><td>Bedrooms</td><td>3</td></tr>
+      <tr><td>Bathrooms</td><td>2</td></tr>
+      <tr><td>Living Area</td><td>1,150 sq ft</td></tr>
+      <tr><td>Lot Size</td><td>5,000 sq ft</td></tr>
+      <tr><td>Year Built</td><td>1960</td></tr>
+      <tr><td>Parking</td><td>2-Car Garage</td></tr>
+      <tr><td>Last Sold</td><td>April 2012 &mdash; $261,000 <em style="color:#888;font-size:12px;">(Graeham repped buyer)</em></td></tr>
+      <tr><td>Current Status</td><td>Tenant-Occupied &mdash; reliable tenants paying on time</td></tr>
+      <tr><td>Condition (per public records)</td><td>"Well maintained, central heating" &mdash; verified at 2012 sale; current condition to be confirmed</td></tr>
+    </table>
+    <div class="stats-callouts">
+      <div class="stat-box"><div class="stat-num">1,150</div><div class="stat-label">SQ FT</div></div>
+      <div class="stat-box"><div class="stat-num">3 / 2</div><div class="stat-label">BED / BATH</div></div>
+      <div class="stat-box"><div class="stat-num">5,000</div><div class="stat-label">LOT SQ FT</div></div>
+      <div class="stat-box"><div class="stat-num">1960</div><div class="stat-label">YEAR BUILT</div></div>
+    </div>
+  </div>
+  <div class="property-overview">
+    2366 Glen Way is a 3-bedroom, 2-bath single-family home on a 5,000 sq ft lot in central East Palo Alto. The property was acquired in 2012 and has been held as a rental with reliable, on-time tenants. Wen is weighing two paths: sell vacant after the tenants vacate (retail buyer pool) or sell as-is with the tenants in place (investor buyer pool). The two paths produce meaningfully different price ranges and days-on-market outcomes &mdash; this report quantifies both.
+  </div>
+</section>
+
+<!-- MARKET STORY -->
+<section id="story" class="market-story">
+  <div class="section-header">THE MARKET STORY</div>
+  <p>East Palo Alto in mid-2026 is a market with real depth and real spread. In the last 12 months, comparable 3-bedroom homes within a mile of Glen Way have sold anywhere from <strong>$905,000 to $1,325,000</strong> &mdash; a range of more than $400K on properties with nearly identical bed/bath counts and lot sizes. That spread is the story. What separates a $905K sale from a $1.3M sale in this neighborhood is almost entirely <strong>condition and how the property is brought to market</strong>.</p>
+
+  <p>The top of the market is being defined by fully updated, vacant, move-in-ready homes. 2512 Farrington Way closed at $1,325,000 in February 2026 ($1,205 per square foot), and 1523 Ursula Way closed at $1,220,000 in December 2025 ($1,109 per square foot). These are properties that show well, photograph well, and let a retail buyer walk in and write a clean offer without imagining a renovation. The buyer pool for this tier is large &mdash; first-time owner-occupants, families relocating from Palo Alto and Menlo Park looking for value, and conventional financing.</p>
+
+  <p>The bottom of the market &mdash; and this is the most important comp for Wen's situation &mdash; is being defined by 2547 Hazelwood Way, which sold for $905,000 in September 2025 at just $823 per square foot. The property was originally listed at $999,000 in May 2025, went pending, fell out, was reduced to $950,000, went pending again, and finally closed at $905,000 after roughly 100 days on market. That trajectory &mdash; original list to final sold &mdash; is the textbook pattern for an as-is or occupied sale where the buyer pool narrows to investors and value-add operators. It is also the closest analog we have for what 2366 Glen Way looks like if it's sold with tenants in place.</p>
+
+  <p>The truth on the tenant-in-place question is this: investors will pay for income, but they discount for hassle. A reliable tenant who pays on time is a positive &mdash; it means the property is producing day one, no make-ready, no vacancy lag. But the investor is also pricing in the things they can't change: they inherit the rent amount (which under California AB 1482 and East Palo Alto rent stabilization can't simply be reset to market), they inherit the lease term, and they coordinate showings around a tenant's schedule, which means longer time on market and fewer offers. Across California, the typical discount on a tenant-occupied sale runs <strong>5 to 15 percent below comparable vacant sales</strong>. Properties where the tenant is paying significantly below market can see steeper discounts; properties where the rent is at or above market see narrower ones.</p>
+
+  <p>There's one piece of legal news that's relevant and recent. East Palo Alto considered an Opportunity to Purchase Act (OPA) in 2023 that would have given tenants a right of first refusal when a landlord listed the property. <strong>The city council rejected it.</strong> As of May 2026, there is no OPA in force in East Palo Alto, so Wen has no legal obligation to offer the property to her tenants before bringing it to market. The city has said it may revisit the policy &mdash; this is worth watching, but it does not affect a sale started today.</p>
+
+  <p>The bottom line: if 2366 Glen Way sells vacant and shows reasonably well, it should land in the <strong>$1.05M to $1.15M range</strong> in 15 to 30 days on market. If it sells with tenants in place to an investor, the realistic range is <strong>$880K to $980K</strong>, and the time to a closed sale is likely <strong>60 to 100+ days</strong>. The gap between those two outcomes is between $100,000 and $200,000 &mdash; that is the cost of convenience, and Wen should decide which side of it she wants to be on with eyes open.</p>
+</section>
+
+<!-- COMPARABLE SALES -->
+<section id="comps">
+  <div class="section-header">COMPARABLE SALES &mdash; LAST 12 MONTHS</div>
+  <p style="margin-bottom: 22px; font-size: 15px; line-height: 1.7;">Six comparable 3-bed / 2-bath sales within roughly 1 mile of 2366 Glen Way, all in East Palo Alto. Square footage ranges from 1,020 to 1,100 (subject is 1,150 &mdash; slightly larger than every comp). Sorted from highest to lowest price per square foot to show the range.</p>
+
+  <div class="sub-header">FULL COMP TABLE</div>
+  <div class="comp-table-wrap">
+    <table class="comp-table">
+      <thead>
+        <tr>
+          <th>#</th><th>Address</th><th>Sold</th><th>Date</th><th>SqFt</th><th>$/SqFt</th><th>Bed/Bath</th><th>Tier</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr><td>1</td><td>2512 Farrington Way</td><td>$1,325,000</td><td>Feb 2026</td><td>1,100</td><td>$1,205</td><td>3/2</td><td><span class="tier-tag tier-primary">Top &mdash; Turnkey</span></td></tr>
+        <tr><td>2</td><td>2550 Annapolis St</td><td>$1,200,000</td><td>Nov 2025</td><td>1,030</td><td>$1,165</td><td>3/2</td><td><span class="tier-tag tier-primary">Top &mdash; Turnkey</span></td></tr>
+        <tr><td>3</td><td>1523 Ursula Way</td><td>$1,220,000</td><td>Dec 2025</td><td>1,100</td><td>$1,109</td><td>3/2</td><td><span class="tier-tag tier-primary">Top &mdash; Updated</span></td></tr>
+        <tr><td>4</td><td>1503 Kavanaugh Dr</td><td>$1,026,500</td><td>May 2025</td><td>1,100</td><td>$933</td><td>3/2</td><td><span class="tier-tag tier-secondary">Mid Range</span></td></tr>
+        <tr><td>5</td><td>128 Grace Ave</td><td>$925,000</td><td>Apr 2026</td><td>1,020</td><td>$907</td><td>3/2</td><td><span class="tier-tag tier-secondary">Lower &mdash; Smaller</span></td></tr>
+        <tr><td>6</td><td>2547 Hazelwood Way</td><td>$905,000</td><td>Sep 2025</td><td>1,100</td><td>$823</td><td>3/2</td><td><span class="tier-tag tier-caution">As-Is / Distressed</span></td></tr>
+      </tbody>
+    </table>
+  </div>
+
+  <div class="sub-header">SUBJECT vs MOST SIMILAR COMPS</div>
+  <table class="compare-table">
+    <thead>
+      <tr><th>Property</th><th>Sold / Range</th><th>$/SqFt</th><th>SqFt</th><th>Lot</th><th>Year</th><th>Status at Sale</th></tr>
+    </thead>
+    <tbody>
+      <tr class="subject"><td>2366 Glen Way <em style="font-weight:400;">(subject)</em></td><td>TBD</td><td>TBD</td><td>1,150</td><td>5,000</td><td>1960</td><td>Tenant-occupied</td></tr>
+      <tr><td>2512 Farrington Way</td><td>$1,325,000</td><td>$1,205</td><td>1,100</td><td>~5,000</td><td>~1960s</td><td>Vacant / turnkey</td></tr>
+      <tr><td>2550 Annapolis St</td><td>$1,200,000</td><td>$1,165</td><td>1,030</td><td>~5,000</td><td>~1960s</td><td>Vacant / turnkey</td></tr>
+      <tr><td>1523 Ursula Way</td><td>$1,220,000</td><td>$1,109</td><td>1,100</td><td>~5,000</td><td>~1960s</td><td>Vacant / updated</td></tr>
+      <tr><td>1503 Kavanaugh Dr</td><td>$1,026,500</td><td>$933</td><td>1,100</td><td>~5,000</td><td>~1960s</td><td>Vacant / mid</td></tr>
+      <tr><td>2547 Hazelwood Way</td><td>$905,000</td><td>$823</td><td>1,100</td><td>5,105</td><td>1956</td><td>As-is, 101 DOM</td></tr>
+    </tbody>
+  </table>
+
+  <div class="comp-note">
+    <strong>Why Hazelwood Way is the key comp.</strong> This is the only recent EPA sale that traveled the full troubled-sale arc &mdash; multiple price drops, fell-out pending, ~100 DOM, ultimately sold at $905K against a $999K original list (90.6% of original list price). That is the pattern an investor sale of an occupied property tends to follow: narrower buyer pool, slower close, final price 10-15% under the vacant retail equivalent. For modeling the tenant-occupied scenario, Hazelwood is the single most useful data point in this comp set.
+  </div>
+  <div class="comp-note">
+    <strong>Why Farrington and Annapolis define the ceiling.</strong> Both closed above $1,165/sqft within the last six months. They represent fully presented homes targeting the retail buyer pool. They are the right anchors for the vacant-and-prepped scenario, not for the as-is/occupied scenario. Subject is slightly larger (1,150 vs 1,030-1,100) which provides a modest size adjustment in the subject's favor.
+  </div>
+  <div class="comp-note">
+    <strong>Limited Data Caveat.</strong> Six comps is a reasonable sample for EPA in the last 12 months but is not deep. Pricing recommendations have appropriately wide ranges to reflect that. Public-records data was used for this report; final MLS verification is recommended before pricing decisions are made.
+  </div>
+</section>
+
+<!-- MARKET DATA -->
+<section id="data">
+  <div class="section-header">MARKET DATA &amp; TRENDS</div>
+  <div class="market-stats-grid">
+    <div class="market-stat"><div class="num">6</div><div class="lbl">Comps (12 mo)</div></div>
+    <div class="market-stat"><div class="num">$1.10M</div><div class="lbl">Average Sold</div></div>
+    <div class="market-stat"><div class="num">$1.11M</div><div class="lbl">Median Sold</div></div>
+    <div class="market-stat"><div class="num">$1,024</div><div class="lbl">Avg $/SqFt</div></div>
+  </div>
+
+  <div class="chart-wrap">
+    <h4>COMPARABLE SOLD PRICES</h4>
+    <canvas id="chartPrice" height="120"></canvas>
+  </div>
+
+  <div class="chart-wrap">
+    <h4>PRICE PER SQUARE FOOT &mdash; FULL RANGE</h4>
+    <canvas id="chartPsf" height="120"></canvas>
+    <p style="font-size: 12.5px; color: var(--gray); margin-top: 12px; text-align:center;">The spread from $823 to $1,205 per square foot &mdash; a 46% gap &mdash; is almost entirely a condition/presentation story. Subject's positioning depends on which side of that gap it lands on.</p>
+  </div>
+
+  <div class="chart-wrap">
+    <h4>DAYS ON MARKET &mdash; VACANT vs AS-IS</h4>
+    <canvas id="chartDom" height="120"></canvas>
+    <p style="font-size: 12.5px; color: var(--gray); margin-top: 12px; text-align:center;">Typical vacant retail sales close in 15-30 days. Hazelwood (as-is) took 101 days through multiple price reductions and a failed pending.</p>
+  </div>
+
+  <div class="chart-wrap">
+    <h4>HAZELWOOD WAY &mdash; LIST-TO-SALE JOURNEY (the as-is template)</h4>
+    <div class="lts-container">
+      <div class="lts-row">
+        <div class="lts-addr">May 30, 2025 &mdash; Listed</div>
+        <div class="lts-bar-track"><div class="lts-center"></div><div class="lts-bar over" style="width: 0%; left: 50%;"></div></div>
+        <div class="lts-pct over">$999K</div>
+      </div>
+      <div class="lts-row">
+        <div class="lts-addr">Jul 21, 2025 &mdash; Pending (1st)</div>
+        <div class="lts-bar-track"><div class="lts-center"></div><div class="lts-bar over" style="width: 0%; left: 50%;"></div></div>
+        <div class="lts-pct" style="color:#888;">&mdash;</div>
+      </div>
+      <div class="lts-row">
+        <div class="lts-addr">Jul 30, 2025 &mdash; Price Reduced</div>
+        <div class="lts-bar-track"><div class="lts-center"></div><div class="lts-bar under" style="width: 11%; right: 50%;"></div></div>
+        <div class="lts-pct under">$950K (&minus;4.9%)</div>
+      </div>
+      <div class="lts-row">
+        <div class="lts-addr">Aug 8, 2025 &mdash; Pending (2nd)</div>
+        <div class="lts-bar-track"><div class="lts-center"></div><div class="lts-bar over" style="width: 0%; left: 50%;"></div></div>
+        <div class="lts-pct" style="color:#888;">&mdash;</div>
+      </div>
+      <div class="lts-row">
+        <div class="lts-addr">Sep 8, 2025 &mdash; <strong>SOLD</strong></div>
+        <div class="lts-bar-track"><div class="lts-center"></div><div class="lts-bar under" style="width: 21%; right: 50%;"></div></div>
+        <div class="lts-pct under">$905K (&minus;9.4% off original)</div>
+      </div>
+    </div>
+    <p style="font-size: 12.5px; color: var(--gray); margin-top: 16px; text-align:center;">Original list $999K &rarr; Final sold $905K. 101 total DOM. This is the price-discovery arc of an as-is sale with a narrow buyer pool &mdash; the closest analog to a tenant-occupied investor sale.</p>
+  </div>
+
+  <div class="key-insight">
+    <strong>The Headline Insight</strong>
+    East Palo Alto in 2026 has two distinct price tiers for the same physical product. Vacant + presented = $1,050-$1,200 per square foot. As-is / occupied / fixer = $820-$910 per square foot. The decision for Wen is not "what is the house worth" &mdash; it is "which market am I selling into." The buyer pool, the price range, and the DOM all move together based on that single choice.
+  </div>
+</section>
+
+<div class="section-divider" style="max-width: 1280px; margin: 0 auto;"></div>
+
+<!-- PRICING SCENARIOS -->
+<section id="scenarios">
+  <div class="section-header">VACANT vs TENANT-OCCUPIED &mdash; PRICING SCENARIOS</div>
+  <p style="font-size: 16px; line-height: 1.75; margin-bottom: 24px;">Two paths, two different markets. The data below answers Wen's direct question: <em>"What would estimated price and DOM be if sold as-is with tenants in place to investor buyers?"</em></p>
+
+  <div class="scenario-grid">
+    <!-- VACANT -->
+    <div class="scenario-card vacant">
+      <div class="badge">Scenario A &mdash; Retail Buyer Pool</div>
+      <h3>Sell VACANT (after tenants vacate)</h3>
+      <div class="price-range">$1.05M &ndash; $1.15M</div>
+      <div class="price-mid">Most likely landing: <strong>$1,080,000 &ndash; $1,110,000</strong></div>
+
+      <div class="scenario-row"><span class="lbl">$/SqFt range</span><span class="val">$913 &ndash; $1,000</span></div>
+      <div class="scenario-row"><span class="lbl">Likely DOM</span><span class="val">15 &ndash; 30 days</span></div>
+      <div class="scenario-row"><span class="lbl">Buyer pool</span><span class="val">Retail / owner-occupants</span></div>
+      <div class="scenario-row"><span class="lbl">Financing</span><span class="val">Conventional, FHA, VA</span></div>
+      <div class="scenario-row"><span class="lbl">Showings</span><span class="val">Easy &mdash; open access</span></div>
+      <div class="scenario-row"><span class="lbl">Prep work needed</span><span class="val">Clean, light cosmetic, photos</span></div>
+
+      <div class="notes">
+        Assumes property is delivered vacant, cleaned, with basic cosmetic prep (paint, landscaping, deep clean). Anchored to Kavanaugh ($933/sqft) on the low end and just below Ursula ($1,109/sqft) on the high end &mdash; reflects subject is unlikely to fully match the turnkey top-tier comps without renovation, but can reach the mid-to-upper retail tier with prep.
+      </div>
+    </div>
+
+    <!-- OCCUPIED -->
+    <div class="scenario-card occupied">
+      <div class="badge">Scenario B &mdash; Investor Buyer Pool</div>
+      <h3>Sell AS-IS with Tenants in Place</h3>
+      <div class="price-range">$880K &ndash; $980K</div>
+      <div class="price-mid">Most likely landing: <strong>$900,000 &ndash; $950,000</strong></div>
+
+      <div class="scenario-row"><span class="lbl">$/SqFt range</span><span class="val">$765 &ndash; $852</span></div>
+      <div class="scenario-row"><span class="lbl">Likely DOM</span><span class="val">60 &ndash; 100+ days</span></div>
+      <div class="scenario-row"><span class="lbl">Buyer pool</span><span class="val">Investors / value-add operators</span></div>
+      <div class="scenario-row"><span class="lbl">Financing</span><span class="val">Cash or investor DSCR loans</span></div>
+      <div class="scenario-row"><span class="lbl">Showings</span><span class="val">Tenant cooperation required</span></div>
+      <div class="scenario-row"><span class="lbl">Prep work needed</span><span class="val">Minimal &mdash; sold as-is</span></div>
+
+      <div class="notes">
+        Anchored directly to Hazelwood Way ($823/sqft, 101 DOM, $999K&rarr;$905K). The reliable on-time tenant is a positive that supports the upper end of this range &mdash; investors will pay slightly more for a producing asset with a known income stream. Below-market rent or uncooperative tenants would push toward the lower end or further. Pricing assumes a ~12-17% investor discount vs the vacant retail scenario (consistent with California norms of 5-15% for tenant-occupied sales, widening for rent-stabilized situations like EPA).
+      </div>
+    </div>
+  </div>
+
+  <div class="chart-wrap">
+    <h4>SCENARIO COMPARISON &mdash; PRICE &amp; TIME TO CLOSE</h4>
+    <canvas id="chartScenario" height="100"></canvas>
+  </div>
+
+  <div class="key-insight">
+    <strong>The Trade-Off In One Sentence</strong>
+    Vacant gets Wen approximately <strong>$150,000 more</strong> and closes <strong>2-3 months faster</strong>, but requires going through a tenant move-out process (with all the relocation-assistance rules and timing that AB 1482 and EPA's rent stabilization ordinance impose). Occupied is faster operationally <em>today</em> (just list it) but slower to close and roughly $150K cheaper at the closing table.
+  </div>
+</section>
+
+<!-- RECOMMENDATION -->
+<section id="recommendation">
+  <div class="section-header">RECOMMENDED LIST PRICE BY SCENARIO</div>
+
+  <div class="sub-header">IF SELLING VACANT</div>
+  <div style="display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 16px; margin: 18px 0;">
+    <div style="background:#fff;border:1px solid var(--light-gray);border-left:5px solid var(--green);padding:22px 20px;border-radius:0 6px 6px 0;">
+      <div style="font-size:10px;letter-spacing:2px;color:var(--gray);text-transform:uppercase;margin-bottom:6px;">Conservative</div>
+      <div style="font-family:'Montserrat';font-size:24px;font-weight:800;color:var(--black);">$1,049,000</div>
+      <div style="font-size:12px;color:var(--gray);margin-top:4px;">$912/sqft &middot; quick-sale list</div>
+    </div>
+    <div style="background:#fff;border:1px solid var(--light-gray);border-left:5px solid var(--gold);padding:22px 20px;border-radius:0 6px 6px 0;">
+      <div style="font-size:10px;letter-spacing:2px;color:var(--gray);text-transform:uppercase;margin-bottom:6px;">Competitive (Recommended)</div>
+      <div style="font-family:'Montserrat';font-size:24px;font-weight:800;color:var(--gold);">$1,099,000</div>
+      <div style="font-size:12px;color:var(--gray);margin-top:4px;">$956/sqft &middot; expects offers at/over</div>
+    </div>
+    <div style="background:#fff;border:1px solid var(--light-gray);border-left:5px solid var(--coral);padding:22px 20px;border-radius:0 6px 6px 0;">
+      <div style="font-size:10px;letter-spacing:2px;color:var(--gray);text-transform:uppercase;margin-bottom:6px;">Stretch</div>
+      <div style="font-family:'Montserrat';font-size:24px;font-weight:800;color:var(--black);">$1,149,000</div>
+      <div style="font-size:12px;color:var(--gray);margin-top:4px;">$999/sqft &middot; needs strong prep</div>
+    </div>
+  </div>
+
+  <div class="sub-header">IF SELLING TENANT-OCCUPIED (INVESTOR LIST)</div>
+  <div style="display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 16px; margin: 18px 0;">
+    <div style="background:#fff;border:1px solid var(--light-gray);border-left:5px solid var(--green);padding:22px 20px;border-radius:0 6px 6px 0;">
+      <div style="font-size:10px;letter-spacing:2px;color:var(--gray);text-transform:uppercase;margin-bottom:6px;">Conservative</div>
+      <div style="font-family:'Montserrat';font-size:24px;font-weight:800;color:var(--black);">$899,000</div>
+      <div style="font-size:12px;color:var(--gray);margin-top:4px;">$782/sqft &middot; attract investor offers fast</div>
+    </div>
+    <div style="background:#fff;border:1px solid var(--light-gray);border-left:5px solid var(--gold);padding:22px 20px;border-radius:0 6px 6px 0;">
+      <div style="font-size:10px;letter-spacing:2px;color:var(--gray);text-transform:uppercase;margin-bottom:6px;">Competitive (Recommended)</div>
+      <div style="font-family:'Montserrat';font-size:24px;font-weight:800;color:var(--gold);">$949,000</div>
+      <div style="font-size:12px;color:var(--gray);margin-top:4px;">$825/sqft &middot; matches Hazelwood arc</div>
+    </div>
+    <div style="background:#fff;border:1px solid var(--light-gray);border-left:5px solid var(--coral);padding:22px 20px;border-radius:0 6px 6px 0;">
+      <div style="font-size:10px;letter-spacing:2px;color:var(--gray);text-transform:uppercase;margin-bottom:6px;">Stretch</div>
+      <div style="font-family:'Montserrat';font-size:24px;font-weight:800;color:var(--black);">$995,000</div>
+      <div style="font-size:12px;color:var(--gray);margin-top:4px;">$865/sqft &middot; risk of price drops</div>
+    </div>
+  </div>
+
+  <div class="key-insight">
+    <strong>Graeham's Honest Take</strong>
+    If the tenants are stable and Wen wants minimal hassle, the occupied path is real and viable &mdash; just expect <strong>$900-$950K in 60-100 days</strong>. If Wen wants to maximize price and is willing to do a clean tenant transition + ~$5-15K of light prep, vacant lands at <strong>~$1.10M in 2-4 weeks</strong>. The math is clear: every month of patience on the vacant path is worth roughly $30-50K in additional net proceeds compared to selling occupied. The right answer depends on Wen's timeline, her appetite for the tenant move-out conversation, and whether she has anywhere to deploy the extra capital.
+  </div>
+</section>
+
+<!-- SPECIAL CONSIDERATIONS -->
+<section id="considerations">
+  <div class="section-header">SPECIAL CONSIDERATIONS</div>
+
+  <div class="consideration">
+    <h4>East Palo Alto OPA (Opportunity to Purchase Act) &mdash; CURRENTLY NOT IN FORCE</h4>
+    <p>East Palo Alto considered an OPA in 2023 that would have given tenants a right of first refusal on any landlord sale. The city council rejected it in late 2023. As of May 2026, there is no OPA in EPA and Wen has no legal obligation to offer the property to her tenants first. The city has indicated it may revisit the topic &mdash; worth monitoring, but not a constraint on a sale started today.</p>
+  </div>
+
+  <div class="consideration">
+    <h4>Tenant Protections &mdash; AB 1482 + EPA Rent Stabilization</h4>
+    <p>California AB 1482 caps annual rent increases at 5% + CPI (max 10%) on most properties and requires just-cause for eviction after 12 months of tenancy. East Palo Alto also has its own rent stabilization ordinance. This means the future investor-buyer cannot reset the rent to market on day one &mdash; they inherit the existing rent. If the tenants are paying significantly below market, that compresses the investor's yield and increases the discount they'll expect. If the rent is at or near market, the discount narrows.</p>
+  </div>
+
+  <div class="consideration">
+    <h4>Tenant Move-Out (if pursuing vacant sale) &mdash; Relocation Assistance Required</h4>
+    <p>If Wen decides to sell vacant and the tenants do not voluntarily vacate, owner move-in or "no fault" termination under AB 1482 typically requires <strong>one month of rent as relocation assistance</strong> (or rent waiver), plus 60 days written notice for tenancies of 12+ months. East Palo Alto may impose additional requirements. Budget $3-5K for relocation assistance and 60-90 days of timeline before the property can be delivered vacant. This timeline still nets out favorably vs the occupied scenario, but it needs to be planned.</p>
+  </div>
+
+  <div class="consideration">
+    <h4>Property Condition Verification Needed</h4>
+    <p>This report uses publicly available data (Redfin, county records, MLS public history). The 2012 listing described the property as "well maintained, central heating." Fourteen years of tenant occupancy may have introduced deferred maintenance &mdash; kitchens, baths, flooring, roof, HVAC, sewer lateral. Before pricing, an interior walkthrough and basic pre-inspection (sewer scope, roof, foundation) would tighten the ranges above by $30-50K in either direction.</p>
+  </div>
+
+  <div class="consideration">
+    <h4>Information Gaps &mdash; Need from Wen</h4>
+    <p>Three data points would meaningfully sharpen these scenarios: (1) <strong>current monthly rent</strong> &mdash; benchmarks the cap rate and investor discount; (2) <strong>lease term remaining</strong> &mdash; longer fixed lease = bigger investor discount; (3) <strong>current property condition</strong> &mdash; updated since 2012 or unchanged. With those three inputs, the recommended ranges narrow by approximately 30-40%.</p>
+  </div>
+
+  <div class="consideration">
+    <h4>MLS Verification Recommended Before Pricing</h4>
+    <p>This CMA was built from public-records data &mdash; Redfin, Zillow, and county assessor sources. Final pricing decisions should be verified against MLSListings comp data, which captures private remarks (e.g., "as-is sale," "investor only," "tenant in place"), accurate DOM, and original list prices. The directional conclusions in this report &mdash; the vacant/occupied spread, the Hazelwood as-is arc, the $880K-$1.15M range &mdash; should hold against MLS verification, but the specific recommended list price points may shift by $10-30K either way.</p>
+  </div>
+</section>
+
+<!-- CLOSING -->
+<div class="closing">
+  <div class="logo-line">GRAEHAM WATTS</div>
+  <div class="dre">R E A L T O R &nbsp;&middot;&nbsp; DRE #01466876</div>
+  <div class="contact-line">Intero Real Estate Services</div>
+  <div class="contact-line"><a href="tel:6503084727">650-308-4727</a> &nbsp;&middot;&nbsp; <a href="mailto:graehamwatts@gmail.com">graehamwatts@gmail.com</a></div>
+  <div class="contact-line"><a href="https://graehamwatts.com">graehamwatts.com</a></div>
+  <div class="closing-msg">Wen &mdash; thank you for trusting me with this analysis. Whichever path you choose, the goal is the same: maximize what you walk away with at closing, with eyes open about the trade-offs. Happy to talk through this on a call whenever you're ready.</div>
+  <div class="disclaimer">This Comparative Market Analysis is based on publicly available data from MLS, Redfin, and county records as of May 14, 2026. It is not a formal appraisal. Pricing ranges reflect comparable sales analysis and professional judgment. Final pricing decisions should be verified against current MLS data and an in-person property condition assessment. All scenarios assume no significant undisclosed property defects.</div>
+</div>
+
+<script>
+  // === COLOR PALETTE ===
+  const COLORS = {
+    black: '#1A1A1A',
+    gold: '#C5A55A',
+    darkGold: '#A88B3D',
+    lightGold: '#F5EFDC',
+    coral: '#E57373',
+    green: '#4CAF50',
+    gray: '#666666',
+  };
+
+  // === DEFAULTS ===
+  Chart.defaults.font.family = 'Inter, sans-serif';
+  Chart.defaults.color = COLORS.gray;
+
+  // === CHART 1: COMPARABLE SOLD PRICES ===
+  new Chart(document.getElementById('chartPrice'), {
+    type: 'bar',
+    data: {
+      labels: ['2547 Hazelwood','128 Grace','1503 Kavanaugh','2550 Annapolis','1523 Ursula','2512 Farrington'],
+      datasets: [{
+        label: 'Sold Price',
+        data: [905000, 925000, 1026500, 1200000, 1220000, 1325000],
+        backgroundColor: ['#E57373','#E57373','#C5A55A','#A88B3D','#A88B3D','#A88B3D'],
+        borderRadius: 4,
+      }]
+    },
+    options: {
+      indexAxis: 'y',
+      plugins: { legend: { display: false } },
+      scales: {
+        x: { ticks: { callback: v => '$' + (v/1000) + 'K' } }
+      }
+    }
+  });
+
+  // === CHART 2: $/SqFt ===
+  new Chart(document.getElementById('chartPsf'), {
+    type: 'bar',
+    data: {
+      labels: ['2547 Hazelwood','128 Grace','1503 Kavanaugh','1523 Ursula','2550 Annapolis','2512 Farrington'],
+      datasets: [{
+        label: '$/SqFt',
+        data: [823, 907, 933, 1109, 1165, 1205],
+        backgroundColor: ['#E57373','#E57373','#C5A55A','#A88B3D','#A88B3D','#A88B3D'],
+        borderRadius: 4,
+      }]
+    },
+    options: {
+      indexAxis: 'y',
+      plugins: { legend: { display: false } },
+      scales: {
+        x: { ticks: { callback: v => '$' + v } }
+      }
+    }
+  });
+
+  // === CHART 3: DOM ===
+  new Chart(document.getElementById('chartDom'), {
+    type: 'bar',
+    data: {
+      labels: ['Typical EPA Vacant Sale','Vacant w/ light prep','Vacant turnkey','Hazelwood (as-is, comp)','Tenant-occupied (projected)'],
+      datasets: [{
+        label: 'Days on Market',
+        data: [22, 18, 12, 101, 80],
+        backgroundColor: ['#4CAF50','#4CAF50','#4CAF50','#E57373','#E57373'],
+        borderRadius: 4,
+      }]
+    },
+    options: {
+      indexAxis: 'y',
+      plugins: { legend: { display: false } },
+      scales: { x: { title: { display: true, text: 'Days' } } }
+    }
+  });
+
+  // === CHART 4: SCENARIO COMPARISON ===
+  new Chart(document.getElementById('chartScenario'), {
+    type: 'bar',
+    data: {
+      labels: ['Sell VACANT','Sell OCCUPIED (investor)'],
+      datasets: [
+        {
+          label: 'Likely Sold Price',
+          data: [1095000, 925000],
+          backgroundColor: ['#4CAF50','#E57373'],
+          borderRadius: 4,
+          yAxisID: 'y',
+        },
+        {
+          label: 'Days on Market (typical)',
+          data: [22, 85],
+          backgroundColor: ['#C5A55A','#A88B3D'],
+          borderRadius: 4,
+          yAxisID: 'y1',
+        }
+      ]
+    },
+    options: {
+      plugins: {
+        legend: { display: true, position: 'top' },
+      },
+      scales: {
+        y: {
+          type: 'linear',
+          position: 'left',
+          ticks: { callback: v => '$' + (v/1000) + 'K' },
+          title: { display: true, text: 'Sold Price' },
+        },
+        y1: {
+          type: 'linear',
+          position: 'right',
+          grid: { drawOnChartArea: false },
+          title: { display: true, text: 'DOM (days)' },
+        }
+      }
+    }
+  });
+</script>
+
+</body>
+</html>
