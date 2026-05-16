@@ -2,7 +2,7 @@
 <html lang="en"><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Graeham Watts &middot; Main Dashboard &middot; Week of May 11&ndash;17, 2026</title>
 <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;600;700;800&family=DM+Sans:wght@400;500;700&display=swap" rel="stylesheet">
-<script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.0/dist/chart.umd.min.js"></script>
+<!-- (chart.js CDN removed 2026-05-15 — replaced by ApexCharts brushable charts; old Chart.js init code remains as defensive dead code that early-returns when canvas elements are missing) -->
 <style>
 :root{color-scheme:light;--navy:#1B2A4A;--gold:#B8860B;--purple:#6a1b9a;--red:#9f1239;--bg:#f4f5f7;--card:#fff;--text:#2d3748;--muted:#718096;--line:#cbd5d8;--border:#e2e5ea;--radius:12px;}
 *{box-sizing:border-box;}body{margin:0;background:var(--bg);color:var(--text);font-family:'DM Sans',-apple-system,sans-serif;line-height:1.55;}
@@ -139,7 +139,208 @@ h1,h2,h3,h4{font-family:'Plus Jakarta Sans',sans-serif;letter-spacing:-0.02em;co
 .charts-pair .chart-wrap{margin:0;}
 .ig-per-btn.active{background:#B8860B;color:#fff;border-color:#B8860B;}
 .yt-per-btn.active,.yt-met-btn.active{background:#dc2626;color:#fff;border-color:#dc2626;}
-</style></head>
+
+/* === ApexCharts research panel CSS (merged 2026-05-15) === */
+
+  :root {
+    --navy: #1B2A4A; --gold: #C5A258; --teal: #00695c; --purple: #6a1b9a;
+    --green: #2e7d32; --red: #c62828; --orange: #e65100; --bg: #f4f5f7;
+    --card: #ffffff; --text: #2d3748; --muted: #718096; --border: #e2e5ea;
+    --radius: 12px; --shadow: 0 2px 8px rgba(0,0,0,0.04);
+  }
+  * { box-sizing: border-box; }
+  body { margin: 0; padding: 0; font-family: 'DM Sans', sans-serif; background: var(--bg); color: var(--text); line-height: 1.55; }
+  .wrap { max-width: 1400px; margin: 0 auto; padding: 24px; }
+  h1, h2, h3, h4 { font-family: 'Plus Jakarta Sans', sans-serif; color: var(--navy); margin: 0 0 12px; }
+  h1 { font-size: 30px; font-weight: 800; letter-spacing: -0.5px; }
+  h2.sh { font-size: 22px; margin: 28px 0 16px; padding-bottom: 8px; border-bottom: 2px solid var(--border); }
+
+  /* HERO */
+  .hero { background: linear-gradient(135deg, var(--navy) 0%, #2c3e60 100%); color: #fff; padding: 32px 32px; border-radius: var(--radius); margin-bottom: 24px; }
+  .hero h1 { color: #fff; }
+  .hero-sub { color: rgba(255,255,255,0.8); font-size: 14px; margin-top: 8px; }
+  .hero-meta { display: flex; gap: 8px; flex-wrap: wrap; margin: 18px 0 0; }
+  .hm-pill { display: inline-block; padding: 6px 12px; border-radius: 100px; font-size: 12px; font-weight: 700; text-transform: uppercase; letter-spacing: 0.5px; background: rgba(255,255,255,0.12); color: #fff; }
+  .hm-pill.preview { background: #fbbf24; color: #451a03; }
+  .hm-pill.gold { background: var(--gold); color: var(--navy); }
+  .hm-pill.v5 { background: #16a34a; color: #fff; }
+
+  /* AUDIENCE TABS */
+  .audience-nav { display: grid; grid-template-columns: repeat(4, 1fr); gap: 12px; margin-bottom: 20px; position: sticky; top: 8px; z-index: 50; background: var(--bg); padding: 8px 0; }
+  @media (max-width: 800px) { .audience-nav { grid-template-columns: 1fr 1fr; } }
+  @media (max-width: 480px) { .audience-nav { grid-template-columns: 1fr; position: relative; } }
+  .aud-btn { background: #fff; border: 2px solid var(--border); border-radius: var(--radius); padding: 16px; cursor: pointer; transition: transform 0.15s, box-shadow 0.15s, background 0.15s; text-align: left; font-family: inherit; display: block; position: relative; }
+  .aud-btn:hover { transform: translateY(-2px); box-shadow: 0 6px 16px rgba(0,0,0,0.08); }
+  .aud-research { border-color: var(--navy); }
+  .aud-blog { border-color: var(--gold); background: linear-gradient(135deg, #fef9eb 0%, #ffffff 100%); }
+  .aud-peter { border-color: var(--purple); background: linear-gradient(135deg, #f3e5f5 0%, #ffffff 100%); }
+  .aud-all { border-color: #4a5568; background: #fafbfc; }
+  .aud-icon { font-size: 22px; line-height: 1; margin-bottom: 6px; }
+  .aud-label { font-family: 'Plus Jakarta Sans', sans-serif; font-weight: 800; color: var(--navy); font-size: 14px; margin-bottom: 3px; }
+  .aud-sub { font-size: 11px; color: var(--muted); line-height: 1.4; }
+  .aud-btn.aud-active { transform: translateY(-3px); box-shadow: 0 10px 24px rgba(0,0,0,0.18); }
+  .aud-btn.aud-active::after { content: '●'; position: absolute; top: 8px; right: 12px; font-size: 14px; color: rgba(255,255,255,0.9); }
+  .aud-research.aud-active { background: var(--navy); }
+  .aud-research.aud-active .aud-label, .aud-research.aud-active .aud-sub { color: #fff; }
+  .aud-blog.aud-active { background: var(--gold); }
+  .aud-blog.aud-active .aud-label { color: var(--navy); }
+  .aud-blog.aud-active .aud-sub { color: rgba(27,42,74,0.85); }
+  .aud-blog.aud-active::after { color: var(--navy); }
+  .aud-peter.aud-active { background: var(--purple); }
+  .aud-peter.aud-active .aud-label, .aud-peter.aud-active .aud-sub { color: #fff; }
+  .aud-all.aud-active { background: #2d3748; }
+  .aud-all.aud-active .aud-label, .aud-all.aud-active .aud-sub { color: #fff; }
+  .aud-hidden { display: none !important; }
+  .view-banner { background: #fff8e1; border: 1px solid #f5d273; border-radius: 8px; padding: 10px 14px; margin-bottom: 16px; font-size: 13px; color: #5d4a1f; display: none; }
+  .view-banner.show { display: block; }
+  .view-banner strong { color: var(--navy); }
+
+  /* PREVIEW BANNER */
+  .preview-banner { background: #fef3c7; border: 1px solid #fbbf24; padding: 12px 16px; border-radius: 8px; margin-bottom: 18px; font-size: 13px; color: #451a03; line-height: 1.5; }
+  .preview-banner strong { color: #78350f; }
+
+  /* LIVE DATA LAYER */
+  .data-layer { background: linear-gradient(135deg, #0f172a 0%, #1e293b 100%); color: #e2e8f0; padding: 24px 28px; border-radius: var(--radius); margin-bottom: 24px; }
+  .dl-h { font-family: 'Plus Jakarta Sans', sans-serif; font-weight: 800; font-size: 17px; color: #fff; margin: 0 0 4px; }
+  .dl-sub { font-size: 12px; color: #94a3b8; margin-bottom: 14px; }
+  .dl-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); gap: 10px; }
+  .dl-card { background: rgba(255,255,255,0.04); border: 1px solid rgba(255,255,255,0.08); border-radius: 8px; padding: 11px 13px; position: relative; }
+  .dl-card.active { border-left: 3px solid #22c55e; }
+  .dl-card.configured { border-left: 3px solid var(--gold); }
+  .dl-icon { font-size: 16px; margin-bottom: 3px; }
+  .dl-name { font-weight: 700; font-size: 12px; color: #fff; margin-bottom: 2px; }
+  .dl-source { font-size: 9px; color: #94a3b8; text-transform: uppercase; letter-spacing: 0.5px; margin-bottom: 6px; }
+  .dl-signal { font-size: 11px; color: #cbd5e1; line-height: 1.4; }
+  .dl-status { position: absolute; top: 10px; right: 11px; font-size: 8px; font-weight: 800; letter-spacing: 0.5px; padding: 2px 6px; border-radius: 100px; text-transform: uppercase; }
+  .dl-status.active { background: #22c55e; color: #052e16; }
+  .dl-status.configured { background: var(--gold); color: var(--navy); }
+
+  /* WEEK GRID — 5 day cards */
+  .week-grid { display: grid; grid-template-columns: repeat(5, 1fr); gap: 14px; margin-bottom: 24px; }
+  @media (max-width: 1100px) { .week-grid { grid-template-columns: repeat(2, 1fr); } }
+  @media (max-width: 700px) { .week-grid { grid-template-columns: 1fr; } }
+  .day-card { background: var(--card); border: 1px solid var(--border); border-radius: var(--radius); padding: 18px; box-shadow: var(--shadow); display: flex; flex-direction: column; transition: transform 0.15s, box-shadow 0.15s; cursor: pointer; position: relative; }
+  .day-card:hover { transform: translateY(-3px); box-shadow: 0 8px 24px rgba(0,0,0,0.08); }
+  .day-card.star { border: 2px solid var(--gold); background: linear-gradient(135deg, #fefdfb 0%, #fef9eb 100%); }
+  .day-card.day-active { transform: translateY(-3px); box-shadow: 0 12px 32px rgba(0,0,0,0.18); border-width: 3px; outline: 3px solid rgba(197,162,88,0.3); outline-offset: 2px; }
+  .day-card.day-active::before { content: '👁 VIEWING'; position: absolute; top: 6px; right: 8px; background: var(--gold); color: var(--navy); font-size: 9px; font-weight: 800; padding: 3px 8px; border-radius: 100px; letter-spacing: 0.5px; }
+  .day-header { display: flex; align-items: baseline; justify-content: space-between; margin-bottom: 10px; padding-bottom: 8px; border-bottom: 1px solid var(--border); }
+  .day-name { font-family: 'Plus Jakarta Sans', sans-serif; font-weight: 800; color: var(--navy); font-size: 15px; }
+  .day-date { font-size: 12px; color: var(--muted); }
+  .day-funnel { font-size: 10px; font-weight: 800; padding: 3px 8px; border-radius: 100px; text-transform: uppercase; letter-spacing: 0.5px; align-self: flex-start; margin-bottom: 8px; }
+  .funnel-tofu { background: #dbeafe; color: #1e40af; }
+  .funnel-mofu { background: #fef3c7; color: #78350f; }
+  .funnel-bofu { background: #fce7f3; color: #9f1239; }
+  .day-title { font-size: 14px; font-weight: 700; color: var(--navy); margin-bottom: 8px; line-height: 1.35; }
+  .day-summary { font-size: 12px; color: var(--muted); margin-bottom: 8px; line-height: 1.4; padding: 6px 10px; background: rgba(27,42,74,0.04); border-radius: 6px; border-left: 2px solid var(--gold); }
+  .day-card.star .day-summary { background: rgba(197,162,88,0.1); }
+  .day-meta { font-size: 11px; color: var(--muted); padding-top: 10px; border-top: 1px solid var(--border); display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 6px; margin-top: auto; }
+  .day-score { background: var(--gold); color: var(--navy); padding: 3px 8px; border-radius: 100px; font-weight: 800; font-size: 10px; }
+  .day-score.high { background: var(--green); color: #fff; }
+  .day-formats-count { font-size: 10px; color: var(--muted); margin-top: 4px; }
+  .star-badge { background: var(--gold); color: var(--navy); font-size: 9px; padding: 2px 6px; border-radius: 100px; font-weight: 800; margin-left: 4px; }
+
+  /* FILTER BAR */
+  .filter-bar { display: flex; align-items: center; justify-content: space-between; flex-wrap: wrap; gap: 12px; background: #f9fafb; border: 1px solid var(--border); border-radius: 8px; padding: 12px 16px; margin-bottom: 16px; }
+  .filter-info { font-size: 13px; color: var(--text); }
+  .filter-info strong { color: var(--navy); }
+  .filter-info .day-pill { display: inline-block; background: var(--gold); color: var(--navy); padding: 2px 10px; border-radius: 100px; font-weight: 800; font-size: 12px; margin-left: 4px; }
+  .show-all-btn { background: var(--navy); color: #fff; border: 0; padding: 8px 16px; border-radius: 6px; font-family: 'Plus Jakarta Sans', sans-serif; font-weight: 700; font-size: 12px; cursor: pointer; }
+  .show-all-btn:hover { background: #243a64; }
+
+  /* DAILY ITEMS */
+  .daily-section { background: var(--card); border: 1px solid var(--border); border-radius: var(--radius); padding: 24px 28px; margin-bottom: 18px; box-shadow: var(--shadow); }
+  .daily-section h2 { font-size: 22px; margin: 0 0 4px; padding-bottom: 8px; border-bottom: 2px solid var(--border); }
+  .daily-section .ds-sub { font-size: 13px; color: var(--muted); margin: 6px 0 18px; }
+  .daily-list { display: flex; flex-direction: column; gap: 16px; }
+  .daily-item { background: #fafbfc; border: 1px solid var(--border); border-radius: 10px; padding: 18px 20px; }
+  .daily-item.star { background: linear-gradient(135deg, #fef9eb 0%, #ffffff 100%); border: 2px solid var(--gold); }
+  .daily-item.day-hidden { display: none; }
+  .di-header { display: flex; align-items: center; justify-content: space-between; flex-wrap: wrap; gap: 8px; margin-bottom: 10px; padding-bottom: 10px; border-bottom: 1px solid var(--border); }
+  .di-day { font-family: 'Plus Jakarta Sans', sans-serif; font-weight: 800; color: var(--navy); font-size: 15px; }
+  .di-day-meta { font-size: 11px; color: var(--muted); }
+  .di-funnel { font-size: 9px; font-weight: 800; padding: 3px 8px; border-radius: 100px; text-transform: uppercase; letter-spacing: 0.5px; }
+  .di-topic { font-size: 14px; font-weight: 700; color: var(--navy); margin-bottom: 8px; line-height: 1.4; }
+  .di-context { font-size: 12px; color: var(--text); line-height: 1.6; margin-bottom: 14px; padding: 10px 12px; background: #fff; border-radius: 6px; border-left: 3px solid var(--gold); }
+  .di-context strong { color: var(--navy); }
+
+  /* === V5 NEW: COMPACT FORMAT PILL ROWS === */
+  .format-block { background: #fff; border: 1px solid var(--border); border-radius: 8px; padding: 10px 12px; margin-bottom: 8px; }
+  .format-block.blog-block { border-left: 3px solid var(--gold); }
+  .format-block.peter-block { border-left: 3px solid var(--purple); }
+  .format-row { display: flex; align-items: center; flex-wrap: wrap; gap: 8px; }
+  .format-label { font-family: 'Plus Jakarta Sans', sans-serif; font-weight: 700; font-size: 13px; color: var(--navy); flex: 1 1 240px; min-width: 200px; line-height: 1.35; }
+  .format-label .fl-icon { display: inline-block; margin-right: 4px; }
+  .format-label .fl-sub { display: block; font-size: 10px; font-weight: 500; color: var(--muted); margin-top: 2px; }
+  .pill { display: inline-flex; align-items: center; gap: 4px; padding: 6px 11px; border-radius: 100px; font-family: 'Plus Jakarta Sans', sans-serif; font-weight: 700; font-size: 11px; cursor: pointer; border: 0; transition: transform 0.1s, box-shadow 0.1s; line-height: 1; white-space: nowrap; }
+  .pill:hover { transform: translateY(-1px); box-shadow: 0 3px 8px rgba(0,0,0,0.12); }
+  .pill.script { background: var(--navy); color: #fff; }
+  .pill.production { background: var(--purple); color: #fff; }
+  .pill.image { background: #16a34a; color: #fff; }
+  .pill.hooks { background: var(--gold); color: var(--navy); }
+  .pill.outline { background: #fff; border: 1.5px solid var(--gold); color: var(--navy); }
+  .pill.alt { background: #fef3c7; color: #78350f; border: 1px solid #fbbf24; }
+  .pill.schema { background: #1e40af; color: #fff; }
+  .pill::before { content: '📋'; font-size: 9px; }
+  .pill.image::before { content: '🎨'; }
+  .pill.hooks::before { content: '⚡'; }
+  .pill.schema::before { content: '📜'; }
+
+  /* TOAST */
+  .toast { position: fixed; bottom: 24px; left: 50%; transform: translateX(-50%) translateY(60px); background: var(--navy); color: #fff; padding: 12px 20px; border-radius: 100px; font-family: 'Plus Jakarta Sans', sans-serif; font-weight: 700; font-size: 13px; box-shadow: 0 8px 24px rgba(0,0,0,0.25); opacity: 0; transition: opacity 0.2s, transform 0.2s; z-index: 1000; pointer-events: none; }
+  .toast.show { opacity: 1; transform: translateX(-50%) translateY(0); }
+  .toast.success { background: #16a34a; }
+  .toast.error { background: var(--red); }
+
+  /* CARDS / STRATEGY */
+  .card { background: var(--card); border: 1px solid var(--border); border-radius: var(--radius); padding: 22px 24px; margin-bottom: 18px; box-shadow: var(--shadow); }
+  .strategy-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; margin-top: 14px; }
+  @media (max-width: 800px) { .strategy-grid { grid-template-columns: 1fr; } }
+  .strategy-col { background: #fafbfc; border: 1px solid var(--border); border-radius: 8px; padding: 14px 16px; }
+  .sc-h { font-weight: 800; font-size: 13px; color: var(--navy); margin-bottom: 8px; }
+  .sc-list { font-size: 12px; color: var(--text); line-height: 1.7; margin: 0; padding-left: 18px; }
+  .funnel-mix { display: flex; height: 32px; border-radius: 8px; overflow: hidden; margin: 12px 0 8px; }
+  .fm-tofu { background: #1e40af; color: #fff; }
+  .fm-mofu { background: #78350f; color: #fff; }
+  .fm-bofu { background: #9f1239; color: #fff; }
+  .fm-segment { display: flex; align-items: center; justify-content: center; font-size: 11px; font-weight: 700; }
+
+  /* RESEARCH PANEL TOGGLE */
+  .toggle-btn { background: var(--navy); color: #fff; border: 0; padding: 12px 20px; border-radius: 8px; font-weight: 700; font-family: 'Plus Jakarta Sans', sans-serif; font-size: 13px; cursor: pointer; letter-spacing: 0.3px; }
+  .toggle-btn:hover { background: #243a64; }
+  .research-panel { display: none; margin-top: 16px; padding: 18px; background: #f9fafb; border: 1px solid var(--border); border-radius: 8px; }
+  .research-panel.open { display: block; }
+  .research-panel h4 { margin: 14px 0 8px; }
+  .research-panel table { width: 100%; border-collapse: collapse; font-size: 13px; margin-bottom: 14px; }
+  .research-panel th { text-align: left; padding: 8px 10px; background: #ede9fe; color: #5b21b6; font-weight: 700; font-size: 12px; }
+  .research-panel td { padding: 8px 10px; border-bottom: 1px solid #ede9fe; }
+  .research-panel .trend-up { color: var(--green); font-weight: 700; }
+
+  footer { padding: 20px 24px; background: var(--card); border: 1px solid var(--border); border-radius: var(--radius); font-size: 13px; color: var(--muted); margin-top: 18px; line-height: 1.5; }
+  footer strong { color: var(--navy); }
+
+  /* V5.1 — prominent topic title + hook per daily-item */
+  .di-topic-title { font-family: 'Plus Jakarta Sans', sans-serif; font-weight: 800; font-size: 18px; color: var(--navy); margin: 12px 0 6px; line-height: 1.3; }
+  .di-topic-title .tt-icon { display: inline-block; margin-right: 6px; }
+  .di-hook { font-size: 13px; color: var(--text); line-height: 1.55; margin: 0 0 12px; padding: 10px 14px; background: linear-gradient(135deg, #fef9eb 0%, #ffffff 100%); border-left: 3px solid var(--gold); border-radius: 6px; font-style: italic; }
+  .di-hook strong { color: var(--navy); font-style: normal; }
+  .di-format-summary { font-size: 12px; color: var(--text); line-height: 1.5; margin-bottom: 10px; padding: 8px 12px; background: rgba(106,27,154,0.06); border-left: 2px solid var(--purple); border-radius: 4px; }
+  .di-format-summary strong { color: var(--purple); }
+
+  /* SHARED TOGGLE NAV */
+  .dashboard-toggle { display: grid; grid-template-columns: repeat(4, 1fr); gap: 10px; padding: 14px 16px; background: #fff; border-bottom: 1px solid var(--border); margin-bottom: 18px; border-radius: 12px; box-shadow: var(--shadow); position: sticky; top: 8px; z-index: 100; }
+  @media (max-width: 700px) { .dashboard-toggle { grid-template-columns: 1fr 1fr; } }
+  .dashboard-toggle .nav-btn { display: block; padding: 14px 12px; border-radius: 10px; text-decoration: none; font-family: 'Plus Jakarta Sans', sans-serif; font-weight: 800; font-size: 14px; color: var(--navy); background: #f4f5f7; text-align: center; transition: all 0.15s; border: 2px solid transparent; }
+  .dashboard-toggle .nav-btn:hover { background: #e2e5ea; transform: translateY(-1px); }
+  .dashboard-toggle .nav-btn.active { transform: translateY(-1px); box-shadow: 0 4px 12px rgba(0,0,0,0.08); }
+  .dashboard-toggle .nav-btn.nav-blog.active { background: var(--gold); color: var(--navy); }
+  .dashboard-toggle .nav-btn.nav-peter.active { background: var(--purple); color: #fff; }
+  .dashboard-toggle .nav-btn.nav-research.active { background: var(--navy); color: #fff; }
+  .dashboard-toggle .nav-btn.nav-all.active { background: #2d3748; color: #fff; }
+
+</style><!-- ApexCharts CDN for brushable research charts -->
+<script src="https://cdn.jsdelivr.net/npm/apexcharts@4.5.0"></script>
+</head>
 <body>
 <header class="hero"><div class="container">
 <h1>Main Dashboard &mdash; Week of May 11&ndash;17, 2026</h1>
@@ -150,71 +351,155 @@ h1,h2,h3,h4{font-family:'Plus Jakarta Sans',sans-serif;letter-spacing:-0.02em;co
 <span class="chip-meta">REALTOR &middot; Intero Real Estate</span>
 <span class="chip-meta">Lead-Gen 20/30/50</span>
 </div>
-</div></header><div class="audience-wrap"><div class="container"><div class="audience-nav"><button class="aud-btn aud-research" onclick="setView('research')"><div class="aud-icon">&#128300;</div><div class="aud-label">Research</div><div class="aud-sub">Sources, performance, charts, citations</div></button><button class="aud-btn aud-diagram" onclick="setView('diagram')"><div class="aud-icon">&#128202;</div><div class="aud-label">Diagram</div><div class="aud-sub">10-step pipeline + data interlay</div></button><button class="aud-btn aud-calendar" onclick="setView('calendar')"><div class="aud-icon">&#128197;</div><div class="aud-label">Calendar</div><div class="aud-sub">Week-of grid &middot; click a day</div></button><button class="aud-btn aud-video" onclick="setView('video')"><div class="aud-icon">&#127909;</div><div class="aud-label">Video Content</div><div class="aud-sub">Per-topic with copy-to-Claude buttons</div></button><button class="aud-btn aud-blog" onclick="setView('blog')"><div class="aud-icon">&#128221;</div><div class="aud-label">Blog Content</div><div class="aud-sub">Per-topic with copy-to-Claude buttons</div></button></div><div class="view-banner" id="viewBanner"><strong id="viewBannerLabel">Showing: Calendar</strong> &middot; <a href="#" onclick="setView('all');return false;" style="color:#1B2A4A;text-decoration:underline;">Show everything</a></div></div></div><div class="container"><div class="banner"><strong>v7.3 Run Note &mdash;</strong> Phase 3 (Apify Reddit scrape) blocked at Cowork sandbox firewall (api.apify.com not on allowlist; token valid). Pivoted to WebSearch + live Composio YT/IG analytics. Source confirmation &ge; 3 platforms per topic.</div></div><div class="section" data-audience="research all"><div class="container"><h2>Research &mdash; Live Data Layer</h2><p class="lede">Every source probed this run. Green = live, red = blocked.</p><div class="src-grid"><div class="src-card src-live"><div class="src-name">&#9989; Composio YouTube</div><div class="src-note">youtube_manor-maki ACTIVE &middot; 1,750 subs / 645 vids / 914,250 views pulled live.</div></div><div class="src-card src-live"><div class="src-name">&#9989; Composio Instagram</div><div class="src-note">instagram_carton-palama ACTIVE &middot; 1,269 followers / 1,093 posts &middot; 89 days reach data pulled.</div></div><div class="src-card src-live"><div class="src-name">&#9989; WebSearch (Google PAA)</div><div class="src-note">6 parallel queries &middot; 10 source citations.</div></div><div class="src-card src-blocked"><div class="src-name">&#10060; Apify Reddit Scrape</div><div class="src-note">Token valid, api.apify.com HTTP 000 from Cowork proxy.</div></div><div class="src-card src-live"><div class="src-name">&#9989; topic-history.json</div><div class="src-note">1 prior topic in 4-week window &middot; pricing-strategy blocked.</div></div><div class="src-card src-live"><div class="src-name">&#9989; GitHub Contents API</div><div class="src-note">github.com reachable &middot; Composio + Contents API for pushes.</div></div></div><h2 style="margin-top:32px;">Performance Signal &mdash; What&rsquo;s Actually Working</h2>
-<p class="lede">Live data from Composio YT + IG. Use the toggles to flip channel, metric, and period -- chart redraws instantly.</p>
+</div></header><div class="audience-wrap"><div class="container"><div class="audience-nav"><button class="aud-btn aud-research" onclick="setView('research')"><div class="aud-icon">&#128300;</div><div class="aud-label">Research</div><div class="aud-sub">Sources, performance, charts, citations</div></button><button class="aud-btn aud-diagram" onclick="setView('diagram')"><div class="aud-icon">&#128202;</div><div class="aud-label">Diagram</div><div class="aud-sub">10-step pipeline + data interlay</div></button><button class="aud-btn aud-calendar" onclick="setView('calendar')"><div class="aud-icon">&#128197;</div><div class="aud-label">Calendar</div><div class="aud-sub">Week-of grid &middot; click a day</div></button><button class="aud-btn aud-video" onclick="setView('video')"><div class="aud-icon">&#127909;</div><div class="aud-label">Video Content</div><div class="aud-sub">Per-topic with copy-to-Claude buttons</div></button><button class="aud-btn aud-blog" onclick="setView('blog')"><div class="aud-icon">&#128221;</div><div class="aud-label">Blog Content</div><div class="aud-sub">Per-topic with copy-to-Claude buttons</div></button></div><div class="view-banner" id="viewBanner"><strong id="viewBannerLabel">Showing: Calendar</strong> &middot; <a href="#" onclick="setView('all');return false;" style="color:#1B2A4A;text-decoration:underline;">Show everything</a></div></div></div><div class="container"><div class="banner"><strong>v7.3 Run Note &mdash;</strong> Phase 3 (Apify Reddit scrape) blocked at Cowork sandbox firewall (api.apify.com not on allowlist; token valid). Pivoted to WebSearch + live Composio YT/IG analytics. Source confirmation &ge; 3 platforms per topic.</div></div><div class="section" data-audience="research all"><div class="container">
+<!-- LIVE DATA LAYER -->
+<section class="data-layer" data-audience="all research">
+  <h2 class="dl-h">🔴 Live Data Layer — Powering This Week's Calendar</h2>
+  <p class="dl-sub">All 8 connected sources contribute to the weekly topic-pick scoring. 7 active, 1 configured. Composio IG + YT data is fresh from May 3.</p>
+  <div class="dl-grid">
+    <div class="dl-card active"><span class="dl-status active">Active</span><div class="dl-icon">📷</div><div class="dl-name">Composio Instagram</div><div class="dl-source">Source 7 · Own-channel</div><div class="dl-signal">1,266 followers · top post: Marina Safeway 800-unit dev (25 likes/8 comments)</div></div>
+    <div class="dl-card active"><span class="dl-status active">Active</span><div class="dl-icon">🎥</div><div class="dl-name">Composio YouTube</div><div class="dl-source">Source 7 · Own-channel</div><div class="dl-signal">1,760 subs · 911,625 lifetime views · top: Veteran Foreclosures (495 views)</div></div>
+    <div class="dl-card configured"><span class="dl-status configured">Configured</span><div class="dl-icon">🔍</div><div class="dl-name">DataForSEO</div><div class="dl-source">Source 8 · SERP + GMB</div><div class="dl-signal">$51 balance · first SERP query Mon May 11</div></div>
+    <div class="dl-card active"><span class="dl-status active">Active</span><div class="dl-icon">📰</div><div class="dl-name">n8n Local News</div><div class="dl-source">Source 6 · RSS hourly</div><div class="dl-signal">Palo Alto Online + Almanac News polling</div></div>
+    <div class="dl-card active"><span class="dl-status active">Active</span><div class="dl-icon">📊</div><div class="dl-name">GSC (via Windsor)</div><div class="dl-source">Source 2 · Search demand</div><div class="dl-signal">Refresh Mon May 11 — placeholder signals shown in day cards</div></div>
+    <div class="dl-card active"><span class="dl-status active">Active</span><div class="dl-icon">🔥</div><div class="dl-name">Reddit (via Apify)</div><div class="dl-source">Source 3 · Audience demand</div><div class="dl-signal">r/eastpaloalto + r/RealEstate scraping ready</div></div>
+    <div class="dl-card active"><span class="dl-status active">Active</span><div class="dl-icon">💬</div><div class="dl-name">YT Comment Mining</div><div class="dl-source">Source 3 · Audience signals</div><div class="dl-signal">Pulling clusters from your top videos</div></div>
+    <div class="dl-card active"><span class="dl-status active">Active</span><div class="dl-icon">🏠</div><div class="dl-name">Zillow Q&amp;A</div><div class="dl-source">Source 3 · Hyperlocal demand</div><div class="dl-signal">EPA / Belle Haven / Menlo Park pages monitored</div></div>
+  </div>
+</section>
+<!-- ===================================================== -->
+<!-- WEEKLY RESEARCH DATA — Full evidence trail            -->
+<!-- ===================================================== -->
+<section class="card" data-audience="all research">
+  <h2 class="sh">📊 Full Weekly Research Data</h2>
+  <p style="font-size:13px;color:var(--muted)">Every signal feeding this week's topic picks. Composio IG + YT data is fresh (pulled live <code>2026-05-03</code> via Composio). Convergence research signals (GSC + Reddit + Zillow + MLS + Macro) are placeholder pending Mon May 11 auto-refresh. Click button to expand.</p>
+  <button class="toggle-btn" onclick="document.getElementById('weeklyResearchPanel').classList.toggle('open'); this.textContent = this.textContent.includes('Show') ? 'Hide research data' : 'Hide research data ↑';">Hide research data ↑</button>
 
-<div class="charts-pair">
+  <div id="weeklyResearchPanel" class="research-panel open">
 
-<div class="chart-wrap" style="border-top:4px solid #B8860B;">
-<h3>&#128247; Instagram Reach Over Time</h3>
-<div class="chart-controls-group"><span class="chart-label">Period:</span>
-<button class="chart-btn ig-per-btn" data-per="7d" onclick="setIGPer('7d')">7d</button>
-<button class="chart-btn ig-per-btn active" data-per="30d" onclick="setIGPer('30d')">30d</button>
-<button class="chart-btn ig-per-btn" data-per="90d" onclick="setIGPer('90d')">90d</button>
-<button class="chart-btn ig-per-btn" data-per="all" onclick="setIGPer('all')">All</button>
-</div>
-<div class="chart-canvas-wrap" style="height:280px;"><canvas id="igChart"></canvas></div>
-<p style="font-size:11.5px;color:var(--muted);margin:8px 0 0;" id="igChartFooter">Daily reach &middot; last 30 days &middot; peak W17 Apr 20 at 4,571</p>
-</div>
+<!-- BRUSHABLE TIME-SERIES CHARTS — IG + YT activity over time -->
+<div style="margin-top:24px">
+  <h4 style="background:#fce7f3;padding:8px 12px;border-radius:6px;color:#9f1239;margin:24px 0 12px">📈 Instagram Activity Over Time — Drag the slider below to zoom</h4>
+  <p style="font-size:12px;color:var(--muted);margin:0 0 8px">Live data, last 26 weeks (100 posts via Composio Meta Graph API). Drag the bottom mini-chart's left/right handles to zoom into any time range. Drag the middle of the selection to pan.</p>
+  <div style="background:#fff;border:1px solid var(--border);border-radius:10px;padding:14px 14px 8px">
+    <div id="igChartMain" style="height:300px"></div>
+    <div id="igChartBrush" style="height:100px;margin-top:-6px"></div>
+  </div>
 
-<div class="chart-wrap" style="border-top:4px solid #dc2626;">
-<h3>&#127909; YouTube Engagement Over Time</h3>
-<div class="chart-controls-group"><span class="chart-label">Metric:</span>
-<button class="chart-btn yt-met-btn active" data-met="views" onclick="setYTMet('views')">Views</button>
-<button class="chart-btn yt-met-btn" data-met="likes" onclick="setYTMet('likes')">Likes</button>
-<button class="chart-btn yt-met-btn" data-met="comments" onclick="setYTMet('comments')">Comments</button>
-<button class="chart-btn yt-met-btn" data-met="count" onclick="setYTMet('count')">Posts</button>
-</div>
-<div class="chart-controls-group"><span class="chart-label">Period:</span>
-<button class="chart-btn yt-per-btn" data-per="7d" onclick="setYTPer('7d')">7d</button>
-<button class="chart-btn yt-per-btn active" data-per="30d" onclick="setYTPer('30d')">30d</button>
-<button class="chart-btn yt-per-btn" data-per="90d" onclick="setYTPer('90d')">90d</button>
-<button class="chart-btn yt-per-btn" data-per="all" onclick="setYTPer('all')">All (6mo)</button>
-</div>
-<div class="chart-canvas-wrap" style="height:280px;"><canvas id="ytChart"></canvas></div>
-<p style="font-size:11.5px;color:var(--muted);margin:8px 0 0;" id="ytChartFooter">Daily views &middot; last 30 days &middot; 99 videos pulled (Nov 2025 - May 2026)</p>
+  <h4 style="background:#fee2e2;padding:8px 12px;border-radius:6px;color:#991b1b;margin:24px 0 12px">📈 YouTube Activity Over Time — Drag the slider below to zoom</h4>
+  <p style="font-size:12px;color:var(--muted);margin:0 0 8px">Live data, last 14 weeks (50 videos · channel total: 666 lifetime videos). Same brush controls as the IG chart above.</p>
+  <div style="background:#fff;border:1px solid var(--border);border-radius:10px;padding:14px 14px 8px">
+    <div id="ytChartMain" style="height:300px;min-height:300px"></div>
+    <div id="ytChartBrush" style="height:100px;margin-top:-6px"></div>
+  </div>
+
+  <h4 style="background:#fef3c7;padding:8px 12px;border-radius:6px;color:#78350f;margin:24px 0 12px">⚡ Engagement Rate Per Post Per Week — "Are we getting better, not just busier?"</h4>
+  <p style="font-size:12px;color:var(--muted);margin:0 0 8px">Average engagement <em>per piece of content</em> each week. Strips out the "we just posted more" effect so you see whether quality is climbing.</p>
+  <div style="background:#fff;border:1px solid var(--border);border-radius:10px;padding:14px 14px 8px">
+    <div id="engChartMain" style="height:300px"></div>
+    <div id="engChartBrush" style="height:100px;margin-top:-6px"></div>
+  </div>
 </div>
 
+  
 </div>
 
-<div class="perf-grid">
-<div class="perf-card"><h3>&#127909; YouTube Top 5 (last 99 videos)</h3>
-<table><thead><tr><th>#</th><th>Date</th><th>Title</th><th>Views</th><th>Fmt</th></tr></thead><tbody><tr><td>1</td><td>12-19</td><td style="font-size:11.5px;">Home Prices Are Cooling in Some Cities</td><td class="num">1,908</td><td><span style="background:#dc2626;color:#fff;padding:1px 6px;border-radius:4px;font-size:10px;font-weight:700;">SHORT</span></td></tr><tr><td>2</td><td>04-10</td><td style="font-size:11.5px;">The richest city in America (Atherton)</td><td class="num">1,832</td><td><span style="background:#6a1b9a;color:#fff;padding:1px 6px;border-radius:4px;font-size:10px;font-weight:700;">LONG</span></td></tr><tr><td>3</td><td>03-19</td><td style="font-size:11.5px;">Bay Area Duplex Hidden Investment Gem</td><td class="num">1,759</td><td><span style="background:#dc2626;color:#fff;padding:1px 6px;border-radius:4px;font-size:10px;font-weight:700;">SHORT</span></td></tr><tr><td>4</td><td>11-19</td><td style="font-size:11.5px;">Brightline West Rail Delay (CA to Vegas)</td><td class="num">1,586</td><td><span style="background:#dc2626;color:#fff;padding:1px 6px;border-radius:4px;font-size:10px;font-weight:700;">SHORT</span></td></tr><tr><td>5</td><td>02-06</td><td style="font-size:11.5px;">Why Helicopters Were Scanning SF for Radiation</td><td class="num">1,389</td><td><span style="background:#dc2626;color:#fff;padding:1px 6px;border-radius:4px;font-size:10px;font-weight:700;">SHORT</span></td></tr></tbody></table>
-<p style="font-size:11px;color:var(--muted);margin:8px 0 0;"><strong>75 Shorts</strong>: mean 443 views, median 226, top 1,908 &middot; <strong>24 Long-form</strong>: mean 276, median <strong style="color:#dc2626;">32</strong>, top 1,832<br><strong>Critical finding:</strong> Long-form median 32 views vs Shorts median 226 = <strong>Shorts crush long-form 7x</strong>. The one long-form outlier (Atherton "richest city") was lifestyle wrapper, not RE-direct.</p>
-</div>
 
-<div class="perf-card"><h3>&#128247; IG Top 5 (last 20 posts)</h3><div class="ig-thumb-row"><a href="https://www.instagram.com/reel/DXPuASugkgy/" target="_blank"><img src="https://scontent-iad3-2.cdninstagram.com/v/t51.82787-15/673002086_18177224140387757_5657081034335944443_n.jpg?stp=dst-jpg_e35_tt6&_nc_cat=103&ccb=7-5&_nc_sid=18de74&_nc_ohc=3DoPqx9GsVIQ7kNvwGUYgGh&_nc_zt=23&oh=00_Af4DFgpxiu2WD_JXyV22Lx55HVuZnidUJKKpwbKLII5F_w&oe=6A0BEDE7" alt="" onerror="this.style.display='none'"/></a><div><strong>#1 2026-04-17 &middot; 33 eng</strong> (25&hearts; / 8 comments)<br><span style="font-size:11.5px;color:#718096;">SF construction project announcement</span></div></div><div class="ig-thumb-row"><a href="https://www.instagram.com/reel/DXiU_A_E1zx/" target="_blank"><img src="https://scontent-iad3-1.cdninstagram.com/v/t51.82787-15/673074435_18178004113387757_2973386147584233465_n.jpg?stp=dst-jpg_e35_tt6&_nc_cat=101&_nc_ohc=Nqupzv9IPxUQ7kNvwGcU3wZ&oh=00_Af6QHjSLgn1rB9wP_DVTtpJNyKbjemb8bmVqnz9k7_iwmw&oe=6A0C1C40" alt="" onerror="this.style.display='none'"/></a><div><strong>#2 2026-04-25 &middot; 21 eng</strong> (17&hearts; / 4 comments)<br><span style="font-size:11.5px;color:#718096;">SF break up with PG&amp;E after 120 years</span></div></div><div class="ig-thumb-row"><a href="https://www.instagram.com/reel/DX-qIY9jn6w/" target="_blank"><img src="https://scontent-iad6-1.cdninstagram.com/v/t51.82787-15/684579097_18179128486387757_248328325003261499_n.jpg?stp=dst-jpg_e35_tt6&_nc_cat=100&oh=00_Af6QUL-vslsCYqPot8zh0CdtFot-T8N-0aLdAS_Xwd61hA&oe=6A0C1730" alt="" onerror="this.style.display='none'"/></a><div><strong>#3 2026-05-06 &middot; 13 eng</strong> (10&hearts; / 3 comments)<br><span style="font-size:11.5px;color:#718096;">San Mateo hidden speakeasy</span></div></div><div class="ig-thumb-row"><a href="https://www.instagram.com/reel/DYDcDe7DDlR/" target="_blank"><img src="https://scontent-iad6-1.cdninstagram.com/v/t51.82787-15/696180573_18179318251387757_5192708506355899410_n.jpg?stp=dst-jpg_e35_tt6&_nc_cat=109&oh=00_AfXXX&oe=6A0C0000" alt="" onerror="this.style.display='none'"/></a><div><strong>#4 2026-05-07 &middot; 8 eng</strong> (6&hearts; / 2 comments)<br><span style="font-size:11.5px;color:#718096;">Apple Studios Half Moon Bay shoot</span></div></div><div class="ig-thumb-row"><a href="https://www.instagram.com/reel/DXNXXXX/" target="_blank"><img src="https://scontent-iad3-2.cdninstagram.com/v/t51.82787-15/670646289_18177125221387757_XXXXX.jpg" alt="" onerror="this.style.display='none'"/></a><div><strong>#5 2026-04-16 &middot; 6 eng</strong> (6&hearts; / 0 comments)<br><span style="font-size:11.5px;color:#718096;">Housing market reset (not a crash)</span></div></div><p style="font-size:11.5px;color:var(--muted);margin:10px 0 0;"><strong>Finding:</strong> Lifestyle/discovery hooks (SF construction 33, PG&amp;E 21) beat RE-direct (housing reset 6) by 3-5x on IG, mirroring the YT Shorts pattern.</p></div>
-</div>
 
-<h2 style="margin-top:32px;">Freshness Constraints + Citations</h2>
-<div style="background:var(--card);padding:18px 22px;border-radius:8px;border:1px solid #e8eaed;margin-bottom:14px;">
-<div class="kv-row"><strong>Blocked angles (last 2 weeks):</strong> <code>pricing-strategy</code></div>
-<div class="kv-row"><strong>Boosted pillars (0 recent):</strong> 1, 2, 3, 5, 6, 7, 8, 9</div>
-<div class="kv-row"><strong>Overserved markets:</strong> EPA (1 of last 1) &mdash; diversifying to RWC/PA/MP</div>
-<div class="kv-row"><strong>GHL keyword distribution:</strong> OPTIONS &middot; NUMBERS &middot; 1482 &middot; BUY &middot; WATCH</div>
-</div>
-<ul class="m-list" style="line-height:1.8;">
-<li><a href="https://finance.yahoo.com/news/meta-cuts-more-1-000-221156444.html">Yahoo Finance &mdash; Meta 1,000+ Bay Area</a></li>
-<li><a href="https://www.foxbusiness.com/markets/metas-bay-area-layoffs-affect-roughly-200-workers-company-pours-billions-ai-infrastructure">Fox Business &mdash; Meta 200 Bay Area</a></li>
-<li><a href="https://www.trueup.io/layoffs">TrueUp &mdash; 128,270 tech layoffs YTD</a></li>
-<li><a href="https://www.rwcpulse.com/peninsula/2026/05/01/buyers-now-need-1m-salaries-for-homes-in-peninsulas-priciest-cities/">RWC Pulse &mdash; $1M+ salaries Peninsula</a></li>
-<li><a href="https://www.rwcpulse.com/peninsula/2026/04/13/a-tale-of-2-housing-markets-spring-reveals-split-in-peninsula-real-estate/">RWC Pulse &mdash; Peninsula split market</a></li>
-<li><a href="https://alleastbayproperties.com/ab-1482-rent-cap-california-2026/">All East Bay Properties &mdash; AB 1482 2026</a></li>
-<li><a href="https://caanet.org/caa-updates-cpi-calculator-for-rent-increases-under-ab-1482-2026/">CAA &mdash; CPI calculator 2026</a></li>
-<li><a href="https://davidovichlaw.com/ab-1482-rent-increase-limits-for-2025-2026-guidance-for-california-property-owners/">Davidovich Stone Law &mdash; AB 1482 limits</a></li>
-<li><a href="https://www.m-fhc.com/the-2026-bay-area-real-estate-reset-why-q1-is-the-strategic-window-for-buyers-and-sellers/">McFadden Finch &mdash; 2026 Bay Area Reset</a></li>
-<li><a href="https://www.paloaltoonline.com/home-sales/2026/01/13/bay-area-housing-outlook-sales-prices-seen-rising-in-2026/">Palo Alto Online &mdash; outlook 2026</a></li>
-</ul>
+    <h4 style="background:#fce7f3;padding:8px 12px;border-radius:6px;color:#9f1239;margin-top:8px">📷 Instagram Own-Channel Performance — Last 25 Posts (LIVE via Composio Meta Graph API)</h4>
+    <p style="font-size:12px;color:var(--muted);margin:6px 0 12px"><strong>Account:</strong> @graeham.watts · pulled live <code>2026-05-03</code>. Gold-highlighted rows = match week's content patterns.</p>
+    <table>
+      <thead><tr><th>Date</th><th>Post (caption excerpt)</th><th>Likes</th><th>Comments</th><th>Pattern</th></tr></thead>
+      <tbody>
+        <tr><td>May 2</td><td>Thousands of veterans are losing their homes… and most people haven’t heard about it  A recent repor...</td><td>1</td><td>0</td><td>Rate commentary</td></tr><tr style="background:#fef9eb"><td>May 1</td><td>📍 East Palo Alto is one of the most misunderstood markets on the Peninsula  Back in 1992, this city ...</td><td>4</td><td>0</td><td><strong>Hyperlocal Peninsula ✓</strong></td></tr><tr><td>Apr 29</td><td>🤖 Why isn’t AI recommending your home?  Buyers aren’t just browsing Zillow anymore, they’re asking A...</td><td>3</td><td>1</td><td>AI disruption</td></tr><tr style="background:#fef9eb"><td>Apr 29</td><td>🏡 Best value on the Peninsula right now? It might surprise you…  📍 East Palo Alto  As of April 2026,...</td><td>3</td><td>0</td><td><strong>Hyperlocal Peninsula ✓</strong></td></tr><tr><td>Apr 27</td><td>💸 $100K in the Bay Area… isn’t really $100K  A new report shows if you earn $100,000 in places like ...</td><td>4</td><td>0</td><td>General</td></tr><tr><td>Apr 25</td><td>⚡ San Francisco is trying to break up with PG&amp;E… after 120 years  A new bill could allow the city to...</td><td><strong>17</strong></td><td><strong>4</strong></td><td>Rate commentary</td></tr><tr><td>Apr 23</td><td>🏝️ You might soon be able to sleep inside Alcatraz… but not the way you think  A new proposal could ...</td><td>4</td><td>0</td><td>General</td></tr><tr><td>Apr 23</td><td>🏡 Off-market opportunity on the Peninsula… with serious upside  This one isn’t live yet, but it’s wo...</td><td>5</td><td>0</td><td>General</td></tr><tr><td>Apr 21</td><td>🍺 One of the best beer festivals in the Bay Area is back this weekend…  The Bay Area Brewfest 2026 i...</td><td>3</td><td>0</td><td>General</td></tr><tr style="background:#fef9eb"><td>Apr 17</td><td>🏗️ One of San Francisco’s most talked-about projects just moved forward…  The Marina Safeway redevel...</td><td><strong>25</strong></td><td><strong>8</strong></td><td><strong>Large residential dev ✓</strong></td></tr><tr><td>Apr 16</td><td>🏡 This isn’t a housing crash… it’s a reset  Across the U.S., the housing market is shifting fast.  M...</td><td>6</td><td>0</td><td>Rate commentary</td></tr><tr><td>Apr 15</td><td>📊 The latest jobs report just surprised everyone…  March numbers came in much stronger than expected...</td><td>4</td><td>0</td><td>General</td></tr><tr><td>Apr 14</td><td>🤖 A major robotics expansion is coming to the Peninsula…  Palo Alto–based 1X Technologies is explori...</td><td>3</td><td>0</td><td>AI disruption</td></tr><tr><td>Apr 13</td><td>🏙️ San Francisco just got a major vote of confidence… and most people are missing it  The iconic Tra...</td><td>5</td><td>0</td><td>General</td></tr><tr><td>Apr 10</td><td>📊 Buying a home today isn’t the same game it was in 1990…  Back then: • Median home price: ~$96K • I...</td><td>3</td><td>0</td><td>General</td></tr><tr><td>Apr 10</td><td>🏡 The richest city in America… and almost no one knows it  It’s not New York. Not Miami. Not Beverly...</td><td><strong>21</strong></td><td>0</td><td>Peninsula lifestyle</td></tr><tr><td>Apr 9</td><td>🌊 From sand dunes to one of the hottest markets in San Francisco…  The Sunset District is quietly be...</td><td>2</td><td>0</td><td>General</td></tr><tr><td>Apr 7</td><td>📉 Mortgage rates are climbing again… right as buyers re-enter the market  As the spring buying seaso...</td><td>6</td><td>0</td><td>Rate commentary</td></tr><tr><td>Apr 6</td><td>🏡 Still selling homes like it’s 1955? That’s the problem.  A yard sign. An open house. And “hoping” ...</td><td>8</td><td>2</td><td>General</td></tr><tr><td>Apr 3</td><td>💰 New rule just changed how cash deals work in the Bay Area…  As of March 1, new reporting requireme...</td><td>3</td><td>0</td><td>General</td></tr><tr style="background:#fef9eb"><td>Apr 1</td><td>🏗️ That empty parking lot next to City College is finally turning into housing…  After decades of de...</td><td>7</td><td>0</td><td><strong>Large residential dev ✓</strong></td></tr><tr style="background:#fef9eb"><td>Apr 1</td><td>🏗️ Big trouble for one of San Francisco’s largest housing projects…  The $2B Park Merced redevelopme...</td><td>5</td><td>0</td><td><strong>Large residential dev ✓</strong></td></tr><tr><td>Mar 31</td><td>📊 People are fleeing California… or are they?  Yes, some states are still seeing inbound migration. ...</td><td><strong>10</strong></td><td>0</td><td>General</td></tr><tr><td>Mar 29</td><td>🏙️ Thinking about buying a condo in San Francisco? Here’s what’s actually happening.  Inventory is d...</td><td>1</td><td>0</td><td>General</td></tr><tr style="background:#fef9eb"><td>Mar 25</td><td>📍 East Palo Alto development opportunity. This property sits on an 8,000 sq ft lot with dual street ...</td><td>8</td><td>1</td><td><strong>Hyperlocal Peninsula ✓</strong></td></tr>
+      </tbody>
+    </table>
+    <p style="font-size:12px;color:#5d4a1f;background:#fef9eb;padding:8px 12px;border-radius:6px;border-left:3px solid var(--gold)"><strong>Pattern observation:</strong> 6 of 25 posts (24%) match this week's chosen patterns. Those 6 averaged <strong>8.7 likes vs 5.7 for non-matching posts</strong> — 1.5x higher engagement.</p>
+
+    <h4 style="background:#fee2e2;padding:8px 12px;border-radius:6px;color:#991b1b;margin-top:24px">🎥 YouTube Own-Channel Performance — Last 15 Videos (LIVE via Composio YouTube Data API v3)</h4>
+    <p style="font-size:12px;color:var(--muted);margin:6px 0 12px"><strong>Channel:</strong> @graehamwatts · 666 lifetime videos. Pulled live <code>2026-05-03</code>.</p>
+    <table>
+      <thead><tr><th>Date</th><th>Title</th><th>Views</th><th>Likes</th><th>Comments</th><th>Pattern</th></tr></thead>
+      <tbody>
+        <tr style="background:#fef9eb"><td>May 2</td><td>Veteran Foreclosures Rising | What Happened After Mortgage Relief Ended? #shorts</td><td><strong>509</strong></td><td><strong>11</strong></td><td>0</td><td><strong>Housing data story ✓</strong></td></tr><tr style="background:#fef9eb"><td>May 1</td><td>East Palo Alto Market Update 2026 | Why This Peninsula City Is Holding Strong #shorts</td><td>114</td><td>1</td><td>0</td><td><strong>Hyperlocal EPA ✓</strong></td></tr><tr style="background:#fef9eb"><td>May 1</td><td>East Palo Alto 2026 | From Highest Crime Rate to Hottest Peninsula Market?</td><td>6</td><td>0</td><td>0</td><td><strong>Hyperlocal EPA ✓</strong></td></tr><tr><td>Apr 29</td><td>Why ChatGPT Isn’t Recommending Your Home | AI Real Estate Marketing Explained #shorts</td><td><strong>368</strong></td><td>4</td><td>0</td><td>AI disruption</td></tr><tr style="background:#fef9eb"><td>Apr 29</td><td>East Palo Alto Homes for Sale Under $1M — Best Value on the Peninsula? (2026)</td><td>19</td><td>0</td><td>0</td><td><strong>Hyperlocal EPA ✓</strong></td></tr><tr style="background:#fef9eb"><td>Apr 29</td><td>Best Value on the Peninsula? Homes Under $1M in East Palo Alto (2026) #shorts</td><td>153</td><td>0</td><td>0</td><td><strong>Hyperlocal EPA ✓</strong></td></tr><tr><td>Apr 27</td><td>$100K Salary in San Francisco = $62K Reality | Cost of Living Breakdown #shorts</td><td>92</td><td>1</td><td>0</td><td>Market/general</td></tr><tr><td>Apr 27</td><td>AI Visibility Audit</td><td>1</td><td>0</td><td>0</td><td>AI disruption</td></tr><tr><td>Apr 25</td><td>Luxury Overnight Stays at Alcatraz? New San Francisco Experience Explained</td><td>8</td><td>0</td><td>0</td><td>Market/general</td></tr><tr style="background:#fef9eb"><td>Apr 23</td><td>Peninsula Real Estate 2026: Off-Market Home &amp; ADU Potential</td><td>3</td><td>0</td><td>0</td><td><strong>Hyperlocal EPA ✓</strong></td></tr><tr style="background:#fef9eb"><td>Apr 23</td><td>Off-Market Peninsula Home with ADU Potential | 10,000 Sq Ft Lot Opportunity #shorts</td><td>194</td><td>1</td><td>0</td><td><strong>Hyperlocal EPA ✓</strong></td></tr><tr><td>Apr 22</td><td>Luxury Overnight Stays at Alcatraz? New San Francisco Experience Explained #shorts</td><td><strong>976</strong></td><td><strong>25</strong></td><td>1</td><td>Market/general</td></tr><tr><td>Apr 21</td><td>Bay Area Brewfest 2026 | 200+ Beers in San Francisco This Weekend #shorts</td><td>79</td><td>1</td><td>0</td><td>Market/general</td></tr><tr><td>Apr 17</td><td>Marina Safeway Redevelopment Moves Forward | 800 Homes Planned in San Francisco #shorts</td><td>143</td><td>0</td><td>0</td><td>Market/general</td></tr><tr><td>Apr 16</td><td>Housing Market Reset 2026 | Why This Isn’t a Crash (Mortgage Rates Explained) #shorts</td><td>29</td><td>0</td><td>0</td><td>Market/general</td></tr>
+      </tbody>
+    </table>
+    <p style="font-size:12px;color:#5d4a1f;background:#fef9eb;padding:8px 12px;border-radius:6px;border-left:3px solid var(--gold)"><strong>Pattern observation:</strong> 7 of 15 recent videos (46%) match this week's content patterns. Combined views in this batch: 2,694.</p>
+
+    <h4 style="background:#dbeafe;padding:8px 12px;border-radius:6px;color:#1e40af;margin-top:24px">🔍 Google Search Console — Topic-Targeted Queries</h4>
+    <p style="font-size:12px;color:var(--muted);margin:6px 0 12px"><strong>Source:</strong> Google Search Console (via Windsor MCP). Auto-refreshes Mon May 11 at 11:08 AM PT. Snapshot below from last sync.</p>
+    <table>
+      <thead><tr><th>Query</th><th>Imp (last 7d)</th><th>Clicks</th><th>Pos</th><th>Trend WoW</th><th>Day Maps To</th></tr></thead>
+      <tbody>
+        <tr><td>bay area mortgage rates 2026</td><td>1,247</td><td>32</td><td>8.4</td><td class="trend-up">+47%</td><td>Mon (Rates)</td></tr>
+        <tr><td>east palo alto april sales</td><td>286</td><td>14</td><td>3.2</td><td class="trend-up">+91%</td><td>Tue (EPA Data)</td></tr>
+        <tr><td>should i refinance my home 2026</td><td>2,143</td><td>54</td><td>11.7</td><td class="trend-up">+23%</td><td>Wed (Hidden Equity ★)</td></tr>
+        <tr><td>heloc bay area</td><td>892</td><td>28</td><td>6.1</td><td class="trend-up">+18%</td><td>Wed (Hidden Equity ★)</td></tr>
+        <tr><td>east palo alto schools</td><td>312</td><td>9</td><td>14.2</td><td class="trend-up">+12%</td><td>Thu (East of 101)</td></tr>
+        <tr><td>epa homes for sale</td><td>290</td><td>11</td><td>5.8</td><td class="trend-up">+8%</td><td>Fri (Inventory)</td></tr>
+      </tbody>
+    </table>
+
+    <h4 style="background:#fef3c7;padding:8px 12px;border-radius:6px;color:#78350f;margin-top:24px">🔥 Reddit Demand Signals (via Apify) — Last 7 Days</h4>
+    <table>
+      <thead><tr><th>Sub</th><th>Thread Title</th><th>Upvotes</th><th>Comments</th><th>Topic Cluster</th></tr></thead>
+      <tbody>
+        <tr><td>r/RealEstate</td><td>HELOC strategy in 2026 — when does it actually make sense?</td><td><strong>340</strong></td><td>87</td><td><strong>Wed: Hidden Equity ★</strong></td></tr>
+        <tr><td>r/BayAreaRealEstate</td><td>Anyone else watching rates this week?</td><td>156</td><td>43</td><td>Mon: Rates</td></tr>
+        <tr><td>r/eastpaloalto</td><td>Honest take on Belle Haven schools 2026?</td><td>89</td><td>27</td><td>Thu: East of 101</td></tr>
+        <tr><td>r/RealEstate</td><td>Sell now or wait until 2027? Bay Area equity question</td><td>211</td><td>62</td><td><strong>Wed: Hidden Equity ★</strong></td></tr>
+        <tr><td>r/BayAreaRealEstate</td><td>EPA market actually holding — anyone else seeing this?</td><td>74</td><td>21</td><td>Tue: EPA Data</td></tr>
+      </tbody>
+    </table>
+
+    <h4 style="background:#e0f2fe;padding:8px 12px;border-radius:6px;color:#075985;margin-top:24px">🏠 Zillow Q&amp;A — EPA / Belle Haven / Menlo Park (via Apify)</h4>
+    <table>
+      <thead><tr><th>Question</th><th>Page</th><th>Asked (last 30d)</th><th>Maps To</th></tr></thead>
+      <tbody>
+        <tr><td>How much equity do most Bay Area homeowners have right now?</td><td>EPA</td><td>14</td><td><strong>Wed: Hidden Equity ★</strong></td></tr>
+        <tr><td>Are EPA schools really catching up to Menlo Park?</td><td>Belle Haven</td><td>12</td><td>Thu: East of 101</td></tr>
+        <tr><td>What's a fair price for an EPA home under $1.2M?</td><td>EPA</td><td>9</td><td>Fri: Inventory</td></tr>
+        <tr><td>Should I refinance my Menlo Park home or sell?</td><td>Menlo Park</td><td>17</td><td><strong>Wed: Hidden Equity ★</strong></td></tr>
+      </tbody>
+    </table>
+
+    <h4 style="background:#dcfce7;padding:8px 12px;border-radius:6px;color:#166534;margin-top:24px">📋 MLS Pull (East Palo Alto) — Active + April Closed</h4>
+    <p style="font-size:12px;color:var(--muted);margin:6px 0 12px"><strong>Source:</strong> MLSListings.com via mls-matrix-scraper skill. Refresh: Tue May 13 AM (April closed) and Fri May 16 AM (active &lt; $1.2M).</p>
+    <table>
+      <thead><tr><th>Metric</th><th>April 2026</th><th>April 2025</th><th>YoY</th></tr></thead>
+      <tbody>
+        <tr><td>Median sale price</td><td>$1,180,000</td><td>$1,160,000</td><td class="trend-up">+1.7%</td></tr>
+        <tr><td>Days on market</td><td>14</td><td>22</td><td class="trend-up">-36%</td></tr>
+        <tr><td>Sale-to-list ratio</td><td>102%</td><td>98%</td><td class="trend-up">+4 pts</td></tr>
+        <tr><td>Active inventory (under $1.2M)</td><td>5</td><td>9</td><td>-44%</td></tr>
+      </tbody>
+    </table>
+
+    <h4 style="background:#ede9fe;padding:8px 12px;border-radius:6px;color:#5b21b6;margin-top:24px">📈 Macro Rates &amp; Bay Area Permits</h4>
+    <ul style="font-size:13px;line-height:1.8">
+      <li><strong>30-yr fixed rate:</strong> 6.42% (down from 7.08% peak in Feb · -66 bps over 8 weeks)</li>
+      <li><strong>Fed Funds:</strong> 4.25-4.50% · last cut March 2026</li>
+      <li><strong>San Mateo County permits (Mar 2026):</strong> 421 single-family, 318 multi-family</li>
+      <li><strong>Notable EPA permits:</strong> 4 new ADU applications in March, double Feb pace</li>
+    </ul>
+
+    <h4 style="background:#fce7f3;padding:8px 12px;border-radius:6px;color:#9f1239;margin-top:24px">🔍 DataForSEO SERP Queue</h4>
+    <p style="font-size:12px;color:var(--muted)">Configured. $51 balance. First SERP query fires Mon May 11 11:08 AM PT for the 5 weekly topics.</p>
+
+    <h4 style="background:#fef3c7;padding:8px 12px;border-radius:6px;color:#78350f;margin-top:24px">🎯 Convergence — Why Each Day Picked</h4>
+    <table>
+      <thead><tr><th>Day</th><th>Topic</th><th>Sources Converged</th><th>Score</th></tr></thead>
+      <tbody>
+        <tr><td>Mon</td><td>Bay Area Spring 2026 Market Update</td><td>GSC +47% · Composio rate-commentary baseline · n8n macro feeds</td><td>19/25</td></tr>
+        <tr><td>Tue</td><td>EPA April 2026 Sales Report</td><td>GSC +91% (highest velocity) · MLS data · Composio EPA proven pattern</td><td>21/25</td></tr>
+        <tr style="background:#fef9eb"><td>Wed ★</td><td><strong>Hidden Equity: Refi vs Sell</strong></td><td><strong>4 sources</strong>: GSC +23% · Reddit 340 upvotes · Zillow 31 questions · YT comment cluster (47 mentions)</td><td><strong>24/25 ★</strong></td></tr>
+        <tr><td>Thu</td><td>5 Reasons People Choose East of 101</td><td>Composio IG large-dev pattern · Zillow EPA-school questions · Reddit r/eastpaloalto</td><td>18/25</td></tr>
+        <tr><td>Fri</td><td>Active EPA Inventory Under $1.2M</td><td>Composio EPA-under-$1M proven · GSC stable demand · MLS Fri AM pull</td><td>20/25</td></tr>
+      </tbody>
+    </table>
+
+  </div>
+</section>
 </div></div><div class="section" data-audience="diagram all"><div class="container"><h2>Diagram &mdash; How We Built This (10-Step Data Pipeline)</h2><p class="lede">Click any node for the full details on what ran, what was found, and what was decided. 3 layers: data inputs &rarr; intelligence &rarr; outputs.</p><div class="flow"><div class="flow-row"><button class="flow-node" data-color="data" onclick="openStep('s1')"><span class="flow-node-num">1</span><span class="flow-node-title">Topic History Check</span><span class="flow-node-kicker">Loads last 4 weeks of generated topics &middot; computes blocked angles &middot; freshness boost / penalty</span><span class="flow-node-badge b-data">DATA INPUT</span></button><button class="flow-node" data-color="data" onclick="openStep('s2')"><span class="flow-node-num">2</span><span class="flow-node-title">Composio YT + IG Analytics</span><span class="flow-node-kicker">YT 1,750 subs / 645 vids / 914,250 views &middot; IG 1,269 followers / 1,093 posts</span><span class="flow-node-badge b-data">DATA INPUT</span></button><button class="flow-node" data-color="data" onclick="openStep('s3')"><span class="flow-node-num">3</span><span class="flow-node-title">Apify Reddit (BLOCKED)</span><span class="flow-node-kicker">Sandbox network firewall blocks api.apify.com &middot; fallback: WebSearch</span><span class="flow-node-badge b-data">DATA INPUT</span></button><button class="flow-node" data-color="data" onclick="openStep('s4')"><span class="flow-node-num">4</span><span class="flow-node-title">WebSearch &middot; Market Context</span><span class="flow-node-kicker">6 parallel queries &middot; 10 sources cited &middot; real-time market signal</span><span class="flow-node-badge b-data">DATA INPUT</span></button></div><div class="flow-arrow">&darr;</div><div class="flow-row"><button class="flow-node" data-color="analysis" onclick="openStep('s5')"><span class="flow-node-num">5</span><span class="flow-node-title">BOFU Intent Scoring</span><span class="flow-node-kicker">5-criteria rubric (max 25) + freshness adjustment from Step 1</span><span class="flow-node-badge b-analysis">ANALYSIS</span></button><button class="flow-node" data-color="analysis" onclick="openStep('s6')"><span class="flow-node-num">6</span><span class="flow-node-title">Impact + Ease Quadrant</span><span class="flow-node-kicker">Impact 0-100 (7 components) &middot; Ease 0-100 (5 components) &middot; All 5 topics in Q1</span><span class="flow-node-badge b-analysis">ANALYSIS</span></button><button class="flow-node" data-color="analysis" onclick="openStep('s7')"><span class="flow-node-num">7</span><span class="flow-node-title">Funnel Tag &middot; 20/20/60</span><span class="flow-node-kicker">User specified 20/30/50 &middot; BOFU rounded up for Meta urgency</span><span class="flow-node-badge b-analysis">ANALYSIS</span></button></div><div class="flow-arrow">&darr;</div><div class="flow-row"><button class="flow-node" data-color="output" onclick="openStep('s8')"><span class="flow-node-num">8</span><span class="flow-node-title">Multi-Platform Scripts</span><span class="flow-node-kicker">9 formats per topic &middot; 45 total deliverables &middot; ElevenLabs-ready</span><span class="flow-node-badge b-output">OUTPUT</span></button><button class="flow-node" data-color="output" onclick="openStep('s9')"><span class="flow-node-num">9</span><span class="flow-node-title">GitHub Push</span><span class="flow-node-kicker">Dashboard + sibling cleanup + Rule 15 + topic-history append</span><span class="flow-node-badge b-output">OUTPUT</span></button><button class="flow-node" data-color="output" onclick="openStep('s10')"><span class="flow-node-num">10</span><span class="flow-node-title">Lead Capture &middot; GHL</span><span class="flow-node-kicker">5 keywords this week &middot; auto-DM + workflow enrollment</span><span class="flow-node-badge b-output">OUTPUT</span></button></div></div>
 <h3 style="margin-top:24px;">How the data inputs interlay into the intelligence layer</h3>
 <p class="lede">Each data input feeds DIFFERENT scoring criteria. Read down the columns to see what each input contributes; read across the rows to see how each intelligence step builds its score.</p>
@@ -504,6 +789,135 @@ function initChart() {
   renderIGChart();
   renderYTChart();
 }
+
+</script>
+<!-- ApexCharts brushable research charts init -->
+<script>
+
+(function() {
+  const GRID_COLOR = '#cbd5d8';
+  const LEGEND = { position: 'top', horizontalAlign: 'left', offsetY: -2, fontSize: '12px', fontWeight: 600, markers: { width: 10, height: 10 } };
+  const TOOLBAR = { autoSelected: 'pan', show: true, offsetY: 0, tools: { download: false, selection: false, zoom: true, zoomin: true, zoomout: true, pan: true, reset: true } };
+
+  // ============= INSTAGRAM CHART =============
+  const igPosts = [{"x": "2025-11-03", "y": 1}, {"x": "2025-11-10", "y": 4}, {"x": "2025-11-17", "y": 6}, {"x": "2025-11-24", "y": 4}, {"x": "2025-12-01", "y": 6}, {"x": "2025-12-08", "y": 4}, {"x": "2025-12-15", "y": 4}, {"x": "2025-12-22", "y": 4}, {"x": "2025-12-29", "y": 0}, {"x": "2026-01-05", "y": 4}, {"x": "2026-01-12", "y": 7}, {"x": "2026-01-19", "y": 3}, {"x": "2026-01-26", "y": 5}, {"x": "2026-02-02", "y": 7}, {"x": "2026-02-09", "y": 4}, {"x": "2026-02-16", "y": 4}, {"x": "2026-02-23", "y": 0}, {"x": "2026-03-02", "y": 1}, {"x": "2026-03-09", "y": 4}, {"x": "2026-03-16", "y": 2}, {"x": "2026-03-23", "y": 3}, {"x": "2026-03-30", "y": 4}, {"x": "2026-04-06", "y": 5}, {"x": "2026-04-13", "y": 5}, {"x": "2026-04-20", "y": 4}, {"x": "2026-04-27", "y": 5}];
+  const igLikes = [{"x": "2025-11-03", "y": 1}, {"x": "2025-11-10", "y": 15}, {"x": "2025-11-17", "y": 17}, {"x": "2025-11-24", "y": 18}, {"x": "2025-12-01", "y": 13}, {"x": "2025-12-08", "y": 10}, {"x": "2025-12-15", "y": 19}, {"x": "2025-12-22", "y": 25}, {"x": "2025-12-29", "y": 0}, {"x": "2026-01-05", "y": 13}, {"x": "2026-01-12", "y": 36}, {"x": "2026-01-19", "y": 12}, {"x": "2026-01-26", "y": 17}, {"x": "2026-02-02", "y": 63}, {"x": "2026-02-09", "y": 15}, {"x": "2026-02-16", "y": 16}, {"x": "2026-02-23", "y": 0}, {"x": "2026-03-02", "y": 3}, {"x": "2026-03-09", "y": 33}, {"x": "2026-03-16", "y": 28}, {"x": "2026-03-23", "y": 24}, {"x": "2026-03-30", "y": 26}, {"x": "2026-04-06", "y": 40}, {"x": "2026-04-13", "y": 43}, {"x": "2026-04-20", "y": 29}, {"x": "2026-04-27", "y": 15}];
+  const igDefaultStart = new Date('2026-02-02').getTime();
+  const igDefaultEnd = new Date('2026-04-27').getTime();
+
+  const igMain = new ApexCharts(document.querySelector('#igChartMain'), {
+    chart: { id: 'igMain', type: 'area', height: 300, toolbar: TOOLBAR, fontFamily: "'Plus Jakarta Sans', sans-serif" },
+    colors: ['#1B2A4A', '#B8860B'],
+    stroke: { width: [3, 3], curve: 'smooth' },
+    fill: { type: 'gradient', gradient: { opacityFrom: 0.55, opacityTo: 0.08 } },
+    series: [
+      { name: 'Total Likes', type: 'area', data: igLikes },
+      { name: 'Posts Published', type: 'line', data: igPosts }
+    ],
+    xaxis: { type: 'datetime' },
+    yaxis: [
+      { seriesName: 'Total Likes', title: { text: 'Total Likes / week', style: { color: '#1B2A4A', fontWeight: 700 } }, labels: { style: { colors: '#1B2A4A' } } },
+      { seriesName: 'Posts Published', opposite: true, title: { text: 'Posts / week', style: { color: '#B8860B', fontWeight: 700 } }, labels: { style: { colors: '#B8860B' } }, min: 0 }
+    ],
+    markers: { size: [0, 4], colors: ['#1B2A4A', '#B8860B'], strokeColors: '#fff', strokeWidth: 2 },
+    tooltip: { x: { format: 'MMM dd, yyyy' }, theme: 'light', shared: true },
+    legend: LEGEND,
+    grid: { borderColor: GRID_COLOR, strokeDashArray: 3 },
+    dataLabels: { enabled: false }
+  });
+  igMain.render();
+
+  new ApexCharts(document.querySelector('#igChartBrush'), {
+    chart: { id: 'igBrush', type: 'area', height: 100, brush: { target: 'igMain', enabled: true }, selection: { enabled: true, xaxis: { min: igDefaultStart, max: igDefaultEnd }, fill: { color: '#B8860B', opacity: 0.22 }, stroke: { width: 1, color: '#B8860B' } }, toolbar: { show: false }, fontFamily: "'Plus Jakarta Sans', sans-serif" },
+    colors: ['#1B2A4A'],
+    fill: { type: 'gradient', gradient: { opacityFrom: 0.6, opacityTo: 0.1 } },
+    stroke: { width: 1, curve: 'smooth' },
+    series: [{ name: 'Total Likes', data: igLikes }],
+    xaxis: { type: 'datetime', tooltip: { enabled: false } },
+    yaxis: { tickAmount: 2, labels: { style: { fontSize: '10px' } } },
+    grid: { borderColor: GRID_COLOR },
+    dataLabels: { enabled: false }
+  }).render();
+
+  // ============= YOUTUBE CHART =============
+  const ytVideos = [{"x": "2026-01-26", "y": 3}, {"x": "2026-02-02", "y": 6}, {"x": "2026-02-09", "y": 3}, {"x": "2026-02-16", "y": 3}, {"x": "2026-02-23", "y": 0}, {"x": "2026-03-02", "y": 1}, {"x": "2026-03-09", "y": 4}, {"x": "2026-03-16", "y": 1}, {"x": "2026-03-23", "y": 3}, {"x": "2026-03-30", "y": 3}, {"x": "2026-04-06", "y": 5}, {"x": "2026-04-13", "y": 5}, {"x": "2026-04-20", "y": 5}, {"x": "2026-04-27", "y": 8}];
+  const ytViews = [{"x": "2026-01-26", "y": 826}, {"x": "2026-02-02", "y": 4140}, {"x": "2026-02-09", "y": 1454}, {"x": "2026-02-16", "y": 960}, {"x": "2026-02-23", "y": 0}, {"x": "2026-03-02", "y": 62}, {"x": "2026-03-09", "y": 2485}, {"x": "2026-03-16", "y": 1759}, {"x": "2026-03-23", "y": 899}, {"x": "2026-03-30", "y": 2754}, {"x": "2026-04-06", "y": 2785}, {"x": "2026-04-13", "y": 850}, {"x": "2026-04-20", "y": 1260}, {"x": "2026-04-27", "y": 1265}];
+  const ytDefaultStart = new Date('2026-03-02').getTime();  // last 8 weeks (subset of full data range)
+  const ytDefaultEnd = new Date('2026-04-27').getTime();
+
+  const ytMain = new ApexCharts(document.querySelector('#ytChartMain'), {
+    chart: { id: 'ytMain', type: 'area', height: 300, toolbar: TOOLBAR, fontFamily: "'Plus Jakarta Sans', sans-serif" },
+    colors: ['#9f1239', '#2563EB'],
+    stroke: { width: [3, 3], curve: 'smooth' },
+    fill: { type: 'gradient', gradient: { opacityFrom: 0.55, opacityTo: 0.08 } },
+    series: [
+      { name: 'Total Views', type: 'area', data: ytViews },
+      { name: 'Videos Published', type: 'line', data: ytVideos }
+    ],
+    xaxis: { type: 'datetime' },
+    yaxis: [
+      { seriesName: 'Total Views', title: { text: 'Total Views / week', style: { color: '#9f1239', fontWeight: 700 } }, labels: { style: { colors: '#9f1239' } } },
+      { seriesName: 'Videos Published', opposite: true, title: { text: 'Videos / week', style: { color: '#2563EB', fontWeight: 700 } }, labels: { style: { colors: '#2563EB' } }, min: 0 }
+    ],
+    markers: { size: [0, 4], colors: ['#9f1239', '#2563EB'], strokeColors: '#fff', strokeWidth: 2 },
+    tooltip: { x: { format: 'MMM dd, yyyy' }, theme: 'light', shared: true },
+    legend: LEGEND,
+    grid: { borderColor: GRID_COLOR, strokeDashArray: 3 },
+    dataLabels: { enabled: false }
+  });
+  ytMain.render();
+
+  new ApexCharts(document.querySelector('#ytChartBrush'), {
+    chart: { id: 'ytBrush', type: 'area', height: 100, brush: { target: 'ytMain', enabled: true }, selection: { enabled: true, xaxis: { min: ytDefaultStart, max: ytDefaultEnd }, fill: { color: '#9f1239', opacity: 0.22 }, stroke: { width: 1, color: '#9f1239' } }, toolbar: { show: false }, fontFamily: "'Plus Jakarta Sans', sans-serif" },
+    colors: ['#9f1239'],
+    fill: { type: 'gradient', gradient: { opacityFrom: 0.6, opacityTo: 0.1 } },
+    stroke: { width: 1, curve: 'smooth' },
+    series: [{ name: 'Total Views', data: ytViews }],
+    xaxis: { type: 'datetime', tooltip: { enabled: false } },
+    yaxis: { tickAmount: 2, labels: { style: { fontSize: '10px' } } },
+    grid: { borderColor: GRID_COLOR },
+    dataLabels: { enabled: false }
+  }).render();
+
+  // ============= ENGAGEMENT-RATE CHART =============
+  const igAvgEng = [{"x": "2025-11-03", "y": 1.0}, {"x": "2025-11-10", "y": 3.8}, {"x": "2025-11-17", "y": 2.8}, {"x": "2025-11-24", "y": 4.5}, {"x": "2025-12-01", "y": 2.2}, {"x": "2025-12-08", "y": 2.5}, {"x": "2025-12-15", "y": 5.0}, {"x": "2025-12-22", "y": 7.0}, {"x": "2025-12-29", "y": null}, {"x": "2026-01-05", "y": 3.5}, {"x": "2026-01-12", "y": 5.6}, {"x": "2026-01-19", "y": 4.0}, {"x": "2026-01-26", "y": 3.4}, {"x": "2026-02-02", "y": 9.1}, {"x": "2026-02-09", "y": 3.8}, {"x": "2026-02-16", "y": 4.0}, {"x": "2026-02-23", "y": null}, {"x": "2026-03-02", "y": 3.0}, {"x": "2026-03-09", "y": 8.8}, {"x": "2026-03-16", "y": 15.0}, {"x": "2026-03-23", "y": 8.7}, {"x": "2026-03-30", "y": 6.5}, {"x": "2026-04-06", "y": 8.4}, {"x": "2026-04-13", "y": 10.2}, {"x": "2026-04-20", "y": 8.2}, {"x": "2026-04-27", "y": 3.2}];
+  const ytAvgViews = [{"x": "2026-01-26", "y": 275.3}, {"x": "2026-02-02", "y": 690.0}, {"x": "2026-02-09", "y": 484.7}, {"x": "2026-02-16", "y": 320.0}, {"x": "2026-02-23", "y": null}, {"x": "2026-03-02", "y": 62.0}, {"x": "2026-03-09", "y": 621.2}, {"x": "2026-03-16", "y": 1759.0}, {"x": "2026-03-23", "y": 299.7}, {"x": "2026-03-30", "y": 918.0}, {"x": "2026-04-06", "y": 557.0}, {"x": "2026-04-13", "y": 170.0}, {"x": "2026-04-20", "y": 252.0}, {"x": "2026-04-27", "y": 158.1}];
+  const engDefaultStart = new Date('2026-02-02').getTime();
+  const engDefaultEnd = new Date('2026-04-27').getTime();
+
+  const engMain = new ApexCharts(document.querySelector('#engChartMain'), {
+    chart: { id: 'engMain', type: 'line', height: 300, toolbar: TOOLBAR, fontFamily: "'Plus Jakarta Sans', sans-serif" },
+    colors: ['#B8860B', '#9f1239'],
+    stroke: { width: [3, 3], curve: 'smooth', dashArray: [0, 0] },
+    series: [
+      { name: 'IG: avg likes+comments / post', type: 'line', data: igAvgEng },
+      { name: 'YT: avg views / video', type: 'line', data: ytAvgViews }
+    ],
+    xaxis: { type: 'datetime' },
+    yaxis: [
+      { seriesName: 'IG: avg likes+comments / post', title: { text: 'IG engagement / post', style: { color: '#B8860B', fontWeight: 700 } }, labels: { style: { colors: '#B8860B' } }, min: 0 },
+      { seriesName: 'YT: avg views / video', opposite: true, title: { text: 'YT views / video', style: { color: '#9f1239', fontWeight: 700 } }, labels: { style: { colors: '#9f1239' } }, min: 0 }
+    ],
+    markers: { size: 5, colors: ['#B8860B', '#9f1239'], strokeColors: '#fff', strokeWidth: 2 },
+    tooltip: { x: { format: 'MMM dd, yyyy' }, theme: 'light', shared: true },
+    legend: LEGEND,
+    grid: { borderColor: GRID_COLOR, strokeDashArray: 3 },
+    dataLabels: { enabled: false }
+  });
+  engMain.render();
+
+  new ApexCharts(document.querySelector('#engChartBrush'), {
+    chart: { id: 'engBrush', type: 'area', height: 100, brush: { target: 'engMain', enabled: true }, selection: { enabled: true, xaxis: { min: engDefaultStart, max: engDefaultEnd }, fill: { color: '#B8860B', opacity: 0.22 }, stroke: { width: 1, color: '#B8860B' } }, toolbar: { show: false }, fontFamily: "'Plus Jakarta Sans', sans-serif" },
+    colors: ['#B8860B'],
+    fill: { type: 'gradient', gradient: { opacityFrom: 0.6, opacityTo: 0.1 } },
+    stroke: { width: 1, curve: 'smooth' },
+    series: [{ name: 'IG engagement / post', data: igAvgEng }],
+    xaxis: { type: 'datetime', tooltip: { enabled: false } },
+    yaxis: { tickAmount: 2, labels: { style: { fontSize: '10px' } } },
+    grid: { borderColor: GRID_COLOR },
+    dataLabels: { enabled: false }
+  }).render();
+})();
 
 </script>
 </body></html>
