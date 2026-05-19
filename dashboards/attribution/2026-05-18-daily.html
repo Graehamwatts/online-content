@@ -1,0 +1,148 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<title>Daily Attribution Brief — Day 2 of failure (2026-05-18)</title>
+<style>
+  body { margin:0; padding:24px; background:#f5f5f4; font-family:'DM Sans','Helvetica Neue',Arial,sans-serif; color:#0f1729; }
+  .wrap { max-width:720px; margin:0 auto; background:#ffffff; border-radius:14px; overflow:hidden; box-shadow:0 4px 24px rgba(15,23,41,0.08); }
+  .topbar { background:#0f1729; color:#f4b955; padding:12px 24px; font-size:13px; letter-spacing:.08em; text-transform:uppercase; }
+  .header { padding:28px 28px 8px; }
+  .header h1 { margin:0 0 6px; font-size:24px; line-height:1.25; color:#0f1729; }
+  .header .meta { font-size:13px; color:#475569; }
+  .status { margin:18px 28px 0; padding:14px 18px; border-radius:10px; background:#fef2f2; color:#7f1d1d; border-left:5px solid #b91c1c; font-size:14px; }
+  .section { padding:20px 28px; }
+  .section h2 { font-size:14px; letter-spacing:.08em; text-transform:uppercase; color:#64748b; margin:0 0 10px; }
+  .card { background:#fafaf9; border:1px solid #e7e5e4; border-radius:10px; padding:16px 18px; margin-bottom:12px; font-size:14px; line-height:1.55; }
+  .card strong { color:#0f1729; }
+  .card.amber { background:#fffbeb; border-color:#fde68a; }
+  .card.amber strong { color:#92400e; }
+  code { background:#0f1729; color:#f4b955; padding:2px 6px; border-radius:4px; font-size:12px; }
+  table { width:100%; border-collapse:collapse; font-size:14px; }
+  th, td { text-align:left; padding:10px 12px; border-bottom:1px solid #e7e5e4; vertical-align:top; }
+  th { font-size:12px; letter-spacing:.06em; text-transform:uppercase; color:#64748b; }
+  .ok { color:#15803d; font-weight:600; }
+  .bad { color:#b91c1c; font-weight:600; }
+  .warn { color:#a16207; font-weight:600; }
+  .footer { padding:18px 28px 28px; font-size:12px; color:#64748b; border-top:1px solid #f1f5f9; }
+  .footer .sig { color:#0f1729; font-weight:600; }
+  .pill { display:inline-block; padding:2px 10px; border-radius:999px; font-size:11px; font-weight:600; letter-spacing:.04em; text-transform:uppercase; }
+  .pill.red { background:#fee2e2; color:#991b1b; }
+  .recommend { background:#0f1729; color:#fafaf9; padding:18px 20px; border-radius:10px; margin-bottom:12px; font-size:14px; line-height:1.6; }
+  .recommend strong { color:#f4b955; }
+  .recommend code { background:#1e293b; }
+</style>
+</head>
+<body>
+<div class="wrap">
+  <div class="topbar">Daily Attribution Brief · 2026-05-18</div>
+
+  <div class="header">
+    <h1>Day 2 of failure — same three blockers as Sunday <span class="pill red">No data</span></h1>
+    <div class="meta">Reporting period: Mon 2026-05-18 (Pacific). Run at: Tue 2026-05-19, 07:15 AM PT. Brief #2 of consecutive failures.</div>
+  </div>
+
+  <div class="status">
+    <strong>Status:</strong> The pull never ran. This is the second consecutive automated failure with identical root cause. Zero lead activity is <em>not</em> being reported — the chain is still offline. The fix is a 2-minute one and it stays broken until you do it.
+  </div>
+
+  <div class="section">
+    <h2>What changed since Sunday's brief</h2>
+    <div class="card">
+      Nothing. Same three blockers fire today. The window where Friday's review will run is 72 hours from now — if the pipe isn't restored by then, the Friday rollup will also fail.
+    </div>
+  </div>
+
+  <div class="section">
+    <h2>Live infrastructure check (just now)</h2>
+    <table>
+      <thead><tr><th>Check</th><th>Result</th><th>What it means</th></tr></thead>
+      <tbody>
+        <tr>
+          <td><code>GET /repos/.../contents/.github/workflows/daily-attribution-brief.yml</code></td>
+          <td class="bad">404</td>
+          <td>Workflow file is still not registered on remote.</td>
+        </tr>
+        <tr>
+          <td><code>PUT</code> workflow YAML via Contents API</td>
+          <td class="bad">404</td>
+          <td>PAT scope is still <code>repo</code> only. Missing <code>workflow</code>.</td>
+        </tr>
+        <tr>
+          <td><code>POST /actions/workflows/.../dispatches</code></td>
+          <td class="bad">404</td>
+          <td>Confirms workflow isn't dispatchable.</td>
+        </tr>
+        <tr>
+          <td><code>GET /actions/secrets</code></td>
+          <td class="bad">total_count: 0</td>
+          <td>No <code>GHL_PIT</code>, <code>GHL_LOCATION_ID</code>, <code>GMAIL_USER</code>, or <code>GMAIL_APP_PASSWORD</code> set. Even if the workflow was registered, it would fail at the API call.</td>
+        </tr>
+        <tr>
+          <td><code>POST https://services.leadconnectorhq.com/contacts/search</code> from sandbox</td>
+          <td class="ok">401 (real JSON)</td>
+          <td>Host is reachable in ~160ms. The sandbox can talk to GHL — Option C from Sunday's brief is on the table.</td>
+        </tr>
+        <tr>
+          <td>Search mounted folders for PIT</td>
+          <td class="bad">Not found</td>
+          <td>No <code>ghl-pit.txt</code> anywhere under <code>Online Content/</code>, <code>Scheduled/</code>, or uploads.</td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+
+  <div class="section">
+    <h2>The Read</h2>
+    <div class="card">
+      Three doors, all locked. The token can't push workflows. The workflow that would pull data isn't on the remote. The secrets that the workflow would need aren't set. You don't need to fix all three — fix any one cleanly and the brief restores tomorrow. The fastest of the three is dropping the PIT into a mounted folder so I bypass GitHub entirely. That's a single file paste.
+    </div>
+  </div>
+
+  <div class="section">
+    <h2>Pick one — ordered by your effort, not mine</h2>
+
+    <div class="recommend">
+      <strong>★ Recommended (60 seconds) — Option C, sandbox direct:</strong>
+      Create a file at <code>C:\Users\Graeham Watts\Documents\Claude\Online Content\.claude-credentials\ghl-pit.txt</code> with:<br><br>
+      Line 1: your PIT (starts <code>pit-</code>)<br>
+      Line 2: <code>6wuU3haUH7uNeT20E3UZ</code><br><br>
+      That path is already in <code>.gitignore</code> so the secret never touches the repo. I'll auto-detect it tomorrow and skip GitHub Actions entirely. Why this is best: cuts two systems out of the dependency chain. Faster, simpler, fewer failure modes.
+    </div>
+
+    <div class="card amber">
+      <strong>Option A (2 minutes) — fix the PAT:</strong> Go to <code>github.com/settings/tokens</code>, regenerate the classic token with both <code>repo</code> AND <code>workflow</code> scopes checked. Replace contents of <code>Online Content/github-token.txt</code> (same path, one line, no trailing newline). Then I can push the workflow myself. <em>But</em> you'd still need to set Actions Secrets (Option D below) for it to actually pull data.
+    </div>
+
+    <div class="card amber">
+      <strong>Option B (1 minute) — local push:</strong> Open a terminal in <code>Online Content</code>:
+      <br><code>git add .github/workflows/ && git commit -m "register workflows" && git push</code><br>
+      That registers the workflow. <em>Same caveat as A</em> — secrets still need to be set.
+    </div>
+
+    <div class="card amber">
+      <strong>Option D (required if you pick A or B) — set the secrets:</strong> In the repo settings → Secrets and variables → Actions, add: <code>GHL_PIT</code>, <code>GHL_LOCATION_ID</code> (<code>6wuU3haUH7uNeT20E3UZ</code>), <code>GMAIL_USER</code> (<code>graehamwatts@gmail.com</code>), <code>GMAIL_APP_PASSWORD</code> (Gmail app-password, not your login pw). Required for the Action to authenticate to GHL and send the email.
+    </div>
+  </div>
+
+  <div class="section">
+    <h2>Honest take on which to pick</h2>
+    <div class="card">
+      Option C is the cleanest. The whole point of the GitHub Action was to work around the sandbox blocking GHL — but the sandbox no longer blocks GHL. The Action is now solving a problem that doesn't exist. Keeping it adds two failure surfaces (PAT scopes, secrets in two places) for zero benefit. If you want belt-and-suspenders, pick C now to unblock today, then do A+B+D later as a backup path. But you don't need both.
+    </div>
+  </div>
+
+  <div class="section">
+    <h2>Side effects from this run</h2>
+    <div class="card">
+      No writes happened. No commits, no GHL calls, no emails sent (beyond this one). The diagnostic checks above are read-only.
+    </div>
+  </div>
+
+  <div class="footer">
+    <div class="sig">Daily Attribution Brief · automated</div>
+    <div>Graeham Watts · REALTOR · Intero Real Estate · DRE# 02015066</div>
+  </div>
+</div>
+</body>
+</html>
