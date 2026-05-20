@@ -1,0 +1,129 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>Comprehensive Content Audit — Disen Cai vs. Burlingame Market</title>
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.1/dist/chart.umd.min.js"></script>
+<style>
+  :root{--bg:#0a0e1a;--card:#131827;--accent2:#1a2138;--text:#e8ecf3;--dim:#8b94a8;--cyan:#00d9ff;--amber:#ffb84d;--danger:#ff5577;--success:#4dd97f;--border:#1f2942;}
+  *{box-sizing:border-box;margin:0;padding:0;}
+  body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,sans-serif;background:var(--bg);color:var(--text);line-height:1.55;padding:40px 24px;}
+  .container{max-width:1180px;margin:0 auto;}
+  header{text-align:center;margin-bottom:40px;padding-bottom:28px;border-bottom:1px solid var(--border);}
+  header .eyebrow{color:var(--cyan);font-size:13px;text-transform:uppercase;letter-spacing:2px;margin-bottom:12px;}
+  header h1{font-size:34px;font-weight:700;margin-bottom:10px;background:linear-gradient(135deg,#fff,var(--cyan));-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;}
+  header .subtitle{color:var(--dim);font-size:15px;}
+  header .meta{color:var(--dim);font-size:12px;margin-top:14px;}
+  section{margin-bottom:44px;}
+  h2{font-size:22px;margin-bottom:18px;border-left:4px solid var(--cyan);padding-left:14px;}
+  h3{font-size:17px;margin-bottom:10px;}
+  p{margin-bottom:10px;}
+  .dim{color:var(--dim);}
+  .paradox{background:linear-gradient(135deg,rgba(255,85,119,.12),rgba(255,184,77,.05));border:1px solid rgba(255,85,119,.3);border-radius:12px;padding:28px;margin-bottom:32px;}
+  .paradox h3{color:var(--danger);font-size:20px;margin-bottom:12px;}
+  .paradox p{font-size:16px;}
+  .chart-card{background:var(--card);border:1px solid var(--border);border-radius:12px;padding:24px;margin-bottom:20px;}
+  .chart-wrap{position:relative;width:100%;height:300px;}
+  table{width:100%;border-collapse:collapse;font-size:13px;}
+  th{text-align:left;padding:12px 10px;font-size:11px;text-transform:uppercase;letter-spacing:.5px;color:var(--dim);border-bottom:1px solid var(--border);}
+  td{padding:11px 10px;border-bottom:1px solid var(--border);}
+  tr.disen{background:rgba(0,217,255,.06);}
+  tr.disen td:first-child{border-left:3px solid var(--cyan);}
+  .scorecard-wrap{background:var(--card);border:1px solid var(--border);border-radius:12px;padding:12px;overflow-x:auto;}
+  .good{color:var(--success);} .bad{color:var(--danger);} .warn{color:var(--amber);}
+  .missing{display:flex;gap:16px;align-items:flex-start;background:var(--card);border:1px solid var(--border);border-radius:12px;padding:20px;margin-bottom:14px;}
+  .missing .rank{flex-shrink:0;width:40px;height:40px;border-radius:8px;background:rgba(255,85,119,.15);color:var(--danger);display:flex;align-items:center;justify-content:center;font-weight:700;font-size:18px;}
+  .missing h4{font-size:16px;margin-bottom:4px;}
+  .missing p{font-size:14px;color:var(--dim);margin:0;}
+  .missing .fix{color:var(--success);font-size:13px;margin-top:6px;}
+  .keep{display:inline-block;background:rgba(77,217,127,.12);border:1px solid rgba(77,217,127,.3);border-radius:8px;padding:14px 18px;margin:0 8px 12px 0;font-size:14px;}
+  .keep strong{color:var(--success);}
+  .laura{background:var(--accent2);border-radius:12px;padding:28px;}
+  .laura ul{list-style:none;margin-top:12px;}
+  .laura li{padding:6px 0;font-size:14px;}
+  .laura li::before{content:"\2713  ";color:var(--success);}
+  .action-table td{font-size:14px;}
+  .from{color:var(--danger);} .to{color:var(--success);}
+  footer{text-align:center;padding:28px 0;border-top:1px solid var(--border);color:var(--dim);font-size:12px;margin-top:40px;}
+  code{background:var(--card);padding:2px 7px;border-radius:4px;font-size:12px;}
+</style>
+</head>
+<body>
+<div class="container">
+<header>
+  <div class="eyebrow">Comprehensive Content Audit · 138 posts · 12 dimensions</div>
+  <h1>Disen Cai vs. the Burlingame Market</h1>
+  <p class="subtitle">Every angle the data supports — not just Reels</p>
+  <p class="meta">Built for Disen Cai · By Graeham Watts (Property IQ) · 3-month sample · 2026-05-19</p>
+</header>
+<section><div class="paradox">
+  <h3>The paradox that reframes everything</h3>
+  <p style="font-size:18px;margin-bottom:14px;"><strong>Disen posts the most (6.0/week) and engages the least (0.25% rate).</strong></p>
+  <p>Even Mike Bohnert — 772 followers, posting 5× less often — earns <strong>11× Disen's engagement rate</strong>. Laura Bryant earns <strong>27×</strong>. This isn't an effort problem. Disen has the work ethic of a top producer pointed at a format and caption style that can't compound.</p>
+</div></section>
+<section><h2>Engagement rate — the audience-normalized truth</h2>
+  <p class="dim" style="margin-bottom:16px;">Likes + comments ÷ followers. Disen is dead last despite posting most.</p>
+  <div class="chart-card"><div class="chart-wrap"><canvas id="eng" role="img" aria-label="Engagement rate by agent"></canvas></div></div></section>
+<section><h2>Effort vs. impact</h2>
+  <p class="dim" style="margin-bottom:16px;">Posts/week (bars) vs likes/post (line, log). Works hardest, lands softest.</p>
+  <div class="chart-card"><div class="chart-wrap"><canvas id="effort" role="img" aria-label="Posts per week vs likes per post"></canvas></div></div></section>
+<section><h2>Format mix — where the reach gap lives</h2>
+  <div class="chart-card"><div class="chart-wrap"><canvas id="format" role="img" aria-label="Format mix by agent"></canvas></div></div></section>
+<section><h2>Full 12-dimension scorecard</h2>
+  <div class="scorecard-wrap"><table>
+    <thead><tr><th>Dimension</th><th>Disen</th><th>Raziel</th><th>Laura</th><th>Jennifer</th><th>Bohnert</th><th>Disen rank</th></tr></thead>
+    <tbody>
+      <tr><td>Followers</td><td>1,881</td><td>1,903</td><td>26,685</td><td>13,859</td><td>772</td><td>—</td></tr>
+      <tr class="disen"><td>Engagement rate</td><td class="bad">0.25%</td><td>0.67%</td><td>6.7%</td><td>0.72%</td><td>2.75%</td><td class="bad">#5 worst</td></tr>
+      <tr><td>Posts / week</td><td class="good">6.0</td><td>2.4</td><td>0.3</td><td>1.7</td><td>1.1</td><td class="good">#1 most</td></tr>
+      <tr><td>Consistency (stdev)</td><td class="good">0.8</td><td>2.9</td><td>64.3</td><td>2.9</td><td>3.8</td><td class="good">#1 steadiest</td></tr>
+      <tr><td>Reel %</td><td class="bad">13%</td><td>83%</td><td>100%</td><td>71%</td><td>0%</td><td class="bad">#4</td></tr>
+      <tr><td>Avg likes / post</td><td class="bad">4</td><td>12</td><td>1,775</td><td>92</td><td>20</td><td class="bad">#5 worst</td></tr>
+      <tr><td>Avg comments / post</td><td class="bad">0.3</td><td>0.4</td><td>12.1</td><td>7.8</td><td>0.9</td><td class="bad">#5 worst</td></tr>
+      <tr><td>Caption length</td><td class="warn">636ch</td><td>619ch</td><td>265ch</td><td>712ch</td><td>301ch</td><td class="warn">too long</td></tr>
+      <tr><td>Hashtags / post</td><td>5.4</td><td>0.9</td><td>3.3</td><td>4.5</td><td>5.0</td><td>not helping</td></tr>
+      <tr><td>Burlingame focus</td><td>27%</td><td>24%</td><td>33%</td><td>19%</td><td>46%</td><td>mid</td></tr>
+      <tr><td>Topic balance</td><td class="good">strong</td><td>market</td><td>lifestyle</td><td>balanced</td><td>listings</td><td class="good">#1 best</td></tr>
+    </tbody></table></div></section>
+<section><h2>What's missing — ranked by impact</h2>
+  <div class="missing"><div class="rank">1</div><div><h4>Reach format</h4><p>86% carousels/images that can't reach beyond existing followers. Only 13% Reels.</p><p class="fix">Fix: shift to 50%+ Reels.</p></div></div>
+  <div class="missing"><div class="rank">2</div><div><h4>Engagement rate / resonance</h4><p>0.25% — lowest in the set. 6×/week, 4 likes/post. Content isn't stopping the scroll.</p><p class="fix">Fix: fewer, better posts.</p></div></div>
+  <div class="missing"><div class="rank">3</div><div><h4>Conversation / comments</h4><p>0.3 comments/post. Asks questions 57% of the time but nobody answers.</p><p class="fix">Fix: sharper questions, reply to all.</p></div></div>
+  <div class="missing"><div class="rank">4</div><div><h4>Caption density</h4><p>636-char captions; Laura wins with 265-char punchy ones at 6.7%.</p><p class="fix">Fix: cut captions in half.</p></div></div>
+  <div class="missing"><div class="rank">5</div><div><h4>The volume trap</h4><p>Posts 20× more than Laura, gets 1/440th the likes per post.</p><p class="fix">Fix: redirect effort — 3 great Reels beat 6 carousels.</p></div></div></section>
+<section><h2>What's already strong — keep these</h2>
+  <div>
+    <div class="keep"><strong>Cadence + discipline</strong> — 6/wk, 0.8-day stdev. Clockwork.</div>
+    <div class="keep"><strong>Topic balance</strong> — listing + market + lifestyle mix.</div>
+    <div class="keep"><strong>CTA + question intent</strong> — 57% already prompt action.</div>
+  </div>
+  <p class="dim" style="margin-top:14px;">Stop optimizing: hashtag volume (5.4/post isn't helping) and topic selection (already good).</p></section>
+<section><h2>The model to copy: Laura Bryant</h2>
+  <div class="laura"><h3>26,685 followers · 6.7% engagement · proof of concept</h3>
+  <p class="dim">Posts 1/20th as often as Disen, gets 440× the engagement per post.</p>
+  <ul><li>100% Reels — reach format</li><li>Short captions (265 chars)</li><li>Lifestyle-forward — saveable & shareable events</li><li>Quality over quantity</li><li>Energetic, visual captions</li></ul></div></section>
+<section><h2>The action plan</h2>
+  <div class="scorecard-wrap"><table class="action-table">
+    <thead><tr><th>Move</th><th>From</th><th>To</th><th>Why</th></tr></thead>
+    <tbody>
+      <tr><td>Format</td><td class="from">13% Reels</td><td class="to">50%+ Reels</td><td>Reach non-followers</td></tr>
+      <tr><td>Frequency</td><td class="from">6/week</td><td class="to">3-4/week</td><td>Quality over quantity</td></tr>
+      <tr><td>Caption</td><td class="from">636 chars</td><td class="to">&lt;300 chars</td><td>Match the winners</td></tr>
+      <tr><td>Hook</td><td class="from">weak (84 views)</td><td class="to">scroll-stopping first 3s</td><td>Get pushed by algorithm</td></tr>
+      <tr><td>Comments</td><td class="from">0.3/post</td><td class="to">reply to all + sharper Qs</td><td>Strongest algo signal</td></tr>
+    </tbody></table></div></section>
+<footer>
+  <p>Built by Graeham Watts (Intero Real Estate) with the Property IQ system.</p>
+  <p style="margin-top:6px;">Data: Apify Instagram Scraper (138 posts, 3-month window) · MLSListings Matrix · 2026-05-19</p>
+</footer>
+</div>
+<script>
+const dz='#ff5577',gy='#5f6473',bl='#00d9ff',tl='#4dd97f',am='#ffb84d';
+const baseOpts={responsive:true,maintainAspectRatio:false,plugins:{legend:{display:false}},scales:{x:{ticks:{color:'#8b94a8'},grid:{color:'#1f2942'}},y:{ticks:{color:'#8b94a8'},grid:{color:'#1f2942'}}}};
+new Chart(document.getElementById('eng'),{type:'bar',data:{labels:['Laura Bryant','Mike Bohnert','Jennifer Gilson','Raziel Ungar','Disen Cai'],datasets:[{data:[6.7,2.75,0.72,0.67,0.25],backgroundColor:[gy,gy,gy,gy,dz]}]},options:{...baseOpts,indexAxis:'y',scales:{x:{ticks:{color:'#8b94a8',callback:v=>v+'%'},grid:{color:'#1f2942'}},y:{ticks:{color:'#e8ecf3'},grid:{display:false}}}}});
+new Chart(document.getElementById('effort'),{data:{labels:['Disen','Raziel','Jennifer','Bohnert','Laura'],datasets:[{type:'bar',label:'Posts/week',data:[6.0,2.4,1.7,1.1,0.3],backgroundColor:bl,yAxisID:'y'},{type:'line',label:'Likes/post (log)',data:[4,12,92,20,1775],borderColor:dz,backgroundColor:dz,pointRadius:5,tension:.3,yAxisID:'y1'}]},options:{responsive:true,maintainAspectRatio:false,plugins:{legend:{display:true,labels:{color:'#e8ecf3',boxWidth:12}}},scales:{x:{ticks:{color:'#8b94a8'},grid:{color:'#1f2942'}},y:{position:'left',ticks:{color:'#00d9ff'},grid:{color:'#1f2942'}},y1:{position:'right',type:'logarithmic',ticks:{color:'#ff5577'},grid:{drawOnChartArea:false}}}}});
+new Chart(document.getElementById('format'),{type:'bar',data:{labels:['Disen','Raziel','Laura','Jennifer','Bohnert'],datasets:[{label:'Reels',data:[13,83,100,71,0],backgroundColor:tl},{label:'Carousel',data:[48,17,0,29,92],backgroundColor:am},{label:'Image',data:[38,0,0,0,8],backgroundColor:gy}]},options:{...baseOpts,plugins:{legend:{display:true,labels:{color:'#e8ecf3',boxWidth:12}}},scales:{x:{stacked:true,ticks:{color:'#8b94a8'},grid:{display:false}},y:{stacked:true,max:100,ticks:{color:'#8b94a8',callback:v=>v+'%'},grid:{color:'#1f2942'}}}}});
+</script>
+</body>
+</html>
