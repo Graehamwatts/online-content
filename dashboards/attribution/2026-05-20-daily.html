@@ -1,0 +1,143 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Daily Attribution Brief — GHL pull blocked (2026-05-20)</title>
+<style>
+  body { margin:0; padding:24px; background:#f5f5f4; font-family:'DM Sans','Helvetica Neue',Arial,sans-serif; color:#0f1729; }
+  .wrap { max-width:720px; margin:0 auto; background:#ffffff; border-radius:14px; overflow:hidden; box-shadow:0 4px 24px rgba(15,23,41,0.08); }
+  .topbar { background:#0f1729; color:#f4b955; padding:12px 24px; font-size:13px; letter-spacing:.08em; text-transform:uppercase; }
+  .header { padding:28px 28px 8px; }
+  .header h1 { margin:0 0 6px; font-size:24px; line-height:1.25; color:#0f1729; }
+  .header .meta { font-size:13px; color:#475569; }
+  .status { margin:18px 28px 0; padding:14px 18px; border-radius:10px; background:#fef2f2; color:#7f1d1d; border-left:5px solid #b91c1c; font-size:14px; line-height:1.55; }
+  .section { padding:20px 28px; }
+  .section h2 { font-size:14px; letter-spacing:.08em; text-transform:uppercase; color:#64748b; margin:0 0 10px; }
+  .card { background:#fafaf9; border:1px solid #e7e5e4; border-radius:10px; padding:16px 18px; margin-bottom:12px; font-size:14px; line-height:1.55; }
+  .card strong { color:#0f1729; }
+  .card.amber { background:#fffbeb; border-color:#fde68a; }
+  .card.amber strong { color:#92400e; }
+  code { background:#0f1729; color:#f4b955; padding:2px 6px; border-radius:4px; font-size:12px; word-break:break-all; }
+  table { width:100%; border-collapse:collapse; font-size:14px; }
+  th, td { text-align:left; padding:10px 12px; border-bottom:1px solid #e7e5e4; vertical-align:top; }
+  th { font-size:12px; letter-spacing:.06em; text-transform:uppercase; color:#64748b; }
+  .ok { color:#15803d; font-weight:600; }
+  .bad { color:#b91c1c; font-weight:600; }
+  .warn { color:#a16207; font-weight:600; }
+  .kpis { display:flex; gap:12px; flex-wrap:wrap; }
+  .kpi { flex:1 1 150px; background:#fafaf9; border:1px solid #e7e5e4; border-radius:10px; padding:14px 16px; }
+  .kpi .label { font-size:11px; letter-spacing:.06em; text-transform:uppercase; color:#64748b; }
+  .kpi .val { font-size:26px; font-weight:700; color:#0f1729; margin-top:4px; }
+  .kpi .sub { font-size:12px; color:#94a3b8; margin-top:2px; }
+  .footer { padding:18px 28px 28px; font-size:12px; color:#64748b; border-top:1px solid #f1f5f9; }
+  .footer .sig { color:#0f1729; font-weight:600; }
+  .pill { display:inline-block; padding:2px 10px; border-radius:999px; font-size:11px; font-weight:600; letter-spacing:.04em; text-transform:uppercase; }
+  .pill.red { background:#fee2e2; color:#991b1b; }
+  .recommend { background:#0f1729; color:#fafaf9; padding:18px 20px; border-radius:10px; margin-bottom:12px; font-size:14px; line-height:1.6; }
+  .recommend strong { color:#f4b955; }
+  .recommend code { background:#1e293b; }
+</style>
+</head>
+<body>
+<div class="wrap">
+  <div class="topbar">Daily Attribution Brief · 2026-05-20</div>
+
+  <div class="header">
+    <h1>No leads pulled — one missing file is the only thing in the way <span class="pill red">No data</span></h1>
+    <div class="meta">Reporting period: Tue 2026-05-19 (Pacific). Run: Wed 2026-05-20, 07:15 AM PT. Last brief on file: Mon 2026-05-18 — Tuesday's never landed.</div>
+  </div>
+
+  <div class="status">
+    <strong>Status:</strong> Zero leads is <em>not</em> a real number today — the pull never authenticated. But the diagnosis changed this morning, and it's good news: the problem is now down to a single missing credential file. Two of the three blockers from earlier this week turned out to be irrelevant. Fix one file and the brief is back tomorrow.
+  </div>
+
+  <div class="section">
+    <h2>Yesterday's numbers</h2>
+    <div class="kpis">
+      <div class="kpi"><div class="label">Total Leads</div><div class="val">—</div><div class="sub">no auth, not zero</div></div>
+      <div class="kpi"><div class="label">New Opportunities</div><div class="val">—</div><div class="sub">unavailable</div></div>
+      <div class="kpi"><div class="label">Closed Wins</div><div class="val">—</div><div class="sub">unavailable</div></div>
+      <div class="kpi"><div class="label">Top Source</div><div class="val">—</div><div class="sub">unavailable</div></div>
+    </div>
+    <div class="card">
+      I won't show fabricated or "0" figures — there is no readable lead data for any recent day, so every prior brief this week was also a setup notice rather than real attribution. The moment the token is in place, these cards fill with live GHL numbers and the source breakdown returns.
+    </div>
+  </div>
+
+  <div class="section">
+    <h2>The Read</h2>
+    <div class="card">
+      The whole reason this brief was built to route through a GitHub Action was that the sandbox supposedly couldn't reach GoHighLevel. <strong>That's no longer true</strong> — I tested it live this morning and the sandbox talks to GHL directly in about half a second. So the GitHub Action is now solving a problem that doesn't exist, and it can't even be set up anyway (details below). The clean path is to skip GitHub entirely and let me call GHL straight from here. The only thing I'm missing is the token, and it isn't in any folder I can read.
+    </div>
+  </div>
+
+  <div class="section">
+    <h2>Live infrastructure check (run just now)</h2>
+    <table>
+      <thead><tr><th>Check</th><th>Result</th><th>What it means</th></tr></thead>
+      <tbody>
+        <tr>
+          <td><code>POST services.leadconnectorhq.com/contacts/search</code> from sandbox, no token</td>
+          <td class="ok">401, real JSON, 0.54s</td>
+          <td>GHL is reachable from here. The "sandbox is blocked" premise is dead — direct calls work. I just need credentials.</td>
+        </tr>
+        <tr>
+          <td>Search every connected folder for the PIT token</td>
+          <td class="bad">Not found</td>
+          <td>No <code>ghl-pit.txt</code> under <code>Online Content/</code>, <code>Scheduled/</code>, or uploads. The skill points at <code>...\Claude\Skills\ghl-pit.txt</code>, but that folder isn't connected, so I can't read it.</td>
+        </tr>
+        <tr>
+          <td>GitHub PAT scopes (<code>x-oauth-scopes</code>)</td>
+          <td class="bad"><code>repo</code> only</td>
+          <td>No <code>workflow</code> scope, so I can't register <code>daily-attribution-brief.yml</code> via the API. The Action path is closed at the door.</td>
+        </tr>
+        <tr>
+          <td><code>GET /actions/secrets</code> on online-content</td>
+          <td class="bad">total_count: 0</td>
+          <td>No <code>GHL_PIT</code>, <code>GHL_LOCATION_ID</code>, or Gmail secrets. Even a registered Action would 401. And I can't set them — I don't have the token value to store.</td>
+        </tr>
+        <tr>
+          <td><code>.claude-credentials/</code> in <code>.gitignore</code></td>
+          <td class="ok">Ignored (verified)</td>
+          <td>A token dropped there is safe — it will never be committed or pushed.</td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+
+  <div class="section">
+    <h2>Do this one thing — ~60 seconds</h2>
+    <div class="recommend">
+      <strong>★ Drop the token where I can read it.</strong> Create this file:<br><br>
+      <code>C:\Users\Graeham Watts\Documents\Claude\Online Content\.claude-credentials\ghl-pit.txt</code><br><br>
+      Line 1: your Private Integration Token (starts <code>pit-</code>)<br>
+      Line 2: <code>6wuU3haUH7uNeT20E3UZ</code><br><br>
+      That folder is in <code>.gitignore</code> (I verified it this morning), so the secret never touches the repo. Tomorrow's run reads it, calls GHL directly, and the full attribution brief — KPI cards, source breakdown, funnel — comes back. No GitHub Action, no secrets, no PAT changes needed.
+    </div>
+    <div class="card amber">
+      <strong>Why not just fix the GitHub Action?</strong> Because it's the long way around a problem that's gone. The Action existed only to dodge a sandbox block that no longer exists, and to even stand it up you'd need to: regenerate the PAT with <code>workflow</code> scope, push the workflow, <em>and</em> set four Actions secrets. Three steps and two systems, versus one file. If you want a belt-and-suspenders backup later, I'll wire it — but it's not the move today.
+    </div>
+  </div>
+
+  <div class="section">
+    <h2>Where the token comes from (if you don't have it handy)</h2>
+    <div class="card">
+      In GoHighLevel: Settings (gear, bottom-left) → <strong>Private Integrations</strong> → <strong>Create New Integration</strong> → name it "Claude Attribution" → grant read scopes for Contacts and Opportunities → copy the key that starts with <code>pit-</code>. Paste it as line 1 of the file above. The location ID on line 2 is already filled in for you.
+    </div>
+  </div>
+
+  <div class="section">
+    <h2>Side effects from this run</h2>
+    <div class="card">
+      Read-only diagnostics plus this brief. No GHL data was pulled, no opportunities were touched, no workflow was created, and nothing was sent beyond this email. This file is committed to <code>dashboards/attribution/2026-05-20-daily.html</code> for the record.
+    </div>
+  </div>
+
+  <div class="footer">
+    <div class="sig">Daily Attribution Brief · automated</div>
+    <div>Graeham Watts · REALTOR · Intero Real Estate · DRE# 02015066</div>
+  </div>
+</div>
+</body>
+</html>
