@@ -1,0 +1,869 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>GHL CRM Audit — 2026-05-16</title>
+<style>
+  :root {
+    --slate: #1a2744; --slate2: #1e2d4d; --accent: #2d4278;
+    --text: #ffffff; --text2: #a0b0c8;
+    --critical: #e74c3c; --warning: #f39c12; --healthy: #27ae60;
+    --line: rgba(255,255,255,0.1);
+  }
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  body { font-family: -apple-system, "Segoe UI", Arial, sans-serif; background: var(--slate); color: var(--text); line-height: 1.5; padding: 24px; max-width: 1200px; margin: 0 auto; }
+  h1 { font-size: 28px; margin-bottom: 4px; font-weight: 700; letter-spacing: -.01em; }
+  h2 { font-size: 18px; margin: 28px 0 12px; font-weight: 600; color: #fff; border-bottom: 2px solid var(--accent); padding-bottom: 8px; }
+  h3.mm-h { font-size: 14px; margin: 20px 0 8px; color: var(--text); font-weight: 600; display: flex; align-items: center; gap: 10px; }
+  .lede { color: var(--text2); font-size: 13px; margin-bottom: 18px; }
+  .grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(180px, 1fr)); gap: 12px; margin: 14px 0 8px; }
+  .card { background: var(--slate2); padding: 14px 16px; border-radius: 8px; border: 1px solid var(--line); }
+  .card-label { font-size: 10px; text-transform: uppercase; letter-spacing: .08em; color: var(--text2); margin-bottom: 6px; }
+  .card-value { font-size: 28px; font-weight: 700; color: #fff; line-height: 1; }
+  .card-value-sm { font-size: 18px; }
+  .card-sub { font-size: 11px; color: var(--text2); margin-top: 4px; }
+  .phs-card { background: linear-gradient(135deg, var(--slate2), var(--accent)); }
+  .phs-grade { font-size: 56px; font-weight: 700; line-height: 1; }
+  .phs-D { color: var(--warning); }
+  .phs-F { color: var(--critical); }
+  .phs-A, .phs-B { color: var(--healthy); }
+  table { width: 100%; border-collapse: collapse; background: var(--slate2); border-radius: 8px; overflow: hidden; margin-top: 10px; }
+  thead th { background: rgba(0,0,0,0.2); color: var(--text2); text-align: left; padding: 9px 12px; font-size: 10px; text-transform: uppercase; letter-spacing: .05em; font-weight: 600; }
+  tbody td { padding: 9px 12px; border-bottom: 1px solid var(--line); font-size: 12px; vertical-align: top; color: var(--text); }
+  tbody tr:last-child td { border-bottom: none; }
+  tbody tr:nth-child(even) { background: rgba(255,255,255,0.02); }
+  .rank { font-weight: 700; color: var(--text2); width: 24px; text-align: right; }
+  .contact-name a { color: #fff; text-decoration: none; font-weight: 600; border-bottom: 1px dotted var(--text2); }
+  .contact-meta { font-size: 10px; color: var(--text2); margin-top: 2px; }
+  .num { text-align: right; font-variant-numeric: tabular-nums; }
+  .pill { display: inline-block; padding: 2px 8px; border-radius: 10px; font-size: 10px; font-weight: 600; letter-spacing: .02em; white-space: nowrap; }
+  .mismatch { font-size: 11px; color: var(--warning); white-space: nowrap; }
+  .count-badge { background: var(--accent); color: #fff; padding: 2px 8px; border-radius: 10px; font-size: 11px; font-weight: 600; }
+  .muted { color: var(--text2); font-style: italic; }
+  .action-cell { color: var(--healthy); font-size: 11px; font-weight: 600; }
+  .alert-banner { background: rgba(231,76,60,0.15); border-left: 4px solid var(--critical); padding: 12px 16px; margin: 14px 0; border-radius: 0 6px 6px 0; }
+  .alert-banner strong { color: #fff; }
+  .info-banner { background: rgba(243,156,18,0.12); border-left: 4px solid var(--warning); padding: 12px 16px; margin: 14px 0; border-radius: 0 6px 6px 0; color: var(--text2); font-size: 12px; line-height: 1.6; }
+  .footer { margin-top: 32px; padding-top: 16px; border-top: 1px solid var(--line); font-size: 11px; color: var(--text2); }
+  a { color: #6ee7b7; }
+</style>
+</head>
+<body>
+
+<h1>GHL CRM Audit — Saturday, May 16, 2026</h1>
+<div class="lede">Tier-1 audit of 4,039 contacts and 2,892 opportunities · pulled live via direct PIT · runtime 26.9s</div>
+
+<div class="grid">
+  <div class="card phs-card">
+    <div class="card-label">Pipeline Health Score</div>
+    <div class="phs-grade phs-D">D</div>
+    <div class="card-sub">66 / 100</div>
+  </div>
+  <div class="card">
+    <div class="card-label">Contacts audited</div>
+    <div class="card-value">4,039</div>
+    <div class="card-sub">2,892 opportunities</div>
+  </div>
+  <div class="card">
+    <div class="card-label">Critical contacts</div>
+    <div class="card-value" style="color:var(--critical)">2,859</div>
+    <div class="card-sub">70.8% of database</div>
+  </div>
+  <div class="card">
+    <div class="card-label">Pipeline mismatches</div>
+    <div class="card-value" style="color:var(--warning)">94</div>
+    <div class="card-sub">3 hot stuck in cold</div>
+  </div>
+  <div class="card">
+    <div class="card-label">HOT bucket</div>
+    <div class="card-value" style="color:var(--critical)">73</div>
+    <div class="card-sub">1.8% engaged in last 7d</div>
+  </div>
+  <div class="card">
+    <div class="card-label">Open pipeline value</div>
+    <div class="card-value card-value-sm">$0</div>
+    <div class="card-sub">0 opps with $ value set</div>
+  </div>
+</div>
+
+<div class="alert-banner"><strong>Data quality alert:</strong> Only <strong>0</strong> of 2,892 opportunities have a dollar value set. The "$ at risk" metric and any ROI-driven prioritization won't work until <code>monetaryValue</code> is populated on opportunities. Either set it manually at creation or build a workflow that sets a default by stage.</div>
+
+<div class="info-banner">
+  <strong style="color:#fff">Audit method note:</strong> This is a <strong>Tier-1</strong> audit using bulk contact + opportunity endpoints. It uses <code>dateUpdated</code> as the proxy for "last activity." A Tier-2 audit (next iteration) pulls per-contact notes, tasks, and conversations to refine the bucket assignments — that's where false-positive Critical flags drop off significantly. The 2,859 Critical count below is best read as "needs review," not "needs urgent action on every one."
+</div>
+
+<h2>Today's Top 10 — Contacts Needing Action Now</h2>
+<table>
+  <thead><tr><th>#</th><th>Contact</th><th>Bucket</th><th>Flag</th><th>Stage</th><th>Issue</th><th>Silent</th><th>Score</th></tr></thead>
+  <tbody>
+    <tr>
+      <td class="rank">1</td>
+      <td>
+        <div class="contact-name"><a href="https://app.gohighlevel.com/v2/location/6wuU3haUH7uNeT20E3UZ/contacts/detail/8mUMyidjM5Ivdo2eTM4U" target="_blank">Steve Tan</a></div>
+        <div class="contact-meta"> </div>
+      </td>
+      <td><span class="pill" style="background:#e74c3c20;color:#e74c3c">HOT</span></td>
+      <td><span class="pill" style="background:#e74c3c20;color:#e74c3c">CRITICAL</span></td>
+      <td>Cold</td>
+      <td><span class="mismatch">⚡ Hot behavior, cold pipeline</span></td>
+      <td class="num">1d</td>
+      <td class="num">64</td>
+    </tr>
+    <tr>
+      <td class="rank">2</td>
+      <td>
+        <div class="contact-name"><a href="https://app.gohighlevel.com/v2/location/6wuU3haUH7uNeT20E3UZ/contacts/detail/lyU4ixF3k9Q8LyRVV17P" target="_blank">tooheyx2</a></div>
+        <div class="contact-meta"> </div>
+      </td>
+      <td><span class="pill" style="background:#e74c3c20;color:#e74c3c">HOT</span></td>
+      <td><span class="pill" style="background:#e74c3c20;color:#e74c3c">CRITICAL</span></td>
+      <td><em class="muted">no pipeline</em></td>
+      <td><span class="mismatch">⚡ Hot but no pipeline</span></td>
+      <td class="num">2d</td>
+      <td class="num">63</td>
+    </tr>
+    <tr>
+      <td class="rank">3</td>
+      <td>
+        <div class="contact-name"><a href="https://app.gohighlevel.com/v2/location/6wuU3haUH7uNeT20E3UZ/contacts/detail/78MI6moRWmUhGO7yLqYk" target="_blank">Sanjar Nai-Chien</a></div>
+        <div class="contact-meta"> </div>
+      </td>
+      <td><span class="pill" style="background:#e74c3c20;color:#e74c3c">HOT</span></td>
+      <td><span class="pill" style="background:#e74c3c20;color:#e74c3c">CRITICAL</span></td>
+      <td><em class="muted">no pipeline</em></td>
+      <td><span class="mismatch">⚡ Hot but no pipeline</span></td>
+      <td class="num">2d</td>
+      <td class="num">63</td>
+    </tr>
+    <tr>
+      <td class="rank">4</td>
+      <td>
+        <div class="contact-name"><a href="https://app.gohighlevel.com/v2/location/6wuU3haUH7uNeT20E3UZ/contacts/detail/Bs9segefMQ3kqEwqgMsw" target="_blank">Charles Elkan</a></div>
+        <div class="contact-meta">fitzkiwi@gmail.com </div>
+      </td>
+      <td><span class="pill" style="background:#e74c3c20;color:#e74c3c">HOT</span></td>
+      <td><span class="pill" style="background:#e74c3c20;color:#e74c3c">CRITICAL</span></td>
+      <td><em class="muted">no pipeline</em></td>
+      <td><span class="mismatch">⚡ Hot but no pipeline</span></td>
+      <td class="num">5d</td>
+      <td class="num">60</td>
+    </tr>
+    <tr>
+      <td class="rank">5</td>
+      <td>
+        <div class="contact-name"><a href="https://app.gohighlevel.com/v2/location/6wuU3haUH7uNeT20E3UZ/contacts/detail/ev9vRbBQHw3ugZK9gKuV" target="_blank">Jamie Ray</a></div>
+        <div class="contact-meta"> </div>
+      </td>
+      <td><span class="pill" style="background:#e74c3c20;color:#e74c3c">HOT</span></td>
+      <td><span class="pill" style="background:#e74c3c20;color:#e74c3c">CRITICAL</span></td>
+      <td><em class="muted">no pipeline</em></td>
+      <td><span class="mismatch">⚡ Hot but no pipeline</span></td>
+      <td class="num">6d</td>
+      <td class="num">59</td>
+    </tr>
+    <tr>
+      <td class="rank">6</td>
+      <td>
+        <div class="contact-name"><a href="https://app.gohighlevel.com/v2/location/6wuU3haUH7uNeT20E3UZ/contacts/detail/4fmpoUzTe9cUNtB8Bx8C" target="_blank">Christina Monga Gill</a></div>
+        <div class="contact-meta"> </div>
+      </td>
+      <td><span class="pill" style="background:#e74c3c20;color:#e74c3c">HOT</span></td>
+      <td><span class="pill" style="background:#e74c3c20;color:#e74c3c">CRITICAL</span></td>
+      <td><em class="muted">no pipeline</em></td>
+      <td><span class="mismatch">⚡ Hot but no pipeline</span></td>
+      <td class="num">6d</td>
+      <td class="num">59</td>
+    </tr>
+    <tr>
+      <td class="rank">7</td>
+      <td>
+        <div class="contact-name"><a href="https://app.gohighlevel.com/v2/location/6wuU3haUH7uNeT20E3UZ/contacts/detail/tBvzvHvcp2C5eFf3bjuQ" target="_blank">Ian Pham</a></div>
+        <div class="contact-meta">so.v.awalf@gmail.com · +19166906674</div>
+      </td>
+      <td><span class="pill" style="background:#e74c3c20;color:#e74c3c">HOT</span></td>
+      <td><span class="pill" style="background:#e74c3c20;color:#e74c3c">CRITICAL</span></td>
+      <td>Cold</td>
+      <td><span class="mismatch">⚡ Hot behavior, cold pipeline</span></td>
+      <td class="num">7d</td>
+      <td class="num">58</td>
+    </tr>
+    <tr>
+      <td class="rank">8</td>
+      <td>
+        <div class="contact-name"><a href="https://app.gohighlevel.com/v2/location/6wuU3haUH7uNeT20E3UZ/contacts/detail/x0hXGzQn1IaXkaHgeyG1" target="_blank">test23 test</a></div>
+        <div class="contact-meta">test@gmail.com · +639561738352</div>
+      </td>
+      <td><span class="pill" style="background:#e74c3c20;color:#e74c3c">HOT</span></td>
+      <td><span class="pill" style="background:#e74c3c20;color:#e74c3c">CRITICAL</span></td>
+      <td>Cold</td>
+      <td><span class="mismatch">⚡ Hot behavior, cold pipeline</span></td>
+      <td class="num">7d</td>
+      <td class="num">58</td>
+    </tr>
+    <tr>
+      <td class="rank">9</td>
+      <td>
+        <div class="contact-name"><a href="https://app.gohighlevel.com/v2/location/6wuU3haUH7uNeT20E3UZ/contacts/detail/6hAnAi5mBllGD9UxaPe5" target="_blank">Muhammad Irfan</a></div>
+        <div class="contact-meta">irfanfund@gmail.com · +14089819661</div>
+      </td>
+      <td><span class="pill" style="background:#e74c3c20;color:#e74c3c">HOT</span></td>
+      <td><span class="pill" style="background:#e74c3c20;color:#e74c3c">CRITICAL</span></td>
+      <td>Buyer – Within 3 Months</td>
+      <td></td>
+      <td class="num">0d</td>
+      <td class="num">50</td>
+    </tr>
+    <tr>
+      <td class="rank">10</td>
+      <td>
+        <div class="contact-name"><a href="https://app.gohighlevel.com/v2/location/6wuU3haUH7uNeT20E3UZ/contacts/detail/zSFXeXXaseVPbvQwoLFv" target="_blank">Pareeja Kamboj</a></div>
+        <div class="contact-meta">pareeja@gmail.com · +14086445645</div>
+      </td>
+      <td><span class="pill" style="background:#e74c3c20;color:#e74c3c">HOT</span></td>
+      <td><span class="pill" style="background:#e74c3c20;color:#e74c3c">CRITICAL</span></td>
+      <td>Active Buyer</td>
+      <td></td>
+      <td class="num">0d</td>
+      <td class="num">50</td>
+    </tr></tbody>
+</table>
+
+<h2>Pipeline Mismatches — 94 contacts where stage doesn't match behavior</h2>
+
+    <h3 class="mm-h">⚡ Hot but no pipeline <span class="count-badge">26</span></h3>
+    <table>
+      <thead><tr><th>Name</th><th>Current Stage</th><th>Bucket</th><th>Days Silent</th><th>Source</th><th></th></tr></thead>
+      <tbody>
+        
+          <tr>
+            <td><a href="https://app.gohighlevel.com/v2/location/6wuU3haUH7uNeT20E3UZ/contacts/detail/Jn53LYcDKPRBnr2kVEDK" target="_blank">Diana Montaño</a></td>
+            <td>— no pipeline —</td>
+            <td><span class="pill" style="background:#e74c3c20;color:#e74c3c">HOT</span></td>
+            <td class="num">0d</td>
+            <td></td>
+            <td class="action-cell">Assign to correct pipeline</td>
+          </tr>
+          <tr>
+            <td><a href="https://app.gohighlevel.com/v2/location/6wuU3haUH7uNeT20E3UZ/contacts/detail/ZzrrJlrBex9QUEzx2OLA" target="_blank">Thomas William Lausten</a></td>
+            <td>— no pipeline —</td>
+            <td><span class="pill" style="background:#e74c3c20;color:#e74c3c">HOT</span></td>
+            <td class="num">1d</td>
+            <td></td>
+            <td class="action-cell">Assign to correct pipeline</td>
+          </tr>
+          <tr>
+            <td><a href="https://app.gohighlevel.com/v2/location/6wuU3haUH7uNeT20E3UZ/contacts/detail/lyU4ixF3k9Q8LyRVV17P" target="_blank">tooheyx2</a></td>
+            <td>— no pipeline —</td>
+            <td><span class="pill" style="background:#e74c3c20;color:#e74c3c">HOT</span></td>
+            <td class="num">2d</td>
+            <td></td>
+            <td class="action-cell">Assign to correct pipeline</td>
+          </tr>
+          <tr>
+            <td><a href="https://app.gohighlevel.com/v2/location/6wuU3haUH7uNeT20E3UZ/contacts/detail/78MI6moRWmUhGO7yLqYk" target="_blank">Sanjar Nai-Chien</a></td>
+            <td>— no pipeline —</td>
+            <td><span class="pill" style="background:#e74c3c20;color:#e74c3c">HOT</span></td>
+            <td class="num">2d</td>
+            <td></td>
+            <td class="action-cell">Assign to correct pipeline</td>
+          </tr>
+          <tr>
+            <td><a href="https://app.gohighlevel.com/v2/location/6wuU3haUH7uNeT20E3UZ/contacts/detail/ev9vRbBQHw3ugZK9gKuV" target="_blank">Jamie Ray</a></td>
+            <td>— no pipeline —</td>
+            <td><span class="pill" style="background:#e74c3c20;color:#e74c3c">HOT</span></td>
+            <td class="num">6d</td>
+            <td></td>
+            <td class="action-cell">Assign to correct pipeline</td>
+          </tr>
+          <tr>
+            <td><a href="https://app.gohighlevel.com/v2/location/6wuU3haUH7uNeT20E3UZ/contacts/detail/4fmpoUzTe9cUNtB8Bx8C" target="_blank">Christina Monga Gill</a></td>
+            <td>— no pipeline —</td>
+            <td><span class="pill" style="background:#e74c3c20;color:#e74c3c">HOT</span></td>
+            <td class="num">6d</td>
+            <td></td>
+            <td class="action-cell">Assign to correct pipeline</td>
+          </tr>
+          <tr>
+            <td><a href="https://app.gohighlevel.com/v2/location/6wuU3haUH7uNeT20E3UZ/contacts/detail/Bs9segefMQ3kqEwqgMsw" target="_blank">Charles Elkan</a></td>
+            <td>— no pipeline —</td>
+            <td><span class="pill" style="background:#e74c3c20;color:#e74c3c">HOT</span></td>
+            <td class="num">5d</td>
+            <td></td>
+            <td class="action-cell">Assign to correct pipeline</td>
+          </tr>
+          <tr>
+            <td><a href="https://app.gohighlevel.com/v2/location/6wuU3haUH7uNeT20E3UZ/contacts/detail/YpLZwwxr4gJgmdFvdsV0" target="_blank">Rui Fu</a></td>
+            <td>— no pipeline —</td>
+            <td><span class="pill" style="background:#e74c3c20;color:#e74c3c">HOT</span></td>
+            <td class="num">3d</td>
+            <td></td>
+            <td class="action-cell">Assign to correct pipeline</td>
+          </tr>
+          <tr>
+            <td><a href="https://app.gohighlevel.com/v2/location/6wuU3haUH7uNeT20E3UZ/contacts/detail/3BCrPRwbFXxm1Jzp79zx" target="_blank">Sabrina Ramonov 🍄</a></td>
+            <td>— no pipeline —</td>
+            <td><span class="pill" style="background:#e74c3c20;color:#e74c3c">HOT</span></td>
+            <td class="num">0d</td>
+            <td></td>
+            <td class="action-cell">Assign to correct pipeline</td>
+          </tr>
+          <tr>
+            <td><a href="https://app.gohighlevel.com/v2/location/6wuU3haUH7uNeT20E3UZ/contacts/detail/xGZ4F7FP1T199TDRB5ko" target="_blank">Adrian J</a></td>
+            <td>— no pipeline —</td>
+            <td><span class="pill" style="background:#e74c3c20;color:#e74c3c">HOT</span></td>
+            <td class="num">0d</td>
+            <td></td>
+            <td class="action-cell">Assign to correct pipeline</td>
+          </tr>
+          <tr>
+            <td><a href="https://app.gohighlevel.com/v2/location/6wuU3haUH7uNeT20E3UZ/contacts/detail/vklWHzzo8foJnst2lyWb" target="_blank">Creative Home Loan Mortgage Lender</a></td>
+            <td>— no pipeline —</td>
+            <td><span class="pill" style="background:#e74c3c20;color:#e74c3c">HOT</span></td>
+            <td class="num">2d</td>
+            <td></td>
+            <td class="action-cell">Assign to correct pipeline</td>
+          </tr>
+          <tr>
+            <td><a href="https://app.gohighlevel.com/v2/location/6wuU3haUH7uNeT20E3UZ/contacts/detail/uiF0plXvVceMZKye39uT" target="_blank">Ishaan Narang</a></td>
+            <td>— no pipeline —</td>
+            <td><span class="pill" style="background:#e74c3c20;color:#e74c3c">HOT</span></td>
+            <td class="num">1d</td>
+            <td></td>
+            <td class="action-cell">Assign to correct pipeline</td>
+          </tr>
+          <tr>
+            <td><a href="https://app.gohighlevel.com/v2/location/6wuU3haUH7uNeT20E3UZ/contacts/detail/YOt8DEpPwjDU13qpqpqe" target="_blank">John Test</a></td>
+            <td>— no pipeline —</td>
+            <td><span class="pill" style="background:#e74c3c20;color:#e74c3c">HOT</span></td>
+            <td class="num">0d</td>
+            <td></td>
+            <td class="action-cell">Assign to correct pipeline</td>
+          </tr>
+          <tr>
+            <td><a href="https://app.gohighlevel.com/v2/location/6wuU3haUH7uNeT20E3UZ/contacts/detail/xtMTmiCzl88D84M6dR2U" target="_blank">Nate Herk</a></td>
+            <td>— no pipeline —</td>
+            <td><span class="pill" style="background:#e74c3c20;color:#e74c3c">HOT</span></td>
+            <td class="num">4d</td>
+            <td></td>
+            <td class="action-cell">Assign to correct pipeline</td>
+          </tr>
+          <tr>
+            <td><a href="https://app.gohighlevel.com/v2/location/6wuU3haUH7uNeT20E3UZ/contacts/detail/bSDEfG1hvltH0V3CjAPh" target="_blank">ACMEY Co.</a></td>
+            <td>— no pipeline —</td>
+            <td><span class="pill" style="background:#e74c3c20;color:#e74c3c">HOT</span></td>
+            <td class="num">2d</td>
+            <td></td>
+            <td class="action-cell">Assign to correct pipeline</td>
+          </tr>
+          <tr>
+            <td><a href="https://app.gohighlevel.com/v2/location/6wuU3haUH7uNeT20E3UZ/contacts/detail/1Jx3ZhjbtGWOW0I0bix9" target="_blank">Leticia Mondragon-Panuco</a></td>
+            <td>— no pipeline —</td>
+            <td><span class="pill" style="background:#e74c3c20;color:#e74c3c">HOT</span></td>
+            <td class="num">6d</td>
+            <td></td>
+            <td class="action-cell">Assign to correct pipeline</td>
+          </tr>
+          <tr>
+            <td><a href="https://app.gohighlevel.com/v2/location/6wuU3haUH7uNeT20E3UZ/contacts/detail/JDTNRkzlE0OopxsWHiKX" target="_blank">Ryan Bernal</a></td>
+            <td>— no pipeline —</td>
+            <td><span class="pill" style="background:#e74c3c20;color:#e74c3c">HOT</span></td>
+            <td class="num">0d</td>
+            <td></td>
+            <td class="action-cell">Assign to correct pipeline</td>
+          </tr>
+          <tr>
+            <td><a href="https://app.gohighlevel.com/v2/location/6wuU3haUH7uNeT20E3UZ/contacts/detail/TzW2zqCyAlfSM93FhpDq" target="_blank">Lisa Rocio Haro-Becerra / CA REALTOR 🏡</a></td>
+            <td>— no pipeline —</td>
+            <td><span class="pill" style="background:#e74c3c20;color:#e74c3c">HOT</span></td>
+            <td class="num">4d</td>
+            <td></td>
+            <td class="action-cell">Assign to correct pipeline</td>
+          </tr>
+          <tr>
+            <td><a href="https://app.gohighlevel.com/v2/location/6wuU3haUH7uNeT20E3UZ/contacts/detail/hoJRGMk11lALe3JXgp89" target="_blank">Clement Rousselle</a></td>
+            <td>— no pipeline —</td>
+            <td><span class="pill" style="background:#e74c3c20;color:#e74c3c">HOT</span></td>
+            <td class="num">0d</td>
+            <td></td>
+            <td class="action-cell">Assign to correct pipeline</td>
+          </tr>
+          <tr>
+            <td><a href="https://app.gohighlevel.com/v2/location/6wuU3haUH7uNeT20E3UZ/contacts/detail/xThV8MThypmvgLsA8W8z" target="_blank">kevinb</a></td>
+            <td>— no pipeline —</td>
+            <td><span class="pill" style="background:#e74c3c20;color:#e74c3c">HOT</span></td>
+            <td class="num">4d</td>
+            <td></td>
+            <td class="action-cell">Assign to correct pipeline</td>
+          </tr>
+          <tr>
+            <td><a href="https://app.gohighlevel.com/v2/location/6wuU3haUH7uNeT20E3UZ/contacts/detail/klmwH1a6xrKg3eskWpHH" target="_blank">Rob Tell</a></td>
+            <td>— no pipeline —</td>
+            <td><span class="pill" style="background:#e74c3c20;color:#e74c3c">HOT</span></td>
+            <td class="num">4d</td>
+            <td></td>
+            <td class="action-cell">Assign to correct pipeline</td>
+          </tr>
+          <tr>
+            <td><a href="https://app.gohighlevel.com/v2/location/6wuU3haUH7uNeT20E3UZ/contacts/detail/SECJgZx9bgh2I7Wax51q" target="_blank">Sara Ryanne</a></td>
+            <td>— no pipeline —</td>
+            <td><span class="pill" style="background:#e74c3c20;color:#e74c3c">HOT</span></td>
+            <td class="num">0d</td>
+            <td></td>
+            <td class="action-cell">Assign to correct pipeline</td>
+          </tr>
+          <tr>
+            <td><a href="https://app.gohighlevel.com/v2/location/6wuU3haUH7uNeT20E3UZ/contacts/detail/MXPIXVhvKVmauWRkhWuN" target="_blank">Brian K</a></td>
+            <td>— no pipeline —</td>
+            <td><span class="pill" style="background:#e74c3c20;color:#e74c3c">HOT</span></td>
+            <td class="num">4d</td>
+            <td></td>
+            <td class="action-cell">Assign to correct pipeline</td>
+          </tr>
+          <tr>
+            <td><a href="https://app.gohighlevel.com/v2/location/6wuU3haUH7uNeT20E3UZ/contacts/detail/bIUZzzh3eXvtSLjQAImw" target="_blank">Misty Flores</a></td>
+            <td>— no pipeline —</td>
+            <td><span class="pill" style="background:#e74c3c20;color:#e74c3c">HOT</span></td>
+            <td class="num">0d</td>
+            <td></td>
+            <td class="action-cell">Assign to correct pipeline</td>
+          </tr>
+          <tr>
+            <td><a href="https://app.gohighlevel.com/v2/location/6wuU3haUH7uNeT20E3UZ/contacts/detail/r6331A7mxBsi5D7ILhOT" target="_blank">John Dimapilis</a></td>
+            <td>— no pipeline —</td>
+            <td><span class="pill" style="background:#e74c3c20;color:#e74c3c">HOT</span></td>
+            <td class="num">1d</td>
+            <td>Other</td>
+            <td class="action-cell">Assign to correct pipeline</td>
+          </tr>
+        <tr><td colspan="6" class="muted">… and 1 more</td></tr>
+      </tbody>
+    </table>
+  
+    <h3 class="mm-h">⚡ Hot behavior, cold pipeline <span class="count-badge">3</span></h3>
+    <table>
+      <thead><tr><th>Name</th><th>Current Stage</th><th>Bucket</th><th>Days Silent</th><th>Source</th><th></th></tr></thead>
+      <tbody>
+        
+          <tr>
+            <td><a href="https://app.gohighlevel.com/v2/location/6wuU3haUH7uNeT20E3UZ/contacts/detail/tBvzvHvcp2C5eFf3bjuQ" target="_blank">Ian Pham</a></td>
+            <td>Cold</td>
+            <td><span class="pill" style="background:#e74c3c20;color:#e74c3c">HOT</span></td>
+            <td class="num">7d</td>
+            <td>Home Value Form</td>
+            <td class="action-cell">Move to active stage</td>
+          </tr>
+          <tr>
+            <td><a href="https://app.gohighlevel.com/v2/location/6wuU3haUH7uNeT20E3UZ/contacts/detail/8mUMyidjM5Ivdo2eTM4U" target="_blank">Steve Tan</a></td>
+            <td>Cold</td>
+            <td><span class="pill" style="background:#e74c3c20;color:#e74c3c">HOT</span></td>
+            <td class="num">1d</td>
+            <td></td>
+            <td class="action-cell">Move to active stage</td>
+          </tr>
+          <tr>
+            <td><a href="https://app.gohighlevel.com/v2/location/6wuU3haUH7uNeT20E3UZ/contacts/detail/x0hXGzQn1IaXkaHgeyG1" target="_blank">test23 test</a></td>
+            <td>Cold</td>
+            <td><span class="pill" style="background:#e74c3c20;color:#e74c3c">HOT</span></td>
+            <td class="num">7d</td>
+            <td>Home Value Form</td>
+            <td class="action-cell">Move to active stage</td>
+          </tr>
+        
+      </tbody>
+    </table>
+  
+    <h3 class="mm-h">⚠️ Cold behavior, hot pipeline <span class="count-badge">65</span></h3>
+    <table>
+      <thead><tr><th>Name</th><th>Current Stage</th><th>Bucket</th><th>Days Silent</th><th>Source</th><th></th></tr></thead>
+      <tbody>
+        
+          <tr>
+            <td><a href="https://app.gohighlevel.com/v2/location/6wuU3haUH7uNeT20E3UZ/contacts/detail/B3wZC7IXCzaZTnrP4Tzw" target="_blank">Renuka</a></td>
+            <td>Buyer – Within 3 Months</td>
+            <td><span class="pill" style="background:#3498db20;color:#3498db">FOLLOW UP</span></td>
+            <td class="num">45d</td>
+            <td></td>
+            <td class="action-cell">Demote or archive</td>
+          </tr>
+          <tr>
+            <td><a href="https://app.gohighlevel.com/v2/location/6wuU3haUH7uNeT20E3UZ/contacts/detail/g4Rqqq6WD4E38QmGLVLZ" target="_blank">Diggy</a></td>
+            <td>Buyer – Within 3 Months</td>
+            <td><span class="pill" style="background:#3498db20;color:#3498db">FOLLOW UP</span></td>
+            <td class="num">52d</td>
+            <td></td>
+            <td class="action-cell">Demote or archive</td>
+          </tr>
+          <tr>
+            <td><a href="https://app.gohighlevel.com/v2/location/6wuU3haUH7uNeT20E3UZ/contacts/detail/vQCqVHc3wbsM24uaD8DL" target="_blank">Marwan</a></td>
+            <td>Buyer – Within 3 Months</td>
+            <td><span class="pill" style="background:#3498db20;color:#3498db">FOLLOW UP</span></td>
+            <td class="num">64d</td>
+            <td></td>
+            <td class="action-cell">Demote or archive</td>
+          </tr>
+          <tr>
+            <td><a href="https://app.gohighlevel.com/v2/location/6wuU3haUH7uNeT20E3UZ/contacts/detail/KhV8oAdregrGl8Jvdcjz" target="_blank">Tara Hariri</a></td>
+            <td>Active Buyer</td>
+            <td><span class="pill" style="background:#a0b0c820;color:#a0b0c8">LONG TERM</span></td>
+            <td class="num">96d</td>
+            <td></td>
+            <td class="action-cell">Demote or archive</td>
+          </tr>
+          <tr>
+            <td><a href="https://app.gohighlevel.com/v2/location/6wuU3haUH7uNeT20E3UZ/contacts/detail/dWit3vcDpnDFlJOq8fHs" target="_blank">Maribel Martinez</a></td>
+            <td>Buyer – Within 3 Months</td>
+            <td><span class="pill" style="background:#3498db20;color:#3498db">FOLLOW UP</span></td>
+            <td class="num">65d</td>
+            <td></td>
+            <td class="action-cell">Demote or archive</td>
+          </tr>
+          <tr>
+            <td><a href="https://app.gohighlevel.com/v2/location/6wuU3haUH7uNeT20E3UZ/contacts/detail/gcEXBMmWm7q5AJ2PhKPz" target="_blank">Kyle Aaron</a></td>
+            <td>Buyer – Within 3 Months</td>
+            <td><span class="pill" style="background:#3498db20;color:#3498db">FOLLOW UP</span></td>
+            <td class="num">65d</td>
+            <td></td>
+            <td class="action-cell">Demote or archive</td>
+          </tr>
+          <tr>
+            <td><a href="https://app.gohighlevel.com/v2/location/6wuU3haUH7uNeT20E3UZ/contacts/detail/KmwMSz0qfGSHXcY9t4xh" target="_blank">Daniel Soto</a></td>
+            <td>Active Buyer</td>
+            <td><span class="pill" style="background:#3498db20;color:#3498db">FOLLOW UP</span></td>
+            <td class="num">77d</td>
+            <td></td>
+            <td class="action-cell">Demote or archive</td>
+          </tr>
+          <tr>
+            <td><a href="https://app.gohighlevel.com/v2/location/6wuU3haUH7uNeT20E3UZ/contacts/detail/m8Psvf7sHPyTyLpD3v8R" target="_blank">Bin Wu</a></td>
+            <td>Seller – Within 3 Months</td>
+            <td><span class="pill" style="background:#3498db20;color:#3498db">FOLLOW UP</span></td>
+            <td class="num">39d</td>
+            <td>CSV Import</td>
+            <td class="action-cell">Demote or archive</td>
+          </tr>
+          <tr>
+            <td><a href="https://app.gohighlevel.com/v2/location/6wuU3haUH7uNeT20E3UZ/contacts/detail/Y144CHkgG9ks3vfQUUHi" target="_blank">Md Rasedul Hauque</a></td>
+            <td>Buyer – Within 3 Months</td>
+            <td><span class="pill" style="background:#3498db20;color:#3498db">FOLLOW UP</span></td>
+            <td class="num">65d</td>
+            <td>Facebook</td>
+            <td class="action-cell">Demote or archive</td>
+          </tr>
+          <tr>
+            <td><a href="https://app.gohighlevel.com/v2/location/6wuU3haUH7uNeT20E3UZ/contacts/detail/7Vj5aZLROIU731WBhzQ3" target="_blank">Ajay</a></td>
+            <td>Buyer – Within 3 Months</td>
+            <td><span class="pill" style="background:#a0b0c820;color:#a0b0c8">LONG TERM</span></td>
+            <td class="num">122d</td>
+            <td>Other</td>
+            <td class="action-cell">Demote or archive</td>
+          </tr>
+          <tr>
+            <td><a href="https://app.gohighlevel.com/v2/location/6wuU3haUH7uNeT20E3UZ/contacts/detail/R7pAy9SX2GBidMdHQk49" target="_blank">Martin Oberhofer</a></td>
+            <td>Buyer – Within 3 Months</td>
+            <td><span class="pill" style="background:#3498db20;color:#3498db">FOLLOW UP</span></td>
+            <td class="num">65d</td>
+            <td>referral from SOI</td>
+            <td class="action-cell">Demote or archive</td>
+          </tr>
+          <tr>
+            <td><a href="https://app.gohighlevel.com/v2/location/6wuU3haUH7uNeT20E3UZ/contacts/detail/5CA1YXLtqZSpRyLGSuAY" target="_blank">Hu Li</a></td>
+            <td>Seller – Within 3 Months</td>
+            <td><span class="pill" style="background:#3498db20;color:#3498db">FOLLOW UP</span></td>
+            <td class="num">38d</td>
+            <td>CSV Import</td>
+            <td class="action-cell">Demote or archive</td>
+          </tr>
+          <tr>
+            <td><a href="https://app.gohighlevel.com/v2/location/6wuU3haUH7uNeT20E3UZ/contacts/detail/4XtutXrTVGjCIY3sUyc0" target="_blank">Hilda Jones</a></td>
+            <td>Active Seller</td>
+            <td><span class="pill" style="background:#a0b0c820;color:#a0b0c8">LONG TERM</span></td>
+            <td class="num">99d</td>
+            <td>East Palo alto Farm</td>
+            <td class="action-cell">Demote or archive</td>
+          </tr>
+          <tr>
+            <td><a href="https://app.gohighlevel.com/v2/location/6wuU3haUH7uNeT20E3UZ/contacts/detail/A6lwJCm0jxM7jXhWTmo8" target="_blank">Manuel Lopez</a></td>
+            <td>Seller – Within 3 Months</td>
+            <td><span class="pill" style="background:#3498db20;color:#3498db">FOLLOW UP</span></td>
+            <td class="num">72d</td>
+            <td>East Palo Alto Farmlist</td>
+            <td class="action-cell">Demote or archive</td>
+          </tr>
+          <tr>
+            <td><a href="https://app.gohighlevel.com/v2/location/6wuU3haUH7uNeT20E3UZ/contacts/detail/nLYIma2zvPhjMQ8HBL1I" target="_blank">Laura Cano Mccallum</a></td>
+            <td>Seller – Within 3 Months</td>
+            <td><span class="pill" style="background:#3498db20;color:#3498db">FOLLOW UP</span></td>
+            <td class="num">44d</td>
+            <td>GoogleAds</td>
+            <td class="action-cell">Demote or archive</td>
+          </tr>
+          <tr>
+            <td><a href="https://app.gohighlevel.com/v2/location/6wuU3haUH7uNeT20E3UZ/contacts/detail/QWMHVsn4MN8hGfEBkPm3" target="_blank">Michael Head</a></td>
+            <td>Buyer – Within 3 Months</td>
+            <td><span class="pill" style="background:#3498db20;color:#3498db">FOLLOW UP</span></td>
+            <td class="num">65d</td>
+            <td>Facebook</td>
+            <td class="action-cell">Demote or archive</td>
+          </tr>
+          <tr>
+            <td><a href="https://app.gohighlevel.com/v2/location/6wuU3haUH7uNeT20E3UZ/contacts/detail/nokpq4iVebbuAnKFBSvb" target="_blank">Monica Chacon</a></td>
+            <td>Buyer – Within 3 Months</td>
+            <td><span class="pill" style="background:#3498db20;color:#3498db">FOLLOW UP</span></td>
+            <td class="num">65d</td>
+            <td>CSV Import</td>
+            <td class="action-cell">Demote or archive</td>
+          </tr>
+          <tr>
+            <td><a href="https://app.gohighlevel.com/v2/location/6wuU3haUH7uNeT20E3UZ/contacts/detail/BPRLPJmcIzTiGw9JC9vF" target="_blank">Kristine Mabute</a></td>
+            <td>Seller – Within 3 Months</td>
+            <td><span class="pill" style="background:#3498db20;color:#3498db">FOLLOW UP</span></td>
+            <td class="num">32d</td>
+            <td>My Agent Finder</td>
+            <td class="action-cell">Demote or archive</td>
+          </tr>
+          <tr>
+            <td><a href="https://app.gohighlevel.com/v2/location/6wuU3haUH7uNeT20E3UZ/contacts/detail/N6V0nQY9ejQs9p8U3EPE" target="_blank">Kimberly Brockway Barentsen</a></td>
+            <td>Buyer – Within 3 Months</td>
+            <td><span class="pill" style="background:#3498db20;color:#3498db">FOLLOW UP</span></td>
+            <td class="num">65d</td>
+            <td>Facebook</td>
+            <td class="action-cell">Demote or archive</td>
+          </tr>
+          <tr>
+            <td><a href="https://app.gohighlevel.com/v2/location/6wuU3haUH7uNeT20E3UZ/contacts/detail/kmrzolXIXbLreY4ZUSSM" target="_blank">Elisiva Tuivailala-Cuevas</a></td>
+            <td>Buyer – Within 3 Months</td>
+            <td><span class="pill" style="background:#3498db20;color:#3498db">FOLLOW UP</span></td>
+            <td class="num">65d</td>
+            <td>Facebook</td>
+            <td class="action-cell">Demote or archive</td>
+          </tr>
+          <tr>
+            <td><a href="https://app.gohighlevel.com/v2/location/6wuU3haUH7uNeT20E3UZ/contacts/detail/jMFP13UrzHd2Er9kWcn3" target="_blank">Min Wang</a></td>
+            <td>Active Buyer</td>
+            <td><span class="pill" style="background:#a0b0c820;color:#a0b0c8">LONG TERM</span></td>
+            <td class="num">98d</td>
+            <td>Open House</td>
+            <td class="action-cell">Demote or archive</td>
+          </tr>
+          <tr>
+            <td><a href="https://app.gohighlevel.com/v2/location/6wuU3haUH7uNeT20E3UZ/contacts/detail/g6aazh6Xk1QHqzGNVo50" target="_blank">Tuan Ann Nguyen</a></td>
+            <td>Buyer – Within 3 Months</td>
+            <td><span class="pill" style="background:#3498db20;color:#3498db">FOLLOW UP</span></td>
+            <td class="num">65d</td>
+            <td>Open House</td>
+            <td class="action-cell">Demote or archive</td>
+          </tr>
+          <tr>
+            <td><a href="https://app.gohighlevel.com/v2/location/6wuU3haUH7uNeT20E3UZ/contacts/detail/GjF4ozHnXBI1I3P9OMRt" target="_blank">Parvin Nair</a></td>
+            <td>Buyer – Within 3 Months</td>
+            <td><span class="pill" style="background:#3498db20;color:#3498db">FOLLOW UP</span></td>
+            <td class="num">65d</td>
+            <td>Facebook</td>
+            <td class="action-cell">Demote or archive</td>
+          </tr>
+          <tr>
+            <td><a href="https://app.gohighlevel.com/v2/location/6wuU3haUH7uNeT20E3UZ/contacts/detail/hdqns6s8pEjAmvK5md3I" target="_blank">Jesse &amp; Sharon Bradley</a></td>
+            <td>Seller – Within 3 Months</td>
+            <td><span class="pill" style="background:#3498db20;color:#3498db">FOLLOW UP</span></td>
+            <td class="num">43d</td>
+            <td>CSV Import</td>
+            <td class="action-cell">Demote or archive</td>
+          </tr>
+          <tr>
+            <td><a href="https://app.gohighlevel.com/v2/location/6wuU3haUH7uNeT20E3UZ/contacts/detail/pO8pZOcwpjUxlsxUUnN2" target="_blank">Bruce Patten</a></td>
+            <td>Active Seller</td>
+            <td><span class="pill" style="background:#a0b0c820;color:#a0b0c8">LONG TERM</span></td>
+            <td class="num">97d</td>
+            <td>Other</td>
+            <td class="action-cell">Demote or archive</td>
+          </tr>
+        <tr><td colspan="6" class="muted">… and 40 more</td></tr>
+      </tbody>
+    </table>
+  
+
+<h2>Lead Source Performance — sources with 5+ contacts</h2>
+<table>
+  <thead><tr><th>Source</th><th>Count</th><th>HOT</th><th>HOT %</th><th>Won</th></tr></thead>
+  <tbody>
+    <tr>
+      <td>CSV Import</td>
+      <td class="num">1824</td>
+      <td class="num">6</td>
+      <td class="num">0.3%</td>
+      <td class="num">0</td>
+    </tr>
+    <tr>
+      <td>Facebook</td>
+      <td class="num">526</td>
+      <td class="num">4</td>
+      <td class="num">0.8%</td>
+      <td class="num">0</td>
+    </tr>
+    <tr>
+      <td>(unknown)</td>
+      <td class="num">237</td>
+      <td class="num">36</td>
+      <td class="num">15.2%</td>
+      <td class="num">0</td>
+    </tr>
+    <tr>
+      <td>Other</td>
+      <td class="num">174</td>
+      <td class="num">4</td>
+      <td class="num">2.3%</td>
+      <td class="num">0</td>
+    </tr>
+    <tr>
+      <td>Website</td>
+      <td class="num">173</td>
+      <td class="num">1</td>
+      <td class="num">0.6%</td>
+      <td class="num">0</td>
+    </tr>
+    <tr>
+      <td>GoogleAds</td>
+      <td class="num">144</td>
+      <td class="num">2</td>
+      <td class="num">1.4%</td>
+      <td class="num">0</td>
+    </tr>
+    <tr>
+      <td>Google</td>
+      <td class="num">120</td>
+      <td class="num">3</td>
+      <td class="num">2.5%</td>
+      <td class="num">0</td>
+    </tr>
+    <tr>
+      <td>Open House</td>
+      <td class="num">120</td>
+      <td class="num">2</td>
+      <td class="num">1.7%</td>
+      <td class="num">0</td>
+    </tr>
+    <tr>
+      <td>East Palo alto Farm</td>
+      <td class="num">106</td>
+      <td class="num">3</td>
+      <td class="num">2.8%</td>
+      <td class="num">0</td>
+    </tr>
+    <tr>
+      <td>In bound call from listing</td>
+      <td class="num">105</td>
+      <td class="num">2</td>
+      <td class="num">1.9%</td>
+      <td class="num">0</td>
+    </tr>
+    <tr>
+      <td>bryanshortgoogle</td>
+      <td class="num">61</td>
+      <td class="num">0</td>
+      <td class="num">0.0%</td>
+      <td class="num">0</td>
+    </tr>
+    <tr>
+      <td>referral from SOI</td>
+      <td class="num">59</td>
+      <td class="num">2</td>
+      <td class="num">3.4%</td>
+      <td class="num">0</td>
+    </tr>
+    <tr>
+      <td>Referral</td>
+      <td class="num">54</td>
+      <td class="num">0</td>
+      <td class="num">0.0%</td>
+      <td class="num">0</td>
+    </tr>
+    <tr>
+      <td>CallRail Google My Business</td>
+      <td class="num">50</td>
+      <td class="num">0</td>
+      <td class="num">0.0%</td>
+      <td class="num">0</td>
+    </tr>
+    <tr>
+      <td>Realtor.com</td>
+      <td class="num">42</td>
+      <td class="num">1</td>
+      <td class="num">2.4%</td>
+      <td class="num">0</td>
+    </tr>
+    <tr>
+      <td>CallRail Website pool</td>
+      <td class="num">34</td>
+      <td class="num">0</td>
+      <td class="num">0.0%</td>
+      <td class="num">0</td>
+    </tr>
+    <tr>
+      <td>Google Ads - Lead Forms</td>
+      <td class="num">30</td>
+      <td class="num">0</td>
+      <td class="num">0.0%</td>
+      <td class="num">0</td>
+    </tr>
+    <tr>
+      <td>My Agent Finder</td>
+      <td class="num">22</td>
+      <td class="num">0</td>
+      <td class="num">0.0%</td>
+      <td class="num">0</td>
+    </tr>
+    <tr>
+      <td>Zillow</td>
+      <td class="num">19</td>
+      <td class="num">2</td>
+      <td class="num">10.5%</td>
+      <td class="num">0</td>
+    </tr>
+    <tr>
+      <td>Facebook Ads</td>
+      <td class="num">16</td>
+      <td class="num">1</td>
+      <td class="num">6.3%</td>
+      <td class="num">0</td>
+    </tr></tbody>
+</table>
+
+<h2>Behavioral Bucket Breakdown</h2>
+<div class="grid">
+  
+    <div class="card">
+      <div class="card-label">HOT</div>
+      <div class="card-value" style="color:#e74c3c">73</div>
+      <div class="card-sub">1.8%</div>
+    </div>
+    <div class="card">
+      <div class="card-label">WARM</div>
+      <div class="card-value" style="color:#f39c12">506</div>
+      <div class="card-sub">12.5%</div>
+    </div>
+    <div class="card">
+      <div class="card-label">FOLLOW UP</div>
+      <div class="card-value" style="color:#3498db">1,212</div>
+      <div class="card-sub">30.0%</div>
+    </div>
+    <div class="card">
+      <div class="card-label">LONG TERM</div>
+      <div class="card-value" style="color:#a0b0c8">2,248</div>
+      <div class="card-sub">55.7%</div>
+    </div>
+    <div class="card">
+      <div class="card-label">DEAD</div>
+      <div class="card-value" style="color:#6c757d">0</div>
+      <div class="card-sub">0.0%</div>
+    </div>
+</div>
+
+<div class="footer">
+  Generated by <code>ghl-crm-audit</code> skill · Saturday, May 16, 2026 · 
+  Direct LeadConnector PIT (no Windsor, no n8n) · 
+  <a href="https://github.com/Graehamwatts/online-content/tree/main/reports/ghl-audit">All audit reports</a>
+</div>
+
+</body>
+</html>

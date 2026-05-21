@@ -1,0 +1,62 @@
+name: Friday Weekly Attribution Review
+
+on:
+  workflow_dispatch:
+    inputs:
+      week_start_override:
+        description: "YYYY-MM-DD (Pacific) of the week's Monday — overrides current week. Leave blank for current week."
+        required: false
+        default: ""
+  schedule:
+    # 4:00 PM Pacific on Fridays = 23:00 UTC (PDT) / 00:00 UTC Sat (PST). Cover both.
+    - cron: "0 23 * * 5"
+    - cron: "0 0 * * 6"
+
+permissions:
+  contents: write
+
+jobs:
+  weekly:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.11"
+
+      - name: Install deps
+        run: |
+          python -m pip install --upgrade pip
+          pip install requests
+
+      - name: Generate weekly review
+        id: gen
+        env:
+          GHL_PIT: ${{ secrets.GHL_PIT }}
+          GHL_LOCATION_ID: ${{ secrets.GHL_LOCATION_ID }}
+          WEEK_START_OVERRIDE: ${{ github.event.inputs.week_start_override }}
+        run: python .github/scripts/friday_attribution_review.py
+
+      - name: Commit weekly review
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add dashboards/attribution/*.html || true
+          if git diff --cached --quiet; then
+            echo "No new weekly review to commit."
+          else
+            git commit -m "Friday Weekly Attribution Review: ${{ steps.gen.outputs.week_label || 'auto' }}"
+            git push
+          fi
+
+      - name: Send email
+        if: always() && steps.gen.outputs.html_path != ''
+        env:
+          GMAIL_USER: ${{ secrets.GMAIL_USER }}
+          GMAIL_APP_PASSWORD: ${{ secrets.GMAIL_APP_PASSWORD }}
+          BRIEF_SUBJECT: ${{ steps.gen.outputs.subject }}
+          BRIEF_HTML_PATH: ${{ steps.gen.outputs.html_path }}
+        run: python .github/scripts/send_brief_email.py

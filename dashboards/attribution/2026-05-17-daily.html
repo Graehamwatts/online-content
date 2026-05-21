@@ -1,0 +1,102 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<title>Daily Attribution Brief — pipeline broken (2026-05-17)</title>
+<style>
+  body { margin:0; padding:24px; background:#f5f5f4; font-family:'DM Sans','Helvetica Neue',Arial,sans-serif; color:#0f1729; }
+  .wrap { max-width:720px; margin:0 auto; background:#ffffff; border-radius:14px; overflow:hidden; box-shadow:0 4px 24px rgba(15,23,41,0.08); }
+  .topbar { background:#0f1729; color:#f4b955; padding:12px 24px; font-size:13px; letter-spacing:.08em; text-transform:uppercase; }
+  .header { padding:28px 28px 8px; }
+  .header h1 { margin:0 0 6px; font-size:24px; line-height:1.25; color:#0f1729; }
+  .header .meta { font-size:13px; color:#475569; }
+  .status { margin:18px 28px 0; padding:14px 18px; border-radius:10px; background:#fef2f2; color:#7f1d1d; border-left:5px solid #b91c1c; font-size:14px; }
+  .section { padding:20px 28px; }
+  .section h2 { font-size:14px; letter-spacing:.08em; text-transform:uppercase; color:#64748b; margin:0 0 10px; }
+  .card { background:#fafaf9; border:1px solid #e7e5e4; border-radius:10px; padding:16px 18px; margin-bottom:12px; font-size:14px; line-height:1.55; }
+  .card strong { color:#0f1729; }
+  code { background:#0f1729; color:#f4b955; padding:2px 6px; border-radius:4px; font-size:12px; }
+  table { width:100%; border-collapse:collapse; font-size:14px; }
+  th, td { text-align:left; padding:10px 12px; border-bottom:1px solid #e7e5e4; }
+  th { font-size:12px; letter-spacing:.06em; text-transform:uppercase; color:#64748b; }
+  .ok { color:#15803d; font-weight:600; }
+  .bad { color:#b91c1c; font-weight:600; }
+  .footer { padding:18px 28px 28px; font-size:12px; color:#64748b; border-top:1px solid #f1f5f9; }
+  .footer .sig { color:#0f1729; font-weight:600; }
+</style>
+</head>
+<body>
+<div class="wrap">
+  <div class="topbar">Daily Attribution Brief · 2026-05-17</div>
+
+  <div class="header">
+    <h1>GHL pull did not run — automation path is blocked</h1>
+    <div class="meta">Reporting period: Sun 2026-05-17 (Pacific). Run at: Mon 2026-05-18, 07:15 AM PT.</div>
+  </div>
+
+  <div class="status">
+    <strong>Status:</strong> Failure mode. Zero leads are <em>not</em> being reported — the pull never executed. Two infrastructure problems are blocking the standard run path. Both need a one-time fix from you.
+  </div>
+
+  <div class="section">
+    <h2>What happened</h2>
+    <div class="card">
+      The SKILL contract says: run the GitHub Action <code>daily-attribution-brief.yml</code> in <code>Graehamwatts/online-content</code>, because the Cowork sandbox cannot reach GHL. When I tried to dispatch the workflow, GitHub returned <code>404 Not Found</code> — the workflow isn't registered on the remote.
+    </div>
+    <div class="card">
+      I checked the repo: the file <code>.github/workflows/daily-attribution-brief.yml</code> exists in the local checkout but has <strong>never been pushed to GitHub</strong>. The local <code>main</code> branch is 13 commits ahead of <code>origin/main</code>, and the entire <code>.github/workflows/</code> directory is still untracked.
+    </div>
+    <div class="card">
+      I then tried to PUT the workflow file directly via the GitHub Contents API. That call returned <code>404 Not Found</code> as well — which is GitHub's response when the authenticating PAT lacks the <code>workflow</code> scope. The token at <code>Online Content/github-token.txt</code> only carries the <code>repo</code> scope (confirmed via <code>x-oauth-scopes</code> header on <code>GET /user</code>).
+    </div>
+  </div>
+
+  <div class="section">
+    <h2>The Read</h2>
+    <div class="card">
+      Today's brief did not generate because the workflow file was never pushed, and the only PAT I can see can't push workflow files. Same blocker will hit the Friday review and any other Action-backed scheduled report. Fix the token once and the whole automation chain comes back online.
+    </div>
+  </div>
+
+  <div class="section">
+    <h2>What I tried</h2>
+    <table>
+      <thead><tr><th>Step</th><th>Result</th></tr></thead>
+      <tbody>
+        <tr><td><code>POST /actions/workflows/daily-attribution-brief.yml/dispatches</code></td><td class="bad">404 — workflow not registered</td></tr>
+        <tr><td><code>GET /contents/.github/workflows/daily-attribution-brief.yml?ref=main</code></td><td class="bad">404 — file absent on remote</td></tr>
+        <tr><td><code>GET /contents/.github/scripts/daily_attribution_brief.py?ref=main</code></td><td class="ok">200 — present (sha 0dc9c6f…)</td></tr>
+        <tr><td><code>PUT</code> updated script with DRE fix</td><td class="ok">200 — committed (c1020ee)</td></tr>
+        <tr><td><code>PUT</code> workflow YAML to <code>.github/workflows/</code></td><td class="bad">404 — PAT lacks <code>workflow</code> scope</td></tr>
+        <tr><td>Direct GHL call from sandbox</td><td class="bad">Skipped — no PIT in mounted folders (lives only on local PC + GH Secrets)</td></tr>
+      </tbody>
+    </table>
+  </div>
+
+  <div class="section">
+    <h2>Fix this once — three options, pick one</h2>
+    <div class="card">
+      <strong>Option A (recommended, 2 min):</strong> Generate a new classic PAT at <code>github.com/settings/tokens</code> with both <code>repo</code> AND <code>workflow</code> scopes. Replace the contents of <code>C:/Users/Graeham Watts/Documents/Claude/Online Content/github-token.txt</code>. From now on, the sandbox can register workflows and trigger dispatches without you opening a terminal.
+    </div>
+    <div class="card">
+      <strong>Option B (1 min, manual today):</strong> Open a terminal in the Online Content checkout, then: <code>git add .github/workflows/ && git commit -m "register workflows" && git push</code>. That alone will land the workflow on GitHub. Next 7:15 AM run will execute on the scheduled cron.
+    </div>
+    <div class="card">
+      <strong>Option C (longer-term):</strong> Migrate this skill to direct sandbox execution. GHL is now reachable from the sandbox (confirmed: <code>services.leadconnectorhq.com</code> returns a real 401 with valid TLS in ~260 ms). If you stash the PIT in a mounted folder — e.g. <code>Online Content/.claude-credentials/ghl-pit.txt</code> (already gitignored) — I can run the pull and render the brief without GitHub Actions at all. Faster, fewer moving parts.
+    </div>
+  </div>
+
+  <div class="section">
+    <h2>Side effects from this run</h2>
+    <div class="card">
+      One write happened: the local <code>daily_attribution_brief.py</code> (with your DRE fix from commit <code>2146054</code>) was pushed to <code>main</code> as commit <code>c1020ee</code>. That part of the chain is now correct on the remote — no action needed there.
+    </div>
+  </div>
+
+  <div class="footer">
+    <div class="sig">Daily Attribution Brief · automated</div>
+    <div>Graeham Watts · REALTOR · Intero Real Estate · DRE# 01466876</div>
+  </div>
+</div>
+</body>
+</html>

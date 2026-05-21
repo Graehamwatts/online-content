@@ -1,0 +1,110 @@
+<!doctype html>
+<html><head><meta charset="utf-8"><title>Daily Attribution Brief — 2026-05-14 (GHL pull failed)</title>
+<style>
+  body { margin:0; padding:0; background:#f4f2ed; font-family:'DM Sans',-apple-system,BlinkMacSystemFont,sans-serif; color:#0f1729; }
+  .wrap { max-width:720px; margin:0 auto; background:#ffffff; }
+  .topbar { background:#0f1729; color:#f4b955; padding:14px 28px; font-size:13px; letter-spacing:.08em; text-transform:uppercase; font-weight:600; }
+  .header { padding:28px 28px 8px; }
+  .h-date { font-size:13px; color:#6b7280; letter-spacing:.02em; }
+  .h-title { font-size:28px; font-weight:700; margin:6px 0 4px; line-height:1.2; }
+  .h-sub { font-size:14px; color:#475569; }
+  .status { margin:16px 28px 0; padding:10px 14px; border-radius:8px; font-size:13px; font-weight:600; background:#fee2e2; color:#991b1b; }
+  .kpis { display:grid; grid-template-columns:repeat(4,1fr); gap:12px; padding:18px 28px 4px; }
+  .kpi { background:#f8fafc; border:1px solid #e2e8f0; border-radius:10px; padding:14px; }
+  .kpi-label { font-size:11px; text-transform:uppercase; letter-spacing:.05em; color:#64748b; font-weight:600; }
+  .kpi-value { font-size:26px; font-weight:700; margin-top:4px; color:#0f1729; }
+  .kpi-sub { font-size:11px; color:#94a3b8; margin-top:2px; }
+  .section { padding:18px 28px; }
+  .section h2 { font-size:13px; text-transform:uppercase; letter-spacing:.08em; color:#0f1729; margin:0 0 10px; font-weight:700; }
+  .read { background:#fffbeb; border-left:3px solid #f4b955; padding:14px 16px; border-radius:6px; font-size:14px; line-height:1.55; color:#1e293b; }
+  .read.warn { background:#fee2e2; border-left-color:#dc2626; }
+  .steps { background:#f8fafc; border:1px solid #e2e8f0; border-radius:8px; padding:6px 0; }
+  .step { display:flex; gap:14px; padding:14px 18px; border-bottom:1px solid #e2e8f0; align-items:flex-start; }
+  .step:last-child { border-bottom:none; }
+  .step-num { flex:0 0 28px; height:28px; background:#0f1729; color:#f4b955; border-radius:50%; display:flex; align-items:center; justify-content:center; font-weight:700; font-size:13px; }
+  .step-body { flex:1; font-size:13.5px; line-height:1.55; color:#334155; }
+  .step-body strong { color:#0f1729; }
+  code { background:#0f1729; color:#f4b955; padding:2px 6px; border-radius:3px; font-size:12px; font-family:'SF Mono',Menlo,monospace; }
+  .errblock { background:#0f1729; color:#fca5a5; padding:14px 16px; border-radius:6px; font-family:'SF Mono',Menlo,monospace; font-size:12px; line-height:1.6; white-space:pre-wrap; word-break:break-word; }
+  .errblock .ok { color:#86efac; }
+  .errblock .label { color:#94a3b8; }
+  .footer { padding:24px 28px 36px; border-top:1px solid #e2e8f0; font-size:12px; color:#64748b; }
+  .signature { margin-top:8px; font-weight:600; color:#0f1729; font-size:13px; }
+  .dre { color:#94a3b8; font-size:11px; margin-top:2px; }
+  @media (max-width:600px){ .kpis{grid-template-columns:repeat(2,1fr);} }
+</style></head><body>
+<div class="wrap">
+  <div class="topbar">Daily Attribution Brief · 2026-05-14 · GHL pull failed</div>
+  <div class="header">
+    <div class="h-date">Thursday, May 14, 2026 (yesterday's data) · brief generated Fri May 15, 7:15 AM PT</div>
+    <div class="h-title">Same blocker as Tuesday — needs your 5 minutes to unstick</div>
+    <div class="h-sub">No GHL data pulled. The infrastructure is still half-installed; finishing setup will turn this into a real data brief Monday.</div>
+  </div>
+  <div class="status">GHL pull skipped — workflow not yet deployed to <code style="background:#7f1d1d;color:#fecaca">.github/workflows/</code> and zero repo secrets configured.</div>
+
+  <div class="kpis">
+    <div class="kpi"><div class="kpi-label">Leads pulled</div><div class="kpi-value" style="color:#dc2626">—</div><div class="kpi-sub">pull never ran</div></div>
+    <div class="kpi"><div class="kpi-label">Workflow on remote</div><div class="kpi-value" style="font-size:14px; padding-top:8px; color:#dc2626">Missing</div><div class="kpi-sub">YAML local only</div></div>
+    <div class="kpi"><div class="kpi-label">Repo secrets</div><div class="kpi-value" style="font-size:14px; padding-top:8px; color:#dc2626">0 / 4</div><div class="kpi-sub">PIT + Loc + Gmail x2</div></div>
+    <div class="kpi"><div class="kpi-label">Days unblocked</div><div class="kpi-value" style="color:#dc2626">2</div><div class="kpi-sub">since May 13 brief</div></div>
+  </div>
+
+  <div class="section">
+    <h2>The Read</h2>
+    <div class="read warn">
+      I ran this morning's task autonomously and tried three different paths to get you a real attribution brief for yesterday — all three are blocked by the same root cause flagged in <strong>Tuesday's brief</strong>. <strong>(1)</strong> Sandbox can't call GHL directly — <code>services.leadconnectorhq.com</code> is on the allowlist block (confirmed: <code>403 blocked-by-allowlist</code>). <strong>(2)</strong> I tried to deploy the workflow file (<code>.github/workflows/daily-attribution-brief.yml</code>) via the GitHub Contents API — the PAT <code>ghp_2whHvi…</code> returned <code>404 Not Found</code> on the PUT, which is GitHub's polite way of saying "your token has <code>repo</code> scope but not <code>workflow</code> scope, so I'm refusing to let you write into <code>.github/workflows/</code>". <strong>(3)</strong> I tried to trigger <code>workflow_dispatch</code> directly — also 404 because the workflow itself doesn't exist on <code>origin/main</code>. There is one 5-minute fix that unblocks everything; the four steps are below.
+    </div>
+  </div>
+
+  <div class="section">
+    <h2>Diagnostic — exactly what I tried this morning</h2>
+    <div class="errblock"><span class="label">[07:15:01 PT]</span> Loading credentials from ghl-pit.txt ........ <span class="ok">OK</span> (PIT length 78, locId 6wuU3haUH7uNeT20E3UZ)
+<span class="label">[07:15:02 PT]</span> POST https://services.leadconnectorhq.com/contacts/search
+   ↳ HTTP 403 — blocked-by-allowlist (sandbox egress filter)
+
+<span class="label">[07:15:04 PT]</span> Pivoting to GitHub Action path per skill instructions.
+<span class="label">[07:15:04 PT]</span> GET  /repos/Graehamwatts/online-content/contents/.github/workflows/daily-attribution-brief.yml
+   ↳ HTTP 404 — workflow file does not exist on origin/main
+
+<span class="label">[07:15:05 PT]</span> PUT  /repos/Graehamwatts/online-content/contents/.github/workflows/daily-attribution-brief.yml
+   ↳ HTTP 404 — {"message":"Not Found"}   (PAT scopes: repo only — workflow scope is required to write into .github/workflows/)
+
+<span class="label">[07:15:06 PT]</span> POST /repos/Graehamwatts/online-content/actions/workflows/daily-attribution-brief.yml/dispatches
+   ↳ HTTP 404 — workflow file not present, cannot dispatch
+
+<span class="label">[07:15:07 PT]</span> GET  /repos/Graehamwatts/online-content/actions/secrets
+   ↳ HTTP 200 — total_count: 0   (none of GHL_PIT, GHL_LOCATION_ID, GMAIL_USER, GMAIL_APP_PASSWORD are configured)
+
+<span class="label">[07:15:08 PT]</span> Falling back to "send the failure brief" path per skill failure-handling clause.
+<span class="label">[07:15:09 PT]</span> Writing dashboards/attribution/2026-05-14-daily.html ........ <span class="ok">OK</span>
+<span class="label">[07:15:10 PT]</span> Creating Gmail draft to graehamwatts@gmail.com ........ <span class="ok">OK</span></div>
+  </div>
+
+  <div class="section">
+    <h2>5-minute fix (same as Tuesday — still not done)</h2>
+    <div class="steps">
+      <div class="step"><div class="step-num">1</div><div class="step-body"><strong>Re-issue the GitHub PAT with workflow scope.</strong> Go to <strong>github.com/settings/tokens</strong> → find the token starting <code>ghp_2whHvi…</code> → <strong>Regenerate</strong> → check both <code>repo</code> and <code>workflow</code> scopes. Paste the new token over <code>C:\Users\Graeham Watts\Documents\Claude\Online Content\github-token.txt</code>. The next time I run, I can drop the YAML in automatically.</div></div>
+      <div class="step"><div class="step-num">2</div><div class="step-body"><strong>OR — one-shot manual install (faster).</strong> Open <code>C:\Users\Graeham Watts\Documents\Claude\Online Content\runbooks\daily-attribution-brief-workflow.yml</code> in any editor → copy contents → paste into a new file at <code>.github/workflows/daily-attribution-brief.yml</code> in the GitHub web UI → commit on <code>main</code>. (Also exists locally at <code>.github/workflows/</code> but isn't pushed because of step 1.)</div></div>
+      <div class="step"><div class="step-num">3</div><div class="step-body"><strong>Add the 4 repo secrets</strong> at <strong>github.com/Graehamwatts/online-content/settings/secrets/actions</strong>:
+        <br>• <code>GHL_PIT</code> = line 1 of <code>Documents\Claude\Skills\ghl-pit.txt</code>
+        <br>• <code>GHL_LOCATION_ID</code> = <code>6wuU3haUH7uNeT20E3UZ</code>
+        <br>• <code>GMAIL_USER</code> = <code>graehamwatts@gmail.com</code>
+        <br>• <code>GMAIL_APP_PASSWORD</code> = app password from <strong>myaccount.google.com/apppasswords</strong></div></div>
+      <div class="step"><div class="step-num">4</div><div class="step-body"><strong>Smoke-test before Monday.</strong> Once steps 1-3 are done, open the repo → <strong>Actions</strong> tab → <strong>Daily Attribution Brief</strong> → <strong>Run workflow</strong> → leave date blank to run for actual yesterday. You should get a real-data brief in your inbox in &lt;90 seconds.</div></div>
+    </div>
+  </div>
+
+  <div class="section">
+    <h2>What you'll see Monday once it's working</h2>
+    <div class="read">
+      A green status strip, four KPI cards across the top (Total Leads / New Opportunities / Closed Wins / Most Active Source), a 2-3 sentence read of yesterday's activity, a source breakdown table comparing yesterday's leads to the prior week, and a vertical-bar funnel showing Leads → Appointments → Opps → Wins. Friday brings the same view of Thursday plus a small week-to-date roll-up at the bottom.
+    </div>
+  </div>
+
+  <div class="footer">
+    Generated autonomously by the daily-attribution-brief scheduled task. This is the third consecutive run — Tuesday and Wednesday's briefs flagged the same blocker. No data was lost; once the workflow is deployed, all of yesterday's GHL activity is still queryable in the standard 24-hour window.
+    <div class="signature">Graeham Watts · REALTOR, Intero Real Estate</div>
+    <div class="dre">DRE# 01466876</div>
+  </div>
+</div>
+</body></html>
