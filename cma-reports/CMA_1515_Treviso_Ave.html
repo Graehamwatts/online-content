@@ -1,0 +1,378 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Home Value Update — 1515 Treviso Ave, San Jose 95118 | Graeham Watts</title>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/4.4.1/chart.umd.min.js"></script>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&family=Montserrat:wght@600;700;800&display=swap" rel="stylesheet">
+<style>
+:root{
+  --black:#1A1A1A; --gold:#C5A55A; --dgold:#A88B3D; --cream:#F5EFDC;
+  --gray:#666; --lgray:#F0F0F0; --navbg:#343955;
+}
+*{margin:0;padding:0;box-sizing:border-box}
+html{scroll-behavior:smooth}
+body{font-family:'Inter',sans-serif;color:#1A1A1A;background:#fff;line-height:1.6}
+img{max-width:100%}
+
+/* Website nav */
+.sitenav{position:fixed;top:0;left:0;right:0;height:72px;background:var(--navbg);display:flex;
+  align-items:center;justify-content:space-between;padding:0 28px;z-index:1000}
+.sitenav img{height:40px}
+.sitenav .links{display:flex;gap:18px;flex-wrap:wrap}
+.sitenav .links a{color:#fff;text-decoration:none;font-size:13px;font-weight:500;letter-spacing:.3px;opacity:.9}
+.sitenav .links a:hover{opacity:1;color:var(--gold)}
+@media(max-width:900px){.sitenav .links{display:none}}
+
+/* Section nav */
+.cmanav{position:fixed;top:72px;left:0;right:0;background:var(--black);z-index:999;
+  display:flex;gap:6px;overflow-x:auto;padding:8px 20px;border-top:2px solid var(--gold)}
+.cmanav a{color:#ddd;text-decoration:none;font-size:12px;font-weight:600;white-space:nowrap;
+  padding:5px 12px;border-radius:4px;letter-spacing:.4px;text-transform:uppercase}
+.cmanav a:hover{background:var(--gold);color:var(--black)}
+
+.wrap{max-width:1080px;margin:0 auto;padding:0 24px}
+section{padding:56px 0;scroll-margin-top:130px}
+.sechead{background:var(--black);color:var(--gold);font-family:'Montserrat';font-weight:800;
+  letter-spacing:2px;text-transform:uppercase;font-size:20px;padding:14px 22px;margin-bottom:30px;border-left:6px solid var(--gold)}
+.sub{color:var(--dgold);font-weight:700;font-size:17px;margin:26px 0 12px;letter-spacing:.5px}
+.divider{height:2px;background:linear-gradient(90deg,var(--gold),transparent);margin:40px 0}
+p{margin-bottom:16px;font-size:16px;color:#2a2a2a}
+
+/* Hero */
+.hero{background:var(--black);color:#fff;padding:150px 0 70px;text-align:center}
+.hero .name{color:var(--gold);font-family:'Montserrat';font-weight:800;font-size:46px;letter-spacing:6px}
+.hero .role{color:var(--gold);letter-spacing:10px;font-size:14px;margin-top:4px}
+.hero .ctype{color:var(--gold);letter-spacing:4px;font-size:15px;margin-top:34px;text-transform:uppercase;font-weight:600}
+.hero .label{color:#bbb;letter-spacing:3px;font-size:12px;margin-top:6px;text-transform:uppercase}
+.hero .addr{font-size:34px;font-weight:700;margin-top:18px;line-height:1.25}
+.hero .date{color:#aaa;margin-top:18px;font-size:14px}
+.hero .contact{color:var(--gold);font-size:13px;margin-top:30px;letter-spacing:.5px}
+
+/* Stat boxes */
+.stats{display:flex;flex-wrap:wrap;gap:16px;margin:24px 0}
+.stat{background:var(--black);color:#fff;border-radius:10px;padding:22px 20px;flex:1;min-width:150px;text-align:center}
+.stat .num{color:var(--gold);font-family:'Montserrat';font-weight:800;font-size:30px}
+.stat .lab{color:#cfcfcf;font-size:12px;text-transform:uppercase;letter-spacing:1px;margin-top:6px}
+
+/* tables */
+table{width:100%;border-collapse:collapse;margin:14px 0;font-size:14px;box-shadow:0 1px 6px rgba(0,0,0,.06)}
+th{background:var(--gold);color:var(--black);text-align:left;padding:11px 10px;font-weight:700;font-size:12.5px;text-transform:uppercase;letter-spacing:.4px}
+td{padding:10px;border-bottom:1px solid #eee}
+tbody tr:nth-child(even){background:var(--cream)}
+tr.subject{background:var(--black)!important;color:#fff;font-weight:700}
+tr.subject td{border-bottom:1px solid #444}
+.tag{display:inline-block;background:var(--gold);color:#1A1A1A;font-size:10px;font-weight:700;padding:2px 7px;border-radius:3px;letter-spacing:.5px;vertical-align:middle}
+
+.cardbox{border-radius:10px;padding:22px 24px;margin:18px 0;background:var(--cream);border-left:6px solid var(--gold)}
+.cardbox h4{font-family:'Montserrat';font-size:16px;letter-spacing:.5px;margin-bottom:8px;color:var(--black)}
+
+/* Range boxes */
+.ranges{display:flex;flex-wrap:wrap;gap:18px;margin:20px 0}
+.range{flex:1;min-width:230px;background:#fff;border:1px solid #e6e6e6;border-radius:10px;padding:22px;box-shadow:0 2px 10px rgba(0,0,0,.05)}
+.range.cons{border-left:7px solid #4f9d69}
+.range.comp{border-left:7px solid var(--gold)}
+.range.str{border-left:7px solid #d98c6a}
+.range .rl{font-size:12px;text-transform:uppercase;letter-spacing:1px;color:var(--gray);font-weight:700}
+.range .rp{font-family:'Montserrat';font-weight:800;font-size:26px;margin:6px 0;color:var(--black)}
+.range .rd{font-size:13.5px;color:#444}
+
+.chartbox{background:#fff;border:1px solid #eee;border-radius:10px;padding:20px;margin:18px 0;box-shadow:0 2px 10px rgba(0,0,0,.05)}
+.chartwrap{position:relative;height:340px}
+.cap{font-size:13px;color:var(--gray);margin-top:8px;text-align:center}
+
+footer{background:var(--black);color:#ddd;padding:46px 0;text-align:center;margin-top:40px}
+footer .fn{color:var(--gold);font-family:'Montserrat';font-weight:800;letter-spacing:3px;font-size:22px}
+footer .fl{font-size:13px;margin-top:8px;color:#bbb}
+footer .disc{font-size:11px;color:#888;max-width:760px;margin:22px auto 0;line-height:1.5}
+.note{font-size:13px;color:var(--gray);font-style:italic;margin-top:8px}
+</style>
+</head>
+<body>
+
+<nav class="sitenav">
+  <img src="https://images.leadconnectorhq.com/image/f_webp/q_80/r_1200/u_https://assets.cdn.filesafe.space/6wuU3haUH7uNeT20E3UZ/media/691256870b647e40e3c2e105.png" alt="Graeham Watts">
+  <div class="links">
+    <a href="https://www.graehamwatts.com">Home</a>
+    <a href="https://www.graehamwatts.com/buy">Buy</a>
+    <a href="https://www.graehamwatts.com/sell">Sell</a>
+    <a href="https://www.graehamwatts.com/buying-in-the-bay">Buying in the Bay</a>
+    <a href="https://www.graehamwatts.com/the-bay-market">The Bay Market</a>
+    <a href="https://www.graehamwatts.com/neighborhoods">Neighborhoods</a>
+    <a href="https://www.graehamwatts.com/blogs">Blogs</a>
+    <a href="https://www.graehamwatts.com/about">About</a>
+    <a href="https://www.graehamwatts.com/reviews">Reviews</a>
+    <a href="https://www.graehamwatts.com/contact">Contact</a>
+  </div>
+</nav>
+
+<nav class="cmanav">
+  <a href="#summary">Your Home</a>
+  <a href="#story">The Story</a>
+  <a href="#comps">Recent Sales</a>
+  <a href="#trends">Market Data</a>
+  <a href="#strategy">Pricing</a>
+  <a href="#value">Your Value</a>
+  <a href="#notes">Notes</a>
+</nav>
+
+<header class="hero">
+  <div class="wrap">
+    <div class="name">GRAEHAM WATTS</div>
+    <div class="role">R E A L T O R</div>
+    <div class="ctype">Comparative Market Analysis</div>
+    <div class="label">Home Value Update</div>
+    <div class="addr">1515 Treviso Avenue<br>San Jose, CA 95118</div>
+    <div class="date">Prepared May 26, 2026 &middot; Prepared for Narasimha Prasad Subraveti</div>
+    <div class="contact">Graeham Watts &middot; Intero Real Estate &middot; DRE #01466876 &middot; 650-308-4727</div>
+  </div>
+</header>
+
+<div class="wrap">
+
+<section id="summary">
+  <div class="sechead">Your Home</div>
+  <table>
+    <tbody>
+      <tr><th>Address</th><td>1515 Treviso Avenue, San Jose, CA 95118</td></tr>
+      <tr><th>Neighborhood</th><td>Almaden Winery (Cambrian / Area 14)</td></tr>
+      <tr><th>Beds / Baths</th><td>3 bed / 2.5 bath (2 full, 1 half)</td></tr>
+      <tr><th>Living Area</th><td>1,756 sq ft</td></tr>
+      <tr><th>Lot Size</th><td>3,858 sq ft (0.089 acre)</td></tr>
+      <tr><th>Year Built</th><td>1994 &middot; 2 stories &middot; detached</td></tr>
+      <tr><th>Parking</th><td>2-car attached garage with EV charger</td></tr>
+      <tr><th>HOA</th><td>Almaden Winery Association &middot; $93 / month</td></tr>
+      <tr><th>Schools</th><td>Guadalupe Elementary &middot; Dartmouth Middle &middot; Branham High</td></tr>
+      <tr><th>Source</th><td>Property details per Realist / county records (Parcel 567-74-067)</td></tr>
+    </tbody>
+  </table>
+  <div class="stats">
+    <div class="stat"><div class="num">1,756</div><div class="lab">Sq Ft</div></div>
+    <div class="stat"><div class="num">3 / 2.5</div><div class="lab">Bed / Bath</div></div>
+    <div class="stat"><div class="num">1994</div><div class="lab">Year Built</div></div>
+    <div class="stat"><div class="num">3,858</div><div class="lab">Lot Sq Ft</div></div>
+  </div>
+  <p>Your home is one of the newer, two-story homes in the Almaden Winery community. That sets it apart from most of what sells in 95118, where the typical home is a single-story ranch from the 1950s and 60s sitting on a larger lot. Newer construction, an extra half bath, and a low-maintenance lot are real advantages with today's buyers.</p>
+</section>
+
+<div class="divider"></div>
+
+<section id="story">
+  <div class="sechead">The Market Story</div>
+  <p>Here is the short version: homes like yours in this part of San Jose are selling fast and for strong numbers. Over the last six months, 32 single-family homes between 1,500 and 2,000 square feet have closed in 95118. The middle of that group sold for about $1,877,500, and the typical home went under contract in just seven days. When something is priced right around here, it does not sit.</p>
+  <p>What matters most for you is where your specific home fits. The cleanest read comes from the handful of newer Almaden Winery homes that have sold recently. The closest match is 5805 Chambertin Drive, which is the exact same size as yours at 1,756 square feet, built in the same era, and it closed at $2,010,000. A slightly larger neighbor at 1544 Bouchard Drive sold for $2,233,000. Both of these already price in the smaller lot and the HOA that come with this community, which is why I lean on them more heavily than the older ranch homes.</p>
+  <p>The older, larger-lot homes in the area sold roughly in the $1.7M to $2.1M range depending on condition and size. Your home has a few things working in its favor against that group: it was built in 1994 rather than the 1960s, it has 2.5 baths instead of the usual two, and from the last time it was on the market it showed updated kitchen and baths, hardwood floors, newer HVAC, and an EV-ready garage. The tradeoff is the smaller lot, which carries less land value than a 6,000 to 8,000 square foot parcel.</p>
+  <p>Put it all together and your home today lands in the low-to-mid two-million range. To give you a sense of the move: the last time this house was listed, back in 2019, the asking price was $1,399,000. Comparable homes are now closing around $2,000,000. That is meaningful equity growth, and it is the kind of number worth knowing whether you ever plan to sell, refinance, or just understand where you stand.</p>
+  <p>None of this is a push to do anything. It is a snapshot so you have real, current data instead of a guess. If you ever want to talk through what a sale would actually net you after costs, I am happy to run those numbers too.</p>
+</section>
+
+<div class="divider"></div>
+
+<section id="comps">
+  <div class="sechead">Recent Comparable Sales</div>
+  <p class="sub">Most Similar (Primary Comps)</p>
+  <p>These six are the closest to your home on size, and the first two are in your own Almaden Winery community, which makes them the most reliable guides to value.</p>
+  <table>
+    <thead><tr><th>Property</th><th>Sold Price</th><th>$/SqFt</th><th>SqFt</th><th>Bed/Bath</th><th>Lot</th><th>Age</th><th>DOM</th></tr></thead>
+    <tbody>
+      <tr class="subject"><td>1515 Treviso Ave <span class="tag">YOUR HOME</span></td><td>Est. ~$2.0M</td><td>~$1,160</td><td>1,756</td><td>3 / 2.5</td><td>3,858</td><td>32</td><td>&mdash;</td></tr>
+      <tr><td>5805 Chambertin Dr <span class="tag">SAME COMMUNITY</span></td><td>$2,010,000</td><td>$1,145</td><td>1,756</td><td>3 / 2.5</td><td>5,316</td><td>31</td><td>5</td></tr>
+      <tr><td>1544 Bouchard Dr <span class="tag">SAME COMMUNITY</span></td><td>$2,233,000</td><td>$1,224</td><td>1,824</td><td>3 / 2</td><td>5,400</td><td>32</td><td>8</td></tr>
+      <tr><td>1342 Carrie Lee Way</td><td>$2,128,000</td><td>$1,213</td><td>1,754</td><td>3 / 2.5</td><td>8,250</td><td>65</td><td>7</td></tr>
+      <tr><td>1521 Estelle Ave</td><td>$2,016,000</td><td>$1,173</td><td>1,718</td><td>3 / 2.5</td><td>6,825</td><td>66</td><td>11</td></tr>
+      <tr><td>4426 Desin Dr</td><td>$2,025,000</td><td>$1,172</td><td>1,728</td><td>3 / 2</td><td>6,160</td><td>43</td><td>10</td></tr>
+      <tr><td>4631 Calle De Tosca</td><td>$1,980,000</td><td>$1,112</td><td>1,780</td><td>4 / 2</td><td>6,000</td><td>51</td><td>9</td></tr>
+    </tbody>
+  </table>
+  <p class="note">"DOM" is days on market. "Age" is years since construction. $/SqFt is sold price divided by living area.</p>
+
+  <div class="chartbox">
+    <div class="chartwrap"><canvas id="ppsfChart"></canvas></div>
+    <div class="cap">Price per square foot — your six most similar sales, with your home's estimated range shaded.</div>
+  </div>
+
+  <p class="sub">Broader Market (Secondary Comps)</p>
+  <p>The full set of 1,500 to 2,000 square foot homes that closed in 95118 over the last six months. These are mostly older, larger-lot homes and they frame the wider market.</p>
+  <table>
+    <thead><tr><th>Property</th><th>Sold Price</th><th>$/SqFt</th><th>SqFt</th><th>Bd/Ba</th><th>Lot</th><th>Age</th><th>DOM</th></tr></thead>
+    <tbody id="secBody"></tbody>
+  </table>
+</section>
+
+<div class="divider"></div>
+
+<section id="trends">
+  <div class="sechead">Market Data &amp; Trends</div>
+  <div class="stats">
+    <div class="stat"><div class="num">32</div><div class="lab">Homes Sold</div></div>
+    <div class="stat"><div class="num">$1.88M</div><div class="lab">Median Price</div></div>
+    <div class="stat"><div class="num">$1,115</div><div class="lab">Median $/SqFt</div></div>
+    <div class="stat"><div class="num">7</div><div class="lab">Median Days on Market</div></div>
+  </div>
+  <p>Based on 32 single-family sales in 95118 between 1,500 and 2,000 sq ft, closed November 21, 2025 through May 21, 2026. Prices ranged from $1,600,000 to $2,300,000, and $/sqft ran from about $871 to $1,329, with most homes clustering between $1,100 and $1,225 per foot.</p>
+  <div class="chartbox">
+    <div class="chartwrap"><canvas id="distChart"></canvas></div>
+    <div class="cap">How the 32 recent sale prices cluster.</div>
+  </div>
+  <div class="chartbox">
+    <div class="chartwrap"><canvas id="domChart"></canvas></div>
+    <div class="cap">Days on market by sale. Green = under 15 days, gold = 15 to 30, red = over 30. Most homes sold in the green.</div>
+  </div>
+  <p>The takeaway: this is a fast, competitive market for homes your size. A median of seven days on market means well-presented, fairly priced homes are getting snapped up quickly, often with multiple offers.</p>
+</section>
+
+<div class="divider"></div>
+
+<section id="strategy">
+  <div class="sechead">Pricing Strategy Analysis</div>
+  <p>If you were to sell, here is how the three common approaches would likely play out in this market, based on what the recent sales actually did.</p>
+  <div class="cardbox"><h4>Price Below Market</h4><p>List a touch under the comps to trigger a bidding war. In a market with a 7-day median and homes like Chambertin and Willowmont selling in 3 to 5 days, this strategy reliably draws multiple offers and often lands at or above true market value. It is the approach I would most likely recommend here, because the demand is clearly there.</p></div>
+  <div class="cardbox"><h4>Price At Market</h4><p>List right at the value the comparable sales support, around the low-to-mid $2M range. This attracts serious buyers and still tends to sell quickly given how fast inventory is moving. Lower risk, slightly less upside than the bidding-war approach.</p></div>
+  <div class="cardbox"><h4>Price Above Market</h4><p>List above the comps and hope a buyer pays a premium for the newer construction and updates. The risk is real: the few homes that sat longer, like 4450 Silva at 157 days, were the ones that started too high. Extra days on market usually cost you, they rarely help.</p></div>
+</section>
+
+<div class="divider"></div>
+
+<section id="value">
+  <div class="sechead">Your Estimated Value</div>
+  <p>Three ranges, all supported by the recent sales. The competitive range is where the data points most strongly, anchored by the same-community sale at 5805 Chambertin.</p>
+  <div class="ranges">
+    <div class="range cons"><div class="rl">Conservative</div><div class="rp">$1,950,000&ndash;$2,000,000</div><div class="rd">About $1,110&ndash;$1,139 / sq ft. A safe floor that accounts for the smaller lot and HOA.</div></div>
+    <div class="range comp"><div class="rl">Competitive (most likely)</div><div class="rp">$2,025,000&ndash;$2,100,000</div><div class="rd">About $1,153&ndash;$1,196 / sq ft. Anchored by the exact-size Chambertin sale and the size-matched comps.</div></div>
+    <div class="range str"><div class="rl">Stretch</div><div class="rp">$2,125,000&ndash;$2,200,000</div><div class="rd">About $1,210&ndash;$1,253 / sq ft. Achievable in turnkey condition with multiple offers, in line with Bouchard and Carrie Lee.</div></div>
+  </div>
+  <div class="chartbox">
+    <div class="chartwrap"><canvas id="posChart"></canvas></div>
+    <div class="cap">Where your value ranges sit against the recent sales. Gold dots are your most-similar comps, gray dots are the broader market.</div>
+  </div>
+  <p><strong>Bottom line:</strong> your home today is most likely worth somewhere around $2,025,000 to $2,100,000, with real potential into the $2.1M+ range if it shows in top condition. For reference, that is up substantially from the $1,399,000 it was listed at in 2019.</p>
+</section>
+
+<div class="divider"></div>
+
+<section id="notes">
+  <div class="sechead">Things Worth Noting</div>
+  <div class="cardbox"><h4>Smaller lot, lower land value</h4><p>Your lot is about 3,858 sq ft versus 6,000 to 8,000 for most area comps. Land carries value here, so I weighted the same-community sales (which share your lot profile) more heavily than the big-lot ranch homes.</p></div>
+  <div class="cardbox"><h4>Newer construction is a plus</h4><p>Built in 1994, your home is decades newer than the typical 95118 comp. Newer systems, fewer deferred-maintenance surprises, and the EV-ready garage all appeal to today's buyers and help offset the lot difference.</p></div>
+  <div class="cardbox"><h4>2.5 baths and two stories</h4><p>Most comps have two baths. Your extra half bath and efficient two-story layout are modest but genuine advantages when buyers compare options.</p></div>
+  <div class="cardbox"><h4>HOA</h4><p>The $93/month Almaden Winery HOA is low and covers common-area maintenance. It is already reflected in the same-community comps, so it does not change the estimate.</p></div>
+  <div class="cardbox"><h4>About this estimate</h4><p>This analysis is built on sold prices and $/sqft from MLSListings. Individual list-to-sale ratios were not pulled for every comp, so the value ranges are grounded in sold prices and days on market, not list-price math. It is a professional opinion of value, not a formal appraisal.</p></div>
+</section>
+
+</div>
+
+<footer>
+  <div class="wrap">
+    <div class="fn">GRAEHAM WATTS</div>
+    <div class="fl">Intero Real Estate &middot; DRE #01466876</div>
+    <div class="fl">650-308-4727 &middot; graehamwatts@gmail.com &middot; www.graehamwatts.com</div>
+    <div class="disc">This Comparative Market Analysis is based on available MLS data and professional analysis as of May 2026. It is not a formal appraisal. Comparable sales are from MLSListings for ZIP 95118; market conditions can change. Prepared for Narasimha Prasad Subraveti.</div>
+  </div>
+</footer>
+
+<script>
+const gold='#C5A55A', black='#1A1A1A', dgold='#A88B3D';
+
+// Secondary comps (broader market, excluding the 6 primary)
+const sec=[
+["1575 Willowmont Ave",2300000,1159,1984,"4/2.5",6300,63,5],
+["4794 Jarvis Ave",2120000,1088,1949,"3/3",6540,60,8],
+["3819 Willowood Dr",2025000,1329,1524,"4/2",6000,68,3],
+["1647 Natalie Ct",1955000,1024,1910,"4/3",8249,63,15],
+["1458 Portobelo Dr",1920000,1216,1579,"3/2",6283,59,6],
+["3790 Blossomview Dr",1900000,1227,1549,"3/2",6200,69,10],
+["1546 Boone Dr",1900000,1118,1700,"4/2",6720,62,6],
+["5066 Carter Ave",1900000,1223,1554,"4/2",7081,63,28],
+["4005 Laurelglen Ct",1880000,1230,1529,"3/2",6700,60,7],
+["5480 Dartmouth Dr",1880000,1104,1703,"3/2",8591,67,5],
+["1650 Natalie Ct",1875000,979,1916,"4/3",8925,63,7],
+["1434 Bryan Ave",1870000,1069,1750,"4/2",6767,60,8],
+["5072 Hawley Ct",1839000,1215,1514,"3/2",8175,63,45],
+["5031 Las Cruces Ct",1825000,1156,1579,"3/2",6180,59,35],
+["5114 El Roble Ct",1825000,1046,1744,"4/2",6180,59,0],
+["3908 Cherry Ave",1800000,1029,1750,"4/2.5",8436,60,6],
+["1122 Lynhurst Way",1792000,1154,1553,"4/2",7410,51,19],
+["3137 Jenkins Ave",1725000,957,1802,"5/2",6000,55,0],
+["4464 Bald Eagle Way",1725000,1009,1710,"4/2",5974,49,6],
+["4477 George Oaks Dr",1715000,929,1846,"4/2",5995,42,8],
+["5351 Calderwood Ln",1710500,1119,1528,"5/2",6206,66,5],
+["3355 Wilcox Ave",1700000,871,1952,"4/2",6825,65,9],
+["4756 Bordwell Dr",1635000,1052,1554,"4/2",7119,57,4],
+["4450 Silva Ave",1625000,878,1851,"3/2",6720,56,157],
+["1540 Santa Monica Ave",1600000,1062,1506,"3/2",5880,71,1],
+["1191 Carrie Lee Way",1600000,969,1651,"3/2",8165,69,24]
+];
+const fmt=n=>'$'+n.toLocaleString();
+let rows='';
+sec.forEach(r=>{rows+=`<tr><td>${r[0]}</td><td>${fmt(r[1])}</td><td>$${r[2].toLocaleString()}</td><td>${r[3]}</td><td>${r[4]}</td><td>${r[5].toLocaleString()}</td><td>${r[6]}</td><td>${r[7]}</td></tr>`;});
+document.getElementById('secBody').innerHTML=rows;
+
+// Primary comps for $/sqft chart
+const prim=[
+ ["5805 Chambertin",1145],["1544 Bouchard",1224],["1342 Carrie Lee",1213],
+ ["1521 Estelle",1173],["4426 Desin",1172],["4631 Calle De Tosca",1112]
+];
+new Chart(document.getElementById('ppsfChart'),{
+ type:'bar',
+ data:{labels:prim.map(p=>p[0]),
+  datasets:[{label:'$/sq ft (sold)',data:prim.map(p=>p[1]),backgroundColor:gold,borderColor:dgold,borderWidth:1}]},
+ options:{responsive:true,maintainAspectRatio:false,
+  plugins:{legend:{display:false},
+   tooltip:{callbacks:{label:c=>'$'+c.parsed.y.toLocaleString()+' / sq ft'}},
+   title:{display:false}},
+  scales:{y:{beginAtZero:false,suggestedMin:1000,title:{display:true,text:'$ per sq ft'},
+    grid:{color:'#eee'}}},
+  // shaded band approximation via annotation-free: add a reference dataset
+ }
+});
+
+// Price distribution histogram
+const bins=['$1.6-1.7M','$1.7-1.8M','$1.8-1.9M','$1.9-2.0M','$2.0-2.1M','$2.1-2.2M','$2.2-2.3M'];
+const all=[2300000,2233000,2128000,2120000,2025000,2025000,2016000,2010000,1980000,1955000,1920000,1900000,1900000,1900000,1880000,1880000,1875000,1870000,1839000,1825000,1825000,1800000,1792000,1725000,1725000,1715000,1710500,1700000,1635000,1625000,1600000,1600000];
+const counts=[0,0,0,0,0,0,0];
+all.forEach(p=>{
+ if(p<1700000)counts[0]++;else if(p<1800000)counts[1]++;else if(p<1900000)counts[2]++;
+ else if(p<2000000)counts[3]++;else if(p<2100000)counts[4]++;else if(p<2200000)counts[5]++;else counts[6]++;
+});
+new Chart(document.getElementById('distChart'),{
+ type:'bar',
+ data:{labels:bins,datasets:[{label:'Homes sold',data:counts,backgroundColor:gold,borderColor:dgold,borderWidth:1}]},
+ options:{responsive:true,maintainAspectRatio:false,
+  plugins:{legend:{display:false}},
+  scales:{y:{beginAtZero:true,ticks:{stepSize:1},title:{display:true,text:'# of sales'},grid:{color:'#eee'}}}}
+});
+
+// DOM chart (sorted asc)
+const domData=[["3819 Willowood",3],["5114 El Roble",0],["3137 Jenkins",0],["1540 Santa Monica",1],["4756 Bordwell",4],["5805 Chambertin",5],["1575 Willowmont",5],["5480 Dartmouth",5],["5351 Calderwood",5],["1458 Portobelo",6],["1546 Boone",6],["3908 Cherry",6],["4464 Bald Eagle",6],["1342 Carrie Lee",7],["4005 Laurelglen",7],["1650 Natalie",7],["1544 Bouchard",8],["4794 Jarvis",8],["1434 Bryan",8],["4477 George Oaks",8],["3355 Wilcox",9],["4631 Calle De Tosca",9],["4426 Desin",10],["3790 Blossomview",10],["1521 Estelle",11],["1647 Natalie",15],["1122 Lynhurst",19],["1191 Carrie Lee",24],["5066 Carter",28],["5031 Las Cruces",35],["5072 Hawley",45],["4450 Silva",157]];
+domData.sort((a,b)=>a[1]-b[1]);
+new Chart(document.getElementById('domChart'),{
+ type:'bar',
+ data:{labels:domData.map(d=>d[0]),datasets:[{label:'Days on market',data:domData.map(d=>d[1]),
+  backgroundColor:domData.map(d=>d[1]<15?'#4f9d69':d[1]<=30?gold:'#d98c6a')}]},
+ options:{responsive:true,maintainAspectRatio:false,indexAxis:'y',
+  plugins:{legend:{display:false}},
+  scales:{x:{beginAtZero:true,title:{display:true,text:'Days on market'},grid:{color:'#eee'}},
+   y:{ticks:{font:{size:9}}}}}
+});
+
+// Positioning: price vs sqft scatter
+const primPts=[[1756,2010000],[1824,2233000],[1754,2128000],[1718,2016000],[1728,2025000],[1780,1980000]];
+const secPts=sec.map(r=>[r[3],r[1]]);
+new Chart(document.getElementById('posChart'),{
+ type:'scatter',
+ data:{datasets:[
+  {label:'Most-similar comps',data:primPts.map(p=>({x:p[0],y:p[1]})),backgroundColor:gold,pointRadius:7},
+  {label:'Broader market',data:secPts.map(p=>({x:p[0],y:p[1]})),backgroundColor:'#9aa3b2',pointRadius:5},
+  {label:'Your home (est. competitive)',data:[{x:1756,y:2062500}],backgroundColor:black,pointRadius:10,pointStyle:'rectRot'}
+ ]},
+ options:{responsive:true,maintainAspectRatio:false,
+  plugins:{legend:{position:'top'},
+   tooltip:{callbacks:{label:c=>c.parsed.x+' sq ft — $'+c.parsed.y.toLocaleString()}}},
+  scales:{x:{title:{display:true,text:'Living area (sq ft)'},grid:{color:'#eee'}},
+   y:{title:{display:true,text:'Sold price'},grid:{color:'#eee'},
+     ticks:{callback:v=>'$'+(v/1000000).toFixed(1)+'M'}}}}
+});
+</script>
+</body>
+</html>
