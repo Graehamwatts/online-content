@@ -1,0 +1,141 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>New Leads Pipeline — GHL Build Spec</title>
+<style>
+  :root{--ink:#0f1f2e;--slate:#33475b;--muted:#6b7d8f;--line:#e3e9ef;--bg:#f6f8fa;--card:#fff;--accent:#1f6feb;--accent2:#0d4a8f;--native:#2da44e;--stub:#bf6b00;--stubbg:#fff3e0;--nativebg:#e8f6ee;}
+  *{box-sizing:border-box;}
+  body{margin:0;font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,Helvetica,Arial,sans-serif;background:var(--bg);color:var(--ink);line-height:1.55;}
+  .wrap{max-width:1100px;margin:0 auto;padding:32px 24px 72px;}
+  header.hero{background:linear-gradient(135deg,var(--accent2),var(--accent));color:#fff;border-radius:16px;padding:30px 32px;}
+  .hero .eyebrow{text-transform:uppercase;letter-spacing:.14em;font-size:12px;font-weight:600;opacity:.85;margin:0;}
+  .hero h1{margin:6px 0 6px;font-size:27px;}
+  .hero p{margin:0;font-size:14.5px;opacity:.93;max-width:780px;}
+  h2{font-size:20px;margin:34px 0 6px;}
+  h3{font-size:16px;margin:22px 0 4px;color:var(--accent2);}
+  .lead{color:var(--slate);font-size:14px;margin:0 0 14px;max-width:850px;}
+  table{width:100%;border-collapse:collapse;background:var(--card);border:1px solid var(--line);border-radius:12px;overflow:hidden;font-size:13.5px;margin-top:10px;}
+  thead th{background:#eef3f8;text-align:left;padding:10px 12px;font-size:11.5px;text-transform:uppercase;letter-spacing:.05em;color:var(--slate);font-weight:700;}
+  tbody td{padding:10px 12px;border-top:1px solid var(--line);vertical-align:top;}
+  tbody tr:hover{background:#f9fbfd;}
+  .when{white-space:nowrap;font-weight:600;color:var(--accent2);}
+  .pill{display:inline-block;padding:2px 9px;border-radius:999px;font-size:11.5px;font-weight:700;white-space:nowrap;}
+  .native{background:var(--nativebg);color:var(--native);}
+  .stub{background:var(--stubbg);color:var(--stub);}
+  code{background:#eef0f2;padding:1px 5px;border-radius:4px;font-size:12.5px;}
+  .box{background:var(--card);border:1px solid var(--line);border-radius:12px;padding:16px 18px;margin-top:12px;}
+  .warn{background:var(--stubbg);border:1px solid #f0d09b;border-radius:12px;padding:14px 16px;color:#6b4e12;font-size:13.5px;margin-top:14px;}
+  pre{background:#0f1f2e;color:#e8eef5;padding:16px;border-radius:10px;overflow:auto;font-size:12.5px;line-height:1.5;}
+  ul{margin:8px 0 0;padding-left:20px;}li{margin:4px 0;font-size:14px;color:var(--slate);}
+  footer{margin-top:40px;color:var(--muted);font-size:12px;text-align:center;}
+</style>
+</head>
+<body><div class="wrap">
+
+<header class="hero">
+  <p class="eyebrow">Graeham Watts · Intero · GoHighLevel Build Spec</p>
+  <h1>New Leads Pipeline — Workflow Build Spec</h1>
+  <p>The blueprint for building the New Leads automations in GHL. Every step is mapped to a native GHL action or a webhook to your N8N. Build everything UNPUBLISHED (draft) until tested. External video/voice/AI touches route through N8N — those are marked as stubs to wire up separately.</p>
+</header>
+
+<h2>1 · Folder &amp; workflow structure</h2>
+<p class="lead">GHL workflows here use a flat folder list, so we use one folder per pipeline plus a naming convention for the stages. New Leads gets one folder containing six workflows (one per pipeline stage).</p>
+<div class="box">
+  <strong>Folder:</strong> <code>New Leads</code><br>
+  &nbsp;&nbsp;• <code>New Leads — 1. Uncontacted (12-day sprint)</code><br>
+  &nbsp;&nbsp;• <code>New Leads — 2. Contacted, No Response</code><br>
+  &nbsp;&nbsp;• <code>New Leads — 3. Contacted, Responded</code><br>
+  &nbsp;&nbsp;• <code>New Leads — 4. Email/Text Only</code><br>
+  &nbsp;&nbsp;• <code>New Leads — 5. Cold (quarterly nurture)</code><br>
+  &nbsp;&nbsp;• <code>New Leads — 6. Unqualified (holding, no cadence)</code>
+</div>
+
+<h2>2 · Action legend</h2>
+<p class="lead"><span class="pill native">NATIVE</span> = built directly in GHL. <span class="pill stub">STUB → N8N</span> = a GHL <em>Custom Webhook</em> action that posts the contact to your N8N, which performs the external send. These need the N8N webhook URL + the external account auth, wired up separately.</p>
+<table><thead><tr><th>Dashboard touch</th><th>GHL action</th><th>Type</th></tr></thead><tbody>
+<tr><td>Live Call (Adrian/Graeham)</td><td>Create Task (assigned to Adrian) + Internal Notification</td><td><span class="pill native">NATIVE</span></td></tr>
+<tr><td>AI Text / SMS</td><td>Send SMS</td><td><span class="pill native">NATIVE</span></td></tr>
+<tr><td>Email (incl. HeyGen email, testimonials, market video)</td><td>Send Email</td><td><span class="pill native">NATIVE</span></td></tr>
+<tr><td>Wait / delays between days</td><td>Wait</td><td><span class="pill native">NATIVE</span></td></tr>
+<tr><td>Routing at Day 12 (move to stage/pipeline)</td><td>If/Else + Update Opportunity Stage + Add/Remove Tag</td><td><span class="pill native">NATIVE</span></td></tr>
+<tr><td>Lipdub personalized video (GIF MMS)</td><td>Custom Webhook → N8N → Lipdub + Slybroadcast/MMS</td><td><span class="pill stub">STUB → N8N</span></td></tr>
+<tr><td>Slybroadcast ringless voicemail</td><td>Custom Webhook → N8N → Slybroadcast</td><td><span class="pill stub">STUB → N8N</span></td></tr>
+<tr><td>AI Agent outbound call</td><td>GHL AI Agent action OR Custom Webhook → N8N</td><td><span class="pill stub">STUB → N8N</span></td></tr>
+<tr><td>ManyChat Messenger (Meta leads)</td><td>Custom Webhook → ManyChat (or ManyChat-side trigger)</td><td><span class="pill stub">STUB → N8N</span></td></tr>
+</tbody></table>
+
+<h2>3 · Workflow 1 — New Lead, Uncontacted (the 12-day sprint)</h2>
+<p class="lead"><strong>Trigger:</strong> Contact enters the New Leads pipeline / New Lead — Uncontacted stage (Opportunity Stage Changed), OR Form/Facebook lead created with no stage. <strong>Branch early on lead type</strong> (Buyer vs Seller, from form field or tag) so each step sends the matching message. Buyer/Seller copy is in the pipeline dashboard.</p>
+<table><thead><tr><th>Day</th><th>GHL action</th><th>Content / config</th><th>Type</th></tr></thead><tbody>
+<tr><td class="when">Day 0</td><td>Custom Webhook → ManyChat</td><td>Meta leads only. Messenger intro + "Are you looking to buy or sell?" Captures phone → back to GHL. All other sources skip to Day 1.</td><td><span class="pill stub">STUB → N8N</span></td></tr>
+<tr><td class="when">Day 1 · 0min</td><td>Create Task (Adrian) + Internal Notification</td><td>"Call new lead immediately. Use Buyer or Seller script." Due same day.</td><td><span class="pill native">NATIVE</span></td></tr>
+<tr><td class="when">Day 1 · no answer</td><td>Custom Webhook → N8N (Slybroadcast VM + Lipdub GIF MMS)</td><td>Buyer/Seller Lipdub script + captioned GIF linking to video page + calendar link. (See dashboard for exact script + caption.)</td><td><span class="pill stub">STUB → N8N</span></td></tr>
+<tr><td class="when">Day 1 · +1hr</td><td>Send Email</td><td>Subject "I just tried to reach you (quick video inside)." Lipdub GIF embedded + calendar link.</td><td><span class="pill native">NATIVE</span></td></tr>
+<tr><td class="when">Day 2</td><td>Send SMS</td><td>"Hey [Name], did you get a chance to watch the video? Happy to answer any questions, or grab a time here." + link.</td><td><span class="pill native">NATIVE</span></td></tr>
+<tr><td class="when">Day 3</td><td>Custom Webhook → N8N (AI call); fallback Slybroadcast VM</td><td>Buyer: recent listing in their area. Seller: recent nearby sale.</td><td><span class="pill stub">STUB → N8N</span></td></tr>
+<tr><td class="when">Day 4</td><td>Send SMS (with reusable static video GIF)</td><td>Buyer/Seller "how I help [buyers/sellers] in your area" reusable clip + link.</td><td><span class="pill native">NATIVE</span></td></tr>
+<tr><td class="when">Day 5</td><td>Send Email</td><td>Subject "What the market's doing right now (quick video)." Links to latest YouTube market video (graehamwatts.com/the-bay-real-estate-market or channel Videos tab).</td><td><span class="pill native">NATIVE</span></td></tr>
+<tr><td class="when">Day 7</td><td>Custom Webhook → N8N (AI call + VM)</td><td>Buyer: new listing. Seller: timely market stat / recent sale.</td><td><span class="pill stub">STUB → N8N</span></td></tr>
+<tr><td class="when">Day 8</td><td>Send Email</td><td>Testimonial video matching type. Buyer subj "How a buyer like you found the right home." Seller subj "How a seller like you got a strong result."</td><td><span class="pill native">NATIVE</span></td></tr>
+<tr><td class="when">Day 9</td><td>Send SMS</td><td>Buyer/Seller casual GIF text. "Still thinking about [buying/selling]? No rush. Here's my calendar if you ever want to talk."</td><td><span class="pill native">NATIVE</span></td></tr>
+<tr><td class="when">Day 10</td><td>Create Task (Adrian) + Internal Notification</td><td>Second personal call, different time of day. Use buyer/seller script, note responses.</td><td><span class="pill native">NATIVE</span></td></tr>
+<tr><td class="when">Day 11</td><td>Send SMS (with static GIF)</td><td>Buyer: "Here's how I've helped buyers in the area land the right home." Seller: "...get a strong result." + link.</td><td><span class="pill native">NATIVE</span></td></tr>
+<tr><td class="when">Day 12</td><td>Send SMS</td><td>"Last note for now. If your plans change, I'd love to help. Want me to keep you posted on the market? Reply Yes or No."</td><td><span class="pill native">NATIVE</span></td></tr>
+<tr><td class="when">Day 12 · EOD</td><td>Create Task (Adrian) — routing</td><td>Adrian reviews + routes: Active / Within 3mo / Under 9mo / Over 9mo Buyer or Seller; Cold if no engagement; Unqualified if spam. Nobody stays past Day 12. (Can be assisted by If/Else on reply/engagement tags.)</td><td><span class="pill native">NATIVE</span></td></tr>
+</tbody></table>
+
+<h2>4 · Workflows 2–6 — other New Leads stages</h2>
+<h3>2. Contacted, No Response</h3>
+<p class="lead">Continues Days 2–12 of the Uncontacted cadence (same actions as above). Adjustment: Day 10 call task note references the prior contact ("we connected briefly on [date]").</p>
+<h3>3. Contacted, Responded (highest priority)</h3>
+<table><thead><tr><th>When</th><th>GHL action</th><th>Content</th><th>Type</th></tr></thead><tbody>
+<tr><td class="when">+15 min</td><td>Create Task (Adrian) + Notification</td><td>Call back immediately. Discovery + push consultation booking.</td><td><span class="pill native">NATIVE</span></td></tr>
+<tr><td class="when">+1 hr</td><td>Send SMS</td><td>"Hey [Name], thanks for the reply, Adrian here. Grabbed a few options. When works for a quick 15-min call?" + link.</td><td><span class="pill native">NATIVE</span></td></tr>
+<tr><td class="when">Day 1</td><td>Custom Webhook → N8N (Lipdub)</td><td>"Hi [Name], really glad you reached out. Let me show you how I can help with your move, and where I do things differently." + link.</td><td><span class="pill stub">STUB → N8N</span></td></tr>
+<tr><td class="when">Day 2</td><td>Create Task (Adrian)</td><td>Second attempt if no booking.</td><td><span class="pill native">NATIVE</span></td></tr>
+<tr><td class="when">Day 3</td><td>Create Task (Adrian) — routing</td><td>Booked → Appointment Scheduled. Qualified, not booked → route by timeline. Unresponsive → Contacted, No Response.</td><td><span class="pill native">NATIVE</span></td></tr>
+</tbody></table>
+<h3>4. Email/Text Only (no calls)</h3>
+<p class="lead">Long-cadence drip, native only: <strong>Send SMS</strong> every 5 days, <strong>Send Email</strong> (HeyGen market video) every 10 days, <strong>Send SMS</strong> (static GIF) every 14 days, built as Wait + Send loops. Day 14 task: Adrian re-evaluates. No call actions.</p>
+<h3>5. Cold (quarterly nurture)</h3>
+<p class="lead">One touch every 90 days, alternating an emailed HeyGen market video and a static-GIF SMS (Wait 90 → Send → repeat). After 365 days with zero engagement → Update stage to Unqualified.</p>
+<h3>6. Unqualified (holding)</h3>
+<p class="lead">No cadence. Apply DND tag where applicable. No outbound actions. Holding stage only.</p>
+
+<h2>5 · Build log — what's stubbed and exactly where</h2>
+<div class="warn">
+Everything below is a <strong>Custom Webhook → N8N</strong> action. To finish each, we need the N8N webhook URL plus the external account auth. Build the webhook action in place now (named exactly as shown) so the skeleton is complete; we fill the URL + auth together.
+<ul>
+<li><strong>Lipdub (personalized video GIF MMS)</strong> — Uncontacted Day 1 (no answer); Contacted-Responded Day 1; and every other Lipdub across the Buyer/Seller pipelines. Needs: Lipdub API auth + N8N flow that generates the named GIF, hosts the video page, and sends the MMS.</li>
+<li><strong>Slybroadcast ringless voicemail</strong> — Uncontacted Day 1 (no answer) and Day 3/Day 7 (fallback to VM). Needs: Slybroadcast credentials in N8N (you already use this).</li>
+<li><strong>AI Agent outbound call</strong> — Uncontacted Day 3 and Day 7. Decide: GHL native AI Agent action vs N8N. Needs: AI call provider auth.</li>
+<li><strong>ManyChat Messenger</strong> — Uncontacted Day 0 (Meta leads only). Needs: ManyChat connection / webhook.</li>
+<li><strong>HeyGen market/explainer videos</strong> — these are sent as normal Emails (NATIVE); only the video asset itself is produced in HeyGen ahead of time, so no live integration needed. Just keep the latest asset linked.</li>
+</ul>
+</div>
+
+<h2>6 · GHL "Build using AI" prompt (paste this for Workflow 1)</h2>
+<p class="lead">Paste into GHL → Automation → Workflows → Build using AI. It scaffolds the Uncontacted sprint; we then add the webhook stubs and Buyer/Seller branches.</p>
+<pre>Create a workflow named "New Leads — 1. Uncontacted (12-day sprint)". Keep it unpublished.
+
+Trigger: contact is added to the New Leads pipeline (or a new contact is created from a form/Facebook lead with no opportunity stage).
+
+Steps in order, using Wait actions for the timing:
+- Day 1: create a task assigned to Adrian titled "Call new lead now — use buyer or seller script", and send Adrian an internal notification.
+- Wait 1 hour, then send an email. Subject: "I just tried to reach you (quick video inside)". Body invites them to watch a short video and book a time, include the calendar link.
+- Wait to Day 2, send SMS: "Hey {{contact.first_name}}, did you get a chance to watch the video? Happy to answer any questions, or grab a time here: [calendar link]".
+- Wait to Day 4, send SMS sharing a short "how I help buyers and sellers in your area" video, include the calendar link.
+- Wait to Day 5, send an email. Subject: "What the market's doing right now (quick video)". Link to the latest market update video.
+- Wait to Day 8, send an email with a client testimonial video.
+- Wait to Day 9, send SMS: "Still thinking about it? No rush. Here's my calendar if you ever want to talk: [calendar link]".
+- Wait to Day 10, create a task assigned to Adrian: "Second personal call, different time of day".
+- Wait to Day 11, send SMS with a short success-story video and the calendar link.
+- Wait to Day 12, send SMS: "Last note for now. If your plans change I'd love to help. Want me to keep you posted on the market? Reply Yes or No".
+- End of Day 12: create a task assigned to Adrian: "Review and route this lead to the correct pipeline stage".
+
+Leave placeholders where I will add: a Day 0 ManyChat step for Facebook leads, voicemail and Lipdub video sends on Day 1 no-answer, and AI calls on Day 3 and Day 7. I will add those as Custom Webhook actions to N8N.</pre>
+
+<footer>Graeham Watts · Intero Real Estate · DRE# 01466876 · Build draft-only until tested · Source of truth: pipeline dashboard (GW_Pipeline_Sequences)</footer>
+</div></body></html>
