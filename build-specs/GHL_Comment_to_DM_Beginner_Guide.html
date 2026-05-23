@@ -1,0 +1,101 @@
+<!DOCTYPE html><html lang="en"><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Beginner Guide: Comment-to-DM Automation in GoHighLevel</title>
+<style>
+:root{--ink:#0f1f2e;--slate:#33475b;--muted:#6b7d8f;--line:#e3e9ef;--bg:#f6f8fa;--card:#fff;--accent:#1f6feb;--accent2:#0d4a8f;--ok:#2da44e;--warn:#bf6b00;--step:#7a3ff0;}
+*{box-sizing:border-box;} body{margin:0;font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,Helvetica,Arial,sans-serif;background:var(--bg);color:var(--ink);line-height:1.6;}
+.wrap{max-width:900px;margin:0 auto;padding:30px 22px 80px;}
+header.hero{background:linear-gradient(135deg,var(--accent2),var(--accent));color:#fff;border-radius:16px;padding:30px 32px;}
+.hero .eyebrow{text-transform:uppercase;letter-spacing:.14em;font-size:12px;font-weight:600;opacity:.85;margin:0;}
+.hero h1{margin:6px 0 6px;font-size:26px;} .hero p{margin:0;font-size:14.5px;opacity:.93;}
+h2{font-size:20px;margin:34px 0 4px;border-bottom:2px solid var(--line);padding-bottom:6px;}
+.lead{color:var(--slate);font-size:14.5px;margin:6px 0 14px;}
+.step{background:var(--card);border:1px solid var(--line);border-left:5px solid var(--step);border-radius:12px;padding:16px 20px;margin-top:14px;}
+.step .n{display:inline-block;background:var(--step);color:#fff;font-weight:700;border-radius:50%;width:26px;height:26px;text-align:center;line-height:26px;font-size:14px;margin-right:8px;}
+.step h3{display:inline;font-size:16px;}
+.step p, .step li{font-size:14.5px;color:var(--slate);}
+.step .where{font-size:12.5px;color:var(--muted);font-style:italic;margin:4px 0 8px;}
+code{background:#eef0f2;padding:1px 6px;border-radius:4px;font-size:13px;}
+.pill{display:inline-block;background:#eaf3ff;color:var(--accent);border-radius:6px;padding:1px 7px;font-size:12.5px;font-weight:600;}
+.ok{background:#e8f6ee;border:1px solid #b6e3c8;border-radius:10px;padding:12px 16px;color:#1d6b3a;font-size:14px;margin-top:12px;}
+.warn{background:#fff3e0;border:1px solid #f0d09b;border-radius:10px;padding:12px 16px;color:#6b4e12;font-size:13.5px;margin-top:12px;}
+.tdl{background:#f0eafe;border:1px solid #d6c6f7;border-radius:10px;padding:12px 16px;font-size:13.5px;margin-top:12px;}
+ul,ol{margin:8px 0 0;padding-left:22px;}
+footer{margin-top:40px;color:var(--muted);font-size:12px;text-align:center;}
+table{width:100%;border-collapse:collapse;margin-top:10px;font-size:13.5px;background:var(--card);border:1px solid var(--line);border-radius:10px;overflow:hidden;}
+th{background:#eef3f8;text-align:left;padding:9px 12px;font-size:12px;text-transform:uppercase;color:var(--slate);}
+td{padding:9px 12px;border-top:1px solid var(--line);vertical-align:top;color:var(--slate);}
+</style></head><body><div class="wrap">
+
+<header class="hero">
+<p class="eyebrow">Graeham Watts · Intero · Beginner Guide</p>
+<h1>Comment-to-DM Automation in GoHighLevel</h1>
+<p>Step-by-step, written for someone who has never built a GHL workflow. When someone comments a keyword on your Instagram or Facebook post, GHL automatically DMs them, asks if they're buying or selling, and drops them into your CRM. Replaces ManyChat. Costs nothing extra.</p>
+</header>
+
+<div class="ok"><b>What you'll end up with:</b> A follower comments "<b>HOME</b>" on your post → they instantly get a friendly DM from you → they tap "Buying" or "Selling" → they're tagged, added to the right pipeline, and enrolled in your New Leads follow-up — all automatically, all inside GHL.</div>
+
+<h2>Before you start — connect your accounts (one-time)</h2>
+<p class="lead">If these aren't done, the automation simply won't fire. Do them once.</p>
+<div class="step"><span class="n">A</span><h3>Connect Facebook + Instagram to GHL</h3>
+<div class="where">GHL → Settings → Integrations</div>
+<p>Click <b>Connect</b> on Facebook, log in, and allow the permissions. Make sure your <b>Instagram is a Business account</b> and is linked to your Facebook Page. You should see both showing "Connected."</p></div>
+<div class="step"><span class="n">B</span><h3>Turn on keyword DMs in Meta</h3>
+<div class="where">business.facebook.com (Meta Business Suite) → Inbox → Automations / settings</div>
+<p>Enable the setting that allows automated replies to comments/keywords. Without this, Meta blocks GHL from sending the DM.</p></div>
+
+<h2>Build the automation (the workflow)</h2>
+<p class="lead">It's a normal GHL <span class="pill">Workflow</span>. Follow these in order. <b>Tip:</b> there's a shortcut — in the workflow templates, look for the <b>"Instagram Comment Automation" Recipe</b> to start with most of this pre-built.</p>
+
+<div class="step"><span class="n">1</span><h3>Create the workflow</h3>
+<div class="where">GHL → Automation → Workflows</div>
+<p>Click <b>+ Create Workflow</b> → <b>Start from Scratch</b>. At the top-left, rename it <code>IG/FB Comment → DM → Qualify</code>.</p></div>
+
+<div class="step"><span class="n">2</span><h3>Add the trigger</h3>
+<p>Click <b>Add New Trigger</b> → choose <b>Instagram Comment on Post</b> (or <b>Facebook</b> for FB posts — you can add both).</p>
+<ul>
+<li>Under <b>Filters</b>, add: <b>Comment</b> → <code>Contains Phrase</code> → type your keyword (e.g., <code>HOME</code>, <code>BUY</code>, or <code>SELL</code>).</li>
+<li>Turn ON <b>"Track First Level Comments Only"</b> (so replies-to-replies don't trigger it).</li>
+<li>Optional: pick a specific post, or leave it to apply to any post.</li>
+</ul></div>
+
+<div class="step"><span class="n">3</span><h3>Add the DM action</h3>
+<div class="where">Click the <b>+</b> on the canvas → Actions → Communication</div>
+<p>Choose <b>Instagram Interactive Messenger</b> (or <b>Facebook Interactive Messenger</b>). Set <b>Reply Type</b> = <b>Reply to Comment via DM</b> — this turns the public comment into a private DM.</p>
+<p>In <b>Message → Body</b>, write something like:<br><em>"Hey! Thanks for commenting 🙌 Are you looking to buy or sell? Tap below and I'll point you in the right direction."</em></p></div>
+
+<div class="step"><span class="n">4</span><h3>Add the qualifying buttons</h3>
+<p>Under the message, add <b>Quick Replies</b> (one-tap options that disappear after tapping):</p>
+<ul><li><code>Buying</code></li><li><code>Selling</code></li><li><code>Just browsing</code></li></ul>
+<p>The moment you add each Quick Reply, GHL <b>automatically creates a branch</b> for it on the canvas — one path per answer.</p></div>
+
+<div class="step"><span class="n">5</span><h3>Set the wait + the "no answer" path</h3>
+<p>The messenger action has a <b>Wait Step</b> (default 1 minute — bump it to something like <b>30 minutes</b> so people have time to tap). If they don't tap, they fall into the <b>Default Timeout</b> branch — add a gentle nudge DM there, or a tag <code>No Response</code>.</p></div>
+
+<div class="step"><span class="n">6</span><h3>Fill in each branch (what happens after they tap)</h3>
+<p>In the <b>Buying</b> branch, add actions:</p>
+<ul>
+<li><b>Add Contact Tag</b> → <code>Buyer</code> and <code>Source: IG Comment</code></li>
+<li><b>Create/Update Opportunity</b> → add to your <b>Buyer pipeline</b> (or New Leads stage)</li>
+<li>(optional) a follow-up DM: <em>"Awesome — what area are you looking in?"</em></li>
+</ul>
+<p>Do the same in the <b>Selling</b> branch with the <code>Seller</code> tag and Seller pipeline. This is what lands the lead in your CRM and feeds your New Leads follow-up.</p></div>
+
+<div class="step"><span class="n">7</span><h3>Save, publish, test</h3>
+<p>Click <b>Save</b>, then flip <b>Publish</b> on (top-right). Test it (see below) before relying on it.</p></div>
+
+<h2>How to test it</h2>
+<div class="warn"><b>You need a real comment to truly test it.</b> From a different account (or ask a teammate), comment your keyword (e.g., "HOME") on the connected post. Within a minute you should get the DM with the buttons. Tap one and confirm the contact shows up in GHL → Contacts with the right tag and pipeline. If nothing happens, re-check the two "Before you start" connections — that's the #1 cause.</div>
+
+<h2>Good to know (limits — these are Meta's rules, not GHL's)</h2>
+<table>
+<tr><th>Limit</th><th>What it means</th></tr>
+<tr><td>24-hour window</td><td>Automated DMs can only send within 24h of the person's last interaction. (Same rule applies to ManyChat.)</td></tr>
+<tr><td>7-day comment reply</td><td>The comment→DM reply must go out within 7 days of the comment.</td></tr>
+<tr><td>Quick Replies + attachments</td><td>You can't put a file attachment and Quick Replies in the same message — send the file in a separate step.</td></tr>
+<tr><td>Business account required</td><td>Instagram must be a Business account linked to your Facebook Page.</td></tr>
+</table>
+
+<div class="tdl"><b>Why we chose this over ManyChat:</b> it does the same comment→DM→qualify→capture flow, it's already included in GHL (no $29/mo), and the lead lands straight in the CRM with no bridge. ManyChat is kept only as a backup if we ever need extra channels (WhatsApp/Telegram) or its slicker flow builder.</div>
+
+<footer>Graeham Watts · Intero Real Estate · Comment-to-DM beginner guide · Companion to the build spec</footer>
+</div></body></html>
