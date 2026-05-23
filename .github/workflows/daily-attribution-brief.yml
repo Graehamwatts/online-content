@@ -153,10 +153,10 @@ jobs:
               return contacts
 
           def get_opportunities(start_dt, end_dt):
-              opps = []
-              start_after_id = None
+              opps, start_after_id = [], None
               start_ms = int(start_dt.timestamp() * 1000)
-              while True:
+              MAX_PAGES = 10  # safety cap: 1000 opps max per window
+              for _page in range(MAX_PAGES):
                   params = {
                       "location_id": LOCATION_ID,
                       "startAfter": start_ms,
@@ -166,26 +166,27 @@ jobs:
                   r = requests.get(f"{GHL_BASE}/opportunities/search",
                                    params=params, headers=headers, timeout=30)
                   if r.status_code != 200:
-                      print(f"Opportunities error: {r.status_code} {r.text[:300]}")
+                      print(f"Opps error {r.status_code}: {r.text[:200]}", flush=True)
                       break
                   data = r.json()
                   batch = data.get("opportunities", [])
-                  filtered = []
+                  past_window = False
                   for o in batch:
                       cat = o.get("createdAt", "")
                       if cat:
                           try:
                               odt = datetime.fromisoformat(cat.replace("Z", "+00:00"))
-                              if start_dt <= odt < end_dt:
-                                  filtered.append(o)
+                              if odt >= end_dt:
+                                  past_window = True
+                                  break
+                              if odt >= start_dt:
+                                  opps.append(o)
                           except Exception:
                               pass
-                  opps.extend(filtered)
-                  print(f"  Opps batch: {len(batch)}, filtered into window: {len(filtered)}")
-                  if len(batch) < 100:
+                  print(f"  Opps batch {_page+1}: {len(batch)} fetched, {len(opps)} in window total", flush=True)
+                  if past_window or len(batch) < 100:
                       break
-                  last = batch[-1]
-                  start_after_id = last.get("id")
+                  start_after_id = batch[-1].get("id") if batch else None
               return opps
 
           def bucket_source(contact, custom_field_map):
