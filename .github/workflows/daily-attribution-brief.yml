@@ -102,13 +102,16 @@ jobs:
               return stage_map
 
           def get_contacts(start_dt, end_dt):
-              contacts = []
-              page = 1
-              while True:
+              """Fetch contacts in window. Sorts DESC by dateAdded so newest come first — exits as soon as batch hits older than window."""
+              contacts, page = [], 1
+              MAX_PAGES = 50  # safety cap
+              while page <= MAX_PAGES:
                   payload = {
                       "locationId": LOCATION_ID,
                       "page": page,
-                      "pageLimit": 100
+                      "pageLimit": 100,
+                      "sort": "dateAdded",
+                      "sortDirection": "DESC"
                   }
                   r = requests.post(f"{GHL_BASE}/contacts/search",
                                     headers=headers, json=payload, timeout=30)
@@ -119,26 +122,24 @@ jobs:
                   batch = data.get("contacts", [])
                   if not batch:
                       break
-                  oldest_in_batch = None
-                  found_any = False
+                  past_window = False
                   for c in batch:
                       da = c.get("dateAdded", "")
                       if da:
                           try:
                               cdt = datetime.fromisoformat(da.replace("Z", "+00:00"))
-                              if oldest_in_batch is None or cdt < oldest_in_batch:
-                                  oldest_in_batch = cdt
-                              if start_dt <= cdt < end_dt:
-                                  contacts.append(c)
-                                  found_any = True
+                              if cdt >= end_dt:
+                                  continue  # newer than window, skip
+                              if cdt < start_dt:
+                                  past_window = True
+                                  break  # rest of batch and subsequent pages are older
+                              contacts.append(c)
                           except Exception:
                               pass
                   meta = data.get("meta", {})
                   total = meta.get("total", 0)
                   print(f"  Contacts page {page}: {len(batch)} fetched, {len(contacts)} in window (total={total})")
-                  if len(batch) < 100:
-                      break
-                  if oldest_in_batch and oldest_in_batch < start_dt and not found_any:
+                  if past_window or len(batch) < 100:
                       break
                   page += 1
               return contacts
