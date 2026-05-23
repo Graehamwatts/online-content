@@ -38,428 +38,74 @@ jobs:
           WEEK_START_OVERRIDE: ${{ github.event.inputs.week_start_override }}
         run: |
           python3 << 'PYEOF'
-          import requests, json, os, sys
+          import requests, os, sys, json
           from datetime import datetime, timedelta, timezone
           import pytz
-
+          
+          print("=== GHL API DIAGNOSTIC ===", flush=True)
+          
           PT = pytz.timezone("America/Los_Angeles")
           GHL_PIT = os.environ["GHL_PIT"]
           LOCATION_ID = os.environ["GHL_LOCATION_ID"]
-          GHL_BASE = os.environ.get("GHL_API_BASE", "https://services.leadconnectorhq.com")
-          GHL_VERSION = os.environ.get("GHL_VERSION", "2021-07-28")
-          WEEK_START_OVERRIDE = os.environ.get("WEEK_START_OVERRIDE","").strip()
-
+          GHL_BASE = "https://services.leadconnectorhq.com"
+          
           headers = {
               "Authorization": f"Bearer {GHL_PIT}",
-              "Version": GHL_VERSION,
+              "Version": "2021-07-28",
               "Content-Type": "application/json"
           }
-
-          now_pt = datetime.now(PT)
-
-          # Determine this week window: Monday 00:00 PT → Friday 16:00 PT
-          if WEEK_START_OVERRIDE:
-              week_start = PT.localize(datetime.strptime(WEEK_START_OVERRIDE, "%Y-%m-%d"))
-          else:
-              # Find most recent Monday
-              days_since_monday = now_pt.weekday()  # 0=Mon
-              week_start = (now_pt - timedelta(days=days_since_monday)).replace(
-                  hour=0, minute=0, second=0, microsecond=0)
-          week_end = week_start + timedelta(days=4, hours=16)  # Friday 4:00 PM
-
-          start_ts = int(week_start.astimezone(timezone.utc).timestamp() * 1000)
-          end_ts = int(week_end.astimezone(timezone.utc).timestamp() * 1000)
-          week_start_utc = week_start.astimezone(timezone.utc)
-          week_end_utc = week_end.astimezone(timezone.utc)
-
-          # Prior week
-          prior_start = week_start - timedelta(days=7)
-          prior_end = week_end - timedelta(days=7)
-          prior_start_ts = int(prior_start.astimezone(timezone.utc).timestamp() * 1000)
-          prior_end_ts = int(prior_end.astimezone(timezone.utc).timestamp() * 1000)
-          prior_start_utc = prior_start.astimezone(timezone.utc)
-          prior_end_utc = prior_end.astimezone(timezone.utc)
-
-          date_slug = now_pt.strftime("%Y-%m-%d")
-          week_label = f"{week_start.strftime('%b %-d')} – {week_end.strftime('%b %-d, %Y')}"
-          prior_label = f"{prior_start.strftime('%b %-d')} – {prior_end.strftime('%b %-d, %Y')}"
-
-          print(f"This week: {week_start} → {week_end}")
-          print(f"Prior week: {prior_start} → {prior_end}")
-
-          def get_custom_fields():
-              r = requests.get(f"{GHL_BASE}/locations/{LOCATION_ID}/customFields",
-                               headers=headers, timeout=30)
-              if r.status_code != 200:
-                  return {}
-              return {f["id"]: f.get("name","") for f in r.json().get("customFields", [])}
-
-          def get_pipelines():
-              r = requests.get(f"{GHL_BASE}/opportunities/pipelines",
-                               params={"locationId": LOCATION_ID},
-                               headers=headers, timeout=30)
-              if r.status_code != 200:
-                  return {}
-              stage_map = {}
-              for p in r.json().get("pipelines", []):
-                  for s in p.get("stages", []):
-                      stage_map[s["id"]] = s.get("name","")
-              return stage_map
-
-          def get_contacts(start_dt, end_dt):
-              """Use GET /contacts with startAfter cursor — starts at window boundary, never pages through old contacts."""
-              contacts = []
-              start_ms = int(start_dt.timestamp() * 1000)
-              end_ms   = int(end_dt.timestamp() * 1000)
-              start_after_ms = start_ms
-              start_after_id = ""
-              MAX_PAGES = 20
-              for page in range(1, MAX_PAGES + 1):
-                  params = {
-                      "locationId": LOCATION_ID,
-                      "startAfter": start_after_ms,
-                      "startAfterId": start_after_id,
-                      "limit": 100
-                  }
-                  r = requests.get(f"{GHL_BASE}/contacts",
-                                   params=params, headers=headers, timeout=30)
-                  if r.status_code != 200:
-                      print(f"Contacts error {r.status_code}: {r.text[:200]}")
-                      break
-                  data = r.json()
-                  batch = data.get("contacts", [])
-                  if not batch:
-                      break
-                  past_window = False
-                  for c in batch:
-                      da = c.get("dateAdded", "")
-                      if da:
-                          try:
-                              cdt = datetime.fromisoformat(da.replace("Z", "+00:00"))
-                              if cdt >= end_dt:
-                                  past_window = True
-                                  break
-                              contacts.append(c)
-                          except Exception:
-                              pass
-                  print(f"  Contacts page {page}: {len(batch)} fetched, {len(contacts)} in window so far")
-                  if past_window or len(batch) < 100:
-                      break
-                  # Advance cursor to last contact's dateAdded + id
-                  last = batch[-1]
-                  last_da = last.get("dateAdded", "")
-                  if last_da:
-                      try:
-                          start_after_ms = int(datetime.fromisoformat(last_da.replace("Z", "+00:00")).timestamp() * 1000)
-                      except Exception:
-                          break
-                  start_after_id = last.get("id", "")
-              return contacts
-
-          def get_opportunities(start_dt, end_dt):
-              opps, start_after_id = [], None
-              start_ms = int(start_dt.timestamp() * 1000)
-              while True:
-                  params = {
-                      "location_id": LOCATION_ID,
-                      "startAfter": start_ms,
-                      "startAfterId": start_after_id or "",
-                      "limit": 100
-                  }
-                  r = requests.get(f"{GHL_BASE}/opportunities/search",
-                                   params=params, headers=headers, timeout=30)
-                  if r.status_code != 200:
-                      print(f"Opps error {r.status_code}")
-                      break
-                  data = r.json()
-                  batch = data.get("opportunities", [])
-                  filtered = []
-                  for o in batch:
-                      cat = o.get("createdAt", "")
-                      if cat:
-                          try:
-                              odt = datetime.fromisoformat(cat.replace("Z", "+00:00"))
-                              if start_dt <= odt < end_dt:
-                                  filtered.append(o)
-                          except Exception:
-                              pass
-                  opps.extend(filtered)
-                  if len(batch) < 100:
-                      break
-                  start_after_id = batch[-1].get("id")
-              return opps
-
-          def bucket_source(contact, cf_map):
-              src = (contact.get("source") or "").lower()
-              attr = (contact.get("attributionSource") or "").lower()
-              csrc = (contact.get("contactSource") or "").lower()
-              utm_source = utm_medium = utm_campaign = ""
-              for cf in (contact.get("customFields") or []):
-                  fn = cf_map.get(cf.get("id",""),"").lower()
-                  val = (cf.get("value") or "").lower()
-                  if "utm_source" in fn: utm_source = val
-                  elif "utm_medium" in fn: utm_medium = val
-                  elif "utm_campaign" in fn: utm_campaign = val
-              all_text = f"{src} {attr} {csrc} {utm_source} {utm_medium} {utm_campaign}"
-              if any(x in all_text for x in ["gmb","google business","google my business","maps"]):
-                  return "GMB"
-              if any(x in all_text for x in ["cpc","paid","adword","google ads","meta ads","facebook ads","fb ads","instagram ads"]) or utm_medium in ["cpc","paid","ppc"]:
-                  return "Paid Ads"
-              if any(x in all_text for x in ["organic","seo","google search","search"]) or utm_medium == "organic":
-                  return "Organic/SEO"
-              if any(x in all_text for x in ["instagram","facebook","youtube","tiktok","social","ig","fb","yt"]) and "paid" not in all_text:
-                  return "Social Organic"
-              if any(x in all_text for x in ["referral","refer","sphere","past client","agent"]):
-                  return "Referral"
-              if any(x in all_text for x in ["website","form","direct","web","landing"]):
-                  return "Direct/Form"
-              if "cold" in all_text or "manually added" in all_text or "import" in all_text:
-                  return "Cold/Other"
-              return "Unknown"
-
-          # Fetch all data
-          print("Fetching metadata...", flush=True)
-          cf_map = get_custom_fields()
-          stage_map = get_pipelines()
-          won_ids = {sid for sid, sn in stage_map.items() if any(w in sn.lower() for w in ["won","closed","closed won","sold"])}
-          appt_ids = {sid for sid, sn in stage_map.items() if any(w in sn.lower() for w in ["appointment","appt","set","booked"])}
-
-          print(f"Fetching this week's data ({week_label})...")
-          contacts = get_contacts(week_start_utc, week_end_utc)
-          opps = get_opportunities(week_start_utc, week_end_utc)
-
-          print(f"Fetching prior week's data ({prior_label})...")
-          prior_contacts = get_contacts(prior_start_utc, prior_end_utc)
-          prior_opps = get_opportunities(prior_start_utc, prior_end_utc)
-
-          # Build source funnel data
-          BUCKETS = ["Organic/SEO","GMB","Paid Ads","Social Organic","Referral","Direct/Form","Cold/Other","Unknown"]
-          source_this = {b: {"leads":0,"appts":0,"opps":0,"won":0} for b in BUCKETS}
-          source_prior = {b: {"leads":0} for b in BUCKETS}
-
-          for c in contacts:
-              b = bucket_source(c, cf_map)
-              source_this[b]["leads"] += 1
-          for c in prior_contacts:
-              b = bucket_source(c, cf_map)
-              source_prior[b]["leads"] += 1
-
-          for o in opps:
-              stage = o.get("pipelineStageId","")
-              status = o.get("status","")
-              # Try to get linked contact source
-              contact_id = o.get("contactId","")
-              b = "Unknown"
-              if stage in appt_ids:
-                  source_this[b]["appts"] += 1
-              if stage in won_ids or status == "won":
-                  source_this[b]["won"] += 1
-              source_this[b]["opps"] += 1
-
-          total_leads = len(contacts)
-          total_opps = len(opps)
-          total_wins = len([o for o in opps if o.get("status")=="won" or o.get("pipelineStageId","") in won_ids])
-          total_appts = len([o for o in opps if o.get("pipelineStageId","") in appt_ids])
-
-          prior_leads = len(prior_contacts)
-          prior_wins = len([o for o in prior_opps if o.get("status")=="won" or o.get("pipelineStageId","") in won_ids])
-
-          # WoW delta
-          lead_delta = total_leads - prior_leads
-          win_delta = total_wins - prior_wins
-          lead_delta_str = f"+{lead_delta}" if lead_delta >= 0 else str(lead_delta)
-
-          # Status color
-          if prior_leads == 0:
-              status_color = "#22c55e"; status_label_txt = "Baseline week"
-          elif total_leads >= prior_leads:
-              status_color = "#22c55e"; status_label_txt = f"Up {lead_delta_str} leads vs prior week"
-          elif total_leads >= prior_leads * 0.75:
-              status_color = "#f4b955"; status_label_txt = f"Down {abs(lead_delta)} leads vs prior week"
-          else:
-              status_color = "#ef4444"; status_label_txt = f"Significantly down {abs(lead_delta)} leads vs prior week"
-
-          # Top / Bottom sources by lead count
-          active_sources = [(b, source_this[b]["leads"]) for b in BUCKETS if source_this[b]["leads"] > 0]
-          active_sources.sort(key=lambda x: -x[1])
-          top_sources = active_sources[:3]
-          bottom_sources = list(reversed(active_sources[-3:])) if len(active_sources) > 3 else []
-
-          # Top source
-          top_source = top_sources[0][0] if top_sources else "None"
-
-          # Anomalies (>50% WoW swing)
-          anomalies = []
-          for b in BUCKETS:
-              this_w = source_this[b]["leads"]
-              prior_w = source_prior[b]["leads"]
-              if prior_w > 0 and abs(this_w - prior_w) / prior_w > 0.5:
-                  direction = "up" if this_w > prior_w else "down"
-                  pct = abs(round((this_w - prior_w) / prior_w * 100))
-                  anomalies.append(f"<strong>{b}</strong> {direction} {pct}% ({prior_w}→{this_w})")
-
-          # Narrative
-          if total_leads == 0:
-              narrative = f"No leads came in this week ({week_label}). Prior week had {prior_leads}. Something may be broken — check automations, website forms, and any paid campaigns."
-          else:
-              narrative = f"This week ({week_label}) generated <strong>{total_leads}</strong> new lead{'s' if total_leads != 1 else ''} — {lead_delta_str} vs the prior week. "
-              if top_sources:
-                  narrative += f"The strongest channel was <strong>{top_sources[0][0]}</strong> with {top_sources[0][1]} leads. "
-              if total_wins:
-                  narrative += f"<strong>{total_wins}</strong> deal{'s' if total_wins != 1 else ''} closed this week. "
-              if anomalies:
-                  narrative += f"Notable movement: {'; '.join(anomalies[:2])}."
-
-          # Decision block
-          decision_html = ""
-          if bottom_sources:
-              worst = bottom_sources[0]
-              if worst[1] == 0:
-                  decision_html = f'<div style="background:#1a0a0a;border:1px solid #ef4444;border-radius:8px;padding:16px;margin-bottom:16px"><div style="color:#ef4444;font-weight:700;margin-bottom:6px">⚠ Decision Required</div><p style="color:#fca5a5;font-size:14px"><strong>{worst[0]}</strong> produced 0 leads this week. Verify the channel is still active or consider reallocating budget/effort.</p></div>'
-
-          # Source performance table
-          source_rows = ""
-          for b in BUCKETS:
-              tw = source_this[b]
-              if tw["leads"] == 0 and source_prior[b]["leads"] == 0:
-                  continue
-              prior_l = source_prior[b]["leads"]
-              wow_delta = tw["leads"] - prior_l
-              wow_str = (f'<span style="color:#22c55e">+{wow_delta}</span>' if wow_delta > 0
-                         else (f'<span style="color:#ef4444">{wow_delta}</span>' if wow_delta < 0
-                               else '0'))
-              l2a = f'{round(tw["appts"]/tw["leads"]*100)}%' if tw["leads"] else "—"
-              a2o = f'{round(tw["opps"]/tw["appts"]*100)}%' if tw["appts"] else "—"
-              o2w = f'{round(tw["won"]/tw["opps"]*100)}%' if tw["opps"] else "—"
-              source_rows += f"""
-              <tr>
-                <td style="padding:10px 12px;border-bottom:1px solid #1e293b;font-weight:500">{b}</td>
-                <td style="padding:10px 12px;border-bottom:1px solid #1e293b;text-align:center;color:#f4b955;font-weight:700">{tw['leads']}</td>
-                <td style="padding:10px 12px;border-bottom:1px solid #1e293b;text-align:center">{wow_str}</td>
-                <td style="padding:10px 12px;border-bottom:1px solid #1e293b;text-align:center;color:#94a3b8">{tw['appts']}</td>
-                <td style="padding:10px 12px;border-bottom:1px solid #1e293b;text-align:center;color:#94a3b8">{tw['opps']}</td>
-                <td style="padding:10px 12px;border-bottom:1px solid #1e293b;text-align:center;color:#22c55e">{tw['won']}</td>
-              </tr>"""
-
-          # Funnel SVG
-          funnel_data = [("Leads",total_leads),("Appt Set",total_appts),("Opps",total_opps),("Won",total_wins)]
-          max_v = max(v for _,v in funnel_data) if any(v for _,v in funnel_data) else 1
-          funnel_html = ""
-          for label, val in funnel_data:
-              w = max(4, int(val/max_v*400)) if max_v else 4
-              pct = f"({round(val/funnel_data[0][1]*100)}%)" if funnel_data[0][1] else ""
-              funnel_html += f"""
-              <div style="margin:10px 0;display:flex;align-items:center;gap:12px">
-                <div style="width:90px;text-align:right;color:#94a3b8;font-size:13px">{label}</div>
-                <div style="background:#f4b955;height:32px;width:{w}px;border-radius:4px;display:flex;align-items:center;padding:0 10px;box-sizing:border-box">
-                  <span style="color:#0f1729;font-weight:700">{val}</span>
-                </div>
-                <span style="color:#64748b;font-size:12px">{pct}</span>
-              </div>"""
-
-          # Top 3 / Bottom 3 html
-          top3_html = ""
-          for rank, (src, cnt) in enumerate(top_sources, 1):
-              top3_html += f'<div style="padding:8px 0;border-bottom:1px solid #1e293b"><span style="color:#f4b955;font-weight:700">#{rank} {src}</span> — {cnt} leads this week</div>'
-          bottom3_html = ""
-          for rank, (src, cnt) in enumerate(bottom_sources, 1):
-              bottom3_html += f'<div style="padding:8px 0;border-bottom:1px solid #1e293b"><span style="color:#94a3b8;font-weight:600">{src}</span> — {cnt} leads (investigate or deprioritize)</div>'
-
-          html = f"""<!DOCTYPE html>
-          <html lang="en">
-          <head>
-          <meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1">
-          <title>Weekly Attribution Review · {week_label}</title>
-          <link rel="preconnect" href="https://fonts.googleapis.com">
-          <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700&display=swap" rel="stylesheet">
-          <style>
-            *{{box-sizing:border-box;margin:0;padding:0}}
-            body{{font-family:'DM Sans',sans-serif;background:#060d1a;color:#e2e8f0;min-height:100vh}}
-            .wrap{{max-width:720px;margin:0 auto;padding:24px 16px}}
-            .topbar{{background:#0f1729;border:1px solid #1e293b;border-radius:8px;padding:10px 16px;font-size:13px;color:#94a3b8;margin-bottom:20px;display:flex;justify-content:space-between}}
-            .topbar strong{{color:#f4b955}}
-            .header{{background:linear-gradient(135deg,#0f1729,#162032);border:1px solid #1e293b;border-radius:12px;padding:24px;margin-bottom:16px}}
-            .header h1{{font-size:22px;font-weight:700;color:#f1f5f9}}
-            .header .sub{{font-size:14px;color:#94a3b8;margin-top:4px}}
-            .status-strip{{border-radius:6px;padding:8px 16px;margin-bottom:16px;font-weight:600;font-size:14px;color:#0f1729;background:{status_color}}}
-            .kpi-grid{{display:grid;grid-template-columns:repeat(2,1fr);gap:12px;margin-bottom:16px}}
-            @media(min-width:500px){{.kpi-grid{{grid-template-columns:repeat(4,1fr)}}}}
-            .kpi{{background:#0f1729;border:1px solid #1e293b;border-radius:10px;padding:16px;text-align:center}}
-            .kpi .num{{font-size:28px;font-weight:700;color:#f4b955}}
-            .kpi .label{{font-size:12px;color:#94a3b8;margin-top:4px}}
-            .section{{background:#0f1729;border:1px solid #1e293b;border-radius:10px;padding:20px;margin-bottom:16px}}
-            .section h2{{font-size:15px;font-weight:700;color:#f4b955;margin-bottom:12px;text-transform:uppercase;letter-spacing:.05em}}
-            .read-text{{font-size:15px;line-height:1.7;color:#cbd5e1}}
-            table{{width:100%;border-collapse:collapse}}
-            th{{text-align:left;padding:10px 12px;background:#162032;color:#94a3b8;font-size:12px;text-transform:uppercase;letter-spacing:.05em}}
-            td{{vertical-align:middle}}
-            .footer{{text-align:center;padding:24px 0;color:#475569;font-size:13px}}
-          </style>
-          </head>
-          <body>
-          <div class="wrap">
-            <div class="topbar">
-              <span><strong>Weekly Attribution Review</strong> · Week of {week_start.strftime('%b %-d')}</span>
-              <span>{week_label}</span>
-            </div>
-            <div class="header">
-              <h1>Weekly Lead Attribution Review</h1>
-              <div class="sub">{week_label} · Prior week: {prior_label}</div>
-            </div>
-            <div class="status-strip">{status_label_txt}</div>
-            <div class="kpi-grid">
-              <div class="kpi"><div class="num">{total_leads}</div><div class="label">Total Leads</div></div>
-              <div class="kpi"><div class="num">{total_appts}</div><div class="label">Appts Set</div></div>
-              <div class="kpi"><div class="num">{total_opps}</div><div class="label">New Opps</div></div>
-              <div class="kpi"><div class="num">{total_wins}</div><div class="label">Closed Wins</div></div>
-            </div>
-            {decision_html}
-            <div class="section">
-              <h2>The Read</h2>
-              <p class="read-text">{narrative}</p>
-            </div>
-            <div class="section">
-              <h2>Source Performance</h2>
-              <table>
-                <thead><tr>
-                  <th>Source</th><th style="text-align:center">Leads</th><th style="text-align:center">WoW</th>
-                  <th style="text-align:center">Appts</th><th style="text-align:center">Opps</th><th style="text-align:center">Won</th>
-                </tr></thead>
-                <tbody>{source_rows if source_rows else '<tr><td colspan="6" style="padding:16px;color:#94a3b8;text-align:center">No leads this week</td></tr>'}</tbody>
-              </table>
-            </div>
-            <div class="section">
-              <h2>Funnel Overview</h2>
-              {funnel_html}
-            </div>
-            <div style="display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-bottom:16px">
-              <div class="section">
-                <h2>Top 3 Sources</h2>
-                {top3_html if top3_html else '<p style="color:#94a3b8;font-size:14px">No data</p>'}
-              </div>
-              <div class="section">
-                <h2>Bottom Sources</h2>
-                {bottom3_html if bottom3_html else '<p style="color:#94a3b8;font-size:14px">Need more data</p>'}
-              </div>
-            </div>
-            <div class="footer">
-              Graeham Watts · Intero Real Estate · graehamwatts@gmail.com<br>
-              Generated {now_pt.strftime('%Y-%m-%d %H:%M PT')}
-            </div>
-          </div>
-          </body></html>"""
-
-          output_path = f"dashboards/attribution/{date_slug}-weekly.html"
-          os.makedirs("dashboards/attribution", exist_ok=True)
-          with open(output_path, "w", encoding="utf-8") as f:
-              f.write(html)
-          print(f"Wrote {output_path} ({len(html)} chars)")
-
-          with open(os.environ.get("GITHUB_OUTPUT",""), "a") as go:
-              go.write(f"output_path={output_path}\n")
-              go.write(f"date_slug={date_slug}\n")
-              go.write(f"total_leads={total_leads}\n")
-              go.write(f"top_source={top_source}\n")
+          
+          # Window: Mon this week → now
+          now_utc = datetime.now(timezone.utc)
+          week_start_utc = (now_utc - timedelta(days=6)).replace(hour=0,minute=0,second=0,microsecond=0)
+          start_ms = int(week_start_utc.timestamp() * 1000)
+          print(f"Window start: {week_start_utc} ({start_ms})", flush=True)
+          
+          def test_call(name, fn):
+              print(f"
+--- TEST: {name} ---", flush=True)
+              try:
+                  r = fn()
+                  print(f"  Status: {r.status_code}", flush=True)
+                  print(f"  Body[:300]: {r.text[:300]}", flush=True)
+                  return r
+              except Exception as e:
+                  print(f"  EXCEPTION: {type(e).__name__}: {e}", flush=True)
+                  return None
+          
+          # 1. Custom fields
+          test_call("GET /locations/{id}/customFields",
+              lambda: requests.get(f"{GHL_BASE}/locations/{LOCATION_ID}/customFields",
+                                   headers=headers, timeout=(5,15)))
+          
+          # 2. Pipelines
+          test_call("GET /opportunities/pipelines",
+              lambda: requests.get(f"{GHL_BASE}/opportunities/pipelines",
+                                   params={"locationId": LOCATION_ID},
+                                   headers=headers, timeout=(5,15)))
+          
+          # 3. GET /contacts with startAfter (NEW endpoint)
+          test_call("GET /contacts?startAfter=<week_start>",
+              lambda: requests.get(f"{GHL_BASE}/contacts",
+                                   params={"locationId": LOCATION_ID, "startAfter": start_ms, "limit": 5},
+                                   headers=headers, timeout=(5,15)))
+          
+          # 4. POST /contacts/search (old endpoint, no filters)
+          test_call("POST /contacts/search (no filters, limit 5)",
+              lambda: requests.post(f"{GHL_BASE}/contacts/search",
+                                    headers=headers,
+                                    json={"locationId": LOCATION_ID, "page": 1, "pageLimit": 5},
+                                    timeout=(5,15)))
+          
+          # 5. GET /opportunities/search
+          test_call("GET /opportunities/search",
+              lambda: requests.get(f"{GHL_BASE}/opportunities/search",
+                                   params={"location_id": LOCATION_ID, "startAfter": start_ms, "limit": 5},
+                                   headers=headers, timeout=(5,15)))
+          
+          print("
+=== DIAGNOSTIC COMPLETE ===", flush=True)
+          
           PYEOF
 
       - name: Commit and push dashboard
