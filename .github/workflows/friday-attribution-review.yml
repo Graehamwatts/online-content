@@ -62,8 +62,7 @@ jobs:
           print(f"Window start: {week_start_utc} ({start_ms})", flush=True)
           
           def test_call(name, fn):
-              print(f"
---- TEST: {name} ---", flush=True)
+              print(f"--- TEST: {name} ---", flush=True)
               try:
                   r = fn()
                   print(f"  Status: {r.status_code}", flush=True)
@@ -103,8 +102,7 @@ jobs:
                                    params={"location_id": LOCATION_ID, "startAfter": start_ms, "limit": 5},
                                    headers=headers, timeout=(5,15)))
           
-          print("
-=== DIAGNOSTIC COMPLETE ===", flush=True)
+          print("\n=== DIAGNOSTIC COMPLETE ===", flush=True)
           
           PYEOF
 
