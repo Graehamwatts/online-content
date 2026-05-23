@@ -428,6 +428,7 @@ jobs:
         run: |
           git config user.email "graehamwatts@gmail.com"
           git config user.name "Graeham Watts"
+          git remote set-url origin https://x-access-token:${{ secrets.GITHUB_TOKEN }}@github.com/Graehamwatts/online-content.git
           git add dashboards/attribution/
           git diff --staged --quiet || git commit -m "Weekly Attribution Review: ${{ steps.generate.outputs.date_slug }}"
           git push
