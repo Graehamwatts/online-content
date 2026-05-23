@@ -34,6 +34,7 @@ jobs:
         env:
           GHL_PIT: ${{ secrets.GHL_PIT }}
           GHL_LOCATION_ID: ${{ secrets.GHL_LOCATION_ID }}
+          PYTHONUNBUFFERED: "1"
           DATE_OVERRIDE: ${{ github.event.inputs.date_override }}
           GMAIL_ADDRESS: graehamwatts@gmail.com
         run: |

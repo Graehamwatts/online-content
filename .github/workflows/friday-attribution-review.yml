@@ -34,6 +34,7 @@ jobs:
         env:
           GHL_PIT: ${{ secrets.GHL_PIT }}
           GHL_LOCATION_ID: ${{ secrets.GHL_LOCATION_ID }}
+          PYTHONUNBUFFERED: "1"
           WEEK_START_OVERRIDE: ${{ github.event.inputs.week_start_override }}
         run: |
           python3 << 'PYEOF'
@@ -217,7 +218,7 @@ jobs:
               return "Unknown"
 
           # Fetch all data
-          print("Fetching metadata...")
+          print("Fetching metadata...", flush=True)
           cf_map = get_custom_fields()
           stage_map = get_pipelines()
           won_ids = {sid for sid, sn in stage_map.items() if any(w in sn.lower() for w in ["won","closed","closed won","sold"])}
