@@ -106,19 +106,22 @@ jobs:
               return stage_map
 
           def get_contacts(start_dt, end_dt):
-              """Fetch contacts in window. Sorts DESC by dateAdded so newest come first — exits as soon as batch oldest > window."""
-              contacts, page = [], 1
-              MAX_PAGES = 50  # safety cap: 5000 contacts max
-              while page <= MAX_PAGES:
-                  payload = {
+              """Use GET /contacts with startAfter cursor — starts at window boundary, never pages through old contacts."""
+              contacts = []
+              start_ms = int(start_dt.timestamp() * 1000)
+              end_ms   = int(end_dt.timestamp() * 1000)
+              start_after_ms = start_ms
+              start_after_id = ""
+              MAX_PAGES = 20
+              for page in range(1, MAX_PAGES + 1):
+                  params = {
                       "locationId": LOCATION_ID,
-                      "page": page,
-                      "pageLimit": 100,
-                      "sort": "dateAdded",
-                      "sortDirection": "DESC"
+                      "startAfter": start_after_ms,
+                      "startAfterId": start_after_id,
+                      "limit": 100
                   }
-                  r = requests.post(f"{GHL_BASE}/contacts/search",
-                                    headers=headers, json=payload, timeout=30)
+                  r = requests.get(f"{GHL_BASE}/contacts",
+                                   params=params, headers=headers, timeout=30)
                   if r.status_code != 200:
                       print(f"Contacts error {r.status_code}: {r.text[:200]}")
                       break
@@ -133,18 +136,23 @@ jobs:
                           try:
                               cdt = datetime.fromisoformat(da.replace("Z", "+00:00"))
                               if cdt >= end_dt:
-                                  continue  # newer than window, skip
-                              if cdt < start_dt:
                                   past_window = True
-                                  break  # rest of batch (and all subsequent pages) are older
+                                  break
                               contacts.append(c)
                           except Exception:
                               pass
-                  total = data.get("meta", {}).get("total", 0)
-                  print(f"  Contacts page {page}: {len(batch)} fetched, {len(contacts)} in window (total={total})")
+                  print(f"  Contacts page {page}: {len(batch)} fetched, {len(contacts)} in window so far")
                   if past_window or len(batch) < 100:
                       break
-                  page += 1
+                  # Advance cursor to last contact's dateAdded + id
+                  last = batch[-1]
+                  last_da = last.get("dateAdded", "")
+                  if last_da:
+                      try:
+                          start_after_ms = int(datetime.fromisoformat(last_da.replace("Z", "+00:00")).timestamp() * 1000)
+                      except Exception:
+                          break
+                  start_after_id = last.get("id", "")
               return contacts
 
           def get_opportunities(start_dt, end_dt):
