@@ -68,12 +68,16 @@ jobs:
 
           start_ts = int(week_start.astimezone(timezone.utc).timestamp() * 1000)
           end_ts = int(week_end.astimezone(timezone.utc).timestamp() * 1000)
+          week_start_utc = week_start.astimezone(timezone.utc)
+          week_end_utc = week_end.astimezone(timezone.utc)
 
           # Prior week
           prior_start = week_start - timedelta(days=7)
           prior_end = week_end - timedelta(days=7)
           prior_start_ts = int(prior_start.astimezone(timezone.utc).timestamp() * 1000)
           prior_end_ts = int(prior_end.astimezone(timezone.utc).timestamp() * 1000)
+          prior_start_utc = prior_start.astimezone(timezone.utc)
+          prior_end_utc = prior_end.astimezone(timezone.utc)
 
           date_slug = now_pt.strftime("%Y-%m-%d")
           week_label = f"{week_start.strftime('%b %-d')} – {week_end.strftime('%b %-d, %Y')}"
@@ -101,15 +105,11 @@ jobs:
                       stage_map[s["id"]] = s.get("name","")
               return stage_map
 
-          def get_contacts(start_ms, end_ms):
+          def get_contacts(start_dt, end_dt):
               contacts, page = [], 1
               while True:
                   payload = {
                       "locationId": LOCATION_ID,
-                      "filters": [
-                          {"field":"dateAdded","operator":"gte","value":str(start_ms)},
-                          {"field":"dateAdded","operator":"lte","value":str(end_ms)}
-                      ],
                       "page": page, "pageLimit": 100
                   }
                   r = requests.post(f"{GHL_BASE}/contacts/search",
@@ -119,16 +119,34 @@ jobs:
                       break
                   data = r.json()
                   batch = data.get("contacts", [])
-                  contacts.extend(batch)
+                  if not batch:
+                      break
+                  oldest_in_batch = None
+                  found_any = False
+                  for c in batch:
+                      da = c.get("dateAdded", "")
+                      if da:
+                          try:
+                              cdt = datetime.fromisoformat(da.replace("Z", "+00:00"))
+                              if oldest_in_batch is None or cdt < oldest_in_batch:
+                                  oldest_in_batch = cdt
+                              if start_dt <= cdt < end_dt:
+                                  contacts.append(c)
+                                  found_any = True
+                          except Exception:
+                              pass
                   total = data.get("meta", {}).get("total", 0)
-                  print(f"  Contacts page {page}: {len(batch)} / {total}")
-                  if len(contacts) >= total or len(batch) == 0:
+                  print(f"  Contacts page {page}: {len(batch)} fetched, {len(contacts)} in window / {total}")
+                  if len(batch) < 100:
+                      break
+                  if oldest_in_batch and oldest_in_batch < start_dt and not found_any:
                       break
                   page += 1
               return contacts
 
-          def get_opportunities(start_ms, end_ms):
+          def get_opportunities(start_dt, end_dt):
               opps, start_after_id = [], None
+              start_ms = int(start_dt.timestamp() * 1000)
               while True:
                   params = {
                       "location_id": LOCATION_ID,
@@ -143,8 +161,16 @@ jobs:
                       break
                   data = r.json()
                   batch = data.get("opportunities", [])
-                  filtered = [o for o in batch
-                              if start_ms <= int(o.get("createdAt",0) or 0) < end_ms]
+                  filtered = []
+                  for o in batch:
+                      cat = o.get("createdAt", "")
+                      if cat:
+                          try:
+                              odt = datetime.fromisoformat(cat.replace("Z", "+00:00"))
+                              if start_dt <= odt < end_dt:
+                                  filtered.append(o)
+                          except Exception:
+                              pass
                   opps.extend(filtered)
                   if len(batch) < 100:
                       break
@@ -187,12 +213,12 @@ jobs:
           appt_ids = {sid for sid, sn in stage_map.items() if any(w in sn.lower() for w in ["appointment","appt","set","booked"])}
 
           print(f"Fetching this week's data ({week_label})...")
-          contacts = get_contacts(start_ts, end_ts)
-          opps = get_opportunities(start_ts, end_ts)
+          contacts = get_contacts(week_start_utc, week_end_utc)
+          opps = get_opportunities(week_start_utc, week_end_utc)
 
           print(f"Fetching prior week's data ({prior_label})...")
-          prior_contacts = get_contacts(prior_start_ts, prior_end_ts)
-          prior_opps = get_opportunities(prior_start_ts, prior_end_ts)
+          prior_contacts = get_contacts(prior_start_utc, prior_end_utc)
+          prior_opps = get_opportunities(prior_start_utc, prior_end_utc)
 
           # Build source funnel data
           BUCKETS = ["Organic/SEO","GMB","Paid Ads","Social Organic","Referral","Direct/Form","Cold/Other","Unknown"]
