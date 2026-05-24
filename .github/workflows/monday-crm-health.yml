@@ -1,0 +1,133 @@
+name: Monday CRM Health Review
+
+on:
+  schedule:
+    # Every Monday at 15:00 UTC = 8:00 AM PT (PDT) / 7:00 AM PT (PST)
+    - cron: '0 15 * * 1'
+  workflow_dispatch:
+    inputs:
+      week_start_override:
+        description: 'Override week start date (YYYY-MM-DD, Monday; blank = auto)'
+        required: false
+        default: ''
+
+env:
+  GHL_API_BASE: https://services.leadconnectorhq.com
+  GHL_VERSION:  '2021-07-28'
+
+jobs:
+  weekly-health:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          token: ${{ secrets.GITHUB_TOKEN }}
+
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+
+      - name: Install dependencies
+        run: pip install requests pytz
+
+      - name: Generate CRM Health Dashboard
+        id: generate
+        env:
+          GHL_PIT:              ${{ secrets.GHL_PIT }}
+          GHL_LOCATION_ID:      ${{ secrets.GHL_LOCATION_ID }}
+          PYTHONUNBUFFERED:     "1"
+          WEEK_START_OVERRIDE:  ${{ github.event.inputs.week_start_override }}
+        run: python3 scripts/weekly_crm_health.py
+
+      - name: Commit dashboard + history
+        run: |
+          git config user.email "graehamwatts@gmail.com"
+          git config user.name  "Graeham Watts"
+          git remote set-url origin \
+            https://x-access-token:${{ secrets.GITHUB_TOKEN }}@github.com/Graehamwatts/online-content.git
+          git add dashboards/health/
+          git diff --staged --quiet || git commit -m \
+            "CRM Health: ${{ steps.generate.outputs.date_slug }} (score ${{ steps.generate.outputs.health_score }}/${{ steps.generate.outputs.grade }})"
+          git push
+
+      - name: Build email body
+        id: email
+        run: |
+          URL="https://graehamwatts.github.io/online-content/dashboards/health/${{ steps.generate.outputs.date_slug }}-health.html"
+          SCORE="${{ steps.generate.outputs.health_score }}"
+          GRADE="${{ steps.generate.outputs.grade }}"
+          NEW="${{ steps.generate.outputs.new_opps }}"
+          STALE="${{ steps.generate.outputs.stale_recent }}"
+          OLD="${{ steps.generate.outputs.old_active }}"
+          ACTIVE="${{ steps.generate.outputs.active_open }}"
+          CLEARED="${{ steps.generate.outputs.activity_cleared }}"
+
+          BODY="CRM Health Report — Week of ${{ steps.generate.outputs.date_slug }}
+
+Score: ${SCORE}/100  (Grade ${GRADE})
+
+KEY NUMBERS
+  New pipeline entries this week:  ${NEW}
+  Active open deals:                ${ACTIVE}
+  Leads needing follow-up NOW:      ${STALE}  (contact-validated — calls/texts/notes checked)
+  Leads 90+ days old (cleanup):     ${OLD}
+  Leads cleared by activity check:  ${CLEARED} (these were contacted — opportunity just wasn't updated)"
+
+          if [ "${STALE}" -gt "0" ]; then
+            BODY="${BODY}
+
+ACTION REQUIRED: ${STALE} lead(s) haven't been contacted in 14+ days. See dashboard for names."
+          fi
+
+          BODY="${BODY}
+
+View full dashboard:
+${URL}
+
+---
+Graeham Watts · Intero Real Estate
+This report runs automatically every Monday morning."
+
+          echo "url=${URL}" >> $GITHUB_OUTPUT
+          # Write body to a file (avoids shell quoting issues with multiline)
+          printf '%s' "$BODY" > /tmp/email_body.txt
+
+      - name: Send email to Graeham
+        uses: dawidd6/action-send-mail@v3
+        with:
+          server_address: smtp.gmail.com
+          server_port:    465
+          secure:         true
+          username:       ${{ secrets.GMAIL_USERNAME }}
+          password:       ${{ secrets.GMAIL_APP_PASSWORD }}
+          subject:        "CRM Health — ${{ steps.generate.outputs.date_slug }} | Score ${{ steps.generate.outputs.health_score }} (${{ steps.generate.outputs.grade }})"
+          to:             graehamwatts@gmail.com
+          from:           "CRM Health Bot <${{ secrets.GMAIL_USERNAME }}>"
+          body:           file:///tmp/email_body.txt
+
+      - name: Send email to Adrian
+        uses: dawidd6/action-send-mail@v3
+        with:
+          server_address: smtp.gmail.com
+          server_port:    465
+          secure:         true
+          username:       ${{ secrets.GMAIL_USERNAME }}
+          password:       ${{ secrets.GMAIL_APP_PASSWORD }}
+          subject:        "CRM Health — ${{ steps.generate.outputs.date_slug }} | Score ${{ steps.generate.outputs.health_score }} (${{ steps.generate.outputs.grade }})"
+          to:             graehamwattsclientcare@gmail.com
+          from:           "CRM Health Bot <${{ secrets.GMAIL_USERNAME }}>"
+          body:           file:///tmp/email_body.txt
+
+      - name: Report result
+        run: |
+          echo "::notice title=CRM Health::Score ${{ steps.generate.outputs.health_score }} \
+          (Grade ${{ steps.generate.outputs.grade }}) | \
+          New: ${{ steps.generate.outputs.new_opps }} | \
+          Stale: ${{ steps.generate.outputs.stale_recent }} | \
+          ${{ steps.email.outputs.url }}"
+          echo "Dashboard: ${{ steps.email.outputs.url }}"
+
+      - name: Notify on failure
+        if: failure()
+        run: |
+          echo "::error::CRM Health Report failed. Check GHL_PIT, GMAIL_USERNAME, GMAIL_APP_PASSWORD secrets."
