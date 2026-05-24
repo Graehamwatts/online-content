@@ -21,9 +21,9 @@ Dormant-detection design (v2):
 import requests, os, json, time
 from datetime import datetime, timedelta, timezone
 from collections import defaultdict
-import pytz
+from zoneinfo import ZoneInfo
 
-PT           = pytz.timezone("America/Los_Angeles")
+PT = ZoneInfo("America/Los_Angeles")
 GHL_PIT      = os.environ["GHL_PIT"]
 LOCATION_ID  = os.environ["GHL_LOCATION_ID"]
 GHL_BASE     = os.environ.get("GHL_API_BASE", "https://services.leadconnectorhq.com")
@@ -60,7 +60,7 @@ now_pt  = datetime.now(PT)
 now_utc = datetime.now(timezone.utc)
 
 if WEEK_START_OVERRIDE:
-    week_start = PT.localize(datetime.strptime(WEEK_START_OVERRIDE, "%Y-%m-%d"))
+    week_start = datetime.strptime(WEEK_START_OVERRIDE, "%Y-%m-%d").replace(tzinfo=PT)
 else:
     days_back  = now_pt.weekday()
     week_start = (now_pt - timedelta(days=days_back)).replace(
