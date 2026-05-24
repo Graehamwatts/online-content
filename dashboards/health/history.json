@@ -6,12 +6,12 @@
       "grade": "C",
       "label": "Watch Closely",
       "new_opps": 7,
-      "active_open": 1761,
+      "active_open": 1757,
       "stale_recent": 13,
-      "old_active": 1733,
-      "dormant": 1153,
+      "old_active": 1729,
+      "dormant": 383,
       "pipeline_value": 1600000.0,
-      "generated_at": "2026-05-24T00:51:19.214744+00:00"
+      "generated_at": "2026-05-24T01:04:33.107026+00:00"
     }
   ]
 }
