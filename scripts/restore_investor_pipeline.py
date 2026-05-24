@@ -1,12 +1,11 @@
 #!/usr/bin/env python3
 """
-restore_investor_pipeline.py — v2 (safer pagination)
-Finds contacts with no current open opp and re-adds them to Investor/Flipper.
-Uses page-number pagination for contacts (avoids cursor loops).
-Hard cap of 300 pages on both loops as a safety net.
+restore_investor_pipeline.py — v3
+Finds contacts added Oct 2025–Feb 2026 (bulk import window) with no current
+open opp, and re-adds them to the Investor/Flipper pipeline.
+Uses page-number pagination with a hard 300-page safety cap.
 """
 import requests, json, time, sys, os
-from datetime import datetime, timezone
 
 GHL_PIT              = os.environ["GHL_PIT"]
 LOCATION_ID          = os.environ["GHL_LOCATION_ID"]
@@ -14,7 +13,11 @@ GHL_BASE             = "https://services.leadconnectorhq.com"
 INVESTOR_PIPELINE_ID = "rUTHO8xdJSctaCdMRnwR"
 INVESTOR_STAGE_ID    = "aaa5d136-a2df-4b75-91f1-266a76f2dfe5"
 DRY_RUN              = os.environ.get("DRY_RUN", "true").lower() != "false"
-MAX_PAGES            = 300   # safety cap — 300 × 100 = 30,000 records max
+MAX_PAGES            = 300
+
+# Only target contacts from the bulk investor import window
+DATE_FROM = "2025-10"   # YYYY-MM inclusive
+DATE_TO   = "2026-02"   # YYYY-MM inclusive
 
 headers = {
     "Authorization": f"Bearer {GHL_PIT}",
@@ -22,9 +25,10 @@ headers = {
     "Content-Type":  "application/json",
 }
 
-print(f"{'DRY RUN — no changes will be made' if DRY_RUN else 'LIVE — will create opportunities'}", flush=True)
+print(f"{'DRY RUN — no changes' if DRY_RUN else 'LIVE — will create opportunities'}", flush=True)
+print(f"Targeting contacts added {DATE_FROM} – {DATE_TO}", flush=True)
 
-# ── Step 1: collect contact IDs that already have ANY opportunity ────────────
+# ── Step 1: collect all contact IDs that currently have ANY opp ──────────────
 print("\nStep 1: collecting contacts with existing opportunities...", flush=True)
 active_contact_ids = set()
 page = 0
@@ -41,7 +45,7 @@ while page < MAX_PAGES:
     r = requests.get(f"{GHL_BASE}/opportunities/search",
                      params=params, headers=headers, timeout=30)
     if r.status_code != 200:
-        print(f"  opp search error {r.status_code}: {r.text[:200]}", flush=True)
+        print(f"  opp error {r.status_code}: {r.text[:200]}", flush=True)
         break
 
     data  = r.json()
@@ -55,52 +59,45 @@ while page < MAX_PAGES:
             active_contact_ids.add(cid)
 
     if page % 5 == 0:
-        print(f"  opp page {page}: {len(active_contact_ids)} contacts with opps so far", flush=True)
+        print(f"  opp page {page}: {len(active_contact_ids)} contacts with opps", flush=True)
 
-    # Pagination: use meta.nextPageUrl or fall back to last-item cursor
-    meta        = data.get("meta", {})
-    next_page   = meta.get("nextPageUrl") or meta.get("nextPage")
-    total       = meta.get("total", 0)
-    start_after = meta.get("startAfter")
-    start_after_id_meta = meta.get("startAfterId")
-
-    if start_after_id_meta:
-        start_after_ms = start_after or 0
-        start_after_id = start_after_id_meta
+    meta               = data.get("meta", {})
+    start_after_id_new = meta.get("startAfterId", "")
+    if start_after_id_new:
+        start_after_ms = meta.get("startAfter", 0) or 0
+        start_after_id = start_after_id_new
     elif len(batch) == 100:
-        # build cursor from last item
+        from datetime import datetime
         last = batch[-1]
         try:
             start_after_ms = int(
                 datetime.fromisoformat(
-                    last["createdAt"].replace("Z","+00:00")
+                    last["createdAt"].replace("Z", "+00:00")
                 ).timestamp() * 1000
             )
-            new_id = last.get("id","")
+            new_id = last.get("id", "")
             if new_id == start_after_id:
-                print("  cursor didn't advance — stopping opp pagination", flush=True)
+                print("  cursor stalled — stopping opp pagination", flush=True)
                 break
             start_after_id = new_id
         except Exception as e:
             print(f"  cursor error: {e} — stopping", flush=True)
             break
     else:
-        break   # fewer than 100 → last page
+        break
 
     time.sleep(0.1)
 
 print(f"Contacts with existing opps: {len(active_contact_ids)}", flush=True)
 
-# ── Step 2: page through ALL contacts using page number ─────────────────────
-print("\nStep 2: scanning all contacts for those with no opportunity...", flush=True)
-orphaned = []
-page_num = 1
-seen_ids = set()
+# ── Step 2: scan contacts, find orphaned ones in the import window ───────────
+print(f"\nStep 2: scanning contacts added {DATE_FROM}–{DATE_TO} with no opp...", flush=True)
+orphaned  = []
+seen_ids  = set()
 
-while page_num <= MAX_PAGES:
+for page_num in range(1, MAX_PAGES + 1):
     params = {"locationId": LOCATION_ID, "limit": 100, "page": page_num}
-    r = requests.get(f"{GHL_BASE}/contacts/",
-                     params=params, headers=headers, timeout=30)
+    r = requests.get(f"{GHL_BASE}/contacts/", params=params, headers=headers, timeout=30)
     if r.status_code != 200:
         print(f"  contacts error {r.status_code}: {r.text[:200]}", flush=True)
         break
@@ -113,31 +110,34 @@ while page_num <= MAX_PAGES:
     for c in batch:
         cid = c["id"]
         if cid in seen_ids:
-            continue   # genuine duplicate in API response — skip
+            continue
         seen_ids.add(cid)
         new_this_page += 1
+
+        created_month = (c.get("dateAdded") or "")[:7]   # "YYYY-MM"
+        if not (DATE_FROM <= created_month <= DATE_TO):
+            continue   # outside import window — skip
 
         if cid not in active_contact_ids:
             name = (
                 c.get("contactName") or
                 f"{c.get('firstName','').strip()} {c.get('lastName','').strip()}"
             ).strip()
-            created = (c.get("dateAdded") or "")[:10]
-            orphaned.append({"id": cid, "name": name, "created": created})
+            orphaned.append({
+                "id":      cid,
+                "name":    name or "No Name",
+                "created": (c.get("dateAdded") or "")[:10],
+            })
 
     if page_num % 5 == 0:
-        print(f"  contact page {page_num}: {len(seen_ids)} scanned, {len(orphaned)} without opps", flush=True)
+        print(f"  contact page {page_num}: {len(seen_ids)} scanned, {len(orphaned)} in window with no opp", flush=True)
 
     if new_this_page == 0 or len(batch) < 100:
-        break   # end of contacts
-
-    page_num += 1
+        break
     time.sleep(0.1)
 
 print(f"\nTotal contacts scanned: {len(seen_ids)}", flush=True)
-print(f"Contacts with no opportunity: {len(orphaned)}", flush=True)
-
-# Show a sample
+print(f"Contacts in import window with no opp: {len(orphaned)}", flush=True)
 for c in orphaned[:20]:
     print(f"  {c['name']:<35} added:{c['created']}", flush=True)
 if len(orphaned) > 20:
@@ -148,16 +148,16 @@ if not orphaned:
     sys.exit(0)
 
 if DRY_RUN:
-    print(f"\nDRY RUN complete — would add {len(orphaned)} contacts to Investor/Flipper pipeline.", flush=True)
+    print(f"\nDRY RUN complete — would restore {len(orphaned)} contacts to Investor/Flipper.", flush=True)
     sys.exit(0)
 
-# ── Step 3: create opportunity for each orphaned contact ─────────────────────
+# ── Step 3: create opp for each orphaned contact ─────────────────────────────
 print(f"\nStep 3: creating {len(orphaned)} Investor/Flipper opportunities...", flush=True)
 created_count, failed = 0, 0
 
 for i, c in enumerate(orphaned):
     payload = {
-        "title":           c["name"] or "No Name",
+        "title":           c["name"],
         "pipelineId":      INVESTOR_PIPELINE_ID,
         "pipelineStageId": INVESTOR_STAGE_ID,
         "contactId":       c["id"],
