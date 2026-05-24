@@ -157,7 +157,7 @@ created_count, failed = 0, 0
 
 for i, c in enumerate(orphaned):
     payload = {
-        "title":           c["name"],
+        "name":            c["name"],
         "pipelineId":      INVESTOR_PIPELINE_ID,
         "pipelineStageId": INVESTOR_STAGE_ID,
         "contactId":       c["id"],
