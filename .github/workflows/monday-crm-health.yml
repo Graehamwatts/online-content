@@ -131,3 +131,4 @@ This report runs automatically every Monday morning."
         if: failure()
         run: |
           echo "::error::CRM Health Report failed. Check GHL_PIT, GMAIL_USERNAME, GMAIL_APP_PASSWORD secrets."
+
