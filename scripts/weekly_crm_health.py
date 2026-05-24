@@ -7,8 +7,15 @@ Env:     GHL_PIT, GHL_LOCATION_ID, [GHL_API_BASE, GHL_VERSION, WEEK_START_OVERRI
 
 Idle-calculation design:
   For stale-candidate leads, we look up the contact's last activity
-  via GHL conversations + notes APIs.  This catches calls/texts/notes
-  logged on the contact record (which don't bump opportunity updatedAt).
+  via GHL conversations + notes + tasks APIs.
+
+Dormant-detection design (v2):
+  The /opportunities/search endpoint does NOT return pipelineStage.name —
+  all stage names come back blank from that endpoint.
+  We therefore determine dormancy by:
+    1. pipelineId  → entire Investor/Past Buyers/Past Sellers/Lost Deal pipelines are dormant
+    2. pipelineStageId → Cold / Unqualified stage IDs (built from /opportunities/pipelines API)
+  String-based DORMANT_STAGES matching has been removed.
 """
 
 import requests, os, json, time
@@ -30,11 +37,18 @@ headers = {
     "Content-Type":  "application/json",
 }
 
-DORMANT_STAGES = {
-    "cold", "unqualified", "investor/flipper",
-    "bought with another agent", "sold with another agent",
-    "closed", "past buyer", "past seller",
+# ─── Dormant config (ID-based, not string-based) ──────────────────────────────
+
+# These entire pipelines are dormant — don't count as active deals
+DORMANT_PIPELINE_IDS = {
+    "rUTHO8xdJSctaCdMRnwR",   # Investor/Flipper — bulk import holding pen
+    "CkV0U26bzprpKilspmdc",   # Past Buyers
+    "1ozcvQm4Ip050U9pr2HG",   # Past Sellers
+    "gfYgrFFQwSP6UxJF5CY1",   # Lost Deal
 }
+
+# Stage names in ACTIVE pipelines that are considered dormant
+DORMANT_STAGE_NAMES = {"cold", "unqualified"}
 
 STALE_DAYS  = 14   # flag lead as needing follow-up after this many idle days
 RECENT_DAYS = 90   # only flag stale if created within this many days; older = cleanup backlog
@@ -134,7 +148,7 @@ def get_pipelines():
 def get_last_contact_activity(contact_id):
     """
     Return the most recent activity datetime for a contact.
-    Checks: conversations (SMS/email/calls via GHL dialer) + notes (logged calls/activities).
+    Checks: conversations (SMS/email/calls) + notes + completed tasks.
     Returns None if nothing found or API errors.
     """
     if not contact_id:
@@ -172,6 +186,22 @@ def get_last_contact_activity(contact_id):
     except Exception as e:
         print(f"    notes API err for {contact_id}: {e}", flush=True)
 
+    # 3) Tasks — completed tasks are a primary call/activity tracking method in GHL
+    try:
+        r = requests.get(
+            f"{GHL_BASE}/contacts/{contact_id}/tasks",
+            headers=headers, timeout=15,
+        )
+        if r.status_code == 200:
+            tasks = r.json().get("tasks", [])
+            for task in tasks:
+                if task.get("isCompleted"):
+                    d = parse_dt(task.get("completedDate") or task.get("updatedAt"))
+                    if d and (best is None or d > best):
+                        best = d
+    except Exception as e:
+        print(f"    tasks API err for {contact_id}: {e}", flush=True)
+
     return best
 
 
@@ -197,14 +227,39 @@ for pipe in pipelines:
             "pipeline": pname,
         }
 
+# Build set of dormant stage IDs (Cold/Unqualified in ACTIVE pipelines only)
+dormant_stage_ids = set()
+for pipe in pipelines:
+    pid = pipe.get("id", "")
+    if pid not in DORMANT_PIPELINE_IDS:
+        for stage in pipe.get("stages", []):
+            if stage.get("name", "").lower() in DORMANT_STAGE_NAMES:
+                dormant_stage_ids.add(stage.get("id", ""))
+
+print(f"  Pipeline map: {len(pipeline_names)} pipelines, {len(stage_map)} stages", flush=True)
+print(f"  Dormant stage IDs (Cold/Unqualified in active pipelines): {dormant_stage_ids}", flush=True)
+
 
 def stage_info(o):
+    """Look up stage name and pipeline name from opportunity.
+    Falls back to pipelineId for pipeline name if stage lookup fails."""
     sid = o.get("pipelineStageId", "")
-    return stage_map.get(sid, {"name": "Unknown Stage", "pipeline": "Unknown Pipeline"})
+    pid = o.get("pipelineId", "")
+    if sid and sid in stage_map:
+        return stage_map[sid]
+    return {
+        "name":     "Unknown Stage",
+        "pipeline": pipeline_names.get(pid, "Unknown Pipeline"),
+    }
 
 
-def is_dormant_stage(sinfo):
-    return sinfo["name"].lower() in DORMANT_STAGES
+def is_dormant(o):
+    """True if this opportunity belongs to a dormant pipeline or dormant stage."""
+    pid = o.get("pipelineId", "")
+    if pid in DORMANT_PIPELINE_IDS:
+        return True
+    sid = o.get("pipelineStageId", "")
+    return bool(sid and sid in dormant_stage_ids)
 
 
 # ─── Weekly counts (derived from all_open by createdAt) ─────────────────────
@@ -232,19 +287,19 @@ for o in prior_new_opps:
 
 print(f"Week new: {len(week_new_opps)}, Prior new: {len(prior_new_opps)}", flush=True)
 
-# ─── Pipeline health pass 1: categorise using opp updatedAt ─────────────────
+# ─── Pipeline health pass 1: categorise using pipelineId / pipelineStageId ──
 
-active_open   = []
-dormant_open  = []
+active_open      = []
+dormant_open     = []
 stale_candidates = []   # pass-1 flagged; will be re-validated with contact activity
-old_active    = []
-stage_buckets = defaultdict(list)
+old_active       = []
+stage_buckets    = defaultdict(list)
 
 for o in all_open:
     si = stage_info(o)
     stage_buckets[f"{si['pipeline']} → {si['name']}"].append(o)
 
-    if is_dormant_stage(si):
+    if is_dormant(o):
         dormant_open.append(o)
     else:
         active_open.append(o)
@@ -273,11 +328,7 @@ print(f"Pass-1: {len(stale_candidates)} stale candidates to validate", flush=Tru
 
 # ─── Pipeline health pass 2: validate stale candidates with contact activity ─
 
-# For each candidate, fetch contact conversations + notes.
-# If the contact was reached more recently than the opp's updatedAt shows,
-# the lead is NOT actually stale — remove it from the flag list.
-
-stale_recent = []
+stale_recent   = []
 activity_notes = []   # tuples of (name, idle_opp, idle_true) for the dashboard callout
 
 for i, c in enumerate(stale_candidates):
@@ -288,7 +339,6 @@ for i, c in enumerate(stale_candidates):
             true_idle = (now_utc - last_activity).days
             if true_idle < c["idle_opp"]:
                 activity_notes.append((c["name"], c["idle_opp"], true_idle))
-            # Only flag as stale if TRUE idle (contact-level) is >= threshold
             if true_idle < STALE_DAYS:
                 print(f"  {c['name']}: opp says {c['idle_opp']}d idle, "
                       f"contact activity = {true_idle}d — NOT stale", flush=True)
@@ -322,12 +372,12 @@ if activity_notes:
 # ─── Health score ─────────────────────────────────────────────────────────────
 
 score = 50
-if total_new_opps > 0:                                       score += 10
+if total_new_opps > 0:                                           score += 10
 if total_prior_opps > 0 and total_new_opps >= total_prior_opps: score += 5
-if total_wins > 0:                                           score += 15
-if open_pipeline_value >= 500_000:                           score += 5
-if len(active_open) > 0:                                     score += 5
-score -= min(len(stale_recent) * 5, 20)     # penalise only true stale (contact-validated)
+if total_wins > 0:                                               score += 15
+if open_pipeline_value >= 500_000:                               score += 5
+if len(active_open) > 0:                                         score += 5
+score -= min(len(stale_recent) * 5, 20)
 score = max(0, min(100, score))
 
 if score >= 80:   grade, grade_color, score_label = "A", "#22c55e", "Strong Week"
@@ -349,19 +399,18 @@ if os.path.exists(HISTORY_PATH):
     except Exception:
         pass
 
-# Replace or append entry for this date_slug
 new_entry = {
-    "date":          date_slug,
-    "score":         score,
-    "grade":         grade,
-    "label":         score_label,
-    "new_opps":      total_new_opps,
-    "active_open":   len(active_open),
-    "stale_recent":  len(stale_recent),
-    "old_active":    len(old_active),
-    "dormant":       len(dormant_open),
+    "date":           date_slug,
+    "score":          score,
+    "grade":          grade,
+    "label":          score_label,
+    "new_opps":       total_new_opps,
+    "active_open":    len(active_open),
+    "stale_recent":   len(stale_recent),
+    "old_active":     len(old_active),
+    "dormant":        len(dormant_open),
     "pipeline_value": round(open_pipeline_value, 2),
-    "generated_at":  now_utc.isoformat(),
+    "generated_at":   now_utc.isoformat(),
 }
 history_entries = [e for e in history_entries if e.get("date") != date_slug]
 history_entries.append(new_entry)
@@ -371,10 +420,9 @@ with open(HISTORY_PATH, "w") as f:
     json.dump({"entries": history_entries}, f, indent=2)
 print(f"Updated {HISTORY_PATH} ({len(history_entries)} entries)", flush=True)
 
-# ─── Trend sparkline (last 8 weeks) ──────────────────────────────────────────
+# ─── Trend sparkline ─────────────────────────────────────────────────────────
 
 def build_trend_svg(entries, current_date):
-    """Inline SVG bar/line sparkline of weekly scores."""
     recent = entries[-8:] if len(entries) >= 8 else entries
     if len(recent) < 2:
         return ""
@@ -395,36 +443,31 @@ def build_trend_svg(entries, current_date):
         x = pad_l + i * x_step
         y = pad_t + plot_h * (1 - e["score"] / 100)
         pts.append((x, y, e["score"], e["date"], color(e["score"])))
-    # polyline
     poly = " ".join(f"{x:.1f},{y:.1f}" for x, y, *_ in pts)
     circles = ""
     for i, (x, y, s, dt, c) in enumerate(pts):
         r   = 5 if dt == current_date else 3
         op  = 1.0 if dt == current_date else 0.7
         circles += (
-            f'<circle cx="{x:.1f}" cy="{y:.1f}" r="{r}" fill="{c}" '
-            f'opacity="{op}"/>'
+            f'<circle cx="{x:.1f}" cy="{y:.1f}" r="{r}" fill="{c}" opacity="{op}"/>'
         )
-        # date label on x-axis
-        short = dt[5:]  # MM-DD
+        short = dt[5:]
         circles += (
             f'<text x="{x:.1f}" y="{H - 3}" text-anchor="middle" '
             f'font-size="8" fill="#334155">{short}</text>'
         )
-        # score label above dot
         if dt == current_date:
             circles += (
                 f'<text x="{x:.1f}" y="{y - 8:.1f}" text-anchor="middle" '
                 f'font-size="9" font-weight="bold" fill="{c}">{s}</text>'
             )
-    svg = (
+    return (
         f'<svg viewBox="0 0 {W} {H}" xmlns="http://www.w3.org/2000/svg" '
         f'style="width:100%;max-width:{W}px;height:{H}px">'
         f'<polyline points="{poly}" fill="none" stroke="#1e3a5f" stroke-width="1.5"/>'
         f'{circles}'
         f'</svg>'
     )
-    return svg
 
 trend_svg = build_trend_svg(history_entries, date_slug)
 
@@ -441,7 +484,7 @@ if activity_notes:
         "detail": (
             f"e.g. {example[0]}: opportunity showed {example[1]}d idle, "
             f"but last contact activity was only {example[2]}d ago — not flagged as stale. "
-            "Calls/texts logged on the contact (not opportunity) are now included."
+            "Calls/texts/tasks logged on the contact are now included."
         ),
         "color": "#22c55e",
     })
@@ -478,8 +521,8 @@ if old_active:
 if dormant_open:
     attention_items.append({
         "icon": "&#128191;", "color": "#475569",
-        "title": f"{len(dormant_open):,} contacts in Cold / Unqualified / holding stages",
-        "detail": "Dormant — not counted as active deals. Includes your bulk import backlog.",
+        "title": f"{len(dormant_open):,} contacts in dormant pipelines/stages",
+        "detail": "Investor/Flipper, Past Buyers, Past Sellers, Lost Deal + Cold/Unqualified. Not counted as active deals.",
     })
 
 if total_prior_opps > 0 and total_new_opps < total_prior_opps * 0.5:
@@ -518,7 +561,6 @@ def funnel_row(label, count, of_total, color):
 
 # ─── HTML sections ────────────────────────────────────────────────────────────
 
-# Attention
 if attention_items:
     attn_html = ""
     for i, item in enumerate(attention_items):
@@ -533,17 +575,19 @@ if attention_items:
 else:
     attn_html = '<p style="color:#22c55e;text-align:center;padding:16px 0;font-size:14px">&#10003; All clear</p>'
 
-# Pipeline stage table
-stale_ids      = {d["id"] for d in stale_recent}
-active_buckets = {
-    k: v for k, v in stage_buckets.items()
-    if not is_dormant_stage({"name": k.split(" → ")[-1].lower()})
-}
+stale_ids = {d["id"] for d in stale_recent}
+# Active buckets: exclude dormant opps from each bucket
+active_buckets = {}
+for k, v in stage_buckets.items():
+    non_dormant = [o for o in v if not is_dormant(o)]
+    if non_dormant:
+        active_buckets[k] = non_dormant
+
 pipeline_rows = ""
 for label, deals in sorted(active_buckets.items(), key=lambda x: -len(x[1]))[:12]:
-    total_val  = sum(float(d.get("monetaryValue") or 0) for d in deals)
-    val_str    = f"${total_val:,.0f}" if total_val else "&mdash;"
-    n_stale    = sum(1 for d in deals if d.get("id") in stale_ids)
+    total_val   = sum(float(d.get("monetaryValue") or 0) for d in deals)
+    val_str     = f"${total_val:,.0f}" if total_val else "&mdash;"
+    n_stale     = sum(1 for d in deals if d.get("id") in stale_ids)
     stale_badge = (
         f' <span style="background:#f9731618;color:#f97316;font-size:10px;'
         f'padding:2px 6px;border-radius:10px;font-weight:600">{n_stale} follow-up</span>'
@@ -558,7 +602,6 @@ for label, deals in sorted(active_buckets.items(), key=lambda x: -len(x[1]))[:12
 if not pipeline_rows:
     pipeline_rows = '<tr><td colspan="3" style="padding:20px;color:#475569;text-align:center">No active open opportunities</td></tr>'
 
-# Stale follow-up table
 stale_rows = ""
 for d in stale_recent[:12]:
     val_str    = f"${d['value']:,.0f}" if d['value'] else "&mdash;"
@@ -576,7 +619,6 @@ if not stale_rows:
         '&#10003; No recent leads need immediate follow-up</td></tr>'
     )
 
-# New opps by pipeline
 opp_pipeline_rows = ""
 for pname in sorted(week_by_pipeline, key=lambda x: -week_by_pipeline[x]):
     count = week_by_pipeline[pname]
@@ -584,7 +626,7 @@ for pname in sorted(week_by_pipeline, key=lambda x: -week_by_pipeline[x]):
     diff  = count - prior
     wow   = (
         f'<span style="color:#22c55e;font-weight:600">+{diff}</span>' if diff > 0 else
-        f'<span style="color:#ef4444">{diff}</span>'                  if diff < 0 else
+        f'<span style="color:#ef4444">{diff}</span>'                   if diff < 0 else
         '<span style="color:#334155">&mdash;</span>'
     )
     opp_pipeline_rows += (
@@ -595,24 +637,20 @@ for pname in sorted(week_by_pipeline, key=lambda x: -week_by_pipeline[x]):
 if not opp_pipeline_rows:
     opp_pipeline_rows = '<tr><td colspan="3" style="padding:20px;color:#475569;text-align:center">No new pipeline activity this week</td></tr>'
 
-# Funnel
 funnel_base = max(total_new_opps, 1)
 funnel_html = (
     funnel_row("New Pipeline Entries", total_new_opps, funnel_base, "#6366f1") +
-    funnel_row("Closed Won",          total_wins,     funnel_base, "#22c55e")
+    funnel_row("Closed Won",           total_wins,     funnel_base, "#22c55e")
 )
-win_rate   = f"{total_wins/total_new_opps*100:.0f}%" if total_new_opps > 0 else "&mdash;"
+win_rate    = f"{total_wins/total_new_opps*100:.0f}%" if total_new_opps > 0 else "&mdash;"
 val_display = f"${open_pipeline_value/1000:.0f}K" if open_pipeline_value >= 1000 else f"${open_pipeline_value:,.0f}"
 
-# Trend section
 trend_section = ""
 if trend_svg:
     trend_section = f"""
   <div class="section">
     <h2>&#128200; Score Trend (last {min(len(history_entries),8)} weeks)</h2>
-    <div style="padding:8px 0">
-      {trend_svg}
-    </div>
+    <div style="padding:8px 0">{trend_svg}</div>
     <p style="font-size:11px;color:#334155;margin-top:6px;font-style:italic">
       Score is based on new pipeline activity, wins, and true follow-up gaps (contact-validated).
     </p>
@@ -672,7 +710,7 @@ tr:not(:last-child) td{border-bottom:1px solid #0e1a2e}
     <div class="score-num">""" + str(score) + """</div>
     <div class="score-grade">Grade """ + grade + """</div>
     <div class="score-label">""" + score_label + """</div>
-    <div class="note">Idle days now use contact-level activity (calls, texts, notes) — not just opportunity timestamps.</div>
+    <div class="note">Idle days use contact-level activity (calls, texts, notes, tasks) — not opportunity timestamps. Dormancy uses pipeline/stage IDs, not stage name strings.</div>
   </div>
 
   <div class="kpi-grid">
@@ -689,7 +727,7 @@ tr:not(:last-child) td{border-bottom:1px solid #0e1a2e}
     <div class="kpi">
       <div class="num">""" + str(len(active_open)) + """</div>
       <div class="lbl">Active Open Deals</div>
-      <div class="wow"><span style="color:#334155;font-size:11px">excl. cold/dormant</span></div>
+      <div class="wow"><span style="color:#334155;font-size:11px">excl. dormant pipelines</span></div>
     </div>
     <div class="kpi">
       <div class="num">""" + val_display + """</div>
@@ -705,7 +743,7 @@ tr:not(:last-child) td{border-bottom:1px solid #0e1a2e}
 """ + trend_section + """
   <div class="section">
     <h2>&#128293; Active Pipeline by Stage</h2>
-    <p style="font-size:12px;color:#475569;margin-bottom:12px">Open deals in working stages</p>
+    <p style="font-size:12px;color:#475569;margin-bottom:12px">Open deals in working stages (excludes Investor/Flipper, Past Buyers, Past Sellers, Lost Deal, Cold, Unqualified)</p>
     <table>
       <thead><tr>
         <th>Pipeline &rarr; Stage</th>
@@ -714,12 +752,12 @@ tr:not(:last-child) td{border-bottom:1px solid #0e1a2e}
       </tr></thead>
       <tbody>""" + pipeline_rows + """</tbody>
     </table>
-    <p class="caveat">""" + str(len(dormant_open)) + """ in Cold/Unqualified/holding (dormant, not shown). """ + str(len(old_active)) + """ active-stage leads 90+ days old (cleanup backlog).</p>
+    <p class="caveat">""" + str(len(dormant_open)) + """ in dormant pipelines/stages (not shown). """ + str(len(old_active)) + """ active-stage leads 90+ days old (cleanup backlog).</p>
   </div>
 
   <div class="section">
     <h2>&#9200; Needs Follow-Up &mdash; Recent Leads (&le;90 days, """ + str(STALE_DAYS) + """+ days since last contact)</h2>
-    <p style="font-size:12px;color:#475569;margin-bottom:12px">Validated against contact activity (calls, texts, notes) &mdash; opportunity timestamp alone is not enough.</p>
+    <p style="font-size:12px;color:#475569;margin-bottom:12px">Validated against contact activity (calls, texts, notes, tasks) &mdash; opportunity timestamp alone is not enough.</p>
     <table>
       <thead><tr>
         <th>Name</th>
