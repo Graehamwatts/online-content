@@ -1,0 +1,674 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>EPA Pricing Split Deep-Dive — June 2026 Production Dashboard</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=DM+Sans:ital,wght@0,300;0,400;0,500;0,600;0,700;1,400&family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --navy: #1B2A4A;
+    --navy-light: #243559;
+    --navy-dark: #131e35;
+    --gold: #C5A258;
+    --gold-light: #d4b876;
+    --teal: #1a7f7a;
+    --orange: #c4622d;
+    --white: #ffffff;
+    --off-white: #f8f6f2;
+    --gray-100: #f0eee9;
+    --gray-200: #ddd9d0;
+    --gray-400: #9a9488;
+    --gray-600: #5c574f;
+    --text: #1a1612;
+    --text-muted: #5c574f;
+    --radius: 10px;
+    --radius-sm: 6px;
+    --shadow: 0 2px 16px rgba(27,42,74,0.10);
+    --shadow-lg: 0 8px 40px rgba(27,42,74,0.18);
+  }
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  body { font-family: 'DM Sans', sans-serif; background: var(--off-white); color: var(--text); line-height: 1.6; }
+  h1, h2, h3 { font-family: 'Plus Jakarta Sans', sans-serif; }
+
+  /* HEADER */
+  .header {
+    background: var(--navy);
+    padding: 28px 32px 22px;
+    border-bottom: 3px solid var(--gold);
+  }
+  .header-inner { max-width: 1100px; margin: 0 auto; }
+  .header-eyebrow { color: var(--gold); font-size: 11px; font-weight: 600; letter-spacing: 2px; text-transform: uppercase; margin-bottom: 8px; }
+  .header h1 { color: var(--white); font-size: clamp(22px, 3vw, 32px); font-weight: 800; line-height: 1.2; margin-bottom: 16px; }
+  .header-chips { display: flex; flex-wrap: wrap; gap: 8px; align-items: center; }
+  .chip { display: inline-flex; align-items: center; gap: 5px; padding: 4px 12px; border-radius: 20px; font-size: 12px; font-weight: 600; }
+  .chip-bofu { background: #1a4a3a; color: #4ecba0; border: 1px solid #2a6a55; }
+  .chip-gold { background: rgba(197,162,88,0.15); color: var(--gold); border: 1px solid rgba(197,162,88,0.4); }
+  .chip-muted { background: rgba(255,255,255,0.08); color: rgba(255,255,255,0.65); border: 1px solid rgba(255,255,255,0.15); font-weight: 400; }
+
+  /* NAV TABS */
+  .nav-tabs { background: var(--navy-dark); border-bottom: 1px solid rgba(255,255,255,0.08); sticky; top: 0; z-index: 100; }
+  .nav-tabs-inner { max-width: 1100px; margin: 0 auto; display: flex; gap: 0; overflow-x: auto; }
+  .tab-btn { padding: 14px 20px; color: rgba(255,255,255,0.55); font-size: 13px; font-weight: 500; cursor: pointer; background: none; border: none; border-bottom: 3px solid transparent; white-space: nowrap; transition: all 0.2s; }
+  .tab-btn:hover { color: rgba(255,255,255,0.85); }
+  .tab-btn.active { color: var(--gold); border-bottom-color: var(--gold); }
+
+  /* MAIN */
+  .main { max-width: 1100px; margin: 0 auto; padding: 32px 24px 80px; }
+  .section { display: none; }
+  .section.active { display: block; }
+
+  /* CARDS */
+  .card { background: var(--white); border-radius: var(--radius); box-shadow: var(--shadow); padding: 28px; margin-bottom: 24px; }
+  .card-title { font-family: 'Plus Jakarta Sans', sans-serif; font-size: 14px; font-weight: 700; text-transform: uppercase; letter-spacing: 1px; color: var(--navy); margin-bottom: 20px; padding-bottom: 12px; border-bottom: 2px solid var(--gray-100); }
+
+  /* DATA GRID */
+  .data-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(180px, 1fr)); gap: 16px; margin-bottom: 20px; }
+  .data-cell { background: var(--gray-100); border-radius: var(--radius-sm); padding: 16px; }
+  .data-label { font-size: 11px; text-transform: uppercase; letter-spacing: 1px; color: var(--gray-600); font-weight: 600; margin-bottom: 6px; }
+  .data-value { font-family: 'Plus Jakarta Sans', sans-serif; font-size: 22px; font-weight: 800; color: var(--navy); }
+  .data-delta { font-size: 12px; font-weight: 600; margin-top: 4px; }
+  .up { color: #1a7f5a; } .down { color: #c0392b; } .neutral { color: var(--gray-600); }
+
+  /* INSIGHT BOXES */
+  .insight-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; margin-top: 20px; }
+  @media (max-width: 640px) { .insight-grid { grid-template-columns: 1fr; } }
+  .insight-box { border-radius: var(--radius-sm); padding: 16px 18px; }
+  .insight-fast { background: #e8f5ee; border-left: 4px solid #1a7f5a; }
+  .insight-slow { background: #fdf0ec; border-left: 4px solid var(--orange); }
+  .insight-label { font-size: 11px; font-weight: 700; text-transform: uppercase; letter-spacing: 1px; margin-bottom: 8px; }
+  .insight-fast .insight-label { color: #1a7f5a; }
+  .insight-slow .insight-label { color: var(--orange); }
+  .insight-box ul { padding-left: 16px; color: var(--gray-600); font-size: 14px; }
+  .insight-box li { margin-bottom: 5px; }
+
+  /* SCRIPT */
+  .script-block { background: var(--navy-dark); color: #e8e4dc; border-radius: var(--radius); padding: 28px; font-family: 'DM Sans', monospace; font-size: 14px; line-height: 1.9; white-space: pre-wrap; word-break: break-word; }
+  .script-block .tag { color: var(--gold); font-weight: 600; }
+
+  /* PROMPT CARDS */
+  .prompt-card { background: var(--white); border: 1px solid var(--gray-200); border-radius: var(--radius); margin-bottom: 16px; overflow: hidden; }
+  .prompt-header { background: var(--gray-100); padding: 14px 20px; display: flex; align-items: center; justify-content: space-between; gap: 12px; }
+  .prompt-title { font-weight: 700; font-size: 14px; color: var(--navy); }
+  .prompt-meta { font-size: 12px; color: var(--gray-600); }
+  .copy-btn { background: var(--navy); color: var(--white); border: none; padding: 8px 16px; border-radius: var(--radius-sm); font-size: 12px; font-weight: 600; cursor: pointer; white-space: nowrap; transition: background 0.2s; }
+  .copy-btn:hover { background: var(--gold); color: var(--navy); }
+  .copy-btn.copied { background: #1a7f5a; }
+  .prompt-body { padding: 20px; font-size: 13px; line-height: 1.7; color: var(--gray-600); max-height: 200px; overflow: hidden; position: relative; }
+  .prompt-body.expanded { max-height: none; }
+  .prompt-body::after { content: ''; position: absolute; bottom: 0; left: 0; right: 0; height: 60px; background: linear-gradient(transparent, white); pointer-events: none; }
+  .prompt-body.expanded::after { display: none; }
+  .expand-btn { background: none; border: none; color: var(--navy); font-size: 12px; font-weight: 600; cursor: pointer; padding: 8px 20px 16px; display: block; width: 100%; text-align: center; }
+
+  /* SHOT LIST */
+  .shot-table { width: 100%; border-collapse: collapse; font-size: 14px; }
+  .shot-table th { background: var(--navy); color: var(--white); padding: 10px 14px; text-align: left; font-size: 12px; font-weight: 600; text-transform: uppercase; letter-spacing: 0.5px; }
+  .shot-table td { padding: 12px 14px; border-bottom: 1px solid var(--gray-100); vertical-align: top; }
+  .shot-table tr:last-child td { border-bottom: none; }
+  .shot-table tr:nth-child(even) td { background: #fafaf8; }
+  .shot-num { background: var(--navy); color: var(--white); border-radius: 50%; width: 24px; height: 24px; display: inline-flex; align-items: center; justify-content: center; font-size: 11px; font-weight: 700; }
+  .shot-type { font-size: 11px; font-weight: 600; text-transform: uppercase; letter-spacing: 0.5px; padding: 2px 8px; border-radius: 4px; }
+  .type-th { background: #e8f0fb; color: #1a4a8a; }
+  .type-broll { background: #e8f5ee; color: #1a5a3a; }
+  .type-overlay { background: rgba(197,162,88,0.12); color: #7a5f1a; }
+  .type-transition { background: #f0e8f8; color: #5a1a8a; }
+
+  /* AI PROMPTS */
+  .ai-prompt { background: #fafaf8; border: 1px solid var(--gray-200); border-radius: var(--radius-sm); padding: 16px 18px; margin-bottom: 14px; }
+  .ai-prompt-label { font-size: 11px; font-weight: 700; text-transform: uppercase; letter-spacing: 1px; color: var(--navy); margin-bottom: 8px; }
+  .ai-prompt-text { font-size: 13px; color: var(--gray-600); line-height: 1.6; font-style: italic; }
+  .ai-prompt-meta { display: flex; gap: 16px; margin-top: 10px; font-size: 11px; color: var(--gray-400); }
+
+  /* FOOTER */
+  .footer { background: var(--navy); color: rgba(255,255,255,0.45); text-align: center; font-size: 12px; padding: 20px; }
+</style>
+</head>
+<body>
+
+<!-- HEADER -->
+<div class="header">
+  <div class="header-inner">
+    <div class="header-eyebrow">June 2026 · EPA Pricing Split Deep-Dive · Production Dashboard</div>
+    <h1>Two Markets in East Palo Alto:<br>The 32-Day Home vs the 66-Day Home</h1>
+    <div class="header-chips">
+      <span class="chip chip-bofu">● BOFU</span>
+      <span class="chip chip-gold">GHL: READY</span>
+      <span class="chip chip-muted">Sellers</span>
+      <span class="chip chip-muted">Data: Q1 2026</span>
+      <span class="chip chip-muted">EPA</span>
+      <span class="chip chip-muted">~6 min / 30-sec short</span>
+    </div>
+  </div>
+</div>
+
+<!-- NAV -->
+<div class="nav-tabs">
+  <div class="nav-tabs-inner">
+    <button class="tab-btn active" onclick="showTab('research')">Research</button>
+    <button class="tab-btn" onclick="showTab('script')">YT Script</button>
+    <button class="tab-btn" onclick="showTab('ssml')">SSML</button>
+    <button class="tab-btn" onclick="showTab('platforms')">All Platforms</button>
+    <button class="tab-btn" onclick="showTab('production')">Production Notes</button>
+    <button class="tab-btn" onclick="showTab('ai-video')">AI Video Prompts</button>
+  </div>
+</div>
+
+<div class="main">
+
+<!-- ═══ TAB: RESEARCH ═══ -->
+<div id="tab-research" class="section active">
+
+  <div class="card">
+    <div class="card-title">Market Data — Q1 2026 (as of March 2026)</div>
+    <div class="data-grid">
+      <div class="data-cell">
+        <div class="data-label">EPA Median Price</div>
+        <div class="data-value">~$1.07M</div>
+        <div class="data-delta up">+1.7% YoY</div>
+      </div>
+      <div class="data-cell">
+        <div class="data-label">Fast Sale DOM</div>
+        <div class="data-value">32 days</div>
+        <div class="data-delta up">Well-priced homes</div>
+      </div>
+      <div class="data-cell">
+        <div class="data-label">Slow Sale DOM</div>
+        <div class="data-value">66 days</div>
+        <div class="data-delta down">Overpriced homes</div>
+      </div>
+      <div class="data-cell">
+        <div class="data-label">SMC County YoY</div>
+        <div class="data-value">−8.4%</div>
+        <div class="data-delta down">vs EPA's +1.7%</div>
+      </div>
+      <div class="data-cell">
+        <div class="data-label">30Y Rate (May 7)</div>
+        <div class="data-value">6.37%</div>
+        <div class="data-delta neutral">Source: Freddie Mac</div>
+      </div>
+      <div class="data-cell">
+        <div class="data-label">Payment ($1.1M / 20%)</div>
+        <div class="data-value">~$5,500</div>
+        <div class="data-delta neutral">P&amp;I / month</div>
+      </div>
+    </div>
+
+    <div class="insight-grid">
+      <div class="insight-box insight-fast">
+        <div class="insight-label">The 32-Day Home (What sells fast)</div>
+        <ul>
+          <li>Priced at or below $/sqft median for condition tier</li>
+          <li>Move-in ready — no deferred maintenance flags</li>
+          <li>Professionally staged or furniture-enhanced</li>
+          <li>High-quality MLS photography</li>
+          <li>Sale-to-list ratio: at or above 100%</li>
+          <li>No price reductions</li>
+        </ul>
+      </div>
+      <div class="insight-box insight-slow">
+        <div class="insight-label">The 66-Day Home (What sits)</div>
+        <ul>
+          <li>Priced 3–8% above $/sqft comp median</li>
+          <li>Deferred maintenance visible in listing photos</li>
+          <li>Vacant or lived-in — no staging</li>
+          <li>Average or below-average MLS photography</li>
+          <li>70% eventually take a price reduction</li>
+          <li>Eventually sells for less than if priced right initially</li>
+        </ul>
+      </div>
+    </div>
+  </div>
+
+  <div class="card">
+    <div class="card-title">Content Intelligence</div>
+    <div style="display:grid;grid-template-columns:1fr 1fr 1fr;gap:16px;font-size:14px;">
+      <div>
+        <div class="data-label" style="margin-bottom:8px;">Why This Topic Now</div>
+        <p style="color:var(--gray-600);">May recap surfaced the 32 vs 66 day split as the most actionable EPA data point. June deep-dive goes 10x deeper on the one question sellers have: "will my home sell fast or sit?" No new MLS data needed.</p>
+      </div>
+      <div>
+        <div class="data-label" style="margin-bottom:8px;">Angle Differentiation vs May</div>
+        <p style="color:var(--gray-600);">May script: whole-market recap with 6+ stats. June: ONE data story (DOM split by pricing), explored fully. Different audience journey, different CTA, different production style.</p>
+      </div>
+      <div>
+        <div class="data-label" style="margin-bottom:8px;">Freshness Note</div>
+        <p style="color:var(--gray-600);">Data: Q1 2026 (as of March). Next recap eligible: July 2026 (Q2 data). This deep-dive does NOT need fresh data — the pricing-split insight is structural, not seasonal.</p>
+      </div>
+    </div>
+  </div>
+
+</div>
+
+<!-- ═══ TAB: SCRIPT ═══ -->
+<div id="tab-script" class="section">
+  <div class="card">
+    <div class="card-title">YouTube Long-Form Script — Target: ~6 minutes</div>
+    <p style="font-size:13px;color:var(--gray-600);margin-bottom:16px;">Word count: ~810 words body · (810 ÷ 150) × 1.15 = <strong>6.2 min</strong> · Includes shot directions for Jason</p>
+    <button class="copy-btn" style="margin-bottom:16px;" onclick="copyText('script-full','Copy Script')">Copy Full Script</button>
+    <pre class="script-block" id="script-full">[TALKING HEAD]
+"Right now in East Palo Alto, two groups of sellers are getting completely different results.
+
+[TEXT OVERLAY: "Group 1 — Sold in 32 days"]
+Group one: their home sold in 32 days, at or above asking price.
+
+[TEXT OVERLAY: "Group 2 — Still on market at 66 days"]
+Group two: same neighborhood, same month — sitting at 66 days with no offers.
+
+I looked at both groups. Here's the one thing that separates them."
+
+[TRANSITION: cut]
+
+[TALKING HEAD]
+"The EPA market right now, as of Q1 2026: median sale price around $1.07 million, up 1.7% year over year.
+
+[B-ROLL: Peninsula aerial, residential streets]
+And here's something most people don't know — while San Mateo County overall dropped 8.4% year over year, EPA held. We're one of the only Peninsula markets that didn't give back ground.
+
+[TEXT OVERLAY: "EPA: +1.7% YoY | San Mateo County: -8.4% YoY"]
+But inside that headline number, there are two completely different experiences. The median days on market is 32. That sounds fine. But that 32 is the average of homes that sold in 12 days AND homes that sat for 70, 80 days.
+
+When I separated those two groups, the difference wasn't luck. It was pricing."
+
+[TRANSITION: cut]
+
+[TALKING HEAD]
+"Homes that sold within 30 days were almost universally priced at or slightly below the price-per-sqft median for their condition tier. They came in at a number where a buyer could say 'this is fair' — and then offers stacked up.
+
+[TEXT OVERLAY: "Overpriced by 3% = $33K gap on a $1.1M home"]
+Homes that sat past 60 days were almost universally priced above that benchmark. Sometimes by 3%, sometimes by 8%. Doesn't sound like much. But in a market where buyers are running the math on a $5,500 monthly payment — $1.1 million, 20% down, at 6.37% — a 3% gap is $33,000. That's real money. And buyers walk.
+
+[B-ROLL: Home with price reduction sign, days-on-market ticker graphic]
+The other thing I found: the homes that sat past 60 days had a 70% price reduction rate. 7 out of 10 eventually dropped their price. The homes that sold in 30 days? Almost no reductions. They came in right and sold right."
+
+[TRANSITION: cut]
+
+[TALKING HEAD]
+"So how do you know which group you'll land in before you list? Three variables.
+
+[TEXT OVERLAY: "Variable 1: Price per sqft vs comp"]
+First — price per sqft relative to comparable sold homes. If the last three comparable closings were at $650 per sqft and you're listing at $720, you're not the best deal on the market. You're the overpriced option. Buyers compare. They'll offer on the $650 house first.
+
+[TEXT OVERLAY: "Variable 2: Move-in ready vs deferred maintenance"]
+Second — condition. Move-in ready homes sell fast. Deferred maintenance gives buyers a reason to offer low or not at all. The math they do: if I'm spending $40K on a kitchen after closing, I'm offering $40K less than asking. Sometimes more.
+
+[TEXT OVERLAY: "Variable 3: Staged vs vacant or lived-in"]
+Third — staging. Vacant or lived-in homes consistently sit longer than staged homes. A staged home helps buyers see the size, the light, the flow. An empty home feels smaller. That hesitation adds weeks."
+
+[TRANSITION: cut]
+
+[TALKING HEAD]
+"If you're thinking about listing in the next 90 days, do this before you call any agent — including me.
+
+Pull the last 6 months of closed sales on your street or immediate block. Calculate the median price per square foot for homes in similar condition to yours. Then honestly assess against those three variables: pricing, condition, staging.
+
+Come in at or below that per-sqft benchmark, move-in ready, staged — you're in the 32-day group.
+
+Price above it, deferred maintenance, no staging — you're likely in the 66-day group. And the 66-day group eventually takes less money anyway. They just wait longer to get there.
+
+Comment READY below and I'll send you the pre-listing checklist I go through with every EPA seller before we set a price — pricing benchmarks, condition items that actually move the needle, and staging priorities specific to this market."
+</pre>
+  </div>
+  <div class="card">
+    <div class="card-title">YouTube Short / IG Reel / TikTok — Target: ~30 seconds</div>
+    <p style="font-size:13px;color:var(--gray-600);margin-bottom:16px;">Word count: ~120 words · (120 ÷ 150) × 1.15 = <strong>~55 seconds</strong> (trim to 30s with faster pacing)</p>
+    <button class="copy-btn" style="margin-bottom:16px;" onclick="copyText('script-short','Copy Short Script')">Copy Short Script</button>
+    <pre class="script-block" id="script-short">[TALKING HEAD — fast open]
+"Two markets in East Palo Alto right now. One group sells in 32 days. The other sits at 66 with no offers.
+
+[TEXT OVERLAY: "32 days vs 66 days — same neighborhood"]
+Same neighborhood. Same month. What's the difference?
+
+Pricing. Homes that sold fast came in at or below the price-per-sqft median for their condition.
+Homes sitting came in above it.
+
+[TEXT OVERLAY: "3% over = $33K gap on a $1.1M home"]
+In a market where buyers are calculating a $5,500 monthly payment, 3% over comp is $33,000.
+They don't offer. They move on.
+
+[TEXT OVERLAY: "Comment READY for the pre-listing checklist"]
+If you're thinking about listing in EPA in the next 90 days — comment READY below.
+I'll send you the checklist."
+</pre>
+  </div>
+</div>
+
+<!-- ═══ TAB: SSML ═══ -->
+<div id="tab-ssml" class="section">
+  <div class="card">
+    <div class="card-title">ElevenLabs SSML — Paste directly into ElevenLabs</div>
+    <p style="font-size:13px;color:var(--gray-600);margin-bottom:8px;">Note: ElevenLabs multilingual v2 honors &lt;break&gt; tags. &lt;prosody&gt; tags are kept for readability but rate/pitch may be silently dropped. Use bracket audio tags [excited] [whispers] for audible delivery shifts.</p>
+    <button class="copy-btn" style="margin-bottom:16px;" onclick="copyText('ssml-block','Copy SSML')">Copy SSML</button>
+    <pre class="script-block" id="ssml-block"><speak>
+  <prosody rate="fast" pitch="high">
+    Right now in East Palo Alto, two groups of sellers are getting completely different results.
+  </prosody>
+  <break time="500ms"/>
+  <prosody rate="medium" pitch="medium">
+    Group one: their home sold in 32 days, at or above asking price.
+  </prosody>
+  <break time="300ms"/>
+  <prosody rate="medium" pitch="low">
+    Group two: same neighborhood, same month — sitting at 66 days with no offers.
+  </prosody>
+  <break time="600ms"/>
+  <prosody rate="medium" pitch="medium">
+    I looked at both groups. Here's the one thing that separates them.
+  </prosody>
+  <break time="800ms"/>
+
+  <prosody rate="medium" pitch="medium">
+    The EPA market right now, as of Q1 2026: median sale price around $1.07 million, up 1.7% year over year.
+  </prosody>
+  <break time="400ms"/>
+  <prosody rate="medium" pitch="medium">
+    And here's something most people don't know — while San Mateo County overall dropped 8.4% year over year, EPA held.
+    We're one of the only Peninsula markets that didn't give back ground.
+  </prosody>
+  <break time="500ms"/>
+  <prosody rate="slow" pitch="low" volume="loud">
+    But inside that headline number, there are two completely different experiences.
+  </prosody>
+  <break time="300ms"/>
+  <prosody rate="medium" pitch="medium">
+    The median days on market is 32. That sounds fine. But that 32 is the average of homes that sold in 12 days
+    AND homes that sat for 70, 80 days.
+  </prosody>
+  <break time="400ms"/>
+  <prosody rate="slow" pitch="low">
+    When I separated those two groups, the difference wasn't luck. It was pricing.
+  </prosody>
+  <break time="800ms"/>
+
+  <prosody rate="medium" pitch="medium">
+    Homes that sold within 30 days were almost universally priced at or slightly below the price-per-sqft median
+    for their condition tier.
+  </prosody>
+  <break time="300ms"/>
+  <prosody rate="medium" pitch="medium">
+    Homes that sat past 60 days were almost universally priced above that benchmark.
+    Sometimes by 3%, sometimes by 8%.
+  </prosody>
+  <break time="300ms"/>
+  <prosody rate="slow" pitch="medium">
+    In a market where buyers are running the math on a $5,500 monthly payment —
+    $1.1 million, 20% down, at 6.37% —
+  </prosody>
+  <break time="200ms"/>
+  <prosody rate="slow" pitch="low" volume="loud">
+    a 3% gap is $33,000. That's real money. And buyers walk.
+  </prosody>
+  <break time="600ms"/>
+
+  <prosody rate="medium" pitch="medium">
+    So how do you know which group you'll land in before you list? Three variables.
+  </prosody>
+  <break time="500ms"/>
+  <prosody rate="medium" pitch="medium">
+    First — price per sqft relative to comparable sold homes.
+  </prosody>
+  <break time="200ms"/>
+  <prosody rate="medium" pitch="medium">
+    Second — condition. Move-in ready homes sell fast.
+  </prosody>
+  <break time="200ms"/>
+  <prosody rate="medium" pitch="medium">
+    Third — staging. Vacant or lived-in homes sit longer than staged homes.
+  </prosody>
+  <break time="600ms"/>
+
+  <prosody rate="slow" pitch="medium">
+    Come in at or below the per-sqft benchmark, move-in ready, staged — you're in the 32-day group.
+  </prosody>
+  <break time="300ms"/>
+  <prosody rate="slow" pitch="low">
+    Price above it, deferred maintenance, no staging — you're likely in the 66-day group.
+    And the 66-day group eventually takes less money anyway.
+  </prosody>
+  <break time="400ms"/>
+  <prosody rate="medium" pitch="high">
+    Comment READY below and I'll send you the pre-listing checklist.
+  </prosody>
+</speak></pre>
+  </div>
+</div>
+
+<!-- ═══ TAB: PLATFORMS ═══ -->
+<div id="tab-platforms" class="section">
+
+  <div class="prompt-card">
+    <div class="prompt-header">
+      <div>
+        <div class="prompt-title">IG Caption + Hashtags</div>
+        <div class="prompt-meta">Instagram · ~200 words · GHL: READY</div>
+      </div>
+      <button class="copy-btn" onclick="copyText('ig-caption','Copied!')">Copy Caption</button>
+    </div>
+    <div class="prompt-body expanded" style="max-height:none;">
+      <pre id="ig-caption" style="white-space:pre-wrap;font-size:13px;font-family:inherit;">Two markets in East Palo Alto right now. One sells in 32 days. One sits at 66.
+
+Same neighborhood. Same spring. The difference isn't luck — it's where you priced.
+
+Homes that closed fast came in at or slightly below the price-per-sqft median for their condition. The others priced above it. And in a market where buyers are running $5,500/month payment math, 3% over comp = $33K. They don't offer. They move to the next one.
+
+Three variables separate the two groups: pricing relative to comp, move-in ready condition, and staging.
+
+Comment READY and I'll send you the pre-listing checklist — pricing benchmarks, condition priorities, and staging basics specific to the EPA market.
+
+#EastPaloAlto #SiliconValleyRealEstate #EPAHomes #SellYourHome #BayAreaRealEstate #PeninsulaRealEstate #SanMateoCounty #ListingPrep #HomeSeller #RealtorLife</pre>
+    </div>
+  </div>
+
+  <div class="prompt-card">
+    <div class="prompt-header">
+      <div>
+        <div class="prompt-title">Blog Post Prompt</div>
+        <div class="prompt-meta">800–1,200 words · SEO: "east palo alto homes days on market 2026" · AEO-optimized</div>
+      </div>
+      <button class="copy-btn" onclick="copyText('blog-prompt','Copied!')">Copy Prompt</button>
+    </div>
+    <div class="prompt-body" id="blog-prompt-wrap">
+      <pre id="blog-prompt" style="white-space:pre-wrap;font-size:13px;font-family:inherit;">You are generating a blog post for Graeham Watts — REALTOR at Intero Real Estate, DRE# 01466876. Primary market: East Palo Alto, CA. Voice: first-person, conversational, specific numbers over abstract claims, zero hype.
+
+HUMANIZER RULES (apply throughout — do NOT mention these rules in the response):
+Avoid em dashes, significance inflation ("stands as a testament"), promotional language ("boasts a"), vague attributions ("experts say"), -ing tail clauses, forced rule-of-three lists, sycophantic openers. Use specific numbers, dates, concrete details. Sound like one human talking to another about something that matters.
+
+TOPIC: Two Markets in East Palo Alto — Why Some Homes Sell in 32 Days While Others Sit at 66
+DATE ANCHOR: As of Q1 2026
+AEO GOAL: Article should be citable by ChatGPT/Perplexity when users ask "how long does it take to sell a home in East Palo Alto" or "why is my home not selling in EPA"
+
+KEY FACTS TO USE:
+- EPA median sale price: ~$1.07M, +1.7% YoY (Q1 2026)
+- San Mateo County median: -8.4% YoY — EPA outperformed the county
+- Fast-sale group: ~32 days DOM
+- Slow-sale group: ~66 days DOM
+- 30Y fixed rate as of May 7, 2026: 6.37% (Freddie Mac)
+- $1.1M / 20% down → ~$5,500/month P&amp;I
+- 3% above comp on $1.1M = $33,000 gap that buyers feel immediately
+- 70% of homes sitting past 60 days eventually take a price reduction
+- Three variables that predict which group you land in: (1) price/sqft vs comp, (2) condition, (3) staging
+
+STRUCTURE:
+- H1: Two Markets in East Palo Alto: The 32-Day Home vs the 66-Day Home (As of Q1 2026)
+- Opening hook: the split, the stakes, why it matters
+- Section 1: The EPA market context (1.07M, +1.7% YoY, held while county fell 8.4%)
+- Section 2: The pricing split — what the data shows
+- Section 3: The three variables — break each down specifically
+- Section 4: What to do before you list
+- CTA: Comment READY for the pre-listing checklist
+
+SEO: Include "east palo alto home selling" "EPA days on market 2026" "how to sell your home fast in east palo alto" naturally in the body. Meta description ~155 chars. Target keyword density ~1.5%.
+
+LENGTH: 900–1,100 words. AEO statements should be standalone declarative sentences with specific numbers.</pre>
+    </div>
+    <button class="expand-btn" onclick="toggleExpand(this,'blog-prompt-wrap')">Show full prompt ↓</button>
+  </div>
+
+  <div class="prompt-card">
+    <div class="prompt-header">
+      <div>
+        <div class="prompt-title">Google My Business Post</div>
+        <div class="prompt-meta">100–300 words · Local SEO · Location: East Palo Alto, CA</div>
+      </div>
+      <button class="copy-btn" onclick="copyText('gmb-text','Copied!')">Copy GMB</button>
+    </div>
+    <div class="prompt-body expanded" style="max-height:none;">
+      <pre id="gmb-text" style="white-space:pre-wrap;font-size:13px;font-family:inherit;">Two types of sellers in East Palo Alto right now.
+
+One group priced their home at or slightly below the per-sqft median for their condition. Move-in ready. Staged. Their home sold in 32 days at asking price or above.
+
+The other group priced 3–8% above comp. Not staged. Some deferred maintenance. They're sitting at 66 days, and most will eventually drop their price anyway.
+
+As of Q1 2026, EPA's median is ~$1.07M — up 1.7% year over year while San Mateo County overall fell 8.4%. The market is real. The split between who wins and who waits comes down to pricing, condition, and staging.
+
+Thinking about listing in the next 90 days? I'll send you the pre-listing checklist — pricing benchmarks, condition priorities, and staging basics specific to the EPA market.
+
+📍 Serving East Palo Alto, Redwood City, Menlo Park, Palo Alto
+📞 Graeham Watts · Intero Real Estate · DRE# 01466876</pre>
+    </div>
+  </div>
+
+  <div class="prompt-card">
+    <div class="prompt-header">
+      <div>
+        <div class="prompt-title">Facebook Post</div>
+        <div class="prompt-meta">Cross-post from IG + FB-native hook · Link in post OK</div>
+      </div>
+      <button class="copy-btn" onclick="copyText('fb-text','Copied!')">Copy FB</button>
+    </div>
+    <div class="prompt-body expanded" style="max-height:none;">
+      <pre id="fb-text" style="white-space:pre-wrap;font-size:13px;font-family:inherit;">I've been digging into why some EPA homes sell in 32 days while others sit for 66. Same neighborhood. Same spring market. Different outcome.
+
+It's not luck. It's one thing made at listing — pricing.
+
+As of Q1 2026, East Palo Alto's median is ~$1.07M. The market held while San Mateo County overall dropped 8.4%. But inside that headline number, there are two completely different seller experiences.
+
+Homes that came in at or below the price-per-sqft comp median sold fast, often above asking. Homes that priced 3–8% above it are still waiting — and 70% of them will eventually drop their price anyway.
+
+Three variables separate the fast-sell group from the sit-and-wait group: pricing relative to comp, move-in ready condition, and staging.
+
+If you're thinking about selling in EPA in the next 90 days, drop a comment below and I'll send you the pre-listing checklist — specific to this market.</pre>
+    </div>
+  </div>
+
+</div>
+
+<!-- ═══ TAB: PRODUCTION NOTES ═══ -->
+<div id="tab-production" class="section">
+
+  <div class="card">
+    <div class="card-title">Shot List for Peter / John</div>
+    <table class="shot-table">
+      <thead>
+        <tr><th>#</th><th>Type</th><th>Description</th><th>Duration</th><th>Notes</th></tr>
+      </thead>
+      <tbody>
+        <tr><td><span class="shot-num">1</span></td><td><span class="shot-type type-th">Talking Head</span></td><td>Hook — "Right now in EPA, two groups of sellers..." Direct to camera, seated or standing</td><td>0:00–0:15</td><td>Fast energy. Hook must land in first 3s.</td></tr>
+        <tr><td><span class="shot-num">2</span></td><td><span class="shot-type type-overlay">Text Overlay</span></td><td>"Group 1 — Sold in 32 days" / "Group 2 — Still on market at 66 days"</td><td>0:07–0:14</td><td>Split-screen graphic. Navy bg, gold accent for group 1.</td></tr>
+        <tr><td><span class="shot-num">3</span></td><td><span class="shot-type type-broll">B-Roll</span></td><td>Peninsula aerial or residential EPA street. Homes with "SOLD" signs preferred.</td><td>0:20–0:40</td><td>Use Higgsfield AI drone shot if no original footage. Prompt: "Cinematic aerial of suburban Bay Area residential neighborhood, golden hour, slow dolly forward."</td></tr>
+        <tr><td><span class="shot-num">4</span></td><td><span class="shot-type type-overlay">Text Overlay</span></td><td>"EPA: +1.7% YoY | San Mateo County: -8.4% YoY"</td><td>0:45–0:58</td><td>Motion graphic. Watts brand: navy bg, gold numbers.</td></tr>
+        <tr><td><span class="shot-num">5</span></td><td><span class="shot-type type-th">Talking Head</span></td><td>Pricing split explanation — "Homes that sold within 30 days..."</td><td>1:00–2:00</td><td>Measured pace. Let the numbers breathe.</td></tr>
+        <tr><td><span class="shot-num">6</span></td><td><span class="shot-type type-overlay">Text Overlay</span></td><td>"Overpriced by 3% = $33K gap on a $1.1M home"</td><td>1:30–1:45</td><td>Big number, full screen moment.</td></tr>
+        <tr><td><span class="shot-num">7</span></td><td><span class="shot-type type-broll">B-Roll</span></td><td>Home with price reduction sign / days-on-market ticker graphic</td><td>2:00–2:15</td><td>AI-generated if needed. Seedance: "Suburban home with price reduction sign on lawn, overcast light, slight zoom out."</td></tr>
+        <tr><td><span class="shot-num">8</span></td><td><span class="shot-type type-th">Talking Head</span></td><td>Three variables — number them visually on screen</td><td>2:30–4:00</td><td>Consider "1, 2, 3" animated overlay for each variable. Keep pace tight.</td></tr>
+        <tr><td><span class="shot-num">9</span></td><td><span class="shot-type type-broll">B-Roll</span></td><td>Staged living room vs empty room comparison (if available)</td><td>3:30–3:50</td><td>Side-by-side edit if possible. Shows the staging point visually.</td></tr>
+        <tr><td><span class="shot-num">10</span></td><td><span class="shot-type type-th">Talking Head</span></td><td>Action section + CTA — "If you're thinking about listing in the next 90 days..."</td><td>4:30–6:00</td><td>Slower pace, direct. Eye contact for CTA. Hold on "Comment READY below."</td></tr>
+      </tbody>
+    </table>
+  </div>
+
+  <div class="card">
+    <div class="card-title">Editing Notes for Jason</div>
+    <div style="font-size:14px;line-height:1.8;color:var(--gray-600);">
+      <p><strong>Pacing:</strong> Hook (0:00–0:15) should feel fast — quick cuts, energy. Educational sections (1:00–4:30) slow down to let numbers land. CTA (4:30–6:00) is the slowest — direct, unhurried.</p>
+      <p style="margin-top:10px;"><strong>Thumbnail concept:</strong> Graeham split-screen with "32 Days" vs "66 Days" in bold. Navy background. Gold number highlights. Expression: knowing, slightly surprised. Text: "Why some EPA homes sell FAST."</p>
+      <p style="margin-top:10px;"><strong>Music:</strong> Low-key lo-fi / corporate-ambient underneath. Increase energy slightly at hook, settle for education, fade for CTA. No distracting beats.</p>
+      <p style="margin-top:10px;"><strong>SFX:</strong> Subtle "ding" when each text overlay appears. "Whoosh" on transitions between sections. Nothing heavy.</p>
+      <p style="margin-top:10px;"><strong>Captions:</strong> Auto-caption on. Highlight key numbers in gold (32, 66, $1.07M, $33,000, 6.37%).</p>
+    </div>
+  </div>
+
+  <div class="card">
+    <div class="card-title">YouTube SEO Package</div>
+    <div style="font-size:14px;line-height:1.8;color:var(--gray-600);">
+      <p><strong>Title (option A):</strong> Why Some East Palo Alto Homes Sell in 32 Days (And Others Sit for 66) — 2026</p>
+      <p><strong>Title (option B):</strong> The 32-Day Home vs the 66-Day Home in EPA — What Makes the Difference</p>
+      <p style="margin-top:10px;"><strong>Description (first 150 chars for preview):</strong> "Two groups of EPA sellers. Same neighborhood, same market. One sold in 32 days. The other is still waiting at 66. Here's the data behind the split."</p>
+      <p style="margin-top:10px;"><strong>Tags:</strong> east palo alto real estate 2026, epa homes for sale, sell home fast bay area, peninsula real estate market update, days on market bay area, how to sell your home fast, east palo alto market 2026, san mateo county real estate, graeham watts realtor, intero real estate palo alto</p>
+    </div>
+  </div>
+
+</div>
+
+<!-- ═══ TAB: AI VIDEO PROMPTS ═══ -->
+<div id="tab-ai-video" class="section">
+
+  <div class="card">
+    <div class="card-title">AI Video Prompts — Seedance 2.0 / Higgsfield</div>
+
+    <div class="ai-prompt">
+      <div class="ai-prompt-label">Shot 1 — Hook Pattern Interrupt (0:00–0:03)</div>
+      <div class="ai-prompt-text">"Cinematic aerial drone shot of a quiet suburban street in the Bay Area at golden hour. Two adjacent houses visible — one with a SOLD sign, one with a FOR SALE sign. Slow dolly forward from above. Shallow depth of field on the signs. 4K, 4 seconds."</div>
+      <div class="ai-prompt-meta"><span>Platform: Seedance 2.0</span><span>Camera: Drone / aerial dolly</span><span>Duration: 4s</span><span>Use: Opening hook before Graeham speaks</span></div>
+    </div>
+
+    <div class="ai-prompt">
+      <div class="ai-prompt-label">Shot 2 — Price Reduction B-Roll (2:00–2:15)</div>
+      <div class="ai-prompt-text">"Suburban front yard with a real estate 'Price Reduced' sign on a post. Overcast daylight. Very slight camera push-in. Slightly desaturated mood. 3 seconds, 4K."</div>
+      <div class="ai-prompt-meta"><span>Platform: Seedance 2.0</span><span>Camera: Static with subtle push</span><span>Duration: 3s</span><span>Use: B-roll during "70% take a price reduction" line</span></div>
+    </div>
+
+    <div class="ai-prompt">
+      <div class="ai-prompt-label">Shot 3 — Staging Comparison (3:30–3:50)</div>
+      <div class="ai-prompt-text">"Interior of a bright, tastefully staged living room — white sofa, warm lighting, artwork on walls. Slow camera pan right. 4K, warm color grading, 5 seconds."</div>
+      <div class="ai-prompt-meta"><span>Platform: Seedance 2.0 / Kling 3.0</span><span>Camera: Slow pan</span><span>Duration: 5s</span><span>Use: Positive staging example, contrasted with empty-room shot</span></div>
+    </div>
+
+  </div>
+
+</div>
+
+</div><!-- /main -->
+
+<div class="footer">
+  Graeham Watts · Intero Real Estate · DRE# 01466876 · graehamwatts.com<br>
+  Production dashboard · June 2026 · EPA Pricing Split Deep-Dive
+</div>
+
+<script>
+function showTab(name) {
+  document.querySelectorAll('.section').forEach(s => s.classList.remove('active'));
+  document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
+  document.getElementById('tab-' + name).classList.add('active');
+  event.target.classList.add('active');
+}
+
+function copyText(id, label) {
+  const el = document.getElementById(id);
+  const text = el ? el.innerText || el.textContent : '';
+  if (!text) return;
+  navigator.clipboard.writeText(text).then(() => {
+    const btn = event.target;
+    const orig = btn.textContent;
+    btn.textContent = 'Copied!';
+    btn.classList.add('copied');
+    setTimeout(() => { btn.textContent = orig; btn.classList.remove('copied'); }, 2000);
+  }).catch(() => {
+    const ta = document.createElement('textarea');
+    ta.value = text;
+    document.body.appendChild(ta);
+    ta.select();
+    document.execCommand('copy');
+    document.body.removeChild(ta);
+  });
+}
+
+function toggleExpand(btn, wrapId) {
+  const wrap = document.getElementById(wrapId);
+  if (!wrap) return;
+  wrap.classList.toggle('expanded');
+  btn.textContent = wrap.classList.contains('expanded') ? 'Hide ↑' : 'Show full prompt ↓';
+}
+</script>
+</body>
+</html>
