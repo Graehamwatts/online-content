@@ -1,0 +1,110 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Daily Attribution Brief · Sunday, May 24, 2026</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700&display=swap" rel="stylesheet">
+<style>
+*{box-sizing:border-box;margin:0;padding:0}
+body{font-family:'DM Sans',sans-serif;background:#060d1a;color:#e2e8f0;min-height:100vh}
+.wrap{max-width:720px;margin:0 auto;padding:24px 16px}
+.topbar{background:#0f1729;border:1px solid #1e293b;border-radius:8px;padding:10px 16px;font-size:13px;color:#94a3b8;margin-bottom:20px;display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:8px}
+.topbar strong{color:#f4b955}
+.header{background:linear-gradient(135deg,#0f1729 0%,#162032 100%);border:1px solid #1e293b;border-radius:12px;padding:24px;margin-bottom:16px}
+.header h1{font-size:22px;font-weight:700;color:#f1f5f9;margin-bottom:4px}
+.header .sub{font-size:14px;color:#94a3b8}
+.status{border-radius:6px;padding:10px 16px;margin-bottom:16px;font-weight:600;font-size:14px;background:#f4b955;color:#0f1729}
+.kpi-grid{display:grid;grid-template-columns:repeat(2,1fr);gap:12px;margin-bottom:16px}
+@media(min-width:500px){.kpi-grid{grid-template-columns:repeat(4,1fr)}}
+.kpi{background:#0f1729;border:1px solid #1e293b;border-radius:10px;padding:16px;text-align:center}
+.kpi .num{font-size:28px;font-weight:700;color:#f4b955;line-height:1.1}
+.kpi .label{font-size:12px;color:#94a3b8;margin-top:4px}
+.section{background:#0f1729;border:1px solid #1e293b;border-radius:10px;padding:20px;margin-bottom:16px}
+.section h2{font-size:13px;font-weight:700;color:#f4b955;margin-bottom:12px;text-transform:uppercase;letter-spacing:.08em}
+.read{font-size:15px;line-height:1.75;color:#cbd5e1}
+.error-box{background:#1a0a0a;border:1px solid #7f1d1d;border-radius:8px;padding:16px;margin-top:12px}
+.error-box h3{color:#fca5a5;font-size:13px;text-transform:uppercase;letter-spacing:.05em;margin-bottom:8px}
+.error-box code{font-family:monospace;font-size:13px;color:#fda4af;display:block;word-break:break-all}
+.fix-box{background:#0a1a0a;border:1px solid #14532d;border-radius:8px;padding:16px;margin-top:12px}
+.fix-box h3{color:#86efac;font-size:13px;text-transform:uppercase;letter-spacing:.05em;margin-bottom:8px}
+.fix-box p{font-size:14px;color:#bbf7d0;line-height:1.6}
+.fix-box code{font-family:monospace;font-size:12px;background:#052e16;padding:8px 12px;border-radius:4px;display:block;margin-top:8px;color:#4ade80;word-break:break-all}
+.footer{text-align:center;padding:24px 0;color:#475569;font-size:13px;line-height:1.6}
+table{width:100%;border-collapse:collapse}
+th{text-align:left;padding:10px 12px;background:#162032;color:#94a3b8;font-size:12px;text-transform:uppercase;letter-spacing:.05em;font-weight:600}
+td{padding:10px 12px;border-bottom:1px solid #1e293b;color:#e2e8f0;vertical-align:middle}
+</style>
+</head>
+<body>
+<div class="wrap">
+  <div class="topbar">
+    <span><strong>Daily Attribution Brief</strong> · Sunday, May 24, 2026</span>
+    <span>GHL · 6wuU3ha…</span>
+  </div>
+  <div class="header">
+    <h1>Daily Attribution Brief — Partial Run</h1>
+    <div class="sub">Sunday, May 24, 2026 · GHL connectivity confirmed · Source bucketing failed</div>
+  </div>
+  <div class="status">GHL pull ran · Source bucketing failed · Manual review needed</div>
+
+  <div class="kpi-grid">
+    <div class="kpi"><div class="num">2000*</div><div class="label">Contacts Pulled</div></div>
+    <div class="kpi"><div class="num">2</div><div class="label">New Opps</div></div>
+    <div class="kpi"><div class="num">0</div><div class="label">Wins</div></div>
+    <div class="kpi"><div class="num" style="font-size:16px">See below</div><div class="label">Source Fix</div></div>
+  </div>
+
+  <div class="section">
+    <h2>What Happened</h2>
+    <p class="read">GHL connectivity is live — the workflow authenticated successfully and pulled data from your pipeline. <strong>2000 contacts</strong> were flagged in the cursor window for Sunday, May 24, 2026 and <strong>2 opportunities</strong> were created. However, the workflow crashed before it could bucket contacts by source and write the brief.</p>
+    <p class="read" style="margin-top:10px">⚠️ <em>The 2000 contact figure may overcount — the cursor-based pagination in the inline Python is different from the <code>/contacts/search</code> filter approach. Verify against GHL directly.</em></p>
+
+    <div class="error-box">
+      <h3>Error (GitHub Actions Run #26405357744)</h3>
+      <code>AttributeError: 'int' object has no attribute 'lower'<br>
+File &lt;stdin&gt;, line 165, in bucket_source<br>
+One of your GHL contact fields (source, attributionSource, or contactSource) is returning an integer instead of a string.</code>
+    </div>
+
+    <div class="fix-box">
+      <h3>Fix Applied</h3>
+      <p>The external script <strong>.github/scripts/daily_attribution_brief.py</strong> has been patched — <code>bucket_source</code> now coerces all field values via <code>str()</code> before calling <code>.lower()</code>.</p>
+      <p style="margin-top:8px"><strong>Action needed to complete the fix:</strong> Update the workflow to call the external script instead of the inline Python. Open the GitHub Actions workflow file and replace the <code>run: python3 &lt;&lt; 'PYEOF'</code> block with:</p>
+      <code>run: python3 .github/scripts/daily_attribution_brief.py</code>
+      <p style="margin-top:8px">Or add the <code>workflow</code> scope to the Claude Skills PAT so Claude can update workflow files automatically.</p>
+    </div>
+  </div>
+
+  <div class="section">
+    <h2>Run Timeline</h2>
+    <table>
+      <thead><tr><th>Step</th><th>Status</th><th>Detail</th></tr></thead>
+      <tbody>
+        <tr><td>GHL Authentication</td><td style="color:#22c55e">✓ Success</td><td>PIT token valid</td></tr>
+        <tr><td>Custom Fields Fetch</td><td style="color:#22c55e">✓ Success</td><td>Fields resolved</td></tr>
+        <tr><td>Pipeline Stages</td><td style="color:#22c55e">✓ Success</td><td>Stages mapped</td></tr>
+        <tr><td>Contacts Pull (May 24)</td><td style="color:#f4b955">⚠ Partial</td><td>2,000 fetched (hit 20-page cap)</td></tr>
+        <tr><td>Opps Pull (May 24)</td><td style="color:#22c55e">✓ Success</td><td>2 opps in window</td></tr>
+        <tr><td>Source Bucketing</td><td style="color:#ef4444">✗ Failed</td><td>AttributeError: int has no .lower()</td></tr>
+        <tr><td>HTML Generation</td><td style="color:#ef4444">✗ Skipped</td><td>—</td></tr>
+        <tr><td>Script Fix (.py)</td><td style="color:#22c55e">✓ Applied</td><td>str() coercion patched</td></tr>
+        <tr><td>Workflow Update</td><td style="color:#f4b955">⚠ Blocked</td><td>PAT missing workflow scope</td></tr>
+      </tbody>
+    </table>
+  </div>
+
+  <div class="section">
+    <h2>Next Steps</h2>
+    <p class="read">1. Update the workflow manually in GitHub → Actions → daily-attribution-brief.yml → edit the "Generate" step to <code>run: python3 .github/scripts/daily_attribution_brief.py</code><br><br>
+    2. OR: Regenerate the Claude Skills PAT with <code>workflow</code> scope so Claude can update workflow files automatically.<br><br>
+    3. Re-trigger the workflow dispatch — it should produce a clean brief on the next run.</p>
+  </div>
+
+  <div class="footer">
+    Graeham Watts · Intero Real Estate · graehamwatts@gmail.com<br>
+    Generated 2026-05-25 · Daily Attribution Brief (partial — awaiting workflow fix)
+  </div>
+</div>
+</body>
+</html>
