@@ -1,0 +1,41 @@
+[
+  {
+    "client_name": "Narasimha Prasad Subraveti",
+    "due_date": "2026-05-25",
+    "property_address": "1515 Treviso Ave, San Jose, CA 95118",
+    "live_url": "https://graehamwatts.github.io/online-content/cma/CMA_1515_Treviso_Ave.html",
+    "drafted_at": "2026-05-25T00:00:00Z",
+    "draft_id": "r-6783891435301955020",
+    "value_mid": 2050000,
+    "value_low": 1950000,
+    "value_high": 2150000,
+    "data_source": "public_fallback",
+    "run_id": "pcfs-cma-autobuild-weekly-2026-05-25"
+  },
+  {
+    "client_name": "Viduishi Jain",
+    "due_date": "2026-05-25",
+    "property_address": "939 Runnymede St, East Palo Alto, CA 94303",
+    "live_url": "https://graehamwatts.github.io/online-content/cma/CMA_939_Runnymede_St.html",
+    "drafted_at": "2026-05-25T00:00:00Z",
+    "draft_id": "r-3123519841871012116",
+    "value_mid": 1070000,
+    "value_low": 930000,
+    "value_high": 1240000,
+    "data_source": "public_fallback",
+    "run_id": "pcfs-cma-autobuild-weekly-2026-05-25"
+  },
+  {
+    "client_name": "Ravi Indurkar",
+    "due_date": "2026-05-25",
+    "property_address": "347 Avenida Pinos, San Jose, CA 95123",
+    "live_url": "https://graehamwatts.github.io/online-content/cma/CMA_347_Avenida_Pinos.html",
+    "drafted_at": "2026-05-25T00:00:00Z",
+    "draft_id": "r-4140915103657177838",
+    "value_mid": 1800000,
+    "value_low": 1675000,
+    "value_high": 1925000,
+    "data_source": "public_fallback",
+    "run_id": "pcfs-cma-autobuild-weekly-2026-05-25"
+  }
+]
