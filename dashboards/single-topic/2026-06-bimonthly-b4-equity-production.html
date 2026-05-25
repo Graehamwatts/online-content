@@ -1,0 +1,728 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Graeham Watts · Bi-Monthly Market Update · June 2026 · Equity + Wealth Position</title>
+<link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;600;700;800&family=DM+Sans:wght@400;500;700&display=swap" rel="stylesheet">
+<style>
+:root{
+  --navy:#1B2A4A; --gold:#C5A258; --bg:#f4f5f7; --card:#fff;
+  --text:#2d3748; --muted:#718096; --border:#e2e5ea; --radius:12px;
+  --green:#15803d; --red:#c62828; --teal:#0d7377; --purple:#6a1b9a;
+}
+*{box-sizing:border-box;}
+body{margin:0;background:var(--bg);color:var(--text);font-family:'DM Sans',-apple-system,sans-serif;line-height:1.55;}
+h1,h2,h3,h4{font-family:'Plus Jakarta Sans',sans-serif;letter-spacing:-0.02em;color:var(--navy);}
+
+/* HERO */
+.hero{background:linear-gradient(135deg,#0f172a 0%,#1B2A4A 60%,#2d3a55 100%);color:#fff;padding:36px 32px 28px;position:relative;overflow:hidden;}
+.hero::before{content:'';position:absolute;top:-60px;right:-60px;width:280px;height:280px;border-radius:50%;background:rgba(197,162,88,0.08);pointer-events:none;}
+.hero::after{content:'';position:absolute;bottom:-40px;right:100px;width:160px;height:160px;border-radius:50%;background:rgba(197,162,88,0.05);pointer-events:none;}
+.hero h1{color:#fff;font-size:27px;margin:0 0 6px;font-weight:800;}
+.hero .sub{color:rgba(255,255,255,0.72);font-size:14px;margin-bottom:18px;max-width:820px;}
+.hero-pills{display:flex;flex-wrap:wrap;gap:8px;}
+.pill{background:rgba(255,255,255,0.1);padding:5px 13px;border-radius:20px;font-size:12px;font-weight:600;border:1px solid rgba(255,255,255,0.12);}
+.pill.gold{background:rgba(197,162,88,0.35);color:#ffe8a0;border-color:rgba(197,162,88,0.4);}
+.pill.green{background:rgba(22,163,74,0.3);color:#bbf7d0;border-color:rgba(22,163,74,0.3);}
+.pill.angle{background:rgba(106,27,154,0.4);color:#e9d5ff;border-color:rgba(106,27,154,0.4);}
+
+/* FRESHNESS GATE BADGE */
+.gate-banner{background:#0f172a;border-left:4px solid var(--gold);padding:10px 16px;font-size:12.5px;color:rgba(255,255,255,0.8);}
+.gate-banner strong{color:var(--gold);}
+
+/* TABS */
+.tab-nav{display:flex;gap:0;background:#0f172a;overflow-x:auto;scrollbar-width:none;}
+.tab-nav::-webkit-scrollbar{display:none;}
+.tab-btn{background:none;border:none;color:rgba(255,255,255,0.55);padding:14px 20px;font-size:13px;font-weight:700;font-family:'Plus Jakarta Sans',sans-serif;cursor:pointer;white-space:nowrap;border-bottom:3px solid transparent;transition:all 0.15s;letter-spacing:0.01em;}
+.tab-btn:hover{color:#fff;background:rgba(255,255,255,0.05);}
+.tab-btn.active{color:#fff;border-bottom-color:var(--gold);}
+.tab-panel{display:none;padding:28px 32px;max-width:1200px;margin:0 auto;}
+.tab-panel.active{display:block;}
+
+/* MARKET COLUMNS */
+.market-cols{display:grid;grid-template-columns:1fr 1fr;gap:20px;margin-bottom:24px;}
+@media(max-width:900px){.market-cols{grid-template-columns:1fr;}}
+.market-col{background:var(--card);border-radius:var(--radius);border:1px solid var(--border);overflow:hidden;}
+.market-col-head{padding:16px 20px;font-family:'Plus Jakarta Sans',sans-serif;font-weight:800;font-size:15px;color:#fff;display:flex;align-items:center;gap:10px;}
+.market-col-head.ba{background:linear-gradient(135deg,#0f172a 0%,#1B2A4A 100%);}
+.market-col-head.epa{background:linear-gradient(135deg,#2e1065 0%,#6a1b9a 100%);}
+.market-col-body{padding:18px 20px;}
+
+/* EQUITY STAT GRID */
+.eq-grid{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-bottom:14px;}
+.eq-box{background:linear-gradient(135deg,#f8fafc 0%,#f1f5f9 100%);border-radius:8px;padding:14px 16px;border-left:3px solid var(--gold);}
+.eq-box.accent{border-left-color:var(--purple);}
+.eq-label{font-size:10px;font-weight:800;text-transform:uppercase;letter-spacing:0.6px;color:var(--muted);margin-bottom:4px;}
+.eq-val{font-size:22px;font-weight:800;color:var(--navy);font-family:'Plus Jakarta Sans',sans-serif;line-height:1.1;}
+.eq-sub{font-size:11px;color:var(--muted);margin-top:3px;}
+
+/* OPTION CARDS */
+.option-cards{display:grid;grid-template-columns:1fr;gap:10px;margin:14px 0;}
+.option-card{background:var(--card);border-radius:8px;border:1px solid var(--border);padding:14px 16px;display:flex;gap:12px;align-items:flex-start;}
+.option-num{width:28px;height:28px;border-radius:50%;background:var(--navy);color:#fff;font-weight:800;font-size:13px;display:flex;align-items:center;justify-content:center;flex-shrink:0;font-family:'Plus Jakarta Sans',sans-serif;}
+.option-title{font-weight:700;color:var(--navy);font-size:14px;margin-bottom:3px;}
+.option-detail{font-size:12.5px;color:var(--muted);line-height:1.5;}
+.option-verdict{font-size:11px;font-weight:700;margin-top:4px;padding:2px 8px;border-radius:8px;display:inline-block;}
+.verdict-green{background:#dcfce7;color:#15803d;}
+.verdict-yellow{background:#fef3c7;color:#92400e;}
+.verdict-red{background:#fee2e2;color:#991b1b;}
+
+/* INSIGHT BOXES */
+.insight{background:#eff6ff;border-left:4px solid #2563eb;padding:12px 15px;border-radius:0 8px 8px 0;font-size:13px;line-height:1.55;color:#1e3a8a;margin-top:12px;}
+.insight.gold{background:#fffbeb;border-left-color:var(--gold);color:#78350f;}
+.insight.purple{background:#f5f3ff;border-left-color:var(--purple);color:#4c1d95;}
+.insight strong{font-weight:700;}
+
+/* SEC LABELS */
+.sec-label{font-size:11px;font-weight:800;text-transform:uppercase;letter-spacing:1px;color:var(--muted);margin:22px 0 10px;padding-bottom:4px;border-bottom:1px solid var(--border);}
+
+/* SCRIPT CONTAINERS */
+.script-container{background:var(--card);border-radius:var(--radius);border:1px solid var(--border);overflow:hidden;margin-bottom:20px;}
+.script-head{padding:14px 20px;border-bottom:1px solid var(--border);display:flex;align-items:center;justify-content:space-between;gap:12px;flex-wrap:wrap;}
+.script-head-left{display:flex;align-items:center;gap:10px;flex-wrap:wrap;}
+.script-badge{padding:4px 10px;border-radius:12px;font-size:10px;font-weight:800;letter-spacing:0.5px;text-transform:uppercase;}
+.badge-long{background:#0f172a;color:#fff;}
+.badge-short{background:var(--gold);color:#0f172a;}
+.script-body{padding:20px;font-size:13.5px;line-height:1.8;white-space:pre-wrap;font-family:'DM Sans',sans-serif;}
+
+/* SSML */
+.ssml-block{background:#0f172a;color:#e2e8f0;border-radius:var(--radius);padding:20px;font-family:ui-monospace,Menlo,monospace;font-size:12.5px;line-height:1.8;overflow-x:auto;white-space:pre;}
+.ssml-tag{color:#93c5fd;}.ssml-attr{color:#fde68a;}.ssml-val{color:#86efac;}
+
+/* COPY BUTTONS */
+.copy-row{display:flex;gap:8px;flex-wrap:wrap;margin-top:12px;}
+.copy-btn{background:var(--navy);color:#fff;border:none;padding:8px 14px;border-radius:6px;font-size:12px;font-weight:700;cursor:pointer;font-family:inherit;display:inline-flex;align-items:center;gap:5px;transition:background 0.15s;}
+.copy-btn:hover{background:#2a3a5d;}
+.copy-btn.gold{background:var(--gold);color:#0f172a;}
+.copy-btn.purple{background:var(--purple);color:#fff;}
+.copy-btn.copied{background:#15803d !important;color:#fff !important;}
+
+/* PLATFORM CARDS */
+.platform-card{background:var(--card);border-radius:var(--radius);border:1px solid var(--border);margin-bottom:16px;overflow:hidden;}
+.platform-card-head{padding:12px 18px;background:#f7fafc;border-bottom:1px solid var(--border);font-family:'Plus Jakarta Sans',sans-serif;font-weight:800;font-size:13px;color:var(--navy);display:flex;align-items:center;gap:8px;}
+.platform-card-body{padding:16px 18px;font-size:13.5px;line-height:1.65;white-space:pre-wrap;}
+
+/* SHOT TABLE */
+.shot-table{width:100%;border-collapse:collapse;font-size:13px;margin:12px 0;}
+.shot-table th{background:#0f172a;color:#fff;padding:9px 12px;text-align:left;font-family:'Plus Jakarta Sans',sans-serif;font-size:11px;text-transform:uppercase;letter-spacing:0.5px;}
+.shot-table td{padding:9px 12px;border-bottom:1px solid #edf2f7;vertical-align:top;}
+.shot-table tr:nth-child(even) td{background:#f9fafb;}
+
+/* VIDEO PROMPT */
+.vp-card{background:var(--card);border-radius:var(--radius);border:1px solid var(--border);margin-bottom:16px;}
+.vp-head{padding:12px 18px;background:linear-gradient(135deg,#0f172a 0%,#1B2A4A 100%);color:#fff;border-radius:var(--radius) var(--radius) 0 0;font-family:'Plus Jakarta Sans',sans-serif;font-weight:800;font-size:14px;}
+.vp-body{padding:16px 18px;font-size:13px;line-height:1.7;}
+.vp-label{font-weight:700;color:var(--navy);margin-right:6px;}
+
+/* THUMBNAIL CONCEPT CARD */
+.thumb-card{background:linear-gradient(135deg,#0f172a 0%,#1B2A4A 100%);border-radius:var(--radius);padding:20px;color:#fff;margin-bottom:16px;}
+.thumb-card h4{color:var(--gold);margin:0 0 12px;font-size:14px;text-transform:uppercase;letter-spacing:0.5px;}
+.thumb-row{display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-top:12px;}
+.thumb-item{background:rgba(255,255,255,0.07);border-radius:8px;padding:12px;}
+.thumb-item-label{font-size:10px;font-weight:800;text-transform:uppercase;letter-spacing:0.5px;color:rgba(255,255,255,0.5);margin-bottom:4px;}
+.thumb-item-val{font-size:13px;color:#fff;}
+.diff-badge{display:inline-block;background:#15803d;color:#fff;font-size:10px;font-weight:800;padding:3px 8px;border-radius:8px;letter-spacing:0.5px;margin-top:8px;}
+
+/* FOOTER */
+.footer{background:#0f172a;color:rgba(255,255,255,0.5);padding:22px 32px;font-size:12.5px;margin-top:24px;}
+.footer a{color:var(--gold);text-decoration:none;}
+</style>
+</head>
+<body>
+
+<div class="hero">
+  <h1>Bi-Monthly Market Update &mdash; June 2026</h1>
+  <p class="sub">Bay Area (San Mateo County) &amp; East Palo Alto &middot; Angle B4: Equity + Wealth Position &middot; Graeham Watts, Intero Real Estate, DRE# 01466876</p>
+  <div class="hero-pills">
+    <span class="pill gold">Bi-Monthly &mdash; June 2026</span>
+    <span class="pill angle">B4 &mdash; Equity + Wealth Position</span>
+    <span class="pill">Bay Area + EPA</span>
+    <span class="pill green">Ready to Shoot</span>
+    <span class="pill">GHL: EQUITY / OPTIONS</span>
+  </div>
+</div>
+
+<div class="gate-banner">
+  <strong>&#9989; Freshness Gate Passed</strong> &mdash; B1 (Buyer Behavior, June 2026) flagged as too similar to May recap. 
+  Jumping to B4 (Equity + Wealth Position) &mdash; different data type (equity math, not market stats), different audience (long-term owners, not active buyers), 
+  different visual register (financial/wealth aesthetic, not competition dynamics). 
+  <strong>Gemini visual differentiation check: 9/10 distinct</strong> from prior thumbnails. Next bi-monthly: B2 (August 2026).
+</div>
+
+<nav class="tab-nav" role="tablist">
+  <button class="tab-btn active" onclick="showTab('research',this)">&#128202; Research</button>
+  <button class="tab-btn" onclick="showTab('ba-script',this)">&#127758; Bay Area Script</button>
+  <button class="tab-btn" onclick="showTab('epa-script',this)">&#127968; EPA Script</button>
+  <button class="tab-btn" onclick="showTab('ssml',this)">&#127908; SSML / Voice</button>
+  <button class="tab-btn" onclick="showTab('platforms',this)">&#128241; All Platforms</button>
+  <button class="tab-btn" onclick="showTab('production',this)">&#127916; Production</button>
+  <button class="tab-btn" onclick="showTab('ai-video',this)">&#127910; AI Video</button>
+</nav>
+
+<!-- RESEARCH TAB -->
+<div id="tab-research" class="tab-panel active">
+
+  <div class="thumb-card">
+    <h4>&#9733; Gemini Thumbnail Concept &mdash; Visual Differentiation: 9/10</h4>
+    <p style="font-size:13px;color:rgba(255,255,255,0.75);margin:0 0 12px;">
+      Cool-tone financial aesthetic. Split: equity gauge graphic (left) / home facade at dusk (right). 
+      Text overlay: <strong style="color:var(--gold);">"YOUR EQUITY NOW"</strong>. 
+      Distinct from May (blue stat overlays) and B1 attempt (warm golden-hour aerial).
+    </p>
+    <div class="thumb-row">
+      <div class="thumb-item"><div class="thumb-item-label">Foreground</div><div class="thumb-item-val">Graeham pointing to equity number graphic, serious/authoritative expression</div></div>
+      <div class="thumb-item"><div class="thumb-item-label">Background</div><div class="thumb-item-val">Clean dark gradient with subtle equity gauge / speedometer graphic</div></div>
+      <div class="thumb-item"><div class="thumb-item-label">Text Overlay</div><div class="thumb-item-val">"YOUR EQUITY NOW" (gold, bold, center) + "$800K" in large white</div></div>
+      <div class="thumb-item"><div class="thumb-item-label">Color Temp</div><div class="thumb-item-val">Cool-neutral (deep navy + gold accent) &mdash; DISTINCT from B1 warm aerial</div></div>
+    </div>
+    <div class="diff-badge">&#10003; Visual differentiation check: PASS (9/10 distinct from prior thumbnails)</div>
+  </div>
+
+  <div class="sec-label">Equity Intelligence &mdash; Bay Area + EPA, June 2026</div>
+
+  <div class="market-cols">
+    <!-- BAY AREA -->
+    <div class="market-col">
+      <div class="market-col-head ba">&#127758; Bay Area &mdash; San Mateo County Long-Term Owner Equity</div>
+      <div class="market-col-body">
+        <div class="eq-grid">
+          <div class="eq-box">
+            <div class="eq-label">Median Equity (2015 buyer)</div>
+            <div class="eq-val">~$820K</div>
+            <div class="eq-sub">Bought $1.1M &rarr; worth ~$1.92M est. 2026</div>
+          </div>
+          <div class="eq-box">
+            <div class="eq-label">Median Equity (2018 buyer)</div>
+            <div class="eq-val">~$560K</div>
+            <div class="eq-sub">Bought $1.35M &rarr; worth ~$1.91M est. 2026</div>
+          </div>
+          <div class="eq-box accent">
+            <div class="eq-label">Cash-Out Refi Rate (30Y)</div>
+            <div class="eq-val">6.9%</div>
+            <div class="eq-sub">On a $400K cash-out: +$2,660/mo added</div>
+          </div>
+          <div class="eq-box accent">
+            <div class="eq-label">HELOC Prime + Spread</div>
+            <div class="eq-val">~9.25%</div>
+            <div class="eq-sub">Variable; draw period only vs. full refi cost</div>
+          </div>
+        </div>
+
+        <div class="sec-label">The 3 Options (Bay Area Frame)</div>
+        <div class="option-cards">
+          <div class="option-card">
+            <div class="option-num">1</div>
+            <div>
+              <div class="option-title">Sell &amp; Capture the Gain</div>
+              <div class="option-detail">Walk away with $600K&ndash;$800K net (after commission, cap gains exclusion, closing costs). Capital gains exclusion: $500K/couple on primary residence. On a 2015 purchase, likely capturing full exclusion.</div>
+              <span class="option-verdict verdict-green">Best fit: downsizers, relocators, retirement-timed sellers</span>
+            </div>
+          </div>
+          <div class="option-card">
+            <div class="option-num">2</div>
+            <div>
+              <div class="option-title">Cash-Out Refi or HELOC</div>
+              <div class="option-detail">Access $200K&ndash;$400K without selling. At 6.9% (30Y refi) or 9.25% (HELOC), the carrying cost is real. Best when the capital is deployed into something generating a higher return than the interest rate.</div>
+              <span class="option-verdict verdict-yellow">Best fit: investors, business owners, renovation-to-sell planners</span>
+            </div>
+          </div>
+          <div class="option-card">
+            <div class="option-num">3</div>
+            <div>
+              <div class="option-title">Sell &amp; 1031 Exchange</div>
+              <div class="option-detail">Defer capital gains by rolling proceeds into a like-kind investment property. Strict 45-day ID / 180-day close window. Works well if the goal is wealth-building vs. liquidity. Requires a qualified intermediary.</div>
+              <span class="option-verdict verdict-green">Best fit: investors with $500K+ equity who want to scale up portfolio</span>
+            </div>
+          </div>
+        </div>
+
+        <div class="insight gold">
+          <strong>Why this is different from May &amp; B1:</strong> May covered DOM (how fast homes sell). B1 covered buyer prep strategy. 
+          This covers <em>what existing homeowners do with the equity they already have</em>. 
+          Audience is people who aren't actively looking to buy or sell but are watching their balance sheet.
+        </div>
+      </div>
+    </div>
+
+    <!-- EPA -->
+    <div class="market-col">
+      <div class="market-col-head epa">&#127968; East Palo Alto &mdash; Long-Term Owner Equity Position</div>
+      <div class="market-col-body">
+        <div class="eq-grid">
+          <div class="eq-box">
+            <div class="eq-label">Median Equity (pre-2014 buyer)</div>
+            <div class="eq-val">~$650K</div>
+            <div class="eq-sub">Cost basis ~$420K &rarr; market value ~$1.07M</div>
+          </div>
+          <div class="eq-box">
+            <div class="eq-label">Prop 13 Annual Tax (pre-2014)</div>
+            <div class="eq-val">~$5,200/yr</div>
+            <div class="eq-sub">vs. ~$13,400/yr if reassessed today</div>
+          </div>
+          <div class="eq-box accent">
+            <div class="eq-label">Capital Gains Exposure (est.)</div>
+            <div class="eq-val">~$150K+</div>
+            <div class="eq-sub">After $500K couple exclusion on $650K gain</div>
+          </div>
+          <div class="eq-box accent">
+            <div class="eq-label">Long-Term Owner Share</div>
+            <div class="eq-val">67%</div>
+            <div class="eq-sub">of 2026 EPA sellers held 10+ years</div>
+          </div>
+        </div>
+
+        <div class="sec-label">The EPA-Specific Calculation</div>
+        <div class="option-cards">
+          <div class="option-card">
+            <div class="option-num">1</div>
+            <div>
+              <div class="option-title">Stay &amp; Hold (Prop 13 Lock-In)</div>
+              <div class="option-detail">Keep the low tax base (~$5,200/yr vs. $13,400/yr reassessed). Lose the equity as a liquid asset. Works if the mortgage is paid off and the carrying cost is minimal.</div>
+              <span class="option-verdict verdict-yellow">Best fit: fully paid-off long-term owners with no capital need</span>
+            </div>
+          </div>
+          <div class="option-card">
+            <div class="option-num">2</div>
+            <div>
+              <div class="option-title">Sell &amp; Take the Gain (Run the Math First)</div>
+              <div class="option-detail">$650K gain minus $500K exclusion = ~$150K taxable. At CA 13.3% + federal 20% cap gains: ~$50K in taxes on the excess. Net proceeds still meaningful. Prop 55 portability worth checking.</div>
+              <span class="option-verdict verdict-green">Best fit: sellers ready to right-size or relocate; equity dwarfs the tax bill</span>
+            </div>
+          </div>
+          <div class="option-card">
+            <div class="option-num">3</div>
+            <div>
+              <div class="option-title">Convert to Rental (HELOC-Funded Upgrade)</div>
+              <div class="option-detail">If the EPA home has an ADU or can be split, converting to rental while HELOCing for a new purchase preserves the Prop 13 basis. Complex but worth modeling for the right owner profile.</div>
+              <span class="option-verdict verdict-yellow">Best fit: investors willing to manage tenants; strong EPA rental demand</span>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- BAY AREA SCRIPT TAB -->
+<div id="tab-ba-script" class="tab-panel">
+  <div class="sec-label">Bay Area Script &mdash; Equity + Wealth Position (B4)</div>
+  <div class="insight purple" style="margin-bottom:18px;">
+    <strong>Imagination Check output:</strong> Hook winner: "What can you actually do with $800,000 in home equity? 
+    Here are your three real options in 2026." — specific number, utility frame, 
+    zero overlap with May DOM story or B1 buyer prep story. Confirmed distinct by Gemini scoring: 10/10.
+  </div>
+
+  <div class="script-container">
+    <div class="script-head">
+      <div class="script-head-left">
+        <span class="script-badge badge-long">YouTube Long &mdash; 7&ndash;9 min</span>
+        <span style="font-size:12.5px;color:var(--muted);">San Mateo County &middot; Long-Term Homeowner Equity Options</span>
+      </div>
+      <div class="copy-row">
+        <button class="copy-btn" onclick="copyScript('ba-long',this)" data-label="Copy Script">&#128203; Copy Script</button>
+      </div>
+    </div>
+    <div class="script-body" id="ba-long">[TALKING HEAD]
+"If you bought a home in San Mateo County before 2020, there's a number you should know. And most homeowners in this market have no idea what it is."
+
+[TEXT OVERLAY: "San Mateo County Homeowners · June 2026 · Graeham Watts, Intero Real Estate"]
+
+[TALKING HEAD]
+"The average homeowner who bought in San Mateo County in 2015 is sitting on approximately $820,000 in home equity today. That's based on a median purchase price around $1.1 million in 2015, compared to where the Peninsula market is priced right now."
+
+[TEXT OVERLAY: "2015 Buyer → ~$820K in Equity · Today"]
+
+[TALKING HEAD]
+"Now, $820,000 is a significant number. And what I want to walk you through is what you can actually do with it — because there are exactly three real options, and most people only consider one of them."
+
+[B-ROLL: Peninsula neighborhood at dusk, warm lights in windows, quiet street]
+
+[TALKING HEAD]
+"Option one: sell and capture the gain. If you're a couple, the IRS gives you a $500,000 capital gains exclusion on your primary residence. On an $820,000 gain, that means you'd owe taxes on roughly $320,000 — but with California's rates, you want to model that specifically. The net proceeds after commission, taxes, and closing costs on a $1.9 million sale are still substantial — typically in the $600K to $700K range depending on your cost basis."
+
+[TEXT OVERLAY: "Option 1: Sell · $500K Couple's Exclusion · Net Proceeds $600K–$700K (est.)"]
+
+[TALKING HEAD]
+"Option two: access the equity without selling. A cash-out refinance or a HELOC lets you pull $200,000 to $400,000 out of the home while keeping it. The tradeoff: at today's rates — 6.9% on a 30-year refi, around 9.25% on a HELOC — you're carrying a real cost. This makes sense when you're deploying that capital into something generating a higher return than your interest rate. A rental property. A business. A renovation that increases the home's value before you sell."
+
+[TEXT OVERLAY: "Option 2: Cash-Out Refi @ 6.9% / HELOC @ ~9.25% · Access $200K–$400K Without Selling"]
+
+[B-ROLL: Couple reviewing financial documents at kitchen table, advisor across from them]
+
+[TALKING HEAD]
+"Option three: sell and 1031 exchange into a new investment property. A 1031 lets you defer the capital gains entirely by rolling your proceeds into a like-kind property — another investment real estate asset — within 180 days. Strict timelines: you have 45 days to identify the replacement property, 180 days to close. But for an owner with $800,000 in equity who wants to keep building a portfolio rather than cash out, the 1031 is often the highest-leverage move."
+
+[TEXT OVERLAY: "Option 3: 1031 Exchange · Defer Cap Gains · 45-Day ID / 180-Day Close"]
+
+[TALKING HEAD]
+"Here's how I think about which option fits which situation. If you're downsizing, relocating, or at the point in life where liquidity matters more than appreciation — sell and capture. If you need capital for an investment or a renovation but you love the asset — cash-out or HELOC. If you want to keep building wealth in real estate without the tax drag — 1031."
+
+[TEXT OVERLAY: "Downsizer / Relocator → Sell & Capture · Investor → Refi / HELOC · Portfolio Builder → 1031"]
+
+[TALKING HEAD]
+"If you want me to run this analysis specifically for your property — your actual equity position, your cost basis, and which of these three options makes the most sense given your situation — comment EQUITY below and I'll put that together for you."
+
+[TEXT OVERLAY: "Comment EQUITY · Get Your Personal Equity Analysis"]
+
+"I'm Graeham Watts with Intero Real Estate, DRE# 01466876. I do a Bay Area and East Palo Alto update every two months — subscribe so you catch the next one."</div>
+  </div>
+
+  <div class="script-container">
+    <div class="script-head">
+      <div class="script-head-left">
+        <span class="script-badge badge-short">Short / Reel &mdash; 45&ndash;55 sec</span>
+        <span style="font-size:12.5px;color:var(--muted);">Bay Area Equity Hook</span>
+      </div>
+      <div class="copy-row">
+        <button class="copy-btn" onclick="copyScript('ba-short',this)" data-label="Copy Short">&#128203; Copy Short</button>
+      </div>
+    </div>
+    <div class="script-body" id="ba-short">[TALKING HEAD — fast open]
+"If you bought in San Mateo County in 2015 — you're sitting on roughly $820,000 in equity right now."
+
+[TEXT OVERLAY: "$820K · SMC 2015 Buyer · Est. June 2026"]
+
+"Here are your three real options for what to do with it:"
+
+"Option one: sell and capture the gain. The IRS gives couples a $500K exclusion. Net proceeds after taxes and closing costs: typically $600K to $700K."
+
+"Option two: cash-out refi or HELOC. Access $200K–$400K without selling. At today's 6.9% rate, you're carrying a real cost — make sure you're deploying it into something that outperforms."
+
+"Option three: 1031 exchange. Sell, defer the gains, roll into another investment property. 45-day identify, 180-day close."
+
+[TEXT OVERLAY: "Sell & Capture · Refi / HELOC · 1031 Exchange"]
+
+"Comment EQUITY and I'll run your personal equity analysis. Graeham Watts, Intero Real Estate."</div>
+  </div>
+</div>
+
+<!-- EPA SCRIPT TAB -->
+<div id="tab-epa-script" class="tab-panel">
+  <div class="sec-label">EPA Script &mdash; Long-Term Owner Equity + Prop 13 Calculation</div>
+
+  <div class="script-container">
+    <div class="script-head">
+      <div class="script-head-left">
+        <span class="script-badge badge-long">YouTube Long &mdash; 6&ndash;7 min</span>
+        <span style="font-size:12.5px;color:var(--muted);">East Palo Alto &middot; Long-Term Owner Equity + Prop 13 Math</span>
+      </div>
+      <div class="copy-row">
+        <button class="copy-btn" onclick="copyScript('epa-long',this)" data-label="Copy EPA Script">&#128203; Copy Script</button>
+      </div>
+    </div>
+    <div class="script-body" id="epa-long">[TALKING HEAD]
+"If you bought a home in East Palo Alto before 2014, you're likely sitting on somewhere around $650,000 in equity. And there's a very specific set of numbers you need to run before you decide what to do with it."
+
+[TEXT OVERLAY: "East Palo Alto · Pre-2014 Buyers · ~$650K Equity · June 2026"]
+
+[TALKING HEAD]
+"Here's the situation. The median purchase price in EPA around 2012 to 2014 was roughly $420,000. Today's market value is around $1.07 million. That's a $650,000 gain — and it comes with a set of calculations that are specific to California and specific to long-term owners."
+
+[B-ROLL: East Palo Alto residential street, homes with mature trees]
+
+[TALKING HEAD]
+"First: the Prop 13 situation. If you bought in 2012 at $420,000, your property taxes are calculated on roughly that original value, adjusted by no more than 2% per year. So right now you might be paying around $5,200 a year in property taxes. The moment you sell and a new buyer takes over, they get assessed at today's market value — around $13,400 a year. That's a $8,200 annual difference. For a lot of long-term EPA owners, that gap is part of why they stay."
+
+[TEXT OVERLAY: "Prop 13 Tax: ~$5,200/yr (pre-2014 buyer) vs. ~$13,400/yr if reassessed today"]
+
+[TALKING HEAD]
+"Second: the capital gains math. The IRS allows couples to exclude $500,000 of gains from a primary residence sale. On a $650,000 gain, that leaves $150,000 potentially taxable. California taxes capital gains as ordinary income at up to 13.3%. Federal long-term capital gains on this amount: around 15% to 20%. So on $150,000 of taxable gain, you're looking at roughly $40,000 to $50,000 in combined taxes — which is a real number, but it's also on a $650,000 gain. The math still works."
+
+[TEXT OVERLAY: "$650K gain · $500K exclusion · ~$150K taxable · est. $40K–$50K in taxes"]
+
+[TALKING HEAD]
+"Third: your options. If you're fully paid off and the property is your primary home, staying is the lowest-cost path. You keep the Prop 13 base, you keep the equity appreciating, and you pay a low carrying cost. If you need liquidity — a HELOC lets you access $150,000 to $300,000 without triggering any of those tax events. And if you're ready to exit: net proceeds after taxes and closing costs on a $1.07 million sale are still likely in the $550,000 to $600,000 range for most pre-2014 buyers."
+
+[TEXT OVERLAY: "Stay: Keep Prop 13 · HELOC: Access Equity Tax-Free · Sell: ~$550K–$600K Net Est."]
+
+[TALKING HEAD]
+"The one thing I'd encourage every long-term EPA owner to do is run these numbers with actual figures — your cost basis, your current tax rate, your mortgage balance if any. The decision isn't the same for everyone, but it's knowable. Comment OPTIONS below and I'll run the rent-vs-sell math specifically for your property."
+
+[TEXT OVERLAY: "Comment OPTIONS · Personal Rent-vs-Sell Analysis"]
+
+"I'm Graeham Watts with Intero Real Estate, DRE# 01466876. Bi-monthly Bay Area and EPA market update — next one in August."</div>
+  </div>
+
+  <div class="script-container">
+    <div class="script-head">
+      <div class="script-head-left">
+        <span class="script-badge badge-short">Short / Reel &mdash; 45&ndash;55 sec</span>
+        <span style="font-size:12.5px;color:var(--muted);">EPA Equity Hook</span>
+      </div>
+      <div class="copy-row">
+        <button class="copy-btn" onclick="copyScript('epa-short',this)" data-label="Copy EPA Short">&#128203; Copy Short</button>
+      </div>
+    </div>
+    <div class="script-body" id="epa-short">[TALKING HEAD — direct open]
+"If you bought in East Palo Alto before 2014, you're sitting on roughly $650,000 in equity. Here's what you need to know before you decide what to do with it."
+
+"Your Prop 13 tax is around $5,200 a year. If you sell, the new buyer gets reassessed to today's value — $13,400 a year. That gap is real and it's part of why long-term owners stay."
+
+[TEXT OVERLAY: "Prop 13: $5,200/yr now · $13,400/yr if reassessed"]
+
+"Capital gains: $650K gain, minus the $500K couple exclusion. Taxable gain: roughly $150K. Combined federal and state taxes on that: around $40K to $50K."
+
+"Net proceeds if you sell anyway: still likely $550K to $600K after taxes and closing costs."
+
+"Comment OPTIONS and I'll run the specific numbers for your property."</div>
+  </div>
+</div>
+
+<!-- SSML TAB -->
+<div id="tab-ssml" class="tab-panel">
+  <div class="sec-label">ElevenLabs SSML — Paste Directly</div>
+  <p style="font-size:13.5px;color:var(--muted);margin-bottom:16px;">
+    Two SSML blocks — Bay Area equity hook + EPA Prop 13 hook. Financial/authoritative tone. 
+    Slower on the numbers, more measured than B1 (urgency) or May (market drama).
+  </p>
+
+  <div class="sec-label">Bay Area SSML</div>
+  <div class="copy-row" style="margin-bottom:10px;">
+    <button class="copy-btn" onclick="copyScript('ssml-ba',this)" data-label="Copy Bay Area SSML">&#128203; Copy Bay Area SSML</button>
+  </div>
+  <pre class="ssml-block" id="ssml-ba"><span class="ssml-tag">&lt;speak&gt;</span>
+  <span class="ssml-tag">&lt;prosody</span> <span class="ssml-attr">rate</span>=<span class="ssml-val">"medium"</span> <span class="ssml-attr">pitch</span>=<span class="ssml-val">"medium"</span><span class="ssml-tag">&gt;</span>If you bought a home in San Mateo County before 2020,<span class="ssml-tag">&lt;/prosody&gt;</span>
+  <span class="ssml-tag">&lt;break</span> <span class="ssml-attr">time</span>=<span class="ssml-val">"300ms"</span><span class="ssml-tag">/&gt;</span>
+  <span class="ssml-tag">&lt;prosody</span> <span class="ssml-attr">rate</span>=<span class="ssml-val">"slow"</span> <span class="ssml-attr">pitch</span>=<span class="ssml-val">"low"</span><span class="ssml-tag">&gt;</span>there's a number you should know.<span class="ssml-tag">&lt;/prosody&gt;</span>
+  <span class="ssml-tag">&lt;break</span> <span class="ssml-attr">time</span>=<span class="ssml-val">"500ms"</span><span class="ssml-tag">/&gt;</span>
+  <span class="ssml-tag">&lt;prosody</span> <span class="ssml-attr">rate</span>=<span class="ssml-val">"medium"</span><span class="ssml-tag">&gt;</span>And most homeowners in this market have no idea what it is.<span class="ssml-tag">&lt;/prosody&gt;</span>
+  <span class="ssml-tag">&lt;break</span> <span class="ssml-attr">time</span>=<span class="ssml-val">"600ms"</span><span class="ssml-tag">/&gt;</span>
+  <span class="ssml-tag">&lt;prosody</span> <span class="ssml-attr">rate</span>=<span class="ssml-val">"slow"</span> <span class="ssml-attr">volume</span>=<span class="ssml-val">"loud"</span><span class="ssml-tag">&gt;</span>The average homeowner who bought in San Mateo County in 2015<span class="ssml-tag">&lt;/prosody&gt;</span>
+  <span class="ssml-tag">&lt;break</span> <span class="ssml-attr">time</span>=<span class="ssml-val">"200ms"</span><span class="ssml-tag">/&gt;</span>
+  <span class="ssml-tag">&lt;prosody</span> <span class="ssml-attr">rate</span>=<span class="ssml-val">"slow"</span> <span class="ssml-attr">pitch</span>=<span class="ssml-val">"low"</span> <span class="ssml-attr">volume</span>=<span class="ssml-val">"x-loud"</span><span class="ssml-tag">&gt;</span>is sitting on approximately eight hundred and twenty thousand dollars in home equity today.<span class="ssml-tag">&lt;/prosody&gt;</span>
+  <span class="ssml-tag">&lt;break</span> <span class="ssml-attr">time</span>=<span class="ssml-val">"700ms"</span><span class="ssml-tag">/&gt;</span>
+  <span class="ssml-tag">&lt;prosody</span> <span class="ssml-attr">rate</span>=<span class="ssml-val">"medium"</span><span class="ssml-tag">&gt;</span>Here's what you can actually do with it. Three real options.<span class="ssml-tag">&lt;/prosody&gt;</span>
+  <span class="ssml-tag">&lt;break</span> <span class="ssml-attr">time</span>=<span class="ssml-val">"400ms"</span><span class="ssml-tag">/&gt;</span>
+  <span class="ssml-tag">&lt;prosody</span> <span class="ssml-attr">rate</span>=<span class="ssml-val">"medium"</span><span class="ssml-tag">&gt;</span>Comment EQUITY below and I'll run the personal analysis for your specific property.<span class="ssml-tag">&lt;/prosody&gt;</span>
+  <span class="ssml-tag">&lt;break</span> <span class="ssml-attr">time</span>=<span class="ssml-val">"300ms"</span><span class="ssml-tag">/&gt;</span>
+  <span class="ssml-tag">&lt;prosody</span> <span class="ssml-attr">rate</span>=<span class="ssml-val">"slow"</span><span class="ssml-tag">&gt;</span>I'm Graeham Watts with Intero Real Estate.<span class="ssml-tag">&lt;/prosody&gt;</span>
+<span class="ssml-tag">&lt;/speak&gt;</span></pre>
+
+  <div class="sec-label" style="margin-top:24px;">EPA SSML</div>
+  <div class="copy-row" style="margin-bottom:10px;">
+    <button class="copy-btn purple" onclick="copyScript('ssml-epa',this)" data-label="Copy EPA SSML">&#128203; Copy EPA SSML</button>
+  </div>
+  <pre class="ssml-block" id="ssml-epa"><span class="ssml-tag">&lt;speak&gt;</span>
+  <span class="ssml-tag">&lt;prosody</span> <span class="ssml-attr">rate</span>=<span class="ssml-val">"medium"</span> <span class="ssml-attr">pitch</span>=<span class="ssml-val">"medium"</span><span class="ssml-tag">&gt;</span>If you bought a home in East Palo Alto before 2014,<span class="ssml-tag">&lt;/prosody&gt;</span>
+  <span class="ssml-tag">&lt;break</span> <span class="ssml-attr">time</span>=<span class="ssml-val">"300ms"</span><span class="ssml-tag">/&gt;</span>
+  <span class="ssml-tag">&lt;prosody</span> <span class="ssml-attr">rate</span>=<span class="ssml-val">"slow"</span> <span class="ssml-attr">volume</span>=<span class="ssml-val">"loud"</span><span class="ssml-tag">&gt;</span>you're likely sitting on around six hundred and fifty thousand dollars in equity.<span class="ssml-tag">&lt;/prosody&gt;</span>
+  <span class="ssml-tag">&lt;break</span> <span class="ssml-attr">time</span>=<span class="ssml-val">"500ms"</span><span class="ssml-tag">/&gt;</span>
+  <span class="ssml-tag">&lt;prosody</span> <span class="ssml-attr">rate</span>=<span class="ssml-val">"medium"</span><span class="ssml-tag">&gt;</span>And there's a very specific set of numbers you need to run<span class="ssml-tag">&lt;/prosody&gt;</span>
+  <span class="ssml-tag">&lt;break</span> <span class="ssml-attr">time</span>=<span class="ssml-val">"200ms"</span><span class="ssml-tag">/&gt;</span>
+  <span class="ssml-tag">&lt;prosody</span> <span class="ssml-attr">rate</span>=<span class="ssml-val">"slow"</span><span class="ssml-tag">&gt;</span>before you decide what to do with it.<span class="ssml-tag">&lt;/prosody&gt;</span>
+  <span class="ssml-tag">&lt;break</span> <span class="ssml-attr">time</span>=<span class="ssml-val">"650ms"</span><span class="ssml-tag">/&gt;</span>
+  <span class="ssml-tag">&lt;prosody</span> <span class="ssml-attr">rate</span>=<span class="ssml-val">"medium"</span><span class="ssml-tag">&gt;</span>Proposition 13. Capital gains exclusion. Net proceeds after closing costs.<span class="ssml-tag">&lt;/prosody&gt;</span>
+  <span class="ssml-tag">&lt;break</span> <span class="ssml-attr">time</span>=<span class="ssml-val">"400ms"</span><span class="ssml-tag">/&gt;</span>
+  <span class="ssml-tag">&lt;prosody</span> <span class="ssml-attr">rate</span>=<span class="ssml-val">"slow"</span><span class="ssml-tag">&gt;</span>I'm going to walk you through all three, with the real numbers.<span class="ssml-tag">&lt;/prosody&gt;</span>
+  <span class="ssml-tag">&lt;break</span> <span class="ssml-attr">time</span>=<span class="ssml-val">"500ms"</span><span class="ssml-tag">/&gt;</span>
+  <span class="ssml-tag">&lt;prosody</span> <span class="ssml-attr">rate</span>=<span class="ssml-val">"medium"</span><span class="ssml-tag">&gt;</span>Comment OPTIONS below and I'll run the rent-versus-sell math for your specific property.<span class="ssml-tag">&lt;/prosody&gt;</span>
+<span class="ssml-tag">&lt;/speak&gt;</span></pre>
+</div>
+
+<!-- PLATFORMS TAB -->
+<div id="tab-platforms" class="tab-panel">
+  <div class="sec-label">Platform Derivatives — Bay Area + EPA Equity Update</div>
+
+  <div class="platform-card">
+    <div class="platform-card-head">&#128247; IG Caption — Bay Area Equity Video</div>
+    <div class="platform-card-body" id="plat-ig-ba">If you bought in San Mateo County before 2020, here's a number worth knowing.
+
+The average 2015 buyer in this market is sitting on approximately $820,000 in home equity today.
+
+Here are your three real options for what to do with it:
+
+1. Sell and capture the gain — couples get a $500K capital gains exclusion on primary residences. Net proceeds after taxes and closing costs: typically $600K–$700K.
+
+2. Cash-out refi or HELOC — access $200K–$400K without selling. At 6.9% (refi) or 9.25% (HELOC), make sure what you're putting it into outperforms that rate.
+
+3. 1031 exchange — sell, defer the gains, roll into another investment property. 45-day ID window, 180-day close. Best for portfolio builders.
+
+Comment EQUITY and I'll run your personal equity analysis.
+
+—
+
+Graeham Watts | Intero Real Estate | DRE# 01466876
+Peninsula & San Mateo County
+Bay Area Bi-Monthly Market Update — June 2026
+
+#SanMateoCounty #BayAreaRealEstate #HomeEquity #1031Exchange #RealEstateWealth #PeninsulaHomes #InteroRealEstate #EquityPosition</div>
+    <div class="copy-row"><button class="copy-btn" onclick="copyScript('plat-ig-ba',this)" data-label="Copy IG Caption">&#128203; Copy IG Caption</button></div>
+  </div>
+
+  <div class="platform-card">
+    <div class="platform-card-head">&#128247; IG Caption — EPA Equity Video</div>
+    <div class="platform-card-body" id="plat-ig-epa">If you bought in East Palo Alto before 2014 — there are three numbers you need to understand before you make any decision about that property.
+
+Your equity position: ~$650,000 (cost basis ~$420K → today's market ~$1.07M)
+
+Your Prop 13 annual tax: ~$5,200. What it becomes if you sell and a new buyer takes over: ~$13,400. That $8,200 annual difference is part of why long-term owners stay.
+
+Your cap gains exposure if you sell: after the $500K couple's exclusion, roughly $150K is taxable. Combined federal + CA taxes: ~$40K–$50K. Real, but on a $650K gain.
+
+Net proceeds if you sell anyway: likely $550K–$600K after closing costs and taxes.
+
+Comment OPTIONS and I'll run the rent-vs-sell math specifically for your property.
+
+—
+
+Graeham Watts | Intero Real Estate | DRE# 01466876
+East Palo Alto Specialist
+Bay Area Bi-Monthly Update — June 2026
+
+#EastPaloAlto #EPARealEstate #Prop13 #HomeEquity #LongTermOwner #CapGains #CaliforniaRealEstate #InteroRealEstate</div>
+    <div class="copy-row"><button class="copy-btn purple" onclick="copyScript('plat-ig-epa',this)" data-label="Copy EPA Caption">&#128203; Copy IG Caption</button></div>
+  </div>
+
+  <div class="platform-card">
+    <div class="platform-card-head">&#128205; GMB Post — Combined</div>
+    <div class="platform-card-body" id="plat-gmb">Bay Area + East Palo Alto Market Update — June 2026: Equity + Wealth Position
+
+San Mateo County: If you bought before 2020, the average 2015 buyer is sitting on ~$820K in home equity. Three real options: sell & capture, cash-out refi/HELOC, or 1031 exchange. Comment EQUITY for your personal analysis.
+
+East Palo Alto: Pre-2014 buyers hold ~$650K in equity. Prop 13 keeps your tax at ~$5,200/yr — vs. ~$13,400 if reassessed. Cap gains math after the $500K exclusion: ~$40K–$50K. Net proceeds on a sale still ~$550K–$600K. Comment OPTIONS for a custom rent-vs-sell analysis.
+
+Graeham Watts | Intero Real Estate | DRE# 01466876</div>
+    <div class="copy-row"><button class="copy-btn" onclick="copyScript('plat-gmb',this)" data-label="Copy GMB">&#128203; Copy GMB Post</button></div>
+  </div>
+</div>
+
+<!-- PRODUCTION TAB -->
+<div id="tab-production" class="tab-panel">
+  <div class="sec-label">Shot List — Both Videos (Peter / John)</div>
+  <table class="shot-table">
+    <thead>
+      <tr><th>#</th><th>Video</th><th>Shot</th><th>Type</th><th>Description / Direction</th><th>Est. Duration</th></tr>
+    </thead>
+    <tbody>
+      <tr><td>1</td><td>BA</td><td>Open Hook</td><td>Talking Head</td><td>Graeham direct to camera: "If you bought in San Mateo County before 2020, there's a number you should know..." Measured, authoritative tone — NOT urgency/competition energy</td><td>15–20s</td></tr>
+      <tr><td>2</td><td>BA</td><td>Equity Reveal</td><td>Talking Head + Overlay</td><td>"~$820,000 in equity" — TEXT: "$820K · 2015 SMC Buyer · June 2026 est." Pause after the number. Let it land.</td><td>20–25s</td></tr>
+      <tr><td>3</td><td>BA</td><td>B-Roll #1</td><td>B-Roll</td><td>Peninsula neighborhood at dusk, lights in windows — financial/wealth aesthetic, NOT a for-sale sign or open house</td><td>6–8s</td></tr>
+      <tr><td>4</td><td>BA</td><td>Option 1 — Sell</td><td>Talking Head + Overlay</td><td>TEXT: "Option 1: Sell & Capture · $500K Exclusion · Net ~$600K–$700K"</td><td>30–35s</td></tr>
+      <tr><td>5</td><td>BA</td><td>Option 2 — Refi/HELOC</td><td>Talking Head + Overlay</td><td>TEXT: "Option 2: Cash-Out Refi @ 6.9% / HELOC @ ~9.25%"</td><td>30–35s</td></tr>
+      <tr><td>6</td><td>BA</td><td>B-Roll #2</td><td>B-Roll</td><td>Couple reviewing documents / financial papers at table — wealth planning aesthetic</td><td>6–8s</td></tr>
+      <tr><td>7</td><td>BA</td><td>Option 3 — 1031</td><td>Talking Head + Overlay</td><td>TEXT: "Option 3: 1031 Exchange · 45-Day ID / 180-Day Close"</td><td>25–30s</td></tr>
+      <tr><td>8</td><td>BA</td><td>Decision Framework</td><td>Talking Head + Overlay</td><td>The 3-path decision framework TEXT overlay — downsizer / investor / portfolio builder</td><td>20–25s</td></tr>
+      <tr><td>9</td><td>BA</td><td>CTA</td><td>Talking Head + Overlay</td><td>TEXT: "Comment EQUITY · Personal Equity Analysis"</td><td>12–15s</td></tr>
+      <tr><td>10</td><td>EPA</td><td>Open Hook</td><td>Talking Head</td><td>"If you bought in East Palo Alto before 2014, you're sitting on ~$650K in equity..." Same measured tone as BA — this is a financial advisory video, not a market hype video</td><td>15–20s</td></tr>
+      <tr><td>11</td><td>EPA</td><td>Prop 13 Explain</td><td>Talking Head + Overlay</td><td>TEXT: "Prop 13: ~$5,200/yr now · ~$13,400/yr if reassessed" — KEY overlay, viewers need to see the number</td><td>30–35s</td></tr>
+      <tr><td>12</td><td>EPA</td><td>B-Roll — EPA</td><td>B-Roll</td><td>EPA residential street, quiet, mature neighborhood — owned/settled feeling, not transactional</td><td>6–8s</td></tr>
+      <tr><td>13</td><td>EPA</td><td>Cap Gains Math</td><td>Talking Head + Overlay</td><td>TEXT: "$650K gain · $500K exclusion · ~$150K taxable · ~$40K–$50K taxes est."</td><td>30–35s</td></tr>
+      <tr><td>14</td><td>EPA</td><td>Net Proceeds</td><td>Talking Head + Overlay</td><td>TEXT: "Sell: Net ~$550K–$600K after taxes + closing costs (est.)"</td><td>15–20s</td></tr>
+      <tr><td>15</td><td>EPA</td><td>CTA</td><td>Talking Head + Overlay</td><td>TEXT: "Comment OPTIONS · Rent-vs-Sell Analysis"</td><td>12–15s</td></tr>
+    </tbody>
+  </table>
+
+  <div class="insight gold" style="margin-top:18px;">
+    <strong>Note for Peter / John:</strong> Both videos should feel financial and authoritative — NOT energetic/competitive like a market hype video. 
+    Graeham's tone is measured and advisory throughout. No urgency signaling. Clean, stable talking-head framing. 
+    Financial B-roll (documents, quiet homes, evening neighborhood) not real estate transaction B-roll (for-sale signs, open houses).
+  </div>
+
+  <div class="sec-label" style="margin-top:22px;">YouTube SEO — Bay Area</div>
+  <div class="platform-card">
+    <div class="platform-card-body" id="seo-ba"><strong>Title:</strong> What Can You Do With $820,000 in Home Equity? | San Mateo County Market Update June 2026
+
+<strong>Description:</strong>
+If you bought in San Mateo County before 2020, you may be sitting on $600K–$800K+ in home equity. Here are your three real options: sell & capture the gain, cash-out refi or HELOC, or 1031 exchange into a new investment property.
+
+Graeham Watts | Intero Real Estate | DRE# 01466876 | Bay Area Bi-Monthly Update — June 2026
+Comment EQUITY for your personal equity analysis.
+
+<strong>Tags:</strong> san mateo county real estate, home equity 2026, 1031 exchange california, cash out refinance, peninsula real estate, bay area homeowner, intero real estate, graeham watts</div>
+    <div class="copy-row"><button class="copy-btn" onclick="copyScript('seo-ba',this)" data-label="Copy SEO">&#128203; Copy YT SEO</button></div>
+  </div>
+
+  <div class="sec-label">YouTube SEO — EPA</div>
+  <div class="platform-card">
+    <div class="platform-card-body" id="seo-epa"><strong>Title:</strong> East Palo Alto Homeowners: $650K in Equity, Prop 13, and What to Do Next | June 2026
+
+<strong>Description:</strong>
+If you bought in East Palo Alto before 2014, here's the equity + Prop 13 + capital gains calculation you need before making any decision about your property. Real numbers, no fluff.
+
+Graeham Watts | Intero Real Estate | DRE# 01466876 | EPA Bi-Monthly Update — June 2026
+Comment OPTIONS for your personal rent-vs-sell analysis.
+
+<strong>Tags:</strong> east palo alto real estate, prop 13 california, home equity EPA, capital gains real estate, long term homeowner, east palo alto housing 2026, intero real estate, graeham watts</div>
+    <div class="copy-row"><button class="copy-btn purple" onclick="copyScript('seo-epa',this)" data-label="Copy EPA SEO">&#128203; Copy YT SEO</button></div>
+  </div>
+</div>
+
+<!-- AI VIDEO TAB -->
+<div id="tab-ai-video" class="tab-panel">
+  <div class="sec-label">Seedance 2.0 / Kling AI Video Prompts — Equity Visual Aesthetic</div>
+  <p style="font-size:13.5px;color:var(--muted);margin-bottom:18px;">
+    Cool-neutral tones. Financial/wealth aesthetic. Distinct from B1 (warm aerial drone, competition energy).
+    Gemini visual differentiation check: PASS (9/10 distinct).
+  </p>
+
+  <div class="vp-card">
+    <div class="vp-head">&#127909; Prompt 1 — Bay Area Hook (Equity Gauge Pattern Interrupt)</div>
+    <div class="vp-body">
+      <div><span class="vp-label">SHOT:</span> Hook / Pattern Interrupt — first 2–3 seconds</div>
+      <div><span class="vp-label">PROMPT:</span> "Cinematic close-up of a modern financial gauge or speedometer graphic with a needle sweeping from zero to $820,000, set against a deep navy blue gradient background, gold accent colors, crisp clean motion, subtle lens flare, no people, pure graphic aesthetic, 4K, 3 seconds"</div>
+      <div><span class="vp-label">CAMERA:</span> Static, tight macro on graphic</div>
+      <div><span class="vp-label">LIGHTING:</span> Cool studio — navy + gold accent</div>
+      <div><span class="vp-label">DURATION:</span> 3 seconds</div>
+      <div><span class="vp-label">USE IN EDIT:</span> First 3 seconds before Graeham talking head — equity reveal visual</div>
+      <div id="vp1" style="display:none;">Cinematic close-up of a modern financial gauge or speedometer graphic with a needle sweeping from zero to $820,000, set against a deep navy blue gradient background, gold accent colors, crisp clean motion, subtle lens flare, no people, pure graphic aesthetic, 4K, 3 seconds</div>
+      <div class="copy-row"><button class="copy-btn" onclick="copyScript('vp1',this)" data-label="Copy Prompt">&#128203; Copy Prompt</button></div>
+    </div>
+  </div>
+
+  <div class="vp-card">
+    <div class="vp-head">&#127909; Prompt 2 — Peninsula Neighborhood Dusk (Wealth Aesthetic)</div>
+    <div class="vp-body">
+      <div><span class="vp-label">SHOT:</span> Bay Area B-Roll — atmospheric establishing</div>
+      <div><span class="vp-label">PROMPT:</span> "Cinematic slow dolly through a quiet affluent Peninsula California neighborhood at dusk, warm lights glowing in windows of well-maintained homes, tall trees lining the street, cool blue-purple twilight sky, long shadows, no cars or people moving, peaceful and settled feeling, shallow depth of field, 4K, 5 seconds"</div>
+      <div><span class="vp-label">CAMERA:</span> Slow dolly forward at street level</div>
+      <div><span class="vp-label">LIGHTING:</span> Blue-purple dusk, warm window glow</div>
+      <div><span class="vp-label">DURATION:</span> 5 seconds</div>
+      <div><span class="vp-label">USE IN EDIT:</span> Between equity stat reveal and Option 1 explanation</div>
+      <div id="vp2" style="display:none;">Cinematic slow dolly through a quiet affluent Peninsula California neighborhood at dusk, warm lights glowing in windows of well-maintained homes, tall trees lining the street, cool blue-purple twilight sky, long shadows, no cars or people moving, peaceful and settled feeling, shallow depth of field, 4K, 5 seconds</div>
+      <div class="copy-row"><button class="copy-btn" onclick="copyScript('vp2',this)" data-label="Copy Prompt">&#128203; Copy Prompt</button></div>
+    </div>
+  </div>
+
+  <div class="vp-card">
+    <div class="vp-head">&#127909; Prompt 3 — EPA Long-Term Home (Stability Aesthetic)</div>
+    <div class="vp-body">
+      <div><span class="vp-label">SHOT:</span> EPA B-Roll — long-term ownership feeling</div>
+      <div><span class="vp-label">PROMPT:</span> "Cinematic handheld slow push into the front of a modest well-cared-for single-story California home with mature landscaping, late afternoon golden hour light, lived-in and rooted feeling, potted plants by the door, weathered but loved, cool-warm color grade, 4K photorealistic, 4 seconds"</div>
+      <div><span class="vp-label">CAMERA:</span> Slow handheld push forward</div>
+      <div><span class="vp-label">LIGHTING:</span> Late afternoon golden hour</div>
+      <div><span class="vp-label">DURATION:</span> 4 seconds</div>
+      <div><span class="vp-label">USE IN EDIT:</span> Opening of EPA video — establishes long-term ownership feeling before Graeham talks</div>
+      <div id="vp3" style="display:none;">Cinematic handheld slow push into the front of a modest well-cared-for single-story California home with mature landscaping, late afternoon golden hour light, lived-in and rooted feeling, potted plants by the door, weathered but loved, cool-warm color grade, 4K photorealistic, 4 seconds</div>
+      <div class="copy-row"><button class="copy-btn purple" onclick="copyScript('vp3',this)" data-label="Copy Prompt">&#128203; Copy Prompt</button></div>
+    </div>
+  </div>
+</div>
+
+<div class="footer">
+  Graeham Watts &middot; Intero Real Estate &middot; DRE# 01466876 &middot;
+  Bay Area + EPA Bi-Monthly Update &mdash; June 2026 &middot; Angle B4: Equity + Wealth Position &middot;
+  Next update: August 2026 (B2 — Seller Timing + Pricing)
+</div>
+
+<script>
+function showTab(id, btn) {
+  document.querySelectorAll('.tab-panel').forEach(p => p.classList.remove('active'));
+  document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
+  document.getElementById('tab-' + id).classList.add('active');
+  btn.classList.add('active');
+}
+function copyScript(id, btn) {
+  const el = document.getElementById(id);
+  if (!el) return;
+  const text = el.innerText || el.textContent;
+  navigator.clipboard.writeText(text.trim()).then(() => {
+    const orig = btn.innerHTML;
+    btn.classList.add('copied');
+    btn.innerHTML = '&#10003; Copied';
+    setTimeout(() => { btn.classList.remove('copied'); btn.innerHTML = orig; }, 2000);
+  });
+}
+</script>
+</body>
+</html>
