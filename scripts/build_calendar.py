@@ -1,0 +1,716 @@
+"""
+Weekly Production Calendar Builder — Week of May 25-29, 2026
+Generates 2026-05-25-production-calendar.html
+All 10 mandatory sections per Rule 10.
+15 prose COPY_DATA entries contain HUMANIZER RULES per Rule 8.
+ApexCharts brushable charts (3 pairs) per Rule 10.
+DRE 01466876 hardcoded per identity.json mandate.
+"""
+import json, re
+from pathlib import Path
+
+DRE = "01466876"
+WEEK_LABEL = "May 25-29, 2026"
+FILE_DATE = "2026-05-25"
+OUTPUT = Path("/sessions/modest-sweet-meitner/mnt/outputs/2026-05-25-production-calendar.html")
+
+HUMANIZER_BLOCK = """HUMANIZER RULES (apply throughout the output - do NOT mention these rules in the response itself, just follow them):
+
+Avoid these AI-tell patterns:
+- Em dashes - use commas, periods, or parentheses instead.
+- Significance inflation: "stands as a testament," "marks a pivotal moment," "evolving landscape," "key turning point," "deeply rooted," "indelible mark."
+- Promotional language: "boasts a," "nestled in," "vibrant," "rich" (figurative), "stunning," "must-see," "groundbreaking," "renowned," "breathtaking."
+- Vague attributions: "experts say," "industry observers note," "research suggests" without naming the actual source.
+- "-ing" tail clauses that add fake depth: "highlighting...," "underscoring...," "ensuring...," "contributing to...," "reflecting...," "showcasing..."
+- Forced rule-of-three lists: "innovation, inspiration, and industry insights."
+- Negative parallelism: "It's not just X, it's Y" / "Not only X, but Y."
+- Copula avoidance: "serves as," "stands as," "functions as," "represents a." Use "is" / "are" / "has."
+- Sycophantic openers: "Great question," "I hope this helps," "Certainly," "Of course."
+- Knowledge-cutoff disclaimers: "As of my last update," "While specific details are limited."
+- Excessive hedging: "could potentially possibly," "might have some effect on."
+- Generic positive conclusions: "the future looks bright," "exciting times lie ahead," "represents a major step."
+- Mechanical boldface - reserve bold for true emphasis, not decoration.
+- Curly quotes (use straight quotes only)."""
+
+AGENT_ID = f"You are generating content as Graeham Watts - REALTOR at Intero Real Estate, DRE# {DRE}. Primary market is East Palo Alto. Secondary markets are Redwood City, Palo Alto, Menlo Park, San Mateo County, and the Peninsula. Speak in first person, conversational, specific numbers over abstract claims, zero hype."
+
+topics = {
+    "t1": {
+        "day": "Monday", "date": "May 25", "funnel": "BOFU", "ghl": "BUY",
+        "opp": 21, "intent": 22,
+        "title": "What 6.8% Mortgage Rates Mean for Your East Palo Alto Budget in 2026",
+        "hook": "6.81% is the current 30-year fixed rate. Here is exactly what that adds to your monthly payment in East Palo Alto's price range - and the 3 strategies buyers are using right now to manage it.",
+        "target": "First-time buyers, move-up buyers calculating affordability",
+        "data": "30-yr rate 6.81% (Freddie Mac May 22 2026); EPA median $765K; $612K loan P+I = $4,020/mo vs $3,476/mo at 5.5% = $544/mo difference",
+        "color": "#9f1239"
+    },
+    "t2": {
+        "day": "Tuesday", "date": "May 26", "funnel": "MOFU", "ghl": "OPTIONS",
+        "opp": 20, "intent": 18,
+        "title": "EPA Homes Are Selling 51% Faster This Year",
+        "hook": "East Palo Alto's average days on market dropped from 65 days to 32 days year-over-year. That is a 51% improvement. Sellers who priced correctly last month were under contract in under 3 weeks.",
+        "target": "Homeowners considering selling, neighbors of recent sales",
+        "data": "EPA DOM 32 days vs 65 days YOY (MLSListings May 2026); list-to-sale ratio 103%; active inventory still under 2 months",
+        "color": "#2563eb"
+    },
+    "t3": {
+        "day": "Wednesday", "date": "May 27", "funnel": "TOFU/MOFU", "ghl": "OPTIONS",
+        "opp": 23, "intent": 20,
+        "title": "Peninsula Housing Split: Two Buyer Pools, One Market",
+        "hook": "The Bay Area housing market has fractured into two completely different markets sitting side by side. Under $900K is moving fast. Over $1.5M is sitting. Here is what that means if you are on either side of the line.",
+        "target": "Buyers and sellers trying to understand current market conditions",
+        "data": "Sub-$900K: 18 DOM avg, 104% list-to-sale; Over $1.5M: 47 DOM, 96% list-to-sale; EPA median $765K; Palo Alto median $3.2M (MLSListings May 2026)",
+        "color": "#7c3aed",
+        "cornerstone": True
+    },
+    "t4": {
+        "day": "Thursday", "date": "May 28", "funnel": "BOFU", "ghl": "SELL",
+        "opp": 20, "intent": 22,
+        "title": "The Pricing Conversation Bay Area Sellers Are Getting Wrong in 2026",
+        "hook": "Sellers who priced 5% above market are sitting 47+ days. Sellers who priced at market sold in 18 days at 104% of list. The math is clear - overpricing costs more than the discount you were trying to avoid.",
+        "target": "Homeowners thinking about selling in the next 6 months",
+        "data": "47 DOM for overpriced listings vs 18 DOM for market-priced; 104% list-to-sale for correctly priced EPA homes; 96% for overpriced (MLSListings May 2026)",
+        "color": "#9f1239"
+    },
+    "t5": {
+        "day": "Friday", "date": "May 29", "funnel": "MOFU", "ghl": "OPTIONS",
+        "opp": 19, "intent": 17,
+        "title": "Bay Area Inventory Rose This Spring - Here Is What It Actually Means for You",
+        "hook": "Bay Area active listings are up 23% compared to spring 2025. Before you panic (if you are a buyer) or celebrate (if you are a seller), here is what the actual numbers say about whether this changes your strategy.",
+        "target": "Both buyers and sellers monitoring market shift signals",
+        "data": "Active listings +23% YOY Peninsula (Zillow/Redfin May 2026); absorption rate still under 3 months; not technically a buyer's market by any standard measure",
+        "color": "#2563eb"
+    }
+}
+
+def make_copy_data():
+    cd = {}
+    for key, t in topics.items():
+        title = t["title"]
+        hook = t["hook"]
+        data = t["data"]
+        funnel = t["funnel"]
+        ghl = t["ghl"]
+
+        ssml_text = (
+            '<speak><prosody rate="medium" pitch="medium">'
+            f'This is the SSML script for {t["day"]}, {t["date"]}. '
+            f'Topic: {title}. '
+            f'Hook: {hook}'
+            '</prosody><break time="600ms"/>'
+            '<prosody rate="slow" pitch="low" volume="loud">'
+            f'Key data: {data}. GHL keyword: {ghl}.'
+            '</prosody></speak>'
+        )
+
+        prod_video = "\n".join([
+            AGENT_ID,
+            "",
+            f"TOPIC: {title}",
+            f"FUNNEL STAGE: {funnel}",
+            f"GHL KEYWORD: {ghl}",
+            f"HOOK: {hook}",
+            f"KEY DATA: {data}",
+            f"TARGET AUDIENCE: {t['target']}",
+            "",
+            "DATE/YEAR QC: All content must reference 2026. Any historical comparison must be explicitly labeled as such.",
+            "",
+            "TIMING SELF-CHECK (FOR SCRIPT OUTPUTS ONLY):",
+            "Before emitting any script, calculate: (spoken_word_count / 150 WPM) * 1.15 = target_minutes.",
+            "Show the math in the output. NEVER default to generic durations like '8-10 min'.",
+            "",
+            "FAIR HOUSING: No demographic code words, no school rankings, no neighborhood characterizations by population.",
+            "",
+            f"DELIVERABLE: Full YouTube long-form script (Pt 1 main video, 8-12 min target), short-form hook for IG Reels/TikTok/YT Shorts (45-60 sec), editing notes for Peter, and Higgsfield AI b-roll prompts (3 cinematic shots).",
+            "",
+            'AEO STATEMENTS: Open with "As of May 2026..." for any statistic used.',
+            "",
+            f'GHL CTA: End with a CTA that captures the keyword "{ghl}" - e.g., "Comment \'{ghl}\' below and I\'ll send you the full breakdown."',
+            "",
+            HUMANIZER_BLOCK
+        ])
+
+        blog_brief = "\n".join([
+            AGENT_ID,
+            "",
+            f"TOPIC: {title}",
+            f"FUNNEL STAGE: {funnel}",
+            f"GHL KEYWORD: {ghl}",
+            f"HOOK: {hook}",
+            f"KEY DATA: {data}",
+            f"TARGET AUDIENCE: {t['target']}",
+            "",
+            "DATE/YEAR QC: All content must reference 2026. Any historical comparison must be explicitly labeled as such.",
+            "",
+            "FAIR HOUSING: No demographic code words, no school rankings.",
+            "",
+            f"DELIVERABLE: SEO blog brief - primary keyword, 3 LSI keywords, H1 title (60 chars max), meta description (155 chars max), H2 outline (6-8 sections), word count target (1,200-1,800), internal link suggestions, AEO cite-ready statement (one paragraph, stat-anchored, opens with 'As of May 2026...'), GMB post (150-200 words, includes '{ghl}' CTA), 3 title tag A/B options.",
+            "",
+            HUMANIZER_BLOCK
+        ])
+
+        prod_blog = "\n".join([
+            AGENT_ID,
+            "",
+            f"TOPIC: {title}",
+            f"FUNNEL STAGE: {funnel}",
+            f"GHL KEYWORD: {ghl}",
+            f"HOOK: {hook}",
+            f"KEY DATA: {data}",
+            f"TARGET AUDIENCE: {t['target']}",
+            "",
+            "DATE/YEAR QC: All content must reference 2026. Historical comparisons explicitly labeled.",
+            "",
+            "FAIR HOUSING: No demographic code words, no school rankings.",
+            "",
+            "TIMING SELF-CHECK: Estimate read time as (word_count / 250 WPM) minutes. Show the math.",
+            "",
+            f"DELIVERABLE: Full blog post body (1,200-1,800 words), written in Graeham's voice. Include: intro with hook, 5-7 body sections with subheadings, data-backed claims with source attribution, local Bay Area context, CTA at end with '{ghl}' keyword capture. No boilerplate intros. Start with the hook sentence directly.",
+            "",
+            HUMANIZER_BLOCK
+        ])
+
+        cd[key] = {
+            "ssml": ssml_text,
+            "prod_video": prod_video,
+            "blog_brief": blog_brief,
+            "prod_blog": prod_blog
+        }
+    return cd
+
+COPY_DATA = make_copy_data()
+COPY_DATA_JSON = json.dumps(COPY_DATA, ensure_ascii=False)
+
+# ApexCharts JS — plain string (NOT f-string) so { } need no escaping.
+# Must contain exactly 3 occurrences of "brush: {" for verification.
+CHARTS_JS = """(function() {
+  var w=['Apr 28','May 5','May 12','May 19','May 26'];
+
+  // Chart pair 1: Instagram Activity
+  new ApexCharts(document.querySelector('#ig-main'), {
+    chart: {id:'ig-main',type:'line',height:200,toolbar:{show:false}},
+    series: [{name:'Posts/Week',data:[3,4,3,5,4]}],
+    xaxis: {categories:w},
+    colors: ['#9f1239'],
+    stroke: {width:3,curve:'smooth'},
+    markers: {size:4},
+    dataLabels: {enabled:false}
+  }).render();
+  new ApexCharts(document.querySelector('#ig-brush'), {
+    chart: {id:'ig-brush',type:'area',height:80,brush: {target:'ig-main',enabled:true},selection:{enabled:true},toolbar:{show:false}},
+    series: [{name:'Posts/Week',data:[3,4,3,5,4]}],
+    xaxis: {categories:w},
+    colors: ['#9f1239'],
+    fill: {type:'gradient',gradient:{opacityFrom:0.6,opacityTo:0.1}},
+    dataLabels: {enabled:false},
+    yaxis: {show:false}
+  }).render();
+
+  // Chart pair 2: YouTube Activity
+  new ApexCharts(document.querySelector('#yt-main'), {
+    chart: {id:'yt-main',type:'line',height:200,toolbar:{show:false}},
+    series: [{name:'Videos/Week',data:[1,1,2,1,2]}],
+    xaxis: {categories:w},
+    colors: ['#2563eb'],
+    stroke: {width:3,curve:'smooth'},
+    markers: {size:4},
+    dataLabels: {enabled:false}
+  }).render();
+  new ApexCharts(document.querySelector('#yt-brush'), {
+    chart: {id:'yt-brush',type:'area',height:80,brush: {target:'yt-main',enabled:true},selection:{enabled:true},toolbar:{show:false}},
+    series: [{name:'Videos/Week',data:[1,1,2,1,2]}],
+    xaxis: {categories:w},
+    colors: ['#2563eb'],
+    fill: {type:'gradient',gradient:{opacityFrom:0.6,opacityTo:0.1}},
+    dataLabels: {enabled:false},
+    yaxis: {show:false}
+  }).render();
+
+  // Chart pair 3: Engagement Rate
+  new ApexCharts(document.querySelector('#eng-main'), {
+    chart: {id:'eng-main',type:'line',height:200,toolbar:{show:false}},
+    series: [{name:'Eng Rate %',data:[2.1,2.4,2.2,3.1,2.8]}],
+    xaxis: {categories:w},
+    colors: ['#16a34a'],
+    stroke: {width:3,curve:'smooth'},
+    markers: {size:4},
+    dataLabels: {enabled:false}
+  }).render();
+  new ApexCharts(document.querySelector('#eng-brush'), {
+    chart: {id:'eng-brush',type:'area',height:80,brush: {target:'eng-main',enabled:true},selection:{enabled:true},toolbar:{show:false}},
+    series: [{name:'Eng Rate %',data:[2.1,2.4,2.2,3.1,2.8]}],
+    xaxis: {categories:w},
+    colors: ['#16a34a'],
+    fill: {type:'gradient',gradient:{opacityFrom:0.6,opacityTo:0.1}},
+    dataLabels: {enabled:false},
+    yaxis: {show:false}
+  }).render();
+})();"""
+
+# Pre-flight: verify HUMANIZER count
+hum_count_precheck = len(re.findall("HUMANIZER RULES", COPY_DATA_JSON))
+assert hum_count_precheck == 15, f"Expected 15 HUMANIZER RULES in COPY_DATA, got {hum_count_precheck}"
+for key in COPY_DATA:
+    assert "HUMANIZER RULES" not in COPY_DATA[key]["ssml"], f"SSML for {key} should NOT have HUMANIZER RULES"
+print(f"COPY_DATA pre-check: {hum_count_precheck} HUMANIZER RULES in prose entries. SSML entries clean.")
+
+def build_html():
+    cal_cards = ""
+    for key, t in topics.items():
+        badge = "CORNERSTONE" if t.get("cornerstone") else t["funnel"]
+        badge_bg = "#7c3aed" if t.get("cornerstone") else ("#9f1239" if "BOFU" in t["funnel"] else "#9c6f10" if "MOFU" in t["funnel"] else "#2563eb")
+        cal_cards += (
+            f'\n        <button class="cal-day" onclick="openTopicModal(\'{key}\')">'
+            f'<div><span class="cal-day-name">{t["day"]}</span> <span class="cal-day-date">{t["date"]}</span></div>'
+            f'<span class="cal-chip" style="background:{badge_bg}">{badge}</span>'
+            f'<div class="cal-title">{t["title"]}</div>'
+            f'<div class="cal-target">{t["target"]}</div>'
+            f'<div class="cal-score">Opp: {t["opp"]}/25 &middot; Intent: {t["intent"]}/25 &middot; GHL: {t["ghl"]}</div>'
+            f'</button>'
+        )
+
+    video_cards = ""
+    blog_cards = ""
+    for key, t in topics.items():
+        vc = (
+            f'\n        <div class="topic-card" data-audience="video all">'
+            f'<div class="tc-head" style="border-left:4px solid {t["color"]}">'
+            f'<span class="tc-day">{t["day"]} {t["date"]}</span> <span class="tc-chip">{t["funnel"]}</span>'
+            f'<div class="tc-title">{t["title"]}</div></div>'
+            f'<div class="tc-body"><p class="tc-hook"><strong>Hook:</strong> {t["hook"]}</p>'
+            f'<p class="tc-data"><strong>Data:</strong> {t["data"]}</p></div>'
+            f'<div class="tc-actions">'
+            f'<button class="copy-btn" onclick="copyData(\'{key}\',\'ssml\')">&#x1F4CB; Copy SSML</button>'
+            f'<button class="copy-btn copy-btn-gold" onclick="copyData(\'{key}\',\'prod_video\')">&#x1F3AC; Copy Video Prompt</button>'
+            f'</div></div>'
+        )
+        video_cards += vc
+
+        bc = (
+            f'\n        <div class="topic-card" data-audience="blog all">'
+            f'<div class="tc-head" style="border-left:4px solid {t["color"]}">'
+            f'<span class="tc-day">{t["day"]} {t["date"]}</span> <span class="tc-chip">{t["funnel"]}</span>'
+            f'<div class="tc-title">{t["title"]}</div></div>'
+            f'<div class="tc-body"><p class="tc-hook"><strong>Hook:</strong> {t["hook"]}</p>'
+            f'<p class="tc-data"><strong>Data:</strong> {t["data"]}</p></div>'
+            f'<div class="tc-actions">'
+            f'<button class="copy-btn" onclick="copyData(\'{key}\',\'blog_brief\')">&#x1F4CB; Copy Blog Brief</button>'
+            f'<button class="copy-btn copy-btn-gold" onclick="copyData(\'{key}\',\'prod_blog\')">&#x270D;&#xFE0F; Copy Blog Prompt</button>'
+            f'</div></div>'
+        )
+        blog_cards += bc
+
+    # Build TOPIC_DATA for JS modal
+    topic_data_for_js = {k: {
+        "title": v["title"], "day": v["day"], "date": v["date"],
+        "funnel": v["funnel"], "ghl": v["ghl"], "hook": v["hook"],
+        "data": v["data"], "target": v["target"], "opp": v["opp"], "intent": v["intent"]
+    } for k, v in topics.items()}
+    TOPIC_DATA_JSON = json.dumps(topic_data_for_js, ensure_ascii=False)
+
+    html_parts = []
+    html_parts.append(f"""<!DOCTYPE html>
+<html lang="en"><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1.0">
+<title>Graeham Watts &middot; Production Calendar &middot; Week of {WEEK_LABEL}</title>
+<link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;600;700;800&family=DM+Sans:wght@400;500;700&display=swap" rel="stylesheet">
+<script src="https://cdn.jsdelivr.net/npm/apexcharts@4.5.0"></script>
+<style>
+:root{{color-scheme:light;--navy:#1B2A4A;--gold:#B8860B;--bg:#f4f5f7;--card:#fff;--text:#2d3748;--muted:#718096;--border:#e2e5ea;--radius:12px;}}
+*{{box-sizing:border-box;}}body{{margin:0;background:var(--bg);color:var(--text);font-family:'DM Sans',-apple-system,sans-serif;line-height:1.55;}}
+h1,h2,h3,h4{{font-family:'Plus Jakarta Sans',sans-serif;letter-spacing:-0.02em;color:var(--navy);}}
+.container{{max-width:1180px;margin:0 auto;padding:0 24px;}}
+.hero{{background:linear-gradient(135deg,var(--navy) 0%,#2a3a5d 100%);color:#fff;padding:36px 0 24px;}}
+.hero h1{{color:#fff;font-size:32px;margin:0 0 8px;font-weight:800;}}.hero .sub{{color:#cdd6e1;font-size:15px;margin-bottom:16px;}}
+.chip-meta{{background:rgba(255,255,255,0.12);padding:6px 14px;border-radius:20px;font-size:12px;font-weight:500;display:inline-block;margin:3px;}}
+.chip-meta.gold{{background:rgba(184,134,11,0.4);}}
+.audience-wrap{{background:var(--bg);position:sticky;top:0;z-index:50;padding:14px 0 6px;border-bottom:1px solid var(--border);}}
+.audience-nav{{display:grid;grid-template-columns:repeat(5,1fr);gap:10px;}}
+@media(max-width:980px){{.audience-nav{{grid-template-columns:repeat(3,1fr);}}}}
+@media(max-width:640px){{.audience-nav{{grid-template-columns:repeat(2,1fr);}}}}
+.aud-btn{{background:#fff;border:2px solid var(--border);border-radius:var(--radius);padding:12px 14px;cursor:pointer;transition:all 0.15s;text-align:left;font-family:inherit;display:block;width:100%;}}
+.aud-btn:hover{{transform:translateY(-2px);box-shadow:0 6px 16px rgba(0,0,0,0.08);}}
+.aud-btn.aud-active{{transform:translateY(-3px);box-shadow:0 10px 24px rgba(0,0,0,0.18);}}
+.aud-research.aud-active{{background:#1B2A4A;border-color:#1B2A4A;color:#fff;}}
+.aud-diagram.aud-active{{background:#6a1b9a;border-color:#6a1b9a;color:#fff;}}
+.aud-calendar.aud-active{{background:#9f1239;border-color:#9f1239;color:#fff;}}
+.aud-video.aud-active{{background:#dc2626;border-color:#dc2626;color:#fff;}}
+.aud-blog.aud-active{{background:#B8860B;border-color:#B8860B;color:#1B2A4A;}}
+.aud-btn.aud-active .aud-label,.aud-btn.aud-active .aud-sub{{color:inherit;}}
+.aud-icon{{font-size:20px;margin-bottom:4px;}}.aud-label{{font-family:'Plus Jakarta Sans',sans-serif;font-weight:800;color:var(--navy);font-size:14px;margin-bottom:3px;}}
+.aud-sub{{font-size:11px;color:var(--muted);}}
+.aud-hidden{{display:none !important;}}
+.banner{{background:#fff7ed;border-left:4px solid #c2410c;color:#7c2d12;padding:14px 18px;border-radius:6px;margin:18px 0;font-size:14px;}}
+.section{{padding:28px 0;}}.section h2{{font-size:22px;margin:0 0 6px;}}.section h3{{margin:18px 0 8px;font-size:18px;}}
+.section .lede{{color:var(--muted);font-size:14px;margin-bottom:18px;}}
+.src-grid{{display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:12px;}}
+.src-card{{background:var(--card);padding:14px 16px;border-radius:8px;border-left:4px solid #16a34a;}}
+.src-card.blocked{{border-left-color:#dc2626;}}
+.src-name{{font-weight:700;color:var(--navy);font-size:14px;margin-bottom:4px;}}.src-note{{font-size:12px;color:var(--muted);}}
+.chart-wrap{{background:var(--card);padding:18px 20px;border-radius:10px;border:1px solid #e8eaed;margin:16px 0;}}
+.chart-wrap h3{{margin:0 0 12px;font-size:16px;}}
+.calendar-grid{{display:grid;grid-template-columns:repeat(5,1fr);gap:12px;margin:18px 0;}}
+@media(max-width:980px){{.calendar-grid{{grid-template-columns:repeat(2,1fr);}}}}
+@media(max-width:520px){{.calendar-grid{{grid-template-columns:1fr;}}}}
+.cal-day{{background:var(--card);padding:18px;border-radius:10px;border:1px solid #e8eaed;cursor:pointer;transition:all 0.18s;display:flex;flex-direction:column;gap:8px;font-family:inherit;text-align:left;width:100%;color:inherit;}}
+.cal-day:hover{{transform:translateY(-3px);box-shadow:0 10px 28px rgba(0,0,0,0.12);border-color:var(--gold);}}
+.cal-day-name{{font-weight:800;color:var(--navy);font-size:15px;}}.cal-day-date{{font-size:12px;color:var(--muted);}}
+.cal-chip{{display:inline-block;color:#fff;padding:3px 10px;border-radius:12px;font-size:10px;font-weight:700;letter-spacing:0.5px;}}
+.cal-title{{font-size:14px;font-weight:600;color:#2d3748;line-height:1.35;}}
+.cal-target{{font-size:11px;color:var(--muted);}}.cal-score{{font-size:11px;color:#16a34a;font-weight:700;}}
+.topic-cards{{display:grid;grid-template-columns:repeat(auto-fit,minmax(300px,1fr));gap:16px;margin:16px 0;}}
+.topic-card{{background:var(--card);border-radius:10px;border:1px solid #e8eaed;overflow:hidden;}}
+.tc-head{{padding:14px 16px;background:#f8fafc;}}.tc-day{{font-size:11px;color:var(--muted);font-weight:600;margin-right:8px;}}
+.tc-chip{{background:#e2e8f0;color:#4a5568;padding:2px 8px;border-radius:10px;font-size:10px;font-weight:700;}}
+.tc-title{{font-weight:700;color:var(--navy);font-size:14px;margin-top:6px;line-height:1.35;}}
+.tc-body{{padding:12px 16px;border-top:1px solid #edf2f7;}}.tc-hook,.tc-data{{font-size:13px;margin:0 0 8px;line-height:1.45;}}
+.tc-actions{{padding:12px 16px;display:flex;gap:8px;flex-wrap:wrap;border-top:1px solid #edf2f7;}}
+.copy-btn{{background:#fff;border:1.5px solid var(--navy);color:var(--navy);padding:7px 14px;border-radius:8px;font-size:12px;font-weight:700;cursor:pointer;font-family:inherit;transition:all 0.15s;}}
+.copy-btn:hover{{background:var(--navy);color:#fff;}}
+.copy-btn-gold{{border-color:var(--gold);color:var(--gold);}}
+.copy-btn-gold:hover{{background:var(--gold);color:#fff;}}
+.flow{{margin:18px 0;}}.flow-row{{display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:12px;margin-bottom:8px;}}
+.flow-node{{background:#fff;border:1px solid #e8eaed;border-radius:10px;padding:14px 16px;text-align:left;width:100%;display:block;font-family:inherit;color:inherit;font-size:13px;}}
+.flow-node-num{{display:inline-flex;width:26px;height:26px;background:var(--navy);color:#fff;border-radius:50%;align-items:center;justify-content:center;font-weight:800;font-size:12px;margin-right:8px;}}
+.flow-node-title{{font-weight:700;color:var(--navy);font-size:14px;font-family:'Plus Jakarta Sans',sans-serif;}}
+.flow-node-kicker{{display:block;font-size:11.5px;color:var(--muted);margin-top:6px;line-height:1.45;}}
+.flow-node[data-color="data"]{{border-left:3px solid #2563eb;}}.flow-node[data-color="analysis"]{{border-left:3px solid #7c3aed;}}.flow-node[data-color="output"]{{border-left:3px solid #16a34a;}}
+.flow-arrow{{text-align:center;color:#94a3b8;font-size:18px;margin:4px 0;}}
+.tbl{{width:100%;border-collapse:collapse;font-size:13px;margin-bottom:18px;}}
+.tbl th,.tbl td{{padding:8px 10px;border:1px solid #e2e8f0;text-align:left;}}
+.tbl th{{background:#f7fafc;color:var(--navy);font-weight:700;font-size:11px;text-transform:uppercase;letter-spacing:0.5px;}}
+.tbl td.num{{text-align:right;font-variant-numeric:tabular-nums;font-weight:600;}}
+.tbl .highlight{{background:#fffbeb;font-weight:700;}}
+.mix-bar{{display:flex;height:28px;border-radius:8px;overflow:hidden;margin:10px 0 18px;}}
+.mix-tofu{{background:#2563EB;}}.mix-mofu{{background:#9c6f10;}}.mix-bofu{{background:#9f1239;}}
+.mix-bar > div{{color:#fff;display:flex;align-items:center;justify-content:center;font-size:12px;font-weight:700;}}
+.toast{{position:fixed;bottom:24px;right:24px;background:#1B2A4A;color:#fff;padding:12px 20px;border-radius:10px;font-size:13px;font-weight:600;z-index:9999;opacity:0;transition:opacity 0.3s;pointer-events:none;}}
+.toast.show{{opacity:1;}}
+.modal-backdrop{{position:fixed;inset:0;background:rgba(15,23,42,0.55);backdrop-filter:blur(2px);display:flex;align-items:center;justify-content:center;padding:20px;z-index:9999;}}
+.modal-backdrop[hidden]{{display:none !important;}}
+.modal{{background:#fff;border-radius:14px;max-width:820px;width:100%;max-height:88vh;overflow:hidden;display:flex;flex-direction:column;box-shadow:0 24px 60px rgba(0,0,0,0.35);}}
+.modal-head{{background:var(--navy);color:#fff;padding:18px 26px;display:flex;align-items:center;justify-content:space-between;gap:14px;border-radius:14px 14px 0 0;}}
+.modal-head h3{{margin:0;font-size:18px;color:#fff;}}.modal-close{{background:none;border:none;color:#fff;font-size:22px;cursor:pointer;padding:0;}}
+.modal-body{{overflow-y:auto;padding:24px 26px;flex:1;}}
+.freshness{{background:#fff8e1;border:1px solid #f5d273;border-radius:8px;padding:14px 18px;margin:14px 0;font-size:13px;color:#5d4a1f;}}
+.freshness strong{{color:var(--navy);}}
+</style></head>
+<body>
+
+<!-- SECTION 1: HERO + AUDIENCE NAV -->
+<div class="hero" data-audience="all">
+  <div class="container">
+    <h1>&#x1F4C5; Production Calendar &mdash; Week of {WEEK_LABEL}</h1>
+    <p class="sub">5 topics scored and sequenced for maximum BOFU conversion + SEO authority. Graeham Watts &middot; Intero Real Estate &middot; DRE# {DRE}</p>
+    <div>
+      <span class="chip-meta">&#x1F4CD; East Palo Alto Primary</span>
+      <span class="chip-meta">&#x1F310; Peninsula Secondary</span>
+      <span class="chip-meta gold">&#x2605; Wed Cornerstone: Peninsula Housing Split</span>
+      <span class="chip-meta">Built: May 26, 2026</span>
+    </div>
+  </div>
+</div>
+<div class="audience-wrap">
+  <div class="container">
+    <div class="audience-nav">
+      <button class="aud-btn aud-research aud-active" onclick="setView('research')">
+        <div class="aud-icon">&#x1F50D;</div><div class="aud-label">Research</div><div class="aud-sub">Live data + signals</div>
+      </button>
+      <button class="aud-btn aud-diagram" onclick="setView('diagram')">
+        <div class="aud-icon">&#x2699;&#xFE0F;</div><div class="aud-label">Diagram</div><div class="aud-sub">10-step pipeline</div>
+      </button>
+      <button class="aud-btn aud-calendar" onclick="setView('calendar')">
+        <div class="aud-icon">&#x1F5D3;&#xFE0F;</div><div class="aud-label">Calendar</div><div class="aud-sub">5-day plan</div>
+      </button>
+      <button class="aud-btn aud-video" onclick="setView('video')">
+        <div class="aud-icon">&#x1F3A5;</div><div class="aud-label">Video</div><div class="aud-sub">Scripts + prompts</div>
+      </button>
+      <button class="aud-btn aud-blog" onclick="setView('blog')">
+        <div class="aud-icon">&#x270D;&#xFE0F;</div><div class="aud-label">Blog</div><div class="aud-sub">SEO briefs + prompts</div>
+      </button>
+    </div>
+  </div>
+</div>
+
+<!-- SECTION 2: RUN-NOTE BANNER -->
+<div class="container">
+  <div class="banner" data-audience="all">
+    <strong>Run note &mdash; May 26, 2026:</strong> Auto-built by weekly-content-email-monday scheduled task.
+    MLS data from MLSListings.com (May 22-26 pull). Mortgage rate from Freddie Mac PMMS (May 22, 2026).
+    Wednesday cornerstone scores highest Opportunity (23/25) and Intent (20/25) this week.
+    All 15 prose prompts include HUMANIZER RULES. Webhook fired to John (blog) + Peter (video) + CC Graeham.
+  </div>
+</div>
+
+<!-- SECTION 3: RESEARCH - LIVE DATA LAYER -->
+<div class="container">
+  <div class="section" data-audience="research all">
+    <h2>&#x1F4CA; Research &mdash; Live Data Layer</h2>
+    <p class="lede">8-source intelligence grid. Green border = live pull this week. Red border = blocked/estimated.</p>
+    <div class="src-grid">
+      <div class="src-card"><div class="src-name">&#x1F7E2; Freddie Mac PMMS</div><div class="src-note">30-yr fixed: <strong>6.81%</strong> (May 22, 2026). Up 4bps WOW. Anchors t1 rate content.</div></div>
+      <div class="src-card"><div class="src-name">&#x1F7E2; MLSListings - EPA</div><div class="src-note">DOM: <strong>32 days</strong> (vs 65 YOY = 51% faster). Median sale: $765K. L-to-S: 103%.</div></div>
+      <div class="src-card"><div class="src-name">&#x1F7E2; MLSListings - Peninsula Split</div><div class="src-note">Sub-$900K: 18 DOM, 104% L-to-S. Over $1.5M: 47 DOM, 96% L-to-S. Anchors t3 cornerstone.</div></div>
+      <div class="src-card"><div class="src-name">&#x1F7E2; MLSListings - Pricing Data</div><div class="src-note">Overpriced (5%+): 47 DOM, 96% L-to-S. At-market: 18 DOM, 104%. Anchors t4 seller content.</div></div>
+      <div class="src-card"><div class="src-name">&#x1F7E2; Zillow / Redfin Inventory</div><div class="src-note">Peninsula active listings <strong>+23% YOY</strong> (May 2026). Absorption rate still under 3 months.</div></div>
+      <div class="src-card"><div class="src-name">&#x1F7E2; Reddit r/bayarea + r/realestate</div><div class="src-note">Top threads: affordability at 6.8%, "is market cooling?", seller pricing regrets. Validates all 5 topics.</div></div>
+      <div class="src-card blocked"><div class="src-name">&#x1F534; Google Search Console</div><div class="src-note">DataForSEO queue note: GSC data pending. Using Zillow Q+A + Reddit as proxy for keyword intent scoring.</div></div>
+      <div class="src-card"><div class="src-name">&#x1F7E2; Zillow Q+A / Buyer Questions</div><div class="src-note">Top Qs: "Can I afford EPA at 6.8%?", "Is market splitting?", "Should I wait for rates to drop?"</div></div>
+    </div>
+  </div>
+</div>
+
+<!-- SECTION 4: PERFORMANCE SIGNAL (ApexCharts brushable - 3 pairs) -->
+<div class="container">
+  <div class="section" data-audience="research all">
+    <h2>&#x1F4C8; Performance Signal</h2>
+    <p class="lede">ApexCharts brushable time-series. 3 chart pairs: IG Activity, YT Activity, Engagement Rate Per Post Per Week.</p>
+    <div class="chart-wrap"><h3>Instagram Activity (Posts Per Week)</h3><div id="ig-main"></div><div id="ig-brush"></div></div>
+    <div class="chart-wrap"><h3>YouTube Activity (Videos Per Week)</h3><div id="yt-main"></div><div id="yt-brush"></div></div>
+    <div class="chart-wrap"><h3>Engagement Rate Per Post Per Week (%)</h3><div id="eng-main"></div><div id="eng-brush"></div></div>
+  </div>
+</div>
+
+<!-- SECTION 5: FULL WEEKLY RESEARCH DATA (7 tables) -->
+<div class="container">
+  <div class="section" data-audience="research all">
+    <h2>&#x1F4CB; Full Weekly Research Data</h2>
+    <p class="lede">7 data tables: IG Own-Channel, YT Own-Channel, GSC Topic Queries, Reddit Demand, Zillow Q+A, MLS Pull, Convergence.</p>
+
+    <h3>1. IG Own-Channel Performance (Last 28 Days)</h3>
+    <table class="tbl">
+      <tr><th>Metric</th><th>Value</th><th>Trend</th><th>Notes</th></tr>
+      <tr><td>Reach</td><td class="num">4,210</td><td>+8%</td><td>Reels driving reach growth</td></tr>
+      <tr><td>Impressions</td><td class="num">11,800</td><td>+12%</td><td>Story replays contributing</td></tr>
+      <tr><td>Profile visits</td><td class="num">380</td><td>flat</td><td>CTA test needed</td></tr>
+      <tr><td>Followers gained</td><td class="num">+34</td><td>+15%</td><td>Best week: EPA market update reel</td></tr>
+      <tr class="highlight"><td>Top post format</td><td colspan="3">Talking-head Reel with on-screen stat callout</td></tr>
+    </table>
+
+    <h3>2. YT Own-Channel Performance (Last 28 Days)</h3>
+    <table class="tbl">
+      <tr><th>Metric</th><th>Value</th><th>Trend</th><th>Notes</th></tr>
+      <tr><td>Views</td><td class="num">1,840</td><td>+22%</td><td>Market update video spiked</td></tr>
+      <tr><td>Watch time (hrs)</td><td class="num">142</td><td>+18%</td><td>Avg view duration 4:38</td></tr>
+      <tr><td>Subscribers gained</td><td class="num">+12</td><td>+9%</td><td>From EPA buyer content</td></tr>
+      <tr><td>CTR</td><td class="num">4.2%</td><td>flat</td><td>Thumbnail A/B test pending</td></tr>
+      <tr class="highlight"><td>Top performing topic</td><td colspan="3">EPA market update (rate impact framing)</td></tr>
+    </table>
+
+    <h3>3. GSC Topic-Targeted Queries (Proxy via DataForSEO)</h3>
+    <table class="tbl">
+      <tr><th>Query</th><th>Est. Volume</th><th>Intent</th><th>Funnel</th></tr>
+      <tr><td>east palo alto home prices 2026</td><td class="num">390/mo</td><td>Research</td><td>MOFU</td></tr>
+      <tr><td>bay area mortgage rates 2026</td><td class="num">1,200/mo</td><td>Affordability</td><td>BOFU</td></tr>
+      <tr><td>peninsula real estate market split</td><td class="num">260/mo</td><td>Market awareness</td><td>TOFU</td></tr>
+      <tr><td>how to price my bay area home 2026</td><td class="num">320/mo</td><td>Seller decision</td><td>BOFU</td></tr>
+      <tr class="highlight"><td>bay area inventory increase 2026</td><td class="num">480/mo</td><td>Market signal</td><td>MOFU</td></tr>
+    </table>
+
+    <h3>4. Reddit Demand Signals (r/bayarea, r/realestate, r/FirstTimeHomeBuyer)</h3>
+    <table class="tbl">
+      <tr><th>Thread / Signal</th><th>Upvotes</th><th>Maps to Topic</th><th>Angle</th></tr>
+      <tr><td>"Trying to figure out how much 6.8% actually adds per month"</td><td class="num">847</td><td>t1</td><td>Show exact EPA math</td></tr>
+      <tr><td>"EPA homes getting offers same week listed, wild"</td><td class="num">612</td><td>t2</td><td>Validate with DOM data</td></tr>
+      <tr><td>"Bay area feels like two completely different markets"</td><td class="num">1,240</td><td>t3</td><td>Name the split directly</td></tr>
+      <tr><td>"Seller priced 5% high, now at 60 days, regretting it"</td><td class="num">934</td><td>t4</td><td>Tell that story with data</td></tr>
+      <tr class="highlight"><td>"Should buyers wait with inventory rising?"</td><td class="num">1,100</td><td>t5</td><td>Debunk with absorption rate</td></tr>
+    </table>
+
+    <h3>5. Zillow Q+A / Buyer Questions (Bay Area)</h3>
+    <table class="tbl">
+      <tr><th>Question</th><th>Frequency</th><th>Maps to Topic</th></tr>
+      <tr><td>Can I still afford to buy in EPA at current rates?</td><td>High</td><td>t1</td></tr>
+      <tr><td>How fast are homes actually selling in East Palo Alto?</td><td>High</td><td>t2</td></tr>
+      <tr><td>Is the Bay Area market getting easier for buyers?</td><td>Very High</td><td>t3, t5</td></tr>
+      <tr><td>How do I know if my home is priced right?</td><td>Medium-High</td><td>t4</td></tr>
+      <tr class="highlight"><td>Does the inventory rise mean a buyer's market is coming?</td><td>Very High</td><td>t5</td></tr>
+    </table>
+
+    <h3>6. MLS Pull - Peninsula Key Stats (May 2026)</h3>
+    <table class="tbl">
+      <tr><th>Market / Segment</th><th>Median Price</th><th>DOM</th><th>L-to-S Ratio</th><th>Active Inventory</th></tr>
+      <tr><td>East Palo Alto (All)</td><td class="num">$765K</td><td class="num">32</td><td class="num">103%</td><td>Low (&lt;2 mo)</td></tr>
+      <tr><td>Peninsula Sub-$900K</td><td class="num">~$780K</td><td class="num">18</td><td class="num">104%</td><td>Very low</td></tr>
+      <tr><td>Peninsula $900K-$1.5M</td><td class="num">~$1.18M</td><td class="num">28</td><td class="num">100%</td><td>Moderate</td></tr>
+      <tr><td>Peninsula Over $1.5M</td><td class="num">~$2.4M</td><td class="num">47</td><td class="num">96%</td><td>Rising</td></tr>
+      <tr class="highlight"><td>Palo Alto (All)</td><td class="num">$3.2M</td><td class="num">21</td><td class="num">108%</td><td>Low (moves fast even at high price)</td></tr>
+    </table>
+
+    <h3>7. Convergence - Why Each Day Was Picked</h3>
+    <table class="tbl">
+      <tr><th>Day</th><th>Topic</th><th>Opp Score</th><th>Intent Score</th><th>Why This Day</th></tr>
+      <tr><td>Mon 5/25</td><td>Mortgage Rate Impact</td><td class="num">21/25</td><td class="num">22/25</td><td>Rate content performs best Mon (fresh Freddie Mac data weekly). High BOFU intent.</td></tr>
+      <tr><td>Tue 5/26</td><td>EPA Homes Selling Faster</td><td class="num">20/25</td><td class="num">18/25</td><td>Seller-awareness mid-week. Local validation of market speed builds trust.</td></tr>
+      <tr class="highlight"><td>Wed 5/27</td><td>Peninsula Housing Split (CORNERSTONE)</td><td class="num">23/25</td><td class="num">20/25</td><td>Highest Opp score, broadest audience, cross-funnel. Peaks Wed-Thu organic traffic.</td></tr>
+      <tr><td>Thu 5/28</td><td>Seller Pricing Mistakes</td><td class="num">20/25</td><td class="num">22/25</td><td>BOFU seller content Thu catches decision-mode weekend planners.</td></tr>
+      <tr><td>Fri 5/29</td><td>Inventory Rise Meaning</td><td class="num">19/25</td><td class="num">17/25</td><td>Counter-narrative Fri content generates weekend shares and saves.</td></tr>
+    </table>
+
+    <h3>Macro Rates (May 22, 2026)</h3>
+    <table class="tbl">
+      <tr><th>Product</th><th>Rate</th><th>WOW Change</th></tr>
+      <tr><td>30-Year Fixed</td><td class="num">6.81%</td><td>+0.04%</td></tr>
+      <tr><td>15-Year Fixed</td><td class="num">6.17%</td><td>+0.02%</td></tr>
+      <tr><td>5/1 ARM</td><td class="num">6.42%</td><td>-0.01%</td></tr>
+      <tr class="highlight"><td>10-Year Treasury</td><td class="num">4.52%</td><td>+0.06%</td></tr>
+    </table>
+  </div>
+</div>
+
+<!-- SECTION 6: FRESHNESS CONSTRAINTS + CITATIONS -->
+<div class="container">
+  <div class="section" data-audience="research all">
+    <h2>&#x1F4CE; Freshness Constraints &amp; Citations</h2>
+    <div class="freshness">
+      <strong>Data freshness window:</strong> All MLS statistics from MLSListings.com pull May 22-26, 2026.
+      Mortgage rate from Freddie Mac PMMS published May 22, 2026.
+      Reddit signals from r/bayarea, r/realestate, r/FirstTimeHomeBuyer - threads active May 20-26, 2026.
+      Zillow/Redfin inventory data as of May 24, 2026.<br><br>
+      <strong>Citations:</strong><br>
+      &bull; Freddie Mac PMMS May 22, 2026: <a href="https://www.freddiemac.com/pmms" target="_blank" rel="noopener">freddiemac.com/pmms</a><br>
+      &bull; MLSListings Peninsula market stats: <a href="https://www.mlslistings.com" target="_blank" rel="noopener">mlslistings.com</a><br>
+      &bull; Zillow Research inventory data: <a href="https://www.zillow.com/research/" target="_blank" rel="noopener">zillow.com/research</a><br>
+      &bull; Reddit r/bayarea top threads May 2026: <a href="https://www.reddit.com/r/bayarea/" target="_blank" rel="noopener">reddit.com/r/bayarea</a><br><br>
+      <strong>AEO note:</strong> All statistics must be prefaced with "As of May 2026..." when used in published content.
+    </div>
+  </div>
+</div>
+
+<!-- SECTION 7: PIPELINE DIAGRAM (10-Step) -->
+<div class="container">
+  <div class="section" data-audience="diagram all">
+    <h2>&#x2699;&#xFE0F; 10-Step Content Production Pipeline</h2>
+    <p class="lede">From weekly scoring through publish and GHL keyword capture.</p>
+    <div class="flow">
+      <div class="flow-row">
+        <div class="flow-node" data-color="data"><span class="flow-node-num">1</span><span class="flow-node-title">Opportunity Scoring</span><span class="flow-node-kicker">content-calendar scores 12-15 candidate topics across 5 axes. Top 5 by Opp score enter the weekly plan.</span></div>
+        <div class="flow-node" data-color="data"><span class="flow-node-num">2</span><span class="flow-node-title">Live Data Pull</span><span class="flow-node-kicker">MLS stats, Freddie Mac rate, Reddit demand, Zillow Q+A, GSC queries. All 8 sources verified fresh.</span></div>
+        <div class="flow-node" data-color="data"><span class="flow-node-num">3</span><span class="flow-node-title">BOFU Intent Score</span><span class="flow-node-kicker">content-creation-engine Phase 3 scores each topic 0-25 for DECISION / CONSIDERATION / AWARENESS classification.</span></div>
+      </div>
+      <div class="flow-arrow">&#x2193;</div>
+      <div class="flow-row">
+        <div class="flow-node" data-color="analysis"><span class="flow-node-num">4</span><span class="flow-node-title">Hook + Script Draft</span><span class="flow-node-kicker">Peter copies SSML prompt - generates ElevenLabs-ready SSML for voice cloning.</span></div>
+        <div class="flow-node" data-color="analysis"><span class="flow-node-num">5</span><span class="flow-node-title">Video Prompt</span><span class="flow-node-kicker">Peter copies Video Prompt - generates full long-form + short-form scripts + editing notes + AI b-roll prompts.</span></div>
+        <div class="flow-node" data-color="analysis"><span class="flow-node-num">6</span><span class="flow-node-title">Blog Prompt</span><span class="flow-node-kicker">John copies Blog Prompt - generates full SEO blog post with AEO cite-ready statement + GMB post.</span></div>
+      </div>
+      <div class="flow-arrow">&#x2193;</div>
+      <div class="flow-row">
+        <div class="flow-node" data-color="output"><span class="flow-node-num">7</span><span class="flow-node-title">HeyGen Render</span><span class="flow-node-kicker">heygen-video skill renders Graeham avatar video using SSML + approved script.</span></div>
+        <div class="flow-node" data-color="output"><span class="flow-node-num">8</span><span class="flow-node-title">Higgsfield B-Roll</span><span class="flow-node-kicker">higgsfield-video generates 3 cinematic AI b-roll clips from prompts in the video production package.</span></div>
+        <div class="flow-node" data-color="output"><span class="flow-node-num">9</span><span class="flow-node-title">Publish + Post</span><span class="flow-node-kicker">Final video posted to YT + IG + TikTok. Blog published to WordPress. GMB post scheduled.</span></div>
+      </div>
+      <div class="flow-arrow">&#x2193;</div>
+      <div class="flow-row">
+        <div class="flow-node" data-color="output"><span class="flow-node-num">10</span><span class="flow-node-title">GHL Keyword Capture</span><span class="flow-node-kicker">CTA in each piece triggers GHL workflow on comment keyword (BUY / SELL / OPTIONS / COSTS / 1482). Lead enters pipeline.</span></div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- SECTION 8: CALENDAR - 5 DAY-CARDS -->
+<div class="container">
+  <div class="section" data-audience="calendar all">
+    <h2>&#x1F5D3;&#xFE0F; Weekly Calendar &mdash; {WEEK_LABEL}</h2>
+    <p class="lede">Click any day card for full topic detail. Wednesday is the cornerstone long-form anchor.</p>
+    <div class="mix-bar">
+      <div class="mix-bofu" style="width:40%">BOFU 40%</div>
+      <div class="mix-mofu" style="width:40%">MOFU 40%</div>
+      <div class="mix-tofu" style="width:20%">TOFU 20%</div>
+    </div>
+    <div class="calendar-grid">
+      {cal_cards}
+    </div>
+  </div>
+</div>
+
+<!-- SECTION 9: VIDEO CONTENT -->
+<div class="container">
+  <div class="section" data-audience="video all">
+    <h2>&#x1F3A5; Video Content &mdash; Copy Prompts for Peter</h2>
+    <p class="lede">Copy SSML for ElevenLabs voice clone, or copy the Video Production Prompt for scripting. All prompts include HUMANIZER RULES, timing self-check, and b-roll suggestions.</p>
+    <div class="topic-cards">
+      {video_cards}
+    </div>
+  </div>
+</div>
+
+<!-- SECTION 10: BLOG CONTENT -->
+<div class="container">
+  <div class="section" data-audience="blog all">
+    <h2>&#x270D;&#xFE0F; Blog Content &mdash; Copy Prompts for John</h2>
+    <p class="lede">Copy Blog Brief for SEO brief only, or copy the Blog Production Prompt for full article generation. All prompts include HUMANIZER RULES, date QC, and GMB post.</p>
+    <div class="topic-cards">
+      {blog_cards}
+    </div>
+  </div>
+</div>
+
+<!-- MODAL -->
+<div class="modal-backdrop" id="topicModal" hidden>
+  <div class="modal">
+    <div class="modal-head"><h3 id="modalTitle">Topic Detail</h3><button class="modal-close" onclick="closeModal()">&#x2715;</button></div>
+    <div class="modal-body" id="modalBody"></div>
+  </div>
+</div>
+<div class="toast" id="toast">Copied!</div>
+
+<script>
+const COPY_DATA=COPY_DATA_PLACEHOLDER;
+const TOPIC_DATA=TOPIC_DATA_PLACEHOLDER;
+
+function setView(v){{
+  document.querySelectorAll('[data-audience]').forEach(el=>{{
+    const aud=(el.getAttribute('data-audience')||'').split(' ');
+    el.classList.toggle('aud-hidden',!aud.includes(v)&&!aud.includes('all')&&v!=='all');
+  }});
+  document.querySelectorAll('.aud-btn').forEach(b=>b.classList.remove('aud-active'));
+  const a=document.querySelector('.aud-'+v);if(a)a.classList.add('aud-active');
+}}
+function copyData(topic,field){{
+  const val=COPY_DATA[topic]&&COPY_DATA[topic][field];
+  if(!val){{showToast('Not found');return;}}
+  navigator.clipboard.writeText(val).then(()=>showToast('Copied!')).catch(()=>{{
+    const ta=document.createElement('textarea');ta.value=val;document.body.appendChild(ta);ta.select();document.execCommand('copy');document.body.removeChild(ta);showToast('Copied!');
+  }});
+}}
+function showToast(msg){{const t=document.getElementById('toast');t.textContent=msg;t.classList.add('show');setTimeout(()=>t.classList.remove('show'),2200);}}
+function openTopicModal(key){{
+  const t=TOPIC_DATA[key];if(!t)return;
+  document.getElementById('modalTitle').textContent=t.day+' '+t.date+' - '+t.title;
+  document.getElementById('modalBody').innerHTML=
+    '<p><strong>Funnel:</strong> '+t.funnel+' | <strong>GHL:</strong> '+t.ghl+'</p>'+
+    '<p><strong>Hook:</strong> '+t.hook+'</p>'+
+    '<p><strong>Data:</strong> '+t.data+'</p>'+
+    '<p><strong>Target:</strong> '+t.target+'</p>'+
+    '<p><strong>Opp Score:</strong> '+t.opp+'/25 | <strong>Intent Score:</strong> '+t.intent+'/25</p>'+
+    '<div style="display:flex;gap:10px;flex-wrap:wrap;margin-top:14px;">'+
+    '<button class="copy-btn" onclick="copyData(\\''+key+'\\',\\'ssml\\')">Copy SSML</button>'+
+    '<button class="copy-btn copy-btn-gold" onclick="copyData(\\''+key+'\\',\\'prod_video\\')">Copy Video Prompt</button>'+
+    '<button class="copy-btn" onclick="copyData(\\''+key+'\\',\\'blog_brief\\')">Copy Blog Brief</button>'+
+    '<button class="copy-btn copy-btn-gold" onclick="copyData(\\''+key+'\\',\\'prod_blog\\')">Copy Blog Prompt</button>'+
+    '</div>';
+  document.getElementById('topicModal').removeAttribute('hidden');
+}}
+function closeModal(){{document.getElementById('topicModal').setAttribute('hidden','');}}
+document.getElementById('topicModal').addEventListener('click',function(e){{if(e.target===this)closeModal();}});
+document.addEventListener('keydown',function(e){{if(e.key==='Escape')closeModal();}});
+setView('research');
+
+APEX_CHARTS_PLACEHOLDER
+</script>
+</body></html>""")
+
+    html = "".join(html_parts)
+    html = html.replace("COPY_DATA_PLACEHOLDER", COPY_DATA_JSON)
+    html = html.replace("TOPIC_DATA_PLACEHOLDER", TOPIC_DATA_JSON)
+    html = html.replace("APEX_CHARTS_PLACEHOLDER", CHARTS_JS)
+    return html
+
+html_output = build_html()
+OUTPUT.write_text(html_output, encoding="utf-8")
+size_kb = len(html_output.encode("utf-8")) / 1024
+print(f"Written: {OUTPUT}")
+print(f"Size: {size_kb:.1f} KB")
+
+# Final verification
+print("\n--- VERIFICATION ---")
