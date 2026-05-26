@@ -52,45 +52,56 @@ jobs:
 
       - name: Build email body
         id: email
+        env:
+          DATE_SLUG: ${{ steps.generate.outputs.date_slug }}
+          HEALTH_SCORE: ${{ steps.generate.outputs.health_score }}
+          GRADE: ${{ steps.generate.outputs.grade }}
+          NEW_OPPS: ${{ steps.generate.outputs.new_opps }}
+          STALE: ${{ steps.generate.outputs.stale_recent }}
+          OLD_ACTIVE: ${{ steps.generate.outputs.old_active }}
+          ACTIVE_OPEN: ${{ steps.generate.outputs.active_open }}
+          CLEARED: ${{ steps.generate.outputs.activity_cleared }}
         run: |
-          URL="https://graehamwatts.github.io/online-content/dashboards/health/${{ steps.generate.outputs.date_slug }}-health.html"
-          SCORE="${{ steps.generate.outputs.health_score }}"
-          GRADE="${{ steps.generate.outputs.grade }}"
-          NEW="${{ steps.generate.outputs.new_opps }}"
-          STALE="${{ steps.generate.outputs.stale_recent }}"
-          OLD="${{ steps.generate.outputs.old_active }}"
-          ACTIVE="${{ steps.generate.outputs.active_open }}"
-          CLEARED="${{ steps.generate.outputs.activity_cleared }}"
-
-          BODY="CRM Health Report — Week of ${{ steps.generate.outputs.date_slug }}
-
-Score: ${SCORE}/100  (Grade ${GRADE})
-
-KEY NUMBERS
-  New pipeline entries this week:  ${NEW}
-  Active open deals:                ${ACTIVE}
-  Leads needing follow-up NOW:      ${STALE}  (contact-validated — calls/texts/notes checked)
-  Leads 90+ days old (cleanup):     ${OLD}
-  Leads cleared by activity check:  ${CLEARED} (these were contacted — opportunity just wasn't updated)"
-
-          if [ "${STALE}" -gt "0" ]; then
-            BODY="${BODY}
-
-ACTION REQUIRED: ${STALE} lead(s) haven't been contacted in 14+ days. See dashboard for names."
-          fi
-
-          BODY="${BODY}
-
-View full dashboard:
-${URL}
-
----
-Graeham Watts · Intero Real Estate
-This report runs automatically every Monday morning."
-
+          URL="https://graehamwatts.github.io/online-content/dashboards/health/${DATE_SLUG}-health.html"
           echo "url=${URL}" >> $GITHUB_OUTPUT
-          # Write body to a file (avoids shell quoting issues with multiline)
-          printf '%s' "$BODY" > /tmp/email_body.txt
+          python3 - << 'PYEOF'
+          import os
+          date_slug  = os.environ.get("DATE_SLUG", "")
+          score      = os.environ.get("HEALTH_SCORE", "")
+          grade      = os.environ.get("GRADE", "")
+          new_opps   = os.environ.get("NEW_OPPS", "")
+          stale      = int(os.environ.get("STALE", "0") or "0")
+          old_active = os.environ.get("OLD_ACTIVE", "")
+          active     = os.environ.get("ACTIVE_OPEN", "")
+          cleared    = os.environ.get("CLEARED", "")
+          url        = f"https://graehamwatts.github.io/online-content/dashboards/health/{date_slug}-health.html"
+          lines = [
+              f"CRM Health Report — Week of {date_slug}",
+              "",
+              f"Score: {score}/100  (Grade {grade})",
+              "",
+              "KEY NUMBERS",
+              f"  New pipeline entries this week:  {new_opps}",
+              f"  Active open deals:                {active}",
+              f"  Leads needing follow-up NOW:      {stale}  (contact-validated)",
+              f"  Leads 90+ days old (cleanup):     {old_active}",
+              f"  Leads cleared by activity check:  {cleared} (were contacted — opp not updated)",
+          ]
+          if stale > 0:
+              lines += ["", f"ACTION REQUIRED: {stale} lead(s) not contacted in 14+ days. See dashboard."]
+          lines += [
+              "",
+              "View full dashboard:",
+              url,
+              "",
+              "---",
+              "Graeham Watts · Intero Real Estate",
+              "This report runs automatically every Monday morning.",
+          ]
+          with open("/tmp/email_body.txt", "w") as f:
+              f.write("\n".join(lines))
+          print("Email body written.")
+          PYEOF
 
       - name: Send email to Graeham
         uses: dawidd6/action-send-mail@v3
