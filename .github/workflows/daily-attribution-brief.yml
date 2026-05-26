@@ -192,10 +192,10 @@ jobs:
           def bucket_source(contact, custom_field_map):
               """Classify contact into one of 8 source buckets."""
               # Pull all source-related fields
-              source_val = (contact.get("source") or "").lower().strip()
-              attribution = (contact.get("attributionSource") or "").lower().strip()
-              contact_source = (contact.get("contactSource") or "").lower().strip()
-              tags = [t.lower() for t in (contact.get("tags") or [])]
+              source_val = str(contact.get("source") or "").lower().strip()
+              attribution = str(contact.get("attributionSource") or "").lower().strip()
+              contact_source = str(contact.get("contactSource") or "").lower().strip()
+              tags = [str(t).lower() for t in (contact.get("tags") or [])]
 
               # Pull UTM fields from customFields array
               utm_source = ""
@@ -203,7 +203,7 @@ jobs:
               utm_campaign = ""
               for cf in (contact.get("customFields") or []):
                   fn = custom_field_map.get(cf.get("id",""), "").lower()
-                  val = (cf.get("value") or "").lower()
+                  val = str(cf.get("value") or "").lower()
                   if "utm_source" in fn:
                       utm_source = val
                   elif "utm_medium" in fn:
