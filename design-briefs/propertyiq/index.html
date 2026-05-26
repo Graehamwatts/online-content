@@ -150,7 +150,7 @@
     <div class="eyebrow">Design Brief · May 2026 · Living document</div>
     <h1>PropertyIQ.</h1>
     <h1 style="color:var(--accent-1);font-style:italic;font-weight:500;margin-top:4px">The web build.</h1>
-    <p class="lede" style="margin-top:36px">This is the brief for the marketing site, onboarding flow, and Intelligence Command Center for PropertyIQ — the platform we are building to give real estate agents an operating system, not another point tool. <em>We're starting with PropCast.</em> Read this end-to-end before our next working session. Everything below is direction with reasoning, not specifications — your judgment is invited everywhere.</p>
+    <p class="lede" style="margin-top:36px">This is the brief for the <em>PropCast</em> landing page, onboarding flow, and Intelligence Command Center — the first product we're taking to market inside the broader PropertyIQ platform. PropCast is the autonomous content engine for real estate agents. The platform-level architecture is here for context, but the page you're building first is <strong>PropCast.com</strong>, not <strong>PropertyIQ.com</strong>. Read this end-to-end before our next working session. Everything below is direction with reasoning, not specifications — your judgment is invited everywhere.</p>
     <div class="hero-meta">
       <div class="hero-meta-item">From <strong>Graeham Watts</strong></div>
       <div class="hero-meta-item">For <strong>You — the designer</strong></div>
@@ -186,23 +186,47 @@
 
   <p>PropertyIQ replaces the dashboard problem with a <strong>command center</strong>. Instead of seven tools and zero answers, the agent opens one screen that tells them: <em>here is what your market did this week, here is what we recommend you post, here is the household most likely to call you back, here is what your ads earned you</em>. The complexity is still there — it has to be, because the work is genuinely complex — but the surface is calm. The depth is one click away when the agent wants it.</p>
 
-  <h4>The specific problems the site has to make agents feel</h4>
+  <h4>The platform-level problems (PropertyIQ vision)</h4>
 
-  <p>When a real estate agent reads the landing page, they should recognize themselves in the first three lines. These are the friction points to put on the page — paraphrase, don't quote verbatim:</p>
+  <p>These are the friction points that justify the full PropertyIQ platform <em>over time</em>. They're useful context for understanding the strategic position, and a few of them belong on the PropCast page as supporting framing — but they are <strong>not</strong> the primary problems the first landing page has to hit. See the PropCast-specific section below for what the first page is actually selling against.</p>
 
   <div class="problem-grid">
     <div class="problem"><p><strong>Seven tools. Zero answers.</strong> CRM, MLS, video editor, ad platform, postcard service, scheduler, coaching app — all open, all costing money, none of them talking. Monday morning the agent has four dashboards in four tabs and no idea what to do first.</p></div>
     <div class="problem"><p><strong>The CRM is a graveyard.</strong> Forty leads sitting in the pipeline. The agent touched two of them this week. The other thirty-eight have forgotten the agent exists.</p></div>
-    <div class="problem"><p><strong>Content takes an afternoon and produces nothing.</strong> The last three posts took four hours each. None of them generated a single lead. The agent has no idea why some pieces work and others don't.</p></div>
     <div class="problem"><p><strong>Ad spend is a black box.</strong> $2,500 a month to an ad agency. The agent can't connect a single closing back to a single ad. Neither can the agency.</p></div>
     <div class="problem"><p><strong>A competitor is winning listings the agent used to get.</strong> The agent doesn't know what the competitor is posting, where they're spending, or which neighborhoods they're targeting.</p></div>
     <div class="problem"><p><strong>Postcards go out. Silence comes back.</strong> $1,200 on direct mail last quarter. Two phone calls. No idea which addresses scanned the QR code and which ones threw the card in the recycling.</p></div>
-    <div class="problem"><p><strong>Every closed deal should compound. Most don't.</strong> The agent means to call back at six months, at the one-year anniversary, at the listing-decision moment. They forget. Past clients become other agents' new clients.</p></div>
+    <div class="problem"><p><strong>Every closed deal should compound. Most don't.</strong> The agent means to call back at six months, at the anniversary, at the listing-decision moment. They forget. Past clients become other agents' new clients.</p></div>
   </div>
 
-  <p>The site doesn't have to use all seven — pick the three or four that hit hardest. Whichever ones make the page, the discipline is the same: the agent should read them and think <em>"yes, that's me"</em> before they finish the second sentence.</p>
+  <div class="callout">
+    <div class="callout-icon">!</div>
+    <p><strong>READ THIS BEFORE SECTION 06:</strong> the brief above describes the broader PropertyIQ platform. <em>The landing page you're building first is for <strong>PropCast</strong></em> — the content engine module — not for the platform as a whole. PropCast ships first because content production is the top of the funnel; everything downstream depends on it. The PropertyIQ marketing site is a future project. For now: PropCast.com is the page. PropCast solves one specific job — making content the agent doesn't have time to make — and the landing page has to sell against that specific pain, not the broader operational pain that justifies the full platform later. The PropCast-specific friction is below.</p>
+  </div>
 
-  <div class="pull">"The thesis: any agent can buy the same tools. Almost no agent has the operating system to use them together. We are building the operating system."</div>
+  <h4>The PropCast-specific problems (this is what the first landing page sells against)</h4>
+
+  <p>PropCast is the autonomous content engine. It records the agent for six minutes, then ships 3–5 broadcast-quality videos a week to every platform they own — forever — without the agent doing the work. The agent shows houses, lives their life, and the feed posts itself. The landing page has to make the visitor feel the specific pain of trying to do this manually, then watch that pain disappear. These are the problems the page has to land:</p>
+
+  <div class="problem-grid">
+    <div class="problem"><p><strong>6 to 10 hours per video.</strong> Filming. Editing. Captioning. Thumbnailing. Scheduling. Posting. Engaging. Per piece. At the agent's hourly rate that's $300–$1,500 of agent-time per video. So it doesn't happen, or it happens once and then never again.</p></div>
+    <div class="problem"><p><strong>The agent is camera-shy, busy, or both.</strong> They're out showing houses. They're at a closing. They're exhausted. The idea of sitting down to film twelve reels feels worse than the idea of losing the listing.</p></div>
+    <div class="problem"><p><strong>Hiring a videographer doesn't scale.</strong> $500–$1,500 per pro shoot. Twelve to twenty videos a month would cost more than most agents net on a closing. The math doesn't work.</p></div>
+    <div class="problem"><p><strong>Social VAs produce AI slop or off-brand work.</strong> The agent tried it. Half the content was generic. The other half sounded nothing like them. They fired the VA after two months and the social feed went silent again.</p></div>
+    <div class="problem"><p><strong>The agents who stay top-of-mind get the listings.</strong> The ones who don't post consistently disappear from the algorithm and from their sphere's attention. The pressure to publish is constant — and the agent isn't winning that fight.</p></div>
+    <div class="problem"><p><strong>Done properly, content is a second job.</strong> Scripts, B-roll, captions, posting cadence, engagement, retargeting. None of it is one task — all of it is a job. The agent already has a job: selling real estate. They cannot also be a media company.</p></div>
+    <div class="problem"><p><strong>Generic AI content makes the agent look worse, not better.</strong> Plenty of competitors are already using ChatGPT to crank out garbage real-estate content. The agent doesn't want to add to the slop pile — they want content that sounds like them, looks like them, and earns trust. Most "AI content" tools don't clear that bar.</p></div>
+  </div>
+
+  <p>The PropCast landing page should pick three or four of these — paraphrase, don't quote verbatim — and put them on the page in the agent's own voice. The discipline is the same as before: the agent should read them and think <em>"yes, that's me"</em> before they finish the second sentence. The page that already exists at <a href="https://github.com/Graehamwatts/propiq-ui">github.com/Graehamwatts/propiq-ui</a> (specifically <code>index.html</code>) has already drafted a lot of this language well — pull from it.</p>
+
+  <div class="pull">"PropCast records you for six minutes. Then publishes broadcast-quality video to every platform you own — forever. Built for agents who are busy, camera-shy, and sick of AI slop."</div>
+
+  <p>That positioning — direct from the existing draft — is the closest thing we have to a thesis statement for PropCast. Everything on the page should serve it.</p>
+
+  <h4>Why both lists matter for one page</h4>
+
+  <p>The primary problems on the PropCast page are the seven content-specific ones immediately above. <em>The broader PropertyIQ problems are not absent from the page</em> — they show up briefly in the "This is one module. Here is the system." callout discussed in Section 06. The agent should walk away believing two things: (1) PropCast solves their immediate content-production pain, and (2) PropCast is the first step into a larger operating system that will eventually solve the other six pains too. That second belief is what justifies the $349/month subscription as an investment rather than a tool fee.</p>
 
   <!-- ====================== 2 — SYSTEM MAP ====================== -->
   <h2 id="system">02. The system in one diagram</h2>
@@ -452,9 +476,13 @@
 
   <!-- ====================== 6 — LANDING ====================== -->
   <h2 id="landing">06. The PropCast landing page</h2>
-  <div class="section-tag">Story architecture, not feature list</div>
+  <div class="section-tag">The first thing we ship — PropCast.com, not PropertyIQ.com</div>
 
-  <p>The landing page is the only chance to convert a skeptical real estate agent who has seen a hundred tools. The story has to land in under sixty seconds of scrolling. The structure below is the spine — your job is to make each section feel <em>inevitable</em>, like the next thing the visitor was already going to ask.</p>
+  <div class="suggestion">
+    <strong>Scope reminder:</strong> the landing page we're building is for <strong>PropCast</strong>, the content engine module — not for PropertyIQ the platform. PropCast is the first product going to market and has its own URL, its own pricing ($349/mo), its own funnel, and its own brand within the larger PropertyIQ family. The page is selling content automation to a specific kind of buyer: a busy, possibly camera-shy real estate agent who knows they should be posting and isn't. The broader PropertyIQ platform is mentioned briefly on the page (so the visitor understands they're not buying a one-shot tool) but is not the headline product. The PropertyIQ marketing site comes later.
+  </div>
+
+  <p>The page is the only chance to convert a skeptical real estate agent who has seen a hundred tools. The story has to land in under sixty seconds of scrolling. The structure below is the spine — your job is to make each section feel <em>inevitable</em>, like the next thing the visitor was already going to ask. A working draft of this page already exists at <a href="https://github.com/Graehamwatts/propiq-ui">github.com/Graehamwatts/propiq-ui</a> (<code>index.html</code>) — use it as a problem-statement reference and copy mine, not as a visual template.</p>
 
   <div class="diagram">
     <div class="diagram-title">Landing page — section flow</div>
@@ -507,36 +535,57 @@
     </svg>
   </div>
 
-  <h4>The hero headline — multiple options to pressure-test</h4>
+  <h4>The hero headline — PropCast-specific options to pressure-test</h4>
 
-  <p>The previous draft of this brief had the headline as <em>"The operating system real estate agents have been missing."</em> Graeham's verdict: too generic, too small. The hero has to actually <em>say what the system is and does</em>, not just gesture at a category. Below are stronger options — pick the one you think lands hardest, or use them as inputs to your own. Sub-headline directly underneath should fill in the specific operational promise.</p>
+  <p>The previous draft of this brief had the headline as <em>"The operating system real estate agents have been missing."</em> That was both too generic <em>and</em> the wrong product framing — it described PropertyIQ the platform, not PropCast the content engine. The PropCast hero has to do one specific job: convince a busy agent that they can hand off the entire content workload and get back broadcast-quality video on autopilot. Below are headline options anchored on the PropCast promise. The existing draft on GitHub uses <em>"Show houses. Live your life. Your feed posts itself."</em> — that's a strong contender too; treat it as option zero.</p>
 
   <div class="headline-option">
-    <div class="h">An operating system for real estate. <span style="color:var(--accent-1)">One screen replaces seven.</span></div>
-    <p class="why"><strong>Anchor:</strong> the consolidation argument. Direct, declarative. Sub-headline picks up the "what does it do" piece.</p>
+    <div class="h">Show houses. Live your life. <span style="color:var(--accent-1)">Your feed posts itself.</span></div>
+    <p class="why"><strong>Anchor:</strong> the existing draft headline. Three short clauses. Specific permission to stop doing the work. Strong rhythm. Sub-headline names the deliverable (3–5 reels a week to every platform).</p>
   </div>
 
   <div class="headline-option">
-    <div class="h">PropertyIQ watches the market, makes the content, runs the ads, finds the next seller — <span style="color:var(--accent-1)">on one screen, with one AI doing the work in between.</span></div>
-    <p class="why"><strong>Anchor:</strong> the full operating loop in one sentence. Long for a hero but specific. Earns its length by removing all mystery in 3 seconds.</p>
+    <div class="h">Record once. <span style="color:var(--accent-1)">Post forever.</span></div>
+    <p class="why"><strong>Anchor:</strong> the brutal simplicity argument. Earns its mystery by being followed by a sub-headline that explains: <em>"Six minutes of you, on camera, becomes 3–5 broadcast-quality videos every week — shipped to every platform you own. Forever."</em></p>
   </div>
 
   <div class="headline-option">
-    <div class="h">Stop running seven tools. <span style="color:var(--accent-1)">Run the system that runs the tools.</span></div>
-    <p class="why"><strong>Anchor:</strong> the pain-point pivot. Shorter, sharper. Sub-headline names the specific tools and what PropertyIQ does in their place.</p>
+    <div class="h">The content engine for the agent who refuses to be a media company.</div>
+    <p class="why"><strong>Anchor:</strong> the identity argument. Names the audience by what they don't want to become. Sub-headline: <em>"Real estate is a relationship business — not a film shoot. PropCast films it for you, every week, in your voice, with your face."</em></p>
   </div>
 
   <div class="headline-option">
-    <div class="h">The intelligence layer for real estate. <span style="color:var(--accent-1)">Built for the agent who runs their business like a CEO.</span></div>
-    <p class="why"><strong>Anchor:</strong> position + audience identity. Sub-headline names what the layer does — generates content, attributes leads, predicts sellers, runs voice.</p>
+    <div class="h">3 to 5 broadcast-quality videos a week. <span style="color:var(--accent-1)">Six minutes of your time, once.</span></div>
+    <p class="why"><strong>Anchor:</strong> the numbers argument. Direct and specific. No mystery, no metaphor — the agent knows exactly what they're getting and what they're giving up.</p>
   </div>
 
   <div class="headline-option">
-    <div class="h">Your market, watched. <span style="color:var(--accent-1)">Your content, made. Your leads, surfaced. Your ads, attributed. One system. One AI. One screen.</span></div>
-    <p class="why"><strong>Anchor:</strong> Stripe-style cadence list. Editorial weight without being clever. Specific about each verb.</p>
+    <div class="h">You sell houses. <span style="color:var(--accent-1)">We make you famous selling them.</span></div>
+    <p class="why"><strong>Anchor:</strong> the brand-promise argument. Punchy, slightly cocky. Names the outcome (top-of-mind) without naming the mechanism. Sub-headline does the explaining.</p>
   </div>
 
-  <p>The right headline isn't a single sentence stitched together from feature names. It says what the agent gets and why this is different from everything else they've paid for.</p>
+  <div class="headline-option">
+    <div class="h">Stop spending your evenings editing reels. <span style="color:var(--accent-1)">PropCast does it while you sleep.</span></div>
+    <p class="why"><strong>Anchor:</strong> the pain-pivot argument. Direct lift from Graeham's existing copy ("I was done spending my evenings editing reels"). Recognition first, solution second.</p>
+  </div>
+
+  <p>The right headline isn't a single sentence stitched together from feature names. It says what the agent gets, what they have to do for it, and why this is different from the videographer / VA / DIY options they've already tried.</p>
+
+  <h4>What PropCast actually does — for context on the hero promise</h4>
+
+  <p>The headline has to be honest about the deliverable. PropCast's specific promise:</p>
+
+  <ul>
+    <li><strong>3–5 broadcast-quality videos per week, every week.</strong> Reels, Shorts, TikToks, YouTube uploads, Google Business posts</li>
+    <li><strong>Made from the agent's HeyGen avatar and ElevenLabs voice clone</strong> — sounds like them, looks like them</li>
+    <li><strong>Fair Housing-guardrailed scripts, sourced from real market data</strong> — never fabricated, always disclosure-compliant</li>
+    <li><strong>Auto-published to every platform the agent owns</strong> — YouTube, Reels, Shorts, TikTok, GBP, LinkedIn</li>
+    <li><strong>Human QC review before every post</strong> — agent can pause, re-record, or cancel in one click</li>
+    <li><strong>10 minutes of setup. No edits required after.</strong> The agent owns their channels and their content</li>
+    <li><strong>$349/month flat. Cancel anytime.</strong></li>
+  </ul>
+
+  <p>Anchor every section of the page back to those promises. The sub-headline directly under the hero should name two or three of them.</p>
 
   <h4>Section-by-section direction</h4>
 
@@ -686,105 +735,4 @@
   <p>This is the hardest design problem in the whole product. The Command Center has to surface a meaningful amount of information without overwhelming the user. The solution is layering — at default depth, the screen is calm. At one click into Intelligence Mode, every panel reveals the data and reasoning behind what it is showing. The user controls the depth.</p>
 
   <div class="suggestion">
-    <strong>What "Intelligence Mode" actually means:</strong> it's the toggle that <em>shows the agent the in-depth process the system used to arrive at the answer it gave them</em> — but visually, smoothly, and easily. Complexity is still there underneath; the toggle makes it visible without making it overwhelming. Think of it as the difference between a chess engine showing you its move (Mode OFF) versus the same engine showing you its top three candidate moves, the evaluation scores, and the lines it considered (Mode ON). Same engine. Different depth on screen.
-  </div>
-
-  <div class="diagram">
-    <div class="diagram-title">Intelligence Command Center — wireframe (colors directional only — see note below)</div>
-    <svg viewBox="0 0 900 540" xmlns="http://www.w3.org/2000/svg">
-      <rect x="20" y="20" width="860" height="500" rx="10" fill="#0B0B12" stroke="#171724" stroke-width="1"/>
-      <rect x="20" y="20" width="860" height="44" rx="10" fill="#11111B"/>
-      <rect x="20" y="48" width="860" height="16" fill="#11111B"/>
-      <circle cx="48" cy="42" r="8" fill="#171724"/>
-      <text x="68" y="46" font-family="Syne,sans-serif" font-weight="700" font-size="13" fill="#F4F2EC">PropertyIQ</text>
-      <text x="148" y="46" font-family="Inter,sans-serif" font-size="11" fill="#8B8675">/ Command Center</text>
-
-      <rect x="630" y="32" width="130" height="22" rx="11" fill="#171724" stroke="#7B89FF" stroke-width="1"/>
-      <circle cx="750" cy="43" r="7" fill="#7B89FF"/>
-      <text x="700" y="47" text-anchor="middle" font-family="Inter,sans-serif" font-size="10" font-weight="600" fill="#7B89FF">INTELLIGENCE MODE</text>
-
-      <rect x="780" y="32" width="80" height="22" rx="11" fill="#11111B" stroke="#C9A052" stroke-width="1"/>
-      <text x="820" y="47" text-anchor="middle" font-family="Inter,sans-serif" font-size="10" font-weight="600" fill="#C9A052">5 LOOKS · 1 AGING</text>
-
-      <rect x="20" y="64" width="160" height="456" fill="#11111B"/>
-      <g font-family="Inter,sans-serif" font-size="11" fill="#C9C5B8">
-        <text x="40" y="92" font-weight="600" font-size="10" fill="#8B8675" letter-spacing="2">NAVIGATION</text>
-        <rect x="32" y="105" width="136" height="26" rx="6" fill="#171724"/>
-        <text x="46" y="121" fill="#C9A052" font-weight="600">◆ Today</text>
-        <text x="46" y="155">Content Queue</text>
-        <text x="46" y="180">Heatmap (full)</text>
-        <text x="46" y="205">Lead Activity</text>
-        <text x="46" y="230">Ad Performance</text>
-        <text x="46" y="255">Attribution</text>
-        <text x="46" y="280">Avatars + Voice</text>
-        <text x="46" y="305">Competitors</text>
-        <text x="46" y="330" fill="#52C9A0">New listings ●</text>
-
-        <text x="40" y="375" font-weight="600" font-size="10" fill="#8B8675" letter-spacing="2">WATTSON</text>
-        <text x="46" y="400">Playbooks</text>
-        <text x="46" y="425">Voice Calls</text>
-        <text x="46" y="450">Audit Log</text>
-
-        <text x="40" y="495" font-weight="600" font-size="10" fill="#8B8675" letter-spacing="2">SETTINGS</text>
-        <text x="46" y="515">Integrations</text>
-      </g>
-
-      <rect x="190" y="78" width="430" height="240" rx="8" fill="#171724" stroke="#171724"/>
-      <text x="210" y="98" font-family="Inter,sans-serif" font-size="10" font-weight="600" fill="#8B8675" letter-spacing="2">HEATMAP — YOUR FARM</text>
-      <text x="610" y="98" text-anchor="end" font-family="Inter,sans-serif" font-size="10" fill="#C9A052">▼ 7 days · East Palo Alto</text>
-
-      <g opacity="0.4">
-        <line x1="200" y1="115" x2="610" y2="115" stroke="#2A2A3A" stroke-width="0.5"/>
-        <line x1="200" y1="155" x2="610" y2="155" stroke="#2A2A3A" stroke-width="0.5"/>
-        <line x1="200" y1="195" x2="610" y2="195" stroke="#2A2A3A" stroke-width="0.5"/>
-        <line x1="200" y1="235" x2="610" y2="235" stroke="#2A2A3A" stroke-width="0.5"/>
-        <line x1="200" y1="275" x2="610" y2="275" stroke="#2A2A3A" stroke-width="0.5"/>
-        <line x1="265" y1="105" x2="265" y2="305" stroke="#2A2A3A" stroke-width="0.5"/>
-        <line x1="330" y1="105" x2="330" y2="305" stroke="#2A2A3A" stroke-width="0.5"/>
-        <line x1="395" y1="105" x2="395" y2="305" stroke="#2A2A3A" stroke-width="0.5"/>
-        <line x1="460" y1="105" x2="460" y2="305" stroke="#2A2A3A" stroke-width="0.5"/>
-        <line x1="525" y1="105" x2="525" y2="305" stroke="#2A2A3A" stroke-width="0.5"/>
-        <line x1="590" y1="105" x2="590" y2="305" stroke="#2A2A3A" stroke-width="0.5"/>
-      </g>
-
-      <g>
-        <circle cx="240" cy="135" r="3" fill="#C9A052" opacity="0.4"/>
-        <circle cx="285" cy="180" r="4" fill="#C9A052" opacity="0.6"/>
-        <circle cx="310" cy="220" r="3" fill="#C9A052" opacity="0.3"/>
-        <circle cx="355" cy="150" r="5" fill="#C9A052" opacity="0.7"/>
-        <circle cx="380" cy="195" r="3" fill="#C9A052" opacity="0.4"/>
-        <circle cx="410" cy="240" r="4" fill="#C9A052" opacity="0.5"/>
-        <circle cx="445" cy="170" r="3" fill="#C9A052" opacity="0.4"/>
-        <circle cx="480" cy="210" r="6" fill="#C9A052" opacity="0.85"/>
-        <circle cx="500" cy="265" r="3" fill="#C9A052" opacity="0.4"/>
-        <circle cx="540" cy="160" r="3" fill="#C9A052" opacity="0.3"/>
-        <circle cx="575" cy="220" r="4" fill="#C9A052" opacity="0.6"/>
-
-        <!-- Raised-hand pulse -->
-        <circle cx="480" cy="210" r="12" fill="none" stroke="#52C9A0" stroke-width="1.5" opacity="0.8"/>
-        <circle cx="480" cy="210" r="18" fill="none" stroke="#52C9A0" stroke-width="1" opacity="0.4"/>
-        <text x="498" y="213" font-family="Inter,sans-serif" font-size="10" font-weight="600" fill="#52C9A0">↑ RAISED HAND</text>
-
-        <!-- NEW LISTING marker (competitor) -->
-        <rect x="338" y="143" width="14" height="14" rx="2" fill="none" stroke="#E07A5F" stroke-width="1.5"/>
-        <text x="358" y="155" font-family="Inter,sans-serif" font-size="10" font-weight="600" fill="#E07A5F">NEW LISTING · competitor</text>
-      </g>
-
-      <rect x="630" y="78" width="230" height="240" rx="8" fill="#171724"/>
-      <text x="650" y="98" font-family="Inter,sans-serif" font-size="10" font-weight="600" fill="#52C9A0" letter-spacing="2">TODAY'S SIGNALS · 3</text>
-
-      <rect x="640" y="110" width="210" height="56" rx="6" fill="#0F1620" stroke="#52C9A0" stroke-width="0.5"/>
-      <circle cx="654" cy="124" r="3" fill="#52C9A0"/>
-      <text x="668" y="128" font-family="Inter,sans-serif" font-size="11" font-weight="600" fill="#F4F2EC">2147 Saratoga Ave</text>
-      <text x="652" y="146" font-family="Inter,sans-serif" font-size="10" fill="#C9C5B8">Postcard QR scanned · CMA</text>
-      <text x="652" y="159" font-family="Inter,sans-serif" font-size="10" fill="#C9C5B8">request submitted · 19m ago</text>
-
-      <rect x="640" y="172" width="210" height="48" rx="6" fill="#0F1620" stroke="#E07A5F" stroke-width="0.5"/>
-      <circle cx="654" cy="186" r="3" fill="#E07A5F"/>
-      <text x="668" y="190" font-family="Inter,sans-serif" font-size="11" font-weight="600" fill="#F4F2EC">New listing · 1822 Lake St</text>
-      <text x="652" y="208" font-family="Inter,sans-serif" font-size="10" fill="#C9C5B8">Listed by competitor — scan?</text>
-
-      <rect x="640" y="226" width="210" height="48" rx="6" fill="#0F1620" stroke="#52C9A0" stroke-width="0.5" opacity="0.7"/>
-      <circle cx="654" cy="240" r="3" fill="#52C9A0" opacity="0.7"/>
-      <text x="668" y="244" font-family="Inter,sans-serif" font-size="11" font-weight="600" fill="#F4F2EC">Tessa Chen</text>
-      <text x="652" y="262" font-family="Inter,sans-serif" f
+    <strong>What "Inte
