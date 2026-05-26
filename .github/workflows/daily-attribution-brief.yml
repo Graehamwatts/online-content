@@ -2,7 +2,7 @@ name: Daily Attribution Brief
 
 on:
   schedule:
-    - cron: '15 15 * * 1-5'  # 7:15 AM PT Mon-Fri
+    - cron: '15 15 * * 1-5'  # 7:15 AM PT Mon-Fri (UTC-8 in winter, UTC-7 in summer; use 15:15 UTC as safe default)
   workflow_dispatch:
     inputs:
       date_override:
@@ -36,9 +36,10 @@ jobs:
           GHL_LOCATION_ID: ${{ secrets.GHL_LOCATION_ID }}
           PYTHONUNBUFFERED: "1"
           DATE_OVERRIDE: ${{ github.event.inputs.date_override }}
+          GMAIL_ADDRESS: graehamwatts@gmail.com
         run: |
           python3 << 'PYEOF'
-          import requests, json, os, sys, base64
+          import requests, json, os, sys, base64, re
           from datetime import datetime, timedelta, timezone
           import pytz
 
@@ -55,6 +56,7 @@ jobs:
               "Content-Type": "application/json"
           }
 
+          # Determine date window (yesterday in PT)
           now_pt = datetime.now(PT)
           if DATE_OVERRIDE:
               target_date = PT.localize(datetime.strptime(DATE_OVERRIDE, "%Y-%m-%d"))
@@ -63,159 +65,145 @@ jobs:
 
           window_start = target_date.replace(hour=0, minute=0, second=0, microsecond=0)
           window_end = window_start + timedelta(days=1)
+          # UTC datetime objects for client-side ISO string comparison
           window_start_utc = window_start.astimezone(timezone.utc)
           window_end_utc = window_end.astimezone(timezone.utc)
           date_label = window_start.strftime("%A, %B %-d, %Y")
           date_slug = window_start.strftime("%Y-%m-%d")
 
+          print(f"Window: {window_start} → {window_end}")
+
+          # Comparison window (same day last week)
           prior_start = window_start - timedelta(days=7)
           prior_end = window_end - timedelta(days=7)
           prior_start_utc = prior_start.astimezone(timezone.utc)
           prior_end_utc = prior_end.astimezone(timezone.utc)
 
-          print(f"Window: {window_start} → {window_end}", flush=True)
-          print(f"Prior:  {prior_start} → {prior_end}", flush=True)
-
-          errors = []
-
-          def safe_lower(val):
-              """Cast to str and lowercase — handles int/None/bool GHL field values."""
-              if val is None:
-                  return ""
-              return str(val).lower().strip()
-
           def get_custom_fields():
-              try:
-                  r = requests.get(f"{GHL_BASE}/locations/{LOCATION_ID}/customFields",
-                                   headers=headers, timeout=30)
-                  if r.status_code != 200:
-                      errors.append(f"Custom fields {r.status_code}: {r.text[:200]}")
-                      return {}
-                  return {f["id"]: f.get("name","") for f in r.json().get("customFields", [])}
-              except Exception as e:
-                  errors.append(f"Custom fields exception: {e}")
+              r = requests.get(f"{GHL_BASE}/locations/{LOCATION_ID}/customFields",
+                               headers=headers, timeout=30)
+              if r.status_code != 200:
+                  print(f"Custom fields error: {r.status_code} {r.text[:200]}")
                   return {}
+              data = r.json().get("customFields", [])
+              return {f["id"]: f.get("name","") for f in data}
 
           def get_pipelines():
-              try:
-                  r = requests.get(f"{GHL_BASE}/opportunities/pipelines",
-                                   params={"locationId": LOCATION_ID},
-                                   headers=headers, timeout=30)
-                  if r.status_code != 200:
-                      errors.append(f"Pipelines {r.status_code}")
-                      return {}
-                  stage_map = {}
-                  for p in r.json().get("pipelines", []):
-                      for s in p.get("stages", []):
-                          stage_map[s["id"]] = s.get("name", "")
-                  return stage_map
-              except Exception as e:
-                  errors.append(f"Pipelines exception: {e}")
+              r = requests.get(f"{GHL_BASE}/opportunities/pipelines",
+                               params={"locationId": LOCATION_ID},
+                               headers=headers, timeout=30)
+              if r.status_code != 200:
+                  print(f"Pipelines error: {r.status_code}")
                   return {}
+              pipelines = r.json().get("pipelines", [])
+              stage_map = {}
+              for p in pipelines:
+                  for s in p.get("stages", []):
+                      stage_map[s["id"]] = s.get("name", "")
+              return stage_map
 
-          def parse_ghl_dt(dt_str):
-              """Parse GHL datetime string to timezone-aware UTC datetime."""
-              if not dt_str:
-                  return None
-              try:
-                  return datetime.fromisoformat(str(dt_str).replace("Z", "+00:00"))
-              except Exception:
-                  return None
-
-          def get_contacts(start_dt, end_dt, label=""):
+          def get_contacts(start_dt, end_dt):
+              """Use GET /contacts with startAfter cursor — starts at window boundary, never pages through old contacts."""
               contacts = []
               start_ms = int(start_dt.timestamp() * 1000)
+              end_ms   = int(end_dt.timestamp() * 1000)
               start_after_ms = start_ms
               start_after_id = ""
               MAX_PAGES = 20
               for page in range(1, MAX_PAGES + 1):
-                  try:
-                      params = {
-                          "locationId": LOCATION_ID,
-                          "startAfter": start_after_ms,
-                          "startAfterId": start_after_id,
-                          "limit": 100
-                      }
-                      r = requests.get(f"{GHL_BASE}/contacts",
-                                       params=params, headers=headers, timeout=30)
-                      if r.status_code != 200:
-                          errors.append(f"Contacts {r.status_code}: {r.text[:200]}")
-                          break
-                      batch = r.json().get("contacts", [])
-                      if not batch:
-                          break
-                      past_window = False
-                      for c in batch:
-                          cdt = parse_ghl_dt(c.get("dateAdded"))
-                          if cdt is None:
-                              continue
-                          if cdt >= end_dt:
-                              past_window = True
-                              break
-                          if cdt >= start_dt:
-                              contacts.append(c)
-                      print(f"  Contacts page {page} {label}: {len(batch)} fetched, {len(contacts)} in window", flush=True)
-                      if past_window or len(batch) < 100:
-                          break
-                      last = batch[-1]
-                      last_cdt = parse_ghl_dt(last.get("dateAdded"))
-                      if last_cdt:
-                          start_after_ms = int(last_cdt.timestamp() * 1000)
-                      start_after_id = last.get("id", "")
-                  except Exception as e:
-                      errors.append(f"Contacts page {page} exception: {e}")
+                  params = {
+                      "locationId": LOCATION_ID,
+                      "startAfter": start_after_ms,
+                      "startAfterId": start_after_id,
+                      "limit": 100
+                  }
+                  r = requests.get(f"{GHL_BASE}/contacts",
+                                   params=params, headers=headers, timeout=30)
+                  if r.status_code != 200:
+                      print(f"Contacts error {r.status_code}: {r.text[:200]}")
                       break
+                  data = r.json()
+                  batch = data.get("contacts", [])
+                  if not batch:
+                      break
+                  past_window = False
+                  for c in batch:
+                      da = c.get("dateAdded", "")
+                      if da:
+                          try:
+                              cdt = datetime.fromisoformat(da.replace("Z", "+00:00"))
+                              if cdt >= end_dt:
+                                  past_window = True
+                                  break
+                              contacts.append(c)
+                          except Exception:
+                              pass
+                  print(f"  Contacts page {page}: {len(batch)} fetched, {len(contacts)} in window so far")
+                  if past_window or len(batch) < 100:
+                      break
+                  # Advance cursor to last contact's dateAdded + id
+                  last = batch[-1]
+                  last_da = last.get("dateAdded", "")
+                  if last_da:
+                      try:
+                          start_after_ms = int(datetime.fromisoformat(last_da.replace("Z", "+00:00")).timestamp() * 1000)
+                      except Exception:
+                          break
+                  start_after_id = last.get("id", "")
               return contacts
 
-          def get_opportunities(start_dt, end_dt, label=""):
-              opps = []
+          def get_opportunities(start_dt, end_dt):
+              opps, start_after_id = [], None
               start_ms = int(start_dt.timestamp() * 1000)
-              start_after_id = None
-              MAX_PAGES = 10
-              for page in range(MAX_PAGES):
-                  try:
-                      params = {
-                          "location_id": LOCATION_ID,
-                          "startAfter": start_ms,
-                          "startAfterId": start_after_id or "",
-                          "limit": 100
-                      }
-                      r = requests.get(f"{GHL_BASE}/opportunities/search",
-                                       params=params, headers=headers, timeout=30)
-                      if r.status_code != 200:
-                          errors.append(f"Opps {r.status_code}: {r.text[:200]}")
-                          break
-                      batch = r.json().get("opportunities", [])
-                      past_window = False
-                      for o in batch:
-                          odt = parse_ghl_dt(o.get("createdAt"))
-                          if odt is None:
-                              continue
-                          if odt >= end_dt:
-                              past_window = True
-                              break
-                          if odt >= start_dt:
-                              opps.append(o)
-                      print(f"  Opps batch {page+1} {label}: {len(batch)} fetched, {len(opps)} in window", flush=True)
-                      if past_window or len(batch) < 100:
-                          break
-                      start_after_id = batch[-1].get("id") if batch else None
-                  except Exception as e:
-                      errors.append(f"Opps page {page} exception: {e}")
+              MAX_PAGES = 10  # safety cap: 1000 opps max per window
+              for _page in range(MAX_PAGES):
+                  params = {
+                      "location_id": LOCATION_ID,
+                      "startAfter": start_ms,
+                      "startAfterId": start_after_id or "",
+                      "limit": 100
+                  }
+                  r = requests.get(f"{GHL_BASE}/opportunities/search",
+                                   params=params, headers=headers, timeout=30)
+                  if r.status_code != 200:
+                      print(f"Opps error {r.status_code}: {r.text[:200]}", flush=True)
                       break
+                  data = r.json()
+                  batch = data.get("opportunities", [])
+                  past_window = False
+                  for o in batch:
+                      cat = o.get("createdAt", "")
+                      if cat:
+                          try:
+                              odt = datetime.fromisoformat(cat.replace("Z", "+00:00"))
+                              if odt >= end_dt:
+                                  past_window = True
+                                  break
+                              if odt >= start_dt:
+                                  opps.append(o)
+                          except Exception:
+                              pass
+                  print(f"  Opps batch {_page+1}: {len(batch)} fetched, {len(opps)} in window total", flush=True)
+                  if past_window or len(batch) < 100:
+                      break
+                  start_after_id = batch[-1].get("id") if batch else None
               return opps
 
           def bucket_source(contact, custom_field_map):
-              # safe_lower handles int/None/bool values from GHL
-              source_val = safe_lower(contact.get("source"))
-              attribution = safe_lower(contact.get("attributionSource"))
-              contact_source = safe_lower(contact.get("contactSource"))
-              tags = [safe_lower(t) for t in (contact.get("tags") or [])]
+              """Classify contact into one of 8 source buckets."""
+              # Pull all source-related fields
+              source_val = (contact.get("source") or "").lower().strip()
+              attribution = (contact.get("attributionSource") or "").lower().strip()
+              contact_source = (contact.get("contactSource") or "").lower().strip()
+              tags = [t.lower() for t in (contact.get("tags") or [])]
 
-              utm_source = utm_medium = utm_campaign = ""
+              # Pull UTM fields from customFields array
+              utm_source = ""
+              utm_medium = ""
+              utm_campaign = ""
               for cf in (contact.get("customFields") or []):
-                  fn = safe_lower(custom_field_map.get(cf.get("id",""), ""))
-                  val = safe_lower(cf.get("value"))
+                  fn = custom_field_map.get(cf.get("id",""), "").lower()
+                  val = (cf.get("value") or "").lower()
                   if "utm_source" in fn:
                       utm_source = val
                   elif "utm_medium" in fn:
@@ -223,108 +211,117 @@ jobs:
                   elif "utm_campaign" in fn:
                       utm_campaign = val
 
-              all_text = f"{source_val} {attribution} {contact_source} {utm_source} {utm_medium} {utm_campaign} {' '.join(tags)}"
+              all_text = f"{source_val} {attribution} {contact_source} {utm_source} {utm_medium} {utm_campaign}"
 
               if any(x in all_text for x in ["gmb","google business","google my business","maps"]):
                   return "GMB"
               if any(x in all_text for x in ["cpc","paid","adword","google ads","meta ads","facebook ads","fb ads","instagram ads"]) \
                  or utm_medium in ["cpc","paid","ppc"]:
                   return "Paid Ads"
-              if any(x in all_text for x in ["organic","seo","google search"]) or utm_medium == "organic":
+              if any(x in all_text for x in ["organic","seo","google search","search"]) \
+                 or utm_medium == "organic":
                   return "Organic/SEO"
-              if any(x in all_text for x in ["instagram","facebook","youtube","tiktok","social","ig post","fb post","reel"]) \
+              if any(x in all_text for x in ["instagram","facebook","youtube","tiktok","social","ig","fb","yt"]) \
                  and "paid" not in all_text:
                   return "Social Organic"
               if any(x in all_text for x in ["referral","refer","sphere","past client","agent"]):
                   return "Referral"
               if any(x in all_text for x in ["website","form","direct","web","landing"]):
                   return "Direct/Form"
-              if any(x in all_text for x in ["cold","manually added","import","csv"]):
+              if "cold" in all_text or "manually added" in all_text or "import" in all_text:
                   return "Cold/Other"
               return "Unknown"
 
           def get_display_name(contact):
-              fn = safe_lower(contact.get("firstName","")) or ""
-              ln = safe_lower(contact.get("lastName","")) or ""
-              fn = str(contact.get("firstName","") or "").strip()
-              ln = str(contact.get("lastName","") or "").strip()
+              fn = contact.get("firstName","") or ""
+              ln = contact.get("lastName","") or ""
               if fn and ln:
                   return f"{fn} {ln[0]}."
               elif fn:
                   return fn
               elif contact.get("email"):
-                  return str(contact["email"]).split("@")[0]
+                  return contact["email"].split("@")[0]
               return "Unknown"
 
-          # Fetch everything
-          print("Fetching custom fields...", flush=True)
+          # Fetch data
+          print("Fetching custom fields...")
           cf_map = get_custom_fields()
-          print(f"  {len(cf_map)} custom fields", flush=True)
+          print(f"  Found {len(cf_map)} custom fields")
 
-          print("Fetching pipeline stages...", flush=True)
+          print("Fetching pipeline stages...")
           stage_map = get_pipelines()
+          print(f"  Found {len(stage_map)} stages")
+
           won_stage_ids = {sid for sid, sname in stage_map.items()
-                          if any(w in sname.lower() for w in ["won","closed","sold"])}
-          print(f"  {len(stage_map)} stages, {len(won_stage_ids)} won-stages", flush=True)
+                          if any(w in sname.lower() for w in ["won","closed","closed won","sold"])}
+          appt_stage_ids = {sid for sid, sname in stage_map.items()
+                            if any(w in sname.lower() for w in ["appointment","appt","set","booked"])}
+          opp_stage_ids = {sid for sid, sname in stage_map.items()
+                           if any(w in sname.lower() for w in ["opportunit","qualified","negotiat","active"])}
 
-          print(f"Fetching contacts for {date_slug}...", flush=True)
-          contacts = get_contacts(window_start_utc, window_end_utc, f"({date_slug})")
+          print(f"Fetching contacts for {date_slug}...")
+          contacts = get_contacts(window_start_utc, window_end_utc)
+          print(f"Fetching contacts for prior week ({prior_start.strftime('%Y-%m-%d')})...")
+          prior_contacts = get_contacts(prior_start_utc, prior_end_utc)
 
-          print(f"Fetching contacts for prior week ({prior_start.strftime('%Y-%m-%d')})...", flush=True)
-          prior_contacts = get_contacts(prior_start_utc, prior_end_utc, "(prior)")
+          print(f"Fetching opportunities for {date_slug}...")
+          opps = get_opportunities(window_start_utc, window_end_utc)
+          print(f"Fetching opportunities for prior week...")
+          prior_opps = get_opportunities(prior_start_utc, prior_end_utc)
 
-          print(f"Fetching opps for {date_slug}...", flush=True)
-          opps = get_opportunities(window_start_utc, window_end_utc, f"({date_slug})")
-
-          print(f"Fetching opps for prior week...", flush=True)
-          prior_opps = get_opportunities(prior_start_utc, prior_end_utc, "(prior)")
-
-          if errors:
-              print(f"\nErrors encountered: {errors}", flush=True)
-
-          # Bucket & summarize
+          # Bucket current contacts
           source_data = {}
           for c in contacts:
-              b = bucket_source(c, cf_map)
-              if b not in source_data:
-                  source_data[b] = {"count": 0, "names": []}
-              source_data[b]["count"] += 1
-              source_data[b]["names"].append(get_display_name(c))
+              bucket = bucket_source(c, cf_map)
+              if bucket not in source_data:
+                  source_data[bucket] = {"leads": [], "names": []}
+              source_data[bucket]["leads"].append(c)
+              source_data[bucket]["names"].append(get_display_name(c))
 
+          # Count prior week
           prior_source_counts = {}
           for c in prior_contacts:
-              b = bucket_source(c, cf_map)
-              prior_source_counts[b] = prior_source_counts.get(b, 0) + 1
+              bucket = bucket_source(c, cf_map)
+              prior_source_counts[bucket] = prior_source_counts.get(bucket, 0) + 1
+
+          # Count opps/wins
+          new_opps = len(opps)
+          wins = len([o for o in opps if o.get("status") == "won"
+                      or o.get("pipelineStageId","") in won_stage_ids])
+          prior_wins = len([o for o in prior_opps if o.get("status") == "won"
+                            or o.get("pipelineStageId","") in won_stage_ids])
 
           total_leads = len(contacts)
           prior_total = len(prior_contacts)
-          new_opps = len(opps)
-          wins = len([o for o in opps if safe_lower(o.get("status")) == "won"
-                      or o.get("pipelineStageId","") in won_stage_ids])
-
           delta = total_leads - prior_total
           delta_str = f"+{delta}" if delta >= 0 else str(delta)
           delta_pct = round((delta / prior_total * 100)) if prior_total else 0
-          most_active = max(source_data.keys(), key=lambda k: source_data[k]["count"]) if source_data else "None"
 
+          most_active = max(source_data.keys(), key=lambda k: len(source_data[k]["leads"])) if source_data else "None"
+
+          # Determine status color
           if prior_total == 0:
-              status_color, status_label = "#94a3b8", "No prior-week baseline"
+              status_color = "#22c55e"
+              status_label = "No prior data"
           elif total_leads >= prior_total:
-              status_color, status_label = "#22c55e", f"Up {delta_str} vs prior week"
+              status_color = "#22c55e"
+              status_label = f"Up {delta_str} vs prior week"
           elif total_leads >= prior_total * 0.5:
-              status_color, status_label = "#f4b955", f"Down {abs(delta)} vs prior week"
+              status_color = "#f4b955"
+              status_label = f"Down {abs(delta)} vs prior week"
           else:
-              status_color, status_label = "#ef4444", f"Down {abs(delta)} vs prior week"
+              status_color = "#ef4444"
+              status_label = f"Down {abs(delta)} vs prior week"
 
-          # Source rows
+          # Build source rows
           source_rows_html = ""
-          for bucket, info in sorted(source_data.items(), key=lambda x: -x[1]["count"]):
-              count = info["count"]
+          for bucket, info in sorted(source_data.items(), key=lambda x: -len(x[1]["leads"])):
+              count = len(info["leads"])
               prior = prior_source_counts.get(bucket, 0)
               wd = count - prior
               wd_str = (f'<span style="color:#22c55e">+{wd}</span>' if wd > 0
                         else (f'<span style="color:#ef4444">{wd}</span>' if wd < 0
-                              else '<span style="color:#94a3b8">—</span>'))
+                              else '<span style="color:#94a3b8">0</span>'))
               names = ", ".join(info["names"][:4])
               if len(info["names"]) > 4:
                   names += f" +{len(info['names'])-4} more"
@@ -336,112 +333,118 @@ jobs:
                 <td style="padding:10px 12px;border-bottom:1px solid #1e293b;color:#94a3b8;font-size:13px">{names}</td>
               </tr>"""
 
-          # Exec summary
+          # Generate the read
           if total_leads == 0:
-              the_read = f"No new leads came in on {date_label}. Prior week same day had {prior_total}. Check if any automations are paused or lead sources went quiet."
+              the_read = f"No new leads came in yesterday. Prior week same day had {prior_total}. The pipeline is quiet — check if any automations are paused."
           else:
-              the_read = f"{date_label} brought in <strong>{total_leads} new lead{'s' if total_leads != 1 else ''}</strong> — {'up' if delta >= 0 else 'down'} {abs(delta)} vs the same day last week. "
-              the_read += f"Top source: <strong>{most_active}</strong>. "
+              top_src = most_active
+              the_read = f"{date_label} brought in {total_leads} new lead{'s' if total_leads != 1 else ''} — {'up' if delta >= 0 else 'down'} {abs(delta)} vs the same day last week. "
+              the_read += f"Top source was <strong>{top_src}</strong>. "
               if wins:
-                  the_read += f"{wins} deal{'s' if wins != 1 else ''} closed Won. "
-              elif new_opps:
-                  the_read += f"{new_opps} new opportunit{'ies' if new_opps != 1 else 'y'} created, none closed yet. "
-              if errors:
-                  the_read += f"<em style='color:#f4b955'>{len(errors)} API note(s) — see footer.</em>"
+                  the_read += f"{wins} deal{'s' if wins != 1 else ''} moved to Won/Closed today. "
+              if new_opps:
+                  the_read += f"{new_opps} new opportunit{'ies' if new_opps != 1 else 'y'} created."
 
-          # Funnel bars
-          funnel_stages = [("Leads In", total_leads, "#f4b955"), ("Opps Created", new_opps, "#e2a830"), ("Wins", wins, "#22c55e")]
-          max_val = max((s[1] for s in funnel_stages), default=1) or 1
-          funnel_html = ""
+          # Funnel SVG
+          funnel_stages = [
+              ("Leads", total_leads, "#f4b955"),
+              ("Opps Created", new_opps, "#e2a830"),
+              ("Wins", wins, "#22c55e"),
+          ]
+          max_val = max(s[1] for s in funnel_stages) if any(s[1] for s in funnel_stages) else 1
+          funnel_bars = ""
           for label, val, color in funnel_stages:
-              bar_w = max(8, int((val / max_val) * 320))
-              funnel_html += f"""
-              <div style="margin:10px 0;display:flex;align-items:center;gap:12px">
-                <div style="width:120px;text-align:right;color:#94a3b8;font-size:13px;flex-shrink:0">{label}</div>
-                <div style="background:{color};height:30px;width:{bar_w}px;border-radius:4px;display:flex;align-items:center;padding:0 10px;min-width:40px">
-                  <span style="color:#0f1729;font-weight:700;font-size:15px">{val}</span>
+              bar_w = max(4, int((val / max_val) * 300)) if max_val > 0 else 4
+              funnel_bars += f"""
+              <div style="margin:8px 0;display:flex;align-items:center;gap:12px">
+                <div style="width:110px;text-align:right;color:#94a3b8;font-size:13px">{label}</div>
+                <div style="background:{color};height:28px;width:{bar_w}px;border-radius:4px;display:flex;align-items:center;padding:0 8px;box-sizing:border-box">
+                  <span style="color:#0f1729;font-weight:700;font-size:14px;white-space:nowrap">{val}</span>
                 </div>
               </div>"""
 
-          errors_note = ""
-          if errors:
-              err_list = "<br>".join(errors[:5])
-              errors_note = f'<div style="margin-top:12px;padding:10px;background:#1e293b;border-radius:6px;font-size:12px;color:#94a3b8"><strong>API Notes:</strong><br>{err_list}</div>'
-
+          # Build HTML
           html = f"""<!DOCTYPE html>
-<html lang="en">
-<head>
-<meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1">
-<title>Daily Attribution Brief · {date_label}</title>
-<link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700&display=swap" rel="stylesheet">
-<style>
-*{{box-sizing:border-box;margin:0;padding:0}}
-body{{font-family:'DM Sans',sans-serif;background:#060d1a;color:#e2e8f0;min-height:100vh}}
-.wrap{{max-width:720px;margin:0 auto;padding:24px 16px}}
-.topbar{{background:#0f1729;border:1px solid #1e293b;border-radius:8px;padding:10px 16px;font-size:13px;color:#94a3b8;margin-bottom:20px;display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:8px}}
-.topbar strong{{color:#f4b955}}
-.header{{background:linear-gradient(135deg,#0f1729 0%,#162032 100%);border:1px solid #1e293b;border-radius:12px;padding:24px;margin-bottom:16px}}
-.header h1{{font-size:22px;font-weight:700;color:#f1f5f9;margin-bottom:6px}}
-.header .sub{{font-size:14px;color:#94a3b8}}
-.status-strip{{border-radius:6px;padding:9px 16px;margin-bottom:16px;font-weight:600;font-size:14px;color:#0f1729;background:{status_color}}}
-.kpi-grid{{display:grid;grid-template-columns:repeat(2,1fr);gap:12px;margin-bottom:16px}}
-@media(min-width:480px){{.kpi-grid{{grid-template-columns:repeat(4,1fr)}}}}
-.kpi{{background:#0f1729;border:1px solid #1e293b;border-radius:10px;padding:16px;text-align:center}}
-.kpi .num{{font-size:28px;font-weight:700;color:#f4b955}}
-.kpi .label{{font-size:12px;color:#94a3b8;margin-top:4px;line-height:1.3}}
-.section{{background:#0f1729;border:1px solid #1e293b;border-radius:10px;padding:20px;margin-bottom:16px}}
-.section h2{{font-size:13px;font-weight:700;color:#f4b955;margin-bottom:14px;text-transform:uppercase;letter-spacing:.08em}}
-.read-text{{font-size:15px;line-height:1.75;color:#cbd5e1}}
-table{{width:100%;border-collapse:collapse}}
-th{{text-align:left;padding:10px 12px;background:#162032;color:#64748b;font-size:11px;text-transform:uppercase;letter-spacing:.06em;font-weight:600}}
-td{{vertical-align:middle}}
-.footer{{text-align:center;padding:24px 0;color:#475569;font-size:13px;line-height:1.6}}
-</style>
-</head>
-<body>
-<div class="wrap">
-  <div class="topbar">
-    <span><strong>Daily Attribution Brief</strong> · {date_label}</span>
-    <span>GHL: {LOCATION_ID[:8]}… · Generated {now_pt.strftime('%I:%M %p PT')}</span>
-  </div>
-  <div class="header">
-    <h1>Lead Attribution Brief</h1>
-    <div class="sub">{date_label} · vs prior week same day: {delta_str} leads ({delta_pct:+d}%)</div>
-  </div>
-  <div class="status-strip">{status_label}</div>
-  <div class="kpi-grid">
-    <div class="kpi"><div class="num">{total_leads}</div><div class="label">Total Leads</div></div>
-    <div class="kpi"><div class="num">{new_opps}</div><div class="label">New Opps</div></div>
-    <div class="kpi"><div class="num">{wins}</div><div class="label">Closed Wins</div></div>
-    <div class="kpi"><div class="num" style="font-size:{'14px' if len(most_active)>8 else '22px'}">{most_active}</div><div class="label">Top Source</div></div>
-  </div>
-  <div class="section">
-    <h2>The Read</h2>
-    <p class="read-text">{the_read}</p>
-  </div>
-  <div class="section">
-    <h2>Source Breakdown</h2>
-    {"<table><thead><tr><th>Source</th><th style='text-align:center'>Leads</th><th style='text-align:center'>vs Prior Wk</th><th>Notable Names</th></tr></thead><tbody>" + source_rows_html + "</tbody></table>" if source_rows_html else '<p style="color:#94a3b8;font-size:14px">No leads yesterday.</p>'}
-  </div>
-  <div class="section">
-    <h2>Funnel Snapshot</h2>
-    {funnel_html}
-  </div>
-  {errors_note}
-  <div class="footer">
-    Graeham Watts · Intero Real Estate · DRE# 01466876<br>
-    graehamwatts@gmail.com · Daily Attribution Brief
-  </div>
-</div>
-</body></html>"""
+          <html lang="en">
+          <head>
+          <meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+          <title>Daily Attribution Brief · {date_label}</title>
+          <link rel="preconnect" href="https://fonts.googleapis.com">
+          <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700&display=swap" rel="stylesheet">
+          <style>
+            *{{box-sizing:border-box;margin:0;padding:0}}
+            body{{font-family:'DM Sans',sans-serif;background:#060d1a;color:#e2e8f0;min-height:100vh}}
+            .wrap{{max-width:720px;margin:0 auto;padding:24px 16px}}
+            .topbar{{background:#0f1729;border:1px solid #1e293b;border-radius:8px;padding:10px 16px;font-size:13px;color:#94a3b8;margin-bottom:20px;display:flex;justify-content:space-between;align-items:center}}
+            .topbar strong{{color:#f4b955}}
+            .header{{background:linear-gradient(135deg,#0f1729 0%,#162032 100%);border:1px solid #1e293b;border-radius:12px;padding:24px;margin-bottom:16px}}
+            .header h1{{font-size:22px;font-weight:700;color:#f1f5f9;margin-bottom:4px}}
+            .header .sub{{font-size:14px;color:#94a3b8}}
+            .status-strip{{border-radius:6px;padding:8px 16px;margin-bottom:16px;font-weight:600;font-size:14px;color:#0f1729;background:{status_color}}}
+            .kpi-grid{{display:grid;grid-template-columns:repeat(2,1fr);gap:12px;margin-bottom:16px}}
+            @media(min-width:500px){{.kpi-grid{{grid-template-columns:repeat(4,1fr)}}}}
+            .kpi{{background:#0f1729;border:1px solid #1e293b;border-radius:10px;padding:16px;text-align:center}}
+            .kpi .num{{font-size:28px;font-weight:700;color:#f4b955}}
+            .kpi .label{{font-size:12px;color:#94a3b8;margin-top:4px}}
+            .section{{background:#0f1729;border:1px solid #1e293b;border-radius:10px;padding:20px;margin-bottom:16px}}
+            .section h2{{font-size:15px;font-weight:700;color:#f4b955;margin-bottom:12px;text-transform:uppercase;letter-spacing:.05em}}
+            .read-text{{font-size:15px;line-height:1.7;color:#cbd5e1}}
+            table{{width:100%;border-collapse:collapse}}
+            th{{text-align:left;padding:10px 12px;background:#162032;color:#94a3b8;font-size:12px;text-transform:uppercase;letter-spacing:.05em;font-weight:600}}
+            td{{vertical-align:middle}}
+            .footer{{text-align:center;padding:24px 0;color:#475569;font-size:13px}}
+          </style>
+          </head>
+          <body>
+          <div class="wrap">
+            <div class="topbar">
+              <span><strong>Daily Attribution Brief</strong> · {date_label}</span>
+              <span>GHL Location: {LOCATION_ID[:8]}…</span>
+            </div>
+            <div class="header">
+              <h1>Lead Attribution Brief</h1>
+              <div class="sub">{date_label} · Day-over-day: {delta_str} leads ({delta_pct:+}% vs prior week same day)</div>
+            </div>
+            <div class="status-strip">{status_label}</div>
+            <div class="kpi-grid">
+              <div class="kpi"><div class="num">{total_leads}</div><div class="label">Total Leads</div></div>
+              <div class="kpi"><div class="num">{new_opps}</div><div class="label">New Opps</div></div>
+              <div class="kpi"><div class="num">{wins}</div><div class="label">Closed Wins</div></div>
+              <div class="kpi"><div class="num" style="font-size:16px">{most_active}</div><div class="label">Top Source</div></div>
+            </div>
+            <div class="section">
+              <h2>The Read</h2>
+              <p class="read-text">{the_read}</p>
+            </div>
+            <div class="section">
+              <h2>Source Breakdown</h2>
+              <table>
+                <thead><tr>
+                  <th>Source</th><th style="text-align:center">Leads</th><th style="text-align:center">vs Prior Wk</th><th>Notable Names</th>
+                </tr></thead>
+                <tbody>{source_rows_html}</tbody>
+              </table>
+              {'<p style="color:#94a3b8;font-size:14px;margin-top:12px">No leads yesterday.</p>' if not source_data else ''}
+            </div>
+            <div class="section">
+              <h2>Funnel Snapshot</h2>
+              {funnel_bars}
+            </div>
+            <div class="footer">
+              Graeham Watts · Intero Real Estate · graehamwatts@gmail.com<br>
+              Generated {now_pt.strftime('%Y-%m-%d %H:%M PT')}
+            </div>
+          </div>
+          </body></html>"""
 
-          os.makedirs("dashboards/attribution", exist_ok=True)
+          # Write output file
           output_path = f"dashboards/attribution/{date_slug}-daily.html"
+          os.makedirs("dashboards/attribution", exist_ok=True)
           with open(output_path, "w", encoding="utf-8") as f:
               f.write(html)
-          print(f"\nWrote: {output_path}", flush=True)
-          print(f"Summary: {total_leads} leads | {new_opps} opps | {wins} wins | top: {most_active}", flush=True)
+          print(f"Wrote {output_path}")
 
+          # Set outputs
           with open(os.environ.get("GITHUB_OUTPUT",""), "a") as go:
               go.write(f"output_path={output_path}\n")
               go.write(f"date_slug={date_slug}\n")
@@ -462,7 +465,7 @@ td{{vertical-align:middle}}
         run: |
           URL="https://graehamwatts.github.io/online-content/dashboards/attribution/${{ steps.generate.outputs.date_slug }}-daily.html"
           echo "::notice title=Daily Attribution Brief::Sent — ${{ steps.generate.outputs.total_leads }} leads, top source: ${{ steps.generate.outputs.top_source }}, dashboard at $URL"
-          echo "Dashboard URL: $URL"
+          echo "Dashboard: $URL"
 
       - name: Notify on failure
         if: failure()
