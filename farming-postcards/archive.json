@@ -1,0 +1,99 @@
+{
+  "_meta": {
+    "title": "Graeham Watts Farming Postcard Archive",
+    "owner": "Graeham Watts",
+    "dre": "01466876",
+    "brokerage": "Intero Real Estate (Berkshire Hathaway Affiliate)",
+    "team": "The Martin Team",
+    "market": "East Palo Alto / Peninsula",
+    "vendor_default": "Universal Mail Works",
+    "dashboard_url": "https://graehamwatts.github.io/online-content/farming-postcards/",
+    "last_updated": "2026-05-27"
+  },
+  "cards": [
+    {
+      "id": "2025-03-01-equity",
+      "mail_date": "2025-03-01",
+      "archetype": "Equity",
+      "lever": "Pride + curiosity",
+      "front_headline": "Do You Know How Much Equity You've Built This Year?",
+      "back_headline": "Get Your Custom Equity Report",
+      "cta_type": "Home valuation",
+      "cta_line": "Free equity report",
+      "audience": "Both",
+      "pdf": "pdfs/2025-03-01-equity.pdf",
+      "thumbnail": "thumbnails/2025-03-01-equity-1.jpg",
+      "notes": "First-of-month equity angle. Anchored the cadence pattern."
+    },
+    {
+      "id": "2025-03-15-buyer-tagged",
+      "mail_date": "2025-03-15",
+      "archetype": "Buyer-tagged",
+      "lever": "Scarcity",
+      "front_headline": "I Already Have Your Buyer TAGGED",
+      "back_headline": "Active Buyers Are Already Looking In Your Neighborhood",
+      "cta_type": "Call / text Graeham",
+      "cta_line": "Call or text me TODAY",
+      "audience": "Farm",
+      "pdf": "pdfs/2025-03-15-buyer-tagged.pdf",
+      "thumbnail": "thumbnails/2025-03-15-buyer-tagged-1.jpg",
+      "notes": "Geofencing claim — strongest scarcity hook in the library."
+    },
+    {
+      "id": "2025-04-15-anti-zillow-buyer-pool",
+      "mail_date": "2025-04-15",
+      "archetype": "Anti-Zillow buyer pool",
+      "lever": "Scarcity + anti-portal",
+      "front_headline": "I Have A List Of Buyers Who Don't Use Zillow",
+      "back_headline": "My System Identifies High-Intent Buyers",
+      "cta_type": "Scan QR",
+      "cta_line": "You just haven't met them yet",
+      "audience": "Farm",
+      "pdf": "pdfs/2025-04-15-anti-zillow-buyer-pool.pdf",
+      "thumbnail": "thumbnails/2025-04-15-anti-zillow-buyer-pool-1.jpg",
+      "notes": "Pivot card — moved from generic scarcity to anti-portal differentiation."
+    },
+    {
+      "id": "2026-05-01-ai-search",
+      "mail_date": "2026-05-01",
+      "archetype": "AI search invisibility",
+      "lever": "FOMO + tech",
+      "front_headline": "Why Isn't ChatGPT Recommending Your Home?",
+      "back_headline": "Standard Listings Are Becoming Invisible In Your Neighborhood",
+      "cta_type": "Free report (AI score)",
+      "cta_line": "Get your property's AI score",
+      "audience": "Both",
+      "pdf": "pdfs/2026-05-01-ai-search.pdf",
+      "thumbnail": "thumbnails/2026-05-01-ai-search-1.jpg",
+      "notes": "First AEO-themed card. Big shift to AI-search differentiation."
+    },
+    {
+      "id": "2026-05-15-anti-zestimate",
+      "mail_date": "2026-05-15",
+      "archetype": "Anti-Zestimate",
+      "lever": "Anti-algorithm",
+      "front_headline": "Your Zestimate Is Wrong",
+      "back_headline": "Request A Precision Equity Audit",
+      "cta_type": "Home valuation",
+      "cta_line": "Algorithms guess. I measure.",
+      "audience": "Both",
+      "pdf": "pdfs/2026-05-15-anti-zestimate.pdf",
+      "thumbnail": "thumbnails/2026-05-15-anti-zestimate-1.jpg",
+      "notes": "Second tech-themed card in a row. Triggered the cadence rule for the next card to pivot."
+    },
+    {
+      "id": "2026-06-01-neighbor-envy",
+      "mail_date": "2026-06-01",
+      "archetype": "Neighbor envy",
+      "lever": "Curiosity + social proof",
+      "front_headline": "What Did The Last 5 Homes On Your Street Really Sell For?",
+      "back_headline": "Get The Real Number On Your Home",
+      "cta_type": "Home valuation",
+      "cta_line": "Free home valuation · no pressure",
+      "audience": "Both",
+      "preview_html": "2026-06-01-neighbor-envy-preview.html",
+      "status": "DESIGN APPROVED — awaiting print",
+      "notes": "Designed in Cowork on 2026-05-27. Approved by Graeham. Editor + Peter to finalize headshots and QR before sending to Universal Mail Works."
+    }
+  ]
+}
