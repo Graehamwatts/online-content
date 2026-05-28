@@ -148,7 +148,11 @@ footer{background:var(--b);color:#ddd;padding:34px 0;text-align:center;margin-to
 <tr><td>2754 Gorgetown Street (3/1, 1,010 sf)</td><td style="text-align:right">$790,000</td><td style="text-align:right">$790,000</td><td style="text-align:right">$790,000</td><td style="text-align:center">0</td><td style="text-align:center">0</td><td>Likely pocket sale at asking</td></tr>
 </tbody></table>
 <p><strong>The pattern is unambiguous.</strong> The two comps that priced honestly in the $880K to $899K band (2509 Illinois at $899K, 2352 Menalto at $888K) <strong>sold OVER asking in under 30 days</strong>. The comp that priced ambitiously ($1,090K for 128 Grace) took <strong>four and a half months and 2 to 3 price reductions</strong> to clear at $925K. The home that priced slightly too high ($888K for 1133 Jervis, a tiny 760 sqft cottage) took <strong>five months and one reduction</strong> to clear at $860K.</p>
-<p>For 1030 Bradley, the data is telling you exactly where to list. The $885K to $920K band drives competition. The $950K+ band drives months on market and reductions, ending in roughly the same place.</p>
+<p>For 1030 Bradley, the data is telling you exactly where to list. The $885K to $930K band drives competition. The $950K+ band drives months on market and reductions, ending in roughly the same place.</p>
+
+<div class="cb"><div class="cw" style="height:380px"><canvas id="priceJourney"></canvas></div><div class="cap"><strong>Pricing Journey:</strong> each comp's path from Original List to Final List to Sold. Green lines go UP (priced honestly, sold over asking). Coral lines go DOWN (priced too high, required reductions). The two flat-then-up lines (Illinois, Menalto) are the model for how to price 1030 Bradley.</div></div>
+
+<div class="cb"><div class="cw" style="height:340px"><canvas id="domVsCut"></canvas></div><div class="cap"><strong>The DOM Penalty:</strong> homes that priced honestly sold in 19 to 30 days with zero or negative cuts (sold over asking). Homes that priced high required 138 to 152 days AND $28K to $165K in cuts to clear. The choice is right pricing or long DOM. There is no in-between.</div></div>
 </section>
 
 <div class="dv"></div>
@@ -172,10 +176,10 @@ footer{background:var(--b);color:#ddd;padding:34px 0;text-align:center;margin-to
 <section><div class="sh">Recommended Pricing. Three Strategies If He Sells Now</div>
 <div class="rng">
 <div class="rc a"><div class="rl">Conservative. Quick sale.</div><div class="rp">$849,000 to $879,000</div><div class="rd">Priced for speed. Sub-30-day sale, may bid up. Realistic clearing $860K to $895K.</div></div>
-<div class="rc b"><div class="rl">Competitive. Market read. <em>(recommended)</em></div><div class="rp">$889,000 to $919,000</div><div class="rd">The sweet spot. Matches the pattern of 2509 Illinois and 2352 Menalto, which both sold over asking in under 30 days at this price band. Realistic clearing $895K to $935K, 19 to 30 day sale.</div></div>
+<div class="rc b"><div class="rl">Competitive. Market read. <em>(recommended)</em></div><div class="rp">$889,000 to $930,000</div><div class="rd">The sweet spot. Matches the pattern of 2509 Illinois and 2352 Menalto, which both sold over asking in under 30 days at this price band. Realistic clearing $900K to $945K, 19 to 30 day sale.</div></div>
 <div class="rc c"><div class="rl">Ambitious. Tests the ceiling.</div><div class="rp">$929,000 to $959,000</div><div class="rd">Danger zone. 128 Grace started here and took 138 days and three price drops to clear at $925K. Realistic clearing $900K to $930K, 60 to 150 days, with at least one reduction likely.</div></div>
 </div>
-<p><strong>Recommended list: $889,000 to $919,000.</strong> This is right at the cohort's pending-listing band and matches the price-reduction history of the comps below: homes priced in this range sold over asking in 19 to 30 days; homes priced higher sat for 4 to 5 months and required multiple reductions to clear at roughly the same final number anyway.</p>
+<p><strong>Recommended list: $889,000 to $930,000.</strong> This is right at the cohort's pending-listing band and matches the price-reduction history of the comps below: homes priced in this range sold over asking in 19 to 30 days; homes priced higher sat for 4 to 5 months and required multiple reductions to clear at roughly the same final number anyway.</p>
 <p>The conservative range ($849K to $879K) is appropriate if speed matters most and you want competition; the ambitious range ($929K to $959K) is the path most likely to leave you sitting through summer, accumulating DOM and reductions, ending at roughly the same clearing price you would have hit by pricing right the first time.</p>
 </section>
 
@@ -246,6 +250,59 @@ const sub = {
     {x:899000,y:46,r:8},{x:870000,y:38,r:10},{x:799000,y:4,r:10}
   ]
 };
+// Pricing Journey chart , each comp as a line from Original → Final List → Sold
+const journeyData = {
+  labels: ['Original List','Final List','Sold'],
+  datasets: [
+    {label:'2509 Illinois (sold +$56K)',data:[899000,899000,955000],borderColor:'#0a7d3a',backgroundColor:'rgba(10,125,58,0.1)',pointRadius:6,pointBackgroundColor:'#0a7d3a',borderWidth:2.5,tension:0},
+    {label:'2352 Menalto (sold +$12K)',data:[888000,888000,900000],borderColor:'#4f9d69',backgroundColor:'rgba(79,157,105,0.1)',pointRadius:6,pointBackgroundColor:'#4f9d69',borderWidth:2.5,tension:0},
+    {label:'2754 Gorgetown (at asking)',data:[790000,790000,790000],borderColor:'#C5A55A',backgroundColor:'rgba(197,165,90,0.1)',pointRadius:6,pointBackgroundColor:'#C5A55A',borderWidth:2.5,tension:0,borderDash:[5,5]},
+    {label:'1133 Jervis (cut $28K, 152 DOM)',data:[888000,866666,860000],borderColor:'#d98c6a',backgroundColor:'rgba(217,140,106,0.1)',pointRadius:6,pointBackgroundColor:'#d98c6a',borderWidth:2.5,tension:0},
+    {label:'128 Grace (cut $165K, 138 DOM)',data:[1090000,949000,925000],borderColor:'#c0392b',backgroundColor:'rgba(192,57,43,0.1)',pointRadius:6,pointBackgroundColor:'#c0392b',borderWidth:3,tension:0}
+  ]
+};
+new Chart(document.getElementById('priceJourney'),{
+  type:'line',data:journeyData,
+  options:{
+    responsive:true,maintainAspectRatio:false,
+    plugins:{
+      legend:{position:'bottom',labels:{font:{size:11},boxWidth:30}},
+      tooltip:{callbacks:{label:c=>c.dataset.label+': $'+(c.parsed.y/1000).toFixed(0)+'K'}}
+    },
+    scales:{
+      x:{title:{display:true,text:'Listing Stage'},grid:{display:false}},
+      y:{title:{display:true,text:'Price'},ticks:{callback:v=>'$'+(v/1000).toFixed(0)+'K'},grid:{color:'#eee'},min:750000,max:1150000}
+    }
+  }
+});
+
+// DOM vs Price Cut comparison bar chart
+const cutData = {
+  labels: ['2509 Illinois','2352 Menalto','2754 Gorgetown','1133 Jervis','128 Grace'],
+  datasets: [
+    {label:'Days on Market',data:[19,30,0,152,138],backgroundColor:'rgba(26,26,26,0.75)',yAxisID:'y',order:2},
+    {label:'$ Cut from Original (thousands)',data:[-56,-12,0,28,165],backgroundColor:['#0a7d3a','#4f9d69','#C5A55A','#d98c6a','#c0392b'],yAxisID:'y1',order:1,type:'bar'}
+  ]
+};
+new Chart(document.getElementById('domVsCut'),{
+  type:'bar',data:cutData,
+  options:{
+    responsive:true,maintainAspectRatio:false,
+    plugins:{
+      legend:{position:'bottom',labels:{font:{size:11},boxWidth:30}},
+      tooltip:{callbacks:{label:c=>{
+        if(c.dataset.label==='Days on Market')return c.parsed.y+' days';
+        const v=c.parsed.y;return (v<0?'Sold $':'Cut $')+Math.abs(v)+'K '+(v<0?'OVER asking':'from original');
+      }}}
+    },
+    scales:{
+      x:{grid:{display:false},ticks:{font:{size:10}}},
+      y:{title:{display:true,text:'Days on Market',font:{size:11}},position:'left',grid:{color:'#eee'}},
+      y1:{title:{display:true,text:'$ Cut (thousands, negative = over asking)',font:{size:11}},position:'right',grid:{display:false},ticks:{callback:v=>v<0?'+$'+Math.abs(v)+'K':'$'+v+'K'}}
+    }
+  }
+});
+
 new Chart(document.getElementById('priceDom'),{
   type:'bubble',
   data:{datasets:[
