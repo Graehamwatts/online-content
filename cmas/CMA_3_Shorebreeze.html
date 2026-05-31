@@ -131,7 +131,7 @@ ul{margin-left:22px;margin-bottom:14px;font-size:14.5px}
 
 <div class="cb"><div class="cw" style="height:380px"><canvas id="priceJourney"></canvas></div><div class="cap"><strong>Pricing Journey:</strong> each comp's path from original list to final list to sold. Lines that rise (Ralmar, Montage) priced right and sold over asking. The flat lines (Wilks, Oakes) held their price and sold near it fast. The line that drops (Dumbarton) started too high, cut, and sold below its opening number.</div></div>
 
-<div class="cb"><div class="cw" style="height:340px"><canvas id="domVsCut"></canvas></div><div class="cap"><strong>Days on market vs price discipline.</strong> Dark bars are days on market; gold and coral show dollars over or under the original list price. Only 2212 Dumbarton formally cut its price (down $50K), and it had the longest time on market at 35 days. Ralmar and Montage sold above their original list; Wilks and Oakes sold within roughly 1.5% of an unchanged list in under two weeks.</div></div>
+<div class="cb"><div class="cw" style="height:340px"><canvas id="domVsCut"></canvas></div><div class="cap"><strong>Days on market by comp, fastest to slowest.</strong> Bar length is days on market. Color shows the pricing outcome: green sold over asking with no cut, gold sold right at asking with no cut, red required a price cut. The one home that reached for an ambitious number (2212 Dumbarton) sat the longest and still had to cut.</div></div>
 </section>
 
 <div class="dv"></div>
@@ -154,10 +154,11 @@ ul{margin-left:22px;margin-bottom:14px;font-size:14.5px}
 
 <section><div class="sh">Recommended Pricing</div>
 <div class="rng">
-<div class="rc a"><div class="rl">Conservative. Built for a bidding war.</div><div class="rp">$1,275,000 to $1,325,000</div><div class="rd">Priced just under market to drive multiple offers, the 2370 Ralmar model. Most likely clears $1.31M to $1.36M inside two weeks.</div></div>
-<div class="rc b"><div class="rl">Competitive. Market read. <em>(recommended)</em></div><div class="rp">$1,325,000 to $1,388,000</div><div class="rd">Right on your AVM and the move-in four-bedroom cluster (Ralmar, Dumbarton, Montage). Most likely clears $1.34M to $1.40M in two to four weeks at or over asking.</div></div>
-<div class="rc c"><div class="rl">Stretch. Tests the finished ceiling.</div><div class="rp">$1,388,000 to $1,450,000</div><div class="rd">Reaches toward the Wilks and Oakes level. Realistic only with the Path B prep done first. Without it, this is the Dumbarton risk: a cut and a longer wait.</div></div>
+<div class="rc a"><div class="rl">Conservative. Built for a bidding war.</div><div class="rp">$1,275,000 to $1,325,000</div><div class="rd">Priced just under market to drive multiple offers, the 2370 Ralmar model. Most likely clears $1.31M to $1.36M. <strong>Estimated 7 to 14 days on market</strong>, often with competing offers.</div></div>
+<div class="rc b"><div class="rl">Competitive. Market read. <em>(recommended)</em></div><div class="rp">$1,325,000 to $1,388,000</div><div class="rd">Right on your AVM and the move-in four-bedroom cluster (Ralmar, Dumbarton, Montage). Most likely clears $1.34M to $1.40M at or over asking. <strong>Estimated 10 to 28 days on market.</strong></div></div>
+<div class="rc c"><div class="rl">Stretch. Tests the finished ceiling.</div><div class="rp">$1,388,000 to $1,450,000</div><div class="rd">Reaches toward the Wilks and Oakes level, realistic only with the Path B prep done first. Without it, this is the Dumbarton risk. <strong>Estimated 45 to 90+ days on market</strong> and a likely price cut.</div></div>
 </div>
+<p class="note">Days-on-market estimates are drawn from the five closest sold comps plus the current active listings, a small sample, and they assume the spring demand window holds. Treat them as directional ranges, not guarantees. The relationship is consistent in the data: priced at or below market, these homes sold in 8 to 15 days; priced above it, they sat 35 days or longer and usually cut.</p>
 <p><strong>Recommended list: $1,325,000 to $1,375,000.</strong> This sits on your independent AVM, matches the cluster of move-in four-bedrooms that sold in 8 to 35 days, and undercuts the stale actives above you (Mouton at $1,549,000, Alberni at $1,425,000) enough to look like clear value. The reduction history is unambiguous: in this market, listing at or a touch below the expected sale price produces fast, at-or-over-asking results, while reaching for an ambitious anchor produces cuts and time on market that end in roughly the same place. If you complete the light prep in Path B, listing at the top of this band or just into the stretch range becomes credible.</p>
 </section>
 
@@ -205,16 +206,15 @@ const journeyData={labels:['Original List','Final List','Sold'],datasets:[
 {label:'2212 Dumbarton (cut $50K, 35 DOM)',data:[1429000,1379000,1379000],borderColor:'#c0392b',backgroundColor:'rgba(192,57,43,0.1)',pointRadius:6,pointBackgroundColor:'#c0392b',borderWidth:3,tension:0}]};
 new Chart(document.getElementById('priceJourney'),{type:'line',data:journeyData,options:{responsive:true,maintainAspectRatio:false,plugins:{legend:{position:'bottom',labels:{font:{size:11},boxWidth:30}},tooltip:{callbacks:{label:c=>c.dataset.label+': $'+(c.parsed.y/1000).toFixed(0)+'K'}}},scales:{x:{title:{display:true,text:'Listing Stage'},grid:{display:false}},y:{title:{display:true,text:'Price'},ticks:{callback:v=>'$'+(v/1000).toFixed(0)+'K'},grid:{color:'#eee'},min:1150000,max:1550000}}}});
 
-const cutData={labels:['2370 Ralmar','639 Montage','928 Wilks','939 Oakes','2212 Dumbarton'],datasets:[
-{label:'Days on Market',data:[8,34,9,13,35],backgroundColor:'rgba(26,26,26,0.75)',yAxisID:'y',order:2},
-{label:'$ vs Original List (thousands)',data:[112,41,-19,-25,-50],backgroundColor:['#0a7d3a','#0a7d3a','#d98c6a','#d98c6a','#c0392b'],yAxisID:'y1',order:1,type:'bar'}]};
-new Chart(document.getElementById('domVsCut'),{type:'bar',data:cutData,options:{responsive:true,maintainAspectRatio:false,plugins:{legend:{position:'bottom',labels:{font:{size:11},boxWidth:30}},tooltip:{callbacks:{label:c=>{if(c.dataset.label==='Days on Market')return c.parsed.y+' days';const v=c.parsed.y;return v>=0?'Sold $'+v+'K over original':'Sold $'+Math.abs(v)+'K under original';}}}},scales:{x:{grid:{display:false},ticks:{font:{size:10}}},y:{title:{display:true,text:'Days on Market',font:{size:11}},position:'left',grid:{color:'#eee'}},y1:{title:{display:true,text:'$ vs Original List (thousands)',font:{size:11}},position:'right',grid:{display:false},ticks:{callback:v=>(v>=0?'+$':'-$')+Math.abs(v)+'K'}}}}});
+const domLabels=['2370 Ralmar  ·  sold +$112K, no cut','928 Wilks  ·  sold near ask, no cut','939 Oakes  ·  sold near ask, no cut','639 Montage  ·  sold +$41K, no cut','2212 Dumbarton  ·  cut $50K, sold below open'];
+const domDays=[8,9,13,34,35];
+const domColors=['#0a7d3a','#C5A55A','#C5A55A','#0a7d3a','#c0392b'];
+const domOutcome=['Sold $112K over asking, 8 days','Sold within 1.3% of ask, 9 days','Sold within 1.7% of ask, 13 days','Sold $41K over asking, 34 days','Cut $50K from the opening price, 35 days'];
+new Chart(document.getElementById('domVsCut'),{type:'bar',data:{labels:domLabels,datasets:[{label:'Days on Market',data:domDays,backgroundColor:domColors,borderRadius:4}]},options:{indexAxis:'y',responsive:true,maintainAspectRatio:false,plugins:{legend:{display:false},tooltip:{callbacks:{label:c=>domOutcome[c.dataIndex]}}},scales:{x:{title:{display:true,text:'Days on Market',font:{size:11}},grid:{color:'#eee'},beginAtZero:true},y:{grid:{display:false},ticks:{font:{size:11}}}}}});
 
 const sub={sold:[{x:1480000,y:9,r:10},{x:1475000,y:13,r:9},{x:1440000,y:34,r:11},{x:1379000,y:35,r:10},{x:1350000,y:8,r:7},{x:1310000,y:8,r:10},{x:1307000,y:15,r:11},{x:1200000,y:12,r:9},{x:990000,y:18,r:9}],active:[{x:1549000,y:62,r:12},{x:1425000,y:117,r:12},{x:1299000,y:33,r:6}],pending:[{x:1175000,y:22,r:7},{x:1148888,y:147,r:10}]};
 new Chart(document.getElementById('priceDom'),{type:'bubble',data:{datasets:[
 {label:'Sold',data:sub.sold,backgroundColor:'rgba(10,125,58,0.55)',borderColor:'#0a7d3a'},
 {label:'Active',data:sub.active,backgroundColor:'rgba(197,165,90,0.55)',borderColor:'#A88B3D'},
 {label:'Pending',data:sub.pending,backgroundColor:'rgba(217,140,106,0.55)',borderColor:'#d98c6a'}]},
-options:{responsive:true,maintainAspectRatio:false,plugins:{legend:{position:'top'},tooltip:{callbacks:{label:c=>'$'+(c.parsed.x/1000).toFixed(0)+'K, '+c.parsed.y+' DOM, ~'+(c.raw.r*200)+' sqft'}}},scales:{x:{title:{display:true,text:'Sold / List Price'},ticks:{callback:v=>'$'+(v/1000).toFixed(0)+'K'},min:900000,max:1650000,grid:{color:'#eee'}},y:{title:{display:true,text:'Days on Market'},min:0,max:160,grid:{color:'#eee'}}}}});
-</script></body></html>
-         
+options:{responsive:true,maintainAspectRatio:false,plugins:{legend:{positi
