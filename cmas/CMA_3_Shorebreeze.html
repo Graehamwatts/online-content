@@ -206,7 +206,7 @@ const journeyData={labels:['Original List','Final List','Sold'],datasets:[
 {label:'2212 Dumbarton (cut $50K, 35 DOM)',data:[1429000,1379000,1379000],borderColor:'#c0392b',backgroundColor:'rgba(192,57,43,0.1)',pointRadius:6,pointBackgroundColor:'#c0392b',borderWidth:3,tension:0}]};
 new Chart(document.getElementById('priceJourney'),{type:'line',data:journeyData,options:{responsive:true,maintainAspectRatio:false,plugins:{legend:{position:'bottom',labels:{font:{size:11},boxWidth:30}},tooltip:{callbacks:{label:c=>c.dataset.label+': $'+(c.parsed.y/1000).toFixed(0)+'K'}}},scales:{x:{title:{display:true,text:'Listing Stage'},grid:{display:false}},y:{title:{display:true,text:'Price'},ticks:{callback:v=>'$'+(v/1000).toFixed(0)+'K'},grid:{color:'#eee'},min:1150000,max:1550000}}}});
 
-const domLabels=['2370 Ralmar  ·  sold +$112K, no cut','928 Wilks  ·  sold near ask, no cut','939 Oakes  ·  sold near ask, no cut','639 Montage  ·  sold +$41K, no cut','2212 Dumbarton  ·  cut $50K, sold below open'];
+const domLabels=['2370 Ralmar (sold +$112K, no cut)','928 Wilks (sold near ask, no cut)','939 Oakes (sold near ask, no cut)','639 Montage (sold +$41K, no cut)','2212 Dumbarton (cut $50K, sold below open)'];
 const domDays=[8,9,13,34,35];
 const domColors=['#0a7d3a','#C5A55A','#C5A55A','#0a7d3a','#c0392b'];
 const domOutcome=['Sold $112K over asking, 8 days','Sold within 1.3% of ask, 9 days','Sold within 1.7% of ask, 13 days','Sold $41K over asking, 34 days','Cut $50K from the opening price, 35 days'];
@@ -217,4 +217,5 @@ new Chart(document.getElementById('priceDom'),{type:'bubble',data:{datasets:[
 {label:'Sold',data:sub.sold,backgroundColor:'rgba(10,125,58,0.55)',borderColor:'#0a7d3a'},
 {label:'Active',data:sub.active,backgroundColor:'rgba(197,165,90,0.55)',borderColor:'#A88B3D'},
 {label:'Pending',data:sub.pending,backgroundColor:'rgba(217,140,106,0.55)',borderColor:'#d98c6a'}]},
-options:{responsive:true,maintainAspectRatio:false,plugins:{legend:{positi
+options:{responsive:true,maintainAspectRatio:false,plugins:{legend:{position:'top'},tooltip:{callbacks:{label:c=>'$'+(c.parsed.x/1000).toFixed(0)+'K, '+c.parsed.y+' DOM, ~'+(c.raw.r*200)+' sqft'}}},scales:{x:{title:{display:true,text:'Sold / List Price'},ticks:{callback:v=>'$'+(v/1000).toFixed(0)+'K'},min:900000,max:1650000,grid:{color:'#eee'}},y:{title:{display:true,text:'Days on Market'},min:0,max:160,grid:{color:'#eee'}}}}});
+</script></body></html>
