@@ -215,4 +215,6 @@ new Chart(document.getElementById('priceDom'),{type:'bubble',data:{datasets:[
 {label:'Sold',data:sub.sold,backgroundColor:'rgba(10,125,58,0.55)',borderColor:'#0a7d3a'},
 {label:'909 Baines (suggested)',data:sub.subject,backgroundColor:'#C5A55A',borderColor:'#A88B3D',pointStyle:'rectRot'},
 {label:'Active',data:sub.active,backgroundColor:'rgba(45,106,159,0.5)',borderColor:'#2d6a9f'},
-{label:'Pending'
+{label:'Pending',data:sub.pending,backgroundColor:'rgba(217,140,106,0.55)',borderColor:'#d98c6a'}]},
+options:{responsive:true,maintainAspectRatio:false,plugins:{legend:{position:'top'},tooltip:{callbacks:{label:c=>'$'+(c.parsed.x/1000).toFixed(0)+'K, '+c.parsed.y+' DOM'}}},scales:{x:{title:{display:true,text:'Sold / List / Suggested Price'},ticks:{callback:v=>'$'+(v/1000).toFixed(0)+'K'},min:900000,max:1650000,grid:{color:'#eee'}},y:{title:{display:true,text:'Days on Market'},min:0,max:160,grid:{color:'#eee'}}}}});
+</script></body></html>
