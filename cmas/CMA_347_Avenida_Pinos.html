@@ -1,257 +1,149 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-<meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1.0">
-<title>Home Value Update — 347 Avenida Pinos, San Jose | Graeham Watts</title>
-<script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.0/dist/chart.umd.min.js"></script>
+<!DOCTYPE html><html lang="en"><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Home Value Update. 347 Avenida Pinos, San Jose, CA 95123 | Graeham Watts</title>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/4.4.1/chart.umd.min.js"></script>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700;800&family=Montserrat:wght@700;800&display=swap" rel="stylesheet">
 <style>
-:root{--blk:#1A1A1A;--gld:#C5A55A;--gld2:#E8D49A;--off:#F8F5EF;--gray:#8A8A8A;--border:#2C2C2C;--card:#242424;--warn:#F5A623;}
-*{box-sizing:border-box;margin:0;padding:0;}
-body{background:var(--blk);color:#E8E8E8;font-family:Georgia,serif;line-height:1.65;}
-nav{background:#111;border-bottom:1px solid var(--gld);padding:15px 40px;display:flex;align-items:center;justify-content:space-between;}
-.nav-logo{color:var(--gld);font-size:1rem;font-weight:bold;letter-spacing:2px;text-transform:uppercase;}
-.nav-c{color:var(--gray);font-size:0.82rem;}
-.nav-c a{color:var(--gld);text-decoration:none;}
-.hero{background:linear-gradient(135deg,#080808 0%,#181818 60%,#0A0A0A 100%);padding:56px 40px 48px;text-align:center;position:relative;border-bottom:1px solid var(--border);}
-.hero::before{content:"";position:absolute;top:0;left:0;right:0;height:3px;background:linear-gradient(90deg,transparent,var(--gld),transparent);}
-.hero-tag{color:var(--gld);font-size:0.7rem;letter-spacing:4px;text-transform:uppercase;margin-bottom:10px;}
-.hero-h1{font-size:2rem;color:#fff;font-weight:normal;margin-bottom:8px;}
-.hero-addr{color:var(--gld);font-size:1.05rem;margin-bottom:12px;}
-.hero-sub{color:var(--gray);font-size:0.88rem;max-width:580px;margin:0 auto;}
-.warn-bar{background:#221800;border:1px solid var(--warn);border-left:4px solid var(--warn);margin:20px 40px;padding:14px 18px;border-radius:4px;font-size:0.85rem;color:#E8C060;line-height:1.65;}
-.warn-bar strong{color:var(--warn);}
-.wrap{max-width:960px;margin:0 auto;padding:36px 40px;}
-.sec{margin-bottom:38px;}
-.sec-title{font-size:0.68rem;letter-spacing:3px;text-transform:uppercase;color:var(--gld);margin-bottom:18px;padding-bottom:7px;border-bottom:1px solid var(--border);}
-.specs{display:flex;gap:10px;flex-wrap:wrap;}
-.chip{background:var(--card);border:1px solid var(--border);padding:9px 16px;border-radius:4px;font-size:0.83rem;color:#CCC;}
-.chip strong{color:var(--gld);}
-.val-grid{display:grid;grid-template-columns:1fr 1fr 1fr;gap:14px;margin-bottom:16px;}
-@media(max-width:600px){.val-grid{grid-template-columns:1fr;}}
-.vc{background:var(--card);border:1px solid var(--border);padding:22px 18px;border-radius:6px;text-align:center;}
-.vc.prime{border-color:var(--gld);background:#1C1700;}
-.vc-lbl{font-size:0.68rem;letter-spacing:2px;text-transform:uppercase;color:var(--gray);margin-bottom:9px;}
-.vc-val{font-size:1.75rem;color:#fff;font-weight:bold;}
-.vc.prime .vc-val{color:var(--gld);}
-.vc-sub{font-size:0.75rem;color:var(--gray);margin-top:5px;}
-.val-note{font-size:0.76rem;color:#555;text-align:center;}
-.equity-card{background:#0E1A0E;border:1px solid #2A4A2A;border-radius:6px;padding:22px;}
-.eq-lbl{font-size:0.75rem;letter-spacing:2px;text-transform:uppercase;color:#6DBD6D;margin-bottom:14px;}
-.eq-row{display:flex;justify-content:space-between;padding:7px 0;border-bottom:1px solid #1A2A1A;font-size:0.9rem;}
-.eq-row.hi{color:#6DBD6D;font-weight:bold;border-bottom:none;}
-.eq-note{font-size:0.73rem;color:#4A7A4A;margin-top:10px;font-style:italic;}
-.mkt{background:var(--card);border:1px solid var(--border);border-radius:6px;padding:26px;font-size:0.93rem;color:#CCC;}
-.mkt p{margin-bottom:12px;}
-.mkt p:last-child{margin-bottom:0;}
-.chart-box{background:var(--card);border:1px solid var(--border);border-radius:6px;padding:22px;}
-.chart-sub{font-size:0.77rem;color:var(--gray);margin-bottom:14px;}
-canvas{max-height:260px;}
-table{width:100%;border-collapse:collapse;font-size:0.83rem;}
-thead th{background:#0D0D0D;color:var(--gld);font-size:0.68rem;letter-spacing:2px;text-transform:uppercase;padding:11px 9px;text-align:left;border-bottom:1px solid var(--border);}
-td{padding:10px 9px;border-bottom:1px solid #1E1E1E;color:#CCC;vertical-align:middle;}
-tr:hover td{background:#1C1C1C;}
-td.center{text-align:center;}td.right{text-align:right;}
-.nbadge{font-size:0.66rem;background:#221500;color:var(--warn);padding:2px 5px;border-radius:3px;margin-left:3px;}
-.cavbox{background:#121212;border:1px solid #282828;border-radius:6px;padding:18px;font-size:0.82rem;color:#777;line-height:1.7;}
-.cavbox ul{margin-left:14px;}
-.cavbox li{margin-bottom:5px;}
-footer{background:#080808;border-top:1px solid var(--border);padding:28px 40px;text-align:center;font-size:0.76rem;color:var(--gray);}
-.ft-name{color:var(--gld);font-size:0.95rem;margin-bottom:3px;}
-</style>
-</head>
-<body>
-<nav>
-  <div class="nav-logo">Graeham Watts · Intero Real Estate</div>
-  <div class="nav-c">650-308-4727 · <a href="mailto:graehamwatts@gmail.com">graehamwatts@gmail.com</a> · DRE #01466876</div>
-</nav>
-<div class="hero">
-  <div class="hero-tag">Home Value Update — May 2026</div>
-  <div class="hero-h1">What Your Home Is Worth Today</div>
-  <div class="hero-addr">347 Avenida Pinos, San Jose, CA 95123</div>
-  <div class="hero-sub">A complimentary market update for Ravi Indurkar — keeping you in the loop, no agenda.</div>
-</div>
-<div class="warn-bar">
-  <strong>⚠️ Public Data Notice:</strong> MLS access was unavailable during this automated run. All figures are estimates derived from Zillow and Redfin public data and should be treated as directional only. A full MLS-backed analysis will produce a more precise result — reach out and Graeham can run one for you.
-</div>
+:root{--b:#1A1A1A;--g:#C5A55A;--dg:#A88B3D;--cr:#F5EFDC;--gy:#666;--nv:#343955;--grn:#4f9d69;--cor:#d98c6a}
+*{margin:0;padding:0;box-sizing:border-box}body{font-family:Inter,sans-serif;color:#1A1A1A;line-height:1.6}
+.nav{position:fixed;top:0;left:0;right:0;height:60px;background:var(--nv);display:flex;align-items:center;padding:0 24px;z-index:9}.nav img{height:34px}
+.wrap{max-width:1020px;margin:0 auto;padding:0 22px}section{padding:40px 0}
+.sh{background:var(--b);color:var(--g);font-family:Montserrat;font-weight:800;letter-spacing:2px;text-transform:uppercase;font-size:18px;padding:12px 18px;margin-bottom:20px;border-left:6px solid var(--g)}
+.hero{background:var(--b);color:#fff;padding:118px 0 54px;text-align:center}
+.hero .nm{color:var(--g);font-family:Montserrat;font-weight:800;font-size:38px;letter-spacing:5px}
+.hero .rl{color:var(--g);letter-spacing:8px;font-size:12px}
+.hero .ct{color:var(--g);letter-spacing:3px;font-size:13px;margin-top:24px;text-transform:uppercase;font-weight:700}
+.hero .ad{font-size:27px;font-weight:700;margin-top:12px}.hero .dt{color:#aaa;margin-top:12px;font-size:13px}.hero .cn{color:var(--g);font-size:12px;margin-top:20px}
+p{margin-bottom:13px;font-size:15px;color:#2a2a2a}
+.banner{background:#fff4e0;border:1px solid #e8c889;border-left:6px solid var(--g);border-radius:8px;padding:14px 18px;margin:0 0 6px;font-size:13.5px;color:#5a4a22}
+.banner strong{color:#7a5a14}
+.stats{display:flex;flex-wrap:wrap;gap:12px;margin:18px 0}.st{background:var(--b);color:#fff;border-radius:8px;padding:18px;flex:1;min-width:120px;text-align:center}
+.st .n{color:var(--g);font-family:Montserrat;font-weight:800;font-size:23px}.st .l{color:#ccc;font-size:11px;text-transform:uppercase;letter-spacing:1px;margin-top:4px}
+table{width:100%;border-collapse:collapse;margin:12px 0;font-size:13px;box-shadow:0 1px 5px rgba(0,0,0,.06)}
+th{background:var(--g);color:var(--b);text-align:left;padding:9px;font-size:11.5px;text-transform:uppercase}td{padding:8px 9px;border-bottom:1px solid #eee}tbody tr:nth-child(even){background:var(--cr)}
+.rng{display:flex;flex-wrap:wrap;gap:14px;margin:16px 0}.rc{flex:1;min-width:210px;background:#fff;border:1px solid #e6e6e6;border-radius:8px;padding:18px;box-shadow:0 2px 8px rgba(0,0,0,.05)}
+.rc.a{border-left:7px solid #4f9d69}.rc.b{border-left:7px solid var(--g)}.rc.c{border-left:7px solid #d98c6a}
+.rc .rl{font-size:11px;text-transform:uppercase;letter-spacing:1px;color:var(--gy);font-weight:700}.rc .rp{font-family:Montserrat;font-weight:800;font-size:21px;margin:5px 0}.rc .rd{font-size:12.5px;color:#444}
+.cb{background:#fff;border:1px solid #eee;border-radius:8px;padding:16px;margin:14px 0}.cw{position:relative;height:300px}.cap{font-size:12px;color:var(--gy);margin-top:6px;text-align:center}
+.dv{height:2px;background:linear-gradient(90deg,var(--g),transparent);margin:26px 0}
+.card{border-radius:8px;padding:16px 18px;margin:12px 0;background:var(--cr);border-left:6px solid var(--g)}.card h4{font-family:Montserrat;font-size:14px;margin-bottom:5px}
+.eq{background:#eef6f0;border-left:6px solid var(--grn);border-radius:8px;padding:16px 18px;margin:14px 0}
+.eq .big{font-family:Montserrat;font-weight:800;font-size:26px;color:#2f6b46}
+footer{background:var(--b);color:#ddd;padding:34px 0;text-align:center;margin-top:30px}.fn{color:var(--g);font-family:Montserrat;font-weight:800;letter-spacing:3px;font-size:19px}.fl{font-size:12px;margin-top:6px;color:#bbb}.ds{font-size:10.5px;color:#888;max-width:720px;margin:16px auto 0}
+.note{font-size:12px;color:var(--gy);font-style:italic;margin-top:6px}
+ul.cl{margin:6px 0 14px 22px;font-size:14px}ul.cl li{margin-bottom:6px}
+</style></head><body>
+<nav class="nav"><img src="https://images.leadconnectorhq.com/image/f_webp/q_80/r_1200/u_https://assets.cdn.filesafe.space/6wuU3haUH7uNeT20E3UZ/media/691256870b647e40e3c2e105.png" alt="Graeham Watts"></nav>
+<header class="hero"><div class="wrap"><div class="nm">GRAEHAM WATTS</div><div class="rl">R E A L T O R</div>
+<div class="ct">Home Value Update</div>
+<div class="ad">347 Avenida Pinos, San Jose, CA 95123</div>
+<div class="dt">Prepared for Ravi Indurkar, June 1, 2026</div>
+<div class="cn">Graeham Watts. Intero Real Estate. DRE #01466876. 650-308-4727</div></div></header>
 <div class="wrap">
-  <div class="sec">
-    <div class="sec-title">Your Property</div>
-    <div class="specs">
-      <div class="chip"><strong>5</strong> Bed</div>
-      <div class="chip"><strong>3</strong> Bath</div>
-      <div class="chip"><strong>2,358</strong> sqft</div>
-      <div class="chip"><strong>6,355</strong> sqft lot</div>
-      <div class="chip">Built <strong>1971</strong></div>
-      <div class="chip">San Jose, CA <strong>95123</strong></div>
-    </div>
-  </div>
-  <div class="sec">
-    <div class="sec-title">What Your Home Is Worth Today</div>
-    <div class="val-grid">
-      <div class="vc">
-        <div class="vc-lbl">Likely Range</div>
-        <div class="vc-val">$1.68M</div>
-        <div class="vc-sub">Conservative market end</div>
-      </div>
-      <div class="vc prime">
-        <div class="vc-lbl">Most-Likely Value</div>
-        <div class="vc-val">$1.80M</div>
-        <div class="vc-sub">Median comp analysis</div>
-      </div>
-      <div class="vc">
-        <div class="vc-lbl">Top of Range</div>
-        <div class="vc-val">$1.93M</div>
-        <div class="vc-sub">Strong condition &amp; timing</div>
-      </div>
-    </div>
-    <p class="val-note">Comp-based estimate · $763/sqft median across 13 recent comparable sales · Public data only — see notice above</p>
-  </div>
-  
-  <div class="sec">
-    <div class="sec-title">Market Story</div>
-    <div class="mkt"><p>Blossom Valley is one of San Jose's more underrated family neighborhoods — larger homes, good schools, solid highway access, and prices that still make sense. Demand has been consistent, especially for homes that can flex for multi-generational living.</p>
-        <p>For the 2,358 sqft range, we looked at 13 recent sales in 95123. $/sqft ranged from $653.0 to $902.0, with a median of $763. At that figure, your home comes in around $1.80M, with a range of $1.68M to $1.93M.</p>
-        <p>The 5-bedroom/3-bath layout is a genuine differentiator in this market — most competing homes are 4-bedroom configurations. Extra square footage and an extra bedroom typically trade at a premium to the median, which is why the top of your range sits comfortably above average 95123 comps.</p></div>
-  </div>
-  <div class="sec">
-    <div class="sec-title">Comparable Sales — $/sqft Chart</div>
-    <div class="chart-box">
-      <div class="chart-sub">Price per square foot · recently sold similar homes · San Jose area · source: Zillow/Redfin public data</div>
-      <canvas id="cc"></canvas>
-    </div>
-  </div>
-  <div class="sec">
-    <div class="sec-title">Comparable Sales Detail</div>
-    <div class="chart-box">
-      <table>
-        <thead><tr><th>Address</th><th class="center">Bd/Ba</th><th class="center">Sqft</th><th class="center">$/sqft</th><th class="right">Sold</th></tr></thead>
-        <tbody>
-          
-        <tr>
-          <td>345 Avenida Arboles, San Jose</td>
-          <td class="center">4/3</td>
-          <td class="center">2,130</td>
-          <td class="center">$723</td>
-          <td class="right"><strong>$1,540,000</strong></td>
-        </tr>
-        <tr>
-          <td>6460 Standridge Ct, San Jose</td>
-          <td class="center">4/2.5</td>
-          <td class="center">2,386</td>
-          <td class="center">$733</td>
-          <td class="right"><strong>$1,750,000</strong></td>
-        </tr>
-        <tr>
-          <td>5459 Entrada Cedros, San Jose</td>
-          <td class="center">4/3</td>
-          <td class="center">2,482</td>
-          <td class="center">$653</td>
-          <td class="right"><strong>$1,620,000</strong></td>
-        </tr>
-        <tr>
-          <td>6441 Cottle Rd, San Jose</td>
-          <td class="center">4/2.5</td>
-          <td class="center">2,386</td>
-          <td class="center">$696</td>
-          <td class="right"><strong>$1,660,000</strong></td>
-        </tr>
-        <tr>
-          <td>6136 Dunn Ave, San Jose</td>
-          <td class="center">4/3</td>
-          <td class="center">2,274</td>
-          <td class="center">$814</td>
-          <td class="right"><strong>$1,850,000</strong></td>
-        </tr>
-        <tr>
-          <td>5675 Comanche Dr, San Jose</td>
-          <td class="center">4/3</td>
-          <td class="center">2,160</td>
-          <td class="center">$833</td>
-          <td class="right"><strong>$1,800,000</strong></td>
-        </tr>
-        <tr>
-          <td>721 Shawnee Ln, San Jose</td>
-          <td class="center">5/3</td>
-          <td class="center">2,074</td>
-          <td class="center">$827</td>
-          <td class="right"><strong>$1,715,000</strong><span class="note-badge">same bed/bath</span></td>
-        </tr>
-        <tr>
-          <td>5330 Avenida Almendros, San Jose</td>
-          <td class="center">4/3</td>
-          <td class="center">2,504</td>
-          <td class="center">$763</td>
-          <td class="right"><strong>$1,910,000</strong></td>
-        </tr>
-        <tr>
-          <td>6298 Snell Ave, San Jose</td>
-          <td class="center">5/3</td>
-          <td class="center">2,509</td>
-          <td class="center">$678</td>
-          <td class="right"><strong>$1,700,000</strong><span class="note-badge">same bed/bath</span></td>
-        </tr>
-        <tr>
-          <td>406 Madison Dr, San Jose</td>
-          <td class="center">4/2.5</td>
-          <td class="center">2,360</td>
-          <td class="center">$737</td>
-          <td class="right"><strong>$1,740,000</strong></td>
-        </tr>
-        <tr>
-          <td>6218 Woosley Dr, San Jose</td>
-          <td class="center">4/2.5</td>
-          <td class="center">2,368</td>
-          <td class="center">$802</td>
-          <td class="right"><strong>$1,900,000</strong></td>
-        </tr>
-        <tr>
-          <td>6219 Evangeline Dr, San Jose</td>
-          <td class="center">5/3</td>
-          <td class="center">2,384</td>
-          <td class="center">$902</td>
-          <td class="right"><strong>$2,150,000</strong><span class="note-badge">same bed/bath</span></td>
-        </tr>
-        <tr>
-          <td>5500 Cooney Pl, San Jose</td>
-          <td class="center">5/3</td>
-          <td class="center">2,205</td>
-          <td class="center">$816</td>
-          <td class="right"><strong>$1,800,000</strong><span class="note-badge">same bed/bath</span></td>
-        </tr>
-          <tr style="background:#0D0D0D;">
-            <td colspan="3" style="color:#555;font-size:0.78rem;">Median — applied to 2,358 sqft subject</td>
-            <td class="center" style="color:var(--gld);font-weight:bold;">$763</td>
-            <td class="right" style="color:var(--gld);font-weight:bold;">$1.80M</td>
-          </tr>
-        </tbody>
-      </table>
-    </div>
-  </div>
-  <div class="sec">
-    <div class="sec-title">Honest Notes</div>
-    <div class="cavbox">
-      <ul>
-        <li>All estimates use public listing data (Zillow/Redfin) — MLS-verified comps will be more precise.</li>
-        <li>Interior condition, updates, and presentation are the biggest swing factors in final value.</li>
-        <li>Bay Area markets can move meaningfully in 60–90 days. This reflects conditions as of May 2026.</li>
-        <li>This is an owner equity update, not a listing recommendation. Call or text Graeham anytime with questions.</li>
-      </ul>
-    </div>
-  </div>
+
+<section style="padding-top:30px">
+<div class="banner"><strong>About these numbers.</strong> This update was built from public records and current area market data, not a live MLS pull (my MLS access was offline when this ran). Treat the value range as a well-reasoned estimate, not a formal valuation. I will refresh it with full MLS comps and confirm the figure whenever you want a firm number. Nothing here is a request to sell. It is just me keeping you posted on where you stand.</div>
+</section>
+
+<section style="padding-top:18px"><div class="sh">Your Property</div>
+<table><tbody><tr><th>Address</th><td>347 Avenida Pinos, San Jose, CA 95123</td></tr><tr><th>Configuration</th><td>5 bed / 3 bath, single-family home</td></tr><tr><th>Living Area</th><td>2,358 sq ft (public tax record)</td></tr><tr><th>Lot Size</th><td>6,355 sq ft</td></tr><tr><th>Area</th><td>Blossom Valley / South San Jose, 95123</td></tr><tr><th>You acquired</th><td>November 30, 2021 at $1,565,000</td></tr><tr><th>Years owned</th><td>about 4.5 years</td></tr></tbody></table>
+<div class="stats"><div class="st"><div class="n">2,358</div><div class="l">SqFt</div></div><div class="st"><div class="n">5 / 3</div><div class="l">Bed / Bath</div></div><div class="st"><div class="n">6,355</div><div class="l">Lot SqFt</div></div><div class="st"><div class="n">95123</div><div class="l">Zip</div></div></div>
+</section>
+
+<div class="dv"></div>
+
+<section><div class="sh">Where You Stand Today</div>
+<p>Hi Ravi, this is just my regular check-in on where your South San Jose home stands. You bought 347 Avenida Pinos in late 2021 near a market high, and the good news is the larger-home segment in 95123 has held up well even as smaller homes softened. Bigger 4 and 5 bedroom homes like yours have stayed firm because there are simply fewer of them.</p><p>Your most likely value today is about $1,799,000, which is ahead of what you paid. No agenda here, I just like my past clients to know their number.</p>
+<div class="eq"><div>Estimated equity gain since you bought (November 2021)</div><div class="big">about $234,000</div><div style="font-size:13px;color:#3a6b4f">Roughly 15% over your $1,565,000 purchase, before counting principal you have paid down on the loan. That paydown is additional money in your pocket that does not show up in the market value.</div></div>
+</section>
+
+<div class="dv"></div>
+
+<section><div class="sh">What Your Home Is Worth Today</div>
+<div class="rng">
+<div class="rc a"><div class="rl">Likely range (floor)</div><div class="rp">$1.67M</div><div class="rd">A cautious read. Where the home lands if it shows in average condition or a buyer pool is thin that week.</div></div>
+<div class="rc b"><div class="rl">Most likely value</div><div class="rp">$1.80M</div><div class="rd">My best single-number estimate today, $1,799,000, based on 13 recent comparable sales and a median of $763 per square foot applied to your 2,358 square feet.</div></div>
+<div class="rc c"><div class="rl">Top of range (strong condition)</div><div class="rp">$1.94M</div><div class="rd">Achievable with the home presenting well and competitive demand. Not a stretch number, a realistic ceiling.</div></div>
 </div>
-<footer>
-  <div class="ft-name">Graeham Watts</div>
-  REALTOR® · Intero Real Estate · DRE #01466876 · 650-308-4727 · graehamwatts@gmail.com<br><br>
-  <em>Prepared for Ravi Indurkar · May 2026 · Not for distribution</em>
-</footer>
+<div class="cb"><div class="cw" style="height:230px"><canvas id="valueRange"></canvas></div><div class="cap">Your estimated value band today. The gold marker is the most likely figure, $1,799,000.</div></div>
+</section>
+
+<div class="dv"></div>
+
+<section><div class="sh">How I Got There</div>
+
+<p>I pulled 13 recent sales in 95123 that line up with your home on size, then looked at price per square foot. Across those 13 sales, price per square foot ran from $653 to $902, with a median of $763. Applied to your 2,358 square feet, that puts you right around $1,799,000, with a sensible range of $1,673,000 to $1,937,000.</p>
+<p>Your 5 bed, 3 bath layout is a real advantage here. Most competing homes in this pocket are 4 bedroom. The extra bedroom and the square footage tend to trade at a premium to the median, which is why the top of your range sits comfortably above the average 95123 sale.</p>
+<table>
+<thead><tr><th>Comparable Sale</th><th style="text-align:center">Bd/Ba</th><th style="text-align:right">SqFt</th><th style="text-align:right">$/SqFt</th><th style="text-align:right">Est. Sold</th></tr></thead>
+<tbody><tr><td>345 Avenida Arboles</td><td style='text-align:center'>4/3</td><td style='text-align:right'>2,130</td><td style='text-align:right'>$723</td><td style='text-align:right'>$1,540,000</td></tr><tr><td>6460 Standridge Ct</td><td style='text-align:center'>4/2.5</td><td style='text-align:right'>2,386</td><td style='text-align:right'>$733</td><td style='text-align:right'>$1,749,000</td></tr><tr><td>5459 Entrada Cedros</td><td style='text-align:center'>4/3</td><td style='text-align:right'>2,482</td><td style='text-align:right'>$653</td><td style='text-align:right'>$1,621,000</td></tr><tr><td>6441 Cottle Rd</td><td style='text-align:center'>4/2.5</td><td style='text-align:right'>2,386</td><td style='text-align:right'>$696</td><td style='text-align:right'>$1,661,000</td></tr><tr><td>6136 Dunn Ave</td><td style='text-align:center'>4/3</td><td style='text-align:right'>2,274</td><td style='text-align:right'>$814</td><td style='text-align:right'>$1,851,000</td></tr><tr><td>5675 Comanche Dr</td><td style='text-align:center'>4/3</td><td style='text-align:right'>2,160</td><td style='text-align:right'>$833</td><td style='text-align:right'>$1,799,000</td></tr><tr><td>721 Shawnee Ln</td><td style='text-align:center'>5/3</td><td style='text-align:right'>2,074</td><td style='text-align:right'>$827</td><td style='text-align:right'>$1,715,000</td></tr><tr><td>5330 Avenida Almendros</td><td style='text-align:center'>4/3</td><td style='text-align:right'>2,504</td><td style='text-align:right'>$763</td><td style='text-align:right'>$1,911,000</td></tr><tr><td>6298 Snell Ave</td><td style='text-align:center'>5/3</td><td style='text-align:right'>2,509</td><td style='text-align:right'>$678</td><td style='text-align:right'>$1,700,000</td></tr><tr><td>406 Madison Dr</td><td style='text-align:center'>4/2.5</td><td style='text-align:right'>2,360</td><td style='text-align:right'>$737</td><td style='text-align:right'>$1,740,000</td></tr><tr><td>6218 Woosley Dr</td><td style='text-align:center'>4/2.5</td><td style='text-align:right'>2,368</td><td style='text-align:right'>$802</td><td style='text-align:right'>$1,900,000</td></tr><tr><td>6219 Evangeline Dr</td><td style='text-align:center'>5/3</td><td style='text-align:right'>2,384</td><td style='text-align:right'>$902</td><td style='text-align:right'>$2,150,000</td></tr><tr><td>5500 Cooney Pl</td><td style='text-align:center'>5/3</td><td style='text-align:right'>2,205</td><td style='text-align:right'>$816</td><td style='text-align:right'>$1,800,000</td></tr></tbody></table>
+<p class="note">Sold prices shown are estimates derived from public price-per-square-foot data, not confirmed MLS close prices. List-price history (original list, reductions, list-to-sale ratio) is not available without MLS and is not shown.</p>
+<div class="cb"><div class="cw" style="height:320px"><canvas id="psfChart"></canvas></div><div class="cap">Price per square foot across the 13 comparable sales. Gold bars are at or above the $763 median (dashed line); blue bars are below. Your home sits near the median, with upside from the 5-bedroom layout.</div></div>
+
+</section>
+
+<div class="dv"></div>
+
+<section><div class="sh">Your Equity Position</div>
+<p>You bought 347 Avenida Pinos for $1,565,000 in November 2021. Today's most likely value is $1,799,000. That is an estimated gain of about $234,000, roughly 15%, on the market value alone.</p>
+<div class="cb"><div class="cw" style="height:260px"><canvas id="equityChart"></canvas></div><div class="cap">Your purchase price versus today's estimated value. The green portion is estimated market gain. Principal paydown on the loan sits on top of this and is not shown.</div></div>
+<p class="note">Equity gain shown is market appreciation only. Your actual cash position at any future sale also depends on your remaining loan balance, selling costs, and any capital gains treatment. I am happy to run a real net-proceeds figure whenever you want one.</p>
+</section>
+
+<div class="dv"></div>
+
+<section><div class="sh">The South San Jose (95123) Market Right Now</div>
+<p>The 95123 zip as a whole is averaging about $1.34M and has cooled roughly 4% over the past year, but that average is weighted by smaller 3 bedroom homes and townhomes. The broader Blossom Valley house price sits closer to $1.53M and is flat to slightly up year over year. Homes are going to pending in about 17 days, which is still a reasonably quick market.</p><p>Where your home wins is configuration. A 2,358 square foot 5 bed, 3 bath on a 6,355 foot lot is a family-sized home in a school-driven pocket, and that buyer pool stays active even when the overall average dips. That is why your number held up.</p>
+<div class="stats"><div class="st"><div class="n">$1.34M</div><div class="l">95123 Avg Value</div></div><div class="st"><div class="n">-4.2%</div><div class="l">95123 YoY</div></div><div class="st"><div class="n">$1.53M</div><div class="l">Blossom Valley Avg</div></div><div class="st"><div class="n">~17 days</div><div class="l">To Pending</div></div></div>
+</section>
+
+<div class="dv"></div>
+
+<section><div class="sh">Interest Rate Environment</div>
+<p>Rates set the buyer pool, which sets your value. Here is where the 30 year fixed sits today across four public sources, as of June 1, 2026:</p>
+<div class="stats"><div class="st"><div class="n">6.56%</div><div class="l">Bankrate CA Avg</div></div><div class="st"><div class="n">6.54%</div><div class="l">U.S. News 30yr</div></div><div class="st"><div class="n">6.56%</div><div class="l">The Mortgage Reports</div></div><div class="st"><div class="n">6.30%</div><div class="l">NerdWallet APR</div></div></div>
+<p>Sources cluster around <strong>6.5%</strong>. Down from the 2023 to 2024 peaks above 7%, but still well above the sub 3% levels of 2020 and 2021. For you as an owner, steady-to-easing rates support steady-to-firming demand for homes like yours. If rates drift back toward 6% over the next year, expect buyer demand and prices to firm a little. I verify these the day of any real pricing decision.</p>
+</section>
+
+<div class="dv"></div>
+
+<section><div class="sh">What I Could Not Pull This Round</div>
+<p>Because MLS was offline when this update ran, a few things that normally go into a full report are not in this one. I am flagging them so you know exactly what is solid and what is estimated:</p>
+<ul class="cl">
+<li><strong>Per-comp list-price history</strong> (original list price, number of price reductions, dollar cut, and final list-to-sale ratio for each comparable) needs MLS and is not in this version.</li>
+<li><strong>The MLS monthly price and sale-to-list trend charts</strong> and the per-comp pricing-journey and days-on-market charts need that same MLS history, so they are not shown here.</li>
+<li><strong>Exact subject square footage and any unpermitted-area notes</strong> are from public tax records, which can differ from MLS.</li>
+</ul>
+<p>None of this changes the headline number much. It just means the value band is an informed estimate rather than a locked figure. Say the word and I will rerun it with full MLS comps for a firm number.</p>
+</section>
+
+<div class="dv"></div>
+
+<section><div class="sh">Notes and Caveats</div>
+<div class="card"><h4>Public-data estimate</h4><p>This value range was built from public records and current area market statistics, not a live MLS comparable pull. It is a professional estimate to keep you informed, not a formal appraisal or a guarantee of sale price. Condition, updates, and exact timing all move the real number.</p></div>
+<div class="card"><h4>Condition matters</h4><p>I have estimated based on a home in typical condition for the area. If you have updated kitchens, baths, systems, or added square footage since you bought, the real figure likely sits at the higher end. If there is deferred maintenance, it sits lower. A quick walkthrough or a few photos lets me tighten this up.</p></div>
+<div class="card"><h4>About this update</h4><p>Subject details from public county records. Area pricing and trend data cross-referenced June 1, 2026 from public Redfin and Zillow market pages and prior comparable sales. Rate environment from Bankrate, U.S. News, The Mortgage Reports, and NerdWallet. Prepared as a courtesy for the owner. Not a formal appraisal.</p></div>
+</section>
+
+</div>
+<footer><div class="wrap"><div class="fn">GRAEHAM WATTS</div><div class="fl">Intero Real Estate. DRE #01466876</div>
+<div class="fl">650-308-4727. graehamwatts@gmail.com. www.graehamwatts.com</div>
+<div class="ds">Prepared June 1, 2026 for the owner of 347 Avenida Pinos, San Jose, CA 95123. Home value update, not a formal appraisal. Built from public records and current area market data; MLS was offline at run time, so figures are informed estimates to be verified with a full MLS comparable pull before any pricing decision.</div></div></footer>
 <script>
-const ctx=document.getElementById('cc').getContext('2d');
-const lbl=["345 Avenida Arboles", "6460 Standridge Ct", "5459 Entrada Cedros", "6441 Cottle Rd", "6136 Dunn Ave", "5675 Comanche Dr", "721 Shawnee Ln", "5330 Avenida Almendros", "6298 Snell Ave", "406 Madison Dr", "6218 Woosley Dr", "6219 Evangeline Dr", "5500 Cooney Pl"];
-const dat=[723, 733, 653, 696, 814, 833, 827, 763, 678, 737, 802, 902, 816];
-const med=763;
-new Chart(ctx,{type:'bar',data:{labels:lbl,datasets:[
-  {label:'$/sqft (Sold)',data:dat,backgroundColor:dat.map(v=>v>=med?'#C5A55A':'#5A7A8A'),borderRadius:4},
-  {label:'Median $/sqft',data:new Array(lbl.length).fill(med),type:'line',borderColor:'#E8D49A',borderDash:[6,4],borderWidth:2,pointRadius:0}
-]},options:{responsive:true,plugins:{legend:{labels:{color:'#777',font:{size:10}}},tooltip:{callbacks:{label:c=>'  $'+c.raw.toLocaleString()+'/sqft'}}},scales:{x:{ticks:{color:'#555',font:{size:9}},grid:{color:'#1C1C1C'}},y:{ticks:{color:'#777',callback:v=>'$'+v.toLocaleString()},grid:{color:'#1C1C1C'}}}}});
-</script>
-</body></html>
+
+new Chart(document.getElementById('valueRange'),{type:'bar',data:{labels:['Estimated value'],datasets:[
+{label:'Floor to ceiling',data:[[1673000,1937000]],backgroundColor:'rgba(197,165,90,0.25)',borderColor:'#C5A55A',borderWidth:1,borderSkipped:false,borderRadius:6,barThickness:46},
+{label:'Most likely',data:[[1793000,1805000]],backgroundColor:'#1A1A1A',borderColor:'#1A1A1A',barThickness:46}
+]},options:{indexAxis:'y',responsive:true,maintainAspectRatio:false,plugins:{legend:{position:'bottom',labels:{font:{size:11},boxWidth:24}},tooltip:{callbacks:{label:c=>{const v=c.raw;return Array.isArray(v)?('$'+(v[0]/1e6).toFixed(2)+'M to $'+(v[1]/1e6).toFixed(2)+'M'):''}}}},scales:{x:{min:1539160,max:2033850,ticks:{callback:v=>'$'+(v/1e6).toFixed(2)+'M'},grid:{color:'#eee'}},y:{grid:{display:false}}}}});
+
+new Chart(document.getElementById('equityChart'),{type:'bar',data:{labels:['What you paid','Estimated value today'],datasets:[
+{label:'Purchase price',data:[1565000,1565000],backgroundColor:'#343955',stack:'s'},
+{label:'Estimated market gain',data:[0,234000],backgroundColor:'#4f9d69',stack:'s'}
+]},options:{responsive:true,maintainAspectRatio:false,plugins:{legend:{position:'bottom',labels:{font:{size:11},boxWidth:24}},tooltip:{callbacks:{label:c=>c.dataset.label+': $'+(c.parsed.y/1e6).toFixed(2)+'M'}}},scales:{x:{grid:{display:false}},y:{stacked:true,ticks:{callback:v=>'$'+(v/1e6).toFixed(1)+'M'},grid:{color:'#eee'},suggestedMax:2068849},x2:{display:false}}}});
+
+const lbl=['345 Av. Arboles', '6460 Standridge Ct', '5459 Entrada Cedros', '6441 Cottle Rd', '6136 Dunn Ave', '5675 Comanche Dr', '721 Shawnee Ln', '5330 Av. Almendros', '6298 Snell Ave', '406 Madison Dr', '6218 Woosley Dr', '6219 Evangeline Dr', '5500 Cooney Pl'];const dat=[723, 733, 653, 696, 814, 833, 827, 763, 678, 737, 802, 902, 816];const med=763;
+new Chart(document.getElementById('psfChart'),{type:'bar',data:{labels:lbl,datasets:[
+{label:'$/sqft (est.)',data:dat,backgroundColor:dat.map(v=>v>=med?'#C5A55A':'#5A7A8A'),borderRadius:4},
+{label:'Median $763',data:new Array(lbl.length).fill(med),type:'line',borderColor:'#A88B3D',borderDash:[6,4],borderWidth:2,pointRadius:0}
+]},options:{responsive:true,maintainAspectRatio:false,plugins:{legend:{labels:{font:{size:10},boxWidth:22}},tooltip:{callbacks:{label:c=>'$'+c.raw.toLocaleString()+'/sqft'}}},scales:{x:{ticks:{font:{size:8},maxRotation:60,minRotation:60},grid:{display:false}},y:{ticks:{callback:v=>'$'+v},grid:{color:'#eee'},suggestedMin:600}}}});
+
+</script></body></html>
