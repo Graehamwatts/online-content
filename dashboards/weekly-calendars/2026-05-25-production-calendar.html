@@ -154,9 +154,9 @@ h1,h2,h3,h4{font-family:'Plus Jakarta Sans',sans-serif;letter-spacing:-0.02em;co
   <div class="section" data-audience="research all">
     <h2>&#x1F4C8; Performance Signal</h2>
     <p class="lede">ApexCharts brushable time-series. 3 chart pairs: IG Activity, YT Activity, Engagement Rate Per Post Per Week.</p>
-    <div class="chart-wrap"><h3>Instagram Activity (Posts Per Week)</h3><div id="ig-main"></div><div id="ig-brush"></div></div>
-    <div class="chart-wrap"><h3>YouTube Activity (Videos Per Week)</h3><div id="yt-main"></div><div id="yt-brush"></div></div>
-    <div class="chart-wrap"><h3>Engagement Rate Per Post Per Week (%)</h3><div id="eng-main"></div><div id="eng-brush"></div></div>
+    <div class="chart-wrap"><h3>Instagram Activity (Posts Per Week)</h3><div id="ig-main"></div><div id="ig-brush" style="display:none"></div></div>
+    <div class="chart-wrap"><h3>YouTube Activity (Videos Per Week)</h3><div id="yt-main"></div><div id="yt-brush" style="display:none"></div></div>
+    <div class="chart-wrap"><h3>Engagement Rate Per Post Per Week (%)</h3><div id="eng-main"></div><div id="eng-brush" style="display:none"></div></div>
   </div>
 </div>
 
@@ -401,68 +401,29 @@ document.getElementById('topicModal').addEventListener('click',function(e){if(e.
 document.addEventListener('keydown',function(e){if(e.key==='Escape')closeModal();});
 setView('research');
 
-(function() {
+(function(){
+  if(typeof ApexCharts==='undefined'){console.error('ApexCharts failed to load');return;}
   var w=['Apr 28','May 5','May 12','May 19','May 26'];
-
-  // Chart pair 1: Instagram Activity
-  new ApexCharts(document.querySelector('#ig-main'), {
-    chart: {id:'ig-main',type:'line',height:200,toolbar:{show:false}},
-    series: [{name:'Posts/Week',data:[3,4,3,5,4]}],
-    xaxis: {categories:w},
-    colors: ['#9f1239'],
-    stroke: {width:3,curve:'smooth'},
-    markers: {size:4},
-    dataLabels: {enabled:false}
-  }).render();
-  new ApexCharts(document.querySelector('#ig-brush'), {
-    chart: {id:'ig-brush',type:'area',height:80,brush: {target:'ig-main',enabled:true},selection:{enabled:true},toolbar:{show:false}},
-    series: [{name:'Posts/Week',data:[3,4,3,5,4]}],
-    xaxis: {categories:w},
-    colors: ['#9f1239'],
-    fill: {type:'gradient',gradient:{opacityFrom:0.6,opacityTo:0.1}},
-    dataLabels: {enabled:false},
-    yaxis: {show:false}
-  }).render();
-
-  // Chart pair 2: YouTube Activity
-  new ApexCharts(document.querySelector('#yt-main'), {
-    chart: {id:'yt-main',type:'line',height:200,toolbar:{show:false}},
-    series: [{name:'Videos/Week',data:[1,1,2,1,2]}],
-    xaxis: {categories:w},
-    colors: ['#2563eb'],
-    stroke: {width:3,curve:'smooth'},
-    markers: {size:4},
-    dataLabels: {enabled:false}
-  }).render();
-  new ApexCharts(document.querySelector('#yt-brush'), {
-    chart: {id:'yt-brush',type:'area',height:80,brush: {target:'yt-main',enabled:true},selection:{enabled:true},toolbar:{show:false}},
-    series: [{name:'Videos/Week',data:[1,1,2,1,2]}],
-    xaxis: {categories:w},
-    colors: ['#2563eb'],
-    fill: {type:'gradient',gradient:{opacityFrom:0.6,opacityTo:0.1}},
-    dataLabels: {enabled:false},
-    yaxis: {show:false}
-  }).render();
-
-  // Chart pair 3: Engagement Rate
-  new ApexCharts(document.querySelector('#eng-main'), {
-    chart: {id:'eng-main',type:'line',height:200,toolbar:{show:false}},
-    series: [{name:'Eng Rate %',data:[2.1,2.4,2.2,3.1,2.8]}],
-    xaxis: {categories:w},
-    colors: ['#16a34a'],
-    stroke: {width:3,curve:'smooth'},
-    markers: {size:4},
-    dataLabels: {enabled:false}
-  }).render();
-  new ApexCharts(document.querySelector('#eng-brush'), {
-    chart: {id:'eng-brush',type:'area',height:80,brush: {target:'eng-main',enabled:true},selection:{enabled:true},toolbar:{show:false}},
-    series: [{name:'Eng Rate %',data:[2.1,2.4,2.2,3.1,2.8]}],
-    xaxis: {categories:w},
-    colors: ['#16a34a'],
-    fill: {type:'gradient',gradient:{opacityFrom:0.6,opacityTo:0.1}},
-    dataLabels: {enabled:false},
-    yaxis: {show:false}
-  }).render();
+  function draw(sel,name,data,color){
+    var el=document.querySelector(sel); if(!el){return;}
+    try{
+      new ApexCharts(el,{
+        chart:{type:'area',height:240,toolbar:{show:false},zoom:{enabled:false},animations:{enabled:true}},
+        series:[{name:name,data:data}],
+        xaxis:{categories:w},
+        colors:[color],
+        stroke:{width:3,curve:'smooth'},
+        fill:{type:'gradient',gradient:{opacityFrom:0.4,opacityTo:0.05}},
+        markers:{size:4},
+        dataLabels:{enabled:false},
+        grid:{borderColor:'#e2e5ea'},
+        tooltip:{y:{formatter:function(v){return v;}}}
+      }).render();
+    }catch(e){console.error('chart '+sel+' failed:',e);}
+  }
+  draw('#ig-main','Posts / Week',[3,4,3,5,4],'#9f1239');
+  draw('#yt-main','Videos / Week',[1,1,2,1,2],'#2563eb');
+  draw('#eng-main','Engagement Rate %',[2.1,2.4,2.2,3.1,2.8],'#16a34a');
 })();
 </script>
 </body></html>
