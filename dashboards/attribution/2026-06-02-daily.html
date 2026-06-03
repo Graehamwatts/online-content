@@ -7,112 +7,126 @@
 <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700&display=swap" rel="stylesheet">
 <style>
   *{box-sizing:border-box;margin:0;padding:0}
-  body{font-family:'DM Sans',-apple-system,Segoe UI,sans-serif;background:#060d1a;color:#e2e8f0}
+  body{font-family:'DM Sans',sans-serif;background:#060d1a;color:#e2e8f0;min-height:100vh}
   .wrap{max-width:720px;margin:0 auto;padding:24px 16px}
-  .topbar{background:#0f1729;border:1px solid #1e293b;border-radius:8px;padding:10px 16px;font-size:13px;color:#94a3b8;margin-bottom:20px;display:flex;justify-content:space-between;align-items:center;gap:12px}
+  .topbar{background:#0f1729;border:1px solid #1e293b;border-radius:8px;padding:10px 16px;font-size:13px;color:#94a3b8;margin-bottom:20px;display:flex;justify-content:space-between;align-items:center}
   .topbar strong{color:#f4b955}
   .header{background:linear-gradient(135deg,#0f1729 0%,#162032 100%);border:1px solid #1e293b;border-radius:12px;padding:24px;margin-bottom:16px}
-  .header h1{font-size:22px;font-weight:700;color:#f1f5f9;margin-bottom:6px}
-  .header .sub{font-size:14px;color:#94a3b8;line-height:1.5}
-  .status-strip{border-radius:6px;padding:10px 16px;margin-bottom:16px;font-weight:600;font-size:14px;color:#0f1729;background:#ef4444}
+  .header h1{font-size:22px;font-weight:700;color:#f1f5f9;margin-bottom:4px}
+  .header .sub{font-size:14px;color:#94a3b8}
+  .status-strip{border-radius:6px;padding:8px 16px;margin-bottom:16px;font-weight:600;font-size:14px;color:#0f1729;background:#22c55e}
   .kpi-grid{display:grid;grid-template-columns:repeat(2,1fr);gap:12px;margin-bottom:16px}
   @media(min-width:500px){.kpi-grid{grid-template-columns:repeat(4,1fr)}}
   .kpi{background:#0f1729;border:1px solid #1e293b;border-radius:10px;padding:16px;text-align:center}
-  .kpi .num{font-size:26px;font-weight:700;color:#f4b955;line-height:1.1}
-  .kpi .num.sm{font-size:15px}
-  .kpi .label{font-size:11px;color:#94a3b8;margin-top:6px;line-height:1.35}
+  .kpi .num{font-size:28px;font-weight:700;color:#f4b955}
+  .kpi .label{font-size:12px;color:#94a3b8;margin-top:4px}
   .section{background:#0f1729;border:1px solid #1e293b;border-radius:10px;padding:20px;margin-bottom:16px}
-  .section h2{font-size:14px;font-weight:700;color:#f4b955;margin-bottom:12px;text-transform:uppercase;letter-spacing:.05em}
+  .section h2{font-size:15px;font-weight:700;color:#f4b955;margin-bottom:12px;text-transform:uppercase;letter-spacing:.05em}
   .read-text{font-size:15px;line-height:1.7;color:#cbd5e1}
-  .read-text strong{color:#f1f5f9}
-  ul.receipts{list-style:none;margin:0;padding:0}
-  ul.receipts li{position:relative;padding:8px 0 8px 24px;border-bottom:1px solid #16202f;font-size:14px;color:#cbd5e1;line-height:1.5}
-  ul.receipts li:last-child{border-bottom:none}
-  ul.receipts li::before{content:"›";position:absolute;left:6px;color:#f4b955;font-weight:700}
-  ul.receipts code{background:#162032;color:#f4b955;padding:1px 6px;border-radius:4px;font-size:12.5px}
-  pre{background:#0a1120;border:1px solid #1e293b;border-radius:8px;padding:14px;overflow-x:auto;font-size:12.5px;line-height:1.55;color:#cbd5e1;font-family:ui-monospace,Menlo,Consolas,monospace}
-  pre .rm{color:#f87171}
-  pre .add{color:#4ade80}
-  pre .cmt{color:#64748b}
-  ol.steps{margin:4px 0 0 0;padding-left:20px}
-  ol.steps li{font-size:14.5px;line-height:1.6;color:#cbd5e1;margin-bottom:10px}
-  ol.steps li strong{color:#f1f5f9}
-  .good{color:#22c55e;font-weight:600}
-  .footer{text-align:center;padding:22px 0 4px;color:#475569;font-size:13px;line-height:1.6}
+  table{width:100%;border-collapse:collapse}
+  th{text-align:left;padding:10px 12px;background:#162032;color:#94a3b8;font-size:12px;text-transform:uppercase;letter-spacing:.05em;font-weight:600}
+  td{vertical-align:middle}
+  .footer{text-align:center;padding:24px 0;color:#475569;font-size:13px}
 </style>
 </head>
 <body>
 <div class="wrap">
-
   <div class="topbar">
     <span><strong>Daily Attribution Brief</strong> · Tuesday, June 2, 2026</span>
-    <span>⚠ Action required</span>
+    <span>GHL Location: 6wuU3haU…</span>
   </div>
-
   <div class="header">
-    <h1>Your lead numbers aren&rsquo;t actually zero</h1>
-    <div class="sub">The daily brief&rsquo;s data pull has been broken since it launched on May 12 &mdash; today&rsquo;s run couldn&rsquo;t produce real numbers either. Good news: your GoHighLevel connection is healthy and the fix is written and waiting.</div>
+    <h1>Lead Attribution Brief</h1>
+    <div class="sub">Tuesday, June 2, 2026 · Day-over-day: +2000 leads (+0% vs prior week same day)</div>
   </div>
-
-  <div class="status-strip">Reporting bug found &mdash; every brief since May 12 has shown made-up numbers (0 most days, 2,000 on May 28). Not a real lead drought.</div>
-
+  <div class="status-strip">No prior data</div>
   <div class="kpi-grid">
-    <div class="kpi"><div class="num sm">Unknown</div><div class="label">Jun 2 real leads &mdash; pull is broken</div></div>
-    <div class="kpi"><div class="num">14</div><div class="label">daily briefs, none accurate</div></div>
-    <div class="kpi"><div class="num sm good">Valid</div><div class="label">GHL token &amp; API (no auth errors)</div></div>
-    <div class="kpi"><div class="num sm">Ready</div><div class="label">fix written, needs your go-ahead</div></div>
+    <div class="kpi"><div class="num">2000</div><div class="label">Total Leads</div></div>
+    <div class="kpi"><div class="num">0</div><div class="label">New Opps</div></div>
+    <div class="kpi"><div class="num">0</div><div class="label">Closed Wins</div></div>
+    <div class="kpi"><div class="num" style="font-size:16px">Cold/Other</div><div class="label">Top Source</div></div>
   </div>
-
   <div class="section">
     <h2>The Read</h2>
-    <p class="read-text">Heads up &mdash; your daily leads aren&rsquo;t dead. The brief that lands in your inbox has a bug in the part that pulls contacts from GoHighLevel, so the numbers it reports have been <strong>meaningless in both directions</strong>: most days it counts <strong>0</strong>, and on May 28 it counted <strong>2,000</strong> (your entire contact list crammed into one day). The connection itself is fine &mdash; on the last run GHL returned 100 contacts with no login errors &mdash; so this is a logic bug, not a dead pipeline or a bad password. I&rsquo;ve already written the one-change fix, but I couldn&rsquo;t push it for you because the GitHub keys on file don&rsquo;t have permission to edit the automation. Two-minute ask below.</p>
+    <p class="read-text">Tuesday, June 2, 2026 brought in 2000 new leads — up 2000 vs the same day last week. Top source was <strong>Cold/Other</strong>. </p>
   </div>
-
   <div class="section">
-    <h2>What&rsquo;s actually going wrong</h2>
-    <p class="read-text">When the brief asks GoHighLevel for &ldquo;who came in yesterday,&rdquo; it gets the contacts back newest-first &mdash; then it stops the moment it sees the very first contact that&rsquo;s newer than yesterday. Since there&rsquo;s almost always someone added today, it stops on contact #1 and counts zero. And it never sets a &ldquo;don&rsquo;t go older than yesterday&rdquo; limit either &mdash; so on the rare day it doesn&rsquo;t stop early, it scoops up your whole database (that&rsquo;s the 2,000). It needs one bound on each end of the day. That&rsquo;s the entire bug.</p>
+    <h2>Source Breakdown</h2>
+    <table>
+      <thead><tr>
+        <th>Source</th><th style="text-align:center">Leads</th><th style="text-align:center">vs Prior Wk</th><th>Notable Names</th>
+      </tr></thead>
+      <tbody>
+    <tr>
+      <td style="padding:10px 12px;border-bottom:1px solid #1e293b;font-weight:500">Cold/Other</td>
+      <td style="padding:10px 12px;border-bottom:1px solid #1e293b;text-align:center;font-size:18px;font-weight:700;color:#f4b955">942</td>
+      <td style="padding:10px 12px;border-bottom:1px solid #1e293b;text-align:center"><span style="color:#22c55e">+942</span></td>
+      <td style="padding:10px 12px;border-bottom:1px solid #1e293b;color:#94a3b8;font-size:13px">chuck qun z., ann s., kushma wati s., michael c. +938 more</td>
+    </tr>
+    <tr>
+      <td style="padding:10px 12px;border-bottom:1px solid #1e293b;font-weight:500">Unknown</td>
+      <td style="padding:10px 12px;border-bottom:1px solid #1e293b;text-align:center;font-size:18px;font-weight:700;color:#f4b955">671</td>
+      <td style="padding:10px 12px;border-bottom:1px solid #1e293b;text-align:center"><span style="color:#22c55e">+671</span></td>
+      <td style="padding:10px 12px;border-bottom:1px solid #1e293b;color:#94a3b8;font-size:13px">ai f., dr. alvaro c., syntaix a., walter r. +667 more</td>
+    </tr>
+    <tr>
+      <td style="padding:10px 12px;border-bottom:1px solid #1e293b;font-weight:500">Social Organic</td>
+      <td style="padding:10px 12px;border-bottom:1px solid #1e293b;text-align:center;font-size:18px;font-weight:700;color:#f4b955">172</td>
+      <td style="padding:10px 12px;border-bottom:1px solid #1e293b;text-align:center"><span style="color:#22c55e">+172</span></td>
+      <td style="padding:10px 12px;border-bottom:1px solid #1e293b;color:#94a3b8;font-size:13px">annie j., <test lead: dummy data for first_name> <., h.e e., hernandez m. +168 more</td>
+    </tr>
+    <tr>
+      <td style="padding:10px 12px;border-bottom:1px solid #1e293b;font-weight:500">Direct/Form</td>
+      <td style="padding:10px 12px;border-bottom:1px solid #1e293b;text-align:center;font-size:18px;font-weight:700;color:#f4b955">99</td>
+      <td style="padding:10px 12px;border-bottom:1px solid #1e293b;text-align:center"><span style="color:#22c55e">+99</span></td>
+      <td style="padding:10px 12px;border-bottom:1px solid #1e293b;color:#94a3b8;font-size:13px">masiimo e., patrick k., ian p., john angelo t. +95 more</td>
+    </tr>
+    <tr>
+      <td style="padding:10px 12px;border-bottom:1px solid #1e293b;font-weight:500">Referral</td>
+      <td style="padding:10px 12px;border-bottom:1px solid #1e293b;text-align:center;font-size:18px;font-weight:700;color:#f4b955">76</td>
+      <td style="padding:10px 12px;border-bottom:1px solid #1e293b;text-align:center"><span style="color:#22c55e">+76</span></td>
+      <td style="padding:10px 12px;border-bottom:1px solid #1e293b;color:#94a3b8;font-size:13px">carlos p., cobey m., varsha & nandish, vince +72 more</td>
+    </tr>
+    <tr>
+      <td style="padding:10px 12px;border-bottom:1px solid #1e293b;font-weight:500">GMB</td>
+      <td style="padding:10px 12px;border-bottom:1px solid #1e293b;text-align:center;font-size:18px;font-weight:700;color:#f4b955">27</td>
+      <td style="padding:10px 12px;border-bottom:1px solid #1e293b;text-align:center"><span style="color:#22c55e">+27</span></td>
+      <td style="padding:10px 12px;border-bottom:1px solid #1e293b;color:#94a3b8;font-size:13px">rui r., callrail, callrail, callrail +23 more</td>
+    </tr>
+    <tr>
+      <td style="padding:10px 12px;border-bottom:1px solid #1e293b;font-weight:500">Paid Ads</td>
+      <td style="padding:10px 12px;border-bottom:1px solid #1e293b;text-align:center;font-size:18px;font-weight:700;color:#f4b955">13</td>
+      <td style="padding:10px 12px;border-bottom:1px solid #1e293b;text-align:center"><span style="color:#22c55e">+13</span></td>
+      <td style="padding:10px 12px;border-bottom:1px solid #1e293b;color:#94a3b8;font-size:13px">ray p., uriel g., hugh m., nisha m. +9 more</td>
+    </tr></tbody>
+    </table>
+    
   </div>
-
   <div class="section">
-    <h2>The receipts</h2>
-    <ul class="receipts">
-      <li>Last automation run log, verbatim: <code>Contacts page 1: 100 fetched, 0 in window</code> &mdash; 100 real contacts came back, the code counted none of them.</li>
-      <li><strong>14 of 14</strong> daily briefs (May 12 &rarr; Jun 1) report nonsense: most show <code>0 / 0 / 0 / None</code>; May 28 shows <code>2,000 leads / Cold/Other</code>.</li>
-      <li>Your GoHighLevel token (stored in the GitHub automation) is <span class="good">valid</span> &mdash; the API answers with data, no <code>401</code>. The data source is fine.</li>
-      <li>Separate minor note: the local credential file <code>ghl-pit.txt</code> still holds the placeholder <code>pit-PASTE&hellip;_HERE</code>, not a real token. It&rsquo;s <em>not</em> the cause (the automation uses its own copy), but worth replacing if you ever want me to pull GHL directly.</li>
-    </ul>
+    <h2>Funnel Snapshot</h2>
+    
+    <div style="margin:8px 0;display:flex;align-items:center;gap:12px">
+      <div style="width:110px;text-align:right;color:#94a3b8;font-size:13px">Leads</div>
+      <div style="background:#f4b955;height:28px;width:300px;border-radius:4px;display:flex;align-items:center;padding:0 8px;box-sizing:border-box">
+        <span style="color:#0f1729;font-weight:700;font-size:14px;white-space:nowrap">2000</span>
+      </div>
+    </div>
+    <div style="margin:8px 0;display:flex;align-items:center;gap:12px">
+      <div style="width:110px;text-align:right;color:#94a3b8;font-size:13px">Opps Created</div>
+      <div style="background:#e2a830;height:28px;width:4px;border-radius:4px;display:flex;align-items:center;padding:0 8px;box-sizing:border-box">
+        <span style="color:#0f1729;font-weight:700;font-size:14px;white-space:nowrap">0</span>
+      </div>
+    </div>
+    <div style="margin:8px 0;display:flex;align-items:center;gap:12px">
+      <div style="width:110px;text-align:right;color:#94a3b8;font-size:13px">Wins</div>
+      <div style="background:#22c55e;height:28px;width:4px;border-radius:4px;display:flex;align-items:center;padding:0 8px;box-sizing:border-box">
+        <span style="color:#0f1729;font-weight:700;font-size:14px;white-space:nowrap">0</span>
+      </div>
+    </div>
   </div>
-
-  <div class="section">
-    <h2>The fix &mdash; written &amp; ready</h2>
-    <p class="read-text" style="margin-bottom:12px">One small change to the contact-counting logic (the same change applies to opportunities). It adds the missing &ldquo;not older than the window&rdquo; limit and skips past too-new contacts instead of bailing out:</p>
-<pre><span class="rm">- if cdt &gt;= end_dt:           # too new?</span>
-<span class="rm">-     past_window = True       # &hellip;then STOP entirely (bug: kills the batch)</span>
-<span class="rm">-     break</span>
-<span class="rm">- contacts.append(c)          # &hellip;and count everything else, no lower bound (bug)</span>
-<span class="add">+ if cdt &gt;= end_dt:           # too new?</span>
-<span class="add">+     continue                 # skip it, keep scanning older ones</span>
-<span class="add">+ if cdt &gt;= start_dt:         # inside the target day?</span>
-<span class="add">+     contacts.append(c)       # count it</span>
-<span class="add">+ else:                        # older than the day?</span>
-<span class="add">+     past_window = True        # now we can safely stop</span>
-<span class="add">+     break</span></pre>
-    <p class="read-text" style="margin-top:12px;font-size:13.5px;color:#94a3b8">I&rsquo;ve syntax-checked this against the live workflow file. It still needs to run once against real GoHighLevel data to confirm the count &mdash; which happens automatically on the next brief once it&rsquo;s applied.</p>
-  </div>
-
-  <div class="section">
-    <h2>What I need from you</h2>
-    <ol class="steps">
-      <li><strong>Let me push the fix.</strong> Both GitHub keys on file can read everything but can&rsquo;t edit automations (they have the <code>repo</code> permission but not <code>workflow</code>). Add the <strong>workflow</strong> scope to your token (github.com &rarr; Settings &rarr; Developer settings &rarr; Personal access tokens &rarr; edit the token &rarr; check &ldquo;workflow&rdquo;), drop the updated key in <code>github-token.txt</code>, and reply &ldquo;go&rdquo; &mdash; I&rsquo;ll apply the patch and re-run today&rsquo;s brief with real numbers in about two minutes. <em>(Prefer to do it yourself? Say the word and I&rsquo;ll send the exact file to paste in.)</em></li>
-      <li><strong>Optional cleanup.</strong> Replace line 1 of <code>ghl-pit.txt</code> with your real <code>pit-</code> token if you&rsquo;d like a backup path that pulls GoHighLevel directly, independent of GitHub.</li>
-    </ol>
-    <p class="read-text" style="margin-top:14px">Once step 1 is done, the 7:15&nbsp;AM brief reports true daily attribution on its own &mdash; no further babysitting.</p>
-  </div>
-
   <div class="footer">
-    Graeham Watts &middot; Intero Real Estate &middot; DRE# 01466876<br>
-    Daily Attribution Brief &middot; generated 2026-06-03 10:50 PT &middot; data window: Tue Jun 2, 2026 (Pacific)
+    Graeham Watts · Intero Real Estate · graehamwatts@gmail.com<br>
+    Generated 2026-06-03 11:57 PT
   </div>
-
 </div>
 </body></html>
