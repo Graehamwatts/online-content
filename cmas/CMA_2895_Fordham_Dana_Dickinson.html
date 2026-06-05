@@ -1,44 +1,126 @@
-<!DOCTYPE html><html><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
-<title>Home Value Update — 2895 Fordham St</title>
+<!DOCTYPE html><html lang="en"><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Home Value Update. 2895 Fordham St, East Palo Alto, CA 94303 | Graeham Watts</title>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/4.4.1/chart.umd.min.js"></script>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700;800&family=Montserrat:wght@700;800&display=swap" rel="stylesheet">
 <style>
-body{font-family:-apple-system,Segoe UI,Roboto,sans-serif;color:#1a1a1a;margin:0;background:#f4f4f4}
-.wrap{max-width:760px;margin:0 auto;background:#fff}
-.hdr{background:#1a1a1a;color:#fff;padding:26px 30px;border-bottom:4px solid #c5a55a}
-.hdr .k{color:#c5a55a;letter-spacing:2px;font-size:12px;text-transform:uppercase}
-.hdr h1{margin:6px 0 2px;font-size:24px}
-.hdr .sub{color:#bbb;font-size:14px}
-.sec{padding:22px 30px;border-bottom:1px solid #eee}
-.sec h2{font-size:13px;letter-spacing:1px;text-transform:uppercase;color:#c5a55a;margin:0 0 12px}
-.val{background:#1a1a1a;color:#fff;text-align:center;padding:26px}
-.val .r{font-size:30px;font-weight:700;color:#c5a55a}
-.val .l{font-size:12px;letter-spacing:1px;text-transform:uppercase;color:#bbb}
-table{width:100%;border-collapse:collapse;font-size:13px}
-th{background:#f0ead9;color:#1a1a1a;text-align:left;padding:8px;font-size:11px;text-transform:uppercase}
-td{padding:8px;border-bottom:1px solid #eee}
-.subjrow td{background:#faf6ea;font-weight:600}
-.note{font-size:12px;color:#666;line-height:1.6}
-.foot{padding:20px 30px;font-size:11px;color:#888}
-</style></head><body><div class="wrap">
-<div class="hdr"><div class="k">Home Value Update</div><h1>2895 Fordham Street, East Palo Alto</h1>
-<div class="sub">Prepared for Dana Dickinson &middot; June 04, 2026</div></div>
+:root{--b:#1A1A1A;--g:#C5A55A;--dg:#A88B3D;--cr:#F5EFDC;--gy:#666;--nv:#343955}
+*{margin:0;padding:0;box-sizing:border-box}body{font-family:Inter,sans-serif;color:#1A1A1A;line-height:1.6}
+.nav{position:fixed;top:0;left:0;right:0;height:60px;background:var(--nv);display:flex;align-items:center;padding:0 24px;z-index:9}.nav img{height:34px}
+.wrap{max-width:1020px;margin:0 auto;padding:0 22px}section{padding:40px 0}
+.sh{background:var(--b);color:var(--g);font-family:Montserrat;font-weight:800;letter-spacing:2px;text-transform:uppercase;font-size:18px;padding:12px 18px;margin-bottom:20px;border-left:6px solid var(--g)}
+.hero{background:var(--b);color:#fff;padding:118px 0 54px;text-align:center}
+.hero .nm{color:var(--g);font-family:Montserrat;font-weight:800;font-size:38px;letter-spacing:5px}
+.hero .rl{color:var(--g);letter-spacing:8px;font-size:12px}.hero .ct{color:var(--g);letter-spacing:3px;font-size:13px;margin-top:24px;text-transform:uppercase}
+.hero .ad{font-size:27px;font-weight:700;margin-top:12px}.hero .dt{color:#aaa;margin-top:10px;font-size:13px}.hero .cn{color:var(--g);font-size:12px;margin-top:18px}
+p{margin-bottom:13px;font-size:15px;color:#2a2a2a}
+.stats{display:flex;flex-wrap:wrap;gap:12px;margin:18px 0}.st{background:var(--b);color:#fff;border-radius:8px;padding:18px;flex:1;min-width:120px;text-align:center}
+.st .n{color:var(--g);font-family:Montserrat;font-weight:800;font-size:23px}.st .l{color:#ccc;font-size:11px;text-transform:uppercase;letter-spacing:1px;margin-top:4px}
+table{width:100%;border-collapse:collapse;margin:12px 0;font-size:13px;box-shadow:0 1px 5px rgba(0,0,0,.06)}
+th{background:var(--g);color:var(--b);text-align:left;padding:9px;font-size:11.5px;text-transform:uppercase}td{padding:8px 9px;border-bottom:1px solid #eee}tbody tr:nth-child(even){background:var(--cr)}
+.eq{background:var(--gr,#0a7d3a);color:#fff;text-align:center;padding:18px;border-radius:8px;margin:16px 0;font-size:17px;font-weight:700}
+.rng{display:flex;flex-wrap:wrap;gap:14px;margin:16px 0}.rc{flex:1;min-width:210px;background:#fff;border:1px solid #e6e6e6;border-radius:8px;padding:18px;box-shadow:0 2px 8px rgba(0,0,0,.05)}
+.rc.a{border-left:7px solid #4f9d69}.rc.b{border-left:7px solid var(--g)}.rc.c{border-left:7px solid #d98c6a}
+.rc .rl{font-size:11px;text-transform:uppercase;letter-spacing:1px;color:var(--gy);font-weight:700}.rc .rp{font-family:Montserrat;font-weight:800;font-size:20px;margin:5px 0}.rc .rd{font-size:12.5px;color:#444}
+.cb{background:#fff;border:1px solid #eee;border-radius:8px;padding:16px;margin:14px 0}.cw{position:relative;height:300px}.cap{font-size:12px;color:var(--gy);margin-top:6px;text-align:center}
+.dv{height:2px;background:linear-gradient(90deg,var(--g),transparent);margin:26px 0}
+.card{border-radius:8px;padding:16px 18px;margin:12px 0;background:var(--cr);border-left:6px solid var(--g)}.card h4{font-family:Montserrat;font-size:14px;margin-bottom:5px}
+.alert{background:#fff8e6;border-left:6px solid #d98c6a;padding:13px 18px;border-radius:8px;margin:12px 0;font-size:13px}
+footer{background:var(--b);color:#ddd;padding:32px 0;text-align:center;margin-top:28px}.fn{color:var(--g);font-family:Montserrat;font-weight:800;letter-spacing:3px;font-size:19px}.fl{font-size:12px;margin-top:6px;color:#bbb}.ds{font-size:10.5px;color:#888;max-width:720px;margin:14px auto 0}
+.note{font-size:12px;color:var(--gy);font-style:italic;margin-top:6px}
+</style></head><body>
+<nav class="nav"><img src="https://images.leadconnectorhq.com/image/f_webp/q_80/r_1200/u_https://assets.cdn.filesafe.space/6wuU3haUH7uNeT20E3UZ/media/691256870b647e40e3c2e105.png" alt="Graeham Watts"></nav>
+<header class="hero"><div class="wrap"><div class="nm">GRAEHAM WATTS</div><div class="rl">R E A L T O R</div>
+<div class="ct">Home Value Update</div><div class="ad">2895 Fordham St, East Palo Alto, CA 94303</div>
+<div class="dt">Prepared for Dana, June 2026</div>
+<div class="cn">Graeham Watts. Intero Real Estate. DRE #01466876. 650-308-4727</div></div></header>
+<div class="wrap">
 
-<div class="val"><div class="l">Estimated Market Value Today</div><div class="r">$1,140,000 – $1,300,000</div>
-<div class="l" style="margin-top:6px">Most-likely value ~$1,150,000</div></div>
+<section><div class="sh">Your Home</div>
+<table><tbody>
+<tr><th>Address</th><td>2895 Fordham St, East Palo Alto, CA 94303</td></tr>
+<tr><th>Configuration</th><td>6 bed / 2 bath single-family home</td></tr>
+<tr><th>Living Area</th><td>1,907 sq ft</td></tr>
+<tr><th>Lot Size</th><td>11,328 sq ft (0.26 acre)</td></tr>
+<tr><th>Year Built</th><td>1953</td></tr>
+<tr><th>You Purchased</th><td><strong>$1,140,000</strong> (closed within the last few months, with me representing you on the buy side)</td></tr>
+<tr><th>Years Owned</th><td>just under a year</td></tr>
+</tbody></table>
+<div class="stats"><div class="st"><div class="n">1,907</div><div class="l">SqFt</div></div>
+<div class="st"><div class="n">6 / 2</div><div class="l">Bed / Bath</div></div>
+<div class="st"><div class="n">11,328</div><div class="l">Lot SqFt</div></div>
+<div class="st"><div class="n">1953</div><div class="l">Year Built</div></div></div>
+</section>
 
-<div class="sec"><h2>Where You Stand</h2>
-<p class="note">Dana — you just closed on 2895 Fordham at <b>$1,140,000</b>, so that price <i>is</i> today's market value. The encouraging part is your <b>11,328 sq ft lot</b> — far larger than the comparable homes selling around you (most sit on 3,400–8,500 sq ft). Land is what holds value in East Palo Alto, so you bought into real upside. Comparable 1,907-ish sq ft homes nearby are trading from $990,000 to $1,480,000, and at the area's median of <b>$690/sq ft</b> a home your size pencils to about <b>$1,315,830</b> once updated — your room to grow.</p></div>
+<div class="dv"></div>
 
-<div class="sec"><h2>Your Home</h2>
-<table><tr><th>Property</th><th>Purchase</th><th>$/SqFt</th><th>Bed/Bath</th><th>SqFt</th><th>Lot</th><th>DOM</th></tr>
-<tr class="subjrow"><td>2895 Fordham St (yours)</td><td>$1,140,000</td><td>$598</td><td>6/2</td><td>1,907</td><td>11,328</td><td>0</td></tr></table></div>
+<section><div class="sh">Where You Stand</div>
+<p>You bought 2895 Fordham just a few months ago at $1,140,000, so in a real sense the market already told us what your home is worth: it is what a ready buyer paid for it, today, in this exact rate environment. That is the strongest single data point any value estimate can have.</p><p>Here is the encouraging part. Your lot is 11,328 square feet, and almost every comparable home selling around you sits on 3,400 to 8,500 square feet. In East Palo Alto, land is what holds and builds value over time, so you bought into more of the thing that appreciates. Homes your size in the area are trading from $990,000 up to $1,480,000, with a median around $1,310,000 at about $690 per square foot. Your purchase came in at roughly $598 per square foot, which reflects the home's age and condition more than its potential. That gap between what you paid per foot and the area median is your runway.</p>
+<div class="eq">You bought into the larger-lot end of the market. That is where the long-term upside lives.</div>
+</section>
 
-<div class="sec"><h2>Recent Comparable Sales — East Palo Alto (last 6 months)</h2>
-<table><tr><th>Address</th><th>Sold</th><th>$/SqFt</th><th>Bd/Ba</th><th>SqFt</th><th>Lot</th><th>DOM</th></tr><tr><td>928 Wilks St</td><td>$1,480,000</td><td>$783</td><td>4/2.1</td><td>1,890</td><td>3,375</td><td>9</td></tr><tr><td>939 Oakes St</td><td>$1,475,000</td><td>$809</td><td>3/2.1</td><td>1,823</td><td>4,630</td><td>13</td></tr><tr><td>2212 Dumbarton Ave</td><td>$1,379,000</td><td>$703</td><td>4/3</td><td>1,962</td><td>5,000</td><td>35</td></tr><tr><td>2370 Ralmar Ave</td><td>$1,310,000</td><td>$667</td><td>4/3</td><td>1,963</td><td>5,942</td><td>8</td></tr><tr><td>1017 Beech St</td><td>$1,200,000</td><td>$690</td><td>3/2</td><td>1,740</td><td>5,664</td><td>12</td></tr><tr><td>2232 Euclid Ave</td><td>$1,200,000</td><td>$606</td><td>4/1.1</td><td>1,980</td><td>8,528</td><td>148</td></tr><tr><td>2548 Hazelwood Way</td><td>$990,000</td><td>$576</td><td>4/2</td><td>1,720</td><td>5,277</td><td>18</td></tr></table>
-<p class="note" style="margin-top:10px">Median sale price $1,310,000 &middot; median $690/sq ft across 7 comparable East Palo Alto sales. Source: MLSListings, sold Dec 2025–Jun 2026.</p></div>
+<div class="dv"></div>
 
-<div class="sec"><h2>The Market Right Now</h2>
-<p class="note">East Palo Alto's entry-level single-family market is moving quickly — most of these homes sold in 8–35 days. Mortgage rates have settled in the mid-6% range, off their 2023 peaks but still well above the 2020–21 lows, which has thinned the buyer pool slightly and rewards well-priced, move-in-ready homes. Your oversized lot is a genuine differentiator if you ever choose to add an ADU or expand.</p></div>
+<section><div class="sh">The Market Story</div>
+<p>The right comp set for your home is East Palo Alto single-family homes in the 1,600 to 2,200 square foot range. Those sold from $990,000 to $1,480,000 over the last six months. The homes at the top of that range (928 Wilks, 939 Oakes) are newer builds in turnkey shape, which is why they clear near $1.48M. The homes near your purchase price tend to be older and on the original condition, which is the same profile as 2895 Fordham.</p><p>Most of these sold quickly, in 8 to 35 days, which tells you demand for well-presented homes in your neighborhood is healthy. The one long-sitting comp (2232 Euclid at 148 days) was priced ahead of the market and had to wait. The takeaway for you is not about selling, it is that your neighborhood is active and clearing at strong numbers, which supports your equity.</p>
+</section>
 
-<div class="foot"><b>Graeham Watts</b> &middot; REALTOR&reg; &middot; Intero Real Estate &middot; DRE# 01466876 &middot; (650) 308-4727 &middot; graehamwatts.com<br>
-This is a complimentary market estimate for your information, not an appraisal. Values are based on comparable closed sales and current market conditions.</div>
-</div></body></html>
+<div class="dv"></div>
+
+<section><div class="sh">East Palo Alto Comparable Sales. Last 6 Months</div>
+<p>East Palo Alto single-family homes, 1,600 to 2,200 sq ft, closed in the last six months.</p>
+<table><thead><tr><th>Address</th><th style="text-align:center">Bed/Bth</th><th style="text-align:right">SqFt</th><th style="text-align:right">Lot</th><th style="text-align:center">Yr Built</th><th style="text-align:right">Sold Price</th><th style="text-align:right">$/SqFt</th><th style="text-align:center">DOM</th></tr></thead>
+<tbody><tr><td>928 Wilks St</td><td style='text-align:center'>4/2.1</td><td style='text-align:right'>1,890</td><td style='text-align:right'>3,375</td><td style='text-align:center'>2001</td><td style='text-align:right'><strong>$1,480,000</strong></td><td style='text-align:right'>$783</td><td style='text-align:center;color:#0a7d3a;font-weight:700'>9</td></tr><tr><td>939 Oakes St</td><td style='text-align:center'>3/2.1</td><td style='text-align:right'>1,823</td><td style='text-align:right'>4,630</td><td style='text-align:center'>2000</td><td style='text-align:right'><strong>$1,475,000</strong></td><td style='text-align:right'>$809</td><td style='text-align:center;color:#0a7d3a;font-weight:700'>13</td></tr><tr><td>2212 Dumbarton Ave</td><td style='text-align:center'>4/3</td><td style='text-align:right'>1,962</td><td style='text-align:right'>5,000</td><td style='text-align:center'>1946</td><td style='text-align:right'><strong>$1,379,000</strong></td><td style='text-align:right'>$703</td><td style='text-align:center;color:#c0392b;font-weight:700'>35</td></tr><tr><td>2370 Ralmar Ave</td><td style='text-align:center'>4/3</td><td style='text-align:right'>1,963</td><td style='text-align:right'>5,942</td><td style='text-align:center'>2006</td><td style='text-align:right'><strong>$1,310,000</strong></td><td style='text-align:right'>$667</td><td style='text-align:center;color:#0a7d3a;font-weight:700'>8</td></tr><tr><td>1017 Beech St</td><td style='text-align:center'>3/2</td><td style='text-align:right'>1,740</td><td style='text-align:right'>5,664</td><td style='text-align:center'>1951</td><td style='text-align:right'><strong>$1,200,000</strong></td><td style='text-align:right'>$690</td><td style='text-align:center;color:#0a7d3a;font-weight:700'>12</td></tr><tr><td>2232 Euclid Ave</td><td style='text-align:center'>4/1.1</td><td style='text-align:right'>1,980</td><td style='text-align:right'>8,528</td><td style='text-align:center'>1950</td><td style='text-align:right'><strong>$1,200,000</strong></td><td style='text-align:right'>$606</td><td style='text-align:center;color:#c0392b;font-weight:700'>148</td></tr><tr><td>2548 Hazelwood Way</td><td style='text-align:center'>4/2</td><td style='text-align:right'>1,720</td><td style='text-align:right'>5,277</td><td style='text-align:center'>1956</td><td style='text-align:right'><strong>$990,000</strong></td><td style='text-align:right'>$576</td><td style='text-align:center;color:#C5A55A;font-weight:700'>18</td></tr></tbody></table>
+<p class="note">Median sold price $1,310,000 at $690 per sq ft across 7 comparable East Palo Alto sales. Source: MLSListings Matrix. Days-on-market color-coded: green under 15, gold 15 to 30, red over 30.</p>
+</section>
+
+<div class="dv"></div>
+
+<section><div class="sh">The Data, Visualized</div>
+<div class="cb"><div class="cw"><canvas id="cPrice"></canvas></div><div class="cap">Comparable sold prices, highest to lowest. The dashed line marks what you paid ($1,140,000).</div></div>
+<div class="cb"><div class="cw"><canvas id="cPsf"></canvas></div><div class="cap">Price per square foot across the cohort. Your purchase pencils to $598 per sq ft.</div></div>
+<div class="cb"><div class="cw"><canvas id="cDom"></canvas></div><div class="cap">Days on market per comp. Median 13 days. Green under 15, gold 15 to 30, red over 30.</div></div>
+<div class="cb"><div class="cw" style="height:360px"><canvas id="cScatter"></canvas></div><div class="cap">Price versus days on market. Bubble size scales with square footage. Well-priced homes cluster low and left.</div></div>
+</section>
+
+<div class="dv"></div>
+
+<section><div class="sh">Interest Rate Environment</div>
+<p>Mortgage rates set the size of the buyer pool, which sets your home value. Current 30-year fixed, cross-referenced across four sources:</p>
+<div class="stats"><div class="st"><div class="n">6.62%</div><div class="l">Mortgage News Daily</div></div><div class="st"><div class="n">6.74%</div><div class="l">Bankrate CA Avg</div></div><div class="st"><div class="n">6.65%</div><div class="l">Freddie Mac PMMS</div></div><div class="st"><div class="n">6.58%</div><div class="l">Realtor.com Local</div></div></div>
+<p>Rates cluster in the mid-6s, down from the 2023 to 2024 peaks above 7 percent, but still well above the sub-3 percent lows of 2020 and 2021. For you as an owner, that matters in a good way: the homes selling around you are clearing at strong prices even with rates here, and any move back toward 6 percent over the next year would only add demand. Verify day-of via Mortgage News Daily, since rates move weekly.</p>
+</section>
+
+<div class="dv"></div>
+
+<section><div class="sh">What Your Home Is Worth Today</div>
+<div class="rng">
+<div class="rc a"><div class="rl">Likely range, conservative floor</div><div class="rp">$1,140,000</div><div class="rd">Anchored on what you just paid. Your floor is essentially your purchase price in today's market.</div></div>
+<div class="rc b"><div class="rl">Most-likely value today</div><div class="rp">$1,175,000</div><div class="rd">Where the closest recent sales place your home today, given its size and lot, in current condition.</div></div>
+<div class="rc c"><div class="rl">Top of range, strong condition</div><div class="rp">$1,320,000</div><div class="rd">What a home your size reaches at the area's median price per square foot once updated. Your lot supports this over time.</div></div>
+</div>
+<p>Because you purchased so recently, your equity story is just beginning. The point of this update is simply that you bought well: into an oversized lot in an active, appreciating submarket, at a per-foot price below the area median. As the neighborhood continues to clear in the $1.2M to $1.48M range for updated homes, you are positioned on the right side of it.</p>
+</section>
+
+<div class="dv"></div>
+
+<section><div class="sh">Notes &amp; Caveats</div>
+<div class="card"><h4>About this analysis</h4><p>Comparable sales pulled from MLSListings Matrix, East Palo Alto single-family homes in your size range, closed in the last six months. Subject details from MLSListings and your transaction record. Rate environment cross-referenced June 2026 from Mortgage News Daily, Bankrate California, Freddie Mac PMMS, and Realtor.com. This is a professional opinion of value, not a formal appraisal.</p></div>
+<div class="card"><h4>What would sharpen this further</h4><p>This pass uses closed-sale prices, sizes, lots, and days on market. A deeper pull adds each comp's original list price and reduction history plus a five-year monthly price-trend chart for East Palo Alto. Happy to run that fuller version anytime if you want the extra detail. The value range above already reflects the closed comps, which are the ground truth.</p></div>
+<div class="card"><h4>Condition matters</h4><p>The range accounts for typical condition. Your most-likely value lands where it does based on the closest recent sales. If your home shows in strong, updated condition, you are toward the top of the range. If it needs work, toward the floor. You know the home's condition better than the data does, so read the range with that in mind.</p></div>
+</section>
+</div>
+<footer><div class="wrap"><div class="fn">GRAEHAM WATTS</div><div class="fl">Intero Real Estate. DRE #01466876</div>
+<div class="fl">650-308-4727. graehamwatts@gmail.com. www.graehamwatts.com</div>
+<div class="ds">Prepared June 4, 2026 as a complimentary home value update for the owner of 2895 Fordham St, East Palo Alto, CA 94303. Not a formal appraisal. Comparable analysis based on closed East Palo Alto sales in the subject size range over the last six months from MLSListings. Verify current mortgage rates before relying on rate figures.</div></div></footer>
+<script>
+const GOLD='#C5A55A',BLK='#1A1A1A';
+new Chart(document.getElementById('cPrice'),{type:'bar',data:{labels:["928 Wilks St", "939 Oakes St", "2212 Dumbarton Ave", "2370 Ralmar Ave", "1017 Beech St", "2232 Euclid Ave", "2548 Hazelwood Way"],datasets:[{label:'Sold Price',data:[1480000, 1475000, 1379000, 1310000, 1200000, 1200000, 990000],backgroundColor:GOLD,borderColor:'#A88B3D',borderWidth:1}]},
+options:{indexAxis:'y',responsive:true,maintainAspectRatio:false,plugins:{legend:{display:false},tooltip:{callbacks:{label:c=>'$'+(c.parsed.x/1000).toFixed(0)+'K'}},
+annotation:{}},scales:{x:{ticks:{callback:v=>'$'+(v/1000).toFixed(0)+'K'},grid:{color:'#eee'}},y:{grid:{display:false},ticks:{font:{size:10}}}}}});
+new Chart(document.getElementById('cPsf'),{type:'bar',data:{labels:["939 Oakes St", "928 Wilks St", "2212 Dumbarton Ave", "1017 Beech St", "2370 Ralmar Ave", "2232 Euclid Ave", "2548 Hazelwood Way"],datasets:[{label:'$/SqFt',data:[809, 783, 703, 690, 667, 606, 576],backgroundColor:GOLD}]},
+options:{responsive:true,maintainAspectRatio:false,plugins:{legend:{display:false},tooltip:{callbacks:{label:c=>'$'+c.parsed.y+'/sqft'}}},scales:{x:{grid:{display:false},ticks:{font:{size:10},maxRotation:60,minRotation:30}},y:{ticks:{callback:v=>'$'+v},grid:{color:'#eee'}}}}});
+new Chart(document.getElementById('cDom'),{type:'bar',data:{labels:["928 Wilks St", "939 Oakes St", "2212 Dumbarton Ave", "2370 Ralmar Ave", "1017 Beech St", "2232 Euclid Ave", "2548 Hazelwood Way"],datasets:[{label:'Days on Market',data:[9, 13, 35, 8, 12, 148, 18],backgroundColor:["#0a7d3a", "#0a7d3a", "#c0392b", "#0a7d3a", "#0a7d3a", "#c0392b", "#C5A55A"]}]},
+options:{responsive:true,maintainAspectRatio:false,plugins:{legend:{display:false},tooltip:{callbacks:{label:c=>c.parsed.y+' days'}}},scales:{x:{grid:{display:false},ticks:{font:{size:10},maxRotation:60,minRotation:30}},y:{title:{display:true,text:'Days on Market'},grid:{color:'#eee'}}}}});
+new Chart(document.getElementById('cScatter'),{type:'bubble',data:{datasets:[{label:'Comparable Sales',data:[{"x": 1480000, "y": 9, "r": 10}, {"x": 1475000, "y": 13, "r": 10}, {"x": 1379000, "y": 35, "r": 11}, {"x": 1310000, "y": 8, "r": 11}, {"x": 1200000, "y": 12, "r": 10}, {"x": 1200000, "y": 148, "r": 11}, {"x": 990000, "y": 18, "r": 10}],backgroundColor:'rgba(197,165,90,0.55)',borderColor:'#A88B3D'}]},
+options:{responsive:true,maintainAspectRatio:false,plugins:{legend:{display:false},tooltip:{callbacks:{label:c=>'$'+(c.parsed.x/1000).toFixed(0)+'K, '+c.parsed.y+' DOM'}}},scales:{x:{title:{display:true,text:'Sold Price'},ticks:{callback:v=>'$'+(v/1000).toFixed(0)+'K'},grid:{color:'#eee'}},y:{title:{display:true,text:'Days on Market'},min:0,grid:{color:'#eee'}}}}});
+</script></body></html>
