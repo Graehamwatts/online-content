@@ -1,0 +1,289 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>909 Baines St — Weekly Status — June 8, 2026</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700&display=swap" rel="stylesheet">
+<style>
+  body { margin:0; padding:0; background:#eef0f4; font-family:'DM Sans', system-ui, sans-serif; color:#1a2332; line-height:1.55; -webkit-font-smoothing:antialiased; }
+  .wrap { max-width:720px; margin:0 auto; background:#ffffff; }
+  .top-bar { padding:14px 36px; background:#0f1729; color:#9da9c1; font-size:11px; letter-spacing:1.4px; text-transform:uppercase; font-weight:600; display:flex; justify-content:space-between; }
+  .top-bar .right { color:#5d6b85; }
+  .header { padding:32px 36px 24px; }
+  .header h1 { font-size:26px; font-weight:600; margin:0 0 4px 0; color:#0f1729; letter-spacing:-0.4px; }
+  .header .meta { font-size:13px; color:#6a7488; }
+  .header .meta strong { color:#0f1729; font-weight:600; }
+  .status { margin:0 36px; padding:16px 18px; border-radius:6px; display:flex; align-items:center; gap:14px; background:#e8f5ec; border:1px solid #a8d4b6; }
+  .status .dot { width:10px; height:10px; border-radius:50%; background:#1f7a3a; flex-shrink:0; box-shadow:0 0 0 4px rgba(31,122,58,0.15); }
+  .status .text { flex:1; }
+  .status .label { font-size:10.5px; letter-spacing:1.4px; text-transform:uppercase; font-weight:700; color:#1f5e2e; margin-bottom:2px; }
+  .status .msg { font-size:14px; color:#1e3a26; font-weight:500; }
+  .kpi-section { padding:24px 36px 8px; }
+  .kpi-label { font-size:10.5px; letter-spacing:1.4px; text-transform:uppercase; font-weight:700; color:#5d6b85; margin-bottom:12px; }
+  .kpis { display:table; width:100%; border-collapse:separate; border-spacing:8px; margin:0 -8px; }
+  .kpi { display:table-cell; background:#f6f7fa; border-radius:6px; padding:14px 14px 12px; vertical-align:top; }
+  .kpi .k-lbl { font-size:10.5px; color:#6a7488; letter-spacing:0.6px; text-transform:uppercase; font-weight:600; margin-bottom:6px; }
+  .kpi .k-num { font-size:28px; font-weight:600; color:#0f1729; line-height:1; letter-spacing:-0.6px; }
+  .kpi .k-delta { font-size:12px; margin-top:6px; font-weight:500; color:#6a7488; }
+  section { padding:24px 36px 4px; }
+  section h2 { font-size:11px; letter-spacing:1.6px; text-transform:uppercase; font-weight:700; color:#5d6b85; margin:0 0 12px 0; padding-bottom:8px; border-bottom:1px solid #e6e9ef; }
+  section p { font-size:14.5px; color:#2a3142; margin:0 0 12px 0; line-height:1.65; }
+  section p strong { color:#0f1729; font-weight:600; }
+  .market-cards { display:table; width:100%; border-collapse:separate; border-spacing:8px; margin:6px -8px; }
+  .market-card { display:table-cell; background:#f6f7fa; border-radius:6px; padding:18px 18px 16px; vertical-align:top; position:relative; }
+  .market-card .mc-label { font-size:10.5px; color:#6a7488; letter-spacing:1px; text-transform:uppercase; font-weight:700; margin-bottom:14px; }
+  .market-card .mc-delta { font-size:30px; font-weight:700; color:#1f7a3a; line-height:1; letter-spacing:-1px; margin-bottom:4px; }
+  .market-card .mc-delta-label { font-size:11.5px; color:#6a7488; font-weight:500; margin-bottom:14px; }
+  .market-card .mc-row { display:flex; justify-content:space-between; padding:6px 0; font-size:13px; color:#2a3142; border-top:1px solid #ecedf2; }
+  .market-card .mc-row .v { font-weight:600; color:#0f1729; }
+  .hero-stat { padding:28px 36px 8px; border-top:1px solid #e6e9ef; margin-top:12px; }
+  .hero-stat .hs-num { font-size:64px; font-weight:700; color:#0f1729; line-height:0.95; letter-spacing:-3px; margin-bottom:4px; }
+  .hero-stat .hs-num .unit { font-size:30px; color:#6a7488; font-weight:500; letter-spacing:-1px; margin-left:8px; }
+  .hero-stat .hs-title { font-size:20px; font-weight:600; color:#0f1729; line-height:1.25; margin-bottom:6px; letter-spacing:-0.3px; }
+  .hero-stat .hs-sub { font-size:13.5px; color:#6a7488; line-height:1.55; }
+  .hero-stat .hs-sub strong { color:#2a3142; font-weight:600; }
+  .syndication-block { padding:24px 36px 4px; }
+  .syndication-block h2 { font-size:11px; letter-spacing:1.6px; text-transform:uppercase; font-weight:700; color:#5d6b85; margin:0 0 12px 0; padding-bottom:8px; border-bottom:1px solid #e6e9ef; }
+  .syndication-block p { font-size:14.5px; color:#2a3142; margin:0 0 12px 0; line-height:1.65; }
+  .syndication-block p strong { color:#0f1729; font-weight:600; }
+  .syndication { display:flex; flex-wrap:wrap; gap:6px; margin:12px 0 8px 0; }
+  .chip { font-size:12px; padding:5px 12px; background:#f6f7fa; border:1px solid #e6e9ef; color:#3a4154; border-radius:14px; font-weight:500; }
+  .chip.live { background:#e8f5ec; border-color:#a8d4b6; color:#1f5e2e; }
+  .chip.more { background:transparent; border:1px dashed #c5cee0; color:#6a7488; font-style:italic; }
+  .themes-stack { margin-top:18px; }
+  .theme-card { display:flex; gap:18px; padding:18px 20px; background:#f6f7fa; border-radius:6px; margin-bottom:10px; align-items:flex-start; }
+  .theme-card:last-child { margin-bottom:0; }
+  .theme-card .rank { font-size:36px; font-weight:700; color:#c5cee0; line-height:0.9; flex-shrink:0; min-width:38px; letter-spacing:-1.5px; }
+  .theme-card .body { flex:1; }
+  .theme-card .head { display:flex; justify-content:space-between; align-items:baseline; gap:12px; margin-bottom:6px; flex-wrap:wrap; }
+  .theme-card .name { font-size:17px; font-weight:700; color:#0f1729; line-height:1.25; letter-spacing:-0.2px; }
+  .theme-card .count { font-size:10.5px; color:#6a7488; font-weight:600; letter-spacing:0.5px; text-transform:uppercase; background:#fff; padding:3px 9px; border-radius:11px; white-space:nowrap; }
+  .theme-card p { font-size:13.5px; color:#3a4154; margin:0; line-height:1.6; }
+  .theme-card.good { background:#e8f5ec; }
+  .theme-card.good .rank { color:#a8d4b6; }
+  .my-actions { list-style:none; padding:0; margin:8px 0 0 0; }
+  .my-actions li { padding:10px 0 10px 26px; font-size:14px; color:#2a3142; border-bottom:1px solid #f0f2f6; position:relative; line-height:1.55; }
+  .my-actions li:last-child { border-bottom:0; }
+  .my-actions li::before { content:""; position:absolute; left:0; top:13px; width:14px; height:14px; border:1.5px solid #5d6b85; border-radius:3px; background:#5d6b85; }
+  .appendix { margin:8px 36px 0; padding:18px 22px; background:#f6f7fa; border-radius:6px; }
+  .appendix h2 { font-size:10.5px; letter-spacing:1.4px; text-transform:uppercase; font-weight:700; color:#5d6b85; margin:0 0 12px 0; padding:0; border:0; }
+  .appendix-table { width:100%; border-collapse:collapse; font-size:13px; }
+  .appendix-table td { padding:6px 0; color:#3a4154; vertical-align:top; }
+  .appendix-table td:first-child { color:#6a7488; font-weight:500; padding-right:14px; width:190px; }
+  .appendix-table td strong { color:#0f1729; font-weight:600; }
+  .sig { padding:32px 36px 28px; }
+  .sig p { font-size:14.5px; color:#2a3142; margin:0 0 12px 0; line-height:1.65; }
+  .sig .signoff { font-size:15px; color:#0f1729; margin-top:20px; }
+  .sig-block { margin-top:20px; padding-top:20px; border-top:1px solid #e6e9ef; display:table; width:100%; }
+  .sig-photo, .sig-info { display:table-cell; vertical-align:top; }
+  .sig-photo { width:64px; padding-right:16px; }
+  .sig-photo .ph { width:64px; height:64px; background:#0f1729; color:#f4b955; display:flex; align-items:center; justify-content:center; font-size:20px; font-weight:600; border-radius:50%; }
+  .sig-info .name { font-size:15px; font-weight:600; color:#0f1729; line-height:1.2; }
+  .sig-info .role { font-size:12px; color:#6a7488; margin-bottom:6px; }
+  .sig-info .firm { font-size:13px; color:#2a3142; margin-bottom:6px; font-weight:500; }
+  .sig-info .contact { font-size:12.5px; color:#3a4154; line-height:1.7; }
+  .sig-info .contact a { color:#0f1729; text-decoration:none; border-bottom:1px solid #c5cee0; }
+  .sig-info .dre { font-size:11px; color:#6a7488; margin-top:6px; }
+  .footer { padding:14px 36px 22px; background:#0f1729; color:#5d6b85; font-size:11px; text-align:center; line-height:1.6; letter-spacing:0.3px; }
+  @media (max-width:540px) {
+    .top-bar, .header, .kpi-section, section, .sig, .footer, .hero-stat, .syndication-block { padding-left:20px; padding-right:20px; }
+    .status, .appendix { margin-left:20px; margin-right:20px; }
+    .kpis, .market-cards { display:block; margin:0; }
+    .kpi, .market-card { display:block; margin-bottom:8px; }
+    .header h1 { font-size:22px; }
+    .hero-stat .hs-num { font-size:52px; }
+    .hero-stat .hs-num .unit { font-size:22px; }
+  }
+</style>
+</head>
+<body>
+  <div class="wrap">
+
+    <div class="top-bar">
+      <span>Weekly Status Report</span>
+      <span class="right">No. 01 · June 8, 2026</span>
+    </div>
+
+    <div class="header">
+      <h1>909 Baines Street</h1>
+      <div class="meta">East Palo Alto, CA · 4 bd / 2.5 ba / 2,020 sqft · Ravenswood Villages · Listed at <strong>$1,399,000</strong> · Reporting period: <strong>First weekend on market, June 6 – 7, 2026</strong></div>
+    </div>
+
+    <div class="status">
+      <div class="dot"></div>
+      <div class="text">
+        <div class="label">Status · Active</div>
+        <div class="msg">A strong first weekend. The home showed well to a steady stream of buyers across both days, the feedback was positive, and there's early interest to build on. We're taking offers as they come in.</div>
+      </div>
+    </div>
+
+    <div class="kpi-section">
+      <div class="kpi-label">This Weekend (June 6 – 7)</div>
+      <div class="kpis">
+        <div class="kpi">
+          <div class="k-lbl">Open House Days</div>
+          <div class="k-num">2</div>
+          <div class="k-delta">Saturday + Sunday</div>
+        </div>
+        <div class="kpi">
+          <div class="k-lbl">Buyer Groups</div>
+          <div class="k-num">~27</div>
+          <div class="k-delta">~15 Sat · ~12 Sun</div>
+        </div>
+        <div class="kpi">
+          <div class="k-lbl">Standout Leads</div>
+          <div class="k-num">1</div>
+          <div class="k-delta">plus several interested</div>
+        </div>
+        <div class="kpi">
+          <div class="k-lbl">Offers</div>
+          <div class="k-num">0</div>
+          <div class="k-delta">reviewing as submitted</div>
+        </div>
+      </div>
+    </div>
+
+    <section>
+      <h2>The Read</h2>
+      <p>Hi Christine and Yang, here's the recap of your first weekend on the market. The short version: <strong>a busy, positive debut.</strong> We held the home open both days and had roughly <strong>27 groups</strong> come through, about 15 on Saturday and a dozen on Sunday.</p>
+      <p>The response was good across the board. No major criticisms, and nothing close to a dealbreaker. As with any open house, some visitors were serious buyers and some were browsing the neighborhood, and we had a couple of neighbors stop in as well. One out-of-state couple stood out as genuinely interested. They're working on getting their current home in Ohio onto the market before they can move on a purchase here, so we'll keep them close. Several people asked whether there was an offer deadline, and we let them know we're reviewing offers as they come in rather than setting a hard date. All in, a healthy first weekend.</p>
+    </section>
+
+    <section>
+      <h2>Market Context · Where Your Price Sits</h2>
+      <p>Newer four-bedroom homes in this part of East Palo Alto have been selling in the range of roughly <strong>$1.31M to $1.48M</strong>. Your list price of $1,399,000, about $693 per square foot, sits right inside that band. Priced to compete, which is a big part of why the weekend drew the traffic it did.</p>
+      <div class="market-cards">
+        <div class="market-card">
+          <div class="mc-label">Your Price Per Sq Ft</div>
+          <div class="mc-delta">$693</div>
+          <div class="mc-delta-label">in line with the market</div>
+          <div class="mc-row"><span>909 Baines</span><span class="v">$693 / sqft</span></div>
+          <div class="mc-row"><span>Comparable EPA 4-bd sales</span><span class="v">$580 – $809 / sqft</span></div>
+        </div>
+        <div class="market-card">
+          <div class="mc-label">Where Homes Like Yours Clear</div>
+          <div class="mc-delta">$1.4M</div>
+          <div class="mc-delta-label">your list price, within range</div>
+          <div class="mc-row"><span>Recent newer 4-bd sales</span><span class="v">$1.31M – $1.48M</span></div>
+          <div class="mc-row"><span>Your list price</span><span class="v">$1,399,000</span></div>
+        </div>
+      </div>
+      <p style="margin-top:14px; font-size:13px; color:#6a7488;"><em>Source: MLSListings closed sales, East Palo Alto single-family homes, last six months.</em></p>
+    </section>
+
+    <div class="syndication-block">
+      <h2>Online Visibility · The Listing Is Everywhere</h2>
+      <p>The MLS feed syndicates your home to <strong>virtually every major real estate platform</strong>, well over 100 sites once broker-affiliate and aggregator pages are counted. The primary destinations we watch for buyer engagement:</p>
+      <div class="syndication">
+        <span class="chip live">Zillow</span>
+        <span class="chip live">Redfin</span>
+        <span class="chip live">Realtor.com</span>
+        <span class="chip live">Homes.com</span>
+        <span class="chip live">Trulia</span>
+        <span class="chip live">Compass</span>
+        <span class="chip live">Intero (origin)</span>
+        <span class="chip more">+ broker-affiliate &amp; regional sites</span>
+      </div>
+      <p style="margin-top:14px; font-size:13px; color:#6a7488;"><em>Live view and save counts from Zillow and Redfin will be added to next week's report once direct portal tracking is set up.</em></p>
+    </div>
+
+    <div class="hero-stat">
+      <div class="hs-num">~27<span class="unit">groups</span></div>
+      <div class="hs-title">came through the open house this weekend</div>
+      <div class="hs-sub">About <strong>15 on Saturday</strong> and <strong>a dozen on Sunday</strong>. Not everyone signs in, but we captured contact details from roughly a dozen visitors and have already followed up with each one, sending the market breakdown and a short personal video.</div>
+    </div>
+
+    <section>
+      <h2>What We Heard</h2>
+      <div class="themes-stack">
+        <div class="theme-card good">
+          <div class="rank">01</div>
+          <div class="body">
+            <div class="head">
+              <div class="name">One genuinely interested buyer</div>
+              <div class="count">Warm lead</div>
+            </div>
+            <p>An out-of-state couple was clearly the most interested of the weekend. The only thing in the way is timing. They need to get their current home in Ohio on the market before they can purchase here. We're staying in close contact so we're first in line when they're ready.</p>
+          </div>
+        </div>
+        <div class="theme-card">
+          <div class="rank">02</div>
+          <div class="body">
+            <div class="head">
+              <div class="name">Strong overall reception</div>
+              <div class="count">Most groups</div>
+            </div>
+            <p>The home showed well. Buyers responded to the size, the layout, and the condition. There were one or two small comments, the kind you get at any open house, but nothing significant and nothing that rose to a dealbreaker.</p>
+          </div>
+        </div>
+        <div class="theme-card">
+          <div class="rank">03</div>
+          <div class="body">
+            <div class="head">
+              <div class="name">Questions about offer timing</div>
+              <div class="count">Several asked</div>
+            </div>
+            <p>A number of buyers and agents asked whether there was an offer deadline. We told them we're reviewing offers as they're submitted rather than setting a hard date, which keeps the door open and lets a strong offer come through on its own timeline.</p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section>
+      <h2>A Note On Disclosures</h2>
+      <p>The disclosure and inspection package is being finalized and isn't live in the online system just yet. In the meantime, we're sending it directly to the buyers and agents who request it, so nobody who's interested is left waiting. Once it's loaded into the system, every buyer who views the listing will have it at their fingertips.</p>
+    </section>
+
+    <section>
+      <h2>What I'm Doing This Week (No Action Needed)</h2>
+      <ul class="my-actions">
+        <li>Following up personally with every visitor who left contact details from the weekend.</li>
+        <li>Sending the disclosures and inspection reports to buyers and agents as they request them.</li>
+        <li>Staying in regular contact with the out-of-state couple as they work toward listing their current home.</li>
+        <li>Continuing to take and review offers as they come in.</li>
+        <li>Keeping the listing fresh and fully syndicated across every major portal.</li>
+      </ul>
+    </section>
+
+    <div class="appendix">
+      <h2>Appendix · The Numbers So Far</h2>
+      <table class="appendix-table">
+        <tr><td>On market</td><td><strong>First weekend</strong> (open house June 6 – 7, 2026)</td></tr>
+        <tr><td>List price</td><td><strong>$1,399,000</strong> (about $693 / sqft)</td></tr>
+        <tr><td>Property</td><td>4 bd / 2.5 ba / 2,020 sqft · Ravenswood Villages · Built 2000</td></tr>
+        <tr><td>Open houses held</td><td><strong>2</strong> (Saturday + Sunday)</td></tr>
+        <tr><td>Buyer groups this weekend</td><td><strong>~27</strong> (~15 Sat · ~12 Sun)</td></tr>
+        <tr><td>Contacts captured</td><td>~12, all followed up</td></tr>
+        <tr><td>Offers received</td><td><strong>0</strong> so far (reviewing as submitted)</td></tr>
+        <tr><td>Standout interest</td><td>1 out-of-state couple (selling their current home first)</td></tr>
+      </table>
+    </div>
+
+    <div class="sig">
+      <p style="margin-top:24px;">A genuinely strong start. I'll keep working the follow-ups and keep you posted as offers and feedback come in. Any questions in the meantime, just reply or call.</p>
+      <div class="signoff">— Graeham</div>
+
+      <div class="sig-block">
+        <div class="sig-photo"><div class="ph">GW</div></div>
+        <div class="sig-info">
+          <div class="name">Graeham Watts</div>
+          <div class="role">REALTOR</div>
+          <div class="firm">Intero Real Estate</div>
+          <div class="contact">
+            +1 (650) 308-4727 · <a href="mailto:graehamwatts@gmail.com">graehamwatts@gmail.com</a>
+          </div>
+          <div class="dre">DRE # 01466876</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="footer">
+      Confidential weekly status report prepared for the owners of 909 Baines Street, East Palo Alto.
+    </div>
+
+  </div>
+</body>
+</html>
