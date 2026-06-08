@@ -1,0 +1,113 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Daily Attribution Brief · June 8, 2026</title>
+<style>
+  body { margin:0; padding:0; background:#0b1220; }
+  a { color:#f4b955; }
+  @media (max-width:600px){ .kpi { display:block !important; width:100% !important; } }
+</style>
+</head>
+<body style="margin:0;padding:0;background:#0b1220;font-family:'DM Sans',-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,Helvetica,Arial,sans-serif;">
+<div style="max-width:720px;margin:0 auto;background:#0f1729;">
+
+  <!-- Top bar -->
+  <div style="background:#0b1220;padding:14px 28px;border-bottom:1px solid #25324f;">
+    <span style="color:#f4b955;font-size:12px;font-weight:700;letter-spacing:1.5px;text-transform:uppercase;">Daily Attribution Brief</span>
+    <span style="color:#64748b;font-size:12px;font-weight:500;float:right;">Monday, June 8, 2026 · 7:15 AM PT</span>
+  </div>
+
+  <!-- Header -->
+  <div style="padding:30px 28px 8px 28px;">
+    <h1 style="margin:0 0 6px 0;color:#e8edf7;font-size:26px;font-weight:700;line-height:1.25;">Yesterday's brief is on hold &mdash; data-integrity issue</h1>
+    <div style="color:#94a3b8;font-size:14px;font-weight:500;">Reporting window: Sunday, June 7, 2026 &nbsp;·&nbsp; Compared vs. Sunday, June 1</div>
+  </div>
+
+  <!-- Status strip -->
+  <div style="margin:18px 28px;padding:14px 16px;background:#2a2210;border:1px solid #6b5414;border-left:4px solid #f4b955;border-radius:6px;">
+    <span style="color:#f4b955;font-size:14px;font-weight:600;">&#9888; Automation is running and authenticating fine &mdash; but the lead numbers it produces are wrong.</span>
+    <span style="color:#d9cfa8;font-size:14px;"> Nothing was lost. This is a logic bug, not a credentials or outage problem. Root cause and the fix are below.</span>
+  </div>
+
+  <!-- The Read -->
+  <div style="padding:6px 28px 8px 28px;">
+    <div style="color:#f4b955;font-size:12px;font-weight:700;letter-spacing:1px;text-transform:uppercase;margin-bottom:8px;">The Read</div>
+    <p style="margin:0;color:#cbd5e1;font-size:15px;line-height:1.6;">
+      Your daily brief has been silently shipping bad data. The last several committed briefs (June 2, 3 and 4) are byte-for-byte identical &mdash; each reports <strong style="color:#e8edf7;">2,000 leads, 0 opportunities, 0 wins</strong>. That "2,000" isn't yesterday's leads; it's your <em>entire contact list</em>, hitting the pull's 2,000-record cap. The GitHub Action authenticates to GoHighLevel correctly &mdash; so this is purely a query-logic bug, fixable in one place. I did <strong style="color:#e8edf7;">not</strong> auto-patch it, because I can't validate a fix against your live CRM from here (the local copy of your GHL token is dead), and a wrong-but-believable number is worse than an obviously-broken one. Your call on the fix &mdash; it's spelled out below.
+    </p>
+  </div>
+
+  <!-- KPI grid (what the system currently reports) -->
+  <div style="padding:18px 28px 4px 28px;">
+    <div style="color:#94a3b8;font-size:12px;font-weight:600;margin-bottom:10px;">What the live workflow is currently committing &mdash; shown as the <span style="color:#ef4444;">symptom</span>, not as real figures:</div>
+    <div style="font-size:0;">
+      <div class="kpi" style="display:inline-block;width:24%;vertical-align:top;background:#15203b;border:1px solid #25324f;border-radius:8px;padding:14px 12px;box-sizing:border-box;margin-right:1%;">
+        <div style="color:#ef4444;font-size:24px;font-weight:800;line-height:1;">2,000</div>
+        <div style="color:#94a3b8;font-size:11px;margin-top:6px;">Total Leads <span style="color:#ef4444;">&#9888; = full cap</span></div>
+      </div><div class="kpi" style="display:inline-block;width:24%;vertical-align:top;background:#15203b;border:1px solid #25324f;border-radius:8px;padding:14px 12px;box-sizing:border-box;margin-right:1%;">
+        <div style="color:#e8edf7;font-size:24px;font-weight:800;line-height:1;">0</div>
+        <div style="color:#94a3b8;font-size:11px;margin-top:6px;">New Opps <span style="color:#f4b955;">&#9888; verify</span></div>
+      </div><div class="kpi" style="display:inline-block;width:24%;vertical-align:top;background:#15203b;border:1px solid #25324f;border-radius:8px;padding:14px 12px;box-sizing:border-box;margin-right:1%;">
+        <div style="color:#e8edf7;font-size:24px;font-weight:800;line-height:1;">0</div>
+        <div style="color:#94a3b8;font-size:11px;margin-top:6px;">Closed Wins <span style="color:#f4b955;">&#9888; verify</span></div>
+      </div><div class="kpi" style="display:inline-block;width:24%;vertical-align:top;background:#15203b;border:1px solid #25324f;border-radius:8px;padding:14px 12px;box-sizing:border-box;">
+        <div style="color:#e8edf7;font-size:15px;font-weight:700;line-height:1.2;padding:4px 0;">Unknown</div>
+        <div style="color:#94a3b8;font-size:11px;margin-top:6px;">Top Source <span style="color:#ef4444;">&#9888;</span></div>
+      </div>
+    </div>
+  </div>
+
+  <!-- What I found -->
+  <div style="padding:22px 28px 4px 28px;">
+    <div style="color:#f4b955;font-size:12px;font-weight:700;letter-spacing:1px;text-transform:uppercase;margin-bottom:12px;">What I found</div>
+
+    <div style="margin-bottom:12px;padding:13px 15px;background:#15203b;border:1px solid #25324f;border-radius:8px;">
+      <div style="color:#22c55e;font-size:14px;font-weight:700;margin-bottom:3px;">&#9679; Good news: the automation works and the token is valid</div>
+      <div style="color:#cbd5e1;font-size:13px;line-height:1.55;">The <code style="color:#f4b955;">daily-attribution-brief</code> GitHub Action runs Mon&ndash;Fri and last succeeded June&nbsp;5. It uses the <code style="color:#f4b955;">GHL_PIT</code> repo secret, and its runs return real contact data (no auth errors) &mdash; so <strong style="color:#e8edf7;">that</strong> token is fine. No re-auth needed for the daily brief to run.</div>
+    </div>
+
+    <div style="margin-bottom:12px;padding:13px 15px;background:#15203b;border:1px solid #25324f;border-radius:8px;">
+      <div style="color:#ef4444;font-size:14px;font-weight:700;margin-bottom:3px;">&#9679; The bug: the brief counts your whole database, not yesterday</div>
+      <div style="color:#cbd5e1;font-size:13px;line-height:1.55;">The contact pull keeps every record older than end-of-yesterday but never checks the <em>start</em> of the window, so it sweeps up your full history and stops at the 20-page &times; 100 = <strong style="color:#e8edf7;">2,000</strong> cap. Receipt: June 2, 3 and 4 briefs are identical (2,000 / 0 / 0; source buckets sum to exactly 2,000). Real daily counts are never identical three days running.</div>
+    </div>
+
+    <div style="margin-bottom:4px;padding:13px 15px;background:#15203b;border:1px solid #25324f;border-radius:8px;">
+      <div style="color:#f4b955;font-size:14px;font-weight:700;margin-bottom:3px;">&#9679; Side note: your <em>local</em> GHL token is dead</div>
+      <div style="color:#cbd5e1;font-size:13px;line-height:1.55;">The token saved on your machine (<code style="color:#f4b955;">.claude-credentials/ghl-pit.txt</code>) now returns <code style="color:#ef4444;">401 &mdash; Invalid Private Integration token</code>. It doesn't affect the GitHub Action (which uses the repo secret), but it means nothing on your desktop can pull GHL directly until you regenerate it. Worth replacing so a fix can be tested locally.</div>
+    </div>
+  </div>
+
+  <!-- The fix -->
+  <div style="padding:22px 28px 4px 28px;">
+    <div style="color:#f4b955;font-size:12px;font-weight:700;letter-spacing:1px;text-transform:uppercase;margin-bottom:10px;">The fix (needs one live test before trusting it)</div>
+    <p style="margin:0 0 10px 0;color:#cbd5e1;font-size:14px;line-height:1.6;">
+      In <code style="color:#f4b955;">.github/workflows/daily-attribution-brief.yml</code>, the <code style="color:#f4b955;">get_contacts()</code> function needs to actually bound to the day. The opportunities pull already does this correctly &mdash; contacts just needs to match it: only keep a contact when <code style="color:#f4b955;">start &le; dateAdded &lt; end</code>.
+    </p>
+    <p style="margin:0 0 10px 0;color:#cbd5e1;font-size:14px;line-height:1.6;">
+      One caveat I won't paper over: GHL is currently <em>ignoring</em> the <code style="color:#f4b955;">startAfter</code> cursor and returning oldest-records-first, so a client-side date filter alone could swing the count from a wrong 2,000 to a wrong 0. The reliable fix is to switch the pull to <code style="color:#f4b955;">POST /contacts/search</code> with an explicit <code style="color:#f4b955;">dateAdded</code> range filter, sorted newest-first &mdash; then confirm against a day you know the real number for. That validation needs a working token, which is why this is a recommendation, not a change I made blind.
+    </p>
+  </div>
+
+  <!-- What I did -->
+  <div style="padding:18px 28px 8px 28px;">
+    <div style="color:#f4b955;font-size:12px;font-weight:700;letter-spacing:1px;text-transform:uppercase;margin-bottom:10px;">What I did &amp; didn't do this morning</div>
+    <table style="width:100%;border-collapse:collapse;">
+      <tr><td style="padding:6px 0;color:#22c55e;font-size:14px;width:22px;vertical-align:top;">&#10003;</td><td style="padding:6px 0;color:#cbd5e1;font-size:13.5px;line-height:1.5;">Diagnosed the pipeline end-to-end and pinned the exact bug, with receipts.</td></tr>
+      <tr><td style="padding:6px 0;color:#22c55e;font-size:14px;vertical-align:top;">&#10003;</td><td style="padding:6px 0;color:#cbd5e1;font-size:13.5px;line-height:1.5;">Sent you this honest brief instead of an auto-generated "2,000 leads" one.</td></tr>
+      <tr><td style="padding:6px 0;color:#ef4444;font-size:14px;vertical-align:top;">&#10007;</td><td style="padding:6px 0;color:#cbd5e1;font-size:13.5px;line-height:1.5;">Did <strong style="color:#e8edf7;">not</strong> ship a code-fix to your live workflow unattended &mdash; can't validate it against your CRM from here, and a plausible-but-wrong number is the worst outcome.</td></tr>
+      <tr><td style="padding:6px 0;color:#94a3b8;font-size:14px;vertical-align:top;">&#8226;</td><td style="padding:6px 0;color:#cbd5e1;font-size:13.5px;line-height:1.5;">Heads-up: today's 8:15 AM auto-run will still commit an inflated <code style="color:#f4b955;">2026-06-07-daily.html</code> until the fix lands. Reply "fix it" and I'll patch + validate it with you next session.</td></tr>
+    </table>
+  </div>
+
+  <!-- Footer -->
+  <div style="margin-top:14px;padding:18px 28px;border-top:1px solid #25324f;background:#0b1220;">
+    <div style="color:#e8edf7;font-size:13px;font-weight:600;">Graeham Watts &middot; Intero Real Estate</div>
+    <div style="color:#64748b;font-size:12px;margin-top:3px;">DRE# 01466876 &middot; graehamwatts@gmail.com</div>
+    <div style="color:#475569;font-size:11px;margin-top:8px;">Automated daily attribution brief &middot; generated 2026-06-08 7:15 AM PT &middot; this run flagged a data-integrity issue rather than reporting unverified numbers.</div>
+  </div>
+
+</div>
+</body>
+</html>
