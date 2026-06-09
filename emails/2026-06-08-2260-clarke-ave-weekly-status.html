@@ -1,0 +1,277 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>2260 Clarke Ave — Weekly Status — June 8, 2026</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700&display=swap" rel="stylesheet">
+<style>
+  body { margin:0; padding:0; background:#eef0f4; font-family:'DM Sans', system-ui, sans-serif; color:#1a2332; line-height:1.55; -webkit-font-smoothing:antialiased; }
+  .wrap { max-width:720px; margin:0 auto; background:#ffffff; }
+  .top-bar { padding:14px 36px; background:#0f1729; color:#9da9c1; font-size:11px; letter-spacing:1.4px; text-transform:uppercase; font-weight:600; display:flex; justify-content:space-between; }
+  .top-bar .right { color:#5d6b85; }
+  .header { padding:32px 36px 24px; }
+  .header h1 { font-size:26px; font-weight:600; margin:0 0 4px 0; color:#0f1729; letter-spacing:-0.4px; }
+  .header .meta { font-size:13px; color:#6a7488; }
+  .header .meta strong { color:#0f1729; font-weight:600; }
+  .status { margin:0 36px; padding:16px 18px; border-radius:6px; display:flex; align-items:center; gap:14px; background:#eaf4ee; border:1px solid #b6dcc4; }
+  .status .dot { width:10px; height:10px; border-radius:50%; background:#2f9e5b; flex-shrink:0; box-shadow:0 0 0 4px rgba(47,158,91,0.15); }
+  .status .text { flex:1; }
+  .status .label { font-size:10.5px; letter-spacing:1.4px; text-transform:uppercase; font-weight:700; color:#1f7a3a; margin-bottom:2px; }
+  .status .msg { font-size:14px; color:#1f3a28; font-weight:500; }
+  .kpi-section { padding:24px 36px 8px; }
+  .kpi-label { font-size:10.5px; letter-spacing:1.4px; text-transform:uppercase; font-weight:700; color:#5d6b85; margin-bottom:12px; }
+  .kpis { display:table; width:100%; border-collapse:separate; border-spacing:8px; margin:0 -8px; }
+  .kpi { display:table-cell; background:#f6f7fa; border-radius:6px; padding:14px 14px 12px; vertical-align:top; }
+  .kpi .k-lbl { font-size:10.5px; color:#6a7488; letter-spacing:0.6px; text-transform:uppercase; font-weight:600; margin-bottom:6px; }
+  .kpi .k-num { font-size:28px; font-weight:600; color:#0f1729; line-height:1; letter-spacing:-0.6px; }
+  .kpi .k-delta { font-size:12px; margin-top:6px; font-weight:500; color:#6a7488; }
+  section { padding:24px 36px 4px; }
+  section h2 { font-size:11px; letter-spacing:1.6px; text-transform:uppercase; font-weight:700; color:#5d6b85; margin:0 0 12px 0; padding-bottom:8px; border-bottom:1px solid #e6e9ef; }
+  section p { font-size:14.5px; color:#2a3142; margin:0 0 12px 0; line-height:1.65; }
+  section p strong { color:#0f1729; font-weight:600; }
+  .note { margin:8px 36px 0; padding:22px 24px; background:#0f1729; color:#fff; border-radius:6px; }
+  .note .lbl { display:flex; align-items:center; gap:8px; font-size:10.5px; letter-spacing:1.4px; text-transform:uppercase; font-weight:700; color:#f4b955; margin-bottom:10px; }
+  .note .lbl::before { content:"●"; color:#f4b955; font-size:14px; }
+  .note h3 { font-size:18px; font-weight:600; color:#fff; margin:0 0 8px 0; line-height:1.3; }
+  .note p { font-size:14px; color:#c5cee0; margin:0 0 14px 0; line-height:1.6; }
+  .note p strong { color:#fff; }
+  .note .btn { display:inline-block; background:#f4b955; color:#0f1729; padding:10px 18px; border-radius:4px; text-decoration:none; font-size:13px; font-weight:600; letter-spacing:0.3px; margin-right:8px; }
+  .note .btn-secondary { background:transparent; color:#f4b955; border:1px solid #f4b955; }
+  table.comps { width:100%; border-collapse:collapse; margin:8px 0 6px; font-size:13px; }
+  table.comps th { text-align:left; font-size:10px; letter-spacing:0.6px; text-transform:uppercase; color:#6a7488; font-weight:700; padding:8px 8px; border-bottom:1.5px solid #e6e9ef; }
+  table.comps th.r, table.comps td.r { text-align:right; white-space:nowrap; }
+  table.comps td { padding:9px 8px; border-bottom:1px solid #f0f2f6; color:#2a3142; }
+  table.comps tr.subj td { background:#fdf6e6; font-weight:600; color:#0f1729; }
+  table.comps .ours-tag { font-size:10px; color:#a06a14; font-weight:700; text-transform:uppercase; letter-spacing:0.5px; }
+  .hero-stat { padding:28px 36px 8px; border-top:1px solid #e6e9ef; margin-top:12px; }
+  .hero-stat .hs-num { font-size:72px; font-weight:700; color:#0f1729; line-height:0.95; letter-spacing:-3px; margin-bottom:4px; }
+  .hero-stat .hs-num .unit { font-size:32px; color:#6a7488; font-weight:500; letter-spacing:-1px; margin-left:8px; }
+  .hero-stat .hs-title { font-size:20px; font-weight:600; color:#0f1729; line-height:1.25; margin-bottom:6px; letter-spacing:-0.3px; }
+  .hero-stat .hs-sub { font-size:13.5px; color:#6a7488; line-height:1.55; }
+  .hero-stat .hs-sub strong { color:#2a3142; font-weight:600; }
+  .syndication-block { padding:24px 36px 4px; }
+  .syndication-block h2 { font-size:11px; letter-spacing:1.6px; text-transform:uppercase; font-weight:700; color:#5d6b85; margin:0 0 12px 0; padding-bottom:8px; border-bottom:1px solid #e6e9ef; }
+  .syndication-block p { font-size:14.5px; color:#2a3142; margin:0 0 12px 0; line-height:1.65; }
+  .syndication-block p strong { color:#0f1729; font-weight:600; }
+  .syndication { display:flex; flex-wrap:wrap; gap:6px; margin:12px 0 8px 0; }
+  .chip { font-size:12px; padding:5px 12px; background:#f6f7fa; border:1px solid #e6e9ef; color:#3a4154; border-radius:14px; font-weight:500; }
+  .chip.live { background:#e8f5ec; border-color:#a8d4b6; color:#1f5e2e; }
+  .chip.more { background:transparent; border:1px dashed #c5cee0; color:#6a7488; font-style:italic; }
+  .concerns-stack { margin-top:18px; }
+  .concern-card { display:flex; gap:18px; padding:18px 20px; background:#f6f7fa; border-radius:6px; margin-bottom:10px; align-items:flex-start; }
+  .concern-card .rank { font-size:32px; font-weight:700; color:#c5cee0; line-height:0.9; flex-shrink:0; min-width:34px; letter-spacing:-1.5px; }
+  .concern-card .body { flex:1; }
+  .concern-card .head { display:flex; justify-content:space-between; align-items:baseline; gap:12px; margin-bottom:6px; flex-wrap:wrap; }
+  .concern-card .name { font-size:16px; font-weight:700; color:#0f1729; line-height:1.25; letter-spacing:-0.2px; }
+  .concern-card .count { font-size:10.5px; color:#6a7488; font-weight:600; letter-spacing:0.5px; text-transform:uppercase; background:#fff; padding:3px 9px; border-radius:11px; white-space:nowrap; }
+  .concern-card p { font-size:13.5px; color:#3a4154; margin:0; line-height:1.6; }
+  .my-actions { list-style:none; padding:0; margin:8px 0 0 0; }
+  .my-actions li { padding:10px 0 10px 26px; font-size:14px; color:#2a3142; border-bottom:1px solid #f0f2f6; position:relative; line-height:1.55; }
+  .my-actions li:last-child { border-bottom:0; }
+  .my-actions li::before { content:""; position:absolute; left:0; top:13px; width:14px; height:14px; border:1.5px solid #5d6b85; border-radius:3px; background:#5d6b85; }
+  .appendix { margin:8px 36px 0; padding:18px 22px; background:#f6f7fa; border-radius:6px; }
+  .appendix h2 { font-size:10.5px; letter-spacing:1.4px; text-transform:uppercase; font-weight:700; color:#5d6b85; margin:0 0 12px 0; padding:0; border:0; }
+  .appendix-table { width:100%; border-collapse:collapse; font-size:13px; }
+  .appendix-table td { padding:6px 0; color:#3a4154; vertical-align:top; }
+  .appendix-table td:first-child { color:#6a7488; font-weight:500; padding-right:14px; width:180px; }
+  .appendix-table td strong { color:#0f1729; font-weight:600; }
+  .sig { padding:32px 36px 28px; }
+  .sig p { font-size:14.5px; color:#2a3142; margin:0 0 12px 0; line-height:1.65; }
+  .sig .signoff { font-size:15px; color:#0f1729; margin-top:20px; }
+  .sig-block { margin-top:20px; padding-top:20px; border-top:1px solid #e6e9ef; display:table; width:100%; }
+  .sig-photo, .sig-info { display:table-cell; vertical-align:top; }
+  .sig-photo { width:64px; padding-right:16px; }
+  .sig-photo .ph { width:64px; height:64px; background:#0f1729; color:#f4b955; display:flex; align-items:center; justify-content:center; font-size:20px; font-weight:600; border-radius:50%; }
+  .sig-info .name { font-size:15px; font-weight:600; color:#0f1729; line-height:1.2; }
+  .sig-info .role { font-size:12px; color:#6a7488; margin-bottom:6px; }
+  .sig-info .firm { font-size:13px; color:#2a3142; margin-bottom:6px; font-weight:500; }
+  .sig-info .contact { font-size:12.5px; color:#3a4154; line-height:1.7; }
+  .sig-info .contact a { color:#0f1729; text-decoration:none; border-bottom:1px solid #c5cee0; }
+  .sig-info .dre { font-size:11px; color:#6a7488; margin-top:6px; }
+  .footer { padding:14px 36px 22px; background:#0f1729; color:#5d6b85; font-size:11px; text-align:center; line-height:1.6; letter-spacing:0.3px; }
+  @media (max-width:540px) {
+    .top-bar, .header, .kpi-section, section, .sig, .footer, .hero-stat, .syndication-block { padding-left:20px; padding-right:20px; }
+    .status, .note, .appendix { margin-left:20px; margin-right:20px; }
+    .kpis { display:block; margin:0; }
+    .kpi { display:block; margin-bottom:8px; }
+    .header h1 { font-size:22px; }
+    .hero-stat .hs-num { font-size:56px; }
+  }
+</style>
+</head>
+<body>
+  <div class="wrap">
+
+    <div class="top-bar">
+      <span>Weekly Status Report</span>
+      <span class="right">No. 01 · June 8, 2026</span>
+    </div>
+
+    <div class="header">
+      <h1>2260 Clarke Avenue</h1>
+      <div class="meta">East Palo Alto, CA · 4 bd / 3 ba · two homes, 1,958 sqft combined · MLS ML82033776 · Relaunched June 1 · Reporting period: <strong>June 2 – 8, 2026</strong></div>
+    </div>
+
+    <div class="status">
+      <div class="dot"></div>
+      <div class="text">
+        <div class="label">Status · Active · Strong First Week</div>
+        <div class="msg">A really encouraging start back on the market — good weekend traffic and warm feedback on both homes. We're one week in, and the wider market is moving at a patient pace right now, so steady momentum is exactly what we want to see.</div>
+      </div>
+    </div>
+
+    <div class="kpi-section">
+      <div class="kpi-label">This Week (June 2 – 8) · Week 1 of the Relaunch</div>
+      <div class="kpis">
+        <div class="kpi">
+          <div class="k-lbl">Open-House Groups</div>
+          <div class="k-num">8</div>
+          <div class="k-delta">5 Sat / 3 Sun — solid traffic</div>
+        </div>
+        <div class="kpi">
+          <div class="k-lbl">Days Since Relaunch</div>
+          <div class="k-num">7</div>
+          <div class="k-delta">fresh listing period from June 1</div>
+        </div>
+        <div class="kpi">
+          <div class="k-lbl">Comparable Homes Active</div>
+          <div class="k-num">6+</div>
+          <div class="k-delta">similar homes also on the market</div>
+        </div>
+        <div class="kpi">
+          <div class="k-lbl">Next Open House</div>
+          <div class="k-num">Sat</div>
+          <div class="k-delta">this coming weekend</div>
+        </div>
+      </div>
+    </div>
+
+    <section>
+      <h2>The Read</h2>
+      <p>A genuinely good first weekend back on. <strong>The homes are showing beautifully and buyers are responding to them</strong> — eight groups came through Saturday and Sunday, and the feedback on both the main home and the brand-new back home was warm. People connect with the two-home, live-in-one/rent-the-other concept the moment they walk it. The marketing is clearly working: the property is well in front of the market.</p>
+      <p>The wider backdrop is worth keeping in view. <strong>East Palo Alto is in a patient stretch right now</strong> — buyers are taking their time, and a number of comparable homes are sitting on the market as everyone weighs their options. That's the current rhythm of the market, not a reflection on our home. At one week in, with good traffic and a strong product, we're exactly where we want to be: visible, generating interest, and gathering the feedback that tells us how to play the coming weeks.</p>
+    </section>
+
+    <div class="note">
+      <div class="lbl">How I'm Reading Week One</div>
+      <h3>Strong start — let's keep the momentum and stay close</h3>
+      <p>My read: the relaunch is doing its job. The homes are drawing people in and the feedback is positive, and I'd like to give this fresh listing period room to build while we watch how buyers and the comparable listings move. <strong>I'll keep the traffic coming and the feedback flowing</strong>, and I'll reach out as the picture sharpens. Whenever you'd like to talk through strategy together, I'm a call away.</p>
+      <a href="tel:6503084727" class="btn">Call me: (650) 308-4727</a>
+      <a href="#" class="btn btn-secondary">Or reply anytime</a>
+    </div>
+
+    <section>
+      <h2>The Market Right Now · Comparable Homes Still Active</h2>
+      <p>A helpful way to see where we sit is to look at the homes buyers are weighing alongside ours. <strong>Several comparable East Palo Alto listings are currently active and still seeking their buyer</strong> — some for quite a while. It's a useful reminder that the market is simply moving deliberately right now, and that a thoughtful, steady approach tends to win out.</p>
+      <table class="comps">
+        <thead><tr><th>Currently Active · Comparable Homes</th><th class="r">Listed</th><th class="r">Beds</th><th class="r">Days on Market</th></tr></thead>
+        <tbody>
+          <tr><td>3 Shorebreeze Ct</td><td class="r">$1,399,000</td><td class="r">4 bd</td><td class="r">6</td></tr>
+          <tr><td>909 Baines St</td><td class="r">$1,399,888</td><td class="r">4 bd</td><td class="r">7</td></tr>
+          <tr class="subj"><td>2260 Clarke <span class="ours-tag">· ours</span></td><td class="r">$1,599,000</td><td class="r">4 bd</td><td class="r">7</td></tr>
+          <tr><td>1226 Laurel Ave <em>(main + ADU)</em></td><td class="r">$1,299,000</td><td class="r">4 bd</td><td class="r">41</td></tr>
+          <tr><td>2170 Clarke Ave</td><td class="r">$1,098,800</td><td class="r">3 bd</td><td class="r">61</td></tr>
+          <tr><td>950 Mouton Cir</td><td class="r">$1,549,000</td><td class="r">4 bd</td><td class="r">70</td></tr>
+          <tr><td>1120 Alberni St</td><td class="r">$1,425,000</td><td class="r">5 bd</td><td class="r">125</td></tr>
+        </tbody>
+      </table>
+      <p style="font-size:12.5px; color:#6a7488;"><em>Source: MLSListings, East Palo Alto active listings, pulled June 8, 2026. Several comparable homes have been on the market well beyond ours — we're only one week into the relaunch. Days-on-market shown reflects each listing's current run.</em></p>
+    </section>
+
+    <div class="syndication-block">
+      <h2>Online Visibility · The Listing Is Everywhere</h2>
+      <p>The MLS feed is syndicating to every major platform, so exposure is strong — the homes are well in front of the market. Below are the primary destinations we monitor:</p>
+      <div class="syndication">
+        <span class="chip live">Zillow</span>
+        <span class="chip live">Redfin</span>
+        <span class="chip live">Realtor.com</span>
+        <span class="chip live">Homes.com</span>
+        <span class="chip live">Trulia</span>
+        <span class="chip live">Compass</span>
+        <span class="chip live">Intero (origin)</span>
+        <span class="chip more">+ broker-affiliate &amp; regional sites</span>
+      </div>
+      <p style="margin-top:14px; font-size:13px; color:#6a7488;"><em>Exposure isn't the question — the homes are being seen widely. The next signal we watch is buyer engagement deepening into showings and disclosure activity as this fresh week builds.</em></p>
+    </div>
+
+    <div class="hero-stat">
+      <div class="hs-num">8<span class="unit">groups</span></div>
+      <div class="hs-title">toured the homes over the weekend</div>
+      <div class="hs-sub">Five groups Saturday, three Sunday. Feedback was <strong>positive on both the main home and the new back home</strong>, with real interest in the income flexibility. We have another open house scheduled this coming weekend to keep the momentum going.</div>
+    </div>
+
+    <section>
+      <h2>What We're Hearing</h2>
+      <div class="concerns-stack">
+        <div class="concern-card">
+          <div class="rank">01</div>
+          <div class="body">
+            <div class="head"><div class="name">Real interest in the two-home concept</div><div class="count">The standout</div></div>
+            <p>Buyers light up at the live-in-one, rent-the-other setup and the brand-new back home. It's our strongest differentiator, and the story I want to keep front and center.</p>
+          </div>
+        </div>
+        <div class="concern-card">
+          <div class="rank">02</div>
+          <div class="body">
+            <div class="head"><div class="name">Buyers are taking their time</div><div class="count">Market-wide right now</div></div>
+            <p>Consistent with the broader market, buyers are weighing their options carefully before acting. That's the current pace across East Palo Alto, and it's why steady traffic and patience matter this early.</p>
+          </div>
+        </div>
+        <div class="concern-card">
+          <div class="rank">03</div>
+          <div class="body">
+            <div class="head"><div class="name">The tenant in the front home</div><div class="count">Worth clarifying</div></div>
+            <p>For some owner-occupant buyers, the occupied front unit makes it harder to picture moving in. Clarifying the tenancy and timeline would open the property to a wider pool.</p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section>
+      <h2>What I'm Doing This Week</h2>
+      <ul class="my-actions">
+        <li>Holding the open house again this weekend to keep traffic and feedback flowing.</li>
+        <li>Strengthening the MLS listing — making sure the brand-new back home and its rental income are fully reflected so buyers, appraisers, and search all credit the two-home value.</li>
+        <li>Reaching out directly to investor and house-hack buyers — the profile that values a second income unit most.</li>
+        <li>Following up with every agent who toured this weekend to gather feedback and gauge interest.</li>
+        <li>Keeping a close eye on the comparable active listings and the broader market so we stay a step ahead.</li>
+      </ul>
+    </section>
+
+    <div class="appendix">
+      <h2>Appendix · This Week at a Glance</h2>
+      <table class="appendix-table">
+        <tr><td>Relaunched</td><td><strong>June 1, 2026</strong> — current listing period</td></tr>
+        <tr><td>Days on market</td><td><strong>7</strong> (counted from the June 1 relaunch)</td></tr>
+        <tr><td>Property</td><td>4 bd / 3 ba · front home + brand-new back home · 1,958 sqft combined · ~10,647 sqft lot</td></tr>
+        <tr><td>Open-house groups this weekend</td><td><strong>8</strong> (5 Sat / 3 Sun)</td></tr>
+        <tr><td>Comparable homes active</td><td><strong>6+</strong> similar EPA listings currently on the market</td></tr>
+        <tr><td>Next open house</td><td>This coming weekend</td></tr>
+      </table>
+    </div>
+
+    <div class="sig">
+      <p style="margin-top:24px;">Really pleased with how the first weekend went — the homes are doing their part and the interest is real. I'll keep the momentum going and stay close to the market as this fresh week builds. Anytime you'd like to talk it through, just reply or give me a call.</p>
+      <div class="signoff">— Graeham</div>
+      <div class="sig-block">
+        <div class="sig-photo"><div class="ph">GW</div></div>
+        <div class="sig-info">
+          <div class="name">Graeham Watts</div>
+          <div class="role">REALTOR</div>
+          <div class="firm">Intero Real Estate</div>
+          <div class="contact">+1 (650) 308-4727 · <a href="mailto:graehamwatts@gmail.com">graehamwatts@gmail.com</a></div>
+          <div class="dre">DRE # 01466876</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="footer">
+      Weekly status report prepared for the ownership of 2260 Clarke Avenue, East Palo Alto. Figures from MLSListings, June 8, 2026. Not a formal appraisal.
+    </div>
+
+  </div>
+</body>
+</html>
