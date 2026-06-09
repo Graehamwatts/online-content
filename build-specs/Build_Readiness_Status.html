@@ -1,0 +1,151 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Property IQ — Build Readiness Status</title>
+<style>
+  :root{
+    --ink:#0A1628; --slate:#33475b; --muted:#6b7d8f; --line:#e3e9ef;
+    --bg:#f6f8fa; --card:#ffffff; --cyan:#00B4D8;
+    --done:#1B7A3E; --wait:#bf8700; --block:#C23B22; --info:#0077A8;
+  }
+  *{box-sizing:border-box;}
+  body{margin:0;font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,Helvetica,Arial,sans-serif;
+    background:var(--bg);color:var(--ink);line-height:1.5;-webkit-font-smoothing:antialiased;}
+  .wrap{max-width:1000px;margin:0 auto;padding:32px 24px 64px;}
+  header.hero{background:linear-gradient(135deg,#0A1628,#13294a);color:#fff;
+    border-radius:16px;padding:30px 32px 26px;box-shadow:0 8px 30px rgba(10,22,40,.18);}
+  .hero .eyebrow{text-transform:uppercase;letter-spacing:.14em;font-size:12px;font-weight:600;opacity:.85;margin:0;}
+  .hero h1{margin:6px 0 4px;font-size:26px;font-weight:700;}
+  .hero .sub{margin:0;font-size:14px;opacity:.92;}
+  .hero .cyan{color:var(--cyan);}
+  .asof{display:inline-block;margin-top:14px;background:rgba(255,255,255,.16);
+    border:1px solid rgba(255,255,255,.3);padding:5px 13px;border-radius:999px;font-size:12.5px;font-weight:500;}
+  section{margin-top:30px;}
+  h2{font-size:18px;margin:0 0 12px;}
+  table{width:100%;border-collapse:collapse;background:var(--card);
+    border:1px solid var(--line);border-radius:14px;overflow:hidden;font-size:14px;}
+  thead th{background:#eef3f8;text-align:left;padding:11px 14px;font-size:12px;
+    text-transform:uppercase;letter-spacing:.05em;color:var(--slate);font-weight:700;}
+  tbody td{padding:12px 14px;border-top:1px solid var(--line);vertical-align:top;}
+  tbody tr:hover{background:#f9fbfd;}
+  .pill{display:inline-block;padding:3px 10px;border-radius:999px;font-size:11.5px;font-weight:700;white-space:nowrap;}
+  .s-done{background:#e8f6ee;color:var(--done);}
+  .s-wait{background:#fef6e0;color:var(--wait);}
+  .s-block{background:#fdecec;color:var(--block);}
+  .s-info{background:#eaf3ff;color:var(--info);}
+  .item{font-weight:600;}
+  .note{color:var(--slate);font-size:13.5px;}
+  .card{background:var(--card);border:1px solid var(--line);border-radius:14px;padding:18px 20px;font-size:14px;}
+  .card h3{margin:0 0 8px;font-size:15px;}
+  .card ul{margin:6px 0 0;padding-left:20px;}
+  .card li{margin:4px 0;color:var(--slate);}
+  a{color:var(--info);}
+  code{background:#eef3f8;padding:1px 5px;border-radius:5px;font-size:12.5px;}
+  footer{margin-top:34px;color:var(--muted);font-size:12px;text-align:center;}
+</style>
+</head>
+<body>
+<div class="wrap">
+
+  <header class="hero">
+    <p class="eyebrow">Property IQ &middot; Graeham Watts &middot; Intero Real Estate</p>
+    <h1>Build Readiness Status <span class="cyan">&mdash; Lead Automation</span></h1>
+    <p class="sub">Living status of what's live, what's waiting, and what's blocked across the New Leads rollout.</p>
+    <span class="asof">As of Sunday, May 24, 2026</span>
+  </header>
+
+  <section>
+    <h2>A2P / SMS Compliance (GoHighLevel Trust Center)</h2>
+    <table>
+      <thead><tr><th>Item</th><th>Status</th><th>Detail</th></tr></thead>
+      <tbody>
+        <tr>
+          <td class="item">A2P Brand registration</td>
+          <td><span class="pill s-done">Approved</span></td>
+          <td class="note">Standard brand, Identity <b>Verified</b>. Brand SID <code>BN5e34&hellip;34e61b</code>. Approved May 24, 2026 (confirmed by TCR email).</td>
+        </tr>
+        <tr>
+          <td class="item">A2P Campaign registration</td>
+          <td><span class="pill s-wait">In Progress &mdash; pending carrier review</span></td>
+          <td class="note">Use case <b>LOW_VOLUME</b>, connected to the approved brand, messaging service assigned. Campaign ID not yet issued. <b>Already submitted &mdash; no action needed from us; awaiting TCR/carrier approval.</b> The only row action is Delete (do <b>not</b> click it).</td>
+        </tr>
+        <tr>
+          <td class="item">Toll-Free number &mdash; +1 833-958-4727</td>
+          <td><span class="pill s-done">Verified</span></td>
+          <td class="note">Default number, friendly name "Graeham Watts", forwards to +1 650-308-4727. Toll-free verification is a <b>separate track from 10DLC</b> and is already cleared.</td>
+        </tr>
+        <tr>
+          <td class="item">Local number &mdash; +1 650-718-4544</td>
+          <td><span class="pill s-wait">Gated on campaign</span></td>
+          <td class="note">Friendly name "Graeham's number 2". A2P 10DLC governs this local number &mdash; full SMS throughput unlocks when the campaign is approved.</td>
+        </tr>
+      </tbody>
+    </table>
+  </section>
+
+  <section>
+    <h2>Touch Toolkit &amp; Delivery</h2>
+    <table>
+      <thead><tr><th>Item</th><th>Status</th><th>Detail</th></tr></thead>
+      <tbody>
+        <tr>
+          <td class="item">New Leads GIFs (first batch)</td>
+          <td><span class="pill s-done">Uploaded by Jason</span></td>
+          <td class="note">9 GIFs in <code>gifs/new-leads/</code> via commit <a href="https://github.com/Graehamwatts/online-content/commit/81dd1ca2ddc51c0a363175c90893ad296d020f81">81dd1ca</a>: intro (buyer/seller), day 4 (buyer/seller), day 8 (buyer/seller), day 11 (buyer/seller), + "glad you reached out" intro. <b>Cleanup needed:</b> filenames carry a <code>(2).gif</code> / double-extension artifact and one is off-convention &mdash; rename to <code>newleads-day4-buyer.gif</code> style before wiring into GHL.</td>
+        </tr>
+        <tr>
+          <td class="item">Comment-to-DM (native GHL)</td>
+          <td><span class="pill s-wait">Live test pending (John)</span></td>
+          <td class="note">Built native (Instagram/Facebook Interactive Messenger), ManyChat retained as backup. Spec + beginner guide done. Awaiting John's manual live test.</td>
+        </tr>
+        <tr>
+          <td class="item">LipDub personalized video</td>
+          <td><span class="pill s-wait">Endpoint/auth test pending</span></td>
+          <td class="note">API key staged in GHL custom value. Endpoint + auth handshake not yet confirmed.</td>
+        </tr>
+        <tr>
+          <td class="item">AI Text / SMS steps</td>
+          <td><span class="pill s-wait">Waiting on campaign</span></td>
+          <td class="note">Native GHL Send SMS &mdash; buildable; full A2P send depends on campaign approval (or send via the verified toll-free number).</td>
+        </tr>
+        <tr>
+          <td class="item">Voicemail drop + AI outbound call</td>
+          <td><span class="pill s-block">Blocked</span></td>
+          <td class="note">Blocked on A2P campaign approval / number readiness.</td>
+        </tr>
+        <tr>
+          <td class="item">Email steps</td>
+          <td><span class="pill s-done">Buildable now</span></td>
+          <td class="note">Native GHL Send Email &mdash; no blockers.</td>
+        </tr>
+        <tr>
+          <td class="item">Lead Intake Flow (N8N)</td>
+          <td><span class="pill s-done">Live</span></td>
+          <td class="note">Webhook <code>/approved-leads</code> &mdash; dedupe, normalize, upsert to GHL, stamp attribution. Single front door for every source.</td>
+        </tr>
+      </tbody>
+    </table>
+  </section>
+
+  <section>
+    <h2>What's Next</h2>
+    <div class="card">
+      <ul>
+        <li><b>Wait on the A2P campaign</b> &mdash; it's submitted and in carrier review; status flips to Approved and a Campaign ID populates when it clears. Nothing to do but watch it.</li>
+        <li><b>Rename Jason's GIFs</b> to the workflow naming convention (strip the <code>(2).gif</code> / double extension) so they can be referenced cleanly in GHL.</li>
+        <li><b>John runs the comment-to-DM live test</b> using the beginner guide.</li>
+        <li><b>Confirm LipDub endpoint + auth</b> so personalized video touches can fire.</li>
+        <li><b>Decide send-from number</b> &mdash; the toll-free (+1 833) is verified now; if the New Leads SMS uses it, texting may be live ahead of the 10DLC campaign on the local number.</li>
+      </ul>
+    </div>
+  </section>
+
+  <footer>
+    Property IQ &middot; Build Readiness Status &middot; Graeham Watts &middot; DRE# 01466876 &middot; updated in-session May 24, 2026
+  </footer>
+
+</div>
+</body>
+</html>

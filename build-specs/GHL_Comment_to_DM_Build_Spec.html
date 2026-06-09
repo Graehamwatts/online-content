@@ -1,0 +1,55 @@
+<!DOCTYPE html><html lang="en"><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>GHL Comment-to-DM — Build Spec (ManyChat replacement)</title>
+<style>
+:root{--ink:#0f1f2e;--slate:#33475b;--muted:#6b7d8f;--line:#e3e9ef;--bg:#f6f8fa;--card:#fff;--accent:#1f6feb;--accent2:#0d4a8f;--ok:#2da44e;--warn:#bf6b00;}
+*{box-sizing:border-box;} body{margin:0;font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,Helvetica,Arial,sans-serif;background:var(--bg);color:var(--ink);line-height:1.55;}
+.wrap{max-width:980px;margin:0 auto;padding:30px 22px 70px;}
+header.hero{background:linear-gradient(135deg,var(--accent2),var(--accent));color:#fff;border-radius:16px;padding:28px 30px;}
+.hero .eyebrow{text-transform:uppercase;letter-spacing:.14em;font-size:12px;font-weight:600;opacity:.85;margin:0;}
+.hero h1{margin:6px 0 6px;font-size:25px;} .hero p{margin:0;font-size:14px;opacity:.93;max-width:760px;}
+h2{font-size:18px;margin:30px 0 6px;} h3{font-size:15px;margin:18px 0 4px;color:var(--accent2);}
+.lead{color:var(--slate);font-size:14px;margin:0 0 12px;max-width:820px;}
+.card{background:var(--card);border:1px solid var(--line);border-radius:12px;padding:16px 18px;margin-top:12px;}
+ol{margin:8px 0 0;padding-left:22px;} li{margin:7px 0;font-size:14px;color:var(--slate);} li b{color:var(--ink);}
+.ok{background:#e8f6ee;border:1px solid #aede c2;border-left:5px solid var(--ok);border-radius:10px;padding:12px 16px;color:#1d6b3a;font-size:14px;margin-top:10px;}
+.warn{background:#fff3e0;border:1px solid #f0d09b;border-left:5px solid var(--warn);border-radius:10px;padding:12px 16px;color:#6b4e12;font-size:13.5px;margin-top:12px;}
+code{background:#eef0f2;padding:1px 5px;border-radius:4px;font-size:12.5px;}
+footer{margin-top:36px;color:var(--muted);font-size:12px;text-align:center;}
+</style></head><body><div class="wrap">
+<header class="hero">
+<p class="eyebrow">Graeham Watts · Intero · GHL Build Spec</p>
+<h1>Comment-to-DM Automation in GoHighLevel</h1>
+<p>The native GHL replacement for ManyChat. Built as a Workflow, no extra subscription, leads land straight in the CRM. ManyChat stays as a backup only.</p>
+</header>
+
+<h2>Verdict: it matches ManyChat for our use case</h2>
+<div class="ok"><b>Confirmed capable (per GHL's own docs).</b> GHL natively does: keyword-triggered comment detection → auto-DM the commenter → interactive buttons & quick replies ("Are you buying or selling?") → a separate branch per answer → tag, pipeline move, and enrollment into the New Leads sprint. That is the full flow we run in ManyChat, and it's already included in GHL.</div>
+
+<h2>How it's built — it's a WORKFLOW</h2>
+<p class="lead">Built in Automation → Workflows → Create Workflow → Start from Scratch. Not a separate tool — a normal GHL workflow with an Instagram/Facebook trigger.</p>
+<div class="card"><ol>
+<li><b>Trigger:</b> "Instagram Comment on Post" (Facebook has the same). Under <b>Filters</b>, set keyword match: <code>Contains Phrase</code> or <code>Exact Match</code> (e.g., "BUY", "SELL", "HOME"). Toggle <b>Track First Level Comments Only</b> on.</li>
+<li><b>Action:</b> Actions → Communication → <b>Instagram Interactive Messenger</b>. Reply Type = <b>Reply to Comment via DM</b> (takes the public comment private).</li>
+<li><b>Message + interactive controls:</b> write the DM, then add <b>Quick Replies</b> (one-tap, e.g., "Buying" / "Selling") or <b>Buttons</b> (persistent, e.g., "Book a call" / "See listings").</li>
+<li><b>Branches (auto-created):</b> each quick reply/button makes its own branch. In the "Buying" branch → tag <code>Buyer</code>, add to Buyer pipeline / New Leads sprint. In "Selling" → tag <code>Seller</code>, route accordingly.</li>
+<li><b>Wait + Default Timeout:</b> each messenger action needs a Wait step (default 1 min, editable). If no reply, the contact falls into the <b>Default Timeout</b> branch (send a nudge, tag "No Response").</li>
+<li><b>Capture:</b> in each branch add Create/Update Contact + tag <code>Source: IG Comment</code> so the lead is in the CRM and flows into the New Leads automation.</li>
+</ol></div>
+<p class="lead">Shortcut: GHL also ships a pre-built <b>"Instagram Comment Automation" Workflow Recipe</b> John can start from instead of building from scratch.</p>
+
+<h2>Prerequisites (do these first or the trigger won't fire)</h2>
+<div class="card"><ol>
+<li>Connect the <b>Facebook Page + Instagram Business account</b> in GHL → Settings → Integrations.</li>
+<li>In <b>Meta Business Suite</b>, enable the DM-keyword setting so GHL is allowed to auto-reply.</li>
+</ol></div>
+
+<h2>Honest limits (mostly Meta's rules — they hit ManyChat too)</h2>
+<div class="warn">
+• <b>24-hour messaging window:</b> automated DMs only within 24h of the user's last interaction (a Meta rule, not a GHL weakness — ManyChat has it too).<br>
+• <b>7-day comment-reply window:</b> the comment→DM reply must send within 7 days.<br>
+• <b>Quick Replies can't share a message with an attachment</b> — send the attachment in a separate step.<br>
+• <b>Where GHL is genuinely lighter than ManyChat:</b> ManyChat's flow builder is more visual/mature and supports more channels (WhatsApp, Telegram, TikTok) and flow A/B testing. For our comment→DM→qualify→capture, GHL is plenty. Keep ManyChat as backup if we ever need those extras.
+</div>
+
+<footer>Graeham Watts · Intero Real Estate · Comment-to-DM build spec · ManyChat retained as backup only</footer>
+</div></body></html>
