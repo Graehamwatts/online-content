@@ -1,0 +1,367 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>3 Shorebreeze Court — Weekly Status — June 8, 2026</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700&display=swap" rel="stylesheet">
+<style>
+  body { margin:0; padding:0; background:#eef0f4; font-family:'DM Sans', system-ui, sans-serif; color:#1a2332; line-height:1.55; -webkit-font-smoothing:antialiased; }
+  .wrap { max-width:720px; margin:0 auto; background:#ffffff; }
+
+  /* TOP BAR */
+  .top-bar { padding:14px 36px; background:#0f1729; color:#9da9c1; font-size:11px; letter-spacing:1.4px; text-transform:uppercase; font-weight:600; display:flex; justify-content:space-between; }
+  .top-bar .right { color:#5d6b85; }
+
+  /* HEADER */
+  .header { padding:32px 36px 24px; }
+  .header h1 { font-size:26px; font-weight:600; margin:0 0 4px 0; color:#0f1729; letter-spacing:-0.4px; }
+  .header .meta { font-size:13px; color:#6a7488; }
+  .header .meta strong { color:#0f1729; font-weight:600; }
+
+  /* STATUS STRIP */
+  .status { margin:0 36px; padding:16px 18px; border-radius:6px; display:flex; align-items:center; gap:14px; background:#e8f5ec; border:1px solid #a8d4b6; }
+  .status .dot { width:10px; height:10px; border-radius:50%; background:#1f7a3a; flex-shrink:0; box-shadow:0 0 0 4px rgba(31,122,58,0.15); }
+  .status .text { flex:1; }
+  .status .label { font-size:10.5px; letter-spacing:1.4px; text-transform:uppercase; font-weight:700; color:#1f5e2e; margin-bottom:2px; }
+  .status .msg { font-size:14px; color:#1f3a25; font-weight:500; }
+
+  /* KPI ROW */
+  .kpi-section { padding:24px 36px 8px; }
+  .kpi-label { font-size:10.5px; letter-spacing:1.4px; text-transform:uppercase; font-weight:700; color:#5d6b85; margin-bottom:12px; }
+  .kpis { display:table; width:100%; border-collapse:separate; border-spacing:8px; margin:0 -8px; }
+  .kpi { display:table-cell; background:#f6f7fa; border-radius:6px; padding:14px 14px 12px; vertical-align:top; }
+  .kpi .k-lbl { font-size:10.5px; color:#6a7488; letter-spacing:0.6px; text-transform:uppercase; font-weight:600; margin-bottom:6px; }
+  .kpi .k-num { font-size:28px; font-weight:600; color:#0f1729; line-height:1; letter-spacing:-0.6px; }
+  .kpi .k-delta { font-size:12px; margin-top:6px; font-weight:500; }
+  .kpi .k-delta.down { color:#c44545; }
+  .kpi .k-delta.up { color:#1f7a3a; }
+  .kpi .k-delta.flat { color:#6a7488; }
+  .kpi .k-delta::before { content:""; display:inline-block; width:0; height:0; border-left:4px solid transparent; border-right:4px solid transparent; margin-right:5px; vertical-align:middle; }
+  .kpi .k-delta.down::before { border-top:5px solid #c44545; }
+  .kpi .k-delta.up::before { border-bottom:5px solid #1f7a3a; }
+  .kpi .k-delta.flat::before { border-top:5px solid transparent; border-bottom:5px solid transparent; border-left:5px solid #6a7488; }
+
+  /* SECTION */
+  section { padding:24px 36px 4px; }
+  section h2 { font-size:11px; letter-spacing:1.6px; text-transform:uppercase; font-weight:700; color:#5d6b85; margin:0 0 12px 0; padding-bottom:8px; border-bottom:1px solid #e6e9ef; }
+  section p { font-size:14.5px; color:#2a3142; margin:0 0 12px 0; line-height:1.65; }
+  section p strong { color:#0f1729; font-weight:600; }
+
+  /* DECISION BLOCK */
+  .decision { margin:8px 36px 0; padding:22px 24px; background:#0f1729; color:#fff; border-radius:6px; }
+  .decision .lbl { display:flex; align-items:center; gap:8px; font-size:10.5px; letter-spacing:1.4px; text-transform:uppercase; font-weight:700; color:#f4b955; margin-bottom:10px; }
+  .decision .lbl::before { content:"●"; color:#f4b955; font-size:14px; }
+  .decision h3 { font-size:18px; font-weight:600; color:#fff; margin:0 0 8px 0; line-height:1.3; }
+  .decision p { font-size:14px; color:#c5cee0; margin:0 0 14px 0; line-height:1.6; }
+  .decision p strong { color:#fff; }
+  .decision .btn { display:inline-block; background:#f4b955; color:#0f1729; padding:10px 18px; border-radius:4px; text-decoration:none; font-size:13px; font-weight:600; letter-spacing:0.3px; margin-right:8px; }
+  .decision .btn-secondary { background:transparent; color:#f4b955; border:1px solid #f4b955; }
+
+  /* MARKET CONTEXT comparison cards */
+  .market-cards { display:table; width:100%; border-collapse:separate; border-spacing:8px; margin:6px -8px; }
+  .market-card { display:table-cell; background:#f6f7fa; border-radius:6px; padding:18px 18px 16px; vertical-align:top; position:relative; }
+  .market-card .mc-label { font-size:10.5px; color:#6a7488; letter-spacing:1px; text-transform:uppercase; font-weight:700; margin-bottom:14px; }
+  .market-card .mc-delta { font-size:30px; font-weight:700; color:#c44545; line-height:1; letter-spacing:-1px; margin-bottom:4px; }
+  .market-card .mc-delta-label { font-size:11.5px; color:#6a7488; font-weight:500; margin-bottom:14px; }
+  .market-card .mc-row { display:flex; justify-content:space-between; padding:6px 0; font-size:13px; color:#2a3142; border-top:1px solid #ecedf2; }
+  .market-card .mc-row .v { font-weight:600; color:#0f1729; }
+
+  /* HERO STAT — for big section openers */
+  .hero-stat { padding:28px 36px 8px; border-top:1px solid #e6e9ef; margin-top:12px; }
+  .hero-stat .hs-num { font-size:72px; font-weight:700; color:#0f1729; line-height:0.95; letter-spacing:-3px; margin-bottom:4px; }
+  .hero-stat .hs-num .unit { font-size:32px; color:#6a7488; font-weight:500; letter-spacing:-1px; margin-left:8px; }
+  .hero-stat .hs-title { font-size:20px; font-weight:600; color:#0f1729; line-height:1.25; margin-bottom:6px; letter-spacing:-0.3px; }
+  .hero-stat .hs-sub { font-size:13.5px; color:#6a7488; line-height:1.55; }
+  .hero-stat .hs-sub strong { color:#2a3142; font-weight:600; }
+
+  /* SYNDICATION CHIPS */
+  .syndication-block { padding:24px 36px 4px; }
+  .syndication-block h2 { font-size:11px; letter-spacing:1.6px; text-transform:uppercase; font-weight:700; color:#5d6b85; margin:0 0 12px 0; padding-bottom:8px; border-bottom:1px solid #e6e9ef; }
+  .syndication-block p { font-size:14.5px; color:#2a3142; margin:0 0 12px 0; line-height:1.65; }
+  .syndication-block p strong { color:#0f1729; font-weight:600; }
+  .syndication { display:flex; flex-wrap:wrap; gap:6px; margin:12px 0 8px 0; }
+  .chip { font-size:12px; padding:5px 12px; background:#f6f7fa; border:1px solid #e6e9ef; color:#3a4154; border-radius:14px; font-weight:500; }
+  .chip.live { background:#e8f5ec; border-color:#a8d4b6; color:#1f5e2e; }
+  .chip.more { background:transparent; border:1px dashed #c5cee0; color:#6a7488; font-style:italic; }
+
+  /* CONCERN CARDS — themed with rank */
+  .concerns-stack { margin-top:18px; }
+  .concern-card { display:flex; gap:18px; padding:18px 20px; background:#f6f7fa; border-radius:6px; margin-bottom:10px; align-items:flex-start; }
+  .concern-card:last-child { margin-bottom:0; }
+  .concern-card .rank { font-size:36px; font-weight:700; color:#c5cee0; line-height:0.9; flex-shrink:0; min-width:38px; letter-spacing:-1.5px; }
+  .concern-card .body { flex:1; }
+  .concern-card .head { display:flex; justify-content:space-between; align-items:baseline; gap:12px; margin-bottom:6px; flex-wrap:wrap; }
+  .concern-card .name { font-size:17px; font-weight:700; color:#0f1729; line-height:1.25; letter-spacing:-0.2px; }
+  .concern-card .count { font-size:10.5px; color:#6a7488; font-weight:600; letter-spacing:0.5px; text-transform:uppercase; background:#fff; padding:3px 9px; border-radius:11px; white-space:nowrap; }
+  .concern-card p { font-size:13.5px; color:#3a4154; margin:0; line-height:1.6; }
+  .concern-card.urgent { background:#fef5e6; }
+  .concern-card.urgent .rank { color:#f0c98a; }
+  .concern-card.critical { background:#0f1729; }
+  .concern-card.critical .rank { color:#f4b955; }
+  .concern-card.critical .name { color:#fff; }
+  .concern-card.critical .count { background:#2a3a55; color:#c5cee0; }
+  .concern-card.critical p { color:#c5cee0; }
+
+  /* ACTIONS */
+  .my-actions { list-style:none; padding:0; margin:8px 0 0 0; }
+  .my-actions li { padding:10px 0 10px 26px; font-size:14px; color:#2a3142; border-bottom:1px solid #f0f2f6; position:relative; line-height:1.55; }
+  .my-actions li:last-child { border-bottom:0; }
+  .my-actions li::before { content:""; position:absolute; left:0; top:13px; width:14px; height:14px; border:1.5px solid #5d6b85; border-radius:3px; background:#5d6b85; }
+
+  /* APPENDIX */
+  .appendix { margin:8px 36px 0; padding:18px 22px; background:#f6f7fa; border-radius:6px; }
+  .appendix h2 { font-size:10.5px; letter-spacing:1.4px; text-transform:uppercase; font-weight:700; color:#5d6b85; margin:0 0 12px 0; padding:0; border:0; }
+  .appendix-table { width:100%; border-collapse:collapse; font-size:13px; }
+  .appendix-table td { padding:6px 0; color:#3a4154; vertical-align:top; }
+  .appendix-table td:first-child { color:#6a7488; font-weight:500; padding-right:14px; width:170px; }
+  .appendix-table td strong { color:#0f1729; font-weight:600; }
+
+  /* SIGNATURE */
+  .sig { padding:32px 36px 28px; }
+  .sig p { font-size:14.5px; color:#2a3142; margin:0 0 12px 0; line-height:1.65; }
+  .sig .signoff { font-size:15px; color:#0f1729; margin-top:20px; }
+  .sig-block { margin-top:20px; padding-top:20px; border-top:1px solid #e6e9ef; display:table; width:100%; }
+  .sig-photo, .sig-info { display:table-cell; vertical-align:top; }
+  .sig-photo { width:64px; padding-right:16px; }
+  .sig-photo .ph { width:64px; height:64px; background:#0f1729; color:#f4b955; display:flex; align-items:center; justify-content:center; font-size:20px; font-weight:600; border-radius:50%; }
+  .sig-info .name { font-size:15px; font-weight:600; color:#0f1729; line-height:1.2; }
+  .sig-info .role { font-size:12px; color:#6a7488; margin-bottom:6px; }
+  .sig-info .firm { font-size:13px; color:#2a3142; margin-bottom:6px; font-weight:500; }
+  .sig-info .contact { font-size:12.5px; color:#3a4154; line-height:1.7; }
+  .sig-info .contact a { color:#0f1729; text-decoration:none; border-bottom:1px solid #c5cee0; }
+  .sig-info .dre { font-size:11px; color:#6a7488; margin-top:6px; }
+
+  /* FOOTER */
+  .footer { padding:14px 36px 22px; background:#0f1729; color:#5d6b85; font-size:11px; text-align:center; line-height:1.6; letter-spacing:0.3px; }
+
+  @media (max-width:540px) {
+    .top-bar, .header, .kpi-section, section, .sig, .footer, .hero-stat, .syndication-block { padding-left:20px; padding-right:20px; }
+    .status, .decision, .appendix { margin-left:20px; margin-right:20px; }
+    .kpis, .market-cards { display:block; margin:0; }
+    .kpi, .market-card { display:block; margin-bottom:8px; }
+    .header h1 { font-size:22px; }
+    .hero-stat .hs-num { font-size:56px; }
+    .hero-stat .hs-num .unit { font-size:24px; }
+  }
+</style>
+</head>
+<body>
+  <div class="wrap">
+
+    <!-- TOP BAR -->
+    <div class="top-bar">
+      <span>Weekly Status Report</span>
+      <span class="right">No. 01 · June 8, 2026</span>
+    </div>
+
+    <!-- HEADER -->
+    <div class="header">
+      <h1>3 Shorebreeze Court</h1>
+      <div class="meta">East Palo Alto, CA · 4 bd / 2.5 ba / 1,840 sqft · Listed at <strong>$1,399,000</strong> · MLS ML82049532 · Reporting period: <strong>June 2 – June 8, 2026</strong></div>
+    </div>
+
+    <!-- STATUS STRIP -->
+    <div class="status">
+      <div class="dot"></div>
+      <div class="text">
+        <div class="label">Status · Active — Strong Launch</div>
+        <div class="msg">A busy first open-house weekend (~20 groups) for a home that's been listed just six days. Feedback is clustering on a couple of fixed features, and one serious buyer is in follow-up. Nothing needed from you this week — I'm driving it from here.</div>
+      </div>
+    </div>
+
+    <!-- KPIs THIS WEEK -->
+    <div class="kpi-section">
+      <div class="kpi-label">This Week (June 2 – June 8)</div>
+      <div class="kpis">
+        <div class="kpi">
+          <div class="k-lbl">Open House Groups</div>
+          <div class="k-num">~20</div>
+          <div class="k-delta up">Sat ~7 · Sun ~13</div>
+        </div>
+        <div class="kpi">
+          <div class="k-lbl">Days on Market</div>
+          <div class="k-num">6</div>
+          <div class="k-delta flat">listed Jun 2 · EPA avg ~32</div>
+        </div>
+        <div class="kpi">
+          <div class="k-lbl">Serious Buyers</div>
+          <div class="k-num">1</div>
+          <div class="k-delta up">agent-represented, in follow-up</div>
+        </div>
+        <div class="kpi">
+          <div class="k-lbl">Offers</div>
+          <div class="k-num">0</div>
+          <div class="k-delta flat">none yet — normal at day 6</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- THE READ -->
+    <section>
+      <h2>The Read</h2>
+      <p>Hi Marcia and Edgar — quick version: <strong>the launch went well.</strong> We had a genuinely busy opening weekend — roughly <strong>7 groups through on Saturday and 13 on Sunday</strong> — which is strong traffic for a home that's only been on the market since June 2.</p>
+      <p>The feedback was consistent. The two things buyers raised most were <strong>the windows</strong> and <strong>the size of the front rooms</strong>, and a few felt the price was a touch high <em>because</em> of those two things. I'll be straight with you: those are fixed features of the house — we can't move walls or change the windows — so the way we win is on positioning, marketing, and being ready to move fast when the right buyer shows up. There were also a few smaller, miscellaneous comments, but nothing material.</p>
+      <p>The encouraging signal: <strong>one agent-represented buyer told us they're seriously interested</strong>, and I'm following up with them closely to find out whether they'll write an offer. I'll let you know the moment that firms up either way.</p>
+    </section>
+
+    <!-- DECISION REQUIRED -->
+    <div class="decision">
+      <div class="lbl">Where We Stand</div>
+      <h3>A strong first week — nothing needed from you</h3>
+      <p>Short version: the launch did its job. Heavy opening-weekend traffic, one serious agent-represented buyer in active follow-up, and the listing is live across every major portal. <strong>There's nothing you need to do this week — the follow-up from here is on me.</strong> I'll keep you posted as that buyer firms up, and if you ever want to talk it through, I'm one call away.</p>
+      <a href="tel:6503084727" class="btn">Call or text me: (650) 308-4727</a>
+      <a href="mailto:graehamwatts@gmail.com" class="btn btn-secondary">Or reply to this email</a>
+    </div>
+
+    <!-- MARKET CONTEXT -->
+    <section>
+      <h2>Market Context · 3 Shorebreeze vs. East Palo Alto</h2>
+      <p>Here's the part worth sitting with. On the two numbers that matter most, the listing is positioned well:</p>
+      <div class="market-cards">
+        <div class="market-card">
+          <div class="mc-label">Days on Market</div>
+          <div class="mc-delta" style="color:#0f1729;">6 days</div>
+          <div class="mc-delta-label">we're still in the opening window</div>
+          <div class="mc-row"><span>3 Shorebreeze</span><span class="v">6 days</span></div>
+          <div class="mc-row"><span>EPA average</span><span class="v">~32 days</span></div>
+        </div>
+        <div class="market-card">
+          <div class="mc-label">Price per Square Foot</div>
+          <div class="mc-delta" style="color:#1f7a3a;">$760</div>
+          <div class="mc-delta-label">at — or just under — the EPA median</div>
+          <div class="mc-row"><span>3 Shorebreeze</span><span class="v">$760 / sqft</span></div>
+          <div class="mc-row"><span>EPA median</span><span class="v">~$800 / sqft</span></div>
+        </div>
+      </div>
+      <p style="margin-top:14px;">Translation: on a price-per-square-foot basis, <strong>3 Shorebreeze is priced right in line with — actually a touch under — the East Palo Alto median.</strong> So the "priced a little high" comments aren't really about the headline number; they're buyers reacting to the room sizes and windows and pricing in their own discount. That's useful to know, and it's why I'd rather hold steady and let the right buyer find the home than react to week-one chatter. We'll watch the next 7–10 days closely.</p>
+      <p style="font-size:13px; color:#6a7488;"><em>Market figures are a directional snapshot (Redfin / Movoto, East Palo Alto, June 2026) and vary by condition, lot, and pocket. Your $/sqft is exact, from the MLS.</em></p>
+    </section>
+
+    <!-- ONLINE VISIBILITY -->
+    <div class="syndication-block">
+      <h2>Online Visibility · The Listing Is Everywhere</h2>
+      <p>Since it went live on June 2, the MLS feed has syndicated 3 Shorebreeze to <strong>virtually every major real estate platform</strong> — easily 100+ sites once broker-affiliate, regional, and aggregator sites are counted. The primary destinations we monitor for buyer engagement:</p>
+      <div class="syndication">
+        <span class="chip live">Zillow</span>
+        <span class="chip live">Redfin</span>
+        <span class="chip live">Realtor.com</span>
+        <span class="chip live">Homes.com</span>
+        <span class="chip live">Trulia</span>
+        <span class="chip live">Compass</span>
+        <span class="chip live">Coldwell Banker</span>
+        <span class="chip live">Intero (origin)</span>
+        <span class="chip more">+ broker-affiliate &amp; regional sites</span>
+      </div>
+      <p style="margin-top:14px; font-size:13px; color:#6a7488;"><em>Live view/save counts from Zillow and Redfin will be added to next week's report once direct portal access is set up. For now, the open-house turnout is our strongest engagement signal.</em></p>
+    </div>
+
+    <!-- OPEN HOUSE HERO -->
+    <div class="hero-stat">
+      <div class="hs-num">~20<span class="unit">groups</span></div>
+      <div class="hs-title">came through on opening weekend</div>
+      <div class="hs-sub">Roughly <strong>7 groups Saturday</strong> and <strong>13 Sunday</strong> — solid first-weekend traffic for a just-listed home. Most of the feedback clustered into the three themes below.</div>
+    </div>
+
+    <!-- WHAT BUYERS FOCUSED ON -->
+    <section>
+      <h2>What Buyers Focused On</h2>
+      <div class="concerns-stack">
+        <div class="concern-card critical">
+          <div class="rank">01</div>
+          <div class="body">
+            <div class="head">
+              <div class="name">The windows</div>
+              <div class="count">Most-cited comment</div>
+            </div>
+            <p>The single most common thing buyers raised this weekend. It's a fixed feature, so we can't change it — what we can do is make sure the marketing leads with the home's strengths (the bright, open main level, the refreshed kitchen, the loft) so the windows aren't the first impression online. If it keeps coming up, it informs how we position on price.</p>
+          </div>
+        </div>
+
+        <div class="concern-card urgent">
+          <div class="rank">02</div>
+          <div class="body">
+            <div class="head">
+              <div class="name">Size of the front rooms</div>
+              <div class="count">The recurring "setback"</div>
+            </div>
+            <p>Several buyers felt the front rooms read smaller than they expected. Also a fixed feature. We counter it with staging cues and photography that emphasize flow and scale, and by pointing buyers to the spaces that <em>do</em> deliver — the open living/dining, the upstairs loft, and the primary suite.</p>
+          </div>
+        </div>
+
+        <div class="concern-card">
+          <div class="rank">03</div>
+          <div class="body">
+            <div class="head">
+              <div class="name">Price, tied to the above</div>
+              <div class="count">A few buyers</div>
+            </div>
+            <p>A handful felt the price was a little high — but specifically <em>because</em> of the windows and room sizes, not the number on its own. As the market card shows, your $/sqft is already at or under the EPA median. At six days in, this is feedback to monitor, not act on. A few other small, miscellaneous comments came up too — nothing material.</p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- WHERE INTEREST STANDS -->
+    <section>
+      <h2>Where the Interest Stands</h2>
+      <p><strong>One serious buyer, agent-represented.</strong> They told us at the open house they have genuine interest, and I'm following up with their agent as often as I reasonably can to find out whether an offer is coming. I'll let you know the moment that firms up either way.</p>
+      <p><strong>Plenty of eyes on it.</strong> Beyond that one buyer, I'm circling back to the agents whose clients came through this weekend to surface any other real interest before it cools, and keeping an eye on the portal activity for new inquiries.</p>
+    </section>
+
+    <!-- WHAT I'M DOING -->
+    <section>
+      <h2>What I'm Doing This Week (No Action Needed)</h2>
+      <ul class="my-actions">
+        <li>Following up closely with the serious agent-represented buyer to learn whether they'll write an offer.</li>
+        <li>Reviewing the listing photos and remarks so the online presentation leads with the home's strongest spaces — the open main level, kitchen, loft, and primary suite.</li>
+        <li>Collecting written feedback from this weekend's open-house visitors so we can tell whether the window and room-size comments are isolated or a pattern.</li>
+        <li>Watching the Zillow/Redfin engagement and lining up this week's private showings. If the same objections keep surfacing, I'll have a clear pricing read for you by next Monday.</li>
+      </ul>
+    </section>
+
+    <!-- APPENDIX -->
+    <div class="appendix">
+      <h2>Appendix · The Numbers Since Launch</h2>
+      <table class="appendix-table">
+        <tr><td>Listed</td><td><strong>June 2, 2026</strong></td></tr>
+        <tr><td>List price</td><td><strong>$1,399,000</strong> ($760/sqft)</td></tr>
+        <tr><td>Property</td><td>4 bd / 2.5 ba (2 full + 1 half) / 1,840 sqft · Built 2003 · 4,186 sqft lot · HOA $47/mo</td></tr>
+        <tr><td>MLS #</td><td>ML82049532 · Status: <strong>Active</strong> (vacant)</td></tr>
+        <tr><td>Open houses held</td><td><strong>1 weekend</strong> (Sat + Sun) · ~20 groups</td></tr>
+        <tr><td>Offers received</td><td><strong>0</strong></td></tr>
+        <tr><td>Days on market</td><td><strong>6</strong> (vs. EPA avg ~32)</td></tr>
+        <tr><td>Active warm leads</td><td><strong>1</strong> — agent-represented, in follow-up</td></tr>
+        <tr><td>Listing expires</td><td>October 30, 2026</td></tr>
+      </table>
+    </div>
+
+    <!-- SIGNATURE -->
+    <div class="sig">
+      <p style="margin-top:24px;">Bottom line: a strong first week. The two big objections are things we can't change, so the play is to stay the course, keep the marketing sharp, and be ready to move the instant a buyer is. Nothing you need to do this week — I'm on the follow-up. Anything you want me looking at, just say the word.</p>
+      <div class="signoff">— Graeham</div>
+
+      <div class="sig-block">
+        <div class="sig-photo"><div class="ph">GW</div></div>
+        <div class="sig-info">
+          <div class="name">Graeham Watts</div>
+          <div class="role">REALTOR</div>
+          <div class="firm">Intero Real Estate</div>
+          <div class="contact">
+            +1 (650) 308-4727 · <a href="mailto:graehamwatts@gmail.com">graehamwatts@gmail.com</a>
+          </div>
+          <div class="dre">DRE # 01466876</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- FOOTER -->
+    <div class="footer">
+      Confidential weekly status report prepared for Marcia &amp; Edgar regarding 3 Shorebreeze Court, East Palo Alto.
+    </div>
+
+  </div>
+</body>
+</html>

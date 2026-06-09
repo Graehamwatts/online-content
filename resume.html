@@ -1,0 +1,431 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Graeham Watts — Licensed Realtor | Peninsula · East Bay · South Bay</title>
+<meta name="description" content="Graeham Watts — Licensed CA Realtor since 2004. 429+ career transactions, $354M+ gross volume across San Francisco Peninsula, East Bay, and South Bay.">
+<meta property="og:title" content="Graeham Watts — Licensed Realtor">
+<meta property="og:description" content="20+ years. 429+ closings. $354M+ career gross volume. Bay Area / Peninsula / Silicon Valley.">
+<meta property="og:type" content="website">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@700;900&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+<script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.0/dist/chart.umd.min.js"></script>
+<style>
+  :root{
+    --bg:#0e0e0e; --panel:#161616; --panel-2:#1c1c1c; --gold:#d4a437; --gold-soft:#c9a256;
+    --gold-bright:#f0c557; --text:#f5f1e8; --muted:#a39e92; --line:rgba(212,164,55,0.18);
+    --card:#fdfaf3; --card-ink:#1a1a1a; --card-muted:#6b6357;
+  }
+  *{box-sizing:border-box;margin:0;padding:0}
+  html,body{background:var(--bg);color:var(--text);font-family:'Inter',sans-serif;line-height:1.55;-webkit-font-smoothing:antialiased}
+  .wrap{max-width:1080px;margin:0 auto;background:var(--bg)}
+  /* HEADER */
+  header.hero{background:linear-gradient(180deg,#0a0a0a 0%,#141414 100%);padding:36px 40px 28px;border-bottom:1px solid var(--line);position:relative}
+  .hero-grid{display:grid;grid-template-columns:auto 1fr auto;gap:28px;align-items:center}
+  .avatar{width:104px;height:104px;border-radius:50%;background:linear-gradient(135deg,#2a2a2a,#0a0a0a);border:2px solid var(--gold);display:flex;align-items:center;justify-content:center;overflow:hidden;flex-shrink:0}
+  .avatar-initials{font-family:'Playfair Display',serif;font-size:38px;font-weight:900;color:var(--gold);letter-spacing:-1px}
+  .name h1{font-family:'Playfair Display',serif;font-size:54px;line-height:0.95;font-weight:900;letter-spacing:-1.5px;color:#fff;margin-bottom:8px}
+  .role{font-size:13px;letter-spacing:3.5px;color:#bdb4a1;text-transform:uppercase;margin-bottom:14px}
+  .contact{display:flex;flex-wrap:wrap;gap:18px;font-size:14px;color:#cfc7b5}
+  .contact span{display:flex;align-items:center;gap:8px}
+  .contact a{color:#cfc7b5;text-decoration:none}
+  .contact a:hover{color:var(--gold-bright)}
+  .badge{background:linear-gradient(135deg,#1a1a1a,#252525);border:1px solid var(--gold);border-radius:14px;padding:18px 26px;text-align:center;min-width:160px}
+  .badge .big{font-family:'Playfair Display',serif;font-size:34px;font-weight:900;color:var(--gold-bright);line-height:1}
+  .badge .lbl{font-size:11px;letter-spacing:2px;color:#bdb4a1;text-transform:uppercase;margin-top:6px}
+  .badge .sub{font-size:11px;color:var(--gold);margin-top:4px;letter-spacing:1px}
+  /* HERO STATS BAR */
+  .stat-bar{display:grid;grid-template-columns:1fr 1fr 1fr;background:var(--bg)}
+  .stat{padding:28px 24px;text-align:center;border-right:1px solid rgba(255,255,255,0.06)}
+  .stat:last-child{border-right:none}
+  .stat.gold{background:linear-gradient(135deg,var(--gold) 0%,#b88a22 100%);color:#1a1a1a}
+  .stat .v{font-family:'Playfair Display',serif;font-size:42px;font-weight:900;letter-spacing:-1px;line-height:1}
+  .stat .l{font-size:11px;letter-spacing:2.5px;text-transform:uppercase;margin-top:8px;opacity:0.85}
+  .stat.gold .v{color:#1a1a1a}
+  .stat.gold .l{color:#2a2400;opacity:1;font-weight:600}
+  /* MAIN GRID */
+  .main{display:grid;grid-template-columns:1fr 290px;gap:0}
+  .left{padding:40px;background:var(--card);color:var(--card-ink)}
+  .right{background:#0c0c0c;padding:30px 26px;color:var(--text)}
+  /* LEFT COLUMN */
+  h2.section{font-family:'Playfair Display',serif;font-size:18px;letter-spacing:3px;text-transform:uppercase;font-weight:700;color:var(--card-ink);border-bottom:2px solid var(--gold);padding-bottom:8px;margin:0 0 18px;display:inline-block}
+  .section-block{margin-bottom:34px}
+  .profile-text{font-size:15px;line-height:1.7;color:#3a3530}
+  .profile-text strong{color:var(--card-ink);font-weight:700}
+  /* MENTORSHIP CARDS */
+  .mentor-grid{display:grid;grid-template-columns:1fr 1fr;gap:14px}
+  .mentor{background:#f5efde;border-left:3px solid var(--gold);padding:14px 16px;border-radius:4px}
+  .mentor h4{font-size:15px;font-weight:700;color:var(--card-ink);margin-bottom:6px}
+  .mentor p{font-size:13px;color:#5a5247;line-height:1.5}
+  /* EXPERIENCE */
+  .exp{margin-bottom:24px;position:relative}
+  .exp-head{display:flex;justify-content:space-between;align-items:flex-start;gap:12px;margin-bottom:4px}
+  .exp h3{font-size:18px;font-weight:700;color:var(--card-ink)}
+  .pill{background:var(--gold);color:#1a1a1a;font-size:11px;font-weight:700;padding:5px 12px;border-radius:20px;letter-spacing:1px;white-space:nowrap}
+  .exp .where{color:var(--gold-soft);font-size:13px;font-weight:600;margin-bottom:10px}
+  .exp ul{list-style:none;padding-left:0}
+  .exp li{position:relative;padding-left:18px;margin-bottom:8px;font-size:14px;line-height:1.6;color:#3a3530}
+  .exp li::before{content:"•";color:var(--gold);font-weight:700;position:absolute;left:4px;top:0}
+  /* CAREER STATS GRID */
+  .stat-cards{display:grid;grid-template-columns:repeat(4,1fr);gap:10px;margin-bottom:18px}
+  .scard{border:1px solid var(--gold);border-radius:8px;padding:14px 8px;text-align:center;background:#fdfaf3}
+  .scard .v{font-family:'Playfair Display',serif;font-size:22px;font-weight:900;color:var(--card-ink);line-height:1}
+  .scard .l{font-size:9.5px;letter-spacing:1.5px;text-transform:uppercase;color:var(--card-muted);margin-top:6px;font-weight:600}
+  .stat-cards-2{display:grid;grid-template-columns:repeat(3,1fr);gap:10px;margin-bottom:24px}
+  /* SIDE-BY-SIDE BLOCKS */
+  .twocol{display:grid;grid-template-columns:1fr 1fr;gap:14px;margin-bottom:24px}
+  .sidebox{background:#fff;border:1px solid #e8dfc4;border-radius:8px;padding:16px}
+  .sidebox h4{color:var(--gold-soft);font-size:11px;letter-spacing:2px;text-transform:uppercase;font-weight:700;margin-bottom:12px;border-bottom:1px solid #e8dfc4;padding-bottom:8px}
+  .sidebox .row{display:flex;justify-content:space-between;padding:6px 0;font-size:14px;color:#3a3530}
+  .sidebox .row b{font-family:'Playfair Display',serif;font-weight:700}
+  .meta-line{text-align:center;background:#f5efde;border-radius:6px;padding:10px;font-size:13px;color:#5a5247;margin-bottom:20px}
+  /* CHARTS */
+  .charts{display:grid;grid-template-columns:1fr 1fr;gap:14px;margin-bottom:24px}
+  .chart-box{background:#fff;border:1px solid #e8dfc4;border-radius:8px;padding:14px}
+  .chart-box h4{text-align:center;font-size:11px;letter-spacing:2px;text-transform:uppercase;color:var(--card-muted);font-weight:600;margin-bottom:10px}
+  .chart-canvas{position:relative;height:200px}
+  /* PROPERTY TABLE */
+  table.prop{width:100%;border-collapse:collapse;font-size:13px;margin-bottom:20px}
+  table.prop thead{background:#1a1a1a;color:#f0e6c8}
+  table.prop th{padding:10px 12px;text-align:left;font-size:10px;letter-spacing:1.5px;text-transform:uppercase;font-weight:600}
+  table.prop th.r,table.prop td.r{text-align:right}
+  table.prop td{padding:10px 12px;border-bottom:1px solid #ece3c5}
+  table.prop tbody tr:last-child td{border-bottom:none}
+  table.prop td.bold{font-weight:700;color:var(--card-ink)}
+  /* MARKETS */
+  .market{padding:12px 14px;background:#fdfaf3;border-radius:6px;margin-bottom:8px;border:1px solid #ece3c5}
+  .market-head{display:flex;justify-content:space-between;align-items:baseline;margin-bottom:6px}
+  .market-name{font-weight:700;color:var(--card-ink);font-size:14px}
+  .market-vol{font-size:13px;color:#3a3530}
+  .market-vol b{font-weight:700;margin-left:8px}
+  .bar{height:6px;background:#ece3c5;border-radius:3px;overflow:hidden;margin-bottom:6px}
+  .bar i{display:block;height:100%;background:linear-gradient(90deg,var(--gold) 0%,#b88a22 100%);border-radius:3px}
+  .split{font-size:11px;color:#7a7264}
+  /* PRICE TABLE */
+  .price-wrap{display:grid;grid-template-columns:1fr 1fr;gap:14px;margin-bottom:18px}
+  /* CALLOUT */
+  .callout{background:#f5efde;border-left:4px solid var(--gold);padding:16px 20px;border-radius:6px;margin:18px 0}
+  .callout b{color:var(--card-ink)}
+  .cta-row{text-align:center;padding:22px 0 8px}
+  .cta{display:inline-block;background:var(--gold);color:#1a1a1a;padding:14px 32px;border-radius:30px;font-weight:700;text-decoration:none;font-size:15px;box-shadow:0 6px 18px rgba(212,164,55,0.25);transition:transform .15s}
+  .cta:hover{transform:translateY(-2px)}
+  /* RIGHT SIDEBAR */
+  .r-section{margin-bottom:26px}
+  .r-section h3{font-size:11px;letter-spacing:2.5px;text-transform:uppercase;color:#bdb4a1;font-weight:600;margin-bottom:12px}
+  .market-pill{display:inline-block;background:#1a1a1a;border:1px solid var(--gold);color:var(--gold-bright);padding:6px 14px;border-radius:20px;font-size:12px;font-weight:600;margin:0 6px 6px 0}
+  /* ANNUAL BARS */
+  .yr-row{display:grid;grid-template-columns:38px 1fr 28px;gap:10px;align-items:center;margin-bottom:6px;font-size:12px;color:#cfc7b5}
+  .yr-row .y{color:#bdb4a1}
+  .yr-row .b{height:10px;background:#222;border-radius:3px;overflow:hidden}
+  .yr-row .b i{display:block;height:100%;background:linear-gradient(90deg,#d4a437,#f0c557);border-radius:3px}
+  .yr-row .n{text-align:right;color:#f0e6c8;font-weight:600}
+  /* TECH STACK */
+  .tech{display:flex;align-items:center;gap:10px;background:#161616;border:1px solid #2a2a2a;border-radius:8px;padding:10px 12px;margin-bottom:8px}
+  .tech-icon{width:30px;height:30px;border-radius:7px;background:linear-gradient(135deg,#2a2a2a,#1a1a1a);display:flex;align-items:center;justify-content:center;font-size:14px;color:var(--gold-bright)}
+  .tech-name{font-size:13px;font-weight:600;color:#f0e6c8;line-height:1.1}
+  .tech-sub{font-size:11px;color:#8e8676;line-height:1.1;margin-top:2px}
+  /* CREDENTIALS */
+  .cred{display:flex;align-items:flex-start;gap:8px;font-size:12.5px;color:#cfc7b5;margin-bottom:9px;line-height:1.4}
+  .cred-check{color:var(--gold-bright);font-weight:700;flex-shrink:0}
+  /* FOOTER */
+  footer{background:#0a0a0a;text-align:center;padding:18px;font-size:11px;letter-spacing:2px;color:#7a7264;text-transform:uppercase;border-top:1px solid var(--line)}
+  /* PRINT */
+  @media print{body{background:#fff}.cta{display:none}.wrap{box-shadow:none}}
+  /* RESPONSIVE */
+  @media (max-width:900px){
+    .main{grid-template-columns:1fr}
+    .right{order:-1;padding:24px 20px}
+    .hero-grid{grid-template-columns:auto 1fr;gap:20px}
+    .badge{grid-column:1/-1;justify-self:start}
+    .name h1{font-size:38px}
+    .stat-bar{grid-template-columns:1fr}
+    .stat{border-right:none;border-bottom:1px solid rgba(255,255,255,0.06)}
+    .charts{grid-template-columns:1fr}
+    .price-wrap{grid-template-columns:1fr}
+    .mentor-grid{grid-template-columns:1fr}
+    .twocol{grid-template-columns:1fr}
+    .stat-cards{grid-template-columns:repeat(2,1fr)}
+    .stat-cards-2{grid-template-columns:repeat(3,1fr)}
+    .left{padding:28px 22px}
+    header.hero{padding:24px 22px}
+  }
+</style>
+</head>
+<body>
+<div class="wrap">
+
+  <!-- HERO -->
+  <header class="hero">
+    <div class="hero-grid">
+      <div class="avatar"><div class="avatar-initials">GW</div></div>
+      <div class="name">
+        <h1>GRAEHAM<br>WATTS</h1>
+        <div class="role">Licensed Realtor · Peninsula | East Bay | South Bay</div>
+        <div class="contact">
+          <span>📞 <a href="tel:+16503084727">+1 (650) 308-4727</a></span>
+          <span>✉ <a href="mailto:graehamwatts@gmail.com">graehamwatts@gmail.com</a></span>
+          <span>🌐 <a href="https://graehamwatts.com" target="_blank" rel="noopener">graehamwatts.com</a></span>
+          <span>🏷 DRE # 01466876</span>
+        </div>
+      </div>
+      <div class="badge">
+        <div class="big">20+</div>
+        <div class="lbl">Years Licensed</div>
+        <div class="sub">Since 2004</div>
+      </div>
+    </div>
+  </header>
+
+  <!-- TOP STAT BAR -->
+  <div class="stat-bar">
+    <div class="stat gold"><div class="v">429+</div><div class="l">Total Transactions<br>Career Lifetime</div></div>
+    <div class="stat"><div class="v" style="color:#fff">2022 &amp; 2024</div><div class="l">Peak Years (41 Properties)</div></div>
+    <div class="stat"><div class="v" style="color:var(--gold-bright)">$354M+</div><div class="l">Career Gross Volume</div></div>
+  </div>
+
+  <!-- MAIN GRID -->
+  <div class="main">
+    <div class="left">
+
+      <!-- PROFILE -->
+      <div class="section-block">
+        <h2 class="section">Professional Profile</h2>
+        <p class="profile-text">Licensed since <strong>2004</strong>, offering over <strong>20 years</strong> of cycle-tested real estate operation across the San Francisco Peninsula, East Bay, and South Bay. Personally mentored and coached by the industry's most elite trainers to maintain a high-velocity pace — <strong>429+ closings across a 20+ year career</strong> (2017–2025). Specializing in bridging traditional physical dominance with modern digital orchestration: an "Old School" powerhouse running "New School" systems.</p>
+      </div>
+
+      <!-- MENTORSHIP -->
+      <div class="section-block">
+        <h2 class="section">Elite Industry Foundation &amp; Mentorship</h2>
+        <div class="mentor-grid">
+          <div class="mentor"><h4>Fred Martin Team</h4><p>Hand-selected and personally mentored by Peninsula legend Fred Martin — one of the region's most dominant production teams.</p></div>
+          <div class="mentor"><h4>Floyd Wickman</h4><p>Personally coached; mastered the "Sweathogs" high-intensity sales discipline for elite listing acquisition.</p></div>
+          <div class="mentor"><h4>Scott Bergman</h4><p>Advanced performance coaching focused on business scaling, technology integration, SEO, and website optimization.</p></div>
+          <div class="mentor"><h4>Will Draper</h4><p>Strategic coaching for social media marketing and digital brand presence.</p></div>
+          <div class="mentor" style="grid-column:1/-1"><h4>Krys Benyamein</h4><p>Advanced coaching focused on video marketing, social media brand building, and modern digital strategies to strengthen online presence and attract listings.</p></div>
+        </div>
+      </div>
+
+      <!-- EXPERIENCE -->
+      <div class="section-block">
+        <h2 class="section">Professional Experience</h2>
+
+        <div class="exp">
+          <div class="exp-head">
+            <div><h3>Realtor — Intero Real Estate Services</h3><div class="where">San Francisco Peninsula</div></div>
+            <span class="pill">2010 – Present</span>
+          </div>
+          <ul>
+            <li>Designed and deployed AI-driven CRM workflows that streamline the transaction lifecycle and optimize client touchpoints.</li>
+            <li>Navigated and closed complex transactions including short sales, foreclosures, hostile tenant-occupied properties, and code enforcement resolutions.</li>
+            <li>Executed high-density acquisition campaigns leveraging strategic renovations and specialized loan programs to maximize client ROI.</li>
+            <li>Directed targeted, data-driven farming campaigns utilizing digital omnipresence to systematically capture market share.</li>
+          </ul>
+        </div>
+
+        <div class="exp">
+          <div class="exp-head">
+            <div><h3>Realtor — Century 21 | Fred Martin Team</h3><div class="where">San Francisco Peninsula</div></div>
+            <span class="pill">2004 – 2010</span>
+          </div>
+          <ul>
+            <li>Operated within one of the Peninsula's most dominant teams, handling operational heavy lifting and executing relentless farming strategies.</li>
+            <li>Built core operational and compliance workflows sustaining a zero-liability track record across a 20-year career.</li>
+            <li>Executed precision pricing models achieving 100.8% List-to-Sale ratio and 26 Avg Days on Market.</li>
+          </ul>
+        </div>
+      </div>
+
+      <!-- CAREER PERFORMANCE -->
+      <div class="section-block">
+        <h2 class="section">Career Performance (2003–2025)</h2>
+
+        <div class="stat-cards">
+          <div class="scard"><div class="v">219</div><div class="l">Buyer-Side Transactions</div></div>
+          <div class="scard"><div class="v">210</div><div class="l">Listing-Side Transactions</div></div>
+          <div class="scard"><div class="v">429+</div><div class="l">Total Transaction Sides</div></div>
+          <div class="scard"><div class="v">$354M+</div><div class="l">Career Gross Volume</div></div>
+        </div>
+
+        <div class="stat-cards-2">
+          <div class="scard"><div class="v" style="font-style:italic">2022 &amp; 2024</div><div class="l">Peak Years (41 Properties)</div></div>
+          <div class="scard"><div class="v">100.8%</div><div class="l">List-to-Sale Ratio</div></div>
+          <div class="scard"><div class="v">26</div><div class="l">Avg Days on Market</div></div>
+        </div>
+
+        <!-- BUYER VS LISTING -->
+        <h2 class="section" style="font-size:14px;margin-top:12px">Buyer vs. Listing Side Breakdown</h2>
+        <div class="twocol">
+          <div class="sidebox">
+            <h4 style="color:var(--gold-soft)">Buyer Side</h4>
+            <div class="row"><span>Transactions</span><b>219</b></div>
+            <div class="row"><span>Total Volume</span><b>$182,367,707</b></div>
+            <div class="row"><span>Avg Deal Size</span><b>$832,729</b></div>
+          </div>
+          <div class="sidebox">
+            <h4 style="color:var(--gold-soft)">Listing Side</h4>
+            <div class="row"><span>Transactions</span><b>210</b></div>
+            <div class="row"><span>Total Volume</span><b>$171,836,526</b></div>
+            <div class="row"><span>Avg Deal Size</span><b>$818,269</b></div>
+          </div>
+        </div>
+        <div class="meta-line">60 Double-Ended Deals | 369 Unique Properties</div>
+
+        <!-- CHARTS -->
+        <div class="charts">
+          <div class="chart-box"><h4>Total Transactions by Year</h4><div class="chart-canvas"><canvas id="txChart"></canvas></div></div>
+          <div class="chart-box"><h4>Total Earnings by Year</h4><div class="chart-canvas"><canvas id="earnChart"></canvas></div></div>
+        </div>
+
+        <!-- PROPERTY TABLE -->
+        <h2 class="section" style="font-size:14px">Property Type Breakdown</h2>
+        <table class="prop">
+          <thead><tr><th>Property Type</th><th class="r">Buyer</th><th class="r">Listing</th><th class="r">Total</th><th class="r">Total Volume</th></tr></thead>
+          <tbody>
+            <tr><td>Res. Single Family</td><td class="r">187</td><td class="r">181</td><td class="r bold">368</td><td class="r">$312,227,507</td></tr>
+            <tr><td>Res. Condominium</td><td class="r">16</td><td class="r">20</td><td class="r bold">36</td><td class="r">$22,220,376</td></tr>
+            <tr><td>Res. Townhouse</td><td class="r">6</td><td class="r">4</td><td class="r bold">10</td><td class="r">$8,709,000</td></tr>
+            <tr><td>Res. Duplex</td><td class="r">3</td><td class="r">2</td><td class="r bold">5</td><td class="r">$6,845,000</td></tr>
+            <tr><td>Res. Lot (SFR)</td><td class="r">3</td><td class="r">1</td><td class="r bold">4</td><td class="r">$814,000</td></tr>
+          </tbody>
+        </table>
+
+        <!-- TOP MARKETS -->
+        <h2 class="section" style="font-size:14px">Top Markets by Transaction Count</h2>
+        <div id="markets"></div>
+
+        <!-- PRICE DISTRIBUTION -->
+        <h2 class="section" style="font-size:14px;margin-top:12px">Price Range Distribution</h2>
+        <div class="price-wrap">
+          <div class="chart-box"><div class="chart-canvas" style="height:240px"><canvas id="priceChart"></canvas></div></div>
+          <div>
+            <table class="prop">
+              <thead><tr><th>Range</th><th class="r">Count</th><th class="r">Volume</th></tr></thead>
+              <tbody>
+                <tr><td>Under $250K</td><td class="r">32</td><td class="r">$5,426,230</td></tr>
+                <tr><td>$250K–$500K</td><td class="r">69</td><td class="r">$24,982,400</td></tr>
+                <tr><td>$500K–$750K</td><td class="r">94</td><td class="r">$58,236,488</td></tr>
+                <tr><td>$750K–$1M</td><td class="r">117</td><td class="r">$101,697,639</td></tr>
+                <tr><td>$1M–$1.5M</td><td class="r">86</td><td class="r">$102,862,588</td></tr>
+                <tr><td>$1.5M–$2M</td><td class="r">19</td><td class="r">$30,816,000</td></tr>
+                <tr><td>$2M+</td><td class="r">12</td><td class="r">$30,182,888</td></tr>
+              </tbody>
+            </table>
+            <div class="meta-line" style="margin-top:8px">Highest Career Sale: <b style="color:var(--card-ink)">$3,651,000</b> — Los Gatos</div>
+          </div>
+        </div>
+
+        <div class="callout"><b>Market Reliability:</b> Successfully navigated every major market shift since 2004, including the 2008 crash and current rate cycles.</div>
+
+        <div class="cta-row">
+          <a class="cta" href="tel:+16503084727">📞 Call Me: (650) 308-4727</a>
+        </div>
+      </div>
+
+    </div>
+
+    <!-- RIGHT SIDEBAR -->
+    <aside class="right">
+      <div class="r-section">
+        <h3>Markets Served</h3>
+        <span class="market-pill">SF Peninsula</span>
+        <span class="market-pill">East Bay</span>
+        <span class="market-pill">South Bay</span>
+        <span class="market-pill">Silicon Valley</span>
+      </div>
+
+      <div class="r-section">
+        <h3>Annual Transactions</h3>
+        <div id="yrBars"></div>
+      </div>
+
+      <div class="r-section">
+        <h3>Tech Stack</h3>
+        <div class="tech"><div class="tech-icon">⚙</div><div><div class="tech-name">n8n</div><div class="tech-sub">Workflow Automation</div></div></div>
+        <div class="tech"><div class="tech-icon">◎</div><div><div class="tech-name">GoHighLevel</div><div class="tech-sub">CRM &amp; Lead Lifecycle</div></div></div>
+        <div class="tech"><div class="tech-icon">⌕</div><div><div class="tech-name">SEO / AEO</div><div class="tech-sub">Search Intelligence</div></div></div>
+        <div class="tech"><div class="tech-icon">✦</div><div><div class="tech-name">AI Content Engine</div><div class="tech-sub">Digital Omnipresence</div></div></div>
+      </div>
+
+      <div class="r-section">
+        <h3>Credentials</h3>
+        <div class="cred"><span class="cred-check">✓</span><span>CA DRE Licensed Realtor — Since 2004</span></div>
+        <div class="cred"><span class="cred-check">✓</span><span>Floyd Wickman "Sweathogs" — Certified</span></div>
+        <div class="cred"><span class="cred-check">✓</span><span>Member, National Association of Realtors</span></div>
+        <div class="cred"><span class="cred-check">✓</span><span>Intero Real Estate — Top Producer</span></div>
+      </div>
+    </aside>
+  </div>
+
+  <footer>Graeham Watts · Realtor · DRE # 01466876 · graehamwatts.com</footer>
+</div>
+
+<script>
+  // Annual transaction data
+  const years = ['2017','2018','2019','2020','2021','2022','2023','2024','2025*'];
+  const tx = [28,29,20,33,31,41,31,41,24];
+  const earn = [351,481,278,599,622,714,490,720,251]; // in $K
+
+  // Sidebar bars
+  const maxTx = Math.max(...tx);
+  document.getElementById('yrBars').innerHTML = years.map((y,i) => {
+    const pct = (tx[i]/maxTx)*100;
+    return `<div class="yr-row"><span class="y">${y}</span><span class="b"><i style="width:${pct}%"></i></span><span class="n">${tx[i]}</span></div>`;
+  }).join('');
+
+  // Top markets
+  const markets = [
+    {name:'East Palo Alto', deals:246, vol:'$192,274,881', buy:112, list:134},
+    {name:'San Jose', deals:48, vol:'$40,127,764', buy:35, list:13},
+    {name:'Redwood City', deals:14, vol:'$17,162,000', buy:4, list:10},
+    {name:'Milpitas', deals:9, vol:'$5,352,000', buy:7, list:2},
+    {name:'Fremont', deals:9, vol:'$4,774,888', buy:4, list:5},
+    {name:'San Francisco', deals:8, vol:'$12,626,000', buy:7, list:1},
+    {name:'Santa Clara', deals:7, vol:'$5,084,000', buy:6, list:1},
+    {name:'Menlo Park', deals:7, vol:'$7,977,000', buy:0, list:7},
+    {name:'Hayward', deals:6, vol:'$7,520,000', buy:2, list:4},
+    {name:'Sacramento', deals:6, vol:'$1,515,000', buy:2, list:4}
+  ];
+  const maxDeals = markets[0].deals;
+  document.getElementById('markets').innerHTML = markets.map(m => {
+    const pct = (m.deals/maxDeals)*100;
+    return `<div class="market"><div class="market-head"><span class="market-name">${m.name}</span><span class="market-vol">${m.deals} deals <b>${m.vol}</b></span></div><div class="bar"><i style="width:${pct}%"></i></div><div class="split">Buyer: ${m.buy}  ·  Listing: ${m.list}</div></div>`;
+  }).join('');
+
+  // Charts (Chart.js)
+  const goldBars = ['#cfa544','#cfa544','#cfa544','#d4a437','#d4a437','#f0c557','#d4a437','#f0c557','#c89a32'];
+  const common = { plugins:{legend:{display:false}}, responsive:true, maintainAspectRatio:false };
+
+  new Chart(document.getElementById('txChart'), {
+    type:'bar',
+    data:{ labels:years, datasets:[{ data:tx, backgroundColor:goldBars, borderRadius:3 }] },
+    options:{ ...common, scales:{
+      y:{beginAtZero:true,max:60,ticks:{stepSize:15,font:{size:10},color:'#7a7264'},grid:{color:'#ece3c5',drawBorder:false}},
+      x:{ticks:{font:{size:10},color:'#7a7264'},grid:{display:false}}
+    }, plugins:{...common.plugins, tooltip:{enabled:true}, datalabels:{display:false}}}
+  });
+
+  new Chart(document.getElementById('earnChart'), {
+    type:'line',
+    data:{ labels:years, datasets:[{ data:earn, borderColor:'#d4a437', backgroundColor:'rgba(212,164,55,0.1)', tension:0.35, fill:true, pointBackgroundColor:'#d4a437', pointRadius:4 }] },
+    options:{ ...common, scales:{
+      y:{beginAtZero:true,max:800,ticks:{stepSize:200,font:{size:10},color:'#7a7264',callback:v=>'$'+v+'K'},grid:{color:'#ece3c5',drawBorder:false}},
+      x:{ticks:{font:{size:10},color:'#7a7264'},grid:{display:false}}
+    }, plugins:{...common.plugins, tooltip:{callbacks:{label:c=>'$'+c.raw+'K'}}}}
+  });
+
+  new Chart(document.getElementById('priceChart'), {
+    type:'bar',
+    data:{
+      labels:['Under $250K','$250K–$500K','$500K–$750K','$750K–$1M','$1M–$1.5M','$1.5M–$2M','$2M+'],
+      datasets:[{ data:[32,69,94,117,86,19,12], backgroundColor:'#cfa544', borderRadius:3 }]
+    },
+    options:{ ...common, indexAxis:'y', scales:{
+      x:{beginAtZero:true,max:120,ticks:{stepSize:30,font:{size:10},color:'#7a7264'},grid:{color:'#ece3c5',drawBorder:false}},
+      y:{ticks:{font:{size:10},color:'#7a7264'},grid:{display:false}}
+    }}
+  });
+</script>
+</body>
+</html>

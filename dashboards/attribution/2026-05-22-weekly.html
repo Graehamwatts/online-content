@@ -1,0 +1,391 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Weekly Attribution Review · Week of May 18, 2026</title>
+<link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+<style>
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  body {
+    background: #0b1020;
+    font-family: 'DM Sans', -apple-system, sans-serif;
+    color: #e2e8f0;
+    padding: 24px 16px;
+  }
+  .wrapper {
+    max-width: 720px;
+    margin: 0 auto;
+  }
+
+  /* TOP BAR */
+  .top-bar {
+    background: #0f1729;
+    border: 1px solid #1e2d4a;
+    border-radius: 10px 10px 0 0;
+    padding: 12px 24px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+  }
+  .top-bar-label {
+    font-size: 11px;
+    font-weight: 600;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    color: #f4b955;
+  }
+  .top-bar-date {
+    font-size: 11px;
+    color: #64748b;
+    letter-spacing: 0.06em;
+  }
+
+  /* HEADER */
+  .header {
+    background: linear-gradient(135deg, #0f1729 0%, #111f3a 100%);
+    border-left: 1px solid #1e2d4a;
+    border-right: 1px solid #1e2d4a;
+    padding: 32px 24px 24px;
+  }
+  .header h1 {
+    font-size: 26px;
+    font-weight: 700;
+    color: #f8fafc;
+    margin-bottom: 6px;
+  }
+  .header h1 span { color: #f4b955; }
+  .header .subtitle {
+    font-size: 13px;
+    color: #64748b;
+    font-weight: 400;
+  }
+
+  /* STATUS STRIP */
+  .status-strip {
+    padding: 10px 24px;
+    font-size: 12px;
+    font-weight: 600;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    border-left: 1px solid #1e2d4a;
+    border-right: 1px solid #1e2d4a;
+  }
+  .status-strip.error {
+    background: rgba(239, 68, 68, 0.12);
+    color: #ef4444;
+    border-top: 1px solid rgba(239,68,68,0.2);
+  }
+  .status-dot {
+    width: 7px;
+    height: 7px;
+    border-radius: 50%;
+    background: currentColor;
+    flex-shrink: 0;
+  }
+
+  /* CARD BODY */
+  .card-body {
+    background: #0f1729;
+    border: 1px solid #1e2d4a;
+    border-top: none;
+    border-radius: 0 0 10px 10px;
+    padding: 0 24px 28px;
+  }
+
+  /* ALERT BOX */
+  .alert-box {
+    margin: 28px 0 0;
+    background: rgba(239,68,68,0.07);
+    border: 1px solid rgba(239,68,68,0.25);
+    border-radius: 8px;
+    padding: 20px 22px;
+  }
+  .alert-box .alert-title {
+    font-size: 14px;
+    font-weight: 700;
+    color: #ef4444;
+    margin-bottom: 10px;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+  }
+  .alert-box .alert-body {
+    font-size: 13px;
+    color: #94a3b8;
+    line-height: 1.7;
+  }
+  .alert-box code {
+    background: rgba(255,255,255,0.06);
+    border: 1px solid rgba(255,255,255,0.1);
+    border-radius: 4px;
+    padding: 2px 7px;
+    font-size: 12px;
+    color: #f4b955;
+    font-family: 'Courier New', monospace;
+  }
+
+  /* SETUP STEPS */
+  .setup-steps {
+    margin: 20px 0 0;
+    background: rgba(244,185,85,0.05);
+    border: 1px solid rgba(244,185,85,0.2);
+    border-radius: 8px;
+    padding: 20px 22px;
+  }
+  .setup-steps h3 {
+    font-size: 13px;
+    font-weight: 700;
+    color: #f4b955;
+    margin-bottom: 14px;
+    letter-spacing: 0.05em;
+    text-transform: uppercase;
+  }
+  .step {
+    display: flex;
+    gap: 12px;
+    margin-bottom: 12px;
+    align-items: flex-start;
+  }
+  .step:last-child { margin-bottom: 0; }
+  .step-num {
+    width: 22px;
+    height: 22px;
+    border-radius: 50%;
+    background: rgba(244,185,85,0.15);
+    border: 1px solid rgba(244,185,85,0.4);
+    color: #f4b955;
+    font-size: 11px;
+    font-weight: 700;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-shrink: 0;
+    margin-top: 1px;
+  }
+  .step-text {
+    font-size: 13px;
+    color: #94a3b8;
+    line-height: 1.6;
+  }
+  .step-text strong { color: #e2e8f0; font-weight: 600; }
+
+  /* WHAT YOU'LL SEE */
+  .preview-section {
+    margin: 20px 0 0;
+  }
+  .preview-section h3 {
+    font-size: 13px;
+    font-weight: 700;
+    color: #64748b;
+    letter-spacing: 0.06em;
+    text-transform: uppercase;
+    margin-bottom: 14px;
+  }
+  .preview-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 10px;
+  }
+  .preview-card {
+    background: rgba(255,255,255,0.03);
+    border: 1px solid #1e2d4a;
+    border-radius: 7px;
+    padding: 14px 16px;
+  }
+  .preview-card .preview-label {
+    font-size: 11px;
+    color: #475569;
+    font-weight: 600;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    margin-bottom: 6px;
+  }
+  .preview-card .preview-val {
+    font-size: 22px;
+    font-weight: 700;
+    color: #334155;
+  }
+  .preview-card .preview-note {
+    font-size: 11px;
+    color: #334155;
+    margin-top: 4px;
+  }
+
+  /* DIVIDER */
+  .divider {
+    height: 1px;
+    background: #1e2d4a;
+    margin: 24px 0;
+  }
+
+  /* TECH DETAILS */
+  .tech-block {
+    background: rgba(255,255,255,0.02);
+    border: 1px solid #1e2d4a;
+    border-radius: 7px;
+    padding: 16px 18px;
+    font-size: 12px;
+    color: #475569;
+    line-height: 1.8;
+  }
+  .tech-block .tech-label {
+    font-weight: 700;
+    color: #64748b;
+    margin-right: 6px;
+  }
+
+  /* FOOTER */
+  .footer {
+    margin-top: 32px;
+    border-top: 1px solid #1e2d4a;
+    padding-top: 20px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+  }
+  .footer-name {
+    font-size: 13px;
+    font-weight: 700;
+    color: #e2e8f0;
+  }
+  .footer-title {
+    font-size: 11px;
+    color: #475569;
+    margin-top: 2px;
+  }
+  .footer-badge {
+    background: rgba(244,185,85,0.1);
+    border: 1px solid rgba(244,185,85,0.25);
+    border-radius: 20px;
+    padding: 5px 14px;
+    font-size: 11px;
+    font-weight: 600;
+    color: #f4b955;
+    letter-spacing: 0.06em;
+  }
+</style>
+</head>
+<body>
+<div class="wrapper">
+
+  <!-- TOP BAR -->
+  <div class="top-bar">
+    <span class="top-bar-label">Weekly Attribution Review</span>
+    <span class="top-bar-date">Week of May 18 – May 22, 2026</span>
+  </div>
+
+  <!-- HEADER -->
+  <div class="header">
+    <h1>Attribution Review <span>Setup Required</span></h1>
+    <div class="subtitle">May 18 – May 22, 2026 · Generated Friday, May 22, 2026 at 4:00 PM PT</div>
+  </div>
+
+  <!-- STATUS STRIP -->
+  <div class="status-strip error">
+    <div class="status-dot"></div>
+    GHL Pull Failed — Private Integration Token Not Configured
+  </div>
+
+  <!-- CARD BODY -->
+  <div class="card-body">
+
+    <!-- ALERT -->
+    <div class="alert-box">
+      <div class="alert-title">⚠ GHL API: 401 Unauthorized</div>
+      <div class="alert-body">
+        The GoHighLevel Private Integration Token (PIT) found at<br>
+        <code>Documents/Claude/Skills/ghl-pit.txt</code><br><br>
+        still contains the placeholder value <code>pit-PASTE_YOUR_PRIVATE_INTEGRATION_TOKEN_HERE</code>.
+        A live token has not been entered, so no contact or opportunity data could be pulled for this week.
+        <br><br>
+        This is a one-time setup. Once done, every Friday's report will run automatically with live data.
+      </div>
+    </div>
+
+    <!-- SETUP STEPS -->
+    <div class="setup-steps">
+      <h3>One-Time Setup — Takes ~3 Minutes</h3>
+      <div class="step">
+        <div class="step-num">1</div>
+        <div class="step-text">
+          In GoHighLevel, go to <strong>Settings → Private Integrations → Create New Integration</strong>.<br>
+          Name it <em>"Claude Attribution"</em>.
+        </div>
+      </div>
+      <div class="step">
+        <div class="step-num">2</div>
+        <div class="step-text">
+          Grant <strong>READ scopes</strong> for Contacts, Opportunities, and Pipelines. Save.
+        </div>
+      </div>
+      <div class="step">
+        <div class="step-num">3</div>
+        <div class="step-text">
+          Copy the <strong>pit-…</strong> token that appears. Open the file:<br>
+          <code>Documents/Claude/Skills/ghl-pit.txt</code><br>
+          Replace <strong>Line 1</strong> with your token. Line 2 (the Location ID) is already correct.
+        </div>
+      </div>
+      <div class="step">
+        <div class="step-num">4</div>
+        <div class="step-text">
+          That's it. Next Friday at 4:00 PM the report runs automatically with live data.
+        </div>
+      </div>
+    </div>
+
+    <!-- PREVIEW — what the live report will show -->
+    <div class="preview-section" style="margin-top:24px;">
+      <h3>What Live Reports Will Include</h3>
+      <div class="preview-grid">
+        <div class="preview-card">
+          <div class="preview-label">Total Leads</div>
+          <div class="preview-val" style="color:#334155;">—</div>
+          <div class="preview-note">All contacts created Mon–Fri</div>
+        </div>
+        <div class="preview-card">
+          <div class="preview-label">Appointments Set</div>
+          <div class="preview-val" style="color:#334155;">—</div>
+          <div class="preview-note">Stage moves to "Appointment Set"</div>
+        </div>
+        <div class="preview-card">
+          <div class="preview-label">Opportunities</div>
+          <div class="preview-val" style="color:#334155;">—</div>
+          <div class="preview-note">Opps created or qualified</div>
+        </div>
+        <div class="preview-card">
+          <div class="preview-label">Closed Wins</div>
+          <div class="preview-val" style="color:#334155;">—</div>
+          <div class="preview-note">Won/Closed Won stage moves</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="divider"></div>
+
+    <!-- TECH DETAILS -->
+    <div class="tech-block">
+      <span class="tech-label">Run time:</span>Friday May 22, 2026 · 4:00 PM PT<br>
+      <span class="tech-label">GHL Location ID:</span>6wuU3haUH7uNeT20E3UZ<br>
+      <span class="tech-label">API response:</span>401 Unauthorized (placeholder token)<br>
+      <span class="tech-label">Paid ad data:</span>Not queried (GHL pull is a prerequisite)<br>
+      <span class="tech-label">Next run:</span>Friday May 29, 2026 · 4:00 PM PT
+    </div>
+
+    <!-- FOOTER -->
+    <div class="footer">
+      <div>
+        <div class="footer-name">Graeham Watts</div>
+        <div class="footer-title">REALTOR · Intero Real Estate · DRE# 01466876</div>
+      </div>
+      <div class="footer-badge">Attribution Engine</div>
+    </div>
+
+  </div>
+</div>
+</body>
+</html>

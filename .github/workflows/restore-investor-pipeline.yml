@@ -1,0 +1,31 @@
+name: Restore Investor/Flipper Pipeline
+
+on:
+  workflow_dispatch:
+    inputs:
+      dry_run:
+        description: 'Dry run (true = preview, false = actually restore)'
+        required: true
+        default: 'true'
+        type: choice
+        options:
+          - 'true'
+          - 'false'
+
+jobs:
+  restore:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - name: Install dependencies
+        run: pip install requests
+      - name: Run restore
+        env:
+          GHL_PIT:          ${{ secrets.GHL_PIT }}
+          GHL_LOCATION_ID:  ${{ secrets.GHL_LOCATION_ID }}
+          DRY_RUN:          ${{ github.event.inputs.dry_run }}
+          PYTHONUNBUFFERED: "1"
+        run: python3 scripts/restore_investor_pipeline.py

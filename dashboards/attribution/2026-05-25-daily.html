@@ -1,0 +1,114 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Daily Attribution Brief — Action Needs Fix · May 25, 2026</title>
+<link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700&display=swap" rel="stylesheet">
+<style>
+*{box-sizing:border-box;margin:0;padding:0}
+body{font-family:'DM Sans',sans-serif;background:#060d1a;color:#e2e8f0;min-height:100vh}
+.wrap{max-width:720px;margin:0 auto;padding:24px 16px}
+.topbar{background:#0f1729;border:1px solid #1e293b;border-radius:8px;padding:10px 16px;font-size:13px;color:#94a3b8;margin-bottom:20px;display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:8px}
+.topbar strong{color:#f4b955}
+.header{background:linear-gradient(135deg,#0f1729 0%,#1a1a2e 100%);border:1px solid #ef4444;border-radius:12px;padding:24px;margin-bottom:16px}
+.header h1{font-size:22px;font-weight:700;color:#f1f5f9;margin-bottom:6px}
+.header .sub{font-size:14px;color:#94a3b8}
+.status-strip{border-radius:6px;padding:9px 16px;margin-bottom:16px;font-weight:600;font-size:14px;color:#0f1729;background:#f59e0b}
+.section{background:#0f1729;border:1px solid #1e293b;border-radius:10px;padding:20px;margin-bottom:16px}
+.section.warn{border-color:#f59e0b}
+.section.ok{border-color:#22c55e}
+.section h2{font-size:13px;font-weight:700;color:#f4b955;margin-bottom:14px;text-transform:uppercase;letter-spacing:.08em}
+.section h2.red{color:#ef4444}
+.section h2.green{color:#22c55e}
+.body-text{font-size:15px;line-height:1.75;color:#cbd5e1}
+.code-block{background:#162032;border:1px solid #1e293b;border-radius:6px;padding:14px 16px;font-family:monospace;font-size:13px;color:#f4b955;margin:12px 0;line-height:1.6;overflow-x:auto}
+.action-card{background:#162032;border:1px solid #f4b955;border-radius:8px;padding:16px;margin:10px 0}
+.action-card .num{display:inline-block;background:#f4b955;color:#0f1729;border-radius:50%;width:24px;height:24px;text-align:center;line-height:24px;font-weight:700;font-size:13px;margin-right:10px;flex-shrink:0}
+.action-card .title{font-weight:600;color:#f1f5f9;font-size:15px}
+.action-card .desc{color:#94a3b8;font-size:14px;line-height:1.6;margin-top:6px;margin-left:34px}
+.check-row{display:flex;align-items:center;gap:10px;padding:8px 0;border-bottom:1px solid #1e293b;font-size:14px}
+.check-row:last-child{border-bottom:none}
+.dot{width:10px;height:10px;border-radius:50%;flex-shrink:0}
+.dot.green{background:#22c55e}
+.dot.red{background:#ef4444}
+.dot.amber{background:#f59e0b}
+.footer{text-align:center;padding:24px 0;color:#475569;font-size:13px;line-height:1.6}
+</style>
+</head>
+<body>
+<div class="wrap">
+  <div class="topbar">
+    <span><strong>Daily Attribution Brief</strong> · Sunday, May 25, 2026</span>
+    <span>Generated 7:15 AM PT · Auto-run</span>
+  </div>
+
+  <div class="header">
+    <h1>⚠️ Brief Needs a One-Time Fix</h1>
+    <div class="sub">GHL connected and data was fetched — a Python bug in the Action script blocked the final email. Here's what happened and the two-minute fix.</div>
+  </div>
+
+  <div class="status-strip">GHL API ✓ Working · Script Bug ✗ · Windsor.ai ✗ License Expired · Fix Required</div>
+
+  <div class="section">
+    <h2>What Happened</h2>
+    <p class="body-text">The GitHub Action ran at 7:15 AM, connected to GHL with the stored PIT, and successfully fetched contact and opportunity data. The pipeline stalled during the attribution bucketing step when a GHL field returned an integer instead of a string, and the script called <code style="background:#162032;padding:2px 6px;border-radius:3px;font-size:13px">.lower()</code> on it.</p>
+    <div class="code-block">File "&lt;stdin&gt;", line 165, in bucket_source
+AttributeError: 'int' object has no attribute 'lower'
+
+Workflow run: Graehamwatts/online-content → daily-attribution-brief.yml
+Run ID: 26454235316 · Status: failure</div>
+    <p class="body-text" style="margin-top:12px">The fix is a one-line <code style="background:#162032;padding:2px 6px;border-radius:3px;font-size:13px">str()</code> cast. A corrected workflow file is ready to push — the only blocker is that the current GitHub PAT (<code style="background:#162032;padding:2px 6px;border-radius:3px;font-size:13px">pat-skills-and-pages.txt</code>) doesn't have the <strong style="color:#f4b955">workflow</strong> scope needed to update <code style="background:#162032;padding:2px 6px;border-radius:3px;font-size:13px">.github/workflows/</code> files.</p>
+  </div>
+
+  <div class="section">
+    <h2>Diagnostic Checklist</h2>
+    <div class="check-row"><div class="dot green"></div><span>GHL PIT in GitHub Secrets → <strong style="color:#22c55e">Valid</strong> (fetched contacts successfully)</span></div>
+    <div class="check-row"><div class="dot green"></div><span>GHL API reachable from GitHub Actions → <strong style="color:#22c55e">Yes</strong></span></div>
+    <div class="check-row"><div class="dot red"></div><span>Python bucket_source function → <strong style="color:#ef4444">Bug</strong> (int field, no .lower() guard)</span></div>
+    <div class="check-row"><div class="dot red"></div><span>PAT workflow scope → <strong style="color:#ef4444">Missing</strong> (can't push fix to .github/workflows/)</span></div>
+    <div class="check-row"><div class="dot red"></div><span>Local GHL PIT (ghl-pit.txt) → <strong style="color:#ef4444">Placeholder</strong> (token never filled in)</span></div>
+    <div class="check-row"><div class="dot red"></div><span>Windsor.ai connector → <strong style="color:#ef4444">License expired</strong></span></div>
+  </div>
+
+  <div class="section warn">
+    <h2>Fix It: 2 Options (pick one)</h2>
+
+    <div class="action-card">
+      <div style="display:flex;align-items:flex-start;gap:0">
+        <span class="num">1</span>
+        <div>
+          <div class="title">Add workflow scope to the PAT (fastest — 2 min)</div>
+          <div class="desc">
+            Go to <strong>github.com → Settings → Developer Settings → Personal Access Tokens</strong> → find <code style="background:#0f1729;padding:1px 5px;border-radius:3px">pat-skills-and-pages</code> → Edit → check <strong>workflow</strong> under Repository permissions → Save.<br><br>
+            Tomorrow's 7:15 AM run will automatically push the pre-built fix and the brief will send correctly.
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="action-card" style="margin-top:12px">
+      <div style="display:flex;align-items:flex-start;gap:0">
+        <span class="num">2</span>
+        <div>
+          <div class="title">Fill in your local GHL PIT (also works)</div>
+          <div class="desc">
+            Go to <strong>GHL → Settings → Private Integrations → Create</strong> → name it "Claude Attribution" → grant Read: Contacts + Opportunities → copy the <code style="background:#0f1729;padding:1px 5px;border-radius:3px">pit-...</code> key.<br><br>
+            Paste it as Line 1 of: <code style="background:#0f1729;padding:1px 5px;border-radius:3px">Documents\Claude\Online Content\.claude-credentials\ghl-pit.txt</code><br><br>
+            With a local PIT, I can run the attribution script directly without needing the GitHub Action or workflow scope.
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="section ok">
+    <h2 class="green">Good News</h2>
+    <p class="body-text">The GHL integration itself is solid — the API connected, authenticated, and started returning contact data. This is a 2-minute credential/scope fix, not a broken pipeline. Once either option above is done, the brief runs clean every weekday at 7:15 AM automatically.</p>
+  </div>
+
+  <div class="footer">
+    Graeham Watts · Intero Real Estate · DRE# 01466876<br>
+    Daily Attribution Brief · Auto-generated 7:15 AM PT · May 26, 2026
+  </div>
+</div>
+</body></html>

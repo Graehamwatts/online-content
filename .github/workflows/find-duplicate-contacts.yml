@@ -1,0 +1,21 @@
+name: Find Duplicate Contacts
+
+on:
+  workflow_dispatch: {}
+
+jobs:
+  find-dupes:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - name: Install dependencies
+        run: pip install requests
+      - name: Find duplicates
+        env:
+          GHL_PIT:          ${{ secrets.GHL_PIT }}
+          GHL_LOCATION_ID:  ${{ secrets.GHL_LOCATION_ID }}
+          PYTHONUNBUFFERED: "1"
+        run: python3 scripts/find_duplicate_contacts.py

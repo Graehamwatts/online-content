@@ -123,7 +123,7 @@ def get_custom_fields():
 # ---------- source bucketing ----------
 def bucket_source(c):
     """Map a contact's source-related fields to a normalized bucket."""
-    def s(v): return (v or "").strip().lower()
+    def s(v): return str(v).strip().lower() if v is not None else ""
     src = s(c.get("source"))
     attr = s(c.get("attributionSource"))
     contact_src = s(c.get("contactSource"))

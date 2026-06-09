@@ -1,0 +1,481 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Farming Postcard Archive — Graeham Watts</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Anton&family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --gold: #C2A14E;
+    --gold-deep: #A88638;
+    --gold-light: #EAD9A8;
+    --ink: #111418;
+    --dark: #1A1D2E;
+    --cream: #FBF7EC;
+    --bg: #0E1018;
+    --card-bg: #1A1D2E;
+    --text: #E8E4D5;
+    --text-dim: #9b988e;
+    --border: rgba(194, 161, 78, 0.25);
+  }
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  body {
+    font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+    background: var(--bg);
+    color: var(--text);
+    min-height: 100vh;
+    line-height: 1.5;
+  }
+  .container {
+    max-width: 1400px;
+    margin: 0 auto;
+    padding: 60px 32px 80px;
+  }
+  header {
+    border-bottom: 1px solid var(--border);
+    padding-bottom: 36px;
+    margin-bottom: 48px;
+  }
+  .eyebrow {
+    color: var(--gold);
+    font-size: 12px;
+    letter-spacing: 4px;
+    text-transform: uppercase;
+    font-weight: 700;
+    margin-bottom: 12px;
+  }
+  h1 {
+    font-family: 'Anton', sans-serif;
+    font-size: 64px;
+    line-height: 1.0;
+    letter-spacing: -1px;
+    text-transform: uppercase;
+    margin-bottom: 14px;
+  }
+  h1 .gold {
+    background: linear-gradient(180deg, var(--gold-light), var(--gold), var(--gold-deep));
+    -webkit-background-clip: text;
+    background-clip: text;
+    -webkit-text-fill-color: transparent;
+  }
+  .lede {
+    color: var(--text-dim);
+    font-size: 16px;
+    max-width: 720px;
+  }
+  .lede strong {
+    color: var(--text);
+    font-weight: 600;
+  }
+  .meta-row {
+    display: flex;
+    gap: 32px;
+    margin-top: 24px;
+    flex-wrap: wrap;
+    font-size: 13px;
+    color: var(--text-dim);
+  }
+  .meta-row span strong {
+    color: var(--gold);
+    font-weight: 700;
+    margin-right: 6px;
+  }
+
+  /* ===== STATS BAR ===== */
+  .stats {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+    gap: 16px;
+    margin-bottom: 48px;
+  }
+  .stat {
+    background: var(--card-bg);
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    padding: 18px 20px;
+  }
+  .stat-num {
+    font-family: 'Anton', sans-serif;
+    font-size: 38px;
+    color: var(--gold);
+    line-height: 1.0;
+  }
+  .stat-label {
+    color: var(--text-dim);
+    font-size: 12px;
+    text-transform: uppercase;
+    letter-spacing: 1.5px;
+    margin-top: 6px;
+    font-weight: 600;
+  }
+
+  /* ===== TIMELINE / CARD GRID ===== */
+  .section-title {
+    font-family: 'Anton', sans-serif;
+    font-size: 28px;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+    margin-bottom: 24px;
+    color: var(--text);
+  }
+  .grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(360px, 1fr));
+    gap: 24px;
+  }
+  .card {
+    background: var(--card-bg);
+    border: 1px solid var(--border);
+    border-radius: 10px;
+    overflow: hidden;
+    transition: transform 0.18s ease, border-color 0.18s ease, box-shadow 0.18s ease;
+    display: flex;
+    flex-direction: column;
+  }
+  .card:hover {
+    transform: translateY(-3px);
+    border-color: var(--gold);
+    box-shadow: 0 12px 40px rgba(194, 161, 78, 0.15);
+  }
+  .card-thumb {
+    width: 100%;
+    aspect-ratio: 3 / 2;
+    background: #2a2d3e;
+    overflow: hidden;
+    position: relative;
+  }
+  .card-thumb img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+  }
+  .card-thumb .preview-tag {
+    position: absolute;
+    top: 12px;
+    right: 12px;
+    background: var(--gold);
+    color: #000;
+    font-size: 10px;
+    font-weight: 700;
+    letter-spacing: 1.5px;
+    padding: 4px 10px;
+    border-radius: 3px;
+    text-transform: uppercase;
+  }
+  .card-thumb.placeholder {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: linear-gradient(135deg, #1a1d2e, #2a2d3e);
+    color: var(--text-dim);
+    font-size: 12px;
+    text-transform: uppercase;
+    letter-spacing: 2px;
+  }
+  .card-body {
+    padding: 18px 20px 20px;
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+  }
+  .card-meta {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 10px;
+  }
+  .card-date {
+    color: var(--gold);
+    font-size: 12px;
+    font-weight: 700;
+    letter-spacing: 1.5px;
+    text-transform: uppercase;
+  }
+  .archetype-tag {
+    background: rgba(194, 161, 78, 0.12);
+    border: 1px solid rgba(194, 161, 78, 0.4);
+    color: var(--gold-light);
+    font-size: 10px;
+    font-weight: 700;
+    letter-spacing: 1px;
+    padding: 3px 8px;
+    border-radius: 3px;
+    text-transform: uppercase;
+  }
+  .card-headline {
+    font-family: 'Anton', sans-serif;
+    font-size: 18px;
+    line-height: 1.1;
+    text-transform: uppercase;
+    color: var(--text);
+    margin-bottom: 10px;
+    letter-spacing: -0.3px;
+  }
+  .card-details {
+    font-size: 12px;
+    color: var(--text-dim);
+    margin-bottom: 14px;
+    line-height: 1.55;
+  }
+  .card-details strong {
+    color: var(--text);
+    font-weight: 600;
+  }
+  .card-actions {
+    margin-top: auto;
+    display: flex;
+    gap: 8px;
+  }
+  .btn {
+    flex: 1;
+    padding: 10px 14px;
+    border-radius: 5px;
+    text-align: center;
+    font-size: 12px;
+    font-weight: 700;
+    letter-spacing: 1px;
+    text-transform: uppercase;
+    text-decoration: none;
+    transition: background 0.15s ease;
+    cursor: pointer;
+    border: none;
+  }
+  .btn-primary {
+    background: var(--gold);
+    color: #000;
+  }
+  .btn-primary:hover {
+    background: var(--gold-light);
+  }
+  .btn-secondary {
+    background: transparent;
+    color: var(--gold);
+    border: 1px solid var(--gold);
+  }
+  .btn-secondary:hover {
+    background: rgba(194, 161, 78, 0.1);
+  }
+  .status-flag {
+    display: inline-block;
+    background: rgba(194, 161, 78, 0.2);
+    color: var(--gold-light);
+    font-size: 10px;
+    font-weight: 700;
+    letter-spacing: 1px;
+    padding: 4px 8px;
+    border-radius: 3px;
+    text-transform: uppercase;
+    margin-top: 8px;
+  }
+
+  footer {
+    margin-top: 64px;
+    padding-top: 36px;
+    border-top: 1px solid var(--border);
+    color: var(--text-dim);
+    font-size: 12px;
+    line-height: 1.7;
+  }
+  footer strong { color: var(--text); }
+  footer a { color: var(--gold); text-decoration: none; }
+  footer a:hover { text-decoration: underline; }
+
+  @media (max-width: 720px) {
+    h1 { font-size: 42px; }
+    .container { padding: 36px 20px 50px; }
+    .meta-row { gap: 18px; font-size: 12px; }
+  }
+</style>
+</head>
+<body>
+<div class="container">
+
+  <header>
+    <div class="eyebrow">Direct Mail Archive · East Palo Alto Farm</div>
+    <h1>Farming Postcard <span class="gold">Archive</span></h1>
+    <p class="lede">
+      Every farming postcard Graeham has sent — front, back, archetype, hook, CTA — tracked in one place so we can spot repetition, see what's working, and plan what's next.
+      <strong>The skill auto-updates this page</strong> after each new card ships.
+    </p>
+    <div class="meta-row">
+      <span><strong>Owner</strong>Graeham Watts · DRE #01466876</span>
+      <span><strong>Brokerage</strong>Intero Real Estate · The Martin Team</span>
+      <span><strong>Market</strong>EPA / Peninsula</span>
+      <span><strong>Vendor</strong>Universal Mail Works</span>
+    </div>
+  </header>
+
+  <div class="stats">
+    <div class="stat">
+      <div class="stat-num">6</div>
+      <div class="stat-label">Cards Tracked</div>
+    </div>
+    <div class="stat">
+      <div class="stat-num">6</div>
+      <div class="stat-label">Archetypes Used</div>
+    </div>
+    <div class="stat">
+      <div class="stat-num">2</div>
+      <div class="stat-label">Per Month Cadence</div>
+    </div>
+    <div class="stat">
+      <div class="stat-num">1</div>
+      <div class="stat-label">Pending Print</div>
+    </div>
+  </div>
+
+  <h2 class="section-title">All Cards · Newest First</h2>
+
+  <div class="grid">
+
+    <!-- 2026-06-01 NEIGHBOR ENVY -->
+    <div class="card">
+      <div class="card-thumb placeholder">
+        DESIGN PREVIEW · HTML
+        <span class="preview-tag">NEW</span>
+      </div>
+      <div class="card-body">
+        <div class="card-meta">
+          <div class="card-date">June 1, 2026</div>
+          <div class="archetype-tag">Neighbor Envy</div>
+        </div>
+        <div class="card-headline">What Did The Last 5 Homes On Your Street Really Sell For?</div>
+        <div class="card-details">
+          <strong>Back:</strong> Get the REAL number on your home<br>
+          <strong>CTA:</strong> Free home valuation · no pressure<br>
+          <strong>Lever:</strong> Curiosity + social proof
+        </div>
+        <span class="status-flag">Design approved · awaiting print</span>
+        <div class="card-actions" style="margin-top:14px;">
+          <a href="2026-06-01-neighbor-envy-preview.html" class="btn btn-primary">Open Preview</a>
+        </div>
+      </div>
+    </div>
+
+    <!-- 2026-05-15 ANTI-ZESTIMATE -->
+    <div class="card">
+      <div class="card-thumb">
+        <img src="thumbnails/2026-05-15-anti-zestimate-1.jpg" alt="Anti-Zestimate front">
+      </div>
+      <div class="card-body">
+        <div class="card-meta">
+          <div class="card-date">May 15, 2026</div>
+          <div class="archetype-tag">Anti-Zestimate</div>
+        </div>
+        <div class="card-headline">Your Zestimate Is Wrong</div>
+        <div class="card-details">
+          <strong>Back:</strong> Request a precision equity audit<br>
+          <strong>CTA:</strong> Algorithms guess. I measure.<br>
+          <strong>Lever:</strong> Anti-algorithm
+        </div>
+        <div class="card-actions">
+          <a href="pdfs/2026-05-15-anti-zestimate.pdf" class="btn btn-primary" target="_blank">View PDF</a>
+        </div>
+      </div>
+    </div>
+
+    <!-- 2026-05-01 AI SEARCH -->
+    <div class="card">
+      <div class="card-thumb">
+        <img src="thumbnails/2026-05-01-ai-search-1.jpg" alt="AI search front">
+      </div>
+      <div class="card-body">
+        <div class="card-meta">
+          <div class="card-date">May 1, 2026</div>
+          <div class="archetype-tag">AI Search</div>
+        </div>
+        <div class="card-headline">Why Isn't ChatGPT Recommending Your Home?</div>
+        <div class="card-details">
+          <strong>Back:</strong> Standard listings are becoming invisible<br>
+          <strong>CTA:</strong> Get your property's AI score<br>
+          <strong>Lever:</strong> FOMO + tech
+        </div>
+        <div class="card-actions">
+          <a href="pdfs/2026-05-01-ai-search.pdf" class="btn btn-primary" target="_blank">View PDF</a>
+        </div>
+      </div>
+    </div>
+
+    <!-- 2025-04-15 ANTI-ZILLOW BUYER POOL -->
+    <div class="card">
+      <div class="card-thumb">
+        <img src="thumbnails/2025-04-15-anti-zillow-buyer-pool-1.jpg" alt="Anti-Zillow front">
+      </div>
+      <div class="card-body">
+        <div class="card-meta">
+          <div class="card-date">April 15, 2025</div>
+          <div class="archetype-tag">Anti-Zillow Pool</div>
+        </div>
+        <div class="card-headline">I Have A List Of Buyers Who Don't Use Zillow</div>
+        <div class="card-details">
+          <strong>Back:</strong> My system identifies high-intent buyers<br>
+          <strong>CTA:</strong> You just haven't met them yet<br>
+          <strong>Lever:</strong> Scarcity + anti-portal
+        </div>
+        <div class="card-actions">
+          <a href="pdfs/2025-04-15-anti-zillow-buyer-pool.pdf" class="btn btn-primary" target="_blank">View PDF</a>
+        </div>
+      </div>
+    </div>
+
+    <!-- 2025-03-15 BUYER-TAGGED -->
+    <div class="card">
+      <div class="card-thumb">
+        <img src="thumbnails/2025-03-15-buyer-tagged-1.jpg" alt="Buyer-tagged front">
+      </div>
+      <div class="card-body">
+        <div class="card-meta">
+          <div class="card-date">March 15, 2025</div>
+          <div class="archetype-tag">Buyer-Tagged</div>
+        </div>
+        <div class="card-headline">I Already Have Your Buyer TAGGED</div>
+        <div class="card-details">
+          <strong>Back:</strong> Active buyers are already looking<br>
+          <strong>CTA:</strong> Call or text me TODAY<br>
+          <strong>Lever:</strong> Scarcity
+        </div>
+        <div class="card-actions">
+          <a href="pdfs/2025-03-15-buyer-tagged.pdf" class="btn btn-primary" target="_blank">View PDF</a>
+        </div>
+      </div>
+    </div>
+
+    <!-- 2025-03-01 EQUITY -->
+    <div class="card">
+      <div class="card-thumb">
+        <img src="thumbnails/2025-03-01-equity-1.jpg" alt="Equity front">
+      </div>
+      <div class="card-body">
+        <div class="card-meta">
+          <div class="card-date">March 1, 2025</div>
+          <div class="archetype-tag">Equity</div>
+        </div>
+        <div class="card-headline">Do You Know How Much Equity You've Built This Year?</div>
+        <div class="card-details">
+          <strong>Back:</strong> Get your custom equity report<br>
+          <strong>CTA:</strong> Free equity report<br>
+          <strong>Lever:</strong> Pride + curiosity
+        </div>
+        <div class="card-actions">
+          <a href="pdfs/2025-03-01-equity.pdf" class="btn btn-primary" target="_blank">View PDF</a>
+        </div>
+      </div>
+    </div>
+
+  </div>
+
+  <footer>
+    <p><strong>How this page updates.</strong> The <code>farming-postcard</code> skill auto-publishes here after every new card ships — appends the entry to <code>archive.json</code>, regenerates this page, and pushes to <code>Graehamwatts/online-content</code> on GitHub. You don't need to edit it manually.</p>
+    <p style="margin-top:10px;">
+      Source repo: <a href="https://github.com/Graehamwatts/online-content/tree/main/farming-postcards" target="_blank">Graehamwatts/online-content/farming-postcards</a> ·
+      Skill repo: <a href="https://github.com/Graehamwatts/skills/tree/main/skills/farming-postcard" target="_blank">Graehamwatts/skills/farming-postcard</a> ·
+      Last updated 2026-05-27
+    </p>
+  </footer>
+
+</div>
+</body>
+</html>

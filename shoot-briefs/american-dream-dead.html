@@ -1,0 +1,1403 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>Shoot Day Brief — Is the American Dream Dead?</title>
+<style>
+  /* PRINT-OPTIMIZED CSS */
+  @page {
+    size: letter;
+    margin: 0.6in 0.5in 0.6in 0.5in;
+  }
+
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+
+  body {
+    font-family: Georgia, 'Times New Roman', serif;
+    font-size: 11pt;
+    line-height: 1.45;
+    color: #111;
+    background: white;
+    padding: 0;
+  }
+
+  /* ============ COVER PAGE ============ */
+  .cover {
+    page-break-after: always;
+    text-align: center;
+    padding-top: 1.2in;
+  }
+
+  .cover .title {
+    font-family: 'Helvetica Neue', Arial, sans-serif;
+    font-size: 36pt;
+    font-weight: 700;
+    letter-spacing: -1px;
+    margin-bottom: 8px;
+    color: #000;
+  }
+
+  .cover .subtitle {
+    font-family: Georgia, serif;
+    font-size: 18pt;
+    font-style: italic;
+    color: #555;
+    margin-bottom: 30px;
+  }
+
+  .cover .divider {
+    width: 80px;
+    height: 3px;
+    background: #c5a258;
+    margin: 30px auto;
+  }
+
+  .cover .meta-box {
+    border: 2px solid #000;
+    padding: 20px 30px;
+    max-width: 5in;
+    margin: 40px auto 0;
+    text-align: left;
+    font-family: 'Helvetica Neue', Arial, sans-serif;
+    font-size: 11pt;
+  }
+
+  .cover .meta-box .row {
+    display: flex;
+    padding: 6px 0;
+    border-bottom: 1px dotted #999;
+  }
+
+  .cover .meta-box .row:last-child { border-bottom: none; }
+
+  .cover .meta-box .label {
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+    font-size: 9pt;
+    width: 35%;
+    color: #555;
+  }
+
+  .cover .meta-box .value {
+    width: 65%;
+  }
+
+  .cover .footer-note {
+    margin-top: 50px;
+    font-family: 'Helvetica Neue', Arial, sans-serif;
+    font-size: 10pt;
+    color: #777;
+    font-style: italic;
+    max-width: 4.5in;
+    margin-left: auto;
+    margin-right: auto;
+  }
+
+  /* ============ SECTION HEADERS ============ */
+  .section-header {
+    font-family: 'Helvetica Neue', Arial, sans-serif;
+    font-size: 14pt;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 1.5px;
+    color: #000;
+    border-bottom: 3px solid #c5a258;
+    padding-bottom: 6px;
+    margin-bottom: 20px;
+  }
+
+  /* ============ CHEAT SHEET ============ */
+  .cheat-sheet {
+    page-break-after: always;
+  }
+
+  .cheat-sheet table {
+    width: 100%;
+    border-collapse: collapse;
+    margin-top: 12px;
+    font-family: 'Helvetica Neue', Arial, sans-serif;
+    font-size: 10pt;
+  }
+
+  .cheat-sheet th {
+    background: #000;
+    color: white;
+    text-align: left;
+    padding: 8px 10px;
+    font-size: 9pt;
+    text-transform: uppercase;
+    letter-spacing: 0.8px;
+  }
+
+  .cheat-sheet td {
+    padding: 8px 10px;
+    border-bottom: 1px solid #ccc;
+    vertical-align: top;
+  }
+
+  .cheat-sheet tr:nth-child(even) td { background: #f7f3eb; }
+
+  .cheat-sheet .shot-id-cell {
+    font-weight: 700;
+    font-size: 11pt;
+    color: #c5a258;
+    width: 14%;
+  }
+
+  .cheat-sheet .gold-row td { background: #fff5e0 !important; }
+
+  .cheat-flow {
+    margin-top: 30px;
+    background: #f7f3eb;
+    border-left: 4px solid #c5a258;
+    padding: 16px 20px;
+    font-family: 'Helvetica Neue', Arial, sans-serif;
+    font-size: 10pt;
+  }
+
+  .cheat-flow h3 {
+    font-size: 12pt;
+    margin-bottom: 10px;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+  }
+
+  .cheat-flow ul { list-style: none; padding: 0; }
+  .cheat-flow ul li {
+    padding: 4px 0;
+    border-bottom: 1px dotted #ccc;
+  }
+  .cheat-flow ul li strong {
+    color: #c5a258;
+    margin-right: 8px;
+  }
+
+  /* ============ INDIVIDUAL SHOT PAGES ============ */
+  .shot-page {
+    page-break-after: always;
+    padding-top: 6px;
+  }
+
+  .shot-header {
+    display: flex;
+    align-items: flex-start;
+    border-bottom: 3px solid #000;
+    padding-bottom: 8px;
+    margin-bottom: 16px;
+  }
+
+  .shot-id {
+    font-family: 'Helvetica Neue', Arial, sans-serif;
+    font-size: 32pt;
+    font-weight: 800;
+    letter-spacing: -1px;
+    line-height: 1;
+    color: #c5a258;
+    margin-right: 16px;
+    min-width: 1.2in;
+  }
+
+  .shot-title-block {
+    flex: 1;
+  }
+
+  .shot-name {
+    font-family: 'Helvetica Neue', Arial, sans-serif;
+    font-size: 18pt;
+    font-weight: 700;
+    color: #000;
+    line-height: 1.1;
+    margin-bottom: 4px;
+  }
+
+  .shot-section {
+    font-family: 'Helvetica Neue', Arial, sans-serif;
+    font-size: 9pt;
+    color: #777;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+  }
+
+  /* SPEC TABLE */
+  .spec-table {
+    width: 100%;
+    border-collapse: collapse;
+    margin-bottom: 14px;
+    font-family: 'Helvetica Neue', Arial, sans-serif;
+    font-size: 9.5pt;
+  }
+
+  .spec-table td {
+    border: 1px solid #000;
+    padding: 6px 10px;
+    vertical-align: top;
+  }
+
+  .spec-table td.label {
+    background: #000;
+    color: white;
+    text-transform: uppercase;
+    font-weight: 700;
+    font-size: 8pt;
+    letter-spacing: 0.6px;
+    width: 18%;
+  }
+
+  /* WHERE + ACTION + NOTES */
+  .info-block {
+    margin-bottom: 12px;
+    font-family: 'Helvetica Neue', Arial, sans-serif;
+    font-size: 10pt;
+    line-height: 1.5;
+  }
+
+  .info-block .label {
+    font-family: 'Helvetica Neue', Arial, sans-serif;
+    font-size: 9pt;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.8px;
+    color: #555;
+    margin-bottom: 3px;
+  }
+
+  /* SCRIPT BLOCK — the hero element */
+  .script-block {
+    background: #fff8e6;
+    border: 2px solid #c5a258;
+    border-left: 8px solid #c5a258;
+    padding: 14px 18px;
+    margin: 14px 0;
+    font-family: Georgia, serif;
+    font-size: 12pt;
+    line-height: 1.6;
+  }
+
+  .script-block .script-header {
+    font-family: 'Helvetica Neue', Arial, sans-serif;
+    font-size: 9pt;
+    font-weight: 700;
+    color: #c5a258;
+    text-transform: uppercase;
+    letter-spacing: 1.5px;
+    margin-bottom: 8px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+  }
+
+  .script-block .script-header .takes {
+    font-family: Georgia, serif;
+    font-style: italic;
+    color: #555;
+    font-size: 10pt;
+    text-transform: none;
+    letter-spacing: 0;
+  }
+
+  .script-block p {
+    margin-bottom: 8px;
+  }
+
+  .script-block .stage {
+    font-family: 'Helvetica Neue', Arial, sans-serif;
+    font-size: 9.5pt;
+    color: #777;
+    font-style: italic;
+    background: #fff;
+    border-left: 2px solid #c5a258;
+    padding: 4px 10px;
+    margin: 6px 0;
+  }
+
+  /* TAKE CHECKBOXES */
+  .takes-row {
+    display: flex;
+    gap: 14px;
+    margin: 10px 0 14px 0;
+    font-family: 'Helvetica Neue', Arial, sans-serif;
+    font-size: 10pt;
+  }
+
+  .takes-row .label {
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.6px;
+    color: #555;
+    font-size: 9pt;
+    margin-right: 4px;
+  }
+
+  .takes-row .checkbox {
+    width: 18px;
+    height: 18px;
+    border: 2px solid #000;
+    display: inline-block;
+    margin-right: 4px;
+    vertical-align: middle;
+  }
+
+  .takes-row .take-label {
+    display: inline-flex;
+    align-items: center;
+    margin-right: 8px;
+    font-weight: 600;
+  }
+
+  /* NOTES SECTION */
+  .notes-box {
+    border: 1px dashed #555;
+    padding: 10px 12px;
+    margin-top: 12px;
+    min-height: 1in;
+    font-family: 'Helvetica Neue', Arial, sans-serif;
+  }
+
+  .notes-box .label {
+    font-size: 9pt;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.8px;
+    color: #555;
+    margin-bottom: 4px;
+  }
+
+  .notes-box .lines {
+    border-bottom: 1px solid #ccc;
+    height: 0.3in;
+    margin-bottom: 2px;
+  }
+
+  /* ============ FINAL PAGES ============ */
+  .final-page {
+    page-break-before: always;
+  }
+
+  .final-page h2 {
+    font-family: 'Helvetica Neue', Arial, sans-serif;
+    font-size: 18pt;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    border-bottom: 3px solid #c5a258;
+    padding-bottom: 6px;
+    margin-bottom: 18px;
+  }
+
+  .checklist {
+    list-style: none;
+    padding: 0;
+    font-family: 'Helvetica Neue', Arial, sans-serif;
+    font-size: 11pt;
+  }
+
+  .checklist li {
+    padding: 6px 0;
+    border-bottom: 1px dotted #999;
+    display: flex;
+    align-items: center;
+  }
+
+  .checklist li::before {
+    content: '';
+    width: 16px;
+    height: 16px;
+    border: 2px solid #000;
+    margin-right: 12px;
+    flex-shrink: 0;
+  }
+
+  .equipment-section {
+    margin-bottom: 28px;
+  }
+
+  .equipment-section h3 {
+    font-family: 'Helvetica Neue', Arial, sans-serif;
+    font-size: 11pt;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    color: #c5a258;
+    margin-bottom: 8px;
+  }
+
+  .timing-block {
+    background: #f7f3eb;
+    border-left: 4px solid #c5a258;
+    padding: 12px 16px;
+    margin-bottom: 16px;
+    font-family: 'Helvetica Neue', Arial, sans-serif;
+    font-size: 10pt;
+  }
+
+  .timing-block .time-label {
+    font-weight: 700;
+    color: #c5a258;
+    text-transform: uppercase;
+    letter-spacing: 0.8px;
+    font-size: 9pt;
+    margin-bottom: 4px;
+  }
+
+  /* PRINT-SPECIFIC */
+  @media print {
+    body { padding: 0; }
+    .no-print { display: none; }
+  }
+</style>
+</head>
+<body>
+
+<!-- ===================== COVER ===================== -->
+<div class="cover">
+  <div class="title">SHOOT DAY BRIEF</div>
+  <div class="subtitle">Is the American Dream Dead?</div>
+  <div class="divider"></div>
+
+  <div class="meta-box">
+    <div class="row">
+      <div class="label">Project</div>
+      <div class="value">YouTube Long-Form — BTTF Concept</div>
+    </div>
+    <div class="row">
+      <div class="label">Talent</div>
+      <div class="value">Graeham Watts (Intero Real Estate)</div>
+    </div>
+    <div class="row">
+      <div class="label">Videographer</div>
+      <div class="value">Wesley</div>
+    </div>
+    <div class="row">
+      <div class="label">Shoot Date</div>
+      <div class="value">___________________________________</div>
+    </div>
+    <div class="row">
+      <div class="label">Locations</div>
+      <div class="value">3 properties + 1 neighborhood walk</div>
+    </div>
+    <div class="row">
+      <div class="label">Total Live Shots</div>
+      <div class="value">11 (6 primary + 3 secondary + 2 neighborhood)</div>
+    </div>
+    <div class="row">
+      <div class="label">Est. Shoot Time</div>
+      <div class="value">3-4 hours (incl. setup + travel)</div>
+    </div>
+  </div>
+
+  <div class="footer-note">
+    All voiceover narration for B-roll cutaways already recorded.<br>
+    This document covers on-camera, on-location moments only.<br>
+    Tone for everything in here: grounded, conversational, real estate agent talking to a buyer.
+  </div>
+</div>
+
+<!-- ===================== CHEAT SHEET ===================== -->
+<div class="cheat-sheet">
+  <div class="section-header">Cheat Sheet — All Shots at a Glance</div>
+
+  <table>
+    <thead>
+      <tr>
+        <th>Shot</th>
+        <th>What</th>
+        <th>Where</th>
+        <th>Framing</th>
+        <th>Movement</th>
+        <th>Takes</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr class="gold-row">
+        <td class="shot-id-cell">A1</td>
+        <td>HOOK — opener of the entire video</td>
+        <td>Primary house exterior</td>
+        <td>MCU phone-style</td>
+        <td>Static</td>
+        <td>4-5</td>
+      </tr>
+      <tr>
+        <td class="shot-id-cell">A2</td>
+        <td>DeLorean keys close-up</td>
+        <td>Same as A1</td>
+        <td>ECU rack focus</td>
+        <td>Rack focus</td>
+        <td>2-3</td>
+      </tr>
+      <tr>
+        <td class="shot-id-cell">A3</td>
+        <td>Bay Area Receipt — pull-up to property</td>
+        <td>Primary house exterior</td>
+        <td>WS → MCU gimbal</td>
+        <td>Gimbal track</td>
+        <td>3</td>
+      </tr>
+      <tr>
+        <td class="shot-id-cell">A4</td>
+        <td>Workaround intro — agent mode</td>
+        <td>Front door of primary house</td>
+        <td>MCU</td>
+        <td>Static</td>
+        <td>3</td>
+      </tr>
+      <tr>
+        <td class="shot-id-cell">A5</td>
+        <td>The 4-Step Path — walking through interior</td>
+        <td>Primary house interior</td>
+        <td>MCU gimbal walk</td>
+        <td>Tracking</td>
+        <td>2-3</td>
+      </tr>
+      <tr class="gold-row">
+        <td class="shot-id-cell">A6</td>
+        <td>CLOSING — mirrors A1 (same spot, same lens)</td>
+        <td>Primary house exterior</td>
+        <td>MCU phone-style</td>
+        <td>Static</td>
+        <td>3-4</td>
+      </tr>
+      <tr>
+        <td class="shot-id-cell">B1</td>
+        <td>Duplex / starter exterior</td>
+        <td>Secondary house</td>
+        <td>WS exterior</td>
+        <td>Push-in</td>
+        <td>2</td>
+      </tr>
+      <tr>
+        <td class="shot-id-cell">B2</td>
+        <td>Key in door / hand close-up</td>
+        <td>Secondary house</td>
+        <td>ECU hands</td>
+        <td>Static / slider</td>
+        <td>2</td>
+      </tr>
+      <tr>
+        <td class="shot-id-cell">B3</td>
+        <td>"For Sale" sign / real estate visual</td>
+        <td>Secondary house or anywhere</td>
+        <td>MS</td>
+        <td>Static</td>
+        <td>2</td>
+      </tr>
+      <tr>
+        <td class="shot-id-cell">C1</td>
+        <td>Society walking shot — contemplative</td>
+        <td>Residential street EPA/RWC</td>
+        <td>MS gimbal track</td>
+        <td>Tracking walk</td>
+        <td>2-3</td>
+      </tr>
+      <tr>
+        <td class="shot-id-cell">C2</td>
+        <td>Neighborhood B-roll (silent)</td>
+        <td>Same residential street</td>
+        <td>Various WS</td>
+        <td>Push-ins</td>
+        <td>~6 clips</td>
+      </tr>
+    </tbody>
+  </table>
+
+  <div class="cheat-flow">
+    <h3>Suggested Shoot Order</h3>
+    <ul>
+      <li><strong>MORNING (soft light):</strong> Block C (neighborhood walk + B-roll) → Block B (secondary house exterior)</li>
+      <li><strong>MIDDAY (flat / overcast OK):</strong> Block A interior shots — A4, A5</li>
+      <li><strong>GOLDEN HOUR (KEY):</strong> A1, A2, A3, A6 — all primary house exterior in the same light window</li>
+    </ul>
+  </div>
+</div>
+
+<!-- ===================== SHOT A1 ===================== -->
+<div class="shot-page">
+  <div class="shot-header">
+    <div class="shot-id">A1</div>
+    <div class="shot-title-block">
+      <div class="shot-name">THE HOOK</div>
+      <div class="shot-section">Primary House Exterior • Most important shot of the video</div>
+    </div>
+  </div>
+
+  <table class="spec-table">
+    <tr>
+      <td class="label">Framing</td>
+      <td>MCU (waist up). Phone-style — slightly tighter than traditional MS, feels like a selfie call. Graeham on left third, house behind on right two-thirds.</td>
+    </tr>
+    <tr>
+      <td class="label">Lens</td>
+      <td>35mm or 50mm. NOT 85mm — too compressed.</td>
+    </tr>
+    <tr>
+      <td class="label">Movement</td>
+      <td>Static. Locked off is fine. Minimal handheld drift OK.</td>
+    </tr>
+    <tr>
+      <td class="label">Lighting</td>
+      <td>Golden hour. Sun behind Graeham at 3/4 angle. Reflector bounce to fill the face.</td>
+    </tr>
+    <tr>
+      <td class="label">Audio</td>
+      <td>Lav primary. Boom backup if wind.</td>
+    </tr>
+  </table>
+
+  <div class="info-block">
+    <div class="label">Action</div>
+    <div>Talking direct to lens. Calm but direct. No movement until the final line. On the final line ("I'm gonna need these...") Graeham reaches into pocket and pulls out the DeLorean keys. Don't cut — get the reach and dangle.</div>
+  </div>
+
+  <div class="script-block">
+    <div class="script-header">
+      <span>Script — Shot A1</span>
+      <span class="takes">4-5 takes preferred</span>
+    </div>
+
+    <p>"The median age of a first-time homebuyer in America is now <strong>40 years old.</strong>"</p>
+    <div class="stage">[PAUSE — hold silence for 1 full second. Don't rush.]</div>
+    <p>"In 1992, it was 28."</p>
+    <p>"That's not a generation being lazy. That's a generation losing twelve years of wealth-building — and most of you watching this are inside that twelve-year gap right now."</p>
+    <p>"I'm a real estate agent in one of the most expensive markets in the country. And I've spent the last week digging into seventy years of housing data to answer one question: <strong>when did the American Dream actually break, who broke it, and is there any version of it left worth chasing?</strong>"</p>
+    <p>"The answer is more complicated than either side will tell you."</p>
+    <p>"So here's the deal. To do this right, I'm gonna need <em>these</em>..."</p>
+    <div class="stage">[Reach into pocket, pull out DeLorean keys, dangle in front of lens. DO NOT CUT.]</div>
+  </div>
+
+  <div class="takes-row">
+    <span class="label">Takes used:</span>
+    <span class="take-label"><span class="checkbox"></span>1</span>
+    <span class="take-label"><span class="checkbox"></span>2</span>
+    <span class="take-label"><span class="checkbox"></span>3</span>
+    <span class="take-label"><span class="checkbox"></span>4</span>
+    <span class="take-label"><span class="checkbox"></span>5</span>
+  </div>
+
+  <div class="notes-box">
+    <div class="label">Notes / Take Comments</div>
+    <div class="lines"></div>
+    <div class="lines"></div>
+    <div class="lines"></div>
+  </div>
+</div>
+
+<!-- ===================== SHOT A2 ===================== -->
+<div class="shot-page">
+  <div class="shot-header">
+    <div class="shot-id">A2</div>
+    <div class="shot-title-block">
+      <div class="shot-name">DELOREAN KEYS</div>
+      <div class="shot-section">Same Spot as A1 • Rack focus close-up</div>
+    </div>
+  </div>
+
+  <table class="spec-table">
+    <tr>
+      <td class="label">Framing</td>
+      <td>ECU on the keys in Graeham's hand. DMC logo visible. Background falls away completely.</td>
+    </tr>
+    <tr>
+      <td class="label">Lens</td>
+      <td>85mm if available (shallow DOF). 50mm acceptable.</td>
+    </tr>
+    <tr>
+      <td class="label">Movement</td>
+      <td>Slow rack focus — start on face OUT of focus, rack to keys SHARP.</td>
+    </tr>
+    <tr>
+      <td class="label">Lighting</td>
+      <td>Same golden hour conditions as A1. Don't move lights.</td>
+    </tr>
+    <tr>
+      <td class="label">Audio</td>
+      <td>Capture clean — this line is V/O but Wesley should still record it.</td>
+    </tr>
+  </table>
+
+  <div class="info-block">
+    <div class="label">Action</div>
+    <div>Graeham dangles the DeLorean keys at lens. Light jingle. Camera racks focus from his face (soft) to the keys (sharp). Hold on sharp keys for 2 beats.</div>
+  </div>
+
+  <div class="script-block">
+    <div class="script-header">
+      <span>Script — Shot A2</span>
+      <span class="takes">2-3 takes</span>
+    </div>
+    <p>"We're getting in the DeLorean. We're going back to 1955, 1975, 1995, 2015, and then forward to today. Same four questions every stop. Let's go."</p>
+  </div>
+
+  <div class="takes-row">
+    <span class="label">Takes used:</span>
+    <span class="take-label"><span class="checkbox"></span>1</span>
+    <span class="take-label"><span class="checkbox"></span>2</span>
+    <span class="take-label"><span class="checkbox"></span>3</span>
+  </div>
+
+  <div class="notes-box">
+    <div class="label">Notes / Take Comments</div>
+    <div class="lines"></div>
+    <div class="lines"></div>
+    <div class="lines"></div>
+  </div>
+</div>
+
+<!-- ===================== SHOT A3 ===================== -->
+<div class="shot-page">
+  <div class="shot-header">
+    <div class="shot-id">A3</div>
+    <div class="shot-title-block">
+      <div class="shot-name">BAY AREA RECEIPT</div>
+      <div class="shot-section">Pull-Up to Primary House • Gimbal Walk + Stop</div>
+    </div>
+  </div>
+
+  <table class="spec-table">
+    <tr>
+      <td class="label">Framing</td>
+      <td>Start WS (full body + whole house visible). End MCU (Graeham stopped, facing camera).</td>
+    </tr>
+    <tr>
+      <td class="label">Lens</td>
+      <td>24-35mm wide for WS start. Same lens through the move.</td>
+    </tr>
+    <tr>
+      <td class="label">Movement</td>
+      <td>Gimbal tracking from behind/side as Graeham walks up the driveway or walkway. End on him turning to face camera.</td>
+    </tr>
+    <tr>
+      <td class="label">Lighting</td>
+      <td>Same golden hour as A1 + A6. Sun behind Graeham at 3/4.</td>
+    </tr>
+    <tr>
+      <td class="label">Audio</td>
+      <td>Lav + boom backup. Watch for footsteps on lav.</td>
+    </tr>
+  </table>
+
+  <div class="info-block">
+    <div class="label">Action</div>
+    <div>Graeham walks 3-4 steps up the path/driveway. Turns to face camera at the door or midpoint. Delivers script. Gestures to the house on the "EPA $1.02 million" line.</div>
+  </div>
+
+  <div class="script-block">
+    <div class="script-header">
+      <span>Script — Shot A3</span>
+      <span class="takes">3 takes</span>
+    </div>
+    <p>"Bay Area, where I work? East Palo Alto median: <strong>one point oh two million.</strong> San Mateo County: <strong>one point eight million.</strong> Single-family in San Mateo County: <strong>two point one eight million.</strong>"</p>
+    <div class="stage">[Gesture to the house behind you.]</div>
+    <p>"Average down payment in San Jose: <strong>two hundred and thirty-five thousand dollars.</strong> That's not the home. That's the down payment."</p>
+    <div class="stage">[Land "that's the down payment" with subtle disbelief — punchy, not preachy.]</div>
+  </div>
+
+  <div class="takes-row">
+    <span class="label">Takes used:</span>
+    <span class="take-label"><span class="checkbox"></span>1</span>
+    <span class="take-label"><span class="checkbox"></span>2</span>
+    <span class="take-label"><span class="checkbox"></span>3</span>
+  </div>
+
+  <div class="notes-box">
+    <div class="label">Notes / Take Comments</div>
+    <div class="lines"></div>
+    <div class="lines"></div>
+    <div class="lines"></div>
+  </div>
+</div>
+
+<!-- ===================== SHOT A4 ===================== -->
+<div class="shot-page">
+  <div class="shot-header">
+    <div class="shot-id">A4</div>
+    <div class="shot-title-block">
+      <div class="shot-name">WORKAROUND INTRO</div>
+      <div class="shot-section">At Front Door • Agent Mode</div>
+    </div>
+  </div>
+
+  <table class="spec-table">
+    <tr>
+      <td class="label">Framing</td>
+      <td>MCU. Could also do OTS with the door slightly open behind him — agent about to walk a buyer through.</td>
+    </tr>
+    <tr>
+      <td class="label">Lens</td>
+      <td>50mm.</td>
+    </tr>
+    <tr>
+      <td class="label">Movement</td>
+      <td>Static.</td>
+    </tr>
+    <tr>
+      <td class="label">Lighting</td>
+      <td>Door / porch ambient. Fill if needed.</td>
+    </tr>
+    <tr>
+      <td class="label">Audio</td>
+      <td>Lav primary.</td>
+    </tr>
+  </table>
+
+  <div class="info-block">
+    <div class="label">Action</div>
+    <div>Direct to camera. Tone shifts to "agent mode" — confident, helpful, slightly leaning forward. Keys in hand optional for casual visual cue.</div>
+  </div>
+
+  <div class="script-block">
+    <div class="script-header">
+      <span>Script — Shot A4</span>
+      <span class="takes">3 takes</span>
+    </div>
+    <p>"I'm a real estate agent. I work with first-time buyers in this market every week. Let me tell you what I tell them."</p>
+    <p>"The 20 percent down myth needs to die. <strong>You do not need 20 percent down to buy in the Bay Area.</strong> Conventional loans go to 3 percent. FHA goes to 3.5 percent. CalHFA, MyHome Assistance, the City of East Palo Alto first-time buyer program — there are real working programs in San Mateo County right now offering 10 thousand to 40 thousand dollars in down payment assistance."</p>
+  </div>
+
+  <div class="takes-row">
+    <span class="label">Takes used:</span>
+    <span class="take-label"><span class="checkbox"></span>1</span>
+    <span class="take-label"><span class="checkbox"></span>2</span>
+    <span class="take-label"><span class="checkbox"></span>3</span>
+  </div>
+
+  <div class="notes-box">
+    <div class="label">Notes / Take Comments</div>
+    <div class="lines"></div>
+    <div class="lines"></div>
+    <div class="lines"></div>
+  </div>
+</div>
+
+<!-- ===================== SHOT A5 ===================== -->
+<div class="shot-page">
+  <div class="shot-header">
+    <div class="shot-id">A5</div>
+    <div class="shot-title-block">
+      <div class="shot-name">THE 4-STEP PATH</div>
+      <div class="shot-section">Interior Gimbal Walk • Showing the House</div>
+    </div>
+  </div>
+
+  <table class="spec-table">
+    <tr>
+      <td class="label">Framing</td>
+      <td>MCU on Graeham, moving smoothly as he walks. House features visible behind him without distracting.</td>
+    </tr>
+    <tr>
+      <td class="label">Lens</td>
+      <td>35mm.</td>
+    </tr>
+    <tr>
+      <td class="label">Movement</td>
+      <td>Slow gimbal tracking. Wesley walks backward, Graeham walks toward camera. Talking-while-walking shot.</td>
+    </tr>
+    <tr>
+      <td class="label">Lighting</td>
+      <td>Natural interior + bounce/fill for face. Watch for hot windows.</td>
+    </tr>
+    <tr>
+      <td class="label">Audio</td>
+      <td>Lav primary. Watch for shoe noise on hardwood.</td>
+    </tr>
+  </table>
+
+  <div class="info-block">
+    <div class="label">Action</div>
+    <div>Walk through entryway → living room → kitchen or back porch. Like showing a buyer the house. Brief gestures to features as relevant — gesture to property on "duplex or ADU" line. Gesture outward on "fringe markets."</div>
+  </div>
+
+  <div class="script-block">
+    <div class="script-header">
+      <span>Script — Shot A5 (longer — get 2-3 clean takes)</span>
+      <span class="takes">2-3 takes</span>
+    </div>
+    <p>"The actual path to ownership in 2026 isn't 'save two hundred and thirty-five thousand dollars.' It's four moves."</p>
+    <p>"<strong>One</strong> — house-hack. Buy a duplex or a property with an ADU. Rent out one unit, live in the other. The tenant pays your mortgage."</p>
+    <p>"<strong>Two</strong> — three to five percent down conventional or FHA, stacked with first-time buyer assistance. Programs like CalHFA can layer with your loan."</p>
+    <p>"<strong>Three</strong> — buy in an appreciating fringe market. East Palo Alto, Redwood City, parts of San Mateo. Not Palo Alto, not Atherton. The fringe is where the math still works."</p>
+    <p>"<strong>Four</strong> — hold for seven years. Real estate is a long game. You're not flipping. You're building."</p>
+    <p>"The system is what it is. But there are still <em>doors</em>. They're just smaller, and you have to know where they are."</p>
+    <div class="stage">[Land "doors" with weight — this is the section's closing image.]</div>
+  </div>
+
+  <div class="takes-row">
+    <span class="label">Takes used:</span>
+    <span class="take-label"><span class="checkbox"></span>1</span>
+    <span class="take-label"><span class="checkbox"></span>2</span>
+    <span class="take-label"><span class="checkbox"></span>3</span>
+  </div>
+
+  <div class="notes-box">
+    <div class="label">Notes / Take Comments</div>
+    <div class="lines"></div>
+    <div class="lines"></div>
+    <div class="lines"></div>
+  </div>
+</div>
+
+<!-- ===================== SHOT A6 ===================== -->
+<div class="shot-page">
+  <div class="shot-header">
+    <div class="shot-id">A6</div>
+    <div class="shot-title-block">
+      <div class="shot-name">THE CLOSING</div>
+      <div class="shot-section">Primary House Exterior • MUST MIRROR A1</div>
+    </div>
+  </div>
+
+  <table class="spec-table">
+    <tr>
+      <td class="label">Framing</td>
+      <td>MCU. Phone-style. <strong>IDENTICAL to A1.</strong> Same lens, same spot, same angle.</td>
+    </tr>
+    <tr>
+      <td class="label">Lens</td>
+      <td>Same as A1 (35mm or 50mm — whichever was used).</td>
+    </tr>
+    <tr>
+      <td class="label">Movement</td>
+      <td>Static.</td>
+    </tr>
+    <tr>
+      <td class="label">Lighting</td>
+      <td><strong>Same golden hour conditions as A1.</strong> Schedule for same lighting window. If lighting drifts, reshoot A1.</td>
+    </tr>
+    <tr>
+      <td class="label">Audio</td>
+      <td>Lav primary. Boom backup.</td>
+    </tr>
+  </table>
+
+  <div class="info-block">
+    <div class="label">Action</div>
+    <div>Direct to lens. Grounded, sincere tone. Long shot — about 1:50 on camera. Will likely break into 3-4 take segments in edit. At end, reach for DeLorean keys on a surface next to Graeham (or pull from pocket), jingle once, smile, walk out of frame. Hold the empty frame 2-3 seconds.</div>
+  </div>
+
+  <div class="script-block">
+    <div class="script-header">
+      <span>Script — Shot A6 (LONG — break into segments)</span>
+      <span class="takes">3-4 takes</span>
+    </div>
+    <p>"So — is the American Dream dead?"</p>
+    <div class="stage">[PAUSE — sit on it. Don't rush.]</div>
+    <p>"No."</p>
+    <div class="stage">[Another pause — let "No" breathe.]</div>
+    <p>"But the version your grandparents had — one income, one career, one mortgage, one house, send the kid to college on it — <strong>that version is dead.</strong> It got priced out by 45 years of policy choices that shifted economic gains toward the top of the ladder. Both parties signed off. Both parties benefited."</p>
+    <p>"And whatever you think the fix is — more market, less market, more taxes, fewer taxes, more housing supply, more programs — I'm not going to be the one to tell you. That's your call, and that's why we vote."</p>
+    <p>"What I <em>can</em> tell you is what's possible right now, in 2026, in the Bay Area I work in."</p>
+    <p>"A different dream. Smaller. More creative. Two incomes minimum. House-hacking instead of single-family. Geographic flexibility. Down payment assistance instead of saving alone. Multigenerational ownership."</p>
+    <p>"The dream isn't gone. It just costs more, takes longer, and requires you to know things nobody taught you. <strong>That's what this channel is for.</strong>"</p>
+    <p>"If you want my actual playbook for buying in the Bay Area in 2026 — every program, every neighborhood, every workaround I just walked through — <strong>comment OPTIONS below and I'll DM it to you. It's free.</strong>"</p>
+    <p>"And in the comments: tell me what you think. Is the dream dead? Did it just change shape? What's the real fix? I read every one — and I genuinely want the conversation, not just the agreement."</p>
+    <div class="stage">[Pause. Reach for DeLorean keys. Jingle once. Smile.]</div>
+    <p>"Catch you next week."</p>
+    <div class="stage">[Walk out of frame. Hold empty frame 2-3 seconds before cutting.]</div>
+  </div>
+
+  <div class="takes-row">
+    <span class="label">Takes used:</span>
+    <span class="take-label"><span class="checkbox"></span>1</span>
+    <span class="take-label"><span class="checkbox"></span>2</span>
+    <span class="take-label"><span class="checkbox"></span>3</span>
+    <span class="take-label"><span class="checkbox"></span>4</span>
+  </div>
+
+  <div class="notes-box">
+    <div class="label">Notes / Take Comments</div>
+    <div class="lines"></div>
+    <div class="lines"></div>
+    <div class="lines"></div>
+  </div>
+</div>
+
+<!-- ===================== SHOT B1 ===================== -->
+<div class="shot-page">
+  <div class="shot-header">
+    <div class="shot-id">B1</div>
+    <div class="shot-title-block">
+      <div class="shot-name">DUPLEX / STARTER EXTERIOR</div>
+      <div class="shot-section">Secondary House • Silent B-Roll</div>
+    </div>
+  </div>
+
+  <table class="spec-table">
+    <tr>
+      <td class="label">Framing</td>
+      <td>WS exterior of smaller starter or duplex.</td>
+    </tr>
+    <tr>
+      <td class="label">Lens</td>
+      <td>24mm-35mm wide.</td>
+    </tr>
+    <tr>
+      <td class="label">Movement</td>
+      <td>Slow drone-style ground push-in (if drone). Otherwise slider or smooth gimbal walk-in.</td>
+    </tr>
+    <tr>
+      <td class="label">Lighting</td>
+      <td>Whatever — morning or midday OK. This is B-roll.</td>
+    </tr>
+    <tr>
+      <td class="label">Audio</td>
+      <td>Ambient only. No dialogue.</td>
+    </tr>
+  </table>
+
+  <div class="info-block">
+    <div class="label">Action</div>
+    <div>Wide static-to-push-in on duplex or smaller starter home. 6-8 second clean clip. Cutaway over "house-hack a duplex or ADU" line in A5.</div>
+  </div>
+
+  <div class="takes-row">
+    <span class="label">Takes used:</span>
+    <span class="take-label"><span class="checkbox"></span>1</span>
+    <span class="take-label"><span class="checkbox"></span>2</span>
+  </div>
+
+  <div class="notes-box">
+    <div class="label">Notes</div>
+    <div class="lines"></div>
+    <div class="lines"></div>
+  </div>
+</div>
+
+<!-- ===================== SHOT B2 ===================== -->
+<div class="shot-page">
+  <div class="shot-header">
+    <div class="shot-id">B2</div>
+    <div class="shot-title-block">
+      <div class="shot-name">KEY IN DOOR</div>
+      <div class="shot-section">Hands Close-Up • Silent B-Roll</div>
+    </div>
+  </div>
+
+  <table class="spec-table">
+    <tr>
+      <td class="label">Framing</td>
+      <td>ECU on hands and keys.</td>
+    </tr>
+    <tr>
+      <td class="label">Lens</td>
+      <td>85mm or 50mm macro.</td>
+    </tr>
+    <tr>
+      <td class="label">Movement</td>
+      <td>Static or slow slider.</td>
+    </tr>
+    <tr>
+      <td class="label">Lighting</td>
+      <td>Door ambient. Fill if shadow on hands.</td>
+    </tr>
+    <tr>
+      <td class="label">Audio</td>
+      <td>Key sound capture would be nice.</td>
+    </tr>
+  </table>
+
+  <div class="info-block">
+    <div class="label">Action</div>
+    <div>Hand turning key in lock OR close-up of keys being handed over. Multiple angles if time allows. Cutaway visual for ownership / fringe-market beats.</div>
+  </div>
+
+  <div class="takes-row">
+    <span class="label">Takes used:</span>
+    <span class="take-label"><span class="checkbox"></span>1</span>
+    <span class="take-label"><span class="checkbox"></span>2</span>
+  </div>
+
+  <div class="notes-box">
+    <div class="label">Notes</div>
+    <div class="lines"></div>
+    <div class="lines"></div>
+  </div>
+</div>
+
+<!-- ===================== SHOT B3 ===================== -->
+<div class="shot-page">
+  <div class="shot-header">
+    <div class="shot-id">B3</div>
+    <div class="shot-title-block">
+      <div class="shot-name">FOR SALE SIGN</div>
+      <div class="shot-section">Real Estate Visual Signal • Silent B-Roll</div>
+    </div>
+  </div>
+
+  <table class="spec-table">
+    <tr>
+      <td class="label">Framing</td>
+      <td>MS, with house in background. Sign should fill most of frame.</td>
+    </tr>
+    <tr>
+      <td class="label">Lens</td>
+      <td>50mm.</td>
+    </tr>
+    <tr>
+      <td class="label">Movement</td>
+      <td>Static or very slow drift.</td>
+    </tr>
+    <tr>
+      <td class="label">Lighting</td>
+      <td>Natural.</td>
+    </tr>
+    <tr>
+      <td class="label">Audio</td>
+      <td>Ambient only.</td>
+    </tr>
+  </table>
+
+  <div class="info-block">
+    <div class="label">Action</div>
+    <div>Clean shot of any current listing sign (Graeham's name visible ideal). General "real estate" cutaway visual.</div>
+  </div>
+
+  <div class="takes-row">
+    <span class="label">Takes used:</span>
+    <span class="take-label"><span class="checkbox"></span>1</span>
+    <span class="take-label"><span class="checkbox"></span>2</span>
+  </div>
+
+  <div class="notes-box">
+    <div class="label">Notes</div>
+    <div class="lines"></div>
+    <div class="lines"></div>
+  </div>
+</div>
+
+<!-- ===================== SHOT C1 ===================== -->
+<div class="shot-page">
+  <div class="shot-header">
+    <div class="shot-id">C1</div>
+    <div class="shot-title-block">
+      <div class="shot-name">SOCIETY WALK</div>
+      <div class="shot-section">Residential Street EPA/RWC • Most Reflective Moment</div>
+    </div>
+  </div>
+
+  <table class="spec-table">
+    <tr>
+      <td class="label">Framing</td>
+      <td>MS. Some street/neighborhood context visible. Wesley walks backward, Graeham walks toward camera.</td>
+    </tr>
+    <tr>
+      <td class="label">Lens</td>
+      <td>35mm.</td>
+    </tr>
+    <tr>
+      <td class="label">Movement</td>
+      <td>Smooth gimbal tracking. Moderate walking pace — not slow, not rushed.</td>
+    </tr>
+    <tr>
+      <td class="label">Lighting</td>
+      <td>Late afternoon or early morning soft directional light. Tree-shaded street is great.</td>
+    </tr>
+    <tr>
+      <td class="label">Audio</td>
+      <td>Lav. Wind screen if needed.</td>
+    </tr>
+  </table>
+
+  <div class="info-block">
+    <div class="label">Action</div>
+    <div>Walking, contemplative. Reflective tone, not energetic. Heaviest tonal moment in the video. Stop walking on the last line ("It got priced out") if it works naturally.</div>
+  </div>
+
+  <div class="script-block">
+    <div class="script-header">
+      <span>Script — Shot C1</span>
+      <span class="takes">2-3 takes (try different streets/directions)</span>
+    </div>
+    <p>"Here's where it stops being a housing story and becomes a society story."</p>
+    <p>"50 years ago, half of all 25-to-34-year-olds had hit the four classic adulthood milestones: full-time job, married, kid, owned a home."</p>
+    <p>"Today: <strong>less than one in four.</strong> U.S. Census Bureau, 2025."</p>
+    <p>"Why? Because everything got delayed. Median first-time homebuyer age: 40. Marriage age: up. U.S. birth rate hit a record low in 2024. Multigenerational households — three generations under one roof — are at levels we haven't seen since the 1800s."</p>
+    <p>"People frame this as a lifestyle choice. 'Millennials are different.' 'Gen Z chose differently.' But look at the actual research — Harvard's Joint Center for Housing Studies, the Heritage Foundation, peer-reviewed fertility research — <strong>they all point to the same cause: housing cost.</strong>"</p>
+    <p>"You can't get married in your parents' basement. You can't have kids in a one-bedroom apartment. You can't move closer to a better job if you can't afford the rent. The dream didn't get rejected. <strong>It got priced out.</strong>"</p>
+    <div class="stage">[Stop walking on the last line if it feels natural. Don't force it.]</div>
+  </div>
+
+  <div class="takes-row">
+    <span class="label">Takes used:</span>
+    <span class="take-label"><span class="checkbox"></span>1</span>
+    <span class="take-label"><span class="checkbox"></span>2</span>
+    <span class="take-label"><span class="checkbox"></span>3</span>
+  </div>
+
+  <div class="notes-box">
+    <div class="label">Notes / Take Comments</div>
+    <div class="lines"></div>
+    <div class="lines"></div>
+    <div class="lines"></div>
+  </div>
+</div>
+
+<!-- ===================== SHOT C2 ===================== -->
+<div class="shot-page">
+  <div class="shot-header">
+    <div class="shot-id">C2</div>
+    <div class="shot-title-block">
+      <div class="shot-name">NEIGHBORHOOD B-ROLL</div>
+      <div class="shot-section">Silent Establishing Shots • Cuts Over Society Section</div>
+    </div>
+  </div>
+
+  <table class="spec-table">
+    <tr>
+      <td class="label">Framing</td>
+      <td>Various WS — tree-lined street, mailboxes, fences, family-living signals.</td>
+    </tr>
+    <tr>
+      <td class="label">Lens</td>
+      <td>24mm-35mm wide.</td>
+    </tr>
+    <tr>
+      <td class="label">Movement</td>
+      <td>Slow push-ins, slow tilts. No fast movement.</td>
+    </tr>
+    <tr>
+      <td class="label">Lighting</td>
+      <td>Same as C1 window.</td>
+    </tr>
+    <tr>
+      <td class="label">Audio</td>
+      <td>Ambient.</td>
+    </tr>
+  </table>
+
+  <div class="info-block">
+    <div class="label">Action</div>
+    <div>Aim for 6 clean establishing clips. Each 5-8 seconds. These cut over the marriage / kids / multigenerational beats in C1's voiceover.</div>
+  </div>
+
+  <div class="info-block">
+    <div class="label">Shot list — get all six if possible</div>
+    <ol style="font-family: 'Helvetica Neue', Arial, sans-serif; font-size: 10pt; margin-left: 20px;">
+      <li>Tree-lined residential street, no people, slow push-in</li>
+      <li>House with "For Sale" sign (if any in neighborhood)</li>
+      <li>Mailboxes / fences as visual texture</li>
+      <li>Kids' bikes in driveways / family-living signal</li>
+      <li>Empty playground or stroller / quiet street</li>
+      <li>Long lens compression of street with parked cars</li>
+    </ol>
+  </div>
+
+  <div class="notes-box">
+    <div class="label">Notes / Which got captured</div>
+    <div class="lines"></div>
+    <div class="lines"></div>
+  </div>
+</div>
+
+<!-- ===================== EQUIPMENT + FINAL ===================== -->
+<div class="final-page">
+  <h2>Equipment Checklist + Logistics</h2>
+
+  <div class="equipment-section">
+    <h3>Camera Body + Lenses</h3>
+    <ul class="checklist">
+      <li>A7S III (or Wesley's primary body)</li>
+      <li>24-70mm zoom</li>
+      <li>35mm prime (for A1, A6 hero shots)</li>
+      <li>50mm prime (for A4, B3)</li>
+      <li>85mm prime (for A2 rack focus, B2 hands)</li>
+    </ul>
+  </div>
+
+  <div class="equipment-section">
+    <h3>Stabilization + Movement</h3>
+    <ul class="checklist">
+      <li>Gimbal (Ronin / Crane — Wesley's preference)</li>
+      <li>Tripod (for static A1, A6)</li>
+      <li>Slider (for B2 macro slide)</li>
+      <li>Drone if available (for B1 push-in)</li>
+    </ul>
+  </div>
+
+  <div class="equipment-section">
+    <h3>Audio</h3>
+    <ul class="checklist">
+      <li>Lav mic (primary — Sennheiser G4 or equivalent)</li>
+      <li>Boom + windscreen (backup)</li>
+      <li>Spare batteries x4</li>
+      <li>Spare TX/RX batteries</li>
+    </ul>
+  </div>
+
+  <div class="equipment-section">
+    <h3>Lighting</h3>
+    <ul class="checklist">
+      <li>5-in-1 reflector (silver / white)</li>
+      <li>Small LED panel for interior fill (Aputure MC or similar)</li>
+      <li>Diffusion / softbox if available</li>
+    </ul>
+  </div>
+
+  <div class="equipment-section">
+    <h3>Media + Power</h3>
+    <ul class="checklist">
+      <li>Camera batteries x4</li>
+      <li>SD/CFexpress cards x4 (formatted, empty)</li>
+      <li>External monitor (optional, useful for A5 walking shot)</li>
+      <li>Phone with shot list (this PDF) loaded</li>
+    </ul>
+  </div>
+
+  <div class="equipment-section">
+    <h3>Other</h3>
+    <ul class="checklist">
+      <li>Wardrobe — Graeham's normal day clothes (NOT costume)</li>
+      <li>DeLorean keys prop (Graeham brings)</li>
+      <li>Water, snacks</li>
+      <li>House keys / listing access</li>
+    </ul>
+  </div>
+</div>
+
+<div class="final-page">
+  <h2>Shoot Day Flow</h2>
+
+  <div class="timing-block">
+    <div class="time-label">7:30 AM — Soft Light Window Opens</div>
+    <div><strong>Block C:</strong> Society walk (C1) + Neighborhood B-roll (C2). Residential street.</div>
+  </div>
+
+  <div class="timing-block">
+    <div class="time-label">9:30 AM — Move to Secondary House</div>
+    <div><strong>Block B:</strong> Duplex exterior (B1) + keys (B2) + For Sale sign (B3). Quick — 30 min.</div>
+  </div>
+
+  <div class="timing-block">
+    <div class="time-label">10:30 AM — Move to Primary House (Interior Time)</div>
+    <div><strong>Block A Interior:</strong> Workaround intro (A4) at front door + 4-step path (A5) interior gimbal walk.</div>
+  </div>
+
+  <div class="timing-block">
+    <div class="time-label">12:00 PM — LUNCH BREAK</div>
+    <div>Eat. Hydrate. Reset.</div>
+  </div>
+
+  <div class="timing-block">
+    <div class="time-label">1:00 PM — Optional Coverage / Reshoot Buffer</div>
+    <div>Use this window to reshoot anything from the morning if needed. Or grab additional B-roll cutaways.</div>
+  </div>
+
+  <div class="timing-block">
+    <div class="time-label">5:30 PM — GOLDEN HOUR (CRITICAL)</div>
+    <div><strong>Block A Exterior:</strong> A1 (Hook) → A2 (keys close-up) → A3 (Bay Area Receipt walk-up) → A6 (Closing — mirrors A1).<br>
+    Lighting between A1 and A6 must match. Plan tight.</div>
+  </div>
+
+  <div class="timing-block">
+    <div class="time-label">7:00 PM — WRAP</div>
+    <div>Verify all takes captured. Pack up. Transfer cards to backup drive on-site if possible.</div>
+  </div>
+
+  <h2 style="margin-top: 40px;">The One Thing That Cannot Be Missed</h2>
+
+  <div style="background: #fff8e6; border: 2px solid #c5a258; padding: 16px 20px; font-family: 'Helvetica Neue', Arial, sans-serif; font-size: 11pt; line-height: 1.6;">
+    <p><strong>A1 (Hook) and A6 (Closing) MUST be shot in the same light window.</strong> They are the first and last shots of the video and the viewer's eye will detect lighting drift instantly. If golden hour is interrupted by clouds, prioritize A1 and A6 over everything else and reshoot any interior shots another day if needed.</p>
+    <p style="margin-top: 10px;"><strong>The pauses in A1 and A6 are intentional.</strong> After "40 years old" in A1, and after "No" in A6, Graeham sits in silence. Don't cut, don't push. The silence is the shot.</p>
+  </div>
+</div>
+
+</body>
+</html>

@@ -1,0 +1,48 @@
+name: Cleanup Investor/Flipper Pipeline
+
+on:
+  workflow_dispatch:
+    inputs:
+      dry_run:
+        description: 'Dry run — preview only, NO deletions'
+        required: true
+        default: 'true'
+        type: choice
+        options:
+          - 'true'
+          - 'false'
+
+env:
+  GHL_API_BASE: https://services.leadconnectorhq.com
+  GHL_VERSION:  '2021-07-28'
+
+jobs:
+  cleanup:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+
+      - name: Install dependencies
+        run: pip install requests
+
+      - name: Run cleanup
+        env:
+          GHL_PIT:         ${{ secrets.GHL_PIT }}
+          GHL_LOCATION_ID: ${{ secrets.GHL_LOCATION_ID }}
+          DRY_RUN:         ${{ github.event.inputs.dry_run }}
+          PYTHONUNBUFFERED: "1"
+        run: python3 scripts/crm_cleanup_investor.py
+
+      - name: Summary
+        run: |
+          if [ "${{ github.event.inputs.dry_run }}" = "true" ]; then
+            echo "### Dry Run Complete" >> $GITHUB_STEP_SUMMARY
+            echo "No records deleted. Review the log above, then re-run with **dry_run = false** to execute." >> $GITHUB_STEP_SUMMARY
+          else
+            echo "### Cleanup Complete" >> $GITHUB_STEP_SUMMARY
+            echo "Investor/Flipper pipeline opportunities deleted. Contacts were not affected." >> $GITHUB_STEP_SUMMARY
+          fi

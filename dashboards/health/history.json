@@ -1,0 +1,43 @@
+{
+  "entries": [
+    {
+      "date": "2026-05-18",
+      "score": 55,
+      "grade": "C",
+      "label": "Watch Closely",
+      "new_opps": 1910,
+      "active_open": 1753,
+      "stale_recent": 11,
+      "old_active": 1726,
+      "dormant": 2287,
+      "pipeline_value": 1600000.0,
+      "generated_at": "2026-05-24T05:03:59.551015+00:00"
+    },
+    {
+      "date": "2026-06-01",
+      "score": 35,
+      "grade": "D",
+      "label": "Needs Attention",
+      "new_opps": 0,
+      "active_open": 1755,
+      "stale_recent": 10,
+      "old_active": 1731,
+      "dormant": 2285,
+      "pipeline_value": 0.0,
+      "generated_at": "2026-06-01T19:49:11.801438+00:00"
+    },
+    {
+      "date": "2026-06-08",
+      "score": 50,
+      "grade": "C",
+      "label": "Watch Closely",
+      "new_opps": 1,
+      "active_open": 1765,
+      "stale_recent": 14,
+      "old_active": 1730,
+      "dormant": 2287,
+      "pipeline_value": 1400000.0,
+      "generated_at": "2026-06-08T17:41:19.335320+00:00"
+    }
+  ]
+}

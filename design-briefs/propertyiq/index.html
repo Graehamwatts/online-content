@@ -15,8 +15,8 @@
     --ink:#F4F2EC;
     --ink-2:#C9C5B8;
     --ink-3:#8B8675;
-    --gold:#C9A052;
-    --gold-soft:rgba(201,160,82,0.18);
+    --accent-1:#C9A052;
+    --accent-1-soft:rgba(201,160,82,0.18);
     --line:rgba(255,255,255,0.08);
     --line-strong:rgba(255,255,255,0.16);
     --accent:#7B89FF;
@@ -31,18 +31,18 @@
   h1{font-size:clamp(40px,6vw,72px);font-weight:800;letter-spacing:-0.03em}
   h2{font-size:clamp(28px,4vw,44px);margin:88px 0 24px}
   h3{font-size:clamp(20px,2.5vw,28px);margin:48px 0 16px}
-  h4{font-size:18px;text-transform:uppercase;letter-spacing:0.18em;color:var(--gold);margin:32px 0 12px;font-weight:600;font-family:'Inter',sans-serif}
+  h4{font-size:18px;text-transform:uppercase;letter-spacing:0.18em;color:var(--accent-1);margin:32px 0 12px;font-weight:600;font-family:'Inter',sans-serif}
   p{margin:0 0 18px;color:var(--ink-2);font-size:17px}
   strong{color:var(--ink);font-weight:600}
   em{color:var(--ink);font-style:italic;font-weight:400}
-  a{color:var(--gold);text-decoration:none;border-bottom:1px solid rgba(201,160,82,0.4);transition:all 0.2s}
+  a{color:var(--accent-1);text-decoration:none;border-bottom:1px solid rgba(201,160,82,0.4);transition:all 0.2s}
   a:hover{color:var(--ink);border-bottom-color:var(--ink)}
-  code{font-family:'JetBrains Mono',monospace;font-size:14px;background:rgba(255,255,255,0.05);padding:2px 8px;border-radius:4px;color:var(--gold)}
+  code{font-family:'JetBrains Mono',monospace;font-size:14px;background:rgba(255,255,255,0.05);padding:2px 8px;border-radius:4px;color:var(--accent-1)}
   ul,ol{padding-left:22px;color:var(--ink-2)}
   li{margin-bottom:10px;font-size:17px}
-  li::marker{color:var(--gold)}
+  li::marker{color:var(--accent-1)}
   hr{border:none;border-top:1px solid var(--line);margin:64px 0}
-  .eyebrow{font-family:'Inter',sans-serif;font-size:13px;font-weight:600;letter-spacing:0.22em;text-transform:uppercase;color:var(--gold);margin-bottom:18px}
+  .eyebrow{font-family:'Inter',sans-serif;font-size:13px;font-weight:600;letter-spacing:0.22em;text-transform:uppercase;color:var(--accent-1);margin-bottom:18px}
   .lede{font-size:21px;line-height:1.55;color:var(--ink-2);font-weight:300;max-width:780px}
   .lede em{color:var(--ink)}
 
@@ -63,30 +63,36 @@
   .card p:last-child{margin-bottom:0}
 
   /* PULL QUOTE */
-  .pull{border-left:3px solid var(--gold);padding:8px 0 8px 28px;margin:40px 0;font-size:22px;line-height:1.4;font-family:'Syne',sans-serif;font-weight:500;color:var(--ink);max-width:780px}
+  .pull{border-left:3px solid var(--accent-1);padding:8px 0 8px 28px;margin:40px 0;font-size:22px;line-height:1.4;font-family:'Syne',sans-serif;font-weight:500;color:var(--ink);max-width:780px}
 
   /* TABLE */
   table{width:100%;border-collapse:collapse;margin:28px 0;font-size:15px}
-  th{text-align:left;padding:14px 16px;background:var(--bg-3);color:var(--gold);font-family:'Inter',sans-serif;font-weight:600;font-size:12px;text-transform:uppercase;letter-spacing:0.14em;border-bottom:1px solid var(--line-strong)}
+  th{text-align:left;padding:14px 16px;background:var(--bg-3);color:var(--accent-1);font-family:'Inter',sans-serif;font-weight:600;font-size:12px;text-transform:uppercase;letter-spacing:0.14em;border-bottom:1px solid var(--line-strong)}
   td{padding:14px 16px;color:var(--ink-2);border-bottom:1px solid var(--line);vertical-align:top}
   tr:last-child td{border-bottom:none}
 
   /* DIAGRAM WRAP */
   .diagram{background:var(--bg-2);border:1px solid var(--line);border-radius:14px;padding:32px;margin:32px 0;overflow:auto}
-  .diagram-title{font-family:'Inter',sans-serif;font-size:12px;font-weight:600;letter-spacing:0.18em;text-transform:uppercase;color:var(--gold);margin-bottom:20px;text-align:center}
+  .diagram-title{font-family:'Inter',sans-serif;font-size:12px;font-weight:600;letter-spacing:0.18em;text-transform:uppercase;color:var(--accent-1);margin-bottom:20px;text-align:center}
   .diagram svg{display:block;margin:0 auto;max-width:100%;height:auto}
 
-  /* MOOD BOARD */
-  .mood-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:16px;margin:32px 0}
-  @media (max-width:780px){.mood-grid{grid-template-columns:1fr}}
-  .mood-tile{aspect-ratio:1;border-radius:12px;display:flex;align-items:flex-end;padding:18px;font-family:'Syne',sans-serif;font-weight:600;color:var(--ink);font-size:14px;letter-spacing:-0.01em;overflow:hidden;position:relative}
-  .mood-tile span{position:relative;z-index:2}
-  .mood-1{background:linear-gradient(135deg,#0B0B12 0%,#1A1A2E 60%,#C9A052 200%)}
-  .mood-2{background:linear-gradient(160deg,#11111B 0%,#171724 50%,#7B89FF 220%)}
-  .mood-3{background:linear-gradient(120deg,#0B0B12 0%,#52C9A0 250%)}
-  .mood-4{background:radial-gradient(circle at 70% 30%,#C9A052,#11111B 70%)}
-  .mood-5{background:linear-gradient(45deg,#0B0B12 30%,#7B89FF 110%)}
-  .mood-6{background:repeating-linear-gradient(45deg,#0B0B12,#0B0B12 10px,#171724 10px,#171724 20px)}
+  /* HEADLINE OPTIONS */
+  .headline-option{background:var(--bg-2);border:1px solid var(--line);border-left:3px solid var(--accent-1);border-radius:10px;padding:20px 24px;margin:16px 0}
+  .headline-option .h{font-family:'Syne',sans-serif;font-weight:700;font-size:22px;color:var(--ink);line-height:1.25;margin-bottom:8px;letter-spacing:-0.015em}
+  .headline-option .why{font-size:14px;color:var(--ink-3);margin:0}
+  .headline-option .why strong{color:var(--ink-2)}
+
+  /* PROBLEM CARDS */
+  .problem-grid{display:grid;grid-template-columns:1fr;gap:14px;margin:32px 0}
+  .problem{background:var(--bg-2);border:1px solid var(--line);border-radius:10px;padding:18px 22px;position:relative;padding-left:54px}
+  .problem::before{content:counter(p-counter,decimal-leading-zero);counter-increment:p-counter;position:absolute;left:18px;top:18px;font-family:'JetBrains Mono',monospace;font-size:13px;color:var(--danger);font-weight:600}
+  .problem-grid{counter-reset:p-counter}
+  .problem p{margin:0;font-size:16px;color:var(--ink-2)}
+  .problem strong{color:var(--ink)}
+
+  /* SUGGESTION CALLOUT (starting-point flagging) */
+  .suggestion{background:rgba(123,137,255,0.04);border:1px dashed rgba(123,137,255,0.30);border-radius:10px;padding:16px 20px;margin:24px 0;font-size:15px;color:var(--ink-2)}
+  .suggestion strong{color:var(--accent)}
 
   /* DO / DON'T */
   .dodont{display:grid;grid-template-columns:1fr 1fr;gap:24px;margin:32px 0}
@@ -104,9 +110,9 @@
   .toc h4{margin-top:0}
   .toc ol{list-style:none;padding:0;margin:0;counter-reset:toc}
   .toc li{counter-increment:toc;font-size:16px;margin-bottom:8px;padding-left:42px;position:relative}
-  .toc li::before{content:counter(toc,decimal-leading-zero);position:absolute;left:0;color:var(--gold);font-family:'JetBrains Mono',monospace;font-size:13px;top:3px}
+  .toc li::before{content:counter(toc,decimal-leading-zero);position:absolute;left:0;color:var(--accent-1);font-family:'JetBrains Mono',monospace;font-size:13px;top:3px}
   .toc a{color:var(--ink-2);border:none}
-  .toc a:hover{color:var(--gold)}
+  .toc a:hover{color:var(--accent-1)}
 
   /* FOOTER */
   footer{padding:80px 0 60px;border-top:1px solid var(--line);margin-top:80px}
@@ -114,13 +120,22 @@
   .sig{font-family:'Syne',sans-serif;font-weight:700;color:var(--ink);font-size:24px;margin-bottom:8px}
 
   /* CALLOUT */
-  .callout{background:linear-gradient(135deg,rgba(201,160,82,0.08),rgba(123,137,255,0.04));border:1px solid var(--gold-soft);border-radius:12px;padding:24px 28px;margin:28px 0;display:flex;gap:20px;align-items:flex-start}
-  .callout-icon{flex-shrink:0;width:32px;height:32px;border-radius:50%;background:var(--gold);color:var(--bg);display:flex;align-items:center;justify-content:center;font-family:'Syne',sans-serif;font-weight:800;font-size:18px}
+  .callout{background:linear-gradient(135deg,rgba(201,160,82,0.08),rgba(123,137,255,0.04));border:1px solid var(--accent-1-soft);border-radius:12px;padding:24px 28px;margin:28px 0;display:flex;gap:20px;align-items:flex-start}
+  .callout-icon{flex-shrink:0;width:32px;height:32px;border-radius:50%;background:var(--accent-1);color:var(--bg);display:flex;align-items:center;justify-content:center;font-family:'Syne',sans-serif;font-weight:800;font-size:18px}
   .callout p{margin:0;color:var(--ink)}
-  .callout strong{color:var(--gold)}
+  .callout strong{color:var(--accent-1)}
 
   /* SECTION TAG */
-  .section-tag{display:inline-block;font-size:11px;font-weight:600;letter-spacing:0.22em;text-transform:uppercase;color:var(--gold);background:var(--gold-soft);padding:6px 12px;border-radius:4px;margin-bottom:16px;font-family:'Inter',sans-serif}
+  .section-tag{display:inline-block;font-size:11px;font-weight:600;letter-spacing:0.22em;text-transform:uppercase;color:var(--accent-1);background:var(--accent-1-soft);padding:6px 12px;border-radius:4px;margin-bottom:16px;font-family:'Inter',sans-serif}
+
+  /* INSPO LINKS */
+  .inspo-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(260px,1fr));gap:14px;margin:24px 0}
+  .inspo{background:var(--bg-2);border:1px solid var(--line);border-radius:10px;padding:18px 20px}
+  .inspo-name{font-family:'Syne',sans-serif;font-weight:700;font-size:16px;color:var(--ink);margin-bottom:4px}
+  .inspo-url{font-family:'JetBrains Mono',monospace;font-size:12px;color:var(--accent-1);word-break:break-all;display:block;margin-bottom:8px;border:none}
+  .inspo p{font-size:14px;margin:0;color:var(--ink-3)}
+  .inspo.positive{border-left:3px solid var(--accent-2)}
+  .inspo.negative{border-left:3px solid var(--danger);opacity:0.85}
 
   /* WIREFRAME LEGEND */
   .legend{display:flex;flex-wrap:wrap;gap:16px;font-size:13px;color:var(--ink-3);margin-top:20px;justify-content:center}
@@ -132,15 +147,15 @@
 
 <section class="hero">
   <div class="container">
-    <div class="eyebrow">Design Brief · May 2026 · Confidential</div>
+    <div class="eyebrow">Design Brief · May 2026 · Living document</div>
     <h1>PropertyIQ.</h1>
-    <h1 style="color:var(--gold);font-style:italic;font-weight:500;margin-top:4px">The web build.</h1>
-    <p class="lede" style="margin-top:36px">This is the brief for the marketing site, onboarding flow, and Intelligence Command Center for PropertyIQ — the platform we are building to give real estate agents an operating system, not another point tool. <em>We're starting with PropCast.</em> Everything you see in this document is the context you'll need to make design decisions that fit the system, not just the page in front of you.</p>
+    <h1 style="color:var(--accent-1);font-style:italic;font-weight:500;margin-top:4px">The web build.</h1>
+    <p class="lede" style="margin-top:36px">This is the brief for the <em>PropCast</em> landing page, onboarding flow, and Intelligence Command Center — the first product we're taking to market inside the broader PropertyIQ platform. PropCast is the autonomous content engine for real estate agents. The platform-level architecture is here for context, but the page you're building first is <strong>PropCast.com</strong>, not <strong>PropertyIQ.com</strong>. Read this end-to-end before our next working session. Everything below is direction with reasoning, not specifications — your judgment is invited everywhere.</p>
     <div class="hero-meta">
       <div class="hero-meta-item">From <strong>Graeham Watts</strong></div>
-      <div class="hero-meta-item">For <strong>The Web Designer</strong></div>
-      <div class="hero-meta-item">Repo <strong><a href="https://github.com/Graehamwatts/propiq-ui" style="border:none">github.com/Graehamwatts/propiq-ui</a></strong></div>
-      <div class="hero-meta-item">Status <strong>Brief — read before our next call</strong></div>
+      <div class="hero-meta-item">For <strong>You — the designer</strong></div>
+      <div class="hero-meta-item">UI repo <strong><a href="https://github.com/Graehamwatts/propiq-ui" style="border:none">github.com/Graehamwatts/propiq-ui</a></strong></div>
+      <div class="hero-meta-item">Status <strong>Living document — URL stays the same as it updates</strong></div>
     </div>
   </div>
 </section>
@@ -152,12 +167,14 @@
     <ol>
       <li><a href="#why">Why this matters — the agent's real problem</a></li>
       <li><a href="#system">The system in one diagram — where PropCast fits</a></li>
-      <li><a href="#brand">The brand mood — trust, intelligence, edge, not crypto</a></li>
+      <li><a href="#brand">Brand direction — starting points, not specifications</a></li>
+      <li><a href="#fonts">Typography — and the conceptual logos we love</a></li>
+      <li><a href="#3d">The 3D / motion question — telling the story with the visual</a></li>
       <li><a href="#landing">The PropCast landing page — story architecture</a></li>
-      <li><a href="#onboarding">Onboarding — a conversation, not a form</a></li>
+      <li><a href="#onboarding">Onboarding — new agent vs experienced agent</a></li>
       <li><a href="#command">The Intelligence Command Center</a></li>
-      <li><a href="#existing">What's already in the GitHub repo — and what to improve</a></li>
-      <li><a href="#process">Process, scope and next steps</a></li>
+      <li><a href="#existing">What's already in the GitHub repo</a></li>
+      <li><a href="#process">Process &amp; what to build first</a></li>
     </ol>
   </div>
 
@@ -169,9 +186,47 @@
 
   <p>PropertyIQ replaces the dashboard problem with a <strong>command center</strong>. Instead of seven tools and zero answers, the agent opens one screen that tells them: <em>here is what your market did this week, here is what we recommend you post, here is the household most likely to call you back, here is what your ads earned you</em>. The complexity is still there — it has to be, because the work is genuinely complex — but the surface is calm. The depth is one click away when the agent wants it.</p>
 
-  <div class="pull">"The thesis: any agent can buy the same tools. Almost no agent has the operating system to use them together. We are building the operating system."</div>
+  <h4>The platform-level problems (PropertyIQ vision)</h4>
 
-  <p>That positioning is what the website has to communicate. Not "another SaaS for realtors." The agent has seen forty of those. What they have never seen is a single system that takes them from <em>I have no content this week</em> to <em>three pieces are live, twelve leads came in, two are likely sellers, here is your call list</em> — without them touching a dozen products to make it happen.</p>
+  <p>These are the friction points that justify the full PropertyIQ platform <em>over time</em>. They're useful context for understanding the strategic position, and a few of them belong on the PropCast page as supporting framing — but they are <strong>not</strong> the primary problems the first landing page has to hit. See the PropCast-specific section below for what the first page is actually selling against.</p>
+
+  <div class="problem-grid">
+    <div class="problem"><p><strong>Seven tools. Zero answers.</strong> CRM, MLS, video editor, ad platform, postcard service, scheduler, coaching app — all open, all costing money, none of them talking. Monday morning the agent has four dashboards in four tabs and no idea what to do first.</p></div>
+    <div class="problem"><p><strong>The CRM is a graveyard.</strong> Forty leads sitting in the pipeline. The agent touched two of them this week. The other thirty-eight have forgotten the agent exists.</p></div>
+    <div class="problem"><p><strong>Ad spend is a black box.</strong> $2,500 a month to an ad agency. The agent can't connect a single closing back to a single ad. Neither can the agency.</p></div>
+    <div class="problem"><p><strong>A competitor is winning listings the agent used to get.</strong> The agent doesn't know what the competitor is posting, where they're spending, or which neighborhoods they're targeting.</p></div>
+    <div class="problem"><p><strong>Postcards go out. Silence comes back.</strong> $1,200 on direct mail last quarter. Two phone calls. No idea which addresses scanned the QR code and which ones threw the card in the recycling.</p></div>
+    <div class="problem"><p><strong>Every closed deal should compound. Most don't.</strong> The agent means to call back at six months, at the anniversary, at the listing-decision moment. They forget. Past clients become other agents' new clients.</p></div>
+  </div>
+
+  <div class="callout">
+    <div class="callout-icon">!</div>
+    <p><strong>READ THIS BEFORE SECTION 06:</strong> the brief above describes the broader PropertyIQ platform. <em>The landing page you're building first is for <strong>PropCast</strong></em> — the content engine module — not for the platform as a whole. PropCast ships first because content production is the top of the funnel; everything downstream depends on it. The PropertyIQ marketing site is a future project. For now: PropCast.com is the page. PropCast solves one specific job — making content the agent doesn't have time to make — and the landing page has to sell against that specific pain, not the broader operational pain that justifies the full platform later. The PropCast-specific friction is below.</p>
+  </div>
+
+  <h4>The PropCast-specific problems (this is what the first landing page sells against)</h4>
+
+  <p>PropCast is the autonomous content engine. It records the agent for six minutes, then ships 3–5 broadcast-quality videos a week to every platform they own — forever — without the agent doing the work. The agent shows houses, lives their life, and the feed posts itself. The landing page has to make the visitor feel the specific pain of trying to do this manually, then watch that pain disappear. These are the problems the page has to land:</p>
+
+  <div class="problem-grid">
+    <div class="problem"><p><strong>6 to 10 hours per video.</strong> Filming. Editing. Captioning. Thumbnailing. Scheduling. Posting. Engaging. Per piece. At the agent's hourly rate that's $300–$1,500 of agent-time per video. So it doesn't happen, or it happens once and then never again.</p></div>
+    <div class="problem"><p><strong>The agent is camera-shy, busy, or both.</strong> They're out showing houses. They're at a closing. They're exhausted. The idea of sitting down to film twelve reels feels worse than the idea of losing the listing.</p></div>
+    <div class="problem"><p><strong>Hiring a videographer doesn't scale.</strong> $500–$1,500 per pro shoot. Twelve to twenty videos a month would cost more than most agents net on a closing. The math doesn't work.</p></div>
+    <div class="problem"><p><strong>Social VAs produce AI slop or off-brand work.</strong> The agent tried it. Half the content was generic. The other half sounded nothing like them. They fired the VA after two months and the social feed went silent again.</p></div>
+    <div class="problem"><p><strong>The agents who stay top-of-mind get the listings.</strong> The ones who don't post consistently disappear from the algorithm and from their sphere's attention. The pressure to publish is constant — and the agent isn't winning that fight.</p></div>
+    <div class="problem"><p><strong>Done properly, content is a second job.</strong> Scripts, B-roll, captions, posting cadence, engagement, retargeting. None of it is one task — all of it is a job. The agent already has a job: selling real estate. They cannot also be a media company.</p></div>
+    <div class="problem"><p><strong>Generic AI content makes the agent look worse, not better.</strong> Plenty of competitors are already using ChatGPT to crank out garbage real-estate content. The agent doesn't want to add to the slop pile — they want content that sounds like them, looks like them, and earns trust. Most "AI content" tools don't clear that bar.</p></div>
+  </div>
+
+  <p>The PropCast landing page should pick three or four of these — paraphrase, don't quote verbatim — and put them on the page in the agent's own voice. The discipline is the same as before: the agent should read them and think <em>"yes, that's me"</em> before they finish the second sentence. The page that already exists at <a href="https://github.com/Graehamwatts/propiq-ui">github.com/Graehamwatts/propiq-ui</a> (specifically <code>index.html</code>) has already drafted a lot of this language well — pull from it.</p>
+
+  <div class="pull">"PropCast records you for six minutes. Then publishes broadcast-quality video to every platform you own — forever. Built for agents who are busy, camera-shy, and sick of AI slop."</div>
+
+  <p>That positioning — direct from the existing draft — is the closest thing we have to a thesis statement for PropCast. Everything on the page should serve it.</p>
+
+  <h4>Why both lists matter for one page</h4>
+
+  <p>The primary problems on the PropCast page are the seven content-specific ones immediately above. <em>The broader PropertyIQ problems are not absent from the page</em> — they show up briefly in the "This is one module. Here is the system." callout discussed in Section 06. The agent should walk away believing two things: (1) PropCast solves their immediate content-production pain, and (2) PropCast is the first step into a larger operating system that will eventually solve the other six pains too. That second belief is what justifies the $349/month subscription as an investment rather than a tool fee.</p>
 
   <!-- ====================== 2 — SYSTEM MAP ====================== -->
   <h2 id="system">02. The system in one diagram</h2>
@@ -195,18 +250,14 @@
           <stop offset="0%" stop-color="#7B89FF"/><stop offset="100%" stop-color="#52C9A0"/>
         </linearGradient>
       </defs>
-      <!-- Platform outer container -->
       <rect x="20" y="20" width="840" height="420" rx="16" fill="none" stroke="#C9A052" stroke-width="1.5" stroke-dasharray="4,4" opacity="0.6"/>
       <text x="40" y="50" font-family="Inter,sans-serif" font-size="12" font-weight="600" fill="#C9A052" letter-spacing="2">PROPERTYIQ — THE PLATFORM</text>
 
-      <!-- Wattson layer (top, spanning) -->
       <rect x="60" y="90" width="760" height="60" rx="10" fill="url(#wattsonGrad)" opacity="0.95"/>
       <text x="440" y="118" text-anchor="middle" font-family="Syne,sans-serif" font-weight="700" font-size="18" fill="#0B0B12">WATTSON</text>
       <text x="440" y="138" text-anchor="middle" font-family="Inter,sans-serif" font-size="12" fill="#0B0B12" opacity="0.8">Cross-cutting AI agent — onboarding, content, voice, attribution, automation</text>
 
-      <!-- Modules row -->
       <g font-family="Syne,sans-serif" font-weight="700" font-size="15" fill="#F4F2EC">
-        <!-- PropCast (highlighted) -->
         <rect x="60" y="200" width="135" height="120" rx="10" fill="url(#propcastGrad)"/>
         <text x="127" y="232" text-anchor="middle" fill="#0B0B12">PropCast</text>
         <text x="127" y="252" text-anchor="middle" font-family="Inter,sans-serif" font-size="10" font-weight="500" fill="#0B0B12" opacity="0.85">Content engine</text>
@@ -214,7 +265,6 @@
         <rect x="80" y="285" width="95" height="20" rx="4" fill="#0B0B12" opacity="0.5"/>
         <text x="127" y="299" text-anchor="middle" font-family="Inter,sans-serif" font-size="10" font-weight="600" fill="#C9A052">SHIPPING NOW</text>
 
-        <!-- PropReach -->
         <rect x="215" y="200" width="135" height="120" rx="10" fill="url(#modGrad)" stroke="#C9A052" stroke-width="0.5" opacity="0.95"/>
         <text x="282" y="232" text-anchor="middle">PropReach</text>
         <text x="282" y="252" text-anchor="middle" font-family="Inter,sans-serif" font-size="10" font-weight="500" fill="#C9C5B8">Paid amplification</text>
@@ -222,7 +272,6 @@
         <rect x="240" y="285" width="84" height="20" rx="4" fill="#171724"/>
         <text x="282" y="299" text-anchor="middle" font-family="Inter,sans-serif" font-size="10" font-weight="600" fill="#8B8675">PHASE 2</text>
 
-        <!-- PropFlow -->
         <rect x="370" y="200" width="135" height="120" rx="10" fill="url(#modGrad)" stroke="#C9A052" stroke-width="0.5" opacity="0.95"/>
         <text x="437" y="232" text-anchor="middle">PropFlow</text>
         <text x="437" y="252" text-anchor="middle" font-family="Inter,sans-serif" font-size="10" font-weight="500" fill="#C9C5B8">CRM + Voice</text>
@@ -230,7 +279,6 @@
         <rect x="395" y="285" width="84" height="20" rx="4" fill="#171724"/>
         <text x="437" y="299" text-anchor="middle" font-family="Inter,sans-serif" font-size="10" font-weight="600" fill="#8B8675">PHASE 3</text>
 
-        <!-- PropClose -->
         <rect x="525" y="200" width="135" height="120" rx="10" fill="url(#modGrad)" stroke="#C9A052" stroke-width="0.5" opacity="0.95"/>
         <text x="592" y="232" text-anchor="middle">PropClose</text>
         <text x="592" y="252" text-anchor="middle" font-family="Inter,sans-serif" font-size="10" font-weight="500" fill="#C9C5B8">Transaction</text>
@@ -238,7 +286,6 @@
         <rect x="550" y="285" width="84" height="20" rx="4" fill="#171724"/>
         <text x="592" y="299" text-anchor="middle" font-family="Inter,sans-serif" font-size="10" font-weight="600" fill="#8B8675">PHASE 4</text>
 
-        <!-- PropSearch -->
         <rect x="680" y="200" width="140" height="120" rx="10" fill="url(#modGrad)" stroke="#C9A052" stroke-width="0.5" opacity="0.95"/>
         <text x="750" y="232" text-anchor="middle">PropSearch</text>
         <text x="750" y="252" text-anchor="middle" font-family="Inter,sans-serif" font-size="10" font-weight="500" fill="#C9C5B8">Investor</text>
@@ -247,125 +294,195 @@
         <text x="750" y="299" text-anchor="middle" font-family="Inter,sans-serif" font-size="10" font-weight="600" fill="#8B8675">STANDALONE</text>
       </g>
 
-      <!-- Shared infrastructure -->
       <rect x="60" y="350" width="760" height="60" rx="10" fill="#11111B" stroke="#52C9A0" stroke-width="1" stroke-dasharray="3,3" opacity="0.85"/>
       <text x="440" y="378" text-anchor="middle" font-family="Syne,sans-serif" font-weight="700" font-size="14" fill="#52C9A0">SHARED INFRASTRUCTURE</text>
       <text x="440" y="396" text-anchor="middle" font-family="Inter,sans-serif" font-size="11" fill="#C9C5B8" opacity="0.8">Event Ledger · Video Intelligence · Predictive Seller · Owned Link Shortener · Voice · Render Infra</text>
 
-      <!-- Arrows: Wattson down to modules -->
       <g stroke="#7B89FF" stroke-width="1" opacity="0.4" fill="none">
-        <line x1="127" y1="150" x2="127" y2="200"/>
-        <line x1="282" y1="150" x2="282" y2="200"/>
-        <line x1="437" y1="150" x2="437" y2="200"/>
-        <line x1="592" y1="150" x2="592" y2="200"/>
-        <line x1="750" y1="150" x2="750" y2="200"/>
+        <line x1="127" y1="150" x2="127" y2="200"/><line x1="282" y1="150" x2="282" y2="200"/><line x1="437" y1="150" x2="437" y2="200"/><line x1="592" y1="150" x2="592" y2="200"/><line x1="750" y1="150" x2="750" y2="200"/>
       </g>
-
-      <!-- Arrows: Modules to shared infra -->
       <g stroke="#52C9A0" stroke-width="1" opacity="0.3" fill="none">
-        <line x1="127" y1="320" x2="127" y2="350"/>
-        <line x1="282" y1="320" x2="282" y2="350"/>
-        <line x1="437" y1="320" x2="437" y2="350"/>
-        <line x1="592" y1="320" x2="592" y2="350"/>
-        <line x1="750" y1="320" x2="750" y2="350"/>
+        <line x1="127" y1="320" x2="127" y2="350"/><line x1="282" y1="320" x2="282" y2="350"/><line x1="437" y1="320" x2="437" y2="350"/><line x1="592" y1="320" x2="592" y2="350"/><line x1="750" y1="320" x2="750" y2="350"/>
       </g>
     </svg>
     <div class="legend">
-      <div class="legend-item"><div class="legend-swatch" style="background:#C9A052"></div>Shipping now</div>
+      <div class="legend-item"><div class="legend-swatch" style="background:#C9A052"></div>Shipping now (PropCast)</div>
       <div class="legend-item"><div class="legend-swatch" style="background:#171724;border:1px solid #C9A052"></div>Future modules</div>
       <div class="legend-item"><div class="legend-swatch" style="background:linear-gradient(90deg,#7B89FF,#52C9A0)"></div>Wattson AI layer</div>
       <div class="legend-item"><div class="legend-swatch" style="background:#11111B;border:1px dashed #52C9A0"></div>Shared infrastructure</div>
     </div>
   </div>
 
-  <p>The takeaway for the design: <strong>PropCast is the front door, but every page should hint that there is a bigger building behind it.</strong> A user who lands on the PropCast page should understand they are signing up for the first module of a real platform — not a single-purpose tool that will be obsolete in a year.</p>
+  <p><strong>Takeaway:</strong> PropCast is the front door, but every page should hint that there is a bigger building behind it. A user landing on the PropCast page should understand they are signing up for the first module of a real platform — not a single-purpose tool that will be obsolete in a year.</p>
 
-  <!-- ====================== 3 — BRAND MOOD ====================== -->
-  <h2 id="brand">03. Brand mood</h2>
-  <div class="section-tag">Trust, intelligence, edge — not crypto</div>
+  <!-- ====================== 3 — BRAND ====================== -->
+  <h2 id="brand">03. Brand direction</h2>
+  <div class="section-tag">Starting points, not specifications</div>
 
-  <p>The visual challenge is specific: PropertyIQ has to feel <em>technologically serious</em> without feeling cold, <em>cutting-edge</em> without feeling like a memecoin, and <em>trustworthy</em> without feeling like a 1990s mortgage broker. The audience is a licensed real estate professional who needs to put their reputation on the line by using this product. The brand has to earn that.</p>
+  <div class="suggestion">
+    <strong>Important framing:</strong> everything in this section is a starting point Claude (the AI that drafted this brief) generated, not something I'm personally invested in. The colors, the type, the motion — treat them as Claude's first pass that you should push back on, replace, or refine based on your own judgment. The principles below the spec table are what I actually believe. The specifics are negotiable.
+  </div>
+
+  <p>The visual challenge is specific: PropertyIQ has to feel <em>technologically serious</em> without feeling cold, <em>cutting-edge</em> without feeling like a memecoin, and <em>trustworthy</em> without feeling like a 1990s mortgage broker. The audience is a licensed real estate professional who needs to put their reputation on the line by using this product. The brand has to earn that — and it has to combine four things at once:</p>
+
+  <ul style="font-size:18px">
+    <li><strong>Trust.</strong> Agents are putting their license and their clients in our hands.</li>
+    <li><strong>Real estate.</strong> Without falling into the photo-of-a-suburban-house cliché.</li>
+    <li><strong>Intelligence.</strong> The product is intelligence about a market. The brand should feel that way too.</li>
+    <li><strong>Technology.</strong> Forward, edged, designed-by-people-with-opinions. Not safe SaaS.</li>
+  </ul>
 
   <div class="card-row">
     <div class="card">
       <h4>What we want it to feel like</h4>
       <ul>
-        <li><strong>Operating system, not app.</strong> Visual language closer to a Bloomberg Terminal redesigned by Linear than a typical real estate website</li>
-        <li><strong>Confident dark, not cold dark.</strong> Deep navy and warm off-white, with gold as the only accent. Negative space used deliberately, not because we have nothing to say</li>
-        <li><strong>Editorial type, not generic SaaS.</strong> A serif or display sans (Syne, Söhne, GT Sectra) for headlines paired with Inter for body</li>
-        <li><strong>3D used as accent, not as everything.</strong> A subtle WebGL element behind the hero (geometric, abstract — not floating houses). Maybe a 3D map of a Bay Area neighborhood reacting to scroll. Restraint is the whole game</li>
+        <li><strong>Operating system, not app.</strong> Closer to a Bloomberg Terminal redesigned by Linear than to a typical real estate website</li>
+        <li><strong>Confident dark, not cold dark.</strong> A deep ink palette with a single warm accent. Negative space used deliberately, not because we have nothing to say</li>
+        <li><strong>Editorial type.</strong> A serif or display sans for headlines paired with Inter (or similar) for body. Designed-not-default</li>
         <li><strong>Motion that respects the user's time.</strong> Eased, short, intentional. No "creative agency" wow animations that delay the read</li>
       </ul>
     </div>
     <div class="card">
       <h4>What we want it to <em>not</em> feel like</h4>
       <ul>
-        <li>Generic SaaS Stripe-clone with a gradient hero, three feature cards, and a testimonial carousel</li>
-        <li>Crypto / Web3 — neon gradients, holographic mesh blobs, glassmorphism overdone, "decentralized real estate" energy</li>
-        <li>Traditional realtor — stock images of suburban houses, blue-and-gold rosettes, "your trusted partner" copy</li>
-        <li>AI startup of 2023 — purple gradient, sparkle icon, "powered by GPT-4" badge</li>
-        <li>Overdesigned. If the agent can't immediately tell what PropertyIQ does within five seconds of landing, the design failed</li>
+        <li>Generic SaaS — Stripe-clone with gradient hero, three feature cards, testimonial carousel</li>
+        <li>Crypto / Web3 — neon gradients, holographic mesh, glassmorphism overdone</li>
+        <li>Traditional realtor — stock photos of houses, "your trusted partner" copy</li>
+        <li>AI startup of 2023 — purple gradient, sparkle icon, "powered by GPT" badge</li>
       </ul>
     </div>
   </div>
 
-  <h4>Color, type, motion — starting point</h4>
+  <h4>Color, type, motion — Claude's suggested starting point</h4>
+
+  <div class="suggestion">
+    <strong>Read the column on the right.</strong> These specs are what Claude proposed. I have <em>no personal hook</em> on any of them. In particular: I use gold (<code>#C9A052</code>) as my personal real estate brand color, and it's bled into this draft — but that doesn't have to be the PropertyIQ accent. The right answer might be a different accent entirely. Bring your own opinion.
+  </div>
 
   <table>
-    <thead><tr><th>System</th><th>Spec</th><th>Notes</th></tr></thead>
+    <thead><tr><th>System</th><th>Claude's suggestion</th><th>Why Claude suggested it</th></tr></thead>
     <tbody>
-      <tr><td>Background</td><td><code>#0B0B12</code> deep ink + subtle radial noise</td><td>Not pure black — pure black feels graphic-design student. Slight blue undertone reads as "system"</td></tr>
-      <tr><td>Surface</td><td><code>#11111B</code> / <code>#171724</code> elevated</td><td>Two surface levels for cards, one for table heads. No third — keep it disciplined</td></tr>
-      <tr><td>Primary accent</td><td><code>#C9A052</code> warm gold</td><td>Used sparingly. Gold = a decision was made. Don't gradient it</td></tr>
-      <tr><td>Secondary accent</td><td><code>#7B89FF</code> intelligence violet</td><td>Reserved for Wattson AI elements and the Intelligence Mode toggle in the app</td></tr>
-      <tr><td>Tertiary accent</td><td><code>#52C9A0</code> signal green</td><td>For positive metrics, raised-hand signals, and the shared infrastructure layer</td></tr>
+      <tr><td>Background</td><td><code>#0B0B12</code> deep ink + subtle noise</td><td>Slight blue undertone reads as "system." Pure black reads "graphic-design student"</td></tr>
+      <tr><td>Surface</td><td><code>#11111B</code> / <code>#171724</code></td><td>Two surface levels for cards. Disciplined hierarchy</td></tr>
+      <tr><td>Primary accent</td><td><code>#C9A052</code> warm gold (open to change)</td><td>Warm against the ink. Open question — could equally be a cool blue, a saturated teal, a quiet red, or no chromatic accent at all</td></tr>
+      <tr><td>Wattson accent</td><td><code>#7B89FF</code> intelligence violet</td><td>Reserved for AI elements and the Intelligence Mode toggle inside the app</td></tr>
+      <tr><td>Signal accent</td><td><code>#52C9A0</code> signal green</td><td>For positive metrics and raised-hand signals on the heatmap</td></tr>
       <tr><td>Text</td><td><code>#F4F2EC</code> warm off-white</td><td>Slightly warm so the dark doesn't read clinical</td></tr>
-      <tr><td>Headline type</td><td>Syne, Söhne Breit, or GT Sectra Fine</td><td>Editorial weight. Syne is the cheapest path to "designed-not-default"</td></tr>
-      <tr><td>Body type</td><td>Inter, weight 300-500</td><td>300 for long-form, 500 for UI labels. Keep weight contrast visible</td></tr>
-      <tr><td>Numeric / data</td><td>JetBrains Mono, weight 400</td><td>Anywhere we show metrics, counters, or code-like content (attribution IDs etc)</td></tr>
     </tbody>
   </table>
 
-  <div class="diagram">
-    <div class="diagram-title">Brand mood — directional palette tiles</div>
-    <div class="mood-grid">
-      <div class="mood-tile mood-1"><span>Ink + Gold — the default frame</span></div>
-      <div class="mood-tile mood-2"><span>Wattson — intelligence violet accent</span></div>
-      <div class="mood-tile mood-3"><span>Signal — opportunity in the data</span></div>
-      <div class="mood-tile mood-4"><span>Sun on data — confident, never gimmicky</span></div>
-      <div class="mood-tile mood-5"><span>Movement — only where it adds clarity</span></div>
-      <div class="mood-tile mood-6"><span>Pattern — system detail, not decoration</span></div>
+  <p>Treat the column on the right as the <em>reasoning</em>, not the answer. If you have a better palette in mind that hits the same four notes (trust + real estate + intelligence + technology), make the case for it.</p>
+
+  <!-- ====================== 4 — FONTS ====================== -->
+  <h2 id="fonts">04. Typography &amp; the brand-storytelling concept</h2>
+  <div class="section-tag">Where conceptual logos like BEAR, SHARK, and FIZZ come in</div>
+
+  <p>The brand should tell its story <em>in the letters themselves</em> wherever possible. Graeham loves a specific family of logo design — where the wordmark <em>is</em> the brand concept rather than a wordmark sitting next to an icon. I'm attaching three reference logos in the email with this brief:</p>
+
+  <div class="card-row">
+    <div class="card">
+      <h4>BEAR</h4>
+      <p>The bear is literally drawn into the letterforms of the word BEAR. You don't see a separate icon and wordmark — you see one shape that is simultaneously the word and the animal. The brand is the typography.</p>
     </div>
+    <div class="card">
+      <h4>SHARK</h4>
+      <p>The "S" is a shark, mid-swim, between two larger shark silhouettes. Again — the wordmark and the brand idea are the same object. You can't separate them.</p>
+    </div>
+  </div>
+
+  <div class="card">
+    <h4>FIZZ</h4>
+    <p>The letters of FIZZ <em>contain the fizz</em>. Bubbles inside the letterforms, liquid filling them, a meniscus halfway up each character. The wordmark doesn't describe the product. It <em>is</em> the product.</p>
+  </div>
+
+  <p>That's the level of conceptual integration we want for PropertyIQ. Not necessarily a literal house inside the letters — please no — but some idea that connects intelligence + real estate + technology directly into the wordmark. Maybe a subtle data-grid texture inside the characters. Maybe a geographic-coordinate sliver. Maybe the dot of an "i" is a pin on a map. Maybe nothing visual at all and the typography itself just <em>feels</em> like infrastructure. Bring options.</p>
+
+  <h4>Where to look for the typeface</h4>
+
+  <p>Graeham has spent serious time on <a href="https://www.fontshare.com/">fontshare.com</a> and <a href="https://www.myfonts.com/">myfonts.com</a> and is open to suggestions. The bar is: the typeface should look <em>intelligent</em>, <em>real-estate-credible</em>, and <em>technology-forward</em> — and it should be a little bit cool and sexy without trying too hard. Mono-display hybrids, modernist serifs with computational character, geometric sans with editorial proportions — all viable. Recommend three to five typefaces with reasoning for each, and we'll pick.</p>
+
+  <div class="inspo-grid">
+    <div class="inspo positive">
+      <div class="inspo-name">Fontshare</div>
+      <a href="https://www.fontshare.com/" class="inspo-url">fontshare.com</a>
+      <p>Free quality typefaces — a strong place to find a heading face with personality without paying for licensing right away</p>
+    </div>
+    <div class="inspo positive">
+      <div class="inspo-name">MyFonts</div>
+      <a href="https://www.myfonts.com/" class="inspo-url">myfonts.com</a>
+      <p>If we need a paid-license type family with stronger editorial weight or a more unique character set</p>
+    </div>
+  </div>
+
+  <!-- ====================== 5 — 3D ====================== -->
+  <h2 id="3d">05. The 3D / motion question</h2>
+  <div class="section-tag">Telling the story with the visual</div>
+
+  <p>Graeham wants the marketing site to feel like a <em>3D-aware</em> site, not a flat document with text on it. Not because 3D is currently trendy — because the best examples on the web right now <em>use the 3D visual to tell the story</em>, and the story and the visual become the same thing. Hover-and-rotate-a-3D-product-for-fun is not the goal. Visual-and-narrative-as-one-object is the goal.</p>
+
+  <h4>Reference sites we want you to study</h4>
+
+  <p>All of these are from the <a href="https://motionsites.ai/">motionsites.ai</a> showcase. Spend a few minutes on each.</p>
+
+  <div class="inspo-grid">
+    <div class="inspo positive">
+      <div class="inspo-name">Urban Jungle (positive ★)</div>
+      <a href="https://motionsites.ai/" class="inspo-url">motionsites.ai → Urban Jungle</a>
+      <p><strong>This is the model.</strong> The 3D animation walks you through the brand's story as you scroll — urban transition early, then a 3D image pops up that visually <em>is</em> what the product does. Story and visual are inseparable.</p>
+    </div>
+    <div class="inspo positive">
+      <div class="inspo-name">WISA Space (positive ★)</div>
+      <a href="https://motionsites.ai/" class="inspo-url">motionsites.ai → WISA Space</a>
+      <p>Tells the story through the visual the same way Urban Jungle does. Scroll moves you through a coherent narrative; the 3D and the copy reinforce each other.</p>
+    </div>
+    <div class="inspo negative">
+      <div class="inspo-name">Synapsis Dark (negative ✗)</div>
+      <a href="https://motionsites.ai/" class="inspo-url">motionsites.ai → Synapsis Dark</a>
+      <p>Cool-looking site. But the imagery doesn't <em>tell us</em> what the company actually does. The visual is decoration, not narrative. Don't do this version.</p>
+    </div>
+    <div class="inspo negative">
+      <div class="inspo-name">"Your email revitalized" (negative ✗)</div>
+      <a href="https://motionsites.ai/" class="inspo-url">motionsites.ai → email landing page</a>
+      <p>A decorative ribbon flies around in the background. Looks fine. Says nothing about the product. This is the trap we want to avoid.</p>
+    </div>
+  </div>
+
+  <div class="callout">
+    <div class="callout-icon">★</div>
+    <p><strong>The ideal:</strong> the 3D <em>tells</em> the PropertyIQ story. The hero shows a fragment of a Bay Area neighborhood from above; as the visitor scrolls, content publishes from one of the homes, an ad reaches another, a household lights up as a raised-hand signal, a closing fires, and the camera pulls back to reveal the entire farm covered in signal. We're <em>showing</em> the loop, not describing it. That's a hard build — if you can't pull it off, abstract geometric 3D as a hero accent is acceptable. But the ideal is the visual <em>is</em> the story.</p>
   </div>
 
   <div class="dodont">
     <div class="do">
       <h4>Do</h4>
       <ul>
-        <li>Use a single accent color per page section, never three at once</li>
-        <li>Treat negative space like it's expensive — because it is</li>
-        <li>Use a subtle WebGL 3D element behind the hero (one, not many)</li>
+        <li>Use a single 3D moment, big, and earn it — Urban Jungle / WISA Space pattern</li>
+        <li>Tie the 3D to the actual operating logic of PropertyIQ — neighborhood, attribution flow, command center surface</li>
+        <li>Use geometric / abstract 3D as accent in other sections — restrained, never decorative</li>
         <li>Show real data in mockups — never lorem ipsum or placeholder numbers</li>
-        <li>Build for the agent who is skeptical of AI hype</li>
       </ul>
     </div>
     <div class="dont">
       <h4>Don't</h4>
       <ul>
         <li>Stock photos of houses, handshakes, "smiling realtor at laptop"</li>
-        <li>Floating 3D house icons. Anything 3D should be abstract / geometric</li>
-        <li>Sparkle icons next to the word "AI"</li>
+        <li>Floating 3D house icons. Anything literal-3D-real-estate is a trap</li>
         <li>Mesh gradient blobs in the background</li>
+        <li>3D for the sake of 3D when it doesn't carry meaning</li>
         <li>Three-column feature card grid as the only landing-page asset</li>
       </ul>
     </div>
   </div>
 
-  <!-- ====================== 4 — LANDING ====================== -->
-  <h2 id="landing">04. The PropCast landing page</h2>
-  <div class="section-tag">Story architecture, not feature list</div>
+  <!-- ====================== 6 — LANDING ====================== -->
+  <h2 id="landing">06. The PropCast landing page</h2>
+  <div class="section-tag">The first thing we ship — PropCast.com, not PropertyIQ.com</div>
 
-  <p>The landing page is the only chance to convert a skeptical real estate agent who has seen a hundred tools. The story has to land in under sixty seconds of scrolling. The structure below is the spine — the designer's job is to make each section feel <em>inevitable</em>, like the next thing the visitor was already going to ask.</p>
+  <div class="suggestion">
+    <strong>Scope reminder:</strong> the landing page we're building is for <strong>PropCast</strong>, the content engine module — not for PropertyIQ the platform. PropCast is the first product going to market and has its own URL, its own pricing ($349/mo), its own funnel, and its own brand within the larger PropertyIQ family. The page is selling content automation to a specific kind of buyer: a busy, possibly camera-shy real estate agent who knows they should be posting and isn't. The broader PropertyIQ platform is mentioned briefly on the page (so the visitor understands they're not buying a one-shot tool) but is not the headline product. The PropertyIQ marketing site comes later.
+  </div>
+
+  <p>The page is the only chance to convert a skeptical real estate agent who has seen a hundred tools. The story has to land in under sixty seconds of scrolling. The structure below is the spine — your job is to make each section feel <em>inevitable</em>, like the next thing the visitor was already going to ask. A working draft of this page already exists at <a href="https://github.com/Graehamwatts/propiq-ui">github.com/Graehamwatts/propiq-ui</a> (<code>index.html</code>) — use it as a problem-statement reference and copy mine, not as a visual template.</p>
 
   <div class="diagram">
     <div class="diagram-title">Landing page — section flow</div>
@@ -375,51 +492,42 @@
           <path d="M0,0 L8,5 L0,10 z" fill="#C9A052"/>
         </marker>
       </defs>
-
-      <!-- Section blocks down the page -->
       <g font-family="Syne,sans-serif" font-weight="700" font-size="14" fill="#F4F2EC">
-
-        <!-- Hero -->
         <rect x="180" y="20" width="500" height="80" rx="10" fill="#171724" stroke="#C9A052" stroke-width="1.5"/>
-        <text x="430" y="50" text-anchor="middle" font-size="15">01 · Hero — the punch</text>
-        <text x="430" y="72" text-anchor="middle" font-family="Inter,sans-serif" font-size="11" font-weight="400" fill="#C9C5B8">3D backdrop · headline answers "what is this" in 7 words · CTA above the fold</text>
+        <text x="430" y="50" text-anchor="middle" font-size="15">01 · Hero — the punch (with the 3D story moment)</text>
+        <text x="430" y="72" text-anchor="middle" font-family="Inter,sans-serif" font-size="11" font-weight="400" fill="#C9C5B8">Headline says what the system is and does · 3D backdrop tells the story · CTA above the fold</text>
         <text x="430" y="88" text-anchor="middle" font-family="JetBrains Mono,monospace" font-size="10" fill="#C9A052">5 seconds to understand · 0 mystery</text>
 
         <line x1="430" y1="100" x2="430" y2="130" stroke="#C9A052" stroke-width="1.5" marker-end="url(#arrow)"/>
 
-        <!-- Problem -->
         <rect x="180" y="135" width="500" height="80" rx="10" fill="#171724" stroke="#7B89FF" stroke-width="1"/>
         <text x="430" y="165" text-anchor="middle" font-size="15">02 · The problem you already know</text>
-        <text x="430" y="187" text-anchor="middle" font-family="Inter,sans-serif" font-size="11" font-weight="400" fill="#C9C5B8">Seven tools. Zero answers. The friction the agent feels every Monday morning, named.</text>
+        <text x="430" y="187" text-anchor="middle" font-family="Inter,sans-serif" font-size="11" font-weight="400" fill="#C9C5B8">Three or four of the friction points from Section 01 — agent reads them and recognizes themselves</text>
         <text x="430" y="203" text-anchor="middle" font-family="JetBrains Mono,monospace" font-size="10" fill="#7B89FF">"Yes, that's me" in one sentence</text>
 
         <line x1="430" y1="215" x2="430" y2="245" stroke="#C9A052" stroke-width="1.5" marker-end="url(#arrow)"/>
 
-        <!-- Solution -->
         <rect x="180" y="250" width="500" height="80" rx="10" fill="#171724" stroke="#52C9A0" stroke-width="1"/>
         <text x="430" y="280" text-anchor="middle" font-size="15">03 · The single screen that replaces seven dashboards</text>
-        <text x="430" y="302" text-anchor="middle" font-family="Inter,sans-serif" font-size="11" font-weight="400" fill="#C9C5B8">Interactive Command Center demo · live heatmap · "today's signals" surfaced</text>
+        <text x="430" y="302" text-anchor="middle" font-family="Inter,sans-serif" font-size="11" font-weight="400" fill="#C9C5B8">Interactive Command Center mockup · live heatmap · "today's signals" pulsing</text>
         <text x="430" y="318" text-anchor="middle" font-family="JetBrains Mono,monospace" font-size="10" fill="#52C9A0">Show, don't tell — animated screen mockup</text>
 
         <line x1="430" y1="330" x2="430" y2="360" stroke="#C9A052" stroke-width="1.5" marker-end="url(#arrow)"/>
 
-        <!-- How it works -->
         <rect x="180" y="365" width="500" height="80" rx="10" fill="#171724" stroke="#C9A052" stroke-width="1"/>
         <text x="430" y="395" text-anchor="middle" font-size="15">04 · How it actually works — the loop</text>
-        <text x="430" y="417" text-anchor="middle" font-family="Inter,sans-serif" font-size="11" font-weight="400" fill="#C9C5B8">Signal → Content → Distribution → Capture → Attribution → Better signal next week</text>
+        <text x="430" y="417" text-anchor="middle" font-family="Inter,sans-serif" font-size="11" font-weight="400" fill="#C9C5B8">Signal → Content → Distribution → Capture → Attribution → Smarter signal next week</text>
         <text x="430" y="433" text-anchor="middle" font-family="JetBrains Mono,monospace" font-size="10" fill="#C9A052">SVG flowchart, scroll-triggered, ~6 sec total</text>
 
         <line x1="430" y1="445" x2="430" y2="475" stroke="#C9A052" stroke-width="1.5" marker-end="url(#arrow)"/>
 
-        <!-- Proof -->
         <rect x="180" y="480" width="500" height="80" rx="10" fill="#171724" stroke="#C9A052" stroke-width="1"/>
         <text x="430" y="510" text-anchor="middle" font-size="15">05 · Proof — comparison + sample videos</text>
-        <text x="430" y="532" text-anchor="middle" font-family="Inter,sans-serif" font-size="11" font-weight="400" fill="#C9C5B8">Side-by-side: agent doing it manually vs PropCast. Actual sample HeyGen + B-roll output embedded.</text>
+        <text x="430" y="532" text-anchor="middle" font-family="Inter,sans-serif" font-size="11" font-weight="400" fill="#C9C5B8">Side-by-side: manual agent vs PropCast agent. Real HeyGen + Higgsfield sample videos embedded.</text>
         <text x="430" y="548" text-anchor="middle" font-family="JetBrains Mono,monospace" font-size="10" fill="#C9A052">Real videos. Real numbers. No "trusted by" logo wall.</text>
 
         <line x1="430" y1="560" x2="430" y2="590" stroke="#C9A052" stroke-width="1.5" marker-end="url(#arrow)"/>
 
-        <!-- CTA -->
         <rect x="180" y="595" width="500" height="55" rx="10" fill="url(#propcastGrad)" stroke="#C9A052" stroke-width="1.5"/>
         <text x="430" y="623" text-anchor="middle" font-size="15" fill="#0B0B12">06 · The CTA — start the conversation</text>
         <text x="430" y="642" text-anchor="middle" font-family="Inter,sans-serif" font-size="11" font-weight="500" fill="#0B0B12" opacity="0.8">"Talk to Wattson" — opens the chatbot onboarding directly. No form to fill out.</text>
@@ -427,419 +535,204 @@
     </svg>
   </div>
 
+  <h4>The hero headline — PropCast-specific options to pressure-test</h4>
+
+  <p>The previous draft of this brief had the headline as <em>"The operating system real estate agents have been missing."</em> That was both too generic <em>and</em> the wrong product framing — it described PropertyIQ the platform, not PropCast the content engine. The PropCast hero has to do one specific job: convince a busy agent that they can hand off the entire content workload and get back broadcast-quality video on autopilot. Below are headline options anchored on the PropCast promise. The existing draft on GitHub uses <em>"Show houses. Live your life. Your feed posts itself."</em> — that's a strong contender too; treat it as option zero.</p>
+
+  <div class="headline-option">
+    <div class="h">Show houses. Live your life. <span style="color:var(--accent-1)">Your feed posts itself.</span></div>
+    <p class="why"><strong>Anchor:</strong> the existing draft headline. Three short clauses. Specific permission to stop doing the work. Strong rhythm. Sub-headline names the deliverable (3–5 reels a week to every platform).</p>
+  </div>
+
+  <div class="headline-option">
+    <div class="h">Record once. <span style="color:var(--accent-1)">Post forever.</span></div>
+    <p class="why"><strong>Anchor:</strong> the brutal simplicity argument. Earns its mystery by being followed by a sub-headline that explains: <em>"Six minutes of you, on camera, becomes 3–5 broadcast-quality videos every week — shipped to every platform you own. Forever."</em></p>
+  </div>
+
+  <div class="headline-option">
+    <div class="h">The content engine for the agent who refuses to be a media company.</div>
+    <p class="why"><strong>Anchor:</strong> the identity argument. Names the audience by what they don't want to become. Sub-headline: <em>"Real estate is a relationship business — not a film shoot. PropCast films it for you, every week, in your voice, with your face."</em></p>
+  </div>
+
+  <div class="headline-option">
+    <div class="h">3 to 5 broadcast-quality videos a week. <span style="color:var(--accent-1)">Six minutes of your time, once.</span></div>
+    <p class="why"><strong>Anchor:</strong> the numbers argument. Direct and specific. No mystery, no metaphor — the agent knows exactly what they're getting and what they're giving up.</p>
+  </div>
+
+  <div class="headline-option">
+    <div class="h">You sell houses. <span style="color:var(--accent-1)">We make you famous selling them.</span></div>
+    <p class="why"><strong>Anchor:</strong> the brand-promise argument. Punchy, slightly cocky. Names the outcome (top-of-mind) without naming the mechanism. Sub-headline does the explaining.</p>
+  </div>
+
+  <div class="headline-option">
+    <div class="h">Stop spending your evenings editing reels. <span style="color:var(--accent-1)">PropCast does it while you sleep.</span></div>
+    <p class="why"><strong>Anchor:</strong> the pain-pivot argument. Direct lift from Graeham's existing copy ("I was done spending my evenings editing reels"). Recognition first, solution second.</p>
+  </div>
+
+  <p>The right headline isn't a single sentence stitched together from feature names. It says what the agent gets, what they have to do for it, and why this is different from the videographer / VA / DIY options they've already tried.</p>
+
+  <h4>What PropCast actually does — for context on the hero promise</h4>
+
+  <p>The headline has to be honest about the deliverable. PropCast's specific promise:</p>
+
+  <ul>
+    <li><strong>3–5 broadcast-quality videos per week, every week.</strong> Reels, Shorts, TikToks, YouTube uploads, Google Business posts</li>
+    <li><strong>Made from the agent's HeyGen avatar and ElevenLabs voice clone</strong> — sounds like them, looks like them</li>
+    <li><strong>Fair Housing-guardrailed scripts, sourced from real market data</strong> — never fabricated, always disclosure-compliant</li>
+    <li><strong>Auto-published to every platform the agent owns</strong> — YouTube, Reels, Shorts, TikTok, GBP, LinkedIn</li>
+    <li><strong>Human QC review before every post</strong> — agent can pause, re-record, or cancel in one click</li>
+    <li><strong>10 minutes of setup. No edits required after.</strong> The agent owns their channels and their content</li>
+    <li><strong>$349/month flat. Cancel anytime.</strong></li>
+  </ul>
+
+  <p>Anchor every section of the page back to those promises. The sub-headline directly under the hero should name two or three of them.</p>
+
   <h4>Section-by-section direction</h4>
 
-  <p><strong>01 · Hero.</strong> One headline. Seven words or fewer. Has to answer "what is this" with zero ambiguity. Working candidate: <em>"The operating system real estate agents have been missing."</em> Below it, one supporting line. One primary CTA — "Talk to Wattson" — which opens the onboarding chat. Background uses a subtle 3D element — a slowly rotating wireframe map of a Bay Area neighborhood, or an abstract geometric form that reacts to cursor. Restraint is the point.</p>
+  <p><strong>01 · Hero.</strong> Pick one of the headline options above (or write a better one). Sub-headline directly underneath delivers the specific operational promise. One primary CTA — "Talk to Wattson" — which opens the onboarding chat. The 3D backdrop is where we hope to make the Urban Jungle / WISA Space move: a fragment of a neighborhood, a content piece publishing, a household lighting up. If the full 3D narrative isn't possible, an abstract geometric form reacting to cursor is the fallback.</p>
 
-  <p><strong>02 · The problem you already know.</strong> Three short paragraphs naming the pain. Monday morning. Seven tabs open. Forty leads in the CRM that you have not touched in two weeks. The agent should read this and recognize themselves in five seconds. No statistics here — pure emotional resonance.</p>
+  <p><strong>02 · The problem you already know.</strong> Three or four of the seven problems listed in Section 01 of this brief — paraphrased into the agent's own voice. Monday morning. Forty leads in the CRM. The competitor winning listings the agent used to get. Pure emotional resonance, no statistics.</p>
 
-  <p><strong>03 · The single screen that replaces seven dashboards.</strong> The hero of the page, even more than the hero. An animated, interactive mockup of the Intelligence Command Center. The user should see the heatmap pulse, see a "raised hand" signal surface, see a content recommendation appear. This is where we earn the visitor's belief.</p>
+  <p><strong>03 · The single screen that replaces seven dashboards.</strong> The hero of the page, more than the hero. An animated, interactive mockup of the Intelligence Command Center. The user should see the heatmap pulse, a "raised hand" signal surface, a content recommendation appear. This is where we earn belief.</p>
 
-  <p><strong>04 · How it actually works — the loop.</strong> One SVG flowchart that animates as the visitor scrolls. Signal in → content out → distribution → capture → attribution → smarter recommendation next week. Six seconds total. Honest about what runs automatically and what requires the agent's approval.</p>
+  <p><strong>04 · How it actually works — the loop.</strong> One SVG flowchart animating as the visitor scrolls. Signal in → content out → distribution → capture → attribution → smarter recommendation next week. Six seconds total. Honest about what runs automatically and what requires the agent's approval.</p>
 
-  <p><strong>05 · Proof.</strong> A side-by-side comparison. Left column: <em>"the agent who does this manually"</em> with a realistic time and cost estimate. Right column: <em>"the agent on PropCast"</em> with the actual time and cost. Below the comparison, embedded video samples — a HeyGen avatar piece, a B-roll cutaway from Higgsfield, a market update with motion graphics. Real outputs, not stock previews.</p>
+  <p><strong>05 · Proof.</strong> Side-by-side comparison. Left column: the agent who does this manually, with realistic time and cost estimate. Right column: the agent on PropCast, with the actual time and cost. Below the comparison, embedded video samples — a HeyGen avatar piece, a B-roll cutaway from Higgsfield, a market update with motion graphics. Real outputs, not stock previews.</p>
 
   <p><strong>06 · The CTA.</strong> Not "request a demo." Not "start your free trial." The CTA opens the Wattson onboarding chat directly. <em>"Start a conversation with Wattson — five minutes to see what your market is doing right now."</em> The conversation itself does the qualifying.</p>
 
   <div class="callout">
     <div class="callout-icon">!</div>
-    <p><strong>Critical:</strong> the landing page is not selling PropCast in isolation. It is selling PropCast as the front door to PropertyIQ. Somewhere on the page — probably between sections 04 and 05 — there should be a quiet section titled something like <em>"This is one module. Here is the system."</em> with a compact version of the architecture diagram from Section 02 of this brief. Two sentences and the diagram. We are showing the visitor that the building is bigger than the door they are walking through.</p>
+    <p><strong>Critical:</strong> the landing page sells PropCast as the front door to PropertyIQ. Somewhere between sections 04 and 05 there should be a quiet section — <em>"This is one module. Here is the system."</em> — with a compact version of the architecture diagram from Section 02. Two sentences and the diagram. We're showing the visitor that the building is bigger than the door they are walking through.</p>
   </div>
 
-  <!-- ====================== 5 — ONBOARDING ====================== -->
-  <h2 id="onboarding">05. Onboarding</h2>
-  <div class="section-tag">A conversation, not a form</div>
+  <!-- ====================== 7 — ONBOARDING ====================== -->
+  <h2 id="onboarding">07. Onboarding</h2>
+  <div class="section-tag">A conversation, not a form — with two different paths</div>
 
-  <p>Every other SaaS in this space onboards with a wizard — six pages of dropdowns, integration toggles, and "tell us about your business" checkboxes. We are going to do the opposite. The agent's first interaction with the product is a conversation with Wattson, the AI agent that will be working for them after they sign up. The medium is the message: if Wattson can't even handle a conversation, how can it handle their content?</p>
+  <p>Every other SaaS in this space onboards with a wizard — six pages of dropdowns, integration toggles, and "tell us about your business" checkboxes. We are going to do the opposite. The agent's first interaction with the product is a conversation with Wattson, the AI agent that will be working for them after they sign up. The medium is the message: if Wattson can't even handle a conversation, how can it handle the agent's content?</p>
 
-  <p>The onboarding flow does five things, and the user only ever sees one of them at a time:</p>
+  <h4>The two paths through onboarding</h4>
+
+  <p>The hardest design problem inside onboarding is that we have two very different new users, and the experience has to respect both:</p>
+
+  <div class="card-row">
+    <div class="card">
+      <h4 style="color:var(--danger)">New agent — high friction</h4>
+      <p>A new agent has no sphere of influence yet, no existing HeyGen avatars, no ElevenLabs voice clone, no past-client list, no ad accounts to connect. Everything has to be created from zero. This is the friction point we have to make easy.</p>
+      <p style="margin-top:14px">The fix: <strong>an in-app recording flow</strong>. PropertyIQ shows the agent a teleprompter script on screen, the agent records two clips of about three minutes each, and the system creates two starting avatars + a voice clone from those clips. No external tools. No "go set up an account on HeyGen first." Just open the laptop and record.</p>
+    </div>
+    <div class="card">
+      <h4 style="color:var(--accent-2)">Experienced agent — low friction</h4>
+      <p>An experienced agent already has avatars they like, a voice clone they've paid for, a past-client list in their CRM, and ad accounts running. Forcing them to re-record everything from scratch is insulting.</p>
+      <p style="margin-top:14px">The fix: <strong>an import flow</strong>. OAuth into HeyGen and pull existing avatars. OAuth into ElevenLabs and pull existing voices. OAuth into GHL (or Follow Up Boss, or whatever CRM) and pull contacts. OAuth into Meta + Google + YouTube and inherit ad performance history. The system <em>makes the connections</em>, the agent doesn't reproduce them.</p>
+    </div>
+  </div>
+
+  <div class="suggestion">
+    <strong>Open design question for you:</strong> should the avatar capture happen during the initial onboarding chat — as a hard gate before the agent can finish signup — or should it happen <em>after</em> the agent completes the conversational onboarding and lands in the Command Center, with the recording surfaced as the first prominent call-to-action? Graeham is genuinely undecided. The gate is more committal (forces the work to happen) but might scare off agents who aren't ready to film themselves on the spot. The post-onboarding placement is gentler but creates an empty-state problem where the agent lands on a Command Center they can't fully use. Bring your opinion to the next session.
+  </div>
 
   <div class="diagram">
-    <div class="diagram-title">Wattson-driven onboarding flow</div>
+    <div class="diagram-title">Wattson-driven onboarding flow — both paths</div>
     <svg viewBox="0 0 880 380" xmlns="http://www.w3.org/2000/svg">
       <defs>
         <marker id="arrow2" markerWidth="10" markerHeight="10" refX="8" refY="5" orient="auto">
           <path d="M0,0 L8,5 L0,10 z" fill="#7B89FF"/>
         </marker>
       </defs>
-
-      <!-- Steps as connected nodes in a horizontal flow with branches -->
       <g font-family="Inter,sans-serif">
-        <!-- Step 1 -->
         <circle cx="80" cy="100" r="40" fill="#11111B" stroke="#7B89FF" stroke-width="2"/>
         <text x="80" y="96" text-anchor="middle" font-family="JetBrains Mono,monospace" font-size="11" fill="#7B89FF" font-weight="500">STEP 01</text>
         <text x="80" y="112" text-anchor="middle" font-family="Syne,sans-serif" font-weight="700" font-size="13" fill="#F4F2EC">Hello</text>
-        <text x="80" y="170" text-anchor="middle" font-size="11" fill="#C9C5B8">Wattson</text>
-        <text x="80" y="184" text-anchor="middle" font-size="11" fill="#C9C5B8">introduces</text>
-        <text x="80" y="198" text-anchor="middle" font-size="11" fill="#C9C5B8">itself,</text>
-        <text x="80" y="212" text-anchor="middle" font-size="11" fill="#C9C5B8">asks for name</text>
-        <text x="80" y="226" text-anchor="middle" font-size="11" fill="#C9C5B8">and brokerage</text>
+        <text x="80" y="170" text-anchor="middle" font-size="11" fill="#C9C5B8">Wattson intro,</text>
+        <text x="80" y="184" text-anchor="middle" font-size="11" fill="#C9C5B8">name, brokerage</text>
 
         <line x1="120" y1="100" x2="180" y2="100" stroke="#7B89FF" stroke-width="1.5" marker-end="url(#arrow2)"/>
 
-        <!-- Step 2 -->
         <circle cx="220" cy="100" r="40" fill="#11111B" stroke="#7B89FF" stroke-width="2"/>
         <text x="220" y="96" text-anchor="middle" font-family="JetBrains Mono,monospace" font-size="11" fill="#7B89FF" font-weight="500">STEP 02</text>
         <text x="220" y="112" text-anchor="middle" font-family="Syne,sans-serif" font-weight="700" font-size="13" fill="#F4F2EC">Context</text>
         <text x="220" y="170" text-anchor="middle" font-size="11" fill="#C9C5B8">Market, niche,</text>
         <text x="220" y="184" text-anchor="middle" font-size="11" fill="#C9C5B8">years in business,</text>
         <text x="220" y="198" text-anchor="middle" font-size="11" fill="#C9C5B8">current CRM,</text>
-        <text x="220" y="212" text-anchor="middle" font-size="11" fill="#C9C5B8">ad spend,</text>
-        <text x="220" y="226" text-anchor="middle" font-size="11" fill="#C9C5B8">pain points</text>
+        <text x="220" y="212" text-anchor="middle" font-size="11" fill="#C9C5B8" font-style="italic">ad spend (optional)</text>
 
         <line x1="260" y1="100" x2="320" y2="100" stroke="#7B89FF" stroke-width="1.5" marker-end="url(#arrow2)"/>
 
-        <!-- Step 3 - avatar -->
         <circle cx="360" cy="100" r="40" fill="#11111B" stroke="#C9A052" stroke-width="2.5"/>
         <text x="360" y="96" text-anchor="middle" font-family="JetBrains Mono,monospace" font-size="11" fill="#C9A052" font-weight="500">STEP 03</text>
-        <text x="360" y="112" text-anchor="middle" font-family="Syne,sans-serif" font-weight="700" font-size="13" fill="#F4F2EC">Avatar</text>
-        <text x="360" y="170" text-anchor="middle" font-size="11" fill="#C9A052" font-weight="600">REQUIRED GATE</text>
-        <text x="360" y="184" text-anchor="middle" font-size="11" fill="#C9C5B8">Record 2 × 3-min</text>
-        <text x="360" y="198" text-anchor="middle" font-size="11" fill="#C9C5B8">videos in-browser.</text>
-        <text x="360" y="212" text-anchor="middle" font-size="11" fill="#C9C5B8">One trains HeyGen,</text>
-        <text x="360" y="226" text-anchor="middle" font-size="11" fill="#C9C5B8">one trains</text>
-        <text x="360" y="240" text-anchor="middle" font-size="11" fill="#C9C5B8">ElevenLabs voice.</text>
+        <text x="360" y="112" text-anchor="middle" font-family="Syne,sans-serif" font-weight="700" font-size="13" fill="#F4F2EC">Branch</text>
+        <text x="360" y="170" text-anchor="middle" font-size="11" fill="#C9A052" font-weight="600">DECISION</text>
+        <text x="360" y="184" text-anchor="middle" font-size="11" fill="#C9C5B8">New agent →</text>
+        <text x="360" y="198" text-anchor="middle" font-size="11" fill="#C9C5B8">record path</text>
+        <text x="360" y="212" text-anchor="middle" font-size="11" fill="#C9C5B8">Experienced →</text>
+        <text x="360" y="226" text-anchor="middle" font-size="11" fill="#C9C5B8">import path</text>
 
-        <line x1="400" y1="100" x2="460" y2="100" stroke="#7B89FF" stroke-width="1.5" marker-end="url(#arrow2)"/>
+        <line x1="400" y1="80" x2="460" y2="60" stroke="#E07A5F" stroke-width="1.5" marker-end="url(#arrow2)"/>
+        <line x1="400" y1="120" x2="460" y2="140" stroke="#52C9A0" stroke-width="1.5" marker-end="url(#arrow2)"/>
 
-        <!-- Step 4 - integrations -->
-        <circle cx="500" cy="100" r="40" fill="#11111B" stroke="#7B89FF" stroke-width="2"/>
-        <text x="500" y="96" text-anchor="middle" font-family="JetBrains Mono,monospace" font-size="11" fill="#7B89FF" font-weight="500">STEP 04</text>
-        <text x="500" y="112" text-anchor="middle" font-family="Syne,sans-serif" font-weight="700" font-size="13" fill="#F4F2EC">Connect</text>
-        <text x="500" y="170" text-anchor="middle" font-size="11" fill="#C9C5B8">OAuth into</text>
-        <text x="500" y="184" text-anchor="middle" font-size="11" fill="#C9C5B8">GHL, Google,</text>
-        <text x="500" y="198" text-anchor="middle" font-size="11" fill="#C9C5B8">Meta, YouTube.</text>
-        <text x="500" y="212" text-anchor="middle" font-size="11" fill="#C9C5B8">Wattson handles</text>
-        <text x="500" y="226" text-anchor="middle" font-size="11" fill="#C9C5B8">the technical</text>
-        <text x="500" y="240" text-anchor="middle" font-size="11" fill="#C9C5B8">handshakes.</text>
+        <!-- NEW agent path - top -->
+        <circle cx="500" cy="55" r="32" fill="#11111B" stroke="#E07A5F" stroke-width="2"/>
+        <text x="500" y="52" text-anchor="middle" font-family="JetBrains Mono,monospace" font-size="9" fill="#E07A5F" font-weight="500">NEW</text>
+        <text x="500" y="66" text-anchor="middle" font-family="Syne,sans-serif" font-weight="700" font-size="11" fill="#F4F2EC">Record</text>
+        <text x="500" y="100" text-anchor="middle" font-size="10" fill="#C9C5B8">2 × 3-min clips,</text>
+        <text x="500" y="113" text-anchor="middle" font-size="10" fill="#C9C5B8">teleprompter on</text>
+        <text x="500" y="126" text-anchor="middle" font-size="10" fill="#C9C5B8">screen → HeyGen</text>
+        <text x="500" y="139" text-anchor="middle" font-size="10" fill="#C9C5B8">+ ElevenLabs</text>
 
-        <line x1="540" y1="100" x2="600" y2="100" stroke="#7B89FF" stroke-width="1.5" marker-end="url(#arrow2)"/>
+        <!-- EXP agent path - bottom -->
+        <circle cx="500" cy="160" r="32" fill="#11111B" stroke="#52C9A0" stroke-width="2"/>
+        <text x="500" y="157" text-anchor="middle" font-family="JetBrains Mono,monospace" font-size="9" fill="#52C9A0" font-weight="500">EXP</text>
+        <text x="500" y="171" text-anchor="middle" font-family="Syne,sans-serif" font-weight="700" font-size="11" fill="#F4F2EC">Import</text>
+        <text x="500" y="205" text-anchor="middle" font-size="10" fill="#C9C5B8">OAuth into</text>
+        <text x="500" y="218" text-anchor="middle" font-size="10" fill="#C9C5B8">HeyGen, ElevenLabs,</text>
+        <text x="500" y="231" text-anchor="middle" font-size="10" fill="#C9C5B8">GHL, Meta, Google</text>
 
-        <!-- Step 5 - first scan -->
-        <circle cx="640" cy="100" r="40" fill="#11111B" stroke="#52C9A0" stroke-width="2"/>
-        <text x="640" y="96" text-anchor="middle" font-family="JetBrains Mono,monospace" font-size="11" fill="#52C9A0" font-weight="500">STEP 05</text>
-        <text x="640" y="112" text-anchor="middle" font-family="Syne,sans-serif" font-weight="700" font-size="13" fill="#F4F2EC">Scan</text>
-        <text x="640" y="170" text-anchor="middle" font-size="11" fill="#C9C5B8">First market</text>
-        <text x="640" y="184" text-anchor="middle" font-size="11" fill="#C9C5B8">intelligence pull</text>
-        <text x="640" y="198" text-anchor="middle" font-size="11" fill="#C9C5B8">runs live.</text>
-        <text x="640" y="212" text-anchor="middle" font-size="11" fill="#C9C5B8">Agent watches</text>
-        <text x="640" y="226" text-anchor="middle" font-size="11" fill="#C9C5B8">the system</text>
-        <text x="640" y="240" text-anchor="middle" font-size="11" fill="#C9C5B8">do the work.</text>
+        <line x1="540" y1="55" x2="595" y2="90" stroke="#7B89FF" stroke-width="1.5" marker-end="url(#arrow2)"/>
+        <line x1="540" y1="160" x2="595" y2="120" stroke="#7B89FF" stroke-width="1.5" marker-end="url(#arrow2)"/>
 
-        <line x1="680" y1="100" x2="740" y2="100" stroke="#7B89FF" stroke-width="1.5" marker-end="url(#arrow2)"/>
+        <!-- Merge: Connect step -->
+        <circle cx="640" cy="105" r="40" fill="#11111B" stroke="#7B89FF" stroke-width="2"/>
+        <text x="640" y="101" text-anchor="middle" font-family="JetBrains Mono,monospace" font-size="11" fill="#7B89FF" font-weight="500">STEP 04</text>
+        <text x="640" y="117" text-anchor="middle" font-family="Syne,sans-serif" font-weight="700" font-size="13" fill="#F4F2EC">Connect</text>
+        <text x="640" y="170" text-anchor="middle" font-size="11" fill="#C9C5B8">Remaining socials,</text>
+        <text x="640" y="184" text-anchor="middle" font-size="11" fill="#C9C5B8">CRM (if not done),</text>
+        <text x="640" y="198" text-anchor="middle" font-size="11" fill="#C9C5B8">calendar, IDX</text>
 
-        <!-- Result -->
-        <rect x="745" y="60" width="120" height="80" rx="10" fill="url(#propcastGrad)"/>
-        <text x="805" y="92" text-anchor="middle" font-family="Syne,sans-serif" font-weight="700" font-size="14" fill="#0B0B12">Command</text>
-        <text x="805" y="110" text-anchor="middle" font-family="Syne,sans-serif" font-weight="700" font-size="14" fill="#0B0B12">Center</text>
-        <text x="805" y="126" text-anchor="middle" font-family="Inter,sans-serif" font-size="10" font-weight="500" fill="#0B0B12" opacity="0.8">with content ready</text>
-        <text x="805" y="180" text-anchor="middle" font-size="11" fill="#C9C5B8">Agent lands here</text>
-        <text x="805" y="194" text-anchor="middle" font-size="11" fill="#C9C5B8">with their first</text>
-        <text x="805" y="208" text-anchor="middle" font-size="11" fill="#C9C5B8">briefing already</text>
-        <text x="805" y="222" text-anchor="middle" font-size="11" fill="#C9C5B8">on the screen.</text>
+        <line x1="680" y1="105" x2="740" y2="105" stroke="#7B89FF" stroke-width="1.5" marker-end="url(#arrow2)"/>
+
+        <rect x="745" y="65" width="120" height="80" rx="10" fill="url(#propcastGrad)"/>
+        <text x="805" y="95" text-anchor="middle" font-family="Syne,sans-serif" font-weight="700" font-size="14" fill="#0B0B12">Command</text>
+        <text x="805" y="113" text-anchor="middle" font-family="Syne,sans-serif" font-weight="700" font-size="14" fill="#0B0B12">Center</text>
+        <text x="805" y="129" text-anchor="middle" font-family="Inter,sans-serif" font-size="10" font-weight="500" fill="#0B0B12" opacity="0.8">First briefing live</text>
+        <text x="805" y="185" text-anchor="middle" font-size="11" fill="#C9C5B8">Agent lands with</text>
+        <text x="805" y="199" text-anchor="middle" font-size="11" fill="#C9C5B8">a candidate content</text>
+        <text x="805" y="213" text-anchor="middle" font-size="11" fill="#C9C5B8">plan already drafted</text>
       </g>
 
-      <!-- Time markers underneath -->
       <g font-family="JetBrains Mono,monospace" font-size="10" fill="#8B8675" text-anchor="middle">
-        <text x="80" y="290">~30 sec</text>
-        <text x="220" y="290">~3 min</text>
-        <text x="360" y="290">~7 min</text>
-        <text x="500" y="290">~2 min</text>
-        <text x="640" y="290">~90 sec (live)</text>
-        <text x="805" y="290">activation</text>
+        <text x="440" y="290" font-family="Syne,sans-serif" font-weight="600" font-size="13" fill="#C9A052">Under 15 minutes total — under 8 if the agent imports</text>
       </g>
-      <text x="440" y="320" text-anchor="middle" font-family="Syne,sans-serif" font-weight="600" font-size="13" fill="#C9A052">Total: under 15 minutes from landing page to first content briefing</text>
     </svg>
   </div>
 
-  <h4>The avatar capture deserves its own design treatment</h4>
+  <h4>The avatar capture deserves its own screen</h4>
 
-  <p>The hardest moment in the entire onboarding is asking the agent to point a camera at their face for six total minutes. We do not let the user skip it, but we have to make it feel professional, not invasive. The capture step is the one screen in the entire flow where the design should slow down and feel cinematic — full bleed, dim ambient lighting in the UI, an on-screen teleprompter with the script Wattson generated based on the agent's market, a quiet pulsing record indicator, and a clear "you'll need this for the system to ship content for you" framing.</p>
+  <p>The hardest moment in onboarding (for new agents) is asking them to point a camera at their face for six total minutes. We don't let the user skip it, but we have to make it feel professional, not invasive. The capture step is the one screen where the design should slow down and feel cinematic — full bleed, dim ambient UI, an on-screen teleprompter with the script Wattson generated based on the agent's market, a quiet pulsing record indicator, and a clear "you'll need this for the system to ship content for you" framing.</p>
 
-  <p>Behind the scenes, the system is doing two things with those clips. Clip one trains the HeyGen avatar — the agent's video twin used in every market update and explainer. Clip two extracts audio and sends it to ElevenLabs to clone the agent's voice — used in voice calls, voiceovers, and any audio-only artifact. The user does not need to know the technical split; they just need to record cleanly.</p>
+  <p>Behind the scenes the system is doing two things with those clips. Clip one trains the HeyGen avatar — the agent's video twin used in every market update and explainer. Clip two extracts audio and sends it to ElevenLabs to clone the agent's voice — used in voice calls, voiceovers, and any audio-only artifact. The user doesn't need to know the technical split; they just need to record cleanly.</p>
 
   <div class="callout">
     <div class="callout-icon">★</div>
-    <p><strong>Avatar atrophy</strong> is a design problem that will surface inside the Command Center. The agent only records two starting clips at signup, but the system tracks how often each avatar look has been used. When a look approaches over-use (12+ pieces) or inactivity (90+ days), the system surfaces a one-tap "refresh your avatar" prompt and the production queue routes around the tired look. By month six the agent will have five to seven avatar looks naturally — never recorded all at once.</p>
+    <p><strong>Avatar atrophy = progressive onboarding, not a separate concept.</strong> The reason the agent only records two starting clips at signup (not fifty) is that we are <em>spreading the recording workload across the year</em>. The system tracks how often each avatar look gets used. When one approaches over-use or inactivity, the agent gets a notification — first a soft one (<em>"your avatar is approaching fatigue, consider recording a new look"</em>), then a firmer one (<em>"your avatar is at fatigue — record a new one to keep your content fresh"</em>). The agent records a new clip directly in-app, the system rotates the tired look out of production for a while, and over the course of the year the agent organically ends up with five to seven looks. That's progressive onboarding, not a single intimidating up-front ask.</p>
   </div>
 
-  <!-- ====================== 6 — COMMAND CENTER ====================== -->
-  <h2 id="command">06. The Intelligence Command Center</h2>
+  <!-- ====================== 8 — COMMAND CENTER ====================== -->
+  <h2 id="command">08. The Intelligence Command Center</h2>
   <div class="section-tag">Where the agent actually lives</div>
 
   <p>This is the hardest design problem in the whole product. The Command Center has to surface a meaningful amount of information without overwhelming the user. The solution is layering — at default depth, the screen is calm. At one click into Intelligence Mode, every panel reveals the data and reasoning behind what it is showing. The user controls the depth.</p>
 
-  <p>The Command Center is also what the marketing site has to show off to convert visitors. The landing-page mockup is essentially a stripped-down preview of the real thing. Design the real thing first; the marketing mockup is downstream of it.</p>
-
-  <div class="diagram">
-    <div class="diagram-title">Intelligence Command Center — wireframe</div>
-    <svg viewBox="0 0 900 540" xmlns="http://www.w3.org/2000/svg">
-      <!-- Outer chrome -->
-      <rect x="20" y="20" width="860" height="500" rx="10" fill="#0B0B12" stroke="#171724" stroke-width="1"/>
-
-      <!-- Top bar -->
-      <rect x="20" y="20" width="860" height="44" rx="10" fill="#11111B"/>
-      <rect x="20" y="48" width="860" height="16" fill="#11111B"/>
-      <circle cx="48" cy="42" r="8" fill="#171724"/>
-      <text x="68" y="46" font-family="Syne,sans-serif" font-weight="700" font-size="13" fill="#F4F2EC">PropertyIQ</text>
-      <text x="148" y="46" font-family="Inter,sans-serif" font-size="11" fill="#8B8675">/ Command Center</text>
-
-      <!-- Intelligence Mode toggle -->
-      <rect x="630" y="32" width="130" height="22" rx="11" fill="#171724" stroke="#7B89FF" stroke-width="1"/>
-      <circle cx="750" cy="43" r="7" fill="#7B89FF"/>
-      <text x="700" y="47" text-anchor="middle" font-family="Inter,sans-serif" font-size="10" font-weight="600" fill="#7B89FF">INTELLIGENCE MODE</text>
-
-      <!-- Avatar atrophy strip -->
-      <rect x="780" y="32" width="80" height="22" rx="11" fill="#11111B" stroke="#C9A052" stroke-width="1"/>
-      <text x="820" y="47" text-anchor="middle" font-family="Inter,sans-serif" font-size="10" font-weight="600" fill="#C9A052">5 LOOKS · 1 AGING</text>
-
-      <!-- Sidebar -->
-      <rect x="20" y="64" width="160" height="456" fill="#11111B"/>
-      <g font-family="Inter,sans-serif" font-size="11" fill="#C9C5B8">
-        <text x="40" y="92" font-weight="600" font-size="10" fill="#8B8675" letter-spacing="2">NAVIGATION</text>
-        <rect x="32" y="105" width="136" height="26" rx="6" fill="#171724"/>
-        <text x="46" y="121" fill="#C9A052" font-weight="600">◆ Today</text>
-        <text x="46" y="155">Content Queue</text>
-        <text x="46" y="180">Heatmap (full)</text>
-        <text x="46" y="205">Lead Activity</text>
-        <text x="46" y="230">Ad Performance</text>
-        <text x="46" y="255">Attribution</text>
-        <text x="46" y="280">Avatars + Voice</text>
-        <text x="46" y="305">Competitors</text>
-
-        <text x="40" y="350" font-weight="600" font-size="10" fill="#8B8675" letter-spacing="2">WATTSON</text>
-        <text x="46" y="375">Playbooks</text>
-        <text x="46" y="400">Voice Calls</text>
-        <text x="46" y="425">Audit Log</text>
-
-        <text x="40" y="475" font-weight="600" font-size="10" fill="#8B8675" letter-spacing="2">SETTINGS</text>
-        <text x="46" y="500">Integrations</text>
-      </g>
-
-      <!-- Main content area -->
-      <!-- Heatmap (hero) -->
-      <rect x="190" y="78" width="430" height="240" rx="8" fill="#171724" stroke="#171724"/>
-      <text x="210" y="98" font-family="Inter,sans-serif" font-size="10" font-weight="600" fill="#8B8675" letter-spacing="2">HEATMAP — YOUR FARM</text>
-      <text x="610" y="98" text-anchor="end" font-family="Inter,sans-serif" font-size="10" fill="#C9A052">▼ 7 days · East Palo Alto</text>
-
-      <!-- Map abstract: gridlines + glowing pins -->
-      <g opacity="0.4">
-        <line x1="200" y1="115" x2="610" y2="115" stroke="#2A2A3A" stroke-width="0.5"/>
-        <line x1="200" y1="155" x2="610" y2="155" stroke="#2A2A3A" stroke-width="0.5"/>
-        <line x1="200" y1="195" x2="610" y2="195" stroke="#2A2A3A" stroke-width="0.5"/>
-        <line x1="200" y1="235" x2="610" y2="235" stroke="#2A2A3A" stroke-width="0.5"/>
-        <line x1="200" y1="275" x2="610" y2="275" stroke="#2A2A3A" stroke-width="0.5"/>
-        <line x1="265" y1="105" x2="265" y2="305" stroke="#2A2A3A" stroke-width="0.5"/>
-        <line x1="330" y1="105" x2="330" y2="305" stroke="#2A2A3A" stroke-width="0.5"/>
-        <line x1="395" y1="105" x2="395" y2="305" stroke="#2A2A3A" stroke-width="0.5"/>
-        <line x1="460" y1="105" x2="460" y2="305" stroke="#2A2A3A" stroke-width="0.5"/>
-        <line x1="525" y1="105" x2="525" y2="305" stroke="#2A2A3A" stroke-width="0.5"/>
-        <line x1="590" y1="105" x2="590" y2="305" stroke="#2A2A3A" stroke-width="0.5"/>
-      </g>
-
-      <!-- Heat dots (varying intensity) -->
-      <g>
-        <circle cx="240" cy="135" r="3" fill="#C9A052" opacity="0.4"/>
-        <circle cx="285" cy="180" r="4" fill="#C9A052" opacity="0.6"/>
-        <circle cx="310" cy="220" r="3" fill="#C9A052" opacity="0.3"/>
-        <circle cx="355" cy="150" r="5" fill="#C9A052" opacity="0.7"/>
-        <circle cx="380" cy="195" r="3" fill="#C9A052" opacity="0.4"/>
-        <circle cx="410" cy="240" r="4" fill="#C9A052" opacity="0.5"/>
-        <circle cx="445" cy="170" r="3" fill="#C9A052" opacity="0.4"/>
-        <circle cx="480" cy="210" r="6" fill="#C9A052" opacity="0.85"/>
-        <circle cx="500" cy="265" r="3" fill="#C9A052" opacity="0.4"/>
-        <circle cx="540" cy="160" r="3" fill="#C9A052" opacity="0.3"/>
-        <circle cx="575" cy="220" r="4" fill="#C9A052" opacity="0.6"/>
-
-        <!-- Raised-hand pulse -->
-        <circle cx="480" cy="210" r="12" fill="none" stroke="#52C9A0" stroke-width="1.5" opacity="0.8"/>
-        <circle cx="480" cy="210" r="18" fill="none" stroke="#52C9A0" stroke-width="1" opacity="0.4"/>
-        <text x="498" y="213" font-family="Inter,sans-serif" font-size="10" font-weight="600" fill="#52C9A0">↑ RAISED HAND</text>
-      </g>
-
-      <!-- Today's signals card (right) -->
-      <rect x="630" y="78" width="230" height="240" rx="8" fill="#171724"/>
-      <text x="650" y="98" font-family="Inter,sans-serif" font-size="10" font-weight="600" fill="#52C9A0" letter-spacing="2">TODAY'S SIGNALS · 3</text>
-
-      <!-- Signal 1 -->
-      <rect x="640" y="110" width="210" height="56" rx="6" fill="#0F1620" stroke="#52C9A0" stroke-width="0.5"/>
-      <circle cx="654" cy="124" r="3" fill="#52C9A0"/>
-      <text x="668" y="128" font-family="Inter,sans-serif" font-size="11" font-weight="600" fill="#F4F2EC">2147 Saratoga Ave</text>
-      <text x="652" y="146" font-family="Inter,sans-serif" font-size="10" fill="#C9C5B8">Postcard QR scanned · CMA</text>
-      <text x="652" y="159" font-family="Inter,sans-serif" font-size="10" fill="#C9C5B8">request submitted · 19m ago</text>
-
-      <!-- Signal 2 -->
-      <rect x="640" y="172" width="210" height="48" rx="6" fill="#0F1620" stroke="#52C9A0" stroke-width="0.5" opacity="0.7"/>
-      <circle cx="654" cy="186" r="3" fill="#52C9A0" opacity="0.7"/>
-      <text x="668" y="190" font-family="Inter,sans-serif" font-size="11" font-weight="600" fill="#F4F2EC">Tessa Chen</text>
-      <text x="652" y="208" font-family="Inter,sans-serif" font-size="10" fill="#C9C5B8">Saved 4 listings in 3 days</text>
-
-      <!-- Signal 3 -->
-      <rect x="640" y="226" width="210" height="48" rx="6" fill="#0F1620" stroke="#52C9A0" stroke-width="0.5" opacity="0.5"/>
-      <circle cx="654" cy="240" r="3" fill="#52C9A0" opacity="0.5"/>
-      <text x="668" y="244" font-family="Inter,sans-serif" font-size="11" font-weight="600" fill="#F4F2EC">Mark + Joanne Diaz</text>
-      <text x="652" y="262" font-family="Inter,sans-serif" font-size="10" fill="#C9C5B8">Watched market update 2×</text>
-
-      <!-- View all link -->
-      <text x="650" y="298" font-family="Inter,sans-serif" font-size="10" font-weight="600" fill="#C9A052">All signals →</text>
-
-      <!-- Content recommendations row -->
-      <rect x="190" y="330" width="430" height="180" rx="8" fill="#171724"/>
-      <text x="210" y="350" font-family="Inter,sans-serif" font-size="10" font-weight="600" fill="#8B8675" letter-spacing="2">THIS WEEK · RECOMMENDED CONTENT</text>
-
-      <!-- Rec 1 -->
-      <rect x="200" y="360" width="135" height="140" rx="6" fill="#0F1620"/>
-      <rect x="200" y="360" width="135" height="22" rx="6" fill="#C9A052"/>
-      <text x="210" y="375" font-family="Inter,sans-serif" font-size="10" font-weight="700" fill="#0B0B12">PRIMARY · ORGANIC</text>
-      <text x="210" y="402" font-family="Syne,sans-serif" font-size="12" font-weight="700" fill="#F4F2EC">East Palo Alto</text>
-      <text x="210" y="416" font-family="Syne,sans-serif" font-size="12" font-weight="700" fill="#F4F2EC">Q2 Market Update</text>
-      <text x="210" y="438" font-family="Inter,sans-serif" font-size="10" fill="#C9C5B8">HeyGen avatar + B-roll +</text>
-      <text x="210" y="450" font-family="Inter,sans-serif" font-size="10" fill="#C9C5B8">stat overlay</text>
-      <text x="210" y="478" font-family="Inter,sans-serif" font-size="10" font-weight="600" fill="#7B89FF">Why? ▾</text>
-
-      <!-- Rec 2 -->
-      <rect x="345" y="360" width="135" height="140" rx="6" fill="#0F1620"/>
-      <rect x="345" y="360" width="135" height="22" rx="6" fill="#7B89FF"/>
-      <text x="355" y="375" font-family="Inter,sans-serif" font-size="10" font-weight="700" fill="#0B0B12">SECONDARY · ORGANIC</text>
-      <text x="355" y="402" font-family="Syne,sans-serif" font-size="12" font-weight="700" fill="#F4F2EC">First-time buyer</text>
-      <text x="355" y="416" font-family="Syne,sans-serif" font-size="12" font-weight="700" fill="#F4F2EC">explainer · ADUs</text>
-      <text x="355" y="438" font-family="Inter,sans-serif" font-size="10" fill="#C9C5B8">Reel · vertical · 38 sec</text>
-      <text x="355" y="478" font-family="Inter,sans-serif" font-size="10" font-weight="600" fill="#7B89FF">Why? ▾</text>
-
-      <!-- Rec 3 - paid -->
-      <rect x="490" y="360" width="135" height="140" rx="6" fill="#0F1620"/>
-      <rect x="490" y="360" width="135" height="22" rx="6" fill="#52C9A0"/>
-      <text x="500" y="375" font-family="Inter,sans-serif" font-size="10" font-weight="700" fill="#0B0B12">AMPLIFY · PAID</text>
-      <text x="500" y="402" font-family="Syne,sans-serif" font-size="12" font-weight="700" fill="#F4F2EC">Last week's listing</text>
-      <text x="500" y="416" font-family="Syne,sans-serif" font-size="12" font-weight="700" fill="#F4F2EC">walkthrough</text>
-      <text x="500" y="438" font-family="Inter,sans-serif" font-size="10" fill="#C9C5B8">$240 spend, Meta + YouTube</text>
-      <text x="500" y="450" font-family="Inter,sans-serif" font-size="10" fill="#C9C5B8">5.4K reached est.</text>
-      <text x="500" y="478" font-family="Inter,sans-serif" font-size="10" font-weight="600" fill="#7B89FF">Why? ▾</text>
-
-      <!-- Attribution mini-card -->
-      <rect x="630" y="330" width="230" height="180" rx="8" fill="#171724"/>
-      <text x="650" y="350" font-family="Inter,sans-serif" font-size="10" font-weight="600" fill="#8B8675" letter-spacing="2">ATTRIBUTION · Q2</text>
-      <text x="650" y="380" font-family="JetBrains Mono,monospace" font-size="22" font-weight="500" fill="#F4F2EC">$487,200</text>
-      <text x="650" y="396" font-family="Inter,sans-serif" font-size="10" fill="#C9C5B8">Pipeline value attributed to content</text>
-      <line x1="650" y1="410" x2="840" y2="410" stroke="#2A2A3A" stroke-width="0.5"/>
-      <text x="650" y="430" font-family="Inter,sans-serif" font-size="10" fill="#8B8675">Closed revenue</text>
-      <text x="650" y="446" font-family="JetBrains Mono,monospace" font-size="14" fill="#F4F2EC">$71,800</text>
-      <text x="780" y="430" font-family="Inter,sans-serif" font-size="10" fill="#8B8675" text-anchor="end">Active leads</text>
-      <text x="840" y="446" font-family="JetBrains Mono,monospace" font-size="14" fill="#F4F2EC" text-anchor="end">12</text>
-
-      <text x="650" y="490" font-family="Inter,sans-serif" font-size="10" font-weight="600" fill="#C9A052">Full attribution →</text>
-    </svg>
-    <div class="legend">
-      <div class="legend-item"><div class="legend-swatch" style="background:#C9A052"></div>Primary CTA / focus</div>
-      <div class="legend-item"><div class="legend-swatch" style="background:#52C9A0"></div>Raised hand / opportunity</div>
-      <div class="legend-item"><div class="legend-swatch" style="background:#7B89FF"></div>Wattson reasoning / Intelligence Mode</div>
-      <div class="legend-item"><div class="legend-swatch" style="background:#171724;border:1px solid #2A2A3A"></div>Default card surface</div>
-    </div>
-  </div>
-
-  <h4>The discipline of Intelligence Mode</h4>
-
-  <p>Intelligence Mode is the single most important interaction in the entire app. When OFF (default for new users), every card on the Command Center shows the answer — the recommended content, the lead to call, the metric. When ON (a global toggle in the header), every card grows a footer panel that reveals the reasoning: what signals drove the recommendation, what competing options were rejected, what data charts support the call, what outcome the system expects.</p>
-
-  <p>The agent toggles the mode based on how much depth they want at that moment. A power user might leave it on permanently. A newer agent might only flip it on when they want to learn what the system is doing. Either way, the depth is one click away and never forced.</p>
-
-  <div class="card">
-    <h4>Six things the Command Center must do at default depth</h4>
-    <ol style="margin:0">
-      <li>Show today's raised-hand signals at the top, with the address and the reason it raised its hand</li>
-      <li>Show the heatmap as the hero of the screen — every household, every touch, visible spatially</li>
-      <li>Show this week's content queue with one-click approve / edit / reschedule</li>
-      <li>Show the attribution number that matters — quarter-to-date pipeline value attributed to content</li>
-      <li>Show the avatar strip — how many looks the agent has, which are fresh, which are aging</li>
-      <li>Surface the next best action the agent can take in the next ten minutes</li>
-    </ol>
-  </div>
-
-  <h4>Heatmap — the hardest single component to design well</h4>
-
-  <p>The heatmap is doing more work than a heatmap usually does. It is not just showing density of touches. It is the spatial representation of the agent's entire marketing presence in their farm. Each household has its own record. Click any household and you see: how many organic content impressions reached this address, how many paid ad impressions, how many postcards were delivered, whether the QR was scanned, whether anyone in the household engaged with a saved listing, whether a raised-hand signal has fired in the last 30 days. The map is the agent's daily work surface, and the rest of the dashboard is supporting it.</p>
-
-  <p>For the website mockup, the heatmap does not need to be functional — but it has to feel like it could be. Glowing pins of varying brightness across an abstract Bay Area neighborhood grid. One or two pulsing pins indicating raised-hand signals. A tooltip on hover showing what is happening at that address. That single component on the landing page does more conversion work than any feature card grid.</p>
-
-  <!-- ====================== 7 — EXISTING ====================== -->
-  <h2 id="existing">07. What's in the GitHub repo</h2>
-  <div class="section-tag">And what to improve</div>
-
-  <p>The repo at <a href="https://github.com/Graehamwatts/propiq-ui">github.com/Graehamwatts/propiq-ui</a> contains early-iteration sketches of the PropertyIQ UI. They were built quickly to get ideas out of my head and onto a screen — not to set the design direction. You should treat them as <em>raw input</em>, not as a starting template to refine.</p>
-
-  <p>What's worth pulling forward from the repo:</p>
-  <ul>
-    <li>The information architecture instinct — the way modules and sub-tools relate to each other</li>
-    <li>The basic content categorization — content buckets, attribution loops, the underlying data model</li>
-    <li>The mental model of "Command Center" as a single entry point</li>
-  </ul>
-
-  <p>What to throw away:</p>
-  <ul>
-    <li>The current visual treatment — every page in the repo looks like a generic SaaS dashboard. None of it carries the brand mood described in Section 03 of this brief</li>
-    <li>The layout density — too dense, too many elements competing for attention, no clear hierarchy</li>
-    <li>The current typography — system font stack, no editorial weight, no personality</li>
-    <li>The lack of motion design — everything is static. The product should feel like it's <em>alive</em> in subtle, controlled ways</li>
-  </ul>
-
-  <p>Your real reference point is this brief and the three reference moods below — not the repo. The repo confirms <em>what</em> needs to be built. This brief defines <em>how</em> it should look and feel.</p>
-
-  <h4>Reference: products to study (not copy)</h4>
-
-  <table>
-    <thead><tr><th>Product</th><th>What to steal</th></tr></thead>
-    <tbody>
-      <tr><td><strong>Linear</strong></td><td>Information density without clutter. Dark-theme discipline. Speed and keyboard-first interaction patterns. The feeling that nothing is wasted</td></tr>
-      <tr><td><strong>Stripe</strong></td><td>Editorial typography. Generous negative space. The way they explain complex concepts on the home page using illustration + animation, not screenshots</td></tr>
-      <tr><td><strong>Vercel</strong></td><td>Dark gradient backgrounds done with restraint. Geometric SVG accents. Performance-feeling motion</td></tr>
-      <tr><td><strong>Arc browser</strong></td><td>The "command center" mental model. Personality in micro-copy. The sense that you're using something built by people with opinions</td></tr>
-      <tr><td><strong>Compass.com</strong></td><td>Premium real estate brand discipline. Restrained color, editorial photography. Note: we want the same restraint but with more tech edge</td></tr>
-      <tr><td><strong>Bloomberg Terminal</strong> (as concept)</td><td>The information density model. Multi-panel dashboard structure. Intelligence Mode is essentially "Terminal-mode for agents"</td></tr>
-    </tbody>
-  </table>
-
-  <!-- ====================== 8 — PROCESS ====================== -->
-  <h2 id="process">08. Process &amp; next steps</h2>
-  <div class="section-tag">How we work together</div>
-
-  <p>Here's the scope and sequence I'd like to work through. Specific timeline is open — let's discuss what's realistic on our next call.</p>
-
-  <table>
-    <thead><tr><th>#</th><th>Deliverable</th><th>Notes</th></tr></thead>
-    <tbody>
-      <tr><td>01</td><td>Brand direction — three options</td><td>Three hi-fi style frames showing typography, color, photography direction, mood. Not full pages, just the visual world</td></tr>
-      <tr><td>02</td><td>Landing page — desktop wireframe</td><td>All six sections from the story flow in this brief, hi-fi wireframe stage. Not final visuals yet</td></tr>
-      <tr><td>03</td><td>Landing page — desktop hi-fi</td><td>Full visual treatment, including the 3D backdrop concept for the hero</td></tr>
-      <tr><td>04</td><td>Landing page — mobile responsive</td><td>Same hi-fi, adapted</td></tr>
-      <tr><td>05</td><td>Onboarding flow — hi-fi screens</td><td>Each of the five steps from the onboarding diagram, including the avatar capture screen which needs its own design treatment</td></tr>
-      <tr><td>06</td><td>Intelligence Command Center — hi-fi</td><td>Default view + Intelligence Mode ON view. The heatmap is the centerpiece</td></tr>
-      <tr><td>07</td><td>Build</td><td>Implementation. We can talk about stack — I'd lean Next.js, Tailwind, Framer Motion for the marketing site, and a more substantial framework for the app itself</td></tr>
-    </tbody>
-  </table>
-
-  <h4>Three things I need from you on the first call</h4>
-
-  <ol>
-    <li>Your read on this brief — what's clear, what's underspecified, what you think we got wrong</li>
-    <li>Your realistic timeline for the deliverables in the table above</li>
-    <li>One or two reference products you've designed for that operate at this kind of intersection of trust + data density</li>
-  </ol>
-
-  <div class="callout">
-    <div class="callout-icon">→</div>
-    <p>The success metric is simple: <strong>when an agent lands on PropertyIQ.com for the first time, do they feel like they have found something different — or do they feel like they've seen this site before?</strong> Everything we build should serve that one bar.</p>
-  </div>
-
-</div>
-
-<footer>
-  <div class="container">
-    <div class="sig">— Graeham Watts</div>
-    <p>REALTOR · DRE# 01466876 · Intero Real Estate · Founder, PropertyIQ</p>
-    <p style="margin-top:24px">graehamwatts@gmail.com · <a href="https://github.com/Graehamwatts/propiq-ui">github.com/Graehamwatts/propiq-ui</a></p>
-    <p style="margin-top:32px;color:var(--ink-3);font-size:12px;letter-spacing:0.14em;text-transform:uppercase">Living brief · last updated 2026-05-26</p>
-  </div>
-</footer>
-
-</body>
-</html>
+  <div class="suggestion">
+    <strong>What "Inte

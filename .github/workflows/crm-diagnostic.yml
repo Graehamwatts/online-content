@@ -1,0 +1,26 @@
+name: CRM Diagnostic
+
+on:
+  workflow_dispatch:
+
+env:
+  GHL_API_BASE: https://services.leadconnectorhq.com
+  GHL_VERSION: '2021-07-28'
+
+jobs:
+  diagnostic:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - name: Install dependencies
+        run: pip install requests pytz
+
+      - name: Run CRM Diagnostic
+        env:
+          GHL_PIT: ${{ secrets.GHL_PIT }}
+          GHL_LOCATION_ID: ${{ secrets.GHL_LOCATION_ID }}
+          PYTHONUNBUFFERED: "1"
+        run: python3 scripts/crm_diagnostic.py

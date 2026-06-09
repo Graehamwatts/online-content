@@ -1,0 +1,495 @@
+name: Daily Attribution Brief
+
+on:
+  schedule:
+    - cron: '15 15 * * 1-5'  # 7:15 AM PT Mon-Fri (UTC-8 in winter, UTC-7 in summer; use 15:15 UTC as safe default)
+  workflow_dispatch:
+    inputs:
+      date_override:
+        description: 'Override date (YYYY-MM-DD, uses yesterday if blank)'
+        required: false
+        default: ''
+
+env:
+  GHL_API_BASE: https://services.leadconnectorhq.com
+  GHL_VERSION: '2021-07-28'
+
+jobs:
+  daily-brief:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          token: ${{ secrets.GITHUB_TOKEN }}
+
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+
+      - name: Install dependencies
+        run: pip install requests pytz
+
+      - name: Generate Daily Attribution Brief
+        id: generate
+        env:
+          GHL_PIT: ${{ secrets.GHL_PIT }}
+          GHL_LOCATION_ID: ${{ secrets.GHL_LOCATION_ID }}
+          PYTHONUNBUFFERED: "1"
+          DATE_OVERRIDE: ${{ github.event.inputs.date_override }}
+          GMAIL_ADDRESS: graehamwatts@gmail.com
+        run: |
+          python3 << 'PYEOF'
+          import requests, json, os, sys, base64, re
+          from datetime import datetime, timedelta, timezone
+          import pytz
+
+          PT = pytz.timezone("America/Los_Angeles")
+          GHL_PIT = os.environ["GHL_PIT"]
+          LOCATION_ID = os.environ["GHL_LOCATION_ID"]
+          GHL_BASE = os.environ.get("GHL_API_BASE", "https://services.leadconnectorhq.com")
+          GHL_VERSION = os.environ.get("GHL_VERSION", "2021-07-28")
+          DATE_OVERRIDE = os.environ.get("DATE_OVERRIDE", "").strip()
+
+          headers = {
+              "Authorization": f"Bearer {GHL_PIT}",
+              "Version": GHL_VERSION,
+              "Content-Type": "application/json"
+          }
+
+          # Determine date window (yesterday in PT)
+          now_pt = datetime.now(PT)
+          if DATE_OVERRIDE:
+              target_date = PT.localize(datetime.strptime(DATE_OVERRIDE, "%Y-%m-%d"))
+          else:
+              target_date = (now_pt - timedelta(days=1)).replace(hour=0, minute=0, second=0, microsecond=0)
+
+          window_start = target_date.replace(hour=0, minute=0, second=0, microsecond=0)
+          window_end = window_start + timedelta(days=1)
+          # UTC datetime objects for client-side ISO string comparison
+          window_start_utc = window_start.astimezone(timezone.utc)
+          window_end_utc = window_end.astimezone(timezone.utc)
+          date_label = window_start.strftime("%A, %B %-d, %Y")
+          date_slug = window_start.strftime("%Y-%m-%d")
+
+          print(f"Window: {window_start} → {window_end}")
+
+          # Comparison window (same day last week)
+          prior_start = window_start - timedelta(days=7)
+          prior_end = window_end - timedelta(days=7)
+          prior_start_utc = prior_start.astimezone(timezone.utc)
+          prior_end_utc = prior_end.astimezone(timezone.utc)
+
+          def get_custom_fields():
+              r = requests.get(f"{GHL_BASE}/locations/{LOCATION_ID}/customFields",
+                               headers=headers, timeout=30)
+              if r.status_code != 200:
+                  print(f"Custom fields error: {r.status_code} {r.text[:200]}")
+                  return {}
+              data = r.json().get("customFields", [])
+              return {f["id"]: f.get("name","") for f in data}
+
+          def get_pipelines():
+              r = requests.get(f"{GHL_BASE}/opportunities/pipelines",
+                               params={"locationId": LOCATION_ID},
+                               headers=headers, timeout=30)
+              if r.status_code != 200:
+                  print(f"Pipelines error: {r.status_code}")
+                  return {}
+              pipelines = r.json().get("pipelines", [])
+              stage_map = {}
+              for p in pipelines:
+                  for s in p.get("stages", []):
+                      stage_map[s["id"]] = s.get("name", "")
+              return stage_map
+
+          def get_contacts(start_dt, end_dt):
+              """POST /contacts/search with a SERVER-SIDE dateAdded range filter (gte/lt), sorted
+              descending, paginated with ES-style searchAfter tokens. Also enforces BOTH window
+              bounds client-side (start_dt <= dateAdded < end_dt) — belt and suspenders: if the
+              server filter schema is even slightly off we fail to ~0, never a believable fake
+              number. If pagination hits the page cap the count is untrustworthy and we emit a
+              ::warning:: rather than shipping it silently."""
+              contacts = []
+              # ISO 8601 UTC, millisecond precision with Z — GHL ES range-filter format
+              gte = start_dt.astimezone(timezone.utc).strftime("%Y-%m-%dT%H:%M:%S.000Z")
+              lt  = end_dt.astimezone(timezone.utc).strftime("%Y-%m-%dT%H:%M:%S.000Z")
+              search_after = None
+              MAX_PAGES = 20
+              cap_hit = True  # flipped to False on any natural termination
+              for page in range(1, MAX_PAGES + 1):
+                  body = {
+                      "locationId": LOCATION_ID,
+                      "pageLimit": 100,
+                      "filters": [
+                          {"field": "dateAdded", "operator": "range",
+                           "value": {"gte": gte, "lt": lt}}
+                      ],
+                      "sort": [
+                          {"field": "dateAdded", "direction": "desc"}
+                      ],
+                  }
+                  if search_after:
+                      body["searchAfter"] = search_after
+                  r = requests.post(f"{GHL_BASE}/contacts/search",
+                                    headers=headers, json=body, timeout=30)
+                  if r.status_code != 200:
+                      print(f"Contacts search error {r.status_code}: {r.text[:300]}", flush=True)
+                      cap_hit = False
+                      break
+                  data = r.json()
+                  batch = data.get("contacts", [])
+                  if not batch:
+                      cap_hit = False
+                      break
+                  done = False
+                  for c in batch:
+                      da = c.get("dateAdded", "")
+                      if not da:
+                          continue
+                      try:
+                          cdt = datetime.fromisoformat(da.replace("Z", "+00:00"))
+                      except Exception:
+                          continue
+                      if cdt >= end_dt:
+                          # newer than the window — desc sort puts these first; skip them
+                          continue
+                      if cdt < start_dt:
+                          # older than the window — desc sort means all remaining are older too
+                          done = True
+                          break
+                      contacts.append(c)
+                  print(f"  Contacts page {page}: {len(batch)} fetched, {len(contacts)} in window so far", flush=True)
+                  if done or len(batch) < 100:
+                      cap_hit = False
+                      break
+                  # Advance the searchAfter cursor from the last record of this batch
+                  last = batch[-1]
+                  search_after = last.get("searchAfter")
+                  if not search_after:
+                      cap_hit = False
+                      break
+              if cap_hit:
+                  print(f"::warning::get_contacts hit the {MAX_PAGES}-page cap for window "
+                        f"{gte}..{lt} — count {len(contacts)} is NOT trustworthy (possible "
+                        f"server-filter failure); treat as suspect, do not ship.", flush=True)
+              return contacts
+
+          def get_opportunities(start_dt, end_dt):
+              opps, start_after_id = [], None
+              start_ms = int(start_dt.timestamp() * 1000)
+              MAX_PAGES = 10  # safety cap: 1000 opps max per window
+              for _page in range(MAX_PAGES):
+                  params = {
+                      "location_id": LOCATION_ID,
+                      "startAfter": start_ms,
+                      "startAfterId": start_after_id or "",
+                      "limit": 100
+                  }
+                  r = requests.get(f"{GHL_BASE}/opportunities/search",
+                                   params=params, headers=headers, timeout=30)
+                  if r.status_code != 200:
+                      print(f"Opps error {r.status_code}: {r.text[:200]}", flush=True)
+                      break
+                  data = r.json()
+                  batch = data.get("opportunities", [])
+                  past_window = False
+                  for o in batch:
+                      cat = o.get("createdAt", "")
+                      if cat:
+                          try:
+                              odt = datetime.fromisoformat(cat.replace("Z", "+00:00"))
+                              if odt >= end_dt:
+                                  past_window = True
+                                  break
+                              if odt >= start_dt:
+                                  opps.append(o)
+                          except Exception:
+                              pass
+                  print(f"  Opps batch {_page+1}: {len(batch)} fetched, {len(opps)} in window total", flush=True)
+                  if past_window or len(batch) < 100:
+                      break
+                  start_after_id = batch[-1].get("id") if batch else None
+              return opps
+
+          def bucket_source(contact, custom_field_map):
+              """Classify contact into one of 8 source buckets."""
+              # Pull all source-related fields
+              source_val = str(contact.get("source") or "").lower().strip()
+              attribution = str(contact.get("attributionSource") or "").lower().strip()
+              contact_source = str(contact.get("contactSource") or "").lower().strip()
+              tags = [str(t).lower() for t in (contact.get("tags") or [])]
+
+              # Pull UTM fields from customFields array
+              utm_source = ""
+              utm_medium = ""
+              utm_campaign = ""
+              for cf in (contact.get("customFields") or []):
+                  fn = custom_field_map.get(cf.get("id",""), "").lower()
+                  val = str(cf.get("value") or "").lower()
+                  if "utm_source" in fn:
+                      utm_source = val
+                  elif "utm_medium" in fn:
+                      utm_medium = val
+                  elif "utm_campaign" in fn:
+                      utm_campaign = val
+
+              all_text = f"{source_val} {attribution} {contact_source} {utm_source} {utm_medium} {utm_campaign}"
+
+              if any(x in all_text for x in ["gmb","google business","google my business","maps"]):
+                  return "GMB"
+              if any(x in all_text for x in ["cpc","paid","adword","google ads","meta ads","facebook ads","fb ads","instagram ads"]) \
+                 or utm_medium in ["cpc","paid","ppc"]:
+                  return "Paid Ads"
+              if any(x in all_text for x in ["organic","seo","google search","search"]) \
+                 or utm_medium == "organic":
+                  return "Organic/SEO"
+              if any(x in all_text for x in ["instagram","facebook","youtube","tiktok","social","ig","fb","yt"]) \
+                 and "paid" not in all_text:
+                  return "Social Organic"
+              if any(x in all_text for x in ["referral","refer","sphere","past client","agent"]):
+                  return "Referral"
+              if any(x in all_text for x in ["website","form","direct","web","landing"]):
+                  return "Direct/Form"
+              if "cold" in all_text or "manually added" in all_text or "import" in all_text:
+                  return "Cold/Other"
+              return "Unknown"
+
+          def get_display_name(contact):
+              fn = contact.get("firstName","") or ""
+              ln = contact.get("lastName","") or ""
+              if fn and ln:
+                  return f"{fn} {ln[0]}."
+              elif fn:
+                  return fn
+              elif contact.get("email"):
+                  return contact["email"].split("@")[0]
+              return "Unknown"
+
+          # Fetch data
+          print("Fetching custom fields...")
+          cf_map = get_custom_fields()
+          print(f"  Found {len(cf_map)} custom fields")
+
+          print("Fetching pipeline stages...")
+          stage_map = get_pipelines()
+          print(f"  Found {len(stage_map)} stages")
+
+          won_stage_ids = {sid for sid, sname in stage_map.items()
+                          if any(w in sname.lower() for w in ["won","closed","closed won","sold"])}
+          appt_stage_ids = {sid for sid, sname in stage_map.items()
+                            if any(w in sname.lower() for w in ["appointment","appt","set","booked"])}
+          opp_stage_ids = {sid for sid, sname in stage_map.items()
+                           if any(w in sname.lower() for w in ["opportunit","qualified","negotiat","active"])}
+
+          print(f"Fetching contacts for {date_slug}...")
+          contacts = get_contacts(window_start_utc, window_end_utc)
+          print(f"Fetching contacts for prior week ({prior_start.strftime('%Y-%m-%d')})...")
+          prior_contacts = get_contacts(prior_start_utc, prior_end_utc)
+
+          print(f"Fetching opportunities for {date_slug}...")
+          opps = get_opportunities(window_start_utc, window_end_utc)
+          print(f"Fetching opportunities for prior week...")
+          prior_opps = get_opportunities(prior_start_utc, prior_end_utc)
+
+          # Bucket current contacts
+          source_data = {}
+          for c in contacts:
+              bucket = bucket_source(c, cf_map)
+              if bucket not in source_data:
+                  source_data[bucket] = {"leads": [], "names": []}
+              source_data[bucket]["leads"].append(c)
+              source_data[bucket]["names"].append(get_display_name(c))
+
+          # Count prior week
+          prior_source_counts = {}
+          for c in prior_contacts:
+              bucket = bucket_source(c, cf_map)
+              prior_source_counts[bucket] = prior_source_counts.get(bucket, 0) + 1
+
+          # Count opps/wins
+          new_opps = len(opps)
+          wins = len([o for o in opps if o.get("status") == "won"
+                      or o.get("pipelineStageId","") in won_stage_ids])
+          prior_wins = len([o for o in prior_opps if o.get("status") == "won"
+                            or o.get("pipelineStageId","") in won_stage_ids])
+
+          total_leads = len(contacts)
+          prior_total = len(prior_contacts)
+          delta = total_leads - prior_total
+          delta_str = f"+{delta}" if delta >= 0 else str(delta)
+          delta_pct = round((delta / prior_total * 100)) if prior_total else 0
+
+          most_active = max(source_data.keys(), key=lambda k: len(source_data[k]["leads"])) if source_data else "None"
+
+          # Determine status color
+          if prior_total == 0:
+              status_color = "#22c55e"
+              status_label = "No prior data"
+          elif total_leads >= prior_total:
+              status_color = "#22c55e"
+              status_label = f"Up {delta_str} vs prior week"
+          elif total_leads >= prior_total * 0.5:
+              status_color = "#f4b955"
+              status_label = f"Down {abs(delta)} vs prior week"
+          else:
+              status_color = "#ef4444"
+              status_label = f"Down {abs(delta)} vs prior week"
+
+          # Build source rows
+          source_rows_html = ""
+          for bucket, info in sorted(source_data.items(), key=lambda x: -len(x[1]["leads"])):
+              count = len(info["leads"])
+              prior = prior_source_counts.get(bucket, 0)
+              wd = count - prior
+              wd_str = (f'<span style="color:#22c55e">+{wd}</span>' if wd > 0
+                        else (f'<span style="color:#ef4444">{wd}</span>' if wd < 0
+                              else '<span style="color:#94a3b8">0</span>'))
+              names = ", ".join(info["names"][:4])
+              if len(info["names"]) > 4:
+                  names += f" +{len(info['names'])-4} more"
+              source_rows_html += f"""
+              <tr>
+                <td style="padding:10px 12px;border-bottom:1px solid #1e293b;font-weight:500">{bucket}</td>
+                <td style="padding:10px 12px;border-bottom:1px solid #1e293b;text-align:center;font-size:18px;font-weight:700;color:#f4b955">{count}</td>
+                <td style="padding:10px 12px;border-bottom:1px solid #1e293b;text-align:center">{wd_str}</td>
+                <td style="padding:10px 12px;border-bottom:1px solid #1e293b;color:#94a3b8;font-size:13px">{names}</td>
+              </tr>"""
+
+          # Generate the read
+          if total_leads == 0:
+              the_read = f"No new leads came in yesterday. Prior week same day had {prior_total}. The pipeline is quiet — check if any automations are paused."
+          else:
+              top_src = most_active
+              the_read = f"{date_label} brought in {total_leads} new lead{'s' if total_leads != 1 else ''} — {'up' if delta >= 0 else 'down'} {abs(delta)} vs the same day last week. "
+              the_read += f"Top source was <strong>{top_src}</strong>. "
+              if wins:
+                  the_read += f"{wins} deal{'s' if wins != 1 else ''} moved to Won/Closed today. "
+              if new_opps:
+                  the_read += f"{new_opps} new opportunit{'ies' if new_opps != 1 else 'y'} created."
+
+          # Funnel SVG
+          funnel_stages = [
+              ("Leads", total_leads, "#f4b955"),
+              ("Opps Created", new_opps, "#e2a830"),
+              ("Wins", wins, "#22c55e"),
+          ]
+          max_val = max(s[1] for s in funnel_stages) if any(s[1] for s in funnel_stages) else 1
+          funnel_bars = ""
+          for label, val, color in funnel_stages:
+              bar_w = max(4, int((val / max_val) * 300)) if max_val > 0 else 4
+              funnel_bars += f"""
+              <div style="margin:8px 0;display:flex;align-items:center;gap:12px">
+                <div style="width:110px;text-align:right;color:#94a3b8;font-size:13px">{label}</div>
+                <div style="background:{color};height:28px;width:{bar_w}px;border-radius:4px;display:flex;align-items:center;padding:0 8px;box-sizing:border-box">
+                  <span style="color:#0f1729;font-weight:700;font-size:14px;white-space:nowrap">{val}</span>
+                </div>
+              </div>"""
+
+          # Build HTML
+          html = f"""<!DOCTYPE html>
+          <html lang="en">
+          <head>
+          <meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+          <title>Daily Attribution Brief · {date_label}</title>
+          <link rel="preconnect" href="https://fonts.googleapis.com">
+          <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700&display=swap" rel="stylesheet">
+          <style>
+            *{{box-sizing:border-box;margin:0;padding:0}}
+            body{{font-family:'DM Sans',sans-serif;background:#060d1a;color:#e2e8f0;min-height:100vh}}
+            .wrap{{max-width:720px;margin:0 auto;padding:24px 16px}}
+            .topbar{{background:#0f1729;border:1px solid #1e293b;border-radius:8px;padding:10px 16px;font-size:13px;color:#94a3b8;margin-bottom:20px;display:flex;justify-content:space-between;align-items:center}}
+            .topbar strong{{color:#f4b955}}
+            .header{{background:linear-gradient(135deg,#0f1729 0%,#162032 100%);border:1px solid #1e293b;border-radius:12px;padding:24px;margin-bottom:16px}}
+            .header h1{{font-size:22px;font-weight:700;color:#f1f5f9;margin-bottom:4px}}
+            .header .sub{{font-size:14px;color:#94a3b8}}
+            .status-strip{{border-radius:6px;padding:8px 16px;margin-bottom:16px;font-weight:600;font-size:14px;color:#0f1729;background:{status_color}}}
+            .kpi-grid{{display:grid;grid-template-columns:repeat(2,1fr);gap:12px;margin-bottom:16px}}
+            @media(min-width:500px){{.kpi-grid{{grid-template-columns:repeat(4,1fr)}}}}
+            .kpi{{background:#0f1729;border:1px solid #1e293b;border-radius:10px;padding:16px;text-align:center}}
+            .kpi .num{{font-size:28px;font-weight:700;color:#f4b955}}
+            .kpi .label{{font-size:12px;color:#94a3b8;margin-top:4px}}
+            .section{{background:#0f1729;border:1px solid #1e293b;border-radius:10px;padding:20px;margin-bottom:16px}}
+            .section h2{{font-size:15px;font-weight:700;color:#f4b955;margin-bottom:12px;text-transform:uppercase;letter-spacing:.05em}}
+            .read-text{{font-size:15px;line-height:1.7;color:#cbd5e1}}
+            table{{width:100%;border-collapse:collapse}}
+            th{{text-align:left;padding:10px 12px;background:#162032;color:#94a3b8;font-size:12px;text-transform:uppercase;letter-spacing:.05em;font-weight:600}}
+            td{{vertical-align:middle}}
+            .footer{{text-align:center;padding:24px 0;color:#475569;font-size:13px}}
+          </style>
+          </head>
+          <body>
+          <div class="wrap">
+            <div class="topbar">
+              <span><strong>Daily Attribution Brief</strong> · {date_label}</span>
+              <span>GHL Location: {LOCATION_ID[:8]}…</span>
+            </div>
+            <div class="header">
+              <h1>Lead Attribution Brief</h1>
+              <div class="sub">{date_label} · Day-over-day: {delta_str} leads ({delta_pct:+}% vs prior week same day)</div>
+            </div>
+            <div class="status-strip">{status_label}</div>
+            <div class="kpi-grid">
+              <div class="kpi"><div class="num">{total_leads}</div><div class="label">Total Leads</div></div>
+              <div class="kpi"><div class="num">{new_opps}</div><div class="label">New Opps</div></div>
+              <div class="kpi"><div class="num">{wins}</div><div class="label">Closed Wins</div></div>
+              <div class="kpi"><div class="num" style="font-size:16px">{most_active}</div><div class="label">Top Source</div></div>
+            </div>
+            <div class="section">
+              <h2>The Read</h2>
+              <p class="read-text">{the_read}</p>
+            </div>
+            <div class="section">
+              <h2>Source Breakdown</h2>
+              <table>
+                <thead><tr>
+                  <th>Source</th><th style="text-align:center">Leads</th><th style="text-align:center">vs Prior Wk</th><th>Notable Names</th>
+                </tr></thead>
+                <tbody>{source_rows_html}</tbody>
+              </table>
+              {'<p style="color:#94a3b8;font-size:14px;margin-top:12px">No leads yesterday.</p>' if not source_data else ''}
+            </div>
+            <div class="section">
+              <h2>Funnel Snapshot</h2>
+              {funnel_bars}
+            </div>
+            <div class="footer">
+              Graeham Watts · Intero Real Estate · graehamwatts@gmail.com<br>
+              Generated {now_pt.strftime('%Y-%m-%d %H:%M PT')}
+            </div>
+          </div>
+          </body></html>"""
+
+          # Write output file
+          output_path = f"dashboards/attribution/{date_slug}-daily.html"
+          os.makedirs("dashboards/attribution", exist_ok=True)
+          with open(output_path, "w", encoding="utf-8") as f:
+              f.write(html)
+          print(f"Wrote {output_path}")
+
+          # Set outputs
+          with open(os.environ.get("GITHUB_OUTPUT",""), "a") as go:
+              go.write(f"output_path={output_path}\n")
+              go.write(f"date_slug={date_slug}\n")
+              go.write(f"total_leads={total_leads}\n")
+              go.write(f"top_source={most_active}\n")
+          PYEOF
+
+      - name: Commit and push dashboard
+        run: |
+          git config user.email "graehamwatts@gmail.com"
+          git config user.name "Graeham Watts"
+          git remote set-url origin https://x-access-token:${{ secrets.GITHUB_TOKEN }}@github.com/Graehamwatts/online-content.git
+          git add dashboards/attribution/
+          git diff --staged --quiet || git commit -m "Daily Attribution Brief: ${{ steps.generate.outputs.date_slug }}"
+          git push
+
+      - name: Report result
+        run: |
+          URL="https://graehamwatts.github.io/online-content/dashboards/attribution/${{ steps.generate.outputs.date_slug }}-daily.html"
+          echo "::notice title=Daily Attribution Brief::Sent — ${{ steps.generate.outputs.total_leads }} leads, top source: ${{ steps.generate.outputs.top_source }}, dashboard at $URL"
+          echo "Dashboard: $URL"
+
+      - name: Notify on failure
+        if: failure()
+        run: |
+          echo "::error::Daily Attribution Brief failed. Check GHL_PIT secret and GHL API availability."

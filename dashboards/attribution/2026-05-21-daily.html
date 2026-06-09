@@ -1,155 +1,123 @@
 <!doctype html>
-<html lang="en">
-<head>
+<html><head>
 <meta charset="utf-8">
-<meta name="viewport" content="width=device-width, initial-scale=1">
-<title>Daily Attribution Brief — still one line away (2026-05-21)</title>
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Daily Attribution Brief — 2026-05-21</title>
+<link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700&display=swap" rel="stylesheet">
 <style>
-  body { margin:0; padding:24px; background:#f5f5f4; font-family:'DM Sans','Helvetica Neue',Arial,sans-serif; color:#0f1729; }
-  .wrap { max-width:720px; margin:0 auto; background:#ffffff; border-radius:14px; overflow:hidden; box-shadow:0 4px 24px rgba(15,23,41,0.08); }
-  .topbar { background:#0f1729; color:#f4b955; padding:12px 24px; font-size:13px; letter-spacing:.08em; text-transform:uppercase; }
-  .header { padding:28px 28px 8px; }
-  .header h1 { margin:0 0 6px; font-size:24px; line-height:1.25; color:#0f1729; }
-  .header .meta { font-size:13px; color:#475569; }
-  .status { margin:18px 28px 0; padding:14px 18px; border-radius:10px; background:#fef2f2; color:#7f1d1d; border-left:5px solid #b91c1c; font-size:14px; line-height:1.55; }
-  .section { padding:20px 28px; }
-  .section h2 { font-size:14px; letter-spacing:.08em; text-transform:uppercase; color:#64748b; margin:0 0 10px; }
-  .card { background:#fafaf9; border:1px solid #e7e5e4; border-radius:10px; padding:16px 18px; margin-bottom:12px; font-size:14px; line-height:1.55; }
-  .card strong { color:#0f1729; }
-  .card.amber { background:#fffbeb; border-color:#fde68a; }
-  .card.amber strong { color:#92400e; }
-  code { background:#0f1729; color:#f4b955; padding:2px 6px; border-radius:4px; font-size:12px; word-break:break-all; }
-  table { width:100%; border-collapse:collapse; font-size:14px; }
-  th, td { text-align:left; padding:10px 12px; border-bottom:1px solid #e7e5e4; vertical-align:top; }
-  th { font-size:12px; letter-spacing:.06em; text-transform:uppercase; color:#64748b; }
-  .ok { color:#15803d; font-weight:600; }
-  .bad { color:#b91c1c; font-weight:600; }
-  .warn { color:#a16207; font-weight:600; }
-  .kpis { display:flex; gap:12px; flex-wrap:wrap; }
-  .kpi { flex:1 1 150px; background:#fafaf9; border:1px solid #e7e5e4; border-radius:10px; padding:14px 16px; }
-  .kpi .label { font-size:11px; letter-spacing:.06em; text-transform:uppercase; color:#64748b; }
-  .kpi .val { font-size:26px; font-weight:700; color:#0f1729; margin-top:4px; }
-  .kpi .sub { font-size:12px; color:#94a3b8; margin-top:2px; }
-  .footer { padding:18px 28px 28px; font-size:12px; color:#64748b; border-top:1px solid #f1f5f9; }
-  .footer .sig { color:#0f1729; font-weight:600; }
-  .pill { display:inline-block; padding:2px 10px; border-radius:999px; font-size:11px; font-weight:600; letter-spacing:.04em; text-transform:uppercase; }
-  .pill.red { background:#fee2e2; color:#991b1b; }
-  .recommend { background:#0f1729; color:#fafaf9; padding:18px 20px; border-radius:10px; margin-bottom:12px; font-size:14px; line-height:1.6; }
-  .recommend strong { color:#f4b955; }
-  .recommend code { background:#1e293b; }
-  .streak { display:flex; gap:8px; flex-wrap:wrap; margin-top:6px; }
-  .day { flex:1 1 80px; text-align:center; background:#fef2f2; border:1px solid #fecaca; border-radius:8px; padding:8px 4px; font-size:12px; color:#7f1d1d; }
-  .day .d { font-weight:700; font-size:13px; }
+  *{box-sizing:border-box;margin:0;padding:0;}
+  body{background:#f4f2ed;font-family:'DM Sans',sans-serif;color:#0f1729;}
+  .wrap{max-width:720px;margin:0 auto;background:#fff;}
+  .topbar{background:#0f1729;color:#f4b955;padding:13px 28px;font-size:12px;letter-spacing:.1em;text-transform:uppercase;font-weight:700;}
+  .header{padding:28px 28px 16px;border-bottom:1px solid #e2e8f0;}
+  .header h1{font-size:24px;font-weight:700;color:#0f1729;margin-bottom:4px;}
+  .header .meta{font-size:13px;color:#64748b;}
+  .status-bar{background:#fef3c7;border-left:4px solid #f59e0b;padding:14px 28px;font-size:14px;color:#92400e;font-weight:600;}
+  .kpis{display:flex;gap:0;border-bottom:1px solid #e2e8f0;}
+  .kpi{flex:1;padding:20px;text-align:center;border-right:1px solid #e2e8f0;}
+  .kpi:last-child{border-right:none;}
+  .kpi .num{font-size:28px;font-weight:700;color:#0f1729;}
+  .kpi .lbl{font-size:11px;text-transform:uppercase;letter-spacing:.06em;color:#94a3b8;margin-top:3px;}
+  .section{padding:22px 28px;border-bottom:1px solid #f1f5f9;}
+  .section h2{font-size:12px;text-transform:uppercase;letter-spacing:.08em;color:#94a3b8;font-weight:700;margin-bottom:12px;}
+  .read-box{background:#fffbeb;border-left:3px solid #f4b955;padding:14px 16px;border-radius:0 6px 6px 0;font-size:14px;line-height:1.6;color:#1e293b;}
+  .error-box{background:#fef2f2;border:1px solid #fca5a5;border-radius:8px;padding:16px 18px;}
+  .error-box h3{font-size:14px;font-weight:700;color:#991b1b;margin-bottom:10px;}
+  .blocker{background:#fff;border:1px solid #e2e8f0;border-radius:8px;padding:16px 18px;margin-bottom:12px;}
+  .blocker .b-title{font-size:14px;font-weight:700;color:#0f1729;margin-bottom:6px;display:flex;align-items:center;gap:8px;}
+  .blocker .badge{background:#fef3c7;color:#92400e;font-size:11px;font-weight:600;padding:2px 8px;border-radius:12px;}
+  .blocker .badge.red{background:#fef2f2;color:#991b1b;}
+  .step{font-size:13px;color:#475569;line-height:1.7;margin-top:8px;}
+  .step code{background:#0f1729;color:#f4b955;padding:1px 6px;border-radius:4px;font-size:12px;}
+  ol{padding-left:20px;margin-top:8px;}
+  ol li{font-size:13px;color:#475569;line-height:1.7;margin-bottom:4px;}
+  .what-you-get{background:#f0fdf4;border:1px solid #86efac;border-radius:8px;padding:16px 18px;margin-top:12px;}
+  .what-you-get .title{font-size:13px;font-weight:700;color:#166534;margin-bottom:8px;}
+  .what-you-get ul{padding-left:18px;}
+  .what-you-get li{font-size:13px;color:#166534;line-height:1.7;}
+  .footer{padding:24px 28px;background:#f8fafc;border-top:1px solid #e2e8f0;font-size:12px;color:#94a3b8;}
+  .sig{font-weight:700;color:#0f1729;font-size:13px;}
 </style>
-</head>
-<body>
+</head><body>
 <div class="wrap">
-  <div class="topbar">Daily Attribution Brief · 2026-05-21</div>
-
+  <div class="topbar">Daily Attribution Brief &middot; 2026-05-21</div>
+  
   <div class="header">
-    <h1>Same blocker, day four — and I've now done everything except paste your token <span class="pill red">No data</span></h1>
-    <div class="meta">Reporting period: Wed 2026-05-20 (Pacific). Run: Thu 2026-05-21, 07:15 AM PT. Last real attribution data on file: none this week.</div>
+    <h1>Thursday, May 21, 2026</h1>
+    <div class="meta">Run at 2026-05-22 14:32 UTC &middot; Daily Attribution Brief (automated)</div>
   </div>
-
-  <div class="status">
-    <strong>Status:</strong> No leads pulled again — not because there were none, but because the brief still can't authenticate to GoHighLevel. Nothing in the plumbing is broken. The connection works, the repo is ready, the credential folder now exists. The one and only missing piece is your Private Integration Token, and it lives in a folder this automation can't see. I've staged the file for you so the fix is now literally pasting one line.
+  
+  <div class="status-bar">&#9888;&#65039; Setup required &mdash; GHL pipeline not yet connected. Two quick fixes below.</div>
+  
+  <div class="kpis">
+    <div class="kpi"><div class="num" style="color:#94a3b8">—</div><div class="lbl">Total Leads</div></div>
+    <div class="kpi"><div class="num" style="color:#94a3b8">—</div><div class="lbl">New Opps</div></div>
+    <div class="kpi"><div class="num" style="color:#94a3b8">—</div><div class="lbl">Closed Wins</div></div>
+    <div class="kpi"><div class="num" style="font-size:14px;padding-top:10px;color:#94a3b8">Pending</div><div class="lbl">Top Source</div></div>
   </div>
-
-  <div class="section">
-    <h2>Wednesday's numbers</h2>
-    <div class="kpis">
-      <div class="kpi"><div class="label">Total Leads</div><div class="val">&mdash;</div><div class="sub">no auth, not zero</div></div>
-      <div class="kpi"><div class="label">New Opportunities</div><div class="val">&mdash;</div><div class="sub">unavailable</div></div>
-      <div class="kpi"><div class="label">Closed Wins</div><div class="val">&mdash;</div><div class="sub">unavailable</div></div>
-      <div class="kpi"><div class="label">Top Source</div><div class="val">&mdash;</div><div class="sub">unavailable</div></div>
-    </div>
-    <div class="card">
-      I will not print fabricated or &ldquo;0&rdquo; figures. There is no readable lead data for any day this week, so every brief since Monday has been a setup notice rather than real attribution. The moment a real token is in place, these four cards fill with live GHL numbers, the source breakdown returns, and the funnel chart comes back.
-    </div>
-  </div>
-
-  <div class="section">
-    <h2>The streak (this is the part to fix)</h2>
-    <div class="card amber">
-      <strong>Four consecutive briefs with no data.</strong> Each morning at 7:15 you get a polished note instead of your numbers. That is the cost of the missing token, and it compounds: every day the pull fails is a day of lead-source attribution you can&rsquo;t see and can&rsquo;t get back. This keeps repeating until line 1 of the staged file is a real <code>pit-</code> key.
-      <div class="streak">
-        <div class="day"><div class="d">Mon 5/18</div>setup notice</div>
-        <div class="day"><div class="d">Tue 5/19</div>never landed</div>
-        <div class="day"><div class="d">Wed 5/20</div>setup notice</div>
-        <div class="day"><div class="d">Thu 5/21</div>this one</div>
-      </div>
-    </div>
-  </div>
-
+  
   <div class="section">
     <h2>The Read</h2>
-    <div class="card">
-      Straight talk: the infrastructure is no longer the problem, and it hasn&rsquo;t been since yesterday. The original design routed this brief through a GitHub Action because the sandbox supposedly couldn&rsquo;t reach GoHighLevel. I retested that live this morning &mdash; the sandbox reaches GHL directly in about a third of a second. So the GitHub Action is solving a problem that no longer exists, and it can&rsquo;t be stood up anyway (the PAT lacks <code>workflow</code> scope and there are no repo secrets). The clean path is to skip GitHub entirely and let me call GHL straight from here. The only thing standing between you and a live brief tomorrow is one credential, and I&rsquo;ve removed every other step.
+    <div class="read-box">
+      The brief ran on schedule at 7:15 AM PT but hit two configuration blockers before it could reach GoHighLevel. 
+      Both are one-time fixes &mdash; once they&rsquo;re done, every future run generates a live lead report automatically. Steps are below.
     </div>
   </div>
-
+  
   <div class="section">
-    <h2>Live infrastructure check (run just now)</h2>
-    <table>
-      <thead><tr><th>Check</th><th>Result</th><th>What it means</th></tr></thead>
-      <tbody>
-        <tr>
-          <td><code>POST services.leadconnectorhq.com/contacts/search</code> from sandbox, no token</td>
-          <td class="ok">401, real JSON, 0.36s</td>
-          <td>GHL is reachable from here. The &ldquo;sandbox is blocked&rdquo; premise is confirmed dead a second day running. Direct calls work; only credentials are missing.</td>
-        </tr>
-        <tr>
-          <td>Search every connected folder for the PIT token</td>
-          <td class="bad">Not found</td>
-          <td>No real <code>pit-</code> token under <code>Online Content/</code>, <code>Scheduled/</code>, or uploads. The skill points at <code>...\Claude\Skills\ghl-pit.txt</code>, but that folder still isn&rsquo;t connected to this automation.</td>
-        </tr>
-        <tr>
-          <td>Did yesterday&rsquo;s prescribed fix get applied?</td>
-          <td class="bad">No</td>
-          <td>The <code>.claude-credentials/</code> folder didn&rsquo;t exist this morning, so the token was never dropped. <strong>I&rsquo;ve now created that folder and the file for you</strong> &mdash; see below.</td>
-        </tr>
-        <tr>
-          <td>GitHub PAT scopes (<code>x-oauth-scopes</code>)</td>
-          <td class="bad"><code>repo</code> only</td>
-          <td>No <code>workflow</code> scope, so I can&rsquo;t register <code>daily-attribution-brief.yml</code> via the API. The Action path is closed at the door &mdash; and unnecessary.</td>
-        </tr>
-        <tr>
-          <td><code>GET /actions/secrets</code> on online-content</td>
-          <td class="bad">total_count: 0</td>
-          <td>No <code>GHL_PIT</code> or <code>GHL_LOCATION_ID</code> secrets. Even a registered Action would 401, and I can&rsquo;t set them &mdash; I don&rsquo;t have the token value to store.</td>
-        </tr>
-        <tr>
-          <td><code>.claude-credentials/</code> in <code>.gitignore</code></td>
-          <td class="ok">Ignored (verified)</td>
-          <td>The staged token file is safe &mdash; <code>git check-ignore</code> confirms it will never be committed or pushed.</td>
-        </tr>
-      </tbody>
-    </table>
-  </div>
-
-  <div class="section">
-    <h2>Do this one thing &mdash; ~30 seconds</h2>
-    <div class="recommend">
-      <strong>&#9733; Paste your token into the file I already made.</strong> Open this file (it now exists, location ID pre-filled):<br><br>
-      <code>C:\Users\Graeham Watts\Documents\Claude\Online Content\.claude-credentials\ghl-pit.txt</code><br><br>
-      Replace line 1 &mdash; currently <code>pit-PASTE_YOUR_PRIVATE_INTEGRATION_TOKEN_HERE</code> &mdash; with your real Private Integration Token. Line 2 (<code>6wuU3haUH7uNeT20E3UZ</code>) is already correct. Save. That&rsquo;s the whole job. Tomorrow&rsquo;s 7:15 run reads it, calls GHL directly, and the full attribution brief &mdash; KPI cards, source breakdown, funnel &mdash; comes back. No GitHub Action, no secrets, no PAT changes.
+    <h2>What Needs Fixing</h2>
+    
+    <div class="blocker">
+      <div class="b-title">
+        <span>&#49;&#65039;&#8419;</span>
+        GHL Private Integration Token
+        <span class="badge red">Blocking</span>
+      </div>
+      <div class="step">The token file at <code>Online Content/.claude-credentials/ghl-pit.txt</code> still has a placeholder value. The GitHub Action also needs it as a repo secret.</div>
+      <ol>
+        <li>Go to <strong>GoHighLevel &rarr; Settings (gear icon) &rarr; Private Integrations</strong></li>
+        <li>Create new integration &rarr; name it <strong>"Claude Attribution"</strong></li>
+        <li>Grant <strong>READ</strong> scopes for Contacts and Opportunities</li>
+        <li>Copy the <code>pit-...</code> token</li>
+        <li>Replace line 1 of <code>.claude-credentials/ghl-pit.txt</code> with the real token</li>
+        <li>In GitHub: <strong>online-content repo &rarr; Settings &rarr; Secrets and variables &rarr; Actions &rarr; New repository secret</strong> &rarr; Name: <code>GHL_PIT</code>, Value: the same token</li>
+        <li>Add a second secret: Name: <code>GHL_LOCATION_ID</code>, Value: <code>6wuU3haUH7uNeT20E3UZ</code></li>
+      </ol>
     </div>
-    <div class="card amber">
-      <strong>Where to get the token if you don&rsquo;t have it handy:</strong> In GoHighLevel &rarr; Settings (gear, bottom-left) &rarr; <strong>Private Integrations</strong> &rarr; <strong>Create New Integration</strong> &rarr; name it &ldquo;Claude Attribution&rdquo; &rarr; grant <em>read</em> scopes for Contacts and Opportunities &rarr; copy the key that starts with <code>pit-</code>. Paste it as line 1 above.
+    
+    <div class="blocker">
+      <div class="b-title">
+        <span>&#50;&#65039;&#8419;</span>
+        GitHub Action Workflow (needs <code>workflow</code> scope on PAT)
+        <span class="badge">One-time</span>
+      </div>
+      <div class="step">The workflow file is built and tested &mdash; it just can&rsquo;t be deployed automatically because the PAT in <code>Scheduled/property-os-daily-backup/github-pat.txt</code> has <code>repo</code> scope but not <code>workflow</code> scope. Two options:</div>
+      <ol>
+        <li><strong>Option A (easiest):</strong> In GitHub, go to <strong>online-content repo &rarr; .github/scripts &rarr; Add file</strong>, then copy the content from <code>runbooks/daily-attribution-brief-workflow.yml</code> into a new file at <code>.github/workflows/daily-attribution-brief.yml</code></li>
+        <li><strong>Option B:</strong> Regenerate the PAT at github.com/settings/tokens with <code>repo</code> + <code>workflow</code> scopes and save it back to the file</li>
+      </ol>
+    </div>
+    
+    <div class="what-you-get">
+      <div class="title">&#10003; Once both are done, every weekday you&rsquo;ll get:</div>
+      <ul>
+        <li>Total new leads with source attribution (GMB, organic, referral, paid, social, unknown)</li>
+        <li>New opportunities and closed wins from the previous day</li>
+        <li>Day-over-week comparison vs same day last week</li>
+        <li>7-day rolling average baseline</li>
+        <li>Executive summary ("The Read") with top performing source</li>
+        <li>Funnel snapshot: Leads &rarr; Opps &rarr; Wins</li>
+        <li>Dashboard committed to GitHub Pages as a permanent record</li>
+      </ul>
     </div>
   </div>
-
-  <div class="section">
-    <h2>Side effects from this run</h2>
-    <div class="card">
-      Read-only diagnostics, one staged credential file (gitignored, never pushed), and this brief. No GHL data was pulled, no opportunities were touched, no workflow was created, and nothing was sent beyond this email draft. This file is committed to <code>dashboards/attribution/2026-05-21-daily.html</code> for the record.
-    </div>
-  </div>
-
+  
   <div class="footer">
-    <div class="sig">Daily Attribution Brief &middot; automated</div>
-    <div>Graeham Watts &middot; REALTOR &middot; Intero Real Estate &middot; DRE# 02015066</div>
+    Auto-generated by Daily Attribution Brief skill &middot; Ran 2026-05-22 14:32 UTC<br>
+    Dashboard: <a href="https://graehamwatts.github.io/online-content/dashboards/attribution/" style="color:#f4b955;">attribution archive</a> &nbsp;&middot;&nbsp;
+    Scripts: <code>.github/scripts/daily_attribution_brief.py</code> (ready to run once credentials set)
+    <div class="sig" style="margin-top:10px">Graeham Watts</div>
+    <div style="color:#94a3b8;font-size:11px;">REALTOR&reg; &middot; Intero Real Estate &middot; DRE# 01466876</div>
   </div>
 </div>
-</body>
-</html>
+</body></html>
