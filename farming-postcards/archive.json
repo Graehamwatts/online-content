@@ -8,7 +8,7 @@
     "market": "East Palo Alto / Peninsula",
     "vendor_default": "Universal Mail Works",
     "dashboard_url": "https://graehamwatts.github.io/online-content/farming-postcards/",
-    "last_updated": "2026-05-27"
+    "last_updated": "2026-06-11"
   },
   "cards": [
     {
@@ -92,8 +92,8 @@
       "cta_line": "Free home valuation · no pressure",
       "audience": "Both",
       "preview_html": "2026-06-01-neighbor-envy-preview.html",
-      "status": "DESIGN APPROVED — awaiting print",
-      "notes": "Designed in Cowork on 2026-05-27. Approved by Graeham. Editor + Peter to finalize headshots and QR before sending to Universal Mail Works."
+      "status": "MAILED",
+      "notes": "Designed in Cowork on 2026-05-27, approved by Graeham, mailed (print merge confirmed in Graeham's Farming Flyers 2026 folder, verified 2026-06-11). Back copy 'Zillow guesses. I measure.' triggered the new villain-cooldown rule — next 2 cards must be Zillow-free."
     }
   ]
 }
