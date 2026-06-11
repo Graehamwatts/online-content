@@ -12,6 +12,20 @@
   },
   "cards": [
     {
+      "id": "2026-06-15-low-inventory-timing",
+      "mail_date": "2026-06-15",
+      "archetype": "Low-Inventory Timing",
+      "lever": "Supply-side scarcity",
+      "front_headline": "Right Now, Your Home Would Have Almost No Competition",
+      "back_headline": "Low Inventory Means Your Home Stands Alone",
+      "cta_type": "Free report (market)",
+      "cta_line": "See what your timing is worth",
+      "audience": "Both",
+      "preview_html": "2026-06-15-low-inventory-timing-preview.html",
+      "status": "ROUGH DRAFT — with Peter",
+      "notes": "First run of new archetype #7, picked after the 2026-06-11 repetition audit (original emailed options 1-3 withdrawn as recycled). MUST verify EPA inventory is genuinely low before print. QR target + headshots pending."
+    },
+    {
       "id": "2025-03-01-equity",
       "mail_date": "2025-03-01",
       "archetype": "Equity",
