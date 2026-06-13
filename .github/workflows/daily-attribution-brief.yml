@@ -483,6 +483,65 @@ jobs:
           git diff --staged --quiet || git commit -m "Daily Attribution Brief: ${{ steps.generate.outputs.date_slug }}"
           git push
 
+      - name: Email the brief
+        env:
+          GMAIL_USERNAME: ${{ secrets.GMAIL_USERNAME }}
+          GMAIL_APP_PASSWORD: ${{ secrets.GMAIL_APP_PASSWORD }}
+          BRIEF_RECIPIENTS: ${{ secrets.BRIEF_RECIPIENTS }}
+          OUTPUT_PATH: ${{ steps.generate.outputs.output_path }}
+          DATE_SLUG: ${{ steps.generate.outputs.date_slug }}
+          TOTAL_LEADS: ${{ steps.generate.outputs.total_leads }}
+          TOP_SOURCE: ${{ steps.generate.outputs.top_source }}
+        run: |
+          python3 << 'PYEOF'
+          import os, smtplib, ssl, sys
+          from email.mime.multipart import MIMEMultipart
+          from email.mime.text import MIMEText
+
+          user = os.environ.get("GMAIL_USERNAME")
+          pw   = os.environ.get("GMAIL_APP_PASSWORD")
+          rcpts = [r.strip() for r in os.environ.get("BRIEF_RECIPIENTS", "").split(",") if r.strip()]
+          if not (user and pw and rcpts):
+              print("::error::Email not sent — missing GMAIL_USERNAME, GMAIL_APP_PASSWORD, or BRIEF_RECIPIENTS secret.")
+              sys.exit(1)
+
+          path = os.environ["OUTPUT_PATH"]
+          with open(path, encoding="utf-8") as f:
+              html = f.read()
+
+          slug = os.environ.get("DATE_SLUG", "")
+          leads = os.environ.get("TOTAL_LEADS", "?")
+          top = os.environ.get("TOP_SOURCE", "?")
+          url = f"https://graehamwatts.github.io/online-content/dashboards/attribution/{slug}-daily.html"
+
+          msg = MIMEMultipart("alternative")
+          msg["Subject"] = f"Daily Attribution Brief — {slug} — {leads} leads (top: {top})"
+          msg["From"] = user
+          msg["To"] = ", ".join(rcpts)
+          text = f"Daily Attribution Brief for {slug}\n{leads} new leads. Top source: {top}.\nDashboard: {url}\n"
+          msg.attach(MIMEText(text, "plain"))
+          msg.attach(MIMEText(html, "html"))
+
+          ctx = ssl.create_default_context()
+          last = None
+          for host, port, mode in [("smtp.gmail.com", 587, "starttls"), ("smtp.gmail.com", 465, "ssl")]:
+              try:
+                  if mode == "starttls":
+                      s = smtplib.SMTP(host, port, timeout=30); s.starttls(context=ctx)
+                  else:
+                      s = smtplib.SMTP_SSL(host, port, context=ctx, timeout=30)
+                  s.login(user, pw)
+                  s.sendmail(user, rcpts, msg.as_string())
+                  s.quit()
+                  print(f"Emailed brief to {', '.join(rcpts)} via {host}:{port}")
+                  sys.exit(0)
+              except Exception as e:
+                  last = e
+                  print(f"  {host}:{port} failed: {e}")
+          print(f"::error::Email send failed on all SMTP routes: {last}")
+          sys.exit(1)
+          PYEOF
+
       - name: Report result
         run: |
           URL="https://graehamwatts.github.io/online-content/dashboards/attribution/${{ steps.generate.outputs.date_slug }}-daily.html"
