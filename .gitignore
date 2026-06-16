@@ -37,3 +37,5 @@ venv/
 outputs/
 **/outputs/
 *.log
+graphify-out/
+**/graphify-out/
