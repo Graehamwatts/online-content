@@ -286,6 +286,11 @@ jobs:
           print(f"Fetching contacts for prior week ({prior_start.strftime('%Y-%m-%d')})...")
           prior_contacts = get_contacts(prior_start_utc, prior_end_utc)
 
+          # Rolling 7-day context so a quiet single day is never mistaken for "leads lost"
+          print("Fetching trailing-7-day contacts for rolling context...")
+          week_start_utc = window_end_utc - timedelta(days=7)
+          leads_7d = len(get_contacts(week_start_utc, window_end_utc))
+
           print(f"Fetching opportunities for {date_slug}...")
           opps = get_opportunities(window_start_utc, window_end_utc)
           print(f"Fetching opportunities for prior week...")
@@ -357,7 +362,7 @@ jobs:
 
           # Generate the read
           if total_leads == 0:
-              the_read = f"No new leads came in yesterday. Prior week same day had {prior_total}. The pipeline is quiet — check if any automations are paused."
+              the_read = f"No new leads came in on this specific day — but <strong>{leads_7d} new lead{'s' if leads_7d != 1 else ''} arrived in the last 7 days</strong>, so the pipeline is active (leads often land in bursts, e.g. an open house). Prior week same day had {prior_total}."
           else:
               top_src = most_active
               the_read = f"{date_label} brought in {total_leads} new lead{'s' if total_leads != 1 else ''} — {'up' if delta >= 0 else 'down'} {abs(delta)} vs the same day last week. "
@@ -365,7 +370,8 @@ jobs:
               if wins:
                   the_read += f"{wins} deal{'s' if wins != 1 else ''} moved to Won/Closed today. "
               if new_opps:
-                  the_read += f"{new_opps} new opportunit{'ies' if new_opps != 1 else 'y'} created."
+                  the_read += f"{new_opps} new opportunit{'ies' if new_opps != 1 else 'y'} created. "
+              the_read += f"<br><span style='color:#94a3b8'>Rolling context: <strong>{leads_7d}</strong> new lead{'s' if leads_7d != 1 else ''} in the last 7 days.</span>"
 
           # Funnel SVG
           funnel_stages = [
