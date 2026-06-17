@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
 <meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1">
-<title>Daily Attribution Brief · Monday, June 15, 2026</title>
+<title>Daily Attribution Brief · Monday, June 15, 2026 — GHL pull failed</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700&display=swap" rel="stylesheet">
 <style>
@@ -14,18 +14,24 @@
   .header{background:linear-gradient(135deg,#0f1729 0%,#162032 100%);border:1px solid #1e293b;border-radius:12px;padding:24px;margin-bottom:16px}
   .header h1{font-size:22px;font-weight:700;color:#f1f5f9;margin-bottom:4px}
   .header .sub{font-size:14px;color:#94a3b8}
-  .status-strip{border-radius:6px;padding:8px 16px;margin-bottom:16px;font-weight:600;font-size:14px;color:#0f1729;background:#f4b955}
+  .status-strip{border-radius:6px;padding:10px 16px;margin-bottom:16px;font-weight:600;font-size:14px;color:#fff;background:#ef4444}
   .kpi-grid{display:grid;grid-template-columns:repeat(2,1fr);gap:12px;margin-bottom:16px}
   @media(min-width:500px){.kpi-grid{grid-template-columns:repeat(4,1fr)}}
   .kpi{background:#0f1729;border:1px solid #1e293b;border-radius:10px;padding:16px;text-align:center}
-  .kpi .num{font-size:28px;font-weight:700;color:#f4b955}
+  .kpi .num{font-size:28px;font-weight:700;color:#64748b}
   .kpi .label{font-size:12px;color:#94a3b8;margin-top:4px}
   .section{background:#0f1729;border:1px solid #1e293b;border-radius:10px;padding:20px;margin-bottom:16px}
   .section h2{font-size:15px;font-weight:700;color:#f4b955;margin-bottom:12px;text-transform:uppercase;letter-spacing:.05em}
   .read-text{font-size:15px;line-height:1.7;color:#cbd5e1}
+  .errbox{background:#1a1020;border:1px solid #7f1d1d;border-radius:8px;padding:14px 16px;font-family:ui-monospace,SFMono-Regular,Menlo,monospace;font-size:13px;color:#fca5a5;white-space:pre-wrap;word-break:break-word}
+  .fix-list{list-style:none;counter-reset:fix}
+  .fix-list li{counter-increment:fix;position:relative;padding:10px 0 10px 40px;border-bottom:1px solid #1e293b;font-size:14px;line-height:1.6;color:#cbd5e1}
+  .fix-list li:last-child{border-bottom:none}
+  .fix-list li::before{content:counter(fix);position:absolute;left:0;top:9px;width:26px;height:26px;background:#f4b955;color:#0f1729;border-radius:50%;font-weight:700;font-size:13px;display:flex;align-items:center;justify-content:center}
+  code{background:#162032;border:1px solid #1e293b;border-radius:4px;padding:1px 6px;font-family:ui-monospace,SFMono-Regular,Menlo,monospace;font-size:12.5px;color:#f4b955}
   table{width:100%;border-collapse:collapse}
   th{text-align:left;padding:10px 12px;background:#162032;color:#94a3b8;font-size:12px;text-transform:uppercase;letter-spacing:.05em;font-weight:600}
-  td{vertical-align:middle}
+  td{vertical-align:middle;padding:10px 12px;border-bottom:1px solid #1e293b;font-size:14px}
   .footer{text-align:center;padding:24px 0;color:#475569;font-size:13px}
 </style>
 </head>
@@ -36,67 +42,58 @@
     <span>GHL Location: 6wuU3haU…</span>
   </div>
   <div class="header">
-    <h1>Lead Attribution Brief</h1>
-    <div class="sub">Monday, June 15, 2026 · Day-over-day: -1 leads (-33% vs prior week same day)</div>
+    <h1>⚠ Lead Attribution Brief — Data Pull Failed</h1>
+    <div class="sub">Monday, June 15, 2026 · The GoHighLevel API rejected the integration token, so yesterday's leads could not be retrieved.</div>
   </div>
-  <div class="status-strip">Down 1 vs prior week</div>
+  <div class="status-strip">GHL pull failed — Private Integration Token returned HTTP 401 (Invalid Private Integration token). No data shown for June 15 — figures are withheld, not zeroed.</div>
   <div class="kpi-grid">
-    <div class="kpi"><div class="num">2</div><div class="label">Total Leads</div></div>
-    <div class="kpi"><div class="num">0</div><div class="label">New Opps</div></div>
-    <div class="kpi"><div class="num">0</div><div class="label">Closed Wins</div></div>
-    <div class="kpi"><div class="num" style="font-size:16px">Social Organic</div><div class="label">Top Source</div></div>
+    <div class="kpi"><div class="num">—</div><div class="label">Total Leads</div></div>
+    <div class="kpi"><div class="num">—</div><div class="label">New Opps</div></div>
+    <div class="kpi"><div class="num">—</div><div class="label">Closed Wins</div></div>
+    <div class="kpi"><div class="num" style="font-size:16px">Unavailable</div><div class="label">Top Source</div></div>
   </div>
   <div class="section">
     <h2>The Read</h2>
-    <p class="read-text">Monday, June 15, 2026 brought in 2 new leads — down 1 vs the same day last week. Top source was <strong>Social Organic</strong>. <br><span style='color:#94a3b8'>Rolling context: <strong>8</strong> new leads in the last 7 days.</span></p>
+    <p class="read-text">Today's brief could not be generated because the GoHighLevel <strong>Private Integration Token (PIT) is being rejected with a 401 — "Invalid Private Integration token."</strong> Every endpoint (contacts search, opportunities, pipelines, custom fields) returns the same error, so this is a credential problem, not a data problem. <br><br>Rather than report a fake "0 leads" — which would look like a real dead day — all figures above are deliberately withheld. The last successful pull was the <strong>June 14</strong> brief (generated June 15 ~6 PM PT), so the token has gone invalid within roughly the last day, most likely expired or rotated. <strong>Action needed:</strong> rotate the PIT and update it in the two places below; the brief will self-heal on the next run.</p>
   </div>
   <div class="section">
-    <h2>Source Breakdown</h2>
+    <h2>Error Detail</h2>
+    <div class="errbox">Request:  POST https://services.leadconnectorhq.com/contacts/search
+Headers:  Authorization: Bearer pit-…  ·  Version: 2021-07-28
+Response: HTTP 401
+          {"statusCode":401,"message":"Invalid Private Integration token"}
+
+Also tested (all 401, same body):
+  GET  /locations/6wuU3haUH7uNeT20E3UZ
+  GET  /contacts/?locationId=6wuU3haUH7uNeT20E3UZ
+Network path to GHL is open (no allowlist block) — the token itself is the cause.</div>
+  </div>
+  <div class="section">
+    <h2>How to Fix (≈5 min)</h2>
+    <ol class="fix-list">
+      <li>In GoHighLevel: <strong>Settings → Private Integrations</strong>, revoke the old token and create a new one with the same scopes (contacts, opportunities, locations/custom fields). Copy the new <code>pit-…</code> value.</li>
+      <li>Update the local credential file — line 1 = new token, line 2 = location id (unchanged): <code>Documents/Claude/Online Content/.claude-credentials/ghl-pit.txt</code> and the mirror at <code>Documents/Claude/Skills/ghl-pit.txt</code>.</li>
+      <li>Update the GitHub repo secret <code>GHL_PIT</code> on <code>Graehamwatts/online-content</code> (Settings → Secrets → Actions) so the scheduled Action uses the new token too.</li>
+      <li>Re-run: trigger the <code>daily-attribution-brief.yml</code> workflow (Run workflow → leave date blank for yesterday, or set <code>2026-06-15</code>) to backfill this brief.</li>
+    </ol>
+  </div>
+  <div class="section">
+    <h2>Last Known Good — Sunday, June 14 (context)</h2>
     <table>
-      <thead><tr>
-        <th>Source</th><th style="text-align:center">Leads</th><th style="text-align:center">vs Prior Wk</th><th>Notable Names</th>
-      </tr></thead>
+      <thead><tr><th>Metric</th><th style="text-align:center">Value</th></tr></thead>
       <tbody>
-    <tr>
-      <td style="padding:10px 12px;border-bottom:1px solid #1e293b;font-weight:500">Social Organic</td>
-      <td style="padding:10px 12px;border-bottom:1px solid #1e293b;text-align:center;font-size:18px;font-weight:700;color:#f4b955">1</td>
-      <td style="padding:10px 12px;border-bottom:1px solid #1e293b;text-align:center"><span style="color:#94a3b8">0</span></td>
-      <td style="padding:10px 12px;border-bottom:1px solid #1e293b;color:#94a3b8;font-size:13px">𝙉𝙖𝙝𝙪𝙚𝙡 𝘾.</td>
-    </tr>
-    <tr>
-      <td style="padding:10px 12px;border-bottom:1px solid #1e293b;font-weight:500">Unknown</td>
-      <td style="padding:10px 12px;border-bottom:1px solid #1e293b;text-align:center;font-size:18px;font-weight:700;color:#f4b955">1</td>
-      <td style="padding:10px 12px;border-bottom:1px solid #1e293b;text-align:center"><span style="color:#ef4444">-1</span></td>
-      <td style="padding:10px 12px;border-bottom:1px solid #1e293b;color:#94a3b8;font-size:13px">Susana V.</td>
-    </tr></tbody>
+        <tr><td>Total leads</td><td style="text-align:center;font-weight:700;color:#f4b955">1</td></tr>
+        <tr><td>New opportunities</td><td style="text-align:center;font-weight:700;color:#f4b955">1</td></tr>
+        <tr><td>Closed wins</td><td style="text-align:center;font-weight:700;color:#f4b955">0</td></tr>
+        <tr><td>Top source</td><td style="text-align:center">Paid Ads (Rosa P.)</td></tr>
+        <tr><td>Rolling 7-day leads</td><td style="text-align:center">9</td></tr>
+      </tbody>
     </table>
-    
-  </div>
-  <div class="section">
-    <h2>Funnel Snapshot</h2>
-    
-    <div style="margin:8px 0;display:flex;align-items:center;gap:12px">
-      <div style="width:110px;text-align:right;color:#94a3b8;font-size:13px">Leads</div>
-      <div style="background:#f4b955;height:28px;width:300px;border-radius:4px;display:flex;align-items:center;padding:0 8px;box-sizing:border-box">
-        <span style="color:#0f1729;font-weight:700;font-size:14px;white-space:nowrap">2</span>
-      </div>
-    </div>
-    <div style="margin:8px 0;display:flex;align-items:center;gap:12px">
-      <div style="width:110px;text-align:right;color:#94a3b8;font-size:13px">Opps Created</div>
-      <div style="background:#e2a830;height:28px;width:4px;border-radius:4px;display:flex;align-items:center;padding:0 8px;box-sizing:border-box">
-        <span style="color:#0f1729;font-weight:700;font-size:14px;white-space:nowrap">0</span>
-      </div>
-    </div>
-    <div style="margin:8px 0;display:flex;align-items:center;gap:12px">
-      <div style="width:110px;text-align:right;color:#94a3b8;font-size:13px">Wins</div>
-      <div style="background:#22c55e;height:28px;width:4px;border-radius:4px;display:flex;align-items:center;padding:0 8px;box-sizing:border-box">
-        <span style="color:#0f1729;font-weight:700;font-size:14px;white-space:nowrap">0</span>
-      </div>
-    </div>
+    <p class="read-text" style="margin-top:12px;font-size:13px;color:#94a3b8">Shown only so the brief isn't blank — these are June 14 figures, not June 15. June 15's true numbers will appear once the token is restored and the workflow is re-run.</p>
   </div>
   <div class="footer">
     Graeham Watts · Intero Real Estate · graehamwatts@gmail.com<br>
-    Generated 2026-06-16 11:57 PT
+    Generated 2026-06-16 20:57 PT · Automated failure notice — GHL token needs rotation
   </div>
 </div>
 </body></html>
