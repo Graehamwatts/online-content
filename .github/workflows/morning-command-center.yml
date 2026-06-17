@@ -1,0 +1,43 @@
+name: Morning Command Center
+
+on:
+  schedule:
+    # Weekdays at 14:00 UTC = 7:00 AM PT (PDT) / 6:00 AM PT (PST). GitHub cron can drift a few hours.
+    - cron: '0 14 * * 1-5'
+  workflow_dispatch: {}
+
+jobs:
+  command-center:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          token: ${{ secrets.GITHUB_TOKEN }}
+
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+
+      - name: Generate + email the Command Center
+        id: generate
+        env:
+          GHL_PIT:            ${{ secrets.GHL_PIT }}
+          GHL_LOCATION_ID:    ${{ secrets.GHL_LOCATION_ID }}
+          GMAIL_USERNAME:     ${{ secrets.GMAIL_USERNAME }}
+          GMAIL_APP_PASSWORD: ${{ secrets.GMAIL_APP_PASSWORD }}
+          BRIEF_RECIPIENTS:   ${{ secrets.BRIEF_RECIPIENTS }}
+          PYTHONUNBUFFERED:   "1"
+        run: python3 scripts/command_center.py
+
+      - name: Commit dashboard
+        run: |
+          git config user.email "graehamwatts@gmail.com"
+          git config user.name  "Graeham Watts"
+          git remote set-url origin https://x-access-token:${{ secrets.GITHUB_TOKEN }}@github.com/Graehamwatts/online-content.git
+          git add dashboards/command-center/
+          git diff --staged --quiet || git commit -m "Morning Command Center: ${{ steps.generate.outputs.date_slug }} (${{ steps.generate.outputs.action_total }} action items)"
+          git push
+
+      - name: Notify on failure
+        if: failure()
+        run: echo "::error::Morning Command Center failed — check GHL_PIT / GMAIL secrets and the run log."
