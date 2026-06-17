@@ -1,0 +1,22 @@
+name: GHL Token Health Check
+on:
+  schedule:
+    - cron: '0 13 * * 1'   # Mondays 13:00 UTC (~6am PT), before the Monday reports
+  workflow_dispatch: {}
+jobs:
+  healthcheck:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - name: Check GHL token
+        env:
+          GHL_PIT:            ${{ secrets.GHL_PIT }}
+          GHL_LOCATION_ID:    ${{ secrets.GHL_LOCATION_ID }}
+          GMAIL_USERNAME:     ${{ secrets.GMAIL_USERNAME }}
+          GMAIL_APP_PASSWORD: ${{ secrets.GMAIL_APP_PASSWORD }}
+          BRIEF_RECIPIENTS:   ${{ secrets.BRIEF_RECIPIENTS }}
+          PYTHONUNBUFFERED:   "1"
+        run: python3 scripts/ghl_token_healthcheck.py
