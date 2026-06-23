@@ -1,0 +1,533 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>909 Baines Street — Weekly Status — June 22, 2026</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700&display=swap" rel="stylesheet">
+<style>
+  body { margin:0; padding:0; background:#eef0f4; font-family:'DM Sans', system-ui, sans-serif; color:#1a2332; line-height:1.55; -webkit-font-smoothing:antialiased; }
+  .wrap { max-width:720px; margin:0 auto; background:#ffffff; }
+
+  /* TOP BAR */
+  .top-bar { padding:14px 36px; background:#0f1729; color:#9da9c1; font-size:11px; letter-spacing:1.4px; text-transform:uppercase; font-weight:600; display:flex; justify-content:space-between; }
+  .top-bar .right { color:#5d6b85; }
+
+  /* HEADER */
+  .header { padding:32px 36px 24px; }
+  .header h1 { font-size:26px; font-weight:600; margin:0 0 4px 0; color:#0f1729; letter-spacing:-0.4px; }
+  .header .meta { font-size:13px; color:#6a7488; }
+  .header .meta strong { color:#0f1729; font-weight:600; }
+
+  /* STATUS STRIP */
+  .status { margin:0 36px; padding:16px 18px; border-radius:6px; display:flex; align-items:center; gap:14px; background:#fef5e6; border:1px solid #f0c98a; }
+  .status .dot { width:10px; height:10px; border-radius:50%; background:#d49019; flex-shrink:0; box-shadow:0 0 0 4px rgba(212,144,25,0.15); }
+  .status .text { flex:1; }
+  .status .label { font-size:10.5px; letter-spacing:1.4px; text-transform:uppercase; font-weight:700; color:#a06a14; margin-bottom:2px; }
+  .status .msg { font-size:14px; color:#3a2c10; font-weight:500; }
+
+  /* KPI ROW */
+  .kpi-section { padding:24px 36px 8px; }
+  .kpi-label { font-size:10.5px; letter-spacing:1.4px; text-transform:uppercase; font-weight:700; color:#5d6b85; margin-bottom:12px; }
+  .kpis { display:table; width:100%; border-collapse:separate; border-spacing:8px; margin:0 -8px; }
+  .kpi { display:table-cell; background:#f6f7fa; border-radius:6px; padding:14px 14px 12px; vertical-align:top; }
+  .kpi .k-lbl { font-size:10.5px; color:#6a7488; letter-spacing:0.6px; text-transform:uppercase; font-weight:600; margin-bottom:6px; }
+  .kpi .k-num { font-size:28px; font-weight:600; color:#0f1729; line-height:1; letter-spacing:-0.6px; }
+  .kpi .k-delta { font-size:12px; margin-top:6px; font-weight:500; }
+  .kpi .k-delta.down { color:#c44545; }
+  .kpi .k-delta.up { color:#1f7a3a; }
+  .kpi .k-delta.flat { color:#6a7488; }
+  .kpi .k-delta::before { content:""; display:inline-block; width:0; height:0; border-left:4px solid transparent; border-right:4px solid transparent; margin-right:5px; vertical-align:middle; }
+  .kpi .k-delta.down::before { border-top:5px solid #c44545; }
+  .kpi .k-delta.up::before { border-bottom:5px solid #1f7a3a; }
+  .kpi .k-delta.flat::before { border-top:5px solid transparent; border-bottom:5px solid transparent; border-left:5px solid #6a7488; }
+
+  /* SECTION */
+  section { padding:24px 36px 4px; }
+  section h2 { font-size:11px; letter-spacing:1.6px; text-transform:uppercase; font-weight:700; color:#5d6b85; margin:0 0 12px 0; padding-bottom:8px; border-bottom:1px solid #e6e9ef; }
+  section p { font-size:14.5px; color:#2a3142; margin:0 0 12px 0; line-height:1.65; }
+  section p strong { color:#0f1729; font-weight:600; }
+
+  /* DECISION BLOCK */
+  .decision { margin:8px 36px 0; padding:22px 24px; background:#0f1729; color:#fff; border-radius:6px; }
+  .decision .lbl { display:flex; align-items:center; gap:8px; font-size:10.5px; letter-spacing:1.4px; text-transform:uppercase; font-weight:700; color:#f4b955; margin-bottom:10px; }
+  .decision .lbl::before { content:"●"; color:#f4b955; font-size:14px; }
+  .decision h3 { font-size:18px; font-weight:600; color:#fff; margin:0 0 8px 0; line-height:1.3; }
+  .decision p { font-size:14px; color:#c5cee0; margin:0 0 14px 0; line-height:1.6; }
+  .decision p strong { color:#fff; }
+  .decision .btn { display:inline-block; background:#f4b955; color:#0f1729; padding:10px 18px; border-radius:4px; text-decoration:none; font-size:13px; font-weight:600; letter-spacing:0.3px; margin-right:8px; }
+  .decision .btn-secondary { background:transparent; color:#f4b955; border:1px solid #f4b955; }
+
+  /* MARKET CONTEXT comparison cards */
+  .market-cards { display:table; width:100%; border-collapse:separate; border-spacing:8px; margin:6px -8px; }
+  .market-card { display:table-cell; background:#f6f7fa; border-radius:6px; padding:18px 18px 16px; vertical-align:top; position:relative; }
+  .market-card .mc-label { font-size:10.5px; color:#6a7488; letter-spacing:1px; text-transform:uppercase; font-weight:700; margin-bottom:14px; }
+  .market-card .mc-delta { font-size:30px; font-weight:700; color:#c44545; line-height:1; letter-spacing:-1px; margin-bottom:4px; }
+  .market-card .mc-delta-label { font-size:11.5px; color:#6a7488; font-weight:500; margin-bottom:14px; }
+  .market-card .mc-row { display:flex; justify-content:space-between; padding:6px 0; font-size:13px; color:#2a3142; border-top:1px solid #ecedf2; }
+  .market-card .mc-row .v { font-weight:600; color:#0f1729; }
+
+  /* HERO STAT — for big section openers */
+  .hero-stat { padding:28px 36px 8px; border-top:1px solid #e6e9ef; margin-top:12px; }
+  .hero-stat .hs-num { font-size:72px; font-weight:700; color:#0f1729; line-height:0.95; letter-spacing:-3px; margin-bottom:4px; }
+  .hero-stat .hs-num .unit { font-size:32px; color:#6a7488; font-weight:500; letter-spacing:-1px; margin-left:8px; }
+  .hero-stat .hs-title { font-size:20px; font-weight:600; color:#0f1729; line-height:1.25; margin-bottom:6px; letter-spacing:-0.3px; }
+  .hero-stat .hs-sub { font-size:13.5px; color:#6a7488; line-height:1.55; }
+  .hero-stat .hs-sub strong { color:#2a3142; font-weight:600; }
+
+  /* SYNDICATION CHIPS */
+  .syndication-block { padding:24px 36px 4px; }
+  .syndication-block h2 { font-size:11px; letter-spacing:1.6px; text-transform:uppercase; font-weight:700; color:#5d6b85; margin:0 0 12px 0; padding-bottom:8px; border-bottom:1px solid #e6e9ef; }
+  .syndication-block p { font-size:14.5px; color:#2a3142; margin:0 0 12px 0; line-height:1.65; }
+  .syndication-block p strong { color:#0f1729; font-weight:600; }
+  .syndication { display:flex; flex-wrap:wrap; gap:6px; margin:12px 0 8px 0; }
+  .chip { font-size:12px; padding:5px 12px; background:#f6f7fa; border:1px solid #e6e9ef; color:#3a4154; border-radius:14px; font-weight:500; }
+  .chip.live { background:#e8f5ec; border-color:#a8d4b6; color:#1f5e2e; }
+  .chip.more { background:transparent; border:1px dashed #c5cee0; color:#6a7488; font-style:italic; }
+
+  /* AGENT TABLE */
+  .agent-table { width:100%; border-collapse:collapse; margin-top:8px; }
+  .agent-table th { text-align:left; font-size:10.5px; letter-spacing:1px; text-transform:uppercase; color:#6a7488; font-weight:700; padding:8px 10px 8px 0; border-bottom:1.5px solid #e6e9ef; }
+  .agent-table td { padding:9px 10px 9px 0; border-bottom:1px solid #f0f2f6; vertical-align:top; }
+  .agent-table td:first-child { font-weight:600; color:#0f1729; font-size:13.5px; white-space:nowrap; width:110px; }
+  .agent-table td:last-child { font-size:13px; color:#3a4154; line-height:1.55; }
+  .agent-table tr:last-child td { border-bottom:0; }
+  .agent-table .empty { color:#9aa3b5; font-style:italic; }
+  .agent-table .win { background:#e8f5ec; }
+  .agent-table .warm { background:#fff8e6; }
+  .agent-table .legend { font-size:11px; color:#6a7488; margin-top:8px; display:flex; gap:14px; }
+  .agent-table .legend .key { display:inline-flex; align-items:center; gap:5px; }
+  .agent-table .legend .swatch { width:10px; height:10px; border-radius:2px; display:inline-block; }
+  .agent-table .legend .swatch.win { background:#a8d4b6; }
+  .agent-table .legend .swatch.warm { background:#f0c98a; }
+
+  /* CONCERN CARDS — themed with rank */
+  .concerns-stack { margin-top:18px; }
+  .concern-card { display:flex; gap:18px; padding:18px 20px; background:#f6f7fa; border-radius:6px; margin-bottom:10px; align-items:flex-start; }
+  .concern-card:last-child { margin-bottom:0; }
+  .concern-card .rank { font-size:36px; font-weight:700; color:#c5cee0; line-height:0.9; flex-shrink:0; min-width:38px; letter-spacing:-1.5px; }
+  .concern-card .body { flex:1; }
+  .concern-card .head { display:flex; justify-content:space-between; align-items:baseline; gap:12px; margin-bottom:6px; flex-wrap:wrap; }
+  .concern-card .name { font-size:17px; font-weight:700; color:#0f1729; line-height:1.25; letter-spacing:-0.2px; }
+  .concern-card .count { font-size:10.5px; color:#6a7488; font-weight:600; letter-spacing:0.5px; text-transform:uppercase; background:#fff; padding:3px 9px; border-radius:11px; white-space:nowrap; }
+  .concern-card p { font-size:13.5px; color:#3a4154; margin:0; line-height:1.6; }
+  .concern-card.urgent { background:#fef5e6; }
+  .concern-card.urgent .rank { color:#f0c98a; }
+  .concern-card.critical { background:#0f1729; }
+  .concern-card.critical .rank { color:#f4b955; }
+  .concern-card.critical .name { color:#fff; }
+  .concern-card.critical .count { background:#2a3a55; color:#c5cee0; }
+  .concern-card.critical p { color:#c5cee0; }
+
+  /* ACTIONS */
+  .my-actions { list-style:none; padding:0; margin:8px 0 0 0; }
+  .my-actions li { padding:10px 0 10px 26px; font-size:14px; color:#2a3142; border-bottom:1px solid #f0f2f6; position:relative; line-height:1.55; }
+  .my-actions li:last-child { border-bottom:0; }
+  .my-actions li::before { content:""; position:absolute; left:0; top:13px; width:14px; height:14px; border:1.5px solid #5d6b85; border-radius:3px; background:#5d6b85; }
+
+  /* APPENDIX */
+  .appendix { margin:8px 36px 0; padding:18px 22px; background:#f6f7fa; border-radius:6px; }
+  .appendix h2 { font-size:10.5px; letter-spacing:1.4px; text-transform:uppercase; font-weight:700; color:#5d6b85; margin:0 0 12px 0; padding:0; border:0; }
+  .appendix-table { width:100%; border-collapse:collapse; font-size:13px; }
+  .appendix-table td { padding:6px 0; color:#3a4154; vertical-align:top; }
+  .appendix-table td:first-child { color:#6a7488; font-weight:500; padding-right:14px; width:170px; }
+  .appendix-table td strong { color:#0f1729; font-weight:600; }
+
+  /* SIGNATURE */
+  .sig { padding:32px 36px 28px; }
+  .sig p { font-size:14.5px; color:#2a3142; margin:0 0 12px 0; line-height:1.65; }
+  .sig .signoff { font-size:15px; color:#0f1729; margin-top:20px; }
+  .sig-block { margin-top:20px; padding-top:20px; border-top:1px solid #e6e9ef; display:table; width:100%; }
+  .sig-photo, .sig-info { display:table-cell; vertical-align:top; }
+  .sig-photo { width:64px; padding-right:16px; }
+  .sig-photo .ph { width:64px; height:64px; background:#0f1729; color:#f4b955; display:flex; align-items:center; justify-content:center; font-size:20px; font-weight:600; border-radius:50%; }
+  .sig-info .name { font-size:15px; font-weight:600; color:#0f1729; line-height:1.2; }
+  .sig-info .role { font-size:12px; color:#6a7488; margin-bottom:6px; }
+  .sig-info .firm { font-size:13px; color:#2a3142; margin-bottom:6px; font-weight:500; }
+  .sig-info .contact { font-size:12.5px; color:#3a4154; line-height:1.7; }
+  .sig-info .contact a { color:#0f1729; text-decoration:none; border-bottom:1px solid #c5cee0; }
+  .sig-info .dre { font-size:11px; color:#6a7488; margin-top:6px; }
+
+  /* FOOTER */
+  .footer { padding:14px 36px 22px; background:#0f1729; color:#5d6b85; font-size:11px; text-align:center; line-height:1.6; letter-spacing:0.3px; }
+
+  /* OFFER BANNER — top-priority good news; include ONLY when offers >= 1 */
+  .offer-banner { margin:16px 36px 0; padding:20px 22px; background:#0f1729; border-radius:6px; border-left:5px solid #2fa85a; }
+  .offer-banner .ob-flag { font-size:10.5px; letter-spacing:1.4px; text-transform:uppercase; font-weight:700; color:#7ee0a0; margin-bottom:6px; }
+  .offer-banner .ob-flag::before { content:"●"; margin-right:7px; color:#2fa85a; }
+  .offer-banner .ob-headline { font-size:22px; font-weight:700; color:#fff; letter-spacing:-0.4px; margin-bottom:14px; }
+  .offer-card { background:#16203a; border-radius:5px; padding:14px 16px; }
+  .offer-card + .offer-card { margin-top:8px; }
+  .offer-card .oc-top { display:flex; justify-content:space-between; align-items:center; margin-bottom:10px; gap:10px; }
+  .offer-card .oc-agent { font-size:15px; font-weight:600; color:#fff; }
+  .offer-card .oc-badge { font-size:10px; letter-spacing:0.8px; text-transform:uppercase; font-weight:700; padding:3px 9px; border-radius:11px; white-space:nowrap; }
+  .offer-card .oc-badge.accepted { background:#2fa85a; color:#fff; }
+  .offer-card .oc-badge.review { background:#f4b955; color:#0f1729; }
+  .offer-banner.received { border-left-color:#f4b955; }
+  .offer-banner.received .ob-flag, .offer-banner.received .ob-flag::before { color:#f4b955; }
+  .offer-banner.accepted { border-left-color:#2fa85a; }
+  .offer-banner.accepted .ob-flag, .offer-banner.accepted .ob-flag::before { color:#7ee0a0; }
+  .offer-banner.pending { border-left-color:#3a8ad9; }
+  .offer-banner.pending .ob-flag, .offer-banner.pending .ob-flag::before { color:#8fc4f2; }
+  .offer-card .oc-badge.received { background:#f4b955; color:#0f1729; }
+  .offer-card .oc-badge.pending { background:#3a8ad9; color:#fff; }
+  .offer-card .oc-state { font-size:12px; color:#9da9c1; margin-top:3px; }
+  .offer-card .oc-steps { display:flex; align-items:center; flex-wrap:wrap; gap:7px; font-size:11.5px; color:#9da9c1; border-top:1px solid #2a3a55; padding-top:9px; margin-top:9px; }
+  .offer-card .oc-steps .done { color:#7ee0a0; }
+  .offer-card .oc-steps .nowstep { color:#8fc4f2; font-weight:600; }
+  .offer-card .oc-figures { display:flex; gap:28px; margin-bottom:8px; }
+  .offer-card .oc-figures > div { display:flex; flex-direction:column; }
+  .offer-card .oc-num { font-size:24px; font-weight:700; color:#fff; line-height:1; letter-spacing:-0.5px; }
+  .offer-card .oc-lbl { font-size:11px; color:#9da9c1; margin-top:4px; }
+  .offer-card .oc-terms { font-size:13px; color:#c5cee0; line-height:1.55; border-top:1px solid #2a3a55; padding-top:8px; }
+
+  /* TRAJECTORY — week over week */
+  .momentum-chip { display:inline-block; font-size:11px; font-weight:700; letter-spacing:0.5px; text-transform:uppercase; padding:4px 11px; border-radius:12px; margin-bottom:8px; }
+  .momentum-chip.accelerating { background:#e8f5ec; color:#1f7a3a; }
+  .momentum-chip.cooling { background:#fbe9e9; color:#c44545; }
+  .momentum-chip.steady { background:#f0f2f6; color:#5d6b85; }
+  .trend-bars { display:table; width:100%; border-collapse:separate; border-spacing:6px; margin:6px -6px 14px; table-layout:fixed; }
+  .trend-bars .tb-col { display:table-cell; vertical-align:bottom; text-align:center; }
+  .trend-bars .tb-track { height:90px; display:flex; align-items:flex-end; justify-content:center; }
+  .trend-bars .tb-bar { width:62%; background:#c5cee0; border-radius:3px 3px 0 0; min-height:3px; }
+  .trend-bars .tb-col.now .tb-bar { background:#0f1729; }
+  .trend-bars .tb-val { font-size:13px; font-weight:700; color:#0f1729; margin-top:6px; }
+  .trend-bars .tb-lbl { font-size:10.5px; color:#6a7488; margin-top:2px; }
+  .trend-bars .tb-col.now .tb-lbl { color:#0f1729; font-weight:700; }
+  .trend-table { width:100%; border-collapse:collapse; margin-top:6px; }
+  .trend-table th { text-align:right; font-size:10.5px; letter-spacing:0.6px; text-transform:uppercase; color:#6a7488; font-weight:700; padding:8px 10px; border-bottom:1.5px solid #e6e9ef; }
+  .trend-table th:first-child { text-align:left; }
+  .trend-table td { padding:9px 10px; border-bottom:1px solid #f0f2f6; font-size:13.5px; color:#2a3142; text-align:right; }
+  .trend-table td:first-child { text-align:left; font-weight:600; color:#0f1729; }
+  .trend-table tr.now td { background:#fffaf0; }
+  .trend-table tr.total td { border-top:2px solid #e6e9ef; border-bottom:0; font-weight:700; color:#0f1729; }
+  .trend-table tr.total td:first-child { text-transform:uppercase; font-size:11px; letter-spacing:1px; }
+  .trend-table .badge-now { font-size:9.5px; letter-spacing:0.6px; text-transform:uppercase; font-weight:700; color:#a06a14; background:#fef0d4; padding:2px 7px; border-radius:9px; margin-left:8px; }
+
+  /* FEEDBACK SUMMARY — short version on top; full detail in the tables below */
+  .fb-summary { background:#f6f7fa; border-radius:6px; padding:18px 20px; margin-top:6px; }
+  .fb-summary .fbs-top { font-size:14px; color:#2a3142; margin:0 0 12px; line-height:1.6; }
+  .fb-summary .fbs-top strong { color:#0f1729; }
+  .fb-summary ul { list-style:none; margin:0; padding:0; }
+  .fb-summary li { position:relative; padding:8px 0 8px 22px; font-size:13.5px; color:#2a3142; line-height:1.55; border-top:1px solid #ecedf2; }
+  .fb-summary li:first-child { border-top:0; }
+  .fb-summary li::before { content:""; position:absolute; left:2px; top:14px; width:7px; height:7px; border-radius:50%; background:#f4b955; }
+  .fb-summary li .who { font-weight:600; color:#0f1729; }
+
+  @media (max-width:540px) {
+    .top-bar, .header, .kpi-section, section, .sig, .footer, .hero-stat, .syndication-block { padding-left:20px; padding-right:20px; }
+    .status, .decision, .appendix, .offer-banner { margin-left:20px; margin-right:20px; }
+    .offer-card .oc-figures { gap:18px; }
+    .trend-bars .tb-track { height:64px; }
+    .trend-table th, .trend-table td { padding:7px 5px; font-size:12.5px; }
+    .kpis, .market-cards { display:block; margin:0; }
+    .kpi, .market-card { display:block; margin-bottom:8px; }
+    .header h1 { font-size:22px; }
+    .agent-table td:first-child { width:90px; font-size:12.5px; }
+    .agent-table td:last-child { font-size:12.5px; }
+    .hero-stat .hs-num { font-size:56px; }
+    .hero-stat .hs-num .unit { font-size:24px; }
+  }
+</style>
+</head>
+<body>
+  <div class="wrap">
+
+    <!-- TOP BAR -->
+    <div class="top-bar">
+      <span>Weekly Status Report</span>
+      <span class="right">No. 01 · June 22, 2026</span>
+    </div>
+
+    <!-- HEADER -->
+    <div class="header">
+      <h1>909 Baines Street</h1>
+      <div class="meta">East Palo Alto, CA · 4 bd / 3 ba / 2,020 sqft · Listed at <strong>$1,399,888</strong> · MLS ML82049409 · Reporting period: <strong>Launch (June 1) – June 22, 2026</strong></div>
+    </div>
+
+    <!-- STATUS STRIP -->
+    <div class="status">
+      <div class="dot"></div>
+      <div class="text">
+        <div class="label">Status · Offer Received, Awaiting Decision</div>
+        <div class="msg">We have our first offer in hand after a strong launch. It is received, not yet accepted, so the next move is yours: accept, counter, or hold while I work to bring in more offers.</div>
+      </div>
+    </div>
+
+    <!-- OFFER BANNER -->
+    <div class="offer-banner received">
+      <div class="ob-flag">Offer Received</div>
+      <div class="ob-headline">1 offer received</div>
+      <div class="offer-card">
+        <div class="oc-top">
+          <span class="oc-agent">Buyer represented by Jeffrey Banks, Compass</span>
+          <span class="oc-badge received">Received · Awaiting your decision</span>
+        </div>
+        <div class="oc-state">Decision needed: accept, counter, or hold for more offers</div>
+        <div class="oc-figures">
+          <div><span class="oc-num">$1,325,888</span><span class="oc-lbl">Offer price</span></div>
+          <div><span class="oc-num">95%</span><span class="oc-lbl">of $1,399,888 list</span></div>
+          <div><span class="oc-num">30 days</span><span class="oc-lbl">proposed close</span></div>
+        </div>
+        <div class="oc-terms">Conventional financing, roughly $1.06M loan, pre-approved through HSBC. Contingencies for appraisal, insurance, and investigation. <em>(One offer in hand so far. I am following up with other agents to try to bring in more before you decide.)</em></div>
+      </div>
+    </div>
+
+    <!-- KPIs -->
+    <div class="kpi-section">
+      <div class="kpi-label">Since Launch (June 1 – June 22)</div>
+      <div class="kpis">
+        <div class="kpi">
+          <div class="k-lbl">Offers</div>
+          <div class="k-num">1</div>
+          <div class="k-delta up">received, under review</div>
+        </div>
+        <div class="kpi">
+          <div class="k-lbl">Disclosure Pulls</div>
+          <div class="k-num">15</div>
+          <div class="k-delta up">strong launch volume</div>
+        </div>
+        <div class="kpi">
+          <div class="k-lbl">Showings</div>
+          <div class="k-num">2</div>
+          <div class="k-delta flat">plus open houses</div>
+        </div>
+        <div class="kpi">
+          <div class="k-lbl">Days on Market</div>
+          <div class="k-num">21</div>
+          <div class="k-delta up">offer by day 18</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- THE READ -->
+    <section>
+      <h2>The Read</h2>
+      <p>Short version: <strong>strong start, and we have our first offer.</strong> We listed June 1 and ran open houses through the month. So far 15 agents have pulled the disclosure package, we have had showings and repeat open-house traffic, and that has produced one written offer at <strong>$1,325,888</strong>, about 95% of the asking price. The offer is received, not yet accepted, so the decision is yours. In the meantime I am following up with the other interested agents to try to bring in more offers. The detail below shows the activity and what buyers are saying.</p>
+    </section>
+
+    <!-- NEXT STEPS -->
+    <div class="decision">
+      <div class="lbl">Decision For You</div>
+      <h3>One offer in hand: accept, counter, or hold for more</h3>
+      <p>We have a real offer at <strong>$1,325,888</strong> (95% of list). It is received, not accepted, so it is your call. My recommendation is to use this offer as leverage while I push the other interested agents for competing offers this week, then decide together. Let's grab 15 minutes to talk it through.</p>
+      <a href="mailto:graehamwatts@gmail.com?subject=909%20Baines%20St%20-%20a%20few%20times%20to%20talk" class="btn">Schedule a call</a>
+      <a href="tel:6503084727" class="btn btn-secondary">Or call: (650) 308-4727</a>
+    </div>
+
+    <!-- TRAJECTORY -->
+    <section>
+      <h2>Activity Since Launch · Week Over Week</h2>
+      <p>Disclosure-package downloads and showings since the home hit the market. The download line climbs as total agent interest builds. Week 1 is the open-house launch week; Week 2 is in progress, and this graph fills in further each week.</p>
+      <svg viewBox="0 0 640 240" width="100%" role="img" aria-label="Cumulative disclosure downloads and showings by week since launch" style="display:block; margin:10px 0 4px;">
+        <title>Cumulative disclosure downloads and showings since launch</title>
+        <line x1="40" y1="18" x2="622" y2="18" stroke="#e6e9ef"/>
+        <line x1="40" y1="112" x2="622" y2="112" stroke="#e6e9ef"/>
+        <line x1="40" y1="206" x2="622" y2="206" stroke="#c5cee0"/>
+        <text x="32" y="22" text-anchor="end" font-family="DM Sans, sans-serif" font-size="11" fill="#9aa3b5">16</text>
+        <text x="32" y="116" text-anchor="end" font-family="DM Sans, sans-serif" font-size="11" fill="#9aa3b5">8</text>
+        <text x="32" y="210" text-anchor="end" font-family="DM Sans, sans-serif" font-size="11" fill="#9aa3b5">0</text>
+        <path d="M40,206 L331,65 L622,30 L622,206 Z" fill="#e7ebf2"/>
+        <polyline points="40,206 331,65 622,30" fill="none" stroke="#0f1729" stroke-width="2.5"/>
+        <circle cx="331" cy="65" r="4" fill="#0f1729"/>
+        <circle cx="622" cy="30" r="4" fill="#0f1729"/>
+        <text x="331" y="54" text-anchor="middle" font-family="DM Sans, sans-serif" font-size="12" font-weight="600" fill="#0f1729">12</text>
+        <text x="616" y="24" text-anchor="end" font-family="DM Sans, sans-serif" font-size="12" font-weight="600" fill="#0f1729">15</text>
+        <polyline points="40,206 331,194 622,183" fill="none" stroke="#d49019" stroke-width="2.5"/>
+        <circle cx="331" cy="194" r="4" fill="#d49019"/>
+        <circle cx="622" cy="183" r="4" fill="#d49019"/>
+        <text x="331" y="190" text-anchor="middle" font-family="DM Sans, sans-serif" font-size="11" fill="#a06a14">1</text>
+        <text x="616" y="179" text-anchor="end" font-family="DM Sans, sans-serif" font-size="11" fill="#a06a14">2</text>
+        <text x="40" y="226" text-anchor="start" font-family="DM Sans, sans-serif" font-size="11.5" fill="#6a7488">Launch</text>
+        <text x="331" y="226" text-anchor="middle" font-family="DM Sans, sans-serif" font-size="11.5" fill="#6a7488">Week 1 · Jun 15–21</text>
+        <text x="622" y="226" text-anchor="end" font-family="DM Sans, sans-serif" font-size="11.5" fill="#0f1729" font-weight="600">Week 2 · now</text>
+        <rect x="40" y="2" width="11" height="11" rx="2" fill="#0f1729"/>
+        <text x="56" y="12" font-family="DM Sans, sans-serif" font-size="11.5" fill="#3a4154">Disclosure downloads (cumulative)</text>
+        <rect x="298" y="2" width="11" height="11" rx="2" fill="#d49019"/>
+        <text x="314" y="12" font-family="DM Sans, sans-serif" font-size="11.5" fill="#3a4154">Showings (cumulative)</text>
+      </svg>
+      <table class="trend-table">
+        <thead>
+          <tr><th>Week</th><th>Showings</th><th>Disclosure downloads</th><th>Offers</th></tr>
+        </thead>
+        <tbody>
+          <tr><td>Week 1 (Jun 15–21)</td><td>1</td><td>12</td><td>1 received</td></tr>
+          <tr class="now"><td>Week 2 (Jun 22–28) <span class="badge-now">Now</span></td><td>1</td><td>3</td><td>0 new</td></tr>
+          <tr class="total"><td>Total since launch</td><td>2</td><td>15</td><td>1</td></tr>
+        </tbody>
+      </table>
+      <p style="margin-top:12px; font-size:13px; color:#6a7488;"><em>Counts are anchored to the open-house launch (week of June 15), so weeks 1 and 2 carry the activity. Confirm the open-house dates and I will lock the exact weekly split.</em></p>
+    </section>
+
+    <!-- WHAT BUYERS ARE TELLING US -->
+    <section>
+      <h2>What Buyers Are Telling Us</h2>
+      <div class="fb-summary">
+        <p class="fbs-top"><strong>The headline:</strong> buyers liked the remodel, the layout, and the location. The hesitations that came up were lot size, the neighborhood, and budget. The offer we have in hand at 95% of list tells us the price is set right.</p>
+        <ul>
+          <li><span class="who">Strong, fast interest:</span> 15 agents pulled disclosures within days of the open house, and that converted to an offer quickly.</li>
+          <li><span class="who">What they liked:</span> the renovation, the two-story layout, and the square footage. Tracy G. and Karlie C. both called out the location and layout.</li>
+          <li><span class="who">Main hesitations:</span> a few buyers wanted a larger lot (Nik G.), weighed the neighborhood (Karlie C.), or were over budget (Tina C.). A couple were also looking at 3 Shorebreeze nearby.</li>
+          <li><span class="who">High note:</span> Jeffrey Banks' buyer moved from the open house to a written offer at $1,325,888, the one offer we have in hand so far.</li>
+        </ul>
+      </div>
+    </section>
+
+    <!-- SHOWING ACTIVITY -->
+    <div class="hero-stat">
+      <div class="hs-num">2<span class="unit">showings</span></div>
+      <div class="hs-title">private tours via Supra, plus one open house</div>
+      <div class="hs-sub">Tracked since launch. The open houses drew strong walk-in traffic. Highlighted rows: <strong>green = offer</strong>, <strong>amber = active interest</strong>.</div>
+    </div>
+    <section>
+      <table class="agent-table">
+        <thead>
+          <tr><th>Agent</th><th>Feedback</th></tr>
+        </thead>
+        <tbody>
+          <tr class="warm"><td>Anna W.</td><td>Clients are new and not yet ready to write. They are reviewing disclosures. Anna showed the home and is following up with them.</td></tr>
+          <tr class="warm"><td>Karlie C.</td><td>Downloaded disclosures and is reviewing the package. Clients liked the property itself and are weighing the neighborhood before deciding.</td></tr>
+        </tbody>
+      </table>
+      <div class="legend">
+        <span class="key"><span class="swatch win"></span> Offer</span>
+        <span class="key"><span class="swatch warm"></span> Active interest</span>
+      </div>
+    </section>
+
+    <!-- OPEN HOUSE -->
+    <div class="hero-stat">
+      <div class="hs-num">Multiple<span class="unit">open houses</span></div>
+      <div class="hs-title">repeat open-house traffic since launch</div>
+      <div class="hs-sub">Several open houses held since the listing went live (confirm the exact count and dates). Good walk-in turnout. One recurring question was about the laundry hookup location in the backyard, which is easy to address in conversation.</div>
+    </div>
+
+    <!-- DISCLOSURE ACTIVITY -->
+    <div class="hero-stat">
+      <div class="hs-num">15<span class="unit">agents</span></div>
+      <div class="hs-title">downloaded the disclosure package</div>
+      <div class="hs-sub">Tracked via Glide, concentrated in the days after the open house. That level of agent download volume is what signals a listing is being seen. Below is every agent and their follow-up.</div>
+    </div>
+    <section>
+      <table class="agent-table">
+        <thead>
+          <tr><th>Agent</th><th>Feedback</th></tr>
+        </thead>
+        <tbody>
+          <tr class="win"><td>Jeffrey B.</td><td><strong>Submitted the one offer we have in hand: $1,325,888.</strong> Compass. Awaiting your decision.</td></tr>
+          <tr class="warm"><td>Jessica H.</td><td>Clients are interested and working on their pre-approval. Following up.</td></tr>
+          <tr><td>Nik G.</td><td>Clients saw the property but have not decided. Smaller lot than what they are looking for.</td></tr>
+          <tr><td>Kevin F.</td><td>Their home in Ohio is listed but not yet sold, so they cannot commit until it closes.</td></tr>
+          <tr><td>Tiffany N.</td><td>Client decided not to move forward (June 17).</td></tr>
+          <tr><td>Maria D.</td><td>Her clients are more interested in 3 Shorebreeze.</td></tr>
+          <tr><td>Tina C.</td><td>Over her client's budget, and early in their search. Asked about HOA and whether it could be rented.</td></tr>
+          <tr><td>Irina L.</td><td>Submitted an offer on a different property (3 Shorebreeze).</td></tr>
+          <tr><td>Tracy G.</td><td>Liked the location, layout, and square footage, but felt the home was dated and passed. Noted roof and plumbing as concerns.</td></tr>
+          <tr><td>Anna W.</td><td>Reviewing with her client. Asked whether the AC and furnace are original, and about the commission structure.</td></tr>
+          <tr><td>Jason C.</td><td>Open house host agent.</td></tr>
+          <tr><td>Tina, Anna O., Gladys H., Grace P.</td><td>Pulled disclosures, follow-up calls and emails in progress, no response yet.</td></tr>
+        </tbody>
+      </table>
+    </section>
+
+    <!-- THEME CARDS -->
+    <div class="hero-stat">
+      <div class="hs-num">18<span class="unit">interactions</span></div>
+      <div class="hs-title">add up to a clear story</div>
+      <div class="hs-sub">Every showing, disclosure pull, and open house conversation, grouped into what mattered most.</div>
+    </div>
+    <section>
+      <div class="concerns-stack">
+        <div class="concern-card critical">
+          <div class="rank">01</div>
+          <div class="body">
+            <div class="head">
+              <div class="name">Price was set right</div>
+              <div class="count">Offer at 95% of list</div>
+            </div>
+            <p>The fastest read on pricing is a real offer. We got one at $1,325,888 within the first showing week, which tells us the list price was well calibrated for this home and this market.</p>
+          </div>
+        </div>
+
+        <div class="concern-card urgent">
+          <div class="rank">02</div>
+          <div class="body">
+            <div class="head">
+              <div class="name">Lot size and neighborhood</div>
+              <div class="count">the recurring hesitation</div>
+            </div>
+            <p>Among buyers who passed, the two themes were a smaller lot than they wanted and questions about the neighborhood. These are positioning points, not condition problems, and they did not stop the home from selling.</p>
+          </div>
+        </div>
+
+        <div class="concern-card">
+          <div class="rank">03</div>
+          <div class="body">
+            <div class="head">
+              <div class="name">Cross-shopping nearby inventory</div>
+              <div class="count">a couple of buyers</div>
+            </div>
+            <p>A few buyers were comparing against 3 Shorebreeze nearby. That is normal at this price point and a good reminder of how the surrounding inventory shapes buyer decisions.</p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- WHAT I'M DOING -->
+    <section>
+      <h2>What I'm Doing This Week (No Action Needed)</h2>
+      <ul class="my-actions">
+        <li>Following up with every agent who pulled disclosures or toured, pushing for additional offers while we have momentum.</li>
+        <li>Working the warm leads directly: Jessica H. (clients still finishing pre-approval) and Karlie C. (reviewing the package), to turn interest into offers.</li>
+        <li>Reviewing the offer in hand with you so we can decide whether to accept, counter, or hold for more.</li>
+        <li>Keeping the open houses and online marketing going so more buyers see it this week.</li>
+      </ul>
+    </section>
+
+    <!-- APPENDIX -->
+    <div class="appendix">
+      <h2>Appendix · The Numbers Since Launch</h2>
+      <table class="appendix-table">
+        <tr><td>Listed</td><td><strong>June 1, 2026</strong></td></tr>
+        <tr><td>List price</td><td><strong>$1,399,888</strong> ($693/sqft)</td></tr>
+        <tr><td>Property</td><td>4 bd / 3 ba / 2,020 sqft · Built 2000 · 3,022 sqft lot</td></tr>
+        <tr><td>Open houses</td><td>Multiple since launch (confirm count and dates)</td></tr>
+        <tr><td>Cumulative showings</td><td><strong>2</strong> private (Supra), plus open-house traffic</td></tr>
+        <tr><td>Cumulative disclosure pulls</td><td><strong>15</strong> agents (Glide)</td></tr>
+        <tr><td>Offers received</td><td><strong>1</strong> · received, under review</td></tr>
+        <tr><td>Offer in hand</td><td>$1,325,888 (95% of list) · proposes 30-day close · HSBC financing</td></tr>
+        <tr><td>Status</td><td>Active · one offer received, pursuing more</td></tr>
+        <tr><td>Days on market</td><td><strong>21</strong></td></tr>
+      </table>
+    </div>
+
+    <!-- SIGNATURE -->
+    <div class="sig">
+      <p style="margin-top:24px;">Strong start out of the gate. We have one offer in hand, and I am working to bring in more before we decide. Reply with any questions and I will keep you posted.</p>
+      <div class="signoff">— Graeham</div>
+
+      <div class="sig-block">
+        <div class="sig-photo"><div class="ph">GW</div></div>
+        <div class="sig-info">
+          <div class="name">Graeham Watts</div>
+          <div class="role">REALTOR</div>
+          <div class="firm">Intero Real Estate</div>
+          <div class="contact">
+            +1 (650) 308-4727 · <a href="mailto:graehamwatts@gmail.com">graehamwatts@gmail.com</a>
+          </div>
+          <div class="dre">DRE # 01466876</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- FOOTER -->
+    <div class="footer">
+      Confidential weekly status report prepared for the owner of 909 Baines Street, East Palo Alto.
+    </div>
+
+  </div>
+
+</body>
+</html>
