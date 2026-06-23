@@ -1,0 +1,454 @@
+<!DOCTYPE html>
+<html lang="en"><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1.0">
+<title>Graeham Watts &middot; Production Calendar &middot; Week of June 22-26, 2026</title>
+<link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;600;700;800&family=DM+Sans:wght@400;500;700&display=swap" rel="stylesheet">
+<script src="https://cdn.jsdelivr.net/npm/apexcharts@4.5.0"></script>
+<style>
+:root{color-scheme:light;--navy:#1B2A4A;--gold:#B8860B;--bg:#f4f5f7;--card:#fff;--text:#2d3748;--muted:#718096;--border:#e2e5ea;--radius:12px;}
+*{box-sizing:border-box;}body{margin:0;background:var(--bg);color:var(--text);font-family:'DM Sans',-apple-system,sans-serif;line-height:1.55;}
+h1,h2,h3,h4{font-family:'Plus Jakarta Sans',sans-serif;letter-spacing:-0.02em;color:var(--navy);}
+.container{max-width:1180px;margin:0 auto;padding:0 24px;}
+.hero{background:linear-gradient(135deg,var(--navy) 0%,#2a3a5d 100%);color:#fff;padding:36px 0 24px;}
+.hero h1{color:#fff;font-size:32px;margin:0 0 8px;font-weight:800;}.hero .sub{color:#cdd6e1;font-size:15px;margin-bottom:16px;}
+.chip-meta{background:rgba(255,255,255,0.12);padding:6px 14px;border-radius:20px;font-size:12px;font-weight:500;display:inline-block;margin:3px;}
+.chip-meta.gold{background:rgba(184,134,11,0.4);}
+.audience-wrap{background:var(--bg);position:sticky;top:0;z-index:50;padding:14px 0 6px;border-bottom:1px solid var(--border);}
+.audience-nav{display:grid;grid-template-columns:repeat(5,1fr);gap:10px;}
+@media(max-width:980px){.audience-nav{grid-template-columns:repeat(3,1fr);}}
+@media(max-width:640px){.audience-nav{grid-template-columns:repeat(2,1fr);}}
+.aud-btn{background:#fff;border:2px solid var(--border);border-radius:var(--radius);padding:12px 14px;cursor:pointer;transition:all 0.15s;text-align:left;font-family:inherit;display:block;width:100%;}
+.aud-btn:hover{transform:translateY(-2px);box-shadow:0 6px 16px rgba(0,0,0,0.08);}
+.aud-btn.aud-active{transform:translateY(-3px);box-shadow:0 10px 24px rgba(0,0,0,0.18);}
+.aud-research.aud-active{background:#1B2A4A;border-color:#1B2A4A;color:#fff;}
+.aud-diagram.aud-active{background:#6a1b9a;border-color:#6a1b9a;color:#fff;}
+.aud-calendar.aud-active{background:#9f1239;border-color:#9f1239;color:#fff;}
+.aud-video.aud-active{background:#dc2626;border-color:#dc2626;color:#fff;}
+.aud-blog.aud-active{background:#B8860B;border-color:#B8860B;color:#1B2A4A;}
+.aud-btn.aud-active .aud-label,.aud-btn.aud-active .aud-sub{color:inherit;}
+.aud-icon{font-size:20px;margin-bottom:4px;}.aud-label{font-family:'Plus Jakarta Sans',sans-serif;font-weight:800;color:var(--navy);font-size:14px;margin-bottom:3px;}
+.aud-sub{font-size:11px;color:var(--muted);}
+.aud-hidden{display:none !important;}
+.banner{background:#f0f7f0;border-left:4px solid #16a34a;color:#14532d;padding:14px 18px;border-radius:6px;margin:18px 0;font-size:14px;}
+.section{padding:28px 0;}.section h2{font-size:22px;margin:0 0 6px;}.section h3{margin:18px 0 8px;font-size:18px;}
+.section .lede{color:var(--muted);font-size:14px;margin-bottom:18px;}
+.src-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:12px;}
+.src-card{background:var(--card);padding:14px 16px;border-radius:8px;border-left:4px solid #16a34a;}
+.src-card.blocked{border-left-color:#dc2626;}
+.src-name{font-weight:700;color:var(--navy);font-size:14px;margin-bottom:4px;}.src-note{font-size:12px;color:var(--muted);}
+.chart-wrap{background:var(--card);padding:18px 20px;border-radius:10px;border:1px solid #e8eaed;margin:16px 0;}
+.chart-wrap h3{margin:0 0 12px;font-size:16px;}
+.live-badge{display:inline-block;background:#dcfce7;color:#166534;font-size:10px;font-weight:800;letter-spacing:0.5px;padding:2px 8px;border-radius:10px;margin-left:8px;vertical-align:middle;}
+.pending-badge{display:inline-block;background:#fee2e2;color:#b91c1c;font-size:10px;font-weight:800;letter-spacing:0.5px;padding:2px 8px;border-radius:10px;margin-left:8px;vertical-align:middle;}
+.calendar-grid{display:grid;grid-template-columns:repeat(5,1fr);gap:12px;margin:18px 0;}
+@media(max-width:980px){.calendar-grid{grid-template-columns:repeat(2,1fr);}}
+@media(max-width:520px){.calendar-grid{grid-template-columns:1fr;}}
+.cal-day{background:var(--card);padding:18px;border-radius:10px;border:1px solid #e8eaed;cursor:pointer;transition:all 0.18s;display:flex;flex-direction:column;gap:8px;font-family:inherit;text-align:left;width:100%;color:inherit;}
+.cal-day:hover{transform:translateY(-3px);box-shadow:0 10px 28px rgba(0,0,0,0.12);border-color:var(--gold);}
+.cal-day-name{font-weight:800;color:var(--navy);font-size:15px;}.cal-day-date{font-size:12px;color:var(--muted);}
+.cal-chip{display:inline-block;color:#fff;padding:3px 10px;border-radius:12px;font-size:10px;font-weight:700;letter-spacing:0.5px;}
+.cal-title{font-size:14px;font-weight:600;color:#2d3748;line-height:1.35;}
+.cal-target{font-size:11px;color:var(--muted);}.cal-score{font-size:11px;color:#16a34a;font-weight:700;}
+.topic-cards{display:grid;grid-template-columns:repeat(auto-fit,minmax(300px,1fr));gap:16px;margin:16px 0;}
+.topic-card{background:var(--card);border-radius:10px;border:1px solid #e8eaed;overflow:hidden;}
+.tc-head{padding:14px 16px;background:#f8fafc;}.tc-day{font-size:11px;color:var(--muted);font-weight:600;margin-right:8px;}
+.tc-chip{background:#e2e8f0;color:#4a5568;padding:2px 8px;border-radius:10px;font-size:10px;font-weight:700;}
+.tc-title{font-weight:700;color:var(--navy);font-size:14px;margin-top:6px;line-height:1.35;}
+.tc-body{padding:12px 16px;border-top:1px solid #edf2f7;}.tc-hook,.tc-data{font-size:13px;margin:0 0 8px;line-height:1.45;}
+.tc-actions{padding:12px 16px;display:flex;gap:8px;flex-wrap:wrap;border-top:1px solid #edf2f7;}
+.copy-btn{background:#fff;border:1.5px solid var(--navy);color:var(--navy);padding:7px 14px;border-radius:8px;font-size:12px;font-weight:700;cursor:pointer;font-family:inherit;transition:all 0.15s;}
+.copy-btn:hover{background:var(--navy);color:#fff;}
+.copy-btn-gold{border-color:var(--gold);color:var(--gold);}
+.copy-btn-gold:hover{background:var(--gold);color:#fff;}
+.flow{margin:18px 0;}.flow-row{display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:12px;margin-bottom:8px;}
+.flow-node{background:#fff;border:1px solid #e8eaed;border-radius:10px;padding:14px 16px;text-align:left;width:100%;display:block;font-family:inherit;color:inherit;font-size:13px;}
+.flow-node-num{display:inline-flex;width:26px;height:26px;background:var(--navy);color:#fff;border-radius:50%;align-items:center;justify-content:center;font-weight:800;font-size:12px;margin-right:8px;}
+.flow-node-title{font-weight:700;color:var(--navy);font-size:14px;font-family:'Plus Jakarta Sans',sans-serif;}
+.flow-node-kicker{display:block;font-size:11.5px;color:var(--muted);margin-top:6px;line-height:1.45;}
+.flow-node[data-color="data"]{border-left:3px solid #2563eb;}.flow-node[data-color="analysis"]{border-left:3px solid #7c3aed;}.flow-node[data-color="output"]{border-left:3px solid #16a34a;}
+.flow-arrow{text-align:center;color:#94a3b8;font-size:18px;margin:4px 0;}
+.tbl{width:100%;border-collapse:collapse;font-size:13px;margin-bottom:18px;}
+.tbl th,.tbl td{padding:8px 10px;border:1px solid #e2e8f0;text-align:left;}
+.tbl th{background:#f7fafc;color:var(--navy);font-weight:700;font-size:11px;text-transform:uppercase;letter-spacing:0.5px;}
+.tbl td.num{text-align:right;font-variant-numeric:tabular-nums;font-weight:600;}
+.tbl .highlight{background:#fffbeb;font-weight:700;}
+.mix-bar{display:flex;height:28px;border-radius:8px;overflow:hidden;margin:10px 0 18px;}
+.mix-tofu{background:#2563EB;}.mix-mofu{background:#9c6f10;}.mix-bofu{background:#9f1239;}
+.mix-bar > div{color:#fff;display:flex;align-items:center;justify-content:center;font-size:12px;font-weight:700;}
+.toast{position:fixed;bottom:24px;right:24px;background:#1B2A4A;color:#fff;padding:12px 20px;border-radius:10px;font-size:13px;font-weight:600;z-index:9999;opacity:0;transition:opacity 0.3s;pointer-events:none;}
+.toast.show{opacity:1;}
+.modal-backdrop{position:fixed;inset:0;background:rgba(15,23,42,0.55);backdrop-filter:blur(2px);display:flex;align-items:center;justify-content:center;padding:20px;z-index:9999;}
+.modal-backdrop[hidden]{display:none !important;}
+.modal{background:#fff;border-radius:14px;max-width:820px;width:100%;max-height:88vh;overflow:hidden;display:flex;flex-direction:column;box-shadow:0 24px 60px rgba(0,0,0,0.35);}
+.modal-head{background:var(--navy);color:#fff;padding:18px 26px;display:flex;align-items:center;justify-content:space-between;gap:14px;border-radius:14px 14px 0 0;}
+.modal-head h3{margin:0;font-size:18px;color:#fff;}.modal-close{background:none;border:none;color:#fff;font-size:22px;cursor:pointer;padding:0;}
+.modal-body{overflow-y:auto;padding:24px 26px;flex:1;}
+.freshness{background:#fff8e1;border:1px solid #f5d273;border-radius:8px;padding:14px 18px;margin:14px 0;font-size:13px;color:#5d4a1f;}
+.freshness strong{color:var(--navy);}
+</style></head>
+<body>
+
+<!-- SECTION 1: HERO + AUDIENCE NAV -->
+<div class="hero" data-audience="all">
+  <div class="container">
+    <h1>&#x1F4C5; Production Calendar &mdash; Week of June 22-26, 2026</h1>
+    <p class="sub">5 topics scored and sequenced for seller leads + SEO authority. Graeham Watts &middot; Intero Real Estate &middot; DRE# 01466876</p>
+    <div style="margin:18px 0 8px;padding:18px 20px;background:#fffbeb;border:1px solid #e2e5ea;border-left:4px solid #B8860B;border-radius:10px;"><div style="font-weight:800;color:#1B2A4A;font-size:15px;">&#9881;&#65039; Production Standards (in force)</div><div style="color:#718096;font-size:12.5px;margin:3px 0 12px;">Baked into the content engine. Apply to every video this week.</div><div style="display:grid;grid-template-columns:1fr 1fr;gap:10px 22px;"><div style="font-size:13px;color:#2d3748;line-height:1.5;"><b style="color:#B8860B;">&#9312; Audio:</b> Stop relying on <code>&lt;prosody&gt;</code> &mdash; ElevenLabs v2 ignores it. Normalize the spoken text: <b>no em-dashes</b>, end statements with a <b>period</b>, spell out numbers/prices. Delivery via bracket tags (<code>[excited]</code>) + stability.</div><div style="font-size:13px;color:#2d3748;line-height:1.5;"><b style="color:#B8860B;">&#9313; B-roll coverage:</b> Plan <b>~1 cutaway per 3&ndash;5s</b> of non-talking-head time &mdash; floors: short-form <b>8&ndash;14</b>, long-form <b>40+</b>. Tag each shot <code>[AI]/[STOCK]/[MAP]/[FILM]</code>.</div><div style="font-size:13px;color:#2d3748;line-height:1.5;"><b style="color:#B8860B;">&#9314; Avatar V:</b> HeyGen <b>Avatar V</b> is the default (best motion). No rendering on IV then redoing.</div><div style="font-size:13px;color:#2d3748;line-height:1.5;"><b style="color:#B8860B;">&#9315; First-frame QC:</b> For AI b-roll, generate + <b>approve the still BEFORE animating</b>. Locations must be the <b>real place</b> (Mapbox/stock/film), never a generic AI city.</div></div></div>
+    <div>
+      <span class="chip-meta">&#x1F4CD; East Palo Alto Primary</span>
+      <span class="chip-meta">&#x1F310; Peninsula Secondary</span>
+      <span class="chip-meta gold">&#x2605; Wed Cornerstone: Peninsula Inventory Shift</span>
+      <span class="chip-meta">Built: June 22, 2026</span>
+    </div>
+  </div>
+</div>
+<div class="audience-wrap">
+  <div class="container">
+    <div class="audience-nav">
+      <button class="aud-btn aud-research aud-active" onclick="setView('research')">
+        <div class="aud-icon">&#x1F50D;</div><div class="aud-label">Research</div><div class="aud-sub">Live data + signals</div>
+      </button>
+      <button class="aud-btn aud-diagram" onclick="setView('diagram')">
+        <div class="aud-icon">&#x2699;&#xFE0F;</div><div class="aud-label">Diagram</div><div class="aud-sub">10-step pipeline</div>
+      </button>
+      <button class="aud-btn aud-calendar" onclick="setView('calendar')">
+        <div class="aud-icon">&#x1F5D3;&#xFE0F;</div><div class="aud-label">Calendar</div><div class="aud-sub">5-day plan</div>
+      </button>
+      <button class="aud-btn aud-video" onclick="setView('video')">
+        <div class="aud-icon">&#x1F3A5;</div><div class="aud-label">Video</div><div class="aud-sub">Scripts + prompts</div>
+      </button>
+      <button class="aud-btn aud-blog" onclick="setView('blog')">
+        <div class="aud-icon">&#x270D;&#xFE0F;</div><div class="aud-label">Blog</div><div class="aud-sub">SEO briefs + prompts</div>
+      </button>
+    </div>
+  </div>
+</div>
+
+<!-- SECTION 2: RUN-NOTE BANNER -->
+<div class="container">
+  <div class="banner" data-audience="all">
+    <strong>Run note &mdash; June 22, 2026 (direct connections, no Windsor):</strong> Real data pulled this run &mdash;
+    <strong>Freddie Mac</strong> 30-yr rate 6.47% (Jun 18), <strong>Redfin</strong> EPA + Peninsula market stats, and public inventory data.
+    Two sources still need wiring: <strong>Google Search Console</strong> (direct SE Ranking connector returns a country-activation 403 &mdash; fix in its project settings) and <strong>IG/YT own-channel performance</strong> (needs a browser pull from YouTube Studio + Instagram insights now that Windsor's license has lapsed). Those two are flagged red below. Wednesday cornerstone (inventory shift) scores highest Opportunity (23/25).
+  </div>
+</div>
+
+<!-- SECTION 3: RESEARCH - LIVE DATA LAYER -->
+<div class="container">
+  <div class="section" data-audience="research">
+    <h2>&#x1F4CA; Research &mdash; Live Data Layer</h2>
+    <p class="lede">8-source intelligence grid. Green = real data pulled this run via direct connection. Red = source still needs wiring (with the exact fix noted).</p>
+    <div class="src-grid">
+      <div class="src-card"><div class="src-name">&#x1F7E2; Freddie Mac PMMS (Jun 18, 2026)</div><div class="src-note">30-yr fixed <strong>6.47%</strong>, down from 6.52% last week; 6.81% a year ago. 15-yr 5.81%. Anchors t2.</div></div>
+      <div class="src-card"><div class="src-name">&#x1F7E2; Redfin &mdash; East Palo Alto</div><div class="src-note">Median sale <strong>$1.089M</strong> (May 2026, +5.7% YOY). DOM <strong>~32 days</strong> vs 66 a year ago. Anchors t1.</div></div>
+      <div class="src-card"><div class="src-name">&#x1F7E2; Inventory &mdash; Months of Supply</div><div class="src-note">South Bay <strong>2.1 &rarr; 3.3 mo</strong> (Jan&rarr;Jun). San Mateo / Peninsula tighter at ~1.7 mo. Anchors t3.</div></div>
+      <div class="src-card"><div class="src-name">&#x1F7E2; Price-Reduction Trend</div><div class="src-note"><strong>~42%</strong> of Peninsula listings have reduced price; over a third in luxury. Anchors t4.</div></div>
+      <div class="src-card"><div class="src-name">&#x1F7E2; Redfin &mdash; Redwood City</div><div class="src-note">Median <strong>~$1.9M</strong>, DOM ~12 days, ~5 offers avg. Peninsula comparison context.</div></div>
+      <div class="src-card"><div class="src-name">&#x1F7E2; Reddit / Demand Signals</div><div class="src-note">Recurring: affordability at 6.47%, "is the market shifting?", seller price-cut regret, AB 1482 questions. Validates all 5 topics.</div></div>
+      <div class="src-card blocked"><div class="src-name">&#x1F534; Google Search Console</div><div class="src-note">Direct SE Ranking connector returns 403: country not active in the GSC project. FIX: activate the property/country in SE Ranking settings (or pull via console.google.com in Chrome). Using public query proxy meanwhile.</div></div>
+      <div class="src-card blocked"><div class="src-name">&#x1F534; IG + YouTube Own-Channel</div><div class="src-note">Windsor license lapsed Jun 7. FIX: pull live from YouTube Studio + Instagram insights via Chrome (pick a browser), or wire the YouTube Data API. Charts below are awaiting this.</div></div>
+    </div>
+  </div>
+</div>
+
+<!-- SECTION 4: PERFORMANCE / MARKET SIGNAL (ApexCharts) -->
+<div class="container">
+  <div class="section" data-audience="research">
+    <h2>&#x1F4C8; Market Signal</h2>
+    <p class="lede">First two charts are REAL data pulled this run. The third (own-channel engagement) is awaiting the YouTube Studio + Instagram pull.</p>
+    <div class="chart-wrap"><h3>30-Year Fixed Mortgage Rate, 2026 (Freddie Mac) <span class="live-badge">LIVE</span></h3><div id="rate-main"></div></div>
+    <div class="chart-wrap"><h3>Months of Supply &mdash; South Bay / Peninsula, 2026 <span class="live-badge">LIVE</span></h3><div id="inv-main"></div></div>
+    <div class="chart-wrap"><h3>Own-Channel Engagement Rate Per Post <span class="pending-badge">AWAITING IG/YT PULL</span></h3><div id="eng-main"></div></div>
+  </div>
+</div>
+
+<!-- SECTION 5: FULL WEEKLY RESEARCH DATA (7 tables) -->
+<div class="container">
+  <div class="section" data-audience="research">
+    <h2>&#x1F4CB; Full Weekly Research Data</h2>
+    <p class="lede">7 data tables. Market tables are real (Freddie Mac + Redfin, June 2026). Own-channel + GSC are flagged with the exact fix.</p>
+
+    <h3>1. IG Own-Channel Performance (Last 28 Days) <span class="pending-badge">PULL VIA CHROME</span></h3>
+    <table class="tbl">
+      <tr><th>Metric</th><th>Value</th><th>Notes</th></tr>
+      <tr><td>Reach / Impressions / Followers</td><td class="num">&mdash;</td><td>Pull from Instagram insights via Chrome (Windsor lapsed). Pick a browser logged into the Graeham Watts IG.</td></tr>
+    </table>
+
+    <h3>2. YT Own-Channel Performance (Last 28 Days) <span class="pending-badge">PULL VIA CHROME</span></h3>
+    <table class="tbl">
+      <tr><th>Metric</th><th>Value</th><th>Notes</th></tr>
+      <tr><td>Views / Watch time / Subs / CTR</td><td class="num">&mdash;</td><td>Pull from YouTube Studio Analytics via Chrome, or wire the YouTube Data API v3.</td></tr>
+    </table>
+
+    <h3>3. Topic-Targeted Queries (proxy &mdash; GSC connector 403)</h3>
+    <table class="tbl">
+      <tr><th>Query theme</th><th>Est. Demand</th><th>Intent</th><th>Funnel</th></tr>
+      <tr><td>east palo alto home equity 2026</td><td>Medium-High</td><td>Owner / seller</td><td>BOFU</td></tr>
+      <tr><td>bay area mortgage rates june 2026</td><td>High</td><td>Affordability</td><td>MOFU</td></tr>
+      <tr class="highlight"><td>peninsula housing inventory 2026</td><td>High</td><td>Market signal</td><td>MOFU</td></tr>
+      <tr><td>how to price my bay area home 2026</td><td>Medium-High</td><td>Seller decision</td><td>BOFU</td></tr>
+      <tr><td>ab 1482 rent cap 2026 california</td><td>High</td><td>Landlord</td><td>TOFU</td></tr>
+    </table>
+
+    <h3>4. Reddit Demand Signals (r/bayarea, r/RealEstate, r/FirstTimeHomeBuyer)</h3>
+    <table class="tbl">
+      <tr><th>Thread / Signal</th><th>Maps to Topic</th><th>Angle</th></tr>
+      <tr><td>"Owners who bought early are set, the rest of us feel locked out"</td><td>t1</td><td>Show what early EPA buyers are actually sitting on</td></tr>
+      <tr><td>"Is 6.5% the new normal, should I just buy?"</td><td>t2</td><td>Reframe buying power in a rebalancing market</td></tr>
+      <tr class="highlight"><td>"More listings sitting, is the Bay finally cooling?"</td><td>t3</td><td>Name the inventory shift with the supply numbers</td></tr>
+      <tr><td>"Seller dropped price twice, what did they do wrong"</td><td>t4</td><td>Tell the overpricing story with the 42% stat</td></tr>
+      <tr><td>"How much can my landlord raise rent this year?"</td><td>t5</td><td>Answer the AB 1482 cap plainly</td></tr>
+    </table>
+
+    <h3>5. Zillow Q+A / Buyer + Owner Questions (Bay Area)</h3>
+    <table class="tbl">
+      <tr><th>Question</th><th>Frequency</th><th>Maps to Topic</th></tr>
+      <tr><td>How much equity do I actually have right now?</td><td>High</td><td>t1</td></tr>
+      <tr><td>Can I still afford the Peninsula at 6.47%?</td><td>Very High</td><td>t2</td></tr>
+      <tr><td>Is more inventory a sign to wait?</td><td>Very High</td><td>t3</td></tr>
+      <tr class="highlight"><td>How do I know if my home is priced right?</td><td>Medium-High</td><td>t4</td></tr>
+      <tr><td>What is the rent increase limit this year?</td><td>Medium</td><td>t5</td></tr>
+    </table>
+
+    <h3>6. Market Stats - EPA + Peninsula (Redfin, June 2026) <span class="live-badge">LIVE</span></h3>
+    <table class="tbl">
+      <tr><th>Market</th><th>Median Sale</th><th>DOM</th><th>YOY</th><th>Note</th></tr>
+      <tr class="highlight"><td>East Palo Alto</td><td class="num">$1,089,348</td><td class="num">~32</td><td class="num">+5.7%</td><td>May 2026 (Redfin); DOM 32 vs 66 a year ago</td></tr>
+      <tr><td>Redwood City</td><td class="num">~$1.90M</td><td class="num">~12</td><td class="num">-10.4%</td><td>~5 offers avg (Redfin); high-price segment volatile</td></tr>
+      <tr><td>Palo Alto (context)</td><td class="num">~$3.2M</td><td class="num">~21</td><td>&mdash;</td><td>Moves fast even at high price</td></tr>
+      <tr><td>South Bay (context)</td><td class="num">~$1.157M</td><td>&mdash;</td><td>&mdash;</td><td>Median sold, June 2026</td></tr>
+    </table>
+
+    <h3>7. Convergence - Why Each Day Was Picked</h3>
+    <table class="tbl">
+      <tr><th>Day</th><th>Topic</th><th>Opp Score</th><th>Intent Score</th><th>Why This Day</th></tr>
+      <tr><td>Mon 6/22</td><td>EPA Mid-Year Equity</td><td class="num">21/25</td><td class="num">22/25</td><td>Equity/seller BOFU to open the week. EPA median up 5.7% YOY; mid-year is a natural equity-check moment.</td></tr>
+      <tr><td>Tue 6/23</td><td>Rates at 6.47%</td><td class="num">19/25</td><td class="num">18/25</td><td>Rate content lands early-week. Reframes buying power for affordability-anxious buyers.</td></tr>
+      <tr class="highlight"><td>Wed 6/24</td><td>Peninsula Inventory Shift (CORNERSTONE)</td><td class="num">23/25</td><td class="num">20/25</td><td>Highest Opp, broadest cross-funnel audience. Months of supply 2.1 to 3.3 is the week's biggest data story.</td></tr>
+      <tr><td>Thu 6/25</td><td>Price Right the First Time</td><td class="num">21/25</td><td class="num">22/25</td><td>BOFU seller content Thursday. The 42% price-reduction stat is the hook.</td></tr>
+      <tr><td>Fri 6/26</td><td>AB 1482 for Landlords</td><td class="num">17/25</td><td class="num">15/25</td><td>Evergreen TOFU explainer. High search, low competition; feeds landlord-to-seller conversations.</td></tr>
+    </table>
+
+    <h3>Macro Rates (Freddie Mac PMMS, June 18 2026) <span class="live-badge">LIVE</span></h3>
+    <table class="tbl">
+      <tr><th>Product</th><th>Rate</th><th>WOW</th><th>YOY</th></tr>
+      <tr class="highlight"><td>30-Year Fixed</td><td class="num">6.47%</td><td>-0.05%</td><td>6.81% a year ago</td></tr>
+      <tr><td>15-Year Fixed</td><td class="num">5.81%</td><td>-0.03%</td><td>&mdash;</td></tr>
+    </table>
+  </div>
+</div>
+
+<!-- SECTION 6: FRESHNESS CONSTRAINTS + CITATIONS -->
+<div class="container">
+  <div class="section" data-audience="research">
+    <h2>&#x1F4CE; Freshness Constraints &amp; Citations</h2>
+    <div class="freshness">
+      <strong>Data freshness window:</strong> Freddie Mac PMMS week of June 18, 2026. Redfin EPA + Redwood City market data May/June 2026. Inventory (months of supply) Jan&ndash;June 2026, public market reports.<br><br>
+      <strong>Still to wire:</strong> Google Search Console (SE Ranking connector 403 &mdash; activate the property/country in settings) and IG/YT own-channel (pull from YouTube Studio + Instagram via Chrome). For property-level transaction precision, pull MyMLS Matrix stats via the mls-matrix-scraper (Chrome, logged in).<br><br>
+      <strong>Citations:</strong><br>
+      &bull; Freddie Mac PMMS: <a href="https://www.freddiemac.com/pmms" target="_blank" rel="noopener">freddiemac.com/pmms</a><br>
+      &bull; Redfin East Palo Alto market: <a href="https://www.redfin.com/city/5401/CA/East-Palo-Alto/housing-market" target="_blank" rel="noopener">redfin.com</a><br>
+      &bull; Redfin Redwood City market: <a href="https://www.redfin.com/city/15525/CA/Redwood-City/housing-market" target="_blank" rel="noopener">redfin.com</a><br>
+      &bull; MLSListings (transaction-level): <a href="https://www.mlslistings.com" target="_blank" rel="noopener">mlslistings.com</a><br><br>
+      <strong>AEO note:</strong> Preface every statistic with "As of June 2026..." in published content.
+    </div>
+  </div>
+</div>
+
+<!-- SECTION 7: PIPELINE DIAGRAM (10-Step) -->
+<div class="container">
+  <div class="section" data-audience="diagram">
+    <h2>&#x2699;&#xFE0F; 10-Step Content Production Pipeline</h2>
+    <p class="lede">From weekly scoring through publish and GHL keyword capture.</p>
+    <div class="flow">
+      <div class="flow-row">
+        <div class="flow-node" data-color="data"><span class="flow-node-num">1</span><span class="flow-node-title">Opportunity Scoring</span><span class="flow-node-kicker">content-calendar scores 12-15 candidate topics across 5 axes. Top 5 by Opp score enter the weekly plan.</span></div>
+        <div class="flow-node" data-color="data"><span class="flow-node-num">2</span><span class="flow-node-title">Live Data Pull</span><span class="flow-node-kicker">Direct connections: Freddie Mac rate, Redfin market, inventory, Reddit demand. GSC + own-channel flagged when a source is down.</span></div>
+        <div class="flow-node" data-color="data"><span class="flow-node-num">3</span><span class="flow-node-title">BOFU Intent Score</span><span class="flow-node-kicker">content-creation-engine scores each topic 0-25 for DECISION / CONSIDERATION / AWARENESS classification.</span></div>
+      </div>
+      <div class="flow-arrow">&#x2193;</div>
+      <div class="flow-row">
+        <div class="flow-node" data-color="analysis"><span class="flow-node-num">4</span><span class="flow-node-title">Hook + Script Draft</span><span class="flow-node-kicker">Peter copies SSML prompt - generates ElevenLabs-ready SSML for voice cloning.</span></div>
+        <div class="flow-node" data-color="analysis"><span class="flow-node-num">5</span><span class="flow-node-title">Video Prompt</span><span class="flow-node-kicker">Peter copies Video Prompt - full long-form + short-form scripts + editing notes + AI b-roll prompts.</span></div>
+        <div class="flow-node" data-color="analysis"><span class="flow-node-num">6</span><span class="flow-node-title">Blog Prompt</span><span class="flow-node-kicker">John copies Blog Prompt - full SEO blog post with AEO cite-ready statement + GMB post.</span></div>
+      </div>
+      <div class="flow-arrow">&#x2193;</div>
+      <div class="flow-row">
+        <div class="flow-node" data-color="output"><span class="flow-node-num">7</span><span class="flow-node-title">HeyGen Render</span><span class="flow-node-kicker">heygen-video skill renders Graeham avatar video using SSML + approved script.</span></div>
+        <div class="flow-node" data-color="output"><span class="flow-node-num">8</span><span class="flow-node-title">Higgsfield B-Roll</span><span class="flow-node-kicker">higgsfield-video generates cinematic AI b-roll clips from prompts in the video package.</span></div>
+        <div class="flow-node" data-color="output"><span class="flow-node-num">9</span><span class="flow-node-title">Publish + Post</span><span class="flow-node-kicker">Video posted to YT + IG + TikTok. Blog published to WordPress. GMB post scheduled.</span></div>
+      </div>
+      <div class="flow-arrow">&#x2193;</div>
+      <div class="flow-row">
+        <div class="flow-node" data-color="output"><span class="flow-node-num">10</span><span class="flow-node-title">GHL Keyword Capture</span><span class="flow-node-kicker">CTA in each piece triggers a GHL workflow on the comment keyword (EQUITY / COSTS / OPTIONS / PRICING / 1482). Lead enters pipeline.</span></div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- SECTION 8: CALENDAR - 5 DAY-CARDS -->
+<div class="container">
+  <div class="section" data-audience="calendar">
+    <h2>&#x1F5D3;&#xFE0F; Weekly Calendar &mdash; June 22-26, 2026</h2>
+    <p class="lede">Click any day card for full topic detail. Wednesday is the cornerstone long-form anchor.</p>
+    <div class="mix-bar">
+      <div class="mix-bofu" style="width:40%">BOFU 40%</div>
+      <div class="mix-mofu" style="width:40%">MOFU 40%</div>
+      <div class="mix-tofu" style="width:20%">TOFU 20%</div>
+    </div>
+    <div class="calendar-grid">
+        <button class="cal-day" onclick="openTopicModal('t1')"><div><span class="cal-day-name">Monday</span> <span class="cal-day-date">June 22</span></div><span class="cal-chip" style="background:#9f1239">BOFU</span><div class="cal-title">How Much Equity East Palo Alto Owners Are Sitting On in Mid-2026</div><div class="cal-target">EPA owners, especially long-tenure; potential sellers / move-up</div><div class="cal-score">Opp: 21/25 &middot; Intent: 22/25 &middot; GHL: EQUITY</div></button>
+        <button class="cal-day" onclick="openTopicModal('t2')"><div><span class="cal-day-name">Tuesday</span> <span class="cal-day-date">June 23</span></div><span class="cal-chip" style="background:#9c6f10">MOFU</span><div class="cal-title">Mortgage Rates Eased to 6.47% - What It Means for Peninsula Buyers</div><div class="cal-target">First-time and move-up buyers calculating affordability</div><div class="cal-score">Opp: 19/25 &middot; Intent: 18/25 &middot; GHL: COSTS</div></button>
+        <button class="cal-day" onclick="openTopicModal('t3')"><div><span class="cal-day-name">Wednesday</span> <span class="cal-day-date">June 24</span></div><span class="cal-chip" style="background:#7c3aed">CORNERSTONE</span><div class="cal-title">Peninsula Inventory Is Climbing - Is the Market Finally Shifting?</div><div class="cal-target">Buyers and sellers trying to read current market conditions</div><div class="cal-score">Opp: 23/25 &middot; Intent: 20/25 &middot; GHL: OPTIONS</div></button>
+        <button class="cal-day" onclick="openTopicModal('t4')"><div><span class="cal-day-name">Thursday</span> <span class="cal-day-date">June 25</span></div><span class="cal-chip" style="background:#9f1239">BOFU</span><div class="cal-title">42% of Peninsula Listings Cut Price - How to Price Right the First Time</div><div class="cal-target">Sellers preparing to list in the next 30-90 days</div><div class="cal-score">Opp: 21/25 &middot; Intent: 22/25 &middot; GHL: PRICING</div></button>
+        <button class="cal-day" onclick="openTopicModal('t5')"><div><span class="cal-day-name">Friday</span> <span class="cal-day-date">June 26</span></div><span class="cal-chip" style="background:#2563eb">TOFU</span><div class="cal-title">AB 1482 Explained for Bay Area Landlords (2026 Update)</div><div class="cal-target">Small and accidental landlords; feeder to listing/relocation</div><div class="cal-score">Opp: 17/25 &middot; Intent: 15/25 &middot; GHL: 1482</div></button>
+    </div>
+  </div>
+</div>
+
+<!-- SECTION 9: VIDEO CONTENT (Peter) -->
+<div class="container">
+  <div class="section" data-audience="video">
+    <h2>&#x1F3A5; Video Content &mdash; Copy Prompts for Peter</h2>
+    <p class="lede">Copy SSML for the ElevenLabs voice clone, or copy the Video Production Prompt for scripting. All prose prompts include HUMANIZER RULES, a timing self-check, and b-roll suggestions.</p>
+    <div class="topic-cards">
+      <div class="topic-card" data-audience="video"><div class="tc-head" style="border-left:4px solid #9f1239"><span class="tc-day">Monday June 22</span> <span class="tc-chip">BOFU</span><div class="tc-title">How Much Equity East Palo Alto Owners Are Sitting On in Mid-2026</div></div><div class="tc-body"><p class="tc-hook"><strong>Hook:</strong> If you bought in East Palo Alto before 2021, you are probably sitting on more equity than you think. Rates near six and a half percent have owners feeling stuck. The equity tells a very different story.</p><p class="tc-data"><strong>Data:</strong> EPA median sale $1,089,348, up 5.7% year over year (Redfin, May 2026). Homes sell in about 32 days now versus 66 a year ago. Pair with the free equity-update CTA (GHL keyword EQUITY).</p></div><div class="tc-actions"><button class="copy-btn" onclick="copyData('t1','ssml')">&#x1F4CB; Copy SSML</button><button class="copy-btn copy-btn-gold" onclick="copyData('t1','prod_video')">&#x1F3AC; Copy Video Prompt</button></div></div>
+      <div class="topic-card" data-audience="video"><div class="tc-head" style="border-left:4px solid #9c6f10"><span class="tc-day">Tuesday June 23</span> <span class="tc-chip">MOFU</span><div class="tc-title">Mortgage Rates Eased to 6.47% - What It Means for Peninsula Buyers</div></div><div class="tc-body"><p class="tc-hook"><strong>Hook:</strong> The thirty year fixed just eased to six point four seven percent. Before you decide that prices you out of the Peninsula, here is what a rebalancing market changes about your actual buying power.</p><p class="tc-data"><strong>Data:</strong> 30-yr 6.47% (Freddie Mac Jun 18), down from 6.52% the prior week and 6.81% a year ago. Rising inventory means less bidding-war pressure. GHL keyword COSTS.</p></div><div class="tc-actions"><button class="copy-btn" onclick="copyData('t2','ssml')">&#x1F4CB; Copy SSML</button><button class="copy-btn copy-btn-gold" onclick="copyData('t2','prod_video')">&#x1F3AC; Copy Video Prompt</button></div></div>
+      <div class="topic-card" data-audience="video"><div class="tc-head" style="border-left:4px solid #7c3aed"><span class="tc-day">Wednesday June 24</span> <span class="tc-chip">CORNERSTONE</span><div class="tc-title">Peninsula Inventory Is Climbing - Is the Market Finally Shifting?</div></div><div class="tc-body"><p class="tc-hook"><strong>Hook:</strong> Months of supply in the South Bay went from about two to over three since January. That is the biggest shift in years. Here is what it actually means if you are buying or selling right now.</p><p class="tc-data"><strong>Data:</strong> South Bay months of supply 2.1 (Jan) to 3.3 (Jun 2026). San Mateo / Peninsula tighter at ~1.7 mo. Rebalancing, still not a buyer's market historically. GHL keyword OPTIONS.</p></div><div class="tc-actions"><button class="copy-btn" onclick="copyData('t3','ssml')">&#x1F4CB; Copy SSML</button><button class="copy-btn copy-btn-gold" onclick="copyData('t3','prod_video')">&#x1F3AC; Copy Video Prompt</button></div></div>
+      <div class="topic-card" data-audience="video"><div class="tc-head" style="border-left:4px solid #9f1239"><span class="tc-day">Thursday June 25</span> <span class="tc-chip">BOFU</span><div class="tc-title">42% of Peninsula Listings Cut Price - How to Price Right the First Time</div></div><div class="tc-body"><p class="tc-hook"><strong>Hook:</strong> Nearly half of Peninsula listings have taken a price cut. In a rebalancing market, overpricing costs more than the discount you were trying to avoid. Here is how to price right on day one.</p><p class="tc-data"><strong>Data:</strong> ~42% of Peninsula listings have reduced price (over a third in luxury). Correctly priced homes still sell well. Pull current DOM/list-to-sale from MLS before quoting. GHL keyword PRICING.</p></div><div class="tc-actions"><button class="copy-btn" onclick="copyData('t4','ssml')">&#x1F4CB; Copy SSML</button><button class="copy-btn copy-btn-gold" onclick="copyData('t4','prod_video')">&#x1F3AC; Copy Video Prompt</button></div></div>
+      <div class="topic-card" data-audience="video"><div class="tc-head" style="border-left:4px solid #2563eb"><span class="tc-day">Friday June 26</span> <span class="tc-chip">TOFU</span><div class="tc-title">AB 1482 Explained for Bay Area Landlords (2026 Update)</div></div><div class="tc-body"><p class="tc-hook"><strong>Hook:</strong> If you own a rental in the Bay Area, AB 1482 caps how much you can raise the rent this year. Here is the 2026 number, who is exempt, and the mistakes that get landlords in trouble.</p><p class="tc-data"><strong>Data:</strong> AB 1482 caps annual increases at 5 percent plus local CPI, with a hard ceiling of 10 percent. Confirm the current CPI figure for the region before publishing. GHL keyword 1482.</p></div><div class="tc-actions"><button class="copy-btn" onclick="copyData('t5','ssml')">&#x1F4CB; Copy SSML</button><button class="copy-btn copy-btn-gold" onclick="copyData('t5','prod_video')">&#x1F3AC; Copy Video Prompt</button></div></div>
+    </div>
+  </div>
+</div>
+
+<!-- SECTION 10: BLOG CONTENT (John) -->
+<div class="container">
+  <div class="section" data-audience="blog">
+    <h2>&#x270D;&#xFE0F; Blog Content &mdash; Copy Prompts for John</h2>
+    <p class="lede">Copy the Blog Brief for the outline + target keyword + AEO statement, or copy the full Blog Production Prompt. All prose prompts include HUMANIZER RULES.</p>
+    <div class="topic-cards">
+      <div class="topic-card" data-audience="blog"><div class="tc-head" style="border-left:4px solid #9f1239"><span class="tc-day">Monday June 22</span> <span class="tc-chip">BOFU</span><div class="tc-title">How Much Equity East Palo Alto Owners Are Sitting On in Mid-2026</div></div><div class="tc-body"><p class="tc-hook"><strong>Target keyword:</strong> east palo alto home equity 2026</p><p class="tc-data"><strong>Angle:</strong> EPA median $1.089M, up 5.7% YOY. Help long-tenure owners see their real equity and the move-up math. CTA to the free equity update.</p></div><div class="tc-actions"><button class="copy-btn" onclick="copyData('t1','blog_brief')">&#x1F4CB; Copy Blog Brief</button><button class="copy-btn copy-btn-gold" onclick="copyData('t1','prod_blog')">&#x270D;&#xFE0F; Copy Blog Prompt</button></div></div>
+      <div class="topic-card" data-audience="blog"><div class="tc-head" style="border-left:4px solid #9c6f10"><span class="tc-day">Tuesday June 23</span> <span class="tc-chip">MOFU</span><div class="tc-title">Mortgage Rates Eased to 6.47% - What It Means for Peninsula Buyers</div></div><div class="tc-body"><p class="tc-hook"><strong>Target keyword:</strong> bay area mortgage rates june 2026</p><p class="tc-data"><strong>Angle:</strong> Rate eased to 6.47%. A calmer market can beat a lower rate in a bidding war.</p></div><div class="tc-actions"><button class="copy-btn" onclick="copyData('t2','blog_brief')">&#x1F4CB; Copy Blog Brief</button><button class="copy-btn copy-btn-gold" onclick="copyData('t2','prod_blog')">&#x270D;&#xFE0F; Copy Blog Prompt</button></div></div>
+      <div class="topic-card" data-audience="blog"><div class="tc-head" style="border-left:4px solid #7c3aed"><span class="tc-day">Wednesday June 24</span> <span class="tc-chip">CORNERSTONE</span><div class="tc-title">Peninsula Inventory Is Climbing - Is the Market Finally Shifting?</div></div><div class="tc-body"><p class="tc-hook"><strong>Target keyword:</strong> peninsula housing inventory 2026</p><p class="tc-data"><strong>Angle:</strong> Cornerstone explainer. Define months-of-supply, show the 2.1 to 3.3 shift, what it means for each side.</p></div><div class="tc-actions"><button class="copy-btn" onclick="copyData('t3','blog_brief')">&#x1F4CB; Copy Blog Brief</button><button class="copy-btn copy-btn-gold" onclick="copyData('t3','prod_blog')">&#x270D;&#xFE0F; Copy Blog Prompt</button></div></div>
+      <div class="topic-card" data-audience="blog"><div class="tc-head" style="border-left:4px solid #9f1239"><span class="tc-day">Thursday June 25</span> <span class="tc-chip">BOFU</span><div class="tc-title">42% of Peninsula Listings Cut Price - How to Price Right the First Time</div></div><div class="tc-body"><p class="tc-hook"><strong>Target keyword:</strong> how to price my bay area home 2026</p><p class="tc-data"><strong>Angle:</strong> The 42% price-cut stat. Walk through the three-strategy pricing framework. CTA to a pricing consult.</p></div><div class="tc-actions"><button class="copy-btn" onclick="copyData('t4','blog_brief')">&#x1F4CB; Copy Blog Brief</button><button class="copy-btn copy-btn-gold" onclick="copyData('t4','prod_blog')">&#x270D;&#xFE0F; Copy Blog Prompt</button></div></div>
+      <div class="topic-card" data-audience="blog"><div class="tc-head" style="border-left:4px solid #2563eb"><span class="tc-day">Friday June 26</span> <span class="tc-chip">TOFU</span><div class="tc-title">AB 1482 Explained for Bay Area Landlords (2026 Update)</div></div><div class="tc-body"><p class="tc-hook"><strong>Target keyword:</strong> ab 1482 rent cap 2026</p><p class="tc-data"><strong>Angle:</strong> Plain-English explainer: the 2026 cap, exemptions, notice rules, common mistakes. Evergreen SEO base.</p></div><div class="tc-actions"><button class="copy-btn" onclick="copyData('t5','blog_brief')">&#x1F4CB; Copy Blog Brief</button><button class="copy-btn copy-btn-gold" onclick="copyData('t5','prod_blog')">&#x270D;&#xFE0F; Copy Blog Prompt</button></div></div>
+    </div>
+  </div>
+</div>
+
+<div class="modal-backdrop" id="topicModal" hidden>
+  <div class="modal">
+    <div class="modal-head"><h3 id="modalTitle">Topic Detail</h3><button class="modal-close" onclick="closeModal()">&#x2715;</button></div>
+    <div class="modal-body" id="modalBody"></div>
+  </div>
+</div>
+<div class="toast" id="toast">Copied!</div>
+
+<script>
+var HUMANIZER = "\n\nHUMANIZER RULES (apply throughout the output): Write like a person actually talks. No em-dashes anywhere. Vary sentence length on purpose. Ban these words: leverage, robust, elevate, unlock, navigate, landscape, testament, tapestry, realm, delve, bustling, dive in. No rule-of-three padding. No 'it is not just X, it is Y'. No 'in today's market' filler. No vague 'experts say' or 'studies show' without a named source. End statements with a period, never an uptalk question. Spell out spoken numbers and prices. Read the final draft aloud once and cut anything you would not actually say to a client.";
+
+var COPY_DATA = {
+  t1: {
+    ssml: "[warm] If you bought a home in East Palo Alto before twenty twenty one, listen up. [confident] Rates are near six and a half percent right now, and a lot of owners feel like they are stuck. But here is the part most people miss. The median East Palo Alto home is now around one million eighty nine thousand dollars, up almost six percent in the last year. The equity you have built is real, and it is probably bigger than you think. [calm] That equity is what moves you up, or buys the second property, or just gives you options. Before you assume you cannot move, let us actually look at your number. Comment the word EQUITY and I will send you a free mid-year equity update on your place. No pressure. Just the real figure.",
+    prod_video: "Write a full video production package for a BOFU equity-focused piece titled 'How Much Equity East Palo Alto Owners Are Sitting On in Mid-2026'. Deliver: (1) a 45-60s short-form script and a 4-6 min long-form script, both opening on the hook that owners feel stuck at 6.47% but their equity says otherwise; (2) inline shot direction tags [TALKING HEAD], [B-ROLL], [MAP], [TEXT OVERLAY], with at least 8 cutaways for short-form and 40+ for long-form; (3) editing notes for Peter (pacing, on-screen equity-math callout, thumbnail concept); (4) three AI b-roll prompts of real East Palo Alto locations (Mapbox/stock/film, never a generic AI city); (5) the CTA: comment EQUITY for a free mid-year equity update. Real data to use: EPA median sale $1,089,348, up 5.7% YOY, DOM ~32 days vs 66 a year ago (Redfin, May 2026). For a specific owner's equity figure, pull their purchase data; tag [VERIFY] where a personalized number goes." + HUMANIZER,
+    blog_brief: "Blog brief. Title options: (1) How Much Equity East Palo Alto Homeowners Have in Mid-2026, (2) Feeling Stuck at 6.47%? Your East Palo Alto Equity May Say Otherwise. Target keyword: east palo alto home equity 2026. Outline: intro (the stuck feeling vs the equity reality), how equity built since 2019-2021, what owners can do with it (move-up, HELOC, sell-and-rightsize), how to get an accurate number, CTA to free equity update. Real data: EPA median $1,089,348, up 5.7% YOY (Redfin, May 2026). AEO cite-ready statement: 'As of June 2026, the median East Palo Alto home sold for about $1.09 million, up 5.7% year over year.' Add a 600-word draft and a short GMB post." + HUMANIZER,
+    prod_blog: "Write a full SEO blog post (900-1100 words) titled 'How Much Equity East Palo Alto Owners Are Sitting On in Mid-2026'. Target keyword: east palo alto home equity 2026. Include H2 sections, one AEO cite-ready statement prefaced with 'As of June 2026' using the $1.09M median (Redfin), an internal-link suggestion to the home-value page, and a closing CTA to the free equity update. End with a 3-sentence GMB post." + HUMANIZER
+  },
+  t2: {
+    ssml: "[curious] The thirty year fixed just eased to six point four seven percent. [calm] And I know what that feels like if you are trying to buy on the Peninsula. It still feels like the door is closing. But here is what changed. There are more homes on the market than there were in January. Which means fewer bidding wars, more room to negotiate, and more time to think. [confident] A slightly higher rate in a calmer market can actually beat a lower rate when you are fighting ten other offers. Want me to run your real numbers. Comment the word COSTS and I will walk you through it.",
+    prod_video: "Write a full video production package for a MOFU affordability piece titled 'Mortgage Rates Eased to 6.47% - What It Means for Peninsula Buyers'. Deliver a 45-60s short and a 4-5 min long-form script. Open on the hook that 6.47% still feels like the door closing, then reframe with rising inventory and reduced bidding pressure. Include inline shot tags, 8+ short-form cutaways / 40+ long-form, editing notes, three AI b-roll prompts of real Peninsula locations, and the CTA to comment COSTS for a buying-power breakdown. Real data: 30-yr 6.47% (Freddie Mac Jun 18 2026), down from 6.52% prior week, 6.81% a year ago." + HUMANIZER,
+    blog_brief: "Blog brief. Title options: (1) Peninsula Buying Power at 6.47%: What Actually Changed, (2) Mortgage Rates Eased to 6.47% - Why a Calmer Market May Help You. Target keyword: bay area mortgage rates june 2026. Outline: the rate move, the inventory counterweight, rate vs competition math, strategies (rate buydown, negotiation, timing), CTA. AEO statement: 'As of June 18, 2026, the 30-year fixed mortgage rate is 6.47%, down from 6.52% the prior week.' Include a 600-word draft and a GMB post." + HUMANIZER,
+    prod_blog: "Write a full SEO blog post (900-1100 words) titled 'Mortgage Rates Eased to 6.47% - What It Means for Peninsula Buyers'. Target keyword: bay area mortgage rates june 2026. H2 sections, one AEO statement prefaced 'As of June 2026' with the 6.47% figure, internal link to a buyer-resources page, CTA to comment COSTS. End with a GMB post." + HUMANIZER
+  },
+  t3: {
+    ssml: "[engaged] Something just changed in the Peninsula housing market, and almost nobody is talking about it the right way. [confident] Back in January, the South Bay had about two months of supply. Right now it is over three. That is the biggest shift we have seen in years. [calm] Now, before buyers celebrate and sellers panic, let me be clear. Three months is still not a buyer's market by any historical measure, and the Peninsula itself is even tighter, closer to one and a half months. But it does mean more choice, a little more patience, and a little more leverage at the table. If you want to know what this means for your specific situation, comment the word OPTIONS. I will break it down for you.",
+    prod_video: "Write a full video production package for the WEEK CORNERSTONE, a TOFU/MOFU explainer titled 'Peninsula Inventory Is Climbing - Is the Market Finally Shifting?'. This is the long-form anchor, so make the long-form script 6-8 minutes plus a 60s short. Open on the hook that South Bay months of supply went from about two to over three since January. Define months-of-supply simply, show the shift, then give the honest read for both buyers and sellers (still not a buyer's market historically; Peninsula/San Mateo even tighter at ~1.7 mo). Include inline shot tags, 12+ short cutaways / 50+ long-form, a simple animated supply chart note for Peter, editing notes, three AI b-roll prompts of real Peninsula locations, and the CTA to comment OPTIONS. Real data: South Bay 2.1 (Jan) to 3.3 (Jun 2026) months of supply; San Mateo ~1.7 mo." + HUMANIZER,
+    blog_brief: "Blog brief (CORNERSTONE, longest piece of the week). Title options: (1) Peninsula Housing Inventory Is Rising in 2026 - What It Actually Means, (2) Is the Bay Area Market Shifting? Read the Inventory First. Target keyword: peninsula housing inventory 2026. Outline: what months-of-supply means, the Jan-to-June shift (2.1 to 3.3 in the South Bay), why it is not a buyer's market yet, what changes for buyers, what changes for sellers, what to watch next. AEO statement: 'As of June 2026, South Bay months of housing supply rose from 2.1 in January to about 3.3.' 900-word draft + GMB post." + HUMANIZER,
+    prod_blog: "Write the cornerstone SEO blog post (1300-1600 words) titled 'Peninsula Inventory Is Climbing - Is the Market Finally Shifting?'. Target keyword: peninsula housing inventory 2026. Use clear H2/H3 structure, a short FAQ block for AEO, one cite-ready statement prefaced 'As of June 2026' with the 2.1 to 3.3 figure, internal links to the buyer and seller resource pages, and a CTA to comment OPTIONS. End with a GMB post." + HUMANIZER
+  },
+  t4: {
+    ssml: "[direct] Here is a hard truth for anyone thinking about selling on the Peninsula this summer. [calm] Almost half of the listings out there right now have already taken a price cut. And nearly every one of them started with the same mistake. They priced on hope instead of evidence. In a market that is rebalancing, overpricing does not get you more. It gets you days on market, a stale listing, and usually a final price below where you should have started. [confident] Pricing right on day one is the whole game. If you want a real pricing strategy for your home, not a guess, comment the word PRICING and let us talk.",
+    prod_video: "Write a full video production package for a BOFU seller piece titled '42% of Peninsula Listings Cut Price - How to Price Right the First Time'. Deliver a 45-60s short and a 4-6 min long-form. Open on the hook that nearly half of listings have cut price and they share one mistake: pricing on hope. Explain the cost of overpricing in a rebalancing market and walk through the three-strategy pricing framework (aggressive, market, aspirational). Include inline shot tags, 8+ short cutaways / 40+ long-form, editing notes, three AI b-roll prompts of real Peninsula neighborhoods, and the CTA to comment PRICING. Real data: ~42% of Peninsula listings have reduced price, over a third in luxury (June 2026). Pull specific DOM/list-to-sale from MLS before quoting; tag [VERIFY MLS]." + HUMANIZER,
+    blog_brief: "Blog brief. Title options: (1) Why 42% of Peninsula Sellers Cut Price in 2026 (and How to Avoid It), (2) Price Right the First Time: A Peninsula Seller's Guide. Target keyword: how to price my bay area home 2026. Outline: the price-cut trend, why overpricing backfires, the three-strategy framework, signs you are priced wrong, how a CMA fixes it, CTA to a pricing consult. AEO statement: 'As of June 2026, about 42% of Peninsula listings have reduced their price.' 700-word draft + GMB post." + HUMANIZER,
+    prod_blog: "Write a full SEO blog post (1000-1200 words) titled '42% of Peninsula Listings Cut Price - How to Price Right the First Time'. Target keyword: how to price my bay area home 2026. H2 sections, the three-strategy pricing framework, one AEO statement prefaced 'As of June 2026' with the 42% figure, internal link to the CMA/home-value page, CTA to comment PRICING. End with a GMB post." + HUMANIZER
+  },
+  t5: {
+    ssml: "[friendly] If you own a rental anywhere in the Bay Area, this one is for you. [calm] AB fourteen eighty two caps how much you can raise the rent each year. The limit is five percent plus your local inflation number, and it can never go above ten percent total. A lot of landlords get this wrong, and a wrong notice can cost you. [confident] There are also exemptions, like most single family homes that are not owned by a corporation, as long as you give the right written notice. If you are not sure whether your property is covered, comment the word fourteen eighty two and I will point you to the right answer.",
+    prod_video: "Write a full video production package for a TOFU educational piece titled 'AB 1482 Explained for Bay Area Landlords (2026 Update)'. Deliver a 45-60s short and a 3-4 min long-form. Open on the hook that AB 1482 caps annual rent increases and getting it wrong is costly. Cover: the cap (5 percent plus local CPI, max 10 percent), who is exempt (most single-family not corporate-owned, with proper notice), notice requirements, and common mistakes. Include inline shot tags, 8+ short cutaways / 30+ long-form, editing notes, three AI b-roll prompts, and the CTA to comment 1482. Tag [VERIFY CPI] for the current local inflation figure; do not state a final percentage cap without it." + HUMANIZER,
+    blog_brief: "Blog brief. Title options: (1) AB 1482 in 2026: The Bay Area Landlord's Plain-English Guide, (2) How Much Can You Raise Rent in 2026? AB 1482 Explained. Target keyword: ab 1482 rent cap 2026. Outline: what AB 1482 is, the 2026 cap formula (5% + CPI, max 10%), who is exempt, notice rules, penalties for getting it wrong, FAQ. AEO statement: 'As of June 2026, AB 1482 caps most California annual rent increases at 5 percent plus local CPI, not to exceed 10 percent.' 800-word draft + GMB post. Tag [VERIFY CPI] for the exact figure." + HUMANIZER,
+    prod_blog: "Write a full SEO blog post (1000-1300 words) titled 'AB 1482 Explained for Bay Area Landlords (2026 Update)'. Target keyword: ab 1482 rent cap 2026. Use H2/H3 plus an FAQ block for AEO, one cite-ready statement prefaced 'As of June 2026', internal link to a landlord/relocation resource, and a soft CTA to comment 1482. Tag [VERIFY CPI] where the inflation figure belongs. End with a GMB post." + HUMANIZER
+  }
+};
+
+var TOPIC_DATA = {
+  t1: {day:'Monday',date:'June 22',title:'How Much Equity East Palo Alto Owners Are Sitting On in Mid-2026',funnel:'BOFU',ghl:'EQUITY',hook:'Owners feel stuck at 6.47%, but the equity built since before 2021 says otherwise.',data:'EPA median $1,089,348, up 5.7% YOY; DOM ~32 vs 66 a year ago (Redfin, May 2026). Pairs with the free equity-update CTA.',target:'EPA owners (esp. long-tenure); potential sellers / move-up buyers',opp:21,intent:22},
+  t2: {day:'Tuesday',date:'June 23',title:'Mortgage Rates Eased to 6.47% - What It Means for Peninsula Buyers',funnel:'MOFU',ghl:'COSTS',hook:'A higher rate in a calmer market can beat a lower rate in a bidding war.',data:'30-yr 6.47% (Freddie Mac Jun 18), down from 6.52% prior week, 6.81% a year ago. Rising inventory = less bidding pressure.',target:'First-time and move-up buyers calculating affordability',opp:19,intent:18},
+  t3: {day:'Wednesday',date:'June 24',title:'Peninsula Inventory Is Climbing - Is the Market Finally Shifting?',funnel:'CORNERSTONE (TOFU/MOFU)',ghl:'OPTIONS',hook:'South Bay months of supply went from about two to over three since January. The biggest shift in years.',data:'South Bay 2.1 (Jan) to 3.3 (Jun 2026) months; San Mateo/Peninsula tighter ~1.7 mo. Rebalancing, still not a buyer market historically.',target:'Buyers and sellers reading current market conditions',opp:23,intent:20},
+  t4: {day:'Thursday',date:'June 25',title:'42% of Peninsula Listings Cut Price - How to Price Right the First Time',funnel:'BOFU',ghl:'PRICING',hook:'Overpricing in a rebalancing market costs more than the discount you were trying to avoid.',data:'~42% of Peninsula listings have reduced price (over a third in luxury). Three-strategy pricing framework. Pull DOM/list-to-sale from MLS before quoting.',target:'Sellers preparing to list in the next 30-90 days',opp:21,intent:22},
+  t5: {day:'Friday',date:'June 26',title:'AB 1482 Explained for Bay Area Landlords (2026 Update)',funnel:'TOFU',ghl:'1482',hook:'AB 1482 caps how much you can raise rent this year. Here is the 2026 number and the exemptions.',data:'Cap = 5% + local CPI, max 10%. Confirm current CPI before publishing. Feeder to listing/relocation.',target:'Small and accidental landlords',opp:17,intent:15}
+};
+
+function setView(v){
+  document.querySelectorAll('[data-audience]').forEach(el=>{
+    const aud=(el.getAttribute('data-audience')||'').split(' ');
+    el.classList.toggle('aud-hidden',!aud.includes(v)&&!aud.includes('all')&&v!=='all');
+  });
+  document.querySelectorAll('.aud-btn').forEach(b=>b.classList.remove('aud-active'));
+  const a=document.querySelector('.aud-'+v);if(a)a.classList.add('aud-active');
+}
+function copyData(topic,field){
+  const val=COPY_DATA[topic]&&COPY_DATA[topic][field];
+  if(!val){showToast('Not found');return;}
+  navigator.clipboard.writeText(val).then(()=>showToast('Copied!')).catch(()=>{
+    const ta=document.createElement('textarea');ta.value=val;document.body.appendChild(ta);ta.select();document.execCommand('copy');document.body.removeChild(ta);showToast('Copied!');
+  });
+}
+function showToast(msg){const t=document.getElementById('toast');t.textContent=msg;t.classList.add('show');setTimeout(()=>t.classList.remove('show'),2200);}
+function openTopicModal(key){
+  const t=TOPIC_DATA[key];if(!t)return;
+  document.getElementById('modalTitle').textContent=t.day+' '+t.date+' - '+t.title;
+  document.getElementById('modalBody').innerHTML=
+    '<p><strong>Funnel:</strong> '+t.funnel+' | <strong>GHL:</strong> '+t.ghl+'</p>'+
+    '<p><strong>Hook:</strong> '+t.hook+'</p>'+
+    '<p><strong>Data:</strong> '+t.data+'</p>'+
+    '<p><strong>Target:</strong> '+t.target+'</p>'+
+    '<p><strong>Opp Score:</strong> '+t.opp+'/25 | <strong>Intent Score:</strong> '+t.intent+'/25</p>'+
+    '<div style="display:flex;gap:10px;flex-wrap:wrap;margin-top:14px;">'+
+    '<button class="copy-btn" onclick="copyData(\''+key+'\',\'ssml\')">Copy SSML</button>'+
+    '<button class="copy-btn copy-btn-gold" onclick="copyData(\''+key+'\',\'prod_video\')">Copy Video Prompt</button>'+
+    '<button class="copy-btn" onclick="copyData(\''+key+'\',\'blog_brief\')">Copy Blog Brief</button>'+
+    '<button class="copy-btn copy-btn-gold" onclick="copyData(\''+key+'\',\'prod_blog\')">Copy Blog Prompt</button>'+
+    '</div>';
+  document.getElementById('topicModal').removeAttribute('hidden');
+}
+function closeModal(){document.getElementById('topicModal').setAttribute('hidden','');}
+document.getElementById('topicModal').addEventListener('click',function(e){if(e.target===this)closeModal();});
+document.addEventListener('keydown',function(e){if(e.key==='Escape')closeModal();});
+setView('research');
+
+(function(){
+  if(typeof ApexCharts==='undefined'){console.error('ApexCharts failed to load');return;}
+  function area(sel,name,cats,data,color,fmt){
+    var el=document.querySelector(sel); if(!el){return;}
+    try{
+      new ApexCharts(el,{
+        chart:{type:'area',height:240,toolbar:{show:false},zoom:{enabled:false}},
+        series:[{name:name,data:data}],
+        xaxis:{categories:cats},
+        colors:[color],
+        stroke:{width:3,curve:'smooth'},
+        fill:{type:'gradient',gradient:{opacityFrom:0.4,opacityTo:0.05}},
+        markers:{size:4},
+        dataLabels:{enabled:false},
+        grid:{borderColor:'#e2e5ea'},
+        tooltip:{y:{formatter:function(v){return v==null?'pending':(fmt?fmt(v):v);}}}
+      }).render();
+    }catch(e){console.error('chart '+sel+' failed:',e);}
+  }
+  // REAL data pulled this run
+  area('#rate-main','30-yr Fixed %',['Apr','May','Jun 11','Jun 18'],[6.33,6.54,6.52,6.47],'#9f1239',function(v){return v+'%';});
+  area('#inv-main','Months of Supply',['Jan 2026','Jun 2026'],[2.1,3.3],'#2563eb',function(v){return v+' mo';});
+  // Awaiting IG/YT pull
+  area('#eng-main','Engagement % (pending)',['May 26','Jun 2','Jun 9','Jun 16','Jun 22'],[null,null,null,null,null],'#16a34a',null);
+})();
+</script>
+</body></html>
