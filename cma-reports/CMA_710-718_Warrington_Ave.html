@@ -208,6 +208,20 @@ footer{background:var(--b);color:#ddd;padding:32px 0;text-align:center;margin-to
 
 <div class="dv"></div>
 
+<section><div class="sh">How Long It Takes to Sell, by Price</div>
+<p>Days on market is not random, it tracks the pricing strategy. In this ZIP a finished, well-priced house sells fast, usually inside two weeks and often over asking. Development land is a different animal: the buyer pool is small, the diligence runs longer, and the higher you price, the longer it sits. The pattern below is a best-guess read built from how comparable listings have actually priced and moved, including the commercial site down the road that is still active and unsold at a number near the top of this range.</p>
+<div class="tscroll"><table><thead><tr><th>Pricing strategy</th><th>Asking</th><th>Who it draws</th><th style="text-align:center">Estimated days on market</th></tr></thead><tbody>
+<tr><td><strong>Aggressive</strong>, priced to compete</td><td>~$3,250,000</td><td>Several developers at once, invites offers</td><td style="text-align:center">30 to 45 days</td></tr>
+<tr><td><strong>Market</strong>, the recommended number</td><td>$3,500,000</td><td>A developer who values the density</td><td style="text-align:center">60 to 90 days</td></tr>
+<tr><td><strong>Ambitious</strong>, top of the supported range</td><td>$4,250,000</td><td>One buyer willing to bet on full entitlement</td><td style="text-align:center">120 to 180 days</td></tr>
+<tr><td><strong>Aspirational</strong>, above market</td><td>$5,000,000+</td><td>Few to none at this price, as the active comp shows</td><td style="text-align:center">12+ months, may not sell</td></tr>
+</tbody></table></div>
+<div class="cb"><div class="cw" style="height:280px"><canvas id="domBar"></canvas></div><div class="cap"><strong>Estimated time on market by asking price.</strong> A best-guess read based on how comparable listings have priced and moved, including a similar redevelopment site nearby still unsold near the top of this range. For contrast, a finished single-family home in this ZIP, priced right, typically sells in under two weeks.</div></div>
+<div class="key"><strong>The best-guess read for 710 and 718.</strong> At the recommended <strong>$3.5M</strong>, plan for roughly <strong>two to three months</strong> to find the right developer. That is normal for development land and much slower than a finished house here, which sells in days. Pushing toward $4.25M typically stretches it to four to six months. Pricing at $5M most likely means exactly what the comparable site down the road is living right now, months on the market with no sale. The realistic price sells in a normal window; the aspirational price mostly buys time on the market.</div>
+</section>
+
+<div class="dv"></div>
+
 <section><div class="sh">My Recommendation</div>
 <p>Jesse, here is how I would play it to get you the best price:</p>
 <ul class="tight">
@@ -245,4 +259,6 @@ new Chart(document.getElementById('residual'),{type:'bar',data:{labels:["Gross s
 new Chart(document.getElementById('commLand'),{type:'bar',data:{labels:["At $160 / land sq ft (conservative)","At $190 / land sq ft (mid)","At $230 / land sq ft (high end)"],datasets:[{label:'Combined site value',data:[3646560,4330290,5241930],backgroundColor:[gold,nv,'#c0392b'],borderRadius:4}]},options:{indexAxis:'y',responsive:true,maintainAspectRatio:false,plugins:{legend:{display:false},tooltip:{callbacks:{label:c=>'$'+(c.parsed.x/1000000).toFixed(2)+'M'}}},scales:{x:{ticks:{callback:v=>'$'+(v/1000000).toFixed(1)+'M'},grid:{color:'#eee'},beginAtZero:true,suggestedMax:5500000},y:{grid:{display:false},ticks:{font:{size:11}}}}}});
 
 new Chart(document.getElementById('ladderChart'),{type:'bar',data:{labels:["Your house as-is (like 603 Warrington)","Renovated older home (3101 Waverly)","Brand-new home, the ZIP's ceiling (3316 Page)","710 + 718 combined, realistic (commercial land)","High end if a developer competes"],datasets:[{label:'Value',data:[950000,1500000,2300000,3500000,4250000],backgroundColor:[gold,gold,blk,nv,green],borderRadius:4}]},options:{indexAxis:'y',responsive:true,maintainAspectRatio:false,plugins:{legend:{display:false},tooltip:{callbacks:{label:c=>'$'+(c.parsed.x/1000000).toFixed(2)+'M'}}},scales:{x:{ticks:{callback:v=>'$'+(v/1000000).toFixed(0)+'M'},grid:{color:'#eee'},beginAtZero:true,suggestedMax:5500000},y:{grid:{display:false},ticks:{font:{size:10.5}}}}}});
+
+new Chart(document.getElementById('domBar'),{type:'bar',data:{labels:["Aggressive, ~$3.25M","Market, $3.5M (recommended)","Ambitious, $4.25M","Aspirational, $5M+"],datasets:[{label:'Days',data:[40,75,150,365],backgroundColor:[green,nv,gold,red],borderRadius:4}]},options:{indexAxis:'y',responsive:true,maintainAspectRatio:false,plugins:{legend:{display:false},tooltip:{callbacks:{label:x=>x.parsed.x>=365?'12+ months / may not trade':x.parsed.x+' days'}}},scales:{x:{ticks:{callback:v=>v>=365?'12+ mo':v+'d'},grid:{color:'#eee'},beginAtZero:true,suggestedMax:380},y:{grid:{display:false},ticks:{font:{size:11}}}}}});
 </script></body></html>
