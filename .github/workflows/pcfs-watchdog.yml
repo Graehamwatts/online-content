@@ -7,7 +7,8 @@ name: PCFS Workflow Watchdog
 
 on:
   schedule:
-    - cron: "0 19 * * *"   # 19:00 UTC = 12pm PDT / 11am PST — after the 8/9/10am workflows
+    - cron: "23 19 * * *"  # 19:23 UTC = 12:23pm PDT / 11:23am PST — off-the-hour (GitHub
+                           # delays/drops :00 crons most), still after the 8/9/10am workflows
   workflow_dispatch: {}     # allow manual test runs
 
 jobs:

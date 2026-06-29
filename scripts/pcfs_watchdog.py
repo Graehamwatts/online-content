@@ -63,9 +63,9 @@ def api_get(path):
 
 
 def executions_today(wf_id, today_pt):
-    """Return (had_success, had_error, last_started_pt) for this workflow's runs today (PT)."""
+    """Return (had_success, had_error, had_running, last_started_pt) for today's runs (PT)."""
     data = api_get(f"/api/v1/executions?workflowId={wf_id}&limit=40")
-    had_success = had_error = False
+    had_success = had_error = had_running = False
     last_started = None
     for ex in data.get("data", []):
         started = ex.get("startedAt") or ex.get("createdAt")
@@ -81,7 +81,10 @@ def executions_today(wf_id, today_pt):
             had_success = True
         elif st in ("error", "crashed", "failed"):
             had_error = True
-    return had_success, had_error, last_started
+        elif st in ("running", "waiting", "new", "unknown", ""):
+            # Started today but not finished — do NOT count as a miss yet (Fugu #5).
+            had_running = True
+    return had_success, had_error, had_running, last_started
 
 
 def main():
@@ -105,7 +108,7 @@ def main():
                 results.append({**wf, "state": "not_expected"})
                 continue
             try:
-                ok, err, last = executions_today(wf["id"], today_pt)
+                ok, err, running, last = executions_today(wf["id"], today_pt)
             except Exception as e:  # noqa: BLE001
                 results.append({**wf, "state": "check_failed", "detail": str(e)})
                 continue
@@ -113,6 +116,9 @@ def main():
                 results.append({**wf, "state": "ok", "last": last})
             elif err:
                 results.append({**wf, "state": "errored", "last": last})
+            elif running:
+                # Still in progress at check time — benign, not a miss.
+                results.append({**wf, "state": "running", "last": last})
             else:
                 results.append({**wf, "state": "missed"})
 
@@ -162,6 +168,8 @@ def main():
             badge, color = "⚠️ errored", "#d97706"; extra = "ran but the execution failed — open it in n8n"
         elif r["state"] == "check_failed":
             badge, color = "❓ couldn't check", "#6b7280"; extra = r.get("detail", "")
+        elif r["state"] == "running":
+            badge, color = "⏳ in progress", "#2563eb"; extra = "started today, not finished at check time"
         else:
             badge, color = "· not scheduled today", "#9ca3af"; extra = ""
         rows.append(
@@ -202,8 +210,11 @@ def _send(status, today_str, summary, html):
     user = os.environ.get("GMAIL_USERNAME"); pw = os.environ.get("GMAIL_APP_PASSWORD")
     rcpts = [r.strip() for r in os.environ.get("BRIEF_RECIPIENTS", "").split(",") if r.strip()]
     if not (user and pw and rcpts):
-        print("::warning::Email skipped — GMAIL_USERNAME/GMAIL_APP_PASSWORD/BRIEF_RECIPIENTS not all set")
-        return
+        # An alert is pending but we can't deliver it — fail LOUD (red Action run)
+        # so the misconfig surfaces, rather than silently swallowing a real alert (Fugu #8).
+        print("::error::Watchdog has an alert to send but GMAIL_USERNAME/GMAIL_APP_PASSWORD/"
+              "BRIEF_RECIPIENTS are not all set — alert could NOT be delivered")
+        sys.exit(1)
     msg = MIMEMultipart("alternative")
     msg["Subject"] = f"{status} ({today_str})"
     msg["From"] = user; msg["To"] = ", ".join(rcpts)
