@@ -1,0 +1,238 @@
+<!doctype html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>Video Topics (Peter) — 21 This Week</title><link rel="preconnect" href="https://fonts.googleapis.com"><link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700&family=Plus+Jakarta+Sans:wght@600;700;800&display=swap" rel="stylesheet"><style>
+:root{--navy:#0f2742;--gold:#C5A258;--teal:#0d9488;--blue:#2563eb;--amber:#d97706;--green:#16a34a;
+--purple:#7c3aed;--purplebg:#f3effe;--red:#dc2626;--ink:#1e293b;--muted:#64748b;--line:#e2e8f0;--bg:#f8fafc;}
+*{box-sizing:border-box}body{margin:0;font-family:'DM Sans',-apple-system,Segoe UI,Roboto,sans-serif;color:var(--ink);background:var(--bg);line-height:1.55}
+.wrap{max-width:1080px;margin:0 auto;padding:24px 18px 80px}
+h1{font-family:'Plus Jakarta Sans',sans-serif;font-size:26px;margin:.2em 0}
+h2{font-family:'Plus Jakarta Sans',sans-serif;font-size:20px;margin:1.4em 0 .5em;border-bottom:2px solid var(--line);padding-bottom:6px}
+h3{font-size:16px;margin:.2em 0}
+a{color:var(--blue)}
+.hero{background:var(--navy);color:#fff;border-radius:14px;padding:22px 24px;margin-bottom:18px}
+.hero h1{color:#fff;margin-top:0}.hero .sub{color:#cbd5e1;font-size:14px}
+.dashboard-toggle{display:flex;gap:10px;flex-wrap:wrap;margin:14px 0 8px}
+.toggle-btn{display:inline-block;padding:10px 16px;border-radius:10px;background:#fff;border:1px solid var(--line);
+text-decoration:none;color:var(--ink);font-weight:600;font-size:14px}
+.toggle-btn.active{background:var(--navy);color:#fff;border-color:var(--navy)}
+.daysec{margin-top:26px}.daytitle{display:flex;align-items:baseline;gap:10px}
+.daytitle .dt{font-size:12px;color:var(--muted);font-weight:600}
+.cards{display:grid;grid-template-columns:repeat(auto-fit,minmax(300px,1fr));gap:14px;margin-top:10px}
+.card{background:#fff;border:1px solid var(--line);border-radius:12px;padding:16px;position:relative}
+.card.star{border-color:var(--gold);box-shadow:0 0 0 2px rgba(197,162,88,.25)}
+.star-badge{position:absolute;top:-10px;right:12px;background:var(--gold);color:#fff;font-size:11px;font-weight:700;
+padding:3px 9px;border-radius:20px}
+.revival{position:absolute;top:-10px;left:12px;background:var(--purple);color:#fff;font-size:11px;padding:3px 9px;border-radius:20px}
+.tag{display:inline-block;font-size:11px;font-weight:700;padding:2px 8px;border-radius:6px;color:#fff;margin-right:6px}
+.TOFU{background:var(--blue)}.MOFU{background:var(--amber)}.BOFU{background:var(--green)}
+.meta{font-size:12px;color:var(--muted);margin:8px 0}.why{font-size:13.5px;margin:8px 0}
+.chips{margin:8px 0}.chip{display:inline-block;background:#eef2ff;color:#3730a3;font-size:11px;padding:3px 8px;border-radius:14px;margin:2px 3px 2px 0}
+.aeo{background:#f0fdf4;border-left:3px solid var(--green);padding:8px 10px;font-size:13px;border-radius:0 6px 6px 0;margin:8px 0}
+.cta{background:#fff7ed;border:1px dashed var(--amber);padding:8px 10px;font-size:12.5px;border-radius:8px;margin:8px 0}
+.ghl{font-weight:700;color:var(--amber)}
+details{margin:8px 0}summary{cursor:pointer;font-weight:600;font-size:13px;color:var(--navy)}
+.btn{display:inline-block;background:var(--gold);color:#fff;border:none;border-radius:8px;padding:8px 12px;font-size:12.5px;
+font-weight:600;cursor:pointer;margin:4px 6px 4px 0}
+.btn.blue{background:var(--blue)}.btn.red{background:var(--red)}.btn.purple{background:var(--purple)}
+.vidsec{font-size:13px;background:#f8fafc;border:1px solid var(--line);border-radius:8px;padding:8px 10px;margin:6px 0}
+.statgrid{display:grid;grid-template-columns:repeat(auto-fit,minmax(150px,1fr));gap:12px;margin:14px 0}
+.stat{background:#fff;border:1px solid var(--line);border-radius:10px;padding:14px}
+.stat .n{font-size:24px;font-weight:800;color:var(--navy)}.stat .l{font-size:12px;color:var(--muted)}
+table{width:100%;border-collapse:collapse;font-size:13px;margin:8px 0;background:#fff}
+th,td{text-align:left;padding:8px 10px;border-bottom:1px solid var(--line)}th{background:#f1f5f9;font-size:12px}
+.up{color:var(--green);font-weight:700}.method{background:var(--purplebg);border:1px solid #ddd6fe;border-radius:12px;padding:6px 16px;margin:14px 0}
+.method summary{color:var(--purple);font-size:16px}
+.conv-card{background:var(--purplebg);border:1px solid #ddd6fe;border-radius:10px;padding:12px;margin:8px 0}
+.sb{display:inline-block;background:var(--purple);color:#fff;font-size:10px;padding:2px 7px;border-radius:10px;margin:1px 2px}
+.toast{position:fixed;bottom:20px;left:50%;transform:translateX(-50%);background:var(--navy);color:#fff;padding:10px 18px;
+border-radius:8px;opacity:0;transition:.3s;font-size:13px;z-index:99}.toast.show{opacity:1}
+.runnote{background:#fffbeb;border:1px solid #fde68a;border-radius:10px;padding:10px 14px;font-size:13px;margin:10px 0}
+.footer{margin-top:40px;padding-top:16px;border-top:1px solid var(--line);font-size:12px;color:var(--muted)}
+</style></head><body><div class="wrap"><div class="hero"><h1>Video Topics (Peter) — 21 This Week</h1><div class="sub">Week of June 29 - July 5, 2026 &middot; Graeham Watts, REALTOR, Intero Real Estate, DRE# 01466876 &middot; Audit: PASS</div></div><nav class="dashboard-toggle"><a href="blogs.html" class="toggle-btn">📝 Blogs</a><a href="videos.html" class="toggle-btn active">🎬 Videos (Peter)</a><a href="research.html" class="toggle-btn">📊 Research Data</a></nav><div class="daysec"><div class="daytitle"><h2 style="border:none;margin:0">Monday</h2><span class="dt">Jun 29</span></div><div class="cards"><div class="card star" id="d1-bofuv"><span class="star-badge">⭐ PICK</span>
+<span class="tag BOFU">BOFU</span><h3>AB 1482 in 2026: exactly what a Bay Area landlord can raise rent to this year</h3>
+<div class="meta">Score 24/25 &middot; Quality 10/10 &middot; Signal 86/100</div>
+<div class="why"><b>Why:</b> GSC query &#x27;ab 1482 rent control 2026&#x27; is up 18% WoW at position 12.4 (41 impr/7d), an r/Landlord thread on the 2026 cap has 121 comments, and a YouTube comment cluster (31 asks) wants the exact CPI-adjusted number. Three sources converge on the same confusion: people don&#x27;t know the real 2026 ceiling.</div>
+<details><summary>🎬 Long-form (YouTube)</summary><div class="vidsec">9-11 min explainer: the exact 2026 cap, walk one real EPA fourplex example, the single-family exemption trap, and the notice that voids the exemption. Talking head + on-screen number cards.</div></details>
+<details><summary>📱 Reel (IG / FB)</summary><div class="vidsec">45s: &#x27;Your landlord can NOT raise your rent more than THIS in 2026&#x27; + the number on screen, one exemption caveat, comment-1482 CTA.</div></details>
+<details><summary>▶️ Short (YT Shorts / TikTok)</summary><div class="vidsec">30s YT Short cut from the long-form cap reveal beat.</div></details>
+<button class="btn red" onclick="cp("Write Graeham's AB 1482 2026 long-form + short-form package. Apply the embedded Humanizer Rules block (no em dashes, no significance inflation, first-person, concrete numbers). Lead with the exact cap number, use the EPA fourplex example, flag the single-family exemption, end on the 1482 keyword CTA.")">📋 Copy Script Prompt for Claude Code</button>
+<button class="btn" onclick="cp("Production items for the AB 1482 video: number-card lower-thirds for the cap %, a simple before/after rent calc graphic, B-roll of a Peninsula multi-unit street, and a comment-1482 end card.")">📋 Copy Production Items Prompt</button>
+</div><div class="card" id="d1-mofuv">
+<span class="tag MOFU">MOFU</span><h3>Is now actually a good time to sell on the Peninsula? Reading the June 2026 signal</h3>
+<div class="meta">Score 22/25 &middot; Quality 9/10 &middot; Signal 72/100</div>
+<div class="why"><b>Why:</b> GSC &#x27;is now a good time to sell bay area&#x27; is up 31% WoW at position 11.2 (58 impr/7d), and the live market read backs a real answer: Peninsula DOM dropped to 32 days from 66 a year ago. The intent is consideration-stage sellers weighing timing.</div>
+<details><summary>🎬 Long-form (YouTube)</summary><div class="vidsec">8-9 min: the DOM-halved stat, what it means for sellers, the pricing mistake (anchoring to 2024 peak), and how to read your own micro-market.</div></details>
+<details><summary>📱 Reel (IG / FB)</summary><div class="vidsec">40s: &#x27;Homes here are selling twice as fast as last year&#x27; with the 66-&gt;32 day graphic.</div></details>
+<details><summary>▶️ Short (YT Shorts / TikTok)</summary><div class="vidsec">30s Short from the 66-&gt;32 reveal.</div></details>
+<button class="btn red" onclick="cp("Write the 'good time to sell Peninsula June 2026' package. Apply the embedded Humanizer Rules block (no em dashes, no significance inflation, first-person, concrete numbers). Anchor on the 32-vs-66 day DOM stat, avoid hype, end on SELL.")">📋 Copy Script Prompt for Claude Code</button>
+<button class="btn" onclick="cp("Production items: a 66->32 day animated counter, a 'priced right vs priced to peak' split graphic, B-roll of sold signs, SELL end card.")">📋 Copy Production Items Prompt</button>
+</div><div class="card" id="d1-tofuv">
+<span class="tag TOFU">TOFU</span><h3>Peninsula homes now sell in 32 days. Here&#x27;s why the speed is back</h3>
+<div class="meta">Score 20/25 &middot; Quality 8/10 &middot; Signal 58/100</div>
+<div class="why"><b>Why:</b> GSC &#x27;how fast are homes selling peninsula&#x27; is up 38% WoW (35 impr/7d) and a YouTube comment cluster (18 asks) wonders if 32 days means the market is overheating again. Broad-curiosity TOFU framing of the same DOM story.</div>
+<details><summary>🎬 Long-form (YouTube)</summary><div class="vidsec">7-8 min market-context piece on the speed-up and what&#x27;s behind it.</div></details>
+<details><summary>📱 Reel (IG / FB)</summary><div class="vidsec">35s fast-cut: &#x27;32 days. That&#x27;s how long homes last here now.&#x27;</div></details>
+<details><summary>▶️ Short (YT Shorts / TikTok)</summary><div class="vidsec">25s Short.</div></details>
+<button class="btn red" onclick="cp("Write the Peninsula-speed TOFU package. Apply the embedded Humanizer Rules block (no em dashes, no significance inflation, first-person, concrete numbers). Keep it curiosity-driven, BUY CTA.")">📋 Copy Script Prompt for Claude Code</button>
+<button class="btn" onclick="cp("Production items: animated DOM counter, neighborhood map B-roll, BUY end card.")">📋 Copy Production Items Prompt</button>
+</div></div></div><div class="daysec"><div class="daytitle"><h2 style="border:none;margin:0">Tuesday</h2><span class="dt">Jun 30</span></div><div class="cards"><div class="card star" id="d2-bofuv"><span class="star-badge">⭐ PICK</span>
+<span class="tag BOFU">BOFU</span><h3>Laid off with equity in your Bay Area home? Sell, hold, or rent it out in 2026</h3>
+<div class="meta">Score 25/25 &middot; Quality 10/10 &middot; Signal 98/100</div>
+<div class="why"><b>Why:</b> Five sources converge. r/personalfinance &#x27;laid off, have equity, sell or hold&#x27; (167 comments) and Oracle&#x27;s 21,000 AI-driven cuts in the cached Reddit pull, GSC &#x27;selling a house after a layoff california&#x27; up 44% WoW (top rising query), an IG poll where 49% said they&#x27;d sell &#x27;only if I had to&#x27;, plus Zillow and YouTube signal. This is the highest-converging, highest-emotional-temperature topic of the week.</div>
+<details><summary>🎬 Long-form (YouTube)</summary><div class="vidsec">11-12 min decision-framework video walking the three paths with real Bay Area equity numbers and the tax/AB1482 catches. Empathy-led open.</div></details>
+<details><summary>📱 Reel (IG / FB)</summary><div class="vidsec">50s: &#x27;Just laid off and you own a Bay Area home? You have 3 moves.&#x27; Count them, OPTIONS CTA.</div></details>
+<details><summary>▶️ Short (YT Shorts / TikTok)</summary><div class="vidsec">35s Short from the three-moves beat.</div></details>
+<button class="btn red" onclick="cp("Write the layoff-equity decision package. Apply the embedded Humanizer Rules block (no em dashes, no significance inflation, first-person, concrete numbers). Open with genuine empathy (no platitudes), lay out the three options with concrete equity math, flag the capital-gains and AB 1482 catches, end on OPTIONS.")">📋 Copy Script Prompt for Claude Code</button>
+<button class="btn" onclick="cp("Production items: a 3-path decision-tree graphic, an equity-math card, a 2-of-5-year timeline graphic, OPTIONS end card, sober B-roll (no doom).")">📋 Copy Production Items Prompt</button>
+</div><div class="card" id="d2-mofuv">
+<span class="tag MOFU">MOFU</span><h3>Tech layoffs hit the Bay again: how a job change actually changes your home timeline</h3>
+<div class="meta">Score 23/25 &middot; Quality 9/10 &middot; Signal 80/100</div>
+<div class="why"><b>Why:</b> The Walmart 300-job and Oracle 21,000-job cuts lead the cached Reddit pull (247 + 198 comments), GSC &#x27;selling a house after a layoff california&#x27; is the top riser (+44%), and an IG poll on selling-if-laid-off pulled 142 responses. Consideration-stage framing for people whose timeline just moved.</div>
+<details><summary>🎬 Long-form (YouTube)</summary><div class="vidsec">8-9 min on timeline planning under layoff pressure.</div></details>
+<details><summary>📱 Reel (IG / FB)</summary><div class="vidsec">40s on the &#x27;prep now so you&#x27;re not forced later&#x27; angle.</div></details>
+<details><summary>▶️ Short (YT Shorts / TikTok)</summary><div class="vidsec">30s Short.</div></details>
+<button class="btn red" onclick="cp("Write the layoff-timeline MOFU package. Apply the embedded Humanizer Rules block (no em dashes, no significance inflation, first-person, concrete numbers). SELL CTA, sober tone.")">📋 Copy Script Prompt for Claude Code</button>
+<button class="btn" onclick="cp("Production items: a timeline graphic, bridge-options card, SELL end card.")">📋 Copy Production Items Prompt</button>
+</div><div class="card" id="d2-tofuv">
+<span class="tag TOFU">TOFU</span><h3>Is East Palo Alto still the Peninsula affordability play in 2026?</h3>
+<div class="meta">Score 20/25 &middot; Quality 8/10 &middot; Signal 62/100</div>
+<div class="why"><b>Why:</b> r/RealEstateInvesting asks exactly this (98 comments), an r/eastpaloalto first-time-buyer thread wants to know what ~$1M buys (64 comments), and Zillow EPA Q&amp;A &#x27;what can I buy under $1M&#x27; was asked 14 times. The live read: EPA avg $1.025M vs Palo Alto multiples higher. Curiosity TOFU.</div>
+<details><summary>🎬 Long-form (YouTube)</summary><div class="vidsec">7-8 min EPA affordability context piece.</div></details>
+<details><summary>📱 Reel (IG / FB)</summary><div class="vidsec">35s: &#x27;The Peninsula city still under the others in 2026.&#x27;</div></details>
+<details><summary>▶️ Short (YT Shorts / TikTok)</summary><div class="vidsec">25s Short.</div></details>
+<button class="btn red" onclick="cp("Write the EPA-affordability TOFU package. Apply the embedded Humanizer Rules block (no em dashes, no significance inflation, first-person, concrete numbers). BUY CTA, no demographic framing (Fair Housing).")">📋 Copy Script Prompt for Claude Code</button>
+<button class="btn" onclick="cp("Production items: a price-gap bar graphic (EPA vs neighbors), EPA street B-roll, BUY end card.")">📋 Copy Production Items Prompt</button>
+</div></div></div><div class="daysec"><div class="daytitle"><h2 style="border:none;margin:0">Wednesday</h2><span class="dt">Jul 1</span></div><div class="cards"><div class="card star" id="d3-bofuv"><span class="star-badge">⭐ PICK</span>
+<span class="tag BOFU">BOFU</span><h3>Outbid four times in EPA? Rent vs buy when you keep losing offers</h3>
+<div class="meta">Score 24/25 &middot; Quality 10/10 &middot; Signal 83/100</div>
+<div class="why"><b>Why:</b> r/RealEstate &#x27;got outbid 4 times, should we keep renting&#x27; (134 comments, stressed sentiment), GSC &#x27;rent vs buy east palo alto&#x27; up 15% WoW, and an IG poll where 66% said they want to own EPA. Decision-stage buyers worn down by competition. The 32-day market and 151-listing scarcity make this real right now.</div>
+<details><summary>🎬 Long-form (YouTube)</summary><div class="vidsec">10-11 min rent-vs-buy framework for the repeatedly-outbid buyer, with the appreciation-vs-rate math worked live.</div></details>
+<details><summary>📱 Reel (IG / FB)</summary><div class="vidsec">45s: &#x27;Lost 4 bids? Here&#x27;s the math on renting one more year.&#x27;</div></details>
+<details><summary>▶️ Short (YT Shorts / TikTok)</summary><div class="vidsec">30s Short.</div></details>
+<button class="btn red" onclick="cp("Write the outbid rent-vs-buy package. Apply the embedded Humanizer Rules block (no em dashes, no significance inflation, first-person, concrete numbers). Work the math on screen, empathetic but direct, BUY CTA.")">📋 Copy Script Prompt for Claude Code</button>
+<button class="btn" onclick="cp("Production items: a rent-vs-buy math card, an 'appreciation vs rate' comparison graphic, BUY end card.")">📋 Copy Production Items Prompt</button>
+</div><div class="card" id="d3-mofuv">
+<span class="tag MOFU">MOFU</span><h3>What it really costs to win a Peninsula home in 2026 (beyond the price)</h3>
+<div class="meta">Score 21/25 &middot; Quality 8/10 &middot; Signal 66/100</div>
+<div class="why"><b>Why:</b> Buyers underestimate close costs; the IG down-payment poll (61% named down payment the top blocker) and rising buy-intent GSC queries point to consideration-stage cost questions. Pairs the affordability theme with concrete dollar figures.</div>
+<details><summary>🎬 Long-form (YouTube)</summary><div class="vidsec">8 min cost-breakdown video.</div></details>
+<details><summary>📱 Reel (IG / FB)</summary><div class="vidsec">40s closing-cost reality check.</div></details>
+<details><summary>▶️ Short (YT Shorts / TikTok)</summary><div class="vidsec">30s Short.</div></details>
+<button class="btn red" onclick="cp("Write the cost-to-buy MOFU package. Apply the embedded Humanizer Rules block (no em dashes, no significance inflation, first-person, concrete numbers). Concrete dollar bands, COSTS CTA.")">📋 Copy Script Prompt for Claude Code</button>
+<button class="btn" onclick="cp("Production items: a line-item cost-stack graphic, COSTS end card.")">📋 Copy Production Items Prompt</button>
+</div><div class="card" id="d3-tofuv">
+<span class="tag TOFU">TOFU</span><h3>Downtown San Mateo&#x27;s revival is reshaping where Peninsula buyers look</h3>
+<div class="meta">Score 21/25 &middot; Quality 9/10 &middot; Signal 78/100</div>
+<div class="why"><b>Why:</b> r/bayarea &#x27;Downtown San Mateo&#x27;s revival is a playbook&#x27; (156 comments, curious), GSC &#x27;redwood city housing market 2026&#x27; up 12% at position 9.8, and Zillow RWC &#x27;good time to buy downtown&#x27; asked 9 times. A current-event hook tying downtown revitalization to buyer interest.</div>
+<details><summary>🎬 Long-form (YouTube)</summary><div class="vidsec">7-8 min downtown-revival context piece.</div></details>
+<details><summary>📱 Reel (IG / FB)</summary><div class="vidsec">35s downtown b-roll montage with the revival angle.</div></details>
+<details><summary>▶️ Short (YT Shorts / TikTok)</summary><div class="vidsec">25s Short.</div></details>
+<button class="btn red" onclick="cp("Write the downtown-revival TOFU package. Apply the embedded Humanizer Rules block (no em dashes, no significance inflation, first-person, concrete numbers). BUY CTA, property/amenity framing only (Fair Housing).")">📋 Copy Script Prompt for Claude Code</button>
+<button class="btn" onclick="cp("Production items: downtown San Mateo/RWC B-roll, Caltrain shot, BUY end card.")">📋 Copy Production Items Prompt</button>
+</div></div></div><div class="daysec"><div class="daytitle"><h2 style="border:none;margin:0">Thursday</h2><span class="dt">Jul 2</span></div><div class="cards"><div class="card star" id="d4-bofuv"><span class="star-badge">⭐ PICK</span>
+<span class="tag BOFU">BOFU</span><h3>Down payment assistance for EPA and Peninsula buyers: what&#x27;s real in 2026</h3>
+<div class="meta">Score 23/25 &middot; Quality 9/10 &middot; Signal 82/100</div>
+<div class="why"><b>Why:</b> An IG poll named down payment the #1 blocker (61% of 188 responses), GSC &#x27;down payment assistance east palo alto&#x27; up 20% WoW, and Zillow PA Q&amp;A on first-time-buyer help asked 8 times. Decision-stage buyers blocked by the upfront gap, which assistance programs directly solve.</div>
+<details><summary>🎬 Long-form (YouTube)</summary><div class="vidsec">9-10 min walkthrough of the stackable DPA programs and qualification.</div></details>
+<details><summary>📱 Reel (IG / FB)</summary><div class="vidsec">45s: &#x27;You might need way less down than you think in EPA.&#x27;</div></details>
+<details><summary>▶️ Short (YT Shorts / TikTok)</summary><div class="vidsec">30s Short.</div></details>
+<button class="btn red" onclick="cp("Write the down-payment-assistance package. Apply the embedded Humanizer Rules block (no em dashes, no significance inflation, first-person, concrete numbers). Name real program types, flag the verify-caps note, COSTS CTA.")">📋 Copy Script Prompt for Claude Code</button>
+<button class="btn" onclick="cp("Production items: a program-stack graphic, a qualification-checklist card, COSTS end card.")">📋 Copy Production Items Prompt</button>
+</div><div class="card" id="d4-mofuv">
+<span class="tag MOFU">MOFU</span><h3>Buy now at 6.49% or wait for rates to drop? The 2026 math, run honestly</h3>
+<div class="meta">Score 23/25 &middot; Quality 10/10 &middot; Signal 88/100</div>
+<div class="why"><b>Why:</b> GSC &#x27;mortgage rates 2026 buy now or wait&#x27; up 27% at position 10.9 (62 impr/7d, the highest-impression rising query), an IG poll where 58% said &#x27;wait&#x27;, and a YouTube comment cluster (27 asks) on refinance-later vs wait-now. For Bay Area and EPA buyers near $1M, live anchor: 6.49% as of June 25, down from 6.77% a year ago.</div>
+<details><summary>🎬 Long-form (YouTube)</summary><div class="vidsec">9-10 min: work the buy-now-vs-wait math live with the 6.49% anchor and a real EPA price.</div></details>
+<details><summary>📱 Reel (IG / FB)</summary><div class="vidsec">45s: &#x27;Wait for rates to drop? Here&#x27;s what that actually costs you.&#x27;</div></details>
+<details><summary>▶️ Short (YT Shorts / TikTok)</summary><div class="vidsec">30s Short from the math reveal.</div></details>
+<button class="btn red" onclick="cp("Write the buy-now-vs-wait package. Apply the embedded Humanizer Rules block (no em dashes, no significance inflation, first-person, concrete numbers). Anchor 6.49% (June 25, 2026), run the math honestly both ways, BUY CTA.")">📋 Copy Script Prompt for Claude Code</button>
+<button class="btn" onclick="cp("Production items: a buy-now-vs-wait math table, a rate-history mini chart (6.77 -> 6.49), BUY end card.")">📋 Copy Production Items Prompt</button>
+</div><div class="card" id="d4-tofuv">
+<span class="tag TOFU">TOFU</span><h3>Where mortgage rates sit mid-2026 and why the Bay Area cares</h3>
+<div class="meta">Score 19/25 &middot; Quality 7/10 &middot; Signal 52/100</div>
+<div class="why"><b>Why:</b> Broad-curiosity framing of the rate story; GSC rate queries are rising and YouTube comments ask about the trend. Gives the week a clean TOFU rate-context piece distinct from the MOFU decision piece.</div>
+<details><summary>🎬 Long-form (YouTube)</summary><div class="vidsec">6-7 min rate-context explainer.</div></details>
+<details><summary>📱 Reel (IG / FB)</summary><div class="vidsec">30s rate snapshot.</div></details>
+<details><summary>▶️ Short (YT Shorts / TikTok)</summary><div class="vidsec">25s Short.</div></details>
+<button class="btn red" onclick="cp("Write the rate-context TOFU package. Apply the embedded Humanizer Rules block (no em dashes, no significance inflation, first-person, concrete numbers). BUY CTA.")">📋 Copy Script Prompt for Claude Code</button>
+<button class="btn" onclick="cp("Production items: a rate-line mini chart, BUY end card.")">📋 Copy Production Items Prompt</button>
+</div></div></div><div class="daysec"><div class="daytitle"><h2 style="border:none;margin:0">Friday</h2><span class="dt">Jul 3</span></div><div class="cards"><div class="card star" id="d5-bofuv"><span class="star-badge" style="background:#b45309">⭐ PICK · low-signal</span>
+<span class="tag BOFU">BOFU</span><h3>What will my East Palo Alto home actually appraise for in 2026?</h3>
+<div class="meta">Score 23/25 &middot; Quality 9/10 &middot; Signal 70/100</div>
+<div class="why"><b>Why:</b> GSC &#x27;what does my home appraise for east palo alto&#x27; sits at position 16.7 (a page-2 win, 26 impr/7d, +9%), and the live read gives a real anchor: EPA avg $1.025M, down 2.9% YoY, 32-day DOM. Decision-stage sellers who want a number, which routes straight to the home-value CTA.</div>
+<details><summary>🎬 Long-form (YouTube)</summary><div class="vidsec">9 min: how EPA appraisal really works vs the Zestimate, with a block-level comp example.</div></details>
+<details><summary>📱 Reel (IG / FB)</summary><div class="vidsec">40s: &#x27;Your Zestimate is probably wrong. Here&#x27;s why.&#x27;</div></details>
+<details><summary>▶️ Short (YT Shorts / TikTok)</summary><div class="vidsec">30s Short.</div></details>
+<button class="btn red" onclick="cp("Write the EPA-appraisal package. Apply the embedded Humanizer Rules block (no em dashes, no significance inflation, first-person, concrete numbers). Contrast real comps vs Zestimate, SELL/home-value CTA.")">📋 Copy Script Prompt for Claude Code</button>
+<button class="btn" onclick="cp("Production items: a comp-grid graphic, a 'Zestimate vs real comp' split, SELL home-value end card.")">📋 Copy Production Items Prompt</button>
+</div><div class="card" id="d5-mofuv">
+<span class="tag MOFU">MOFU</span><h3>Prepping an EPA home to sell fast in a 32-day market</h3>
+<div class="meta">Score 21/25 &middot; Quality 8/10 &middot; Signal 64/100</div>
+<div class="why"><b>Why:</b> Ties the DOM story to seller action: with EPA DOM at 32 days, prep quality decides whether you ride the fast market or lag it. Consideration-stage sellers planning a near-term listing.</div>
+<details><summary>🎬 Long-form (YouTube)</summary><div class="vidsec">8 min seller-prep video.</div></details>
+<details><summary>📱 Reel (IG / FB)</summary><div class="vidsec">40s &#x27;do these 3 things before you list&#x27; cut.</div></details>
+<details><summary>▶️ Short (YT Shorts / TikTok)</summary><div class="vidsec">30s Short.</div></details>
+<button class="btn red" onclick="cp("Write the seller-prep MOFU package. Apply the embedded Humanizer Rules block (no em dashes, no significance inflation, first-person, concrete numbers). SELL CTA.")">📋 Copy Script Prompt for Claude Code</button>
+<button class="btn" onclick="cp("Production items: a prep-checklist card, before/after staging B-roll, SELL end card.")">📋 Copy Production Items Prompt</button>
+</div><div class="card" id="d5-tofuv">
+<span class="tag TOFU">TOFU</span><h3>PG&amp;E bills could jump $840 a year by 2030: the real cost of owning here</h3>
+<div class="meta">Score 20/25 &middot; Quality 8/10 &middot; Signal 56/100</div>
+<div class="why"><b>Why:</b> r/bayarea &#x27;PG&amp;E bills could cost $840 a year more by 2030&#x27; is the top cached Reddit thread (312 comments, frustrated), and ownership-cost curiosity is rising. A current-event hook on the true carrying cost of a Bay Area home.</div>
+<details><summary>🎬 Long-form (YouTube)</summary><div class="vidsec">6-7 min cost-of-ownership context piece.</div></details>
+<details><summary>📱 Reel (IG / FB)</summary><div class="vidsec">35s: &#x27;Your Bay Area mortgage isn&#x27;t your real housing cost.&#x27;</div></details>
+<details><summary>▶️ Short (YT Shorts / TikTok)</summary><div class="vidsec">25s Short.</div></details>
+<button class="btn red" onclick="cp("Write the cost-of-ownership TOFU package. Apply the embedded Humanizer Rules block (no em dashes, no significance inflation, first-person, concrete numbers). COSTS CTA.")">📋 Copy Script Prompt for Claude Code</button>
+<button class="btn" onclick="cp("Production items: a total-cost-of-ownership stacked graphic, COSTS end card.")">📋 Copy Production Items Prompt</button>
+</div></div></div><div class="daysec"><div class="daytitle"><h2 style="border:none;margin:0">Saturday</h2><span class="dt">Jul 4</span></div><div class="cards"><div class="card star" id="d6-bofuv"><span class="star-badge" style="background:#b45309">⭐ PICK · low-signal</span>
+<span class="tag BOFU">BOFU</span><h3>Inherited a San Mateo County home? The first five steps in 2026</h3>
+<div class="meta">Score 22/25 &middot; Quality 9/10 &middot; Signal 55/100</div>
+<div class="why"><b>Why:</b> GSC &#x27;inherited house san mateo county what to do&#x27; sits at position 17.2 (page-2 win, +11%) and Zillow SMC Q&amp;A &#x27;selling an inherited home, where to start&#x27; asked 6 times. Decision-stage heirs who need a clear sequence, an evergreen high-intent topic with a probate/step-up-basis angle.</div>
+<details><summary>🎬 Long-form (YouTube)</summary><div class="vidsec">9-10 min step-by-step for inherited-home heirs.</div></details>
+<details><summary>📱 Reel (IG / FB)</summary><div class="vidsec">45s: &#x27;Just inherited a home? Do these 5 things first.&#x27;</div></details>
+<details><summary>▶️ Short (YT Shorts / TikTok)</summary><div class="vidsec">30s Short.</div></details>
+<button class="btn red" onclick="cp("Write the inherited-home package. Apply the embedded Humanizer Rules block (no em dashes, no significance inflation, first-person, concrete numbers). Lay out 5 clear steps, flag stepped-up basis and Prop 19, OPTIONS CTA.")">📋 Copy Script Prompt for Claude Code</button>
+<button class="btn" onclick="cp("Production items: a 5-step numbered graphic, a stepped-up-basis explainer card, OPTIONS end card.")">📋 Copy Production Items Prompt</button>
+</div><div class="card" id="d6-mofuv">
+<span class="tag MOFU">MOFU</span><h3>Keep it, rent it, or sell it: deciding what to do with an inherited Peninsula home</h3>
+<div class="meta">Score 20/25 &middot; Quality 8/10 &middot; Signal 50/100</div>
+<div class="why"><b>Why:</b> The consideration-stage companion to the inherited-home BOFU piece, for heirs weighing the three paths once the first steps are done. Pairs the evergreen demand with the week&#x27;s rent-vs-sell decision theme.</div>
+<details><summary>🎬 Long-form (YouTube)</summary><div class="vidsec">8 min decision-framework for inherited-home options.</div></details>
+<details><summary>📱 Reel (IG / FB)</summary><div class="vidsec">40s three-paths cut.</div></details>
+<details><summary>▶️ Short (YT Shorts / TikTok)</summary><div class="vidsec">30s Short.</div></details>
+<button class="btn red" onclick="cp("Write the inherited-home options MOFU package. Apply the embedded Humanizer Rules block (no em dashes, no significance inflation, first-person, concrete numbers). OPTIONS CTA.")">📋 Copy Script Prompt for Claude Code</button>
+<button class="btn" onclick="cp("Production items: a keep/rent/sell decision-tree graphic, OPTIONS end card.")">📋 Copy Production Items Prompt</button>
+</div><div class="card" id="d6-tofuv">
+<span class="tag TOFU">TOFU</span><h3>Do Meta layoffs actually move Menlo Park home values? What the data shows</h3>
+<div class="meta">Score 19/25 &middot; Quality 7/10 &middot; Signal 48/100</div>
+<div class="why"><b>Why:</b> GSC &#x27;menlo park home values meta proximity&#x27; (22 impr/7d, +6%) and Zillow MP Q&amp;A &#x27;do Meta layoffs affect MP home values&#x27; asked 7 times. A myth-check TOFU piece tying the layoff theme to a specific high-value submarket.</div>
+<details><summary>🎬 Long-form (YouTube)</summary><div class="vidsec">6-7 min data myth-check.</div></details>
+<details><summary>📱 Reel (IG / FB)</summary><div class="vidsec">35s &#x27;layoffs tanked MP prices? Not so fast.&#x27;</div></details>
+<details><summary>▶️ Short (YT Shorts / TikTok)</summary><div class="vidsec">25s Short.</div></details>
+<button class="btn red" onclick="cp("Write the Meta-layoffs/MP-values TOFU package. Apply the embedded Humanizer Rules block (no em dashes, no significance inflation, first-person, concrete numbers). BUY CTA, data-driven.")">📋 Copy Script Prompt for Claude Code</button>
+<button class="btn" onclick="cp("Production items: a values-vs-layoff-timeline chart, MP B-roll, BUY end card.")">📋 Copy Production Items Prompt</button>
+</div></div></div><div class="daysec"><div class="daytitle"><h2 style="border:none;margin:0">Sunday</h2><span class="dt">Jul 5</span></div><div class="cards"><div class="card star" id="d7-bofuv"><span class="star-badge" style="background:#b45309">⭐ PICK · low-signal</span>
+<span class="tag BOFU">BOFU</span><h3>What are the actual closing costs when you sell in San Mateo County?</h3>
+<div class="meta">Score 20/25 &middot; Quality 8/10 &middot; Signal 54/100</div>
+<div class="why"><b>Why:</b> Evergreen high-intent seller-cost query with steady GSC demand; sellers want the real net-proceeds picture. Pairs with the week&#x27;s selling theme and routes to a net-sheet CTA. Lower urgency, fits Sunday.</div>
+<details><summary>🎬 Long-form (YouTube)</summary><div class="vidsec">8 min seller-cost breakdown.</div></details>
+<details><summary>📱 Reel (IG / FB)</summary><div class="vidsec">40s &#x27;what selling actually costs you.&#x27;</div></details>
+<details><summary>▶️ Short (YT Shorts / TikTok)</summary><div class="vidsec">30s Short.</div></details>
+<button class="btn red" onclick="cp("Write the seller-closing-cost package. Apply the embedded Humanizer Rules block (no em dashes, no significance inflation, first-person, concrete numbers). SELL/net-sheet CTA.")">📋 Copy Script Prompt for Claude Code</button>
+<button class="btn" onclick="cp("Production items: a seller-cost-stack graphic, a net-sheet mock, SELL end card.")">📋 Copy Production Items Prompt</button>
+</div><div class="card" id="d7-mofuv">
+<span class="tag MOFU">MOFU</span><h3>First-time buyer in the Bay in 2026? The order of operations that actually works</h3>
+<div class="meta">Score 19/25 &middot; Quality 7/10 &middot; Signal 49/100</div>
+<div class="why"><b>Why:</b> Steady first-time-buyer demand plus the down-payment-blocker poll signal; a calm, evergreen process piece for the start of a buyer&#x27;s journey. Lower-urgency, weekend-friendly.</div>
+<details><summary>🎬 Long-form (YouTube)</summary><div class="vidsec">7-8 min first-buyer roadmap.</div></details>
+<details><summary>📱 Reel (IG / FB)</summary><div class="vidsec">40s &#x27;do these in THIS order&#x27; cut.</div></details>
+<details><summary>▶️ Short (YT Shorts / TikTok)</summary><div class="vidsec">30s Short.</div></details>
+<button class="btn red" onclick="cp("Write the first-buyer roadmap MOFU package. Apply the embedded Humanizer Rules block (no em dashes, no significance inflation, first-person, concrete numbers). BUY CTA.")">📋 Copy Script Prompt for Claude Code</button>
+<button class="btn" onclick="cp("Production items: a numbered order-of-operations graphic, BUY end card.")">📋 Copy Production Items Prompt</button>
+</div><div class="card" id="d7-tofuv">
+<span class="tag TOFU">TOFU</span><h3>Bay Area housing outlook for the rest of 2026: rebound or head-fake?</h3>
+<div class="meta">Score 18/25 &middot; Quality 7/10 &middot; Signal 46/100</div>
+<div class="why"><b>Why:</b> Broad-interest outlook piece anchored to the live forecast (sales rebound, prices +2-6%, inventory rising). Closes the week with a wide-net TOFU read. Lowest urgency, Sunday slot.</div>
+<details><summary>🎬 Long-form (YouTube)</summary><div class="vidsec">6-7 min outlook explainer.</div></details>
+<details><summary>📱 Reel (IG / FB)</summary><div class="vidsec">35s outlook snapshot.</div></details>
+<details><summary>▶️ Short (YT Shorts / TikTok)</summary><div class="vidsec">25s Short.</div></details>
+<button class="btn red" onclick="cp("Write the 2026-outlook TOFU package. Apply the embedded Humanizer Rules block (no em dashes, no significance inflation, first-person, concrete numbers). BUY CTA.")">📋 Copy Script Prompt for Claude Code</button>
+<button class="btn" onclick="cp("Production items: a forecast-band graphic, BUY end card.")">📋 Copy Production Items Prompt</button>
+</div></div></div><div class="footer">Graeham Watts &middot; REALTOR &middot; Intero Real Estate &middot; DRE# 01466876 &middot; graehamwatts.com &middot; Generated 2026-06-29T09:40:00-07:00 (recovery run, Monday 7am window missed)</div></div><div id="toast" class="toast">Copied!</div><script>function cp(t){navigator.clipboard.writeText(t).then(()=>{var x=document.getElementById("toast");x.classList.add("show");setTimeout(()=>x.classList.remove("show"),1400)})}</script></body></html>
