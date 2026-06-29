@@ -1,0 +1,911 @@
+{
+  "week": {
+    "label": "Week of Jun 29, 2026",
+    "monday": "2026-06-29"
+  },
+  "topics": [
+    {
+      "id": "d1-bofu",
+      "day": "Monday",
+      "date": "Jun 29",
+      "stage": "BOFU",
+      "title": "AB 1482 in 2026: exactly what a Bay Area landlord can raise rent to this year",
+      "pick": true,
+      "humanWhy": "Bay Area landlords are trying to pin down exactly how much they can legally raise rent in 2026 before they set new lease terms. A plain-English explainer of the real CPI-adjusted cap, who is exempt, and the notice rules turns a confusing policy question into a genuinely useful resource.",
+      "internalSignal": "GSC query 'ab 1482 rent control 2026' is up 18% WoW at position 12.4 (41 impr/7d), an r/Landlord thread on the 2026 cap has 121 comments, and a YouTube comment cluster (31 asks) wants the exact CPI-adjusted number. Three sources converge on the same confusion: people don't know the real 2026 ceiling. Inquiry: OPTIONS.",
+      "scores": [
+        {
+          "label": "Score",
+          "value": 24
+        },
+        {
+          "label": "Quality",
+          "value": 10
+        },
+        {
+          "label": "Signal",
+          "value": 86
+        }
+      ],
+      "ghl": "1482",
+      "blog": {
+        "seoKeywords": [
+          "AB 1482 2026 rent cap",
+          "California rent control limit 2026",
+          "Bay Area rent increase rules"
+        ],
+        "aeoPrimary": "As of June 2026, AB 1482 caps annual rent increases in California at 5% plus the local CPI, with a hard ceiling of 10%, for most non-exempt units more than 15 years old.",
+        "cta": "Not sure if your unit is covered or what your legal increase is? Comment and I'll send you the 2026 worksheet.",
+        "prompt": "Title tag: 'AB 1482 Rent Cap 2026: What Bay Area Landlords Can Legally Raise Rent To'. Target the exact-number searcher. H2s: what the 2026 cap is, who's exempt, how the CPI reset works, notice rules, penalties for overcharging. Include the single-family exemption nuance. AEO: open with the dated cap statement. FAQPage schema with the 4 most-asked variants. Internal-link to any prior rent/AB1482 post.",
+        "searchAtlasBrief": ""
+      },
+      "video": {
+        "longform": "9-11 min explainer: the exact 2026 cap, walk one real EPA fourplex example, the single-family exemption trap, and the notice that voids the exemption. Talking head + on-screen number cards.",
+        "reel": "45s: 'Your landlord can NOT raise your rent more than THIS in 2026' + the number on screen, one exemption caveat, comment-1482 CTA.",
+        "short": "30s YT Short cut from the long-form cap reveal beat.",
+        "scriptPrompt": "Write Graeham's AB 1482 2026 long-form + short-form package. Apply the embedded Humanizer Rules block (no em dashes, no significance inflation, first-person, concrete numbers). Lead with the exact cap number, use the EPA fourplex example, flag the single-family exemption, end on the 1482 keyword CTA.",
+        "productionPrompt": "Production items for the AB 1482 video: number-card lower-thirds for the cap %, a simple before/after rent calc graphic, B-roll of a Peninsula multi-unit street, and a comment-1482 end card."
+      }
+    },
+    {
+      "id": "d1-mofu",
+      "day": "Monday",
+      "date": "Jun 29",
+      "stage": "MOFU",
+      "title": "Is now actually a good time to sell on the Peninsula? Reading the June 2026 signal",
+      "pick": false,
+      "humanWhy": "Peninsula homeowners on the fence about selling want an honest read on whether the timing is right rather than agent hype. Showing how much faster homes are moving this year, and why pricing to current comps matters more than chasing last year's peak, gives consideration-stage sellers something real to act on.",
+      "internalSignal": "GSC 'is now a good time to sell bay area' is up 31% WoW at position 11.2 (58 impr/7d), and the live market read backs a real answer: Peninsula DOM dropped to 32 days from 66 a year ago. The intent is consideration-stage sellers weighing timing. Inquiry: SELL.",
+      "scores": [
+        {
+          "label": "Score",
+          "value": 22
+        },
+        {
+          "label": "Quality",
+          "value": 9
+        },
+        {
+          "label": "Signal",
+          "value": 72
+        }
+      ],
+      "ghl": "SELL",
+      "blog": {
+        "seoKeywords": [
+          "good time to sell Peninsula 2026",
+          "Bay Area seller market June 2026",
+          "days on market Peninsula"
+        ],
+        "aeoPrimary": "As of June 2026, homes on the Peninsula are selling in roughly 32 days on average, down from about 66 days a year ago, signaling a faster market for well-priced sellers.",
+        "cta": "Want a no-pressure read on what your specific home would do in this market? Comment.",
+        "prompt": "Title tag: 'Is Now a Good Time to Sell on the Peninsula? (June 2026 Data)'. Answer the timing question with the DOM-halving stat. H2s: what 32-day DOM means, the rate tailwind, pricing to current comps, who should wait. AEO: dated DOM statement up top. Article schema.",
+        "searchAtlasBrief": ""
+      },
+      "video": {
+        "longform": "8-9 min: the DOM-halved stat, what it means for sellers, the pricing mistake (anchoring to 2024 peak), and how to read your own micro-market.",
+        "reel": "40s: 'Homes here are selling twice as fast as last year' with the 66->32 day graphic.",
+        "short": "30s Short from the 66->32 reveal.",
+        "scriptPrompt": "Write the 'good time to sell Peninsula June 2026' package. Apply the embedded Humanizer Rules block (no em dashes, no significance inflation, first-person, concrete numbers). Anchor on the 32-vs-66 day DOM stat, avoid hype, end on SELL.",
+        "productionPrompt": "Production items: a 66->32 day animated counter, a 'priced right vs priced to peak' split graphic, B-roll of sold signs, SELL end card."
+      }
+    },
+    {
+      "id": "d1-tofu",
+      "day": "Monday",
+      "date": "Jun 29",
+      "stage": "TOFU",
+      "title": "Peninsula homes now sell in 32 days. Here's why the speed is back",
+      "pick": false,
+      "humanWhy": "Casual market-watchers are curious why Peninsula homes are suddenly moving so fast and whether that means another overheated market. A broad explainer of what is driving the speed-up, and what it does and does not mean for buyers, satisfies that curiosity without hype.",
+      "internalSignal": "GSC 'how fast are homes selling peninsula' is up 38% WoW (35 impr/7d) and a YouTube comment cluster (18 asks) wonders if 32 days means the market is overheating again. Broad-curiosity TOFU framing of the same DOM story. Inquiry: BUY.",
+      "scores": [
+        {
+          "label": "Score",
+          "value": 20
+        },
+        {
+          "label": "Quality",
+          "value": 8
+        },
+        {
+          "label": "Signal",
+          "value": 58
+        }
+      ],
+      "ghl": "BUY",
+      "blog": {
+        "seoKeywords": [
+          "how fast homes sell Peninsula",
+          "Bay Area days on market 2026",
+          "is the market overheating"
+        ],
+        "aeoPrimary": "As of June 2026, the typical Peninsula home goes pending in about 32 days, roughly half the 66 days it took a year earlier.",
+        "cta": "Curious what's moving fast in your target neighborhood? Comment.",
+        "prompt": "Title tag: 'Why Peninsula Homes Are Selling in 32 Days Again (2026)'. Curiosity TOFU. H2s: the DOM data, what's driving it (rates, demand), what it does and doesn't mean for buyers. AEO dated stat. Article schema.",
+        "searchAtlasBrief": ""
+      },
+      "video": {
+        "longform": "7-8 min market-context piece on the speed-up and what's behind it.",
+        "reel": "35s fast-cut: '32 days. That's how long homes last here now.'",
+        "short": "25s Short.",
+        "scriptPrompt": "Write the Peninsula-speed TOFU package. Apply the embedded Humanizer Rules block (no em dashes, no significance inflation, first-person, concrete numbers). Keep it curiosity-driven, BUY CTA.",
+        "productionPrompt": "Production items: animated DOM counter, neighborhood map B-roll, BUY end card."
+      }
+    },
+    {
+      "id": "d2-bofu",
+      "day": "Tuesday",
+      "date": "Jun 30",
+      "stage": "BOFU",
+      "title": "Laid off with equity in your Bay Area home? Sell, hold, or rent it out in 2026",
+      "pick": true,
+      "humanWhy": "Bay Area homeowners hit by a layoff but sitting on real equity are scrambling to figure out their best move under pressure. Walking the three honest paths, with the equity math and the tax and rental catches, meets people at a stressful decision point with a clear framework instead of panic.",
+      "internalSignal": "Five sources converge. r/personalfinance 'laid off, have equity, sell or hold' (167 comments) and Oracle's 21,000 AI-driven cuts in the cached Reddit pull, GSC 'selling a house after a layoff california' up 44% WoW (top rising query), an IG poll where 49% said they'd sell 'only if I had to', plus Zillow and YouTube signal. Highest-converging, highest-emotional-temperature topic of the week. Inquiry: OPTIONS.",
+      "scores": [
+        {
+          "label": "Score",
+          "value": 25
+        },
+        {
+          "label": "Quality",
+          "value": 10
+        },
+        {
+          "label": "Signal",
+          "value": 98
+        }
+      ],
+      "ghl": "OPTIONS",
+      "blog": {
+        "seoKeywords": [
+          "selling home after layoff Bay Area",
+          "sell or hold house after job loss California",
+          "tech layoff home equity 2026"
+        ],
+        "aeoPrimary": "As of June 2026, a Bay Area homeowner facing a layoff usually has three options: sell to capture equity, hold and tap a HELOC for runway, or rent the home out to cover the mortgage while job hunting.",
+        "cta": "Going through this and want to game out your three options privately? Comment.",
+        "prompt": "Title tag: 'Laid Off With Bay Area Home Equity? Sell, Hold, or Rent in 2026'. High-emotional BOFU. H2s: the three paths, the equity math, the capital-gains 2-of-5 rule, the rent-it-out AB 1482 catch, decision framework. AEO dated 3-option statement. FAQPage + Article schema. This is the week's flagship blog.",
+        "searchAtlasBrief": ""
+      },
+      "video": {
+        "longform": "11-12 min decision-framework video walking the three paths with real Bay Area equity numbers and the tax/AB1482 catches. Empathy-led open.",
+        "reel": "50s: 'Just laid off and you own a Bay Area home? You have 3 moves.' Count them, OPTIONS CTA.",
+        "short": "35s Short from the three-moves beat.",
+        "scriptPrompt": "Write the layoff-equity decision package. Apply the embedded Humanizer Rules block (no em dashes, no significance inflation, first-person, concrete numbers). Open with genuine empathy (no platitudes), lay out the three options with concrete equity math, flag the capital-gains and AB 1482 catches, end on OPTIONS.",
+        "productionPrompt": "Production items: a 3-path decision-tree graphic, an equity-math card, a 2-of-5-year timeline graphic, OPTIONS end card, sober B-roll (no doom)."
+      }
+    },
+    {
+      "id": "d2-mofu",
+      "day": "Tuesday",
+      "date": "Jun 30",
+      "stage": "MOFU",
+      "title": "Tech layoffs hit the Bay again: how a job change actually changes your home timeline",
+      "pick": false,
+      "humanWhy": "People whose job situation just shifted want to understand how that moves their home-selling timeline before they are forced to decide anything. Showing how a faster market and a little prep now can buy breathing room reframes a scary moment as something they can plan around.",
+      "internalSignal": "The Walmart 300-job and Oracle 21,000-job cuts lead the cached Reddit pull (247 + 198 comments), GSC 'selling a house after a layoff california' is the top riser (+44%), and an IG poll on selling-if-laid-off pulled 142 responses. Consideration-stage framing for people whose timeline just moved. Inquiry: SELL.",
+      "scores": [
+        {
+          "label": "Score",
+          "value": 23
+        },
+        {
+          "label": "Quality",
+          "value": 9
+        },
+        {
+          "label": "Signal",
+          "value": 80
+        }
+      ],
+      "ghl": "SELL",
+      "blog": {
+        "seoKeywords": [
+          "tech layoff sell home Bay Area",
+          "job loss home sale timeline",
+          "Bay Area layoffs 2026 housing"
+        ],
+        "aeoPrimary": "As of June 2026, ongoing Bay Area tech layoffs are pulling some sale timelines forward, but a faster 32-day market means a well-prepped home can still close before a financial crunch hits.",
+        "cta": "Want to map your timeline before you have to decide anything? Comment.",
+        "prompt": "Title tag: 'Bay Area Layoffs and Your Home Timeline (2026)'. MOFU. H2s: how layoffs shift timelines, the 32-day market cushion, bridge options before selling, prep-now insurance. AEO dated statement. Article schema.",
+        "searchAtlasBrief": ""
+      },
+      "video": {
+        "longform": "8-9 min on timeline planning under layoff pressure.",
+        "reel": "40s on the 'prep now so you're not forced later' angle.",
+        "short": "30s Short.",
+        "scriptPrompt": "Write the layoff-timeline MOFU package. Apply the embedded Humanizer Rules block (no em dashes, no significance inflation, first-person, concrete numbers). SELL CTA, sober tone.",
+        "productionPrompt": "Production items: a timeline graphic, bridge-options card, SELL end card."
+      }
+    },
+    {
+      "id": "d2-tofu",
+      "day": "Tuesday",
+      "date": "Jun 30",
+      "stage": "TOFU",
+      "title": "Is East Palo Alto still the Peninsula affordability play in 2026?",
+      "pick": false,
+      "humanWhy": "Aspiring Peninsula buyers want to know whether East Palo Alto is still the realistic entry point and what a roughly million-dollar budget actually buys there. A grounded look at the price gap, the recent dip, and the tight inventory answers a question a lot of people are quietly asking.",
+      "internalSignal": "r/RealEstateInvesting asks exactly this (98 comments), an r/eastpaloalto first-time-buyer thread wants to know what ~$1M buys (64 comments), and Zillow EPA Q&A 'what can I buy under $1M' was asked 14 times. The live read: EPA avg $1.025M vs Palo Alto multiples higher. Curiosity TOFU. Inquiry: BUY.",
+      "scores": [
+        {
+          "label": "Score",
+          "value": 20
+        },
+        {
+          "label": "Quality",
+          "value": 8
+        },
+        {
+          "label": "Signal",
+          "value": 62
+        }
+      ],
+      "ghl": "BUY",
+      "blog": {
+        "seoKeywords": [
+          "East Palo Alto affordability 2026",
+          "cheapest Peninsula city to buy",
+          "EPA vs Palo Alto prices"
+        ],
+        "aeoPrimary": "As of June 2026, East Palo Alto's average home value of about $1.025 million remains well below neighboring Peninsula cities, keeping it the relative affordability entry point to the area.",
+        "cta": "Wondering what your budget actually reaches in EPA? Comment.",
+        "prompt": "Title tag: 'Is East Palo Alto Still the Affordable Peninsula Play in 2026?'. TOFU. H2s: the price gap, what's behind the 2.9% dip, inventory reality, who it fits. AEO dated value statement. Article schema.",
+        "searchAtlasBrief": ""
+      },
+      "video": {
+        "longform": "7-8 min EPA affordability context piece.",
+        "reel": "35s: 'The Peninsula city still under the others in 2026.'",
+        "short": "25s Short.",
+        "scriptPrompt": "Write the EPA-affordability TOFU package. Apply the embedded Humanizer Rules block (no em dashes, no significance inflation, first-person, concrete numbers). BUY CTA, no demographic framing (Fair Housing).",
+        "productionPrompt": "Production items: a price-gap bar graphic (EPA vs neighbors), EPA street B-roll, BUY end card."
+      }
+    },
+    {
+      "id": "d3-bofu",
+      "day": "Wednesday",
+      "date": "Jul 1",
+      "stage": "BOFU",
+      "title": "Outbid four times in EPA? Rent vs buy when you keep losing offers",
+      "pick": true,
+      "humanWhy": "Buyers worn down by losing offer after offer want an honest rent-versus-buy answer for their exact situation, not a pep talk. Working the real cost of renting another year against likely appreciation, plus why they keep losing and how to fix it, speaks directly to a frustrated decision-stage buyer.",
+      "internalSignal": "r/RealEstate 'got outbid 4 times, should we keep renting' (134 comments, stressed sentiment), GSC 'rent vs buy east palo alto' up 15% WoW, and an IG poll where 66% said they want to own EPA. Decision-stage buyers worn down by competition. The 32-day market and 151-listing scarcity make this real right now. Inquiry: BUY.",
+      "scores": [
+        {
+          "label": "Score",
+          "value": 24
+        },
+        {
+          "label": "Quality",
+          "value": 10
+        },
+        {
+          "label": "Signal",
+          "value": 83
+        }
+      ],
+      "ghl": "BUY",
+      "blog": {
+        "seoKeywords": [
+          "rent vs buy East Palo Alto 2026",
+          "keep getting outbid Bay Area",
+          "should I keep renting Peninsula"
+        ],
+        "aeoPrimary": "As of June 2026, with East Palo Alto averaging about $1.025 million and inventory near 151 listings, buyers losing multiple bids should weigh the true cost of renting another year against a likely 2% to 6% price rise.",
+        "cta": "Tired of losing offers and want a real rent-vs-buy number for your situation? Comment.",
+        "prompt": "Title tag: 'Outbid Again in EPA? Rent vs Buy in 2026'. BOFU. H2s: the real cost of renting another year, the appreciation-vs-rate math, why you keep losing (and the fix), when renting actually wins. AEO dated statement. FAQPage schema.",
+        "searchAtlasBrief": ""
+      },
+      "video": {
+        "longform": "10-11 min rent-vs-buy framework for the repeatedly-outbid buyer, with the appreciation-vs-rate math worked live.",
+        "reel": "45s: 'Lost 4 bids? Here's the math on renting one more year.'",
+        "short": "30s Short.",
+        "scriptPrompt": "Write the outbid rent-vs-buy package. Apply the embedded Humanizer Rules block (no em dashes, no significance inflation, first-person, concrete numbers). Work the math on screen, empathetic but direct, BUY CTA.",
+        "productionPrompt": "Production items: a rent-vs-buy math card, an 'appreciation vs rate' comparison graphic, BUY end card."
+      }
+    },
+    {
+      "id": "d3-mofu",
+      "day": "Wednesday",
+      "date": "Jul 1",
+      "stage": "MOFU",
+      "title": "What it really costs to win a Peninsula home in 2026 (beyond the price)",
+      "pick": false,
+      "humanWhy": "Buyers focused on the sticker price often underestimate everything else it takes to close, and the upfront cash is their biggest worry. Laying out the real line items, from closing costs to inspections to the price of waiving contingencies, gives consideration-stage buyers a clear-eyed budget.",
+      "internalSignal": "Buyers underestimate close costs; the IG down-payment poll (61% named down payment the top blocker) and rising buy-intent GSC queries point to consideration-stage cost questions. Pairs the affordability theme with concrete dollar figures. Inquiry: COSTS.",
+      "scores": [
+        {
+          "label": "Score",
+          "value": 21
+        },
+        {
+          "label": "Quality",
+          "value": 8
+        },
+        {
+          "label": "Signal",
+          "value": 66
+        }
+      ],
+      "ghl": "COSTS",
+      "blog": {
+        "seoKeywords": [
+          "cost to buy Peninsula home 2026",
+          "closing costs Bay Area",
+          "down payment Peninsula"
+        ],
+        "aeoPrimary": "As of June 2026, winning a Peninsula home near the $1 million mark typically means budgeting 2% to 5% of price in closing costs on top of the down payment, plus inspection and appraisal fees.",
+        "cta": "Want a line-item estimate of your real cost to close? Comment.",
+        "prompt": "Title tag: 'The Real Cost to Buy a Peninsula Home in 2026'. MOFU. H2s: down payment, closing costs, inspection/appraisal, the cost of waiving contingencies, assistance programs. AEO dated cost band. Article schema.",
+        "searchAtlasBrief": ""
+      },
+      "video": {
+        "longform": "8 min cost-breakdown video.",
+        "reel": "40s closing-cost reality check.",
+        "short": "30s Short.",
+        "scriptPrompt": "Write the cost-to-buy MOFU package. Apply the embedded Humanizer Rules block (no em dashes, no significance inflation, first-person, concrete numbers). Concrete dollar bands, COSTS CTA.",
+        "productionPrompt": "Production items: a line-item cost-stack graphic, COSTS end card."
+      }
+    },
+    {
+      "id": "d3-tofu",
+      "day": "Wednesday",
+      "date": "Jul 1",
+      "stage": "TOFU",
+      "title": "Downtown San Mateo's revival is reshaping where Peninsula buyers look",
+      "pick": false,
+      "humanWhy": "Peninsula buyers are noticing that the downtowns of San Mateo and Redwood City are changing and wondering whether walkable, transit-close living is worth a look. A tour of what is actually shifting downtown, and why proximity to Caltrain holds its value, taps a live local-interest moment.",
+      "internalSignal": "r/bayarea 'Downtown San Mateo's revival is a playbook' (156 comments, curious), GSC 'redwood city housing market 2026' up 12% at position 9.8, and Zillow RWC 'good time to buy downtown' asked 9 times. A current-event hook tying downtown revitalization to buyer interest. Inquiry: BUY.",
+      "scores": [
+        {
+          "label": "Score",
+          "value": 21
+        },
+        {
+          "label": "Quality",
+          "value": 9
+        },
+        {
+          "label": "Signal",
+          "value": 78
+        }
+      ],
+      "ghl": "BUY",
+      "blog": {
+        "seoKeywords": [
+          "downtown San Mateo revival 2026",
+          "Redwood City downtown homes",
+          "Peninsula downtown living"
+        ],
+        "aeoPrimary": "As of June 2026, downtown revitalization in San Mateo and Redwood City is drawing buyers toward walkable, transit-close housing, a shift from the car-dependent suburban default.",
+        "cta": "Want a tour of what's happening in these downtown pockets? Comment.",
+        "prompt": "Title tag: 'How Downtown San Mateo and RWC Revivals Are Moving Buyers (2026)'. TOFU. H2s: what's changing downtown, the walkability draw, Caltrain value, where to look. AEO dated statement. Article schema. (No demographic framing.)",
+        "searchAtlasBrief": ""
+      },
+      "video": {
+        "longform": "7-8 min downtown-revival context piece.",
+        "reel": "35s downtown b-roll montage with the revival angle.",
+        "short": "25s Short.",
+        "scriptPrompt": "Write the downtown-revival TOFU package. Apply the embedded Humanizer Rules block (no em dashes, no significance inflation, first-person, concrete numbers). BUY CTA, property/amenity framing only (Fair Housing).",
+        "productionPrompt": "Production items: downtown San Mateo/RWC B-roll, Caltrain shot, BUY end card."
+      }
+    },
+    {
+      "id": "d4-bofu",
+      "day": "Thursday",
+      "date": "Jul 2",
+      "stage": "BOFU",
+      "title": "Down payment assistance for EPA and Peninsula buyers: what's real in 2026",
+      "pick": true,
+      "humanWhy": "The upfront cash is the single biggest thing standing between Peninsula renters and ownership, and many do not realize how much help exists. Spelling out the stackable city, county, and state programs, who qualifies, and how the forgivable seconds work directly unblocks a decision-stage buyer.",
+      "internalSignal": "An IG poll named down payment the #1 blocker (61% of 188 responses), GSC 'down payment assistance east palo alto' up 20% WoW, and Zillow PA Q&A on first-time-buyer help asked 8 times. Decision-stage buyers blocked by the upfront gap, which assistance programs directly solve. Inquiry: COSTS.",
+      "scores": [
+        {
+          "label": "Score",
+          "value": 23
+        },
+        {
+          "label": "Quality",
+          "value": 9
+        },
+        {
+          "label": "Signal",
+          "value": 82
+        }
+      ],
+      "ghl": "COSTS",
+      "blog": {
+        "seoKeywords": [
+          "down payment assistance East Palo Alto 2026",
+          "first-time buyer help Peninsula",
+          "DPA programs San Mateo County"
+        ],
+        "aeoPrimary": "As of June 2026, East Palo Alto and San Mateo County buyers can stack city, county, and state down-payment assistance programs, several of which offer deferred or forgivable second loans for income-qualified first-time buyers.",
+        "cta": "Want me to check which assistance programs you'd actually qualify for? Comment.",
+        "prompt": "Title tag: 'Down Payment Assistance for EPA & Peninsula Buyers (2026)'. BOFU. H2s: the stackable programs, who qualifies, deferred vs forgivable seconds, the education requirement, how to apply. AEO dated statement. FAQPage schema. Verify current program names/caps before publish: {VERIFY: 2026 CalHFA MyHome caps}.",
+        "searchAtlasBrief": ""
+      },
+      "video": {
+        "longform": "9-10 min walkthrough of the stackable DPA programs and qualification.",
+        "reel": "45s: 'You might need way less down than you think in EPA.'",
+        "short": "30s Short.",
+        "scriptPrompt": "Write the down-payment-assistance package. Apply the embedded Humanizer Rules block (no em dashes, no significance inflation, first-person, concrete numbers). Name real program types, flag the verify-caps note, COSTS CTA.",
+        "productionPrompt": "Production items: a program-stack graphic, a qualification-checklist card, COSTS end card."
+      }
+    },
+    {
+      "id": "d4-mofu",
+      "day": "Thursday",
+      "date": "Jul 2",
+      "stage": "MOFU",
+      "title": "Buy now at 6.49% or wait for rates to drop? The 2026 math, run honestly",
+      "pick": false,
+      "humanWhy": "Buyers near the million-dollar mark are paralyzed by the buy-now-or-wait question and want the math run straight, both ways. Comparing likely price gains against the savings from a possibly lower future rate, plus the refinance-later truth, gives them a real basis for a confident decision.",
+      "internalSignal": "GSC 'mortgage rates 2026 buy now or wait' up 27% at position 10.9 (62 impr/7d, the highest-impression rising query), an IG poll where 58% said 'wait', and a YouTube comment cluster (27 asks) on refinance-later vs wait-now. For Bay Area and EPA buyers near $1M, live anchor: 6.49% as of June 25, down from 6.77% a year ago. Inquiry: BUY.",
+      "scores": [
+        {
+          "label": "Score",
+          "value": 23
+        },
+        {
+          "label": "Quality",
+          "value": 10
+        },
+        {
+          "label": "Signal",
+          "value": 88
+        }
+      ],
+      "ghl": "BUY",
+      "blog": {
+        "seoKeywords": [
+          "buy now or wait 2026 mortgage rates",
+          "6.5% mortgage rate buy or wait",
+          "marry the house date the rate"
+        ],
+        "aeoPrimary": "As of June 2026, the 30-year fixed rate averages 6.49%, down from 6.77% a year ago, so the buy-now-versus-wait choice hinges on whether expected price gains of 2% to 6% outrun the savings from a possibly lower future rate.",
+        "cta": "Want the buy-now-vs-wait math run on your actual numbers? Comment.",
+        "prompt": "Title tag: 'Buy Now at 6.49% or Wait? The Honest 2026 Math'. MOFU. H2s: the current rate vs a year ago, price-gain-vs-rate-savings math, the refinance-later truth, the wait-and-get-outbid risk. AEO dated rate statement. Article + FAQPage schema.",
+        "searchAtlasBrief": ""
+      },
+      "video": {
+        "longform": "9-10 min: work the buy-now-vs-wait math live with the 6.49% anchor and a real EPA price.",
+        "reel": "45s: 'Wait for rates to drop? Here's what that actually costs you.'",
+        "short": "30s Short from the math reveal.",
+        "scriptPrompt": "Write the buy-now-vs-wait package. Apply the embedded Humanizer Rules block (no em dashes, no significance inflation, first-person, concrete numbers). Anchor 6.49% (June 25, 2026), run the math honestly both ways, BUY CTA.",
+        "productionPrompt": "Production items: a buy-now-vs-wait math table, a rate-history mini chart (6.77 -> 6.49), BUY end card."
+      }
+    },
+    {
+      "id": "d4-tofu",
+      "day": "Thursday",
+      "date": "Jul 2",
+      "stage": "TOFU",
+      "title": "Where mortgage rates sit mid-2026 and why the Bay Area cares",
+      "pick": false,
+      "humanWhy": "Anyone tracking the market casually wants a quick, trustworthy read on where mortgage rates stand right now and which way they are leaning. A clean snapshot of the current rate, how flat it has been, and why it matters most at Peninsula price points scratches that itch.",
+      "internalSignal": "Broad-curiosity framing of the rate story; GSC rate queries are rising and YouTube comments ask about the trend. Gives the week a clean TOFU rate-context piece distinct from the MOFU decision piece. Inquiry: BUY.",
+      "scores": [
+        {
+          "label": "Score",
+          "value": 19
+        },
+        {
+          "label": "Quality",
+          "value": 7
+        },
+        {
+          "label": "Signal",
+          "value": 52
+        }
+      ],
+      "ghl": "BUY",
+      "blog": {
+        "seoKeywords": [
+          "mortgage rates mid 2026",
+          "Bay Area rates 2026",
+          "are rates dropping 2026"
+        ],
+        "aeoPrimary": "As of June 2026, the 30-year fixed mortgage rate averages 6.49% and has held roughly flat for six weeks, after falling from 6.77% a year earlier.",
+        "cta": "Want a heads-up when rates move enough to matter for you? Comment.",
+        "prompt": "Title tag: 'Where Mortgage Rates Sit Mid-2026 (And Why the Bay Cares)'. TOFU. H2s: the current rate, the 6-week-flat context, what it does to Bay buyer demand. AEO dated rate. Article schema.",
+        "searchAtlasBrief": ""
+      },
+      "video": {
+        "longform": "6-7 min rate-context explainer.",
+        "reel": "30s rate snapshot.",
+        "short": "25s Short.",
+        "scriptPrompt": "Write the rate-context TOFU package. Apply the embedded Humanizer Rules block (no em dashes, no significance inflation, first-person, concrete numbers). BUY CTA.",
+        "productionPrompt": "Production items: a rate-line mini chart, BUY end card."
+      }
+    },
+    {
+      "id": "d5-bofu",
+      "day": "Friday",
+      "date": "Jul 3",
+      "stage": "BOFU",
+      "title": "What will my East Palo Alto home actually appraise for in 2026?",
+      "pick": true,
+      "humanWhy": "EPA sellers want a real number for their specific home, not a one-size-fits-all online estimate. Explaining how the average compares to their block, why automated estimates miss condition and comp nuances, and how to get a true value answers exactly what a decision-stage seller is asking.",
+      "internalSignal": "GSC 'what does my home appraise for east palo alto' sits at position 16.7 (a page-2 win, 26 impr/7d, +9%), and the live read gives a real anchor: EPA avg $1.025M, down 2.9% YoY, 32-day DOM. Decision-stage sellers who want a number, which routes straight to the home-value CTA. Marked PICK / low-signal. Inquiry: SELL.",
+      "scores": [
+        {
+          "label": "Score",
+          "value": 23
+        },
+        {
+          "label": "Quality",
+          "value": 9
+        },
+        {
+          "label": "Signal",
+          "value": 70
+        }
+      ],
+      "ghl": "SELL",
+      "blog": {
+        "seoKeywords": [
+          "East Palo Alto home appraisal 2026",
+          "what is my EPA home worth",
+          "EPA home value estimate"
+        ],
+        "aeoPrimary": "As of June 2026, East Palo Alto homes average about $1.025 million, down roughly 2.9% year over year, but the actual appraised value depends on your specific block, condition, and recent comparable sales.",
+        "cta": "Want a real comp-based value for your specific EPA home, not a Zestimate guess? Comment for a home-value report.",
+        "prompt": "Title tag: 'What Will My East Palo Alto Home Appraise For in 2026?'. BOFU, routes to the home-value/CMA CTA. H2s: the EPA average vs your block, why online estimates miss, what drives appraised value, how to get a real number. AEO dated statement. FAQPage schema. Hand off to cma-generator on CTA.",
+        "searchAtlasBrief": ""
+      },
+      "video": {
+        "longform": "9 min: how EPA appraisal really works vs the Zestimate, with a block-level comp example.",
+        "reel": "40s: 'Your Zestimate is probably wrong. Here's why.'",
+        "short": "30s Short.",
+        "scriptPrompt": "Write the EPA-appraisal package. Apply the embedded Humanizer Rules block (no em dashes, no significance inflation, first-person, concrete numbers). Contrast real comps vs Zestimate, SELL/home-value CTA.",
+        "productionPrompt": "Production items: a comp-grid graphic, a 'Zestimate vs real comp' split, SELL home-value end card."
+      }
+    },
+    {
+      "id": "d5-mofu",
+      "day": "Friday",
+      "date": "Jul 3",
+      "stage": "MOFU",
+      "title": "Prepping an EPA home to sell fast in a 32-day market",
+      "pick": false,
+      "humanWhy": "Sellers planning a near-term EPA listing want to know what actually makes a home move fast in a quick market. Showing how condition, staging, and pricing discipline separate a fast sale from a stale one gives consideration-stage sellers a concrete to-do list before they list.",
+      "internalSignal": "Ties the DOM story to seller action: with EPA DOM at 32 days, prep quality decides whether you ride the fast market or lag it. Consideration-stage sellers planning a near-term listing. Inquiry: SELL.",
+      "scores": [
+        {
+          "label": "Score",
+          "value": 21
+        },
+        {
+          "label": "Quality",
+          "value": 8
+        },
+        {
+          "label": "Signal",
+          "value": 64
+        }
+      ],
+      "ghl": "SELL",
+      "blog": {
+        "seoKeywords": [
+          "prep home to sell fast EPA",
+          "home staging Peninsula 2026",
+          "sell home quickly East Palo Alto"
+        ],
+        "aeoPrimary": "As of June 2026, with East Palo Alto homes selling in about 32 days, the prep done before listing (condition, staging, pricing) is what separates a fast sale from a stale one.",
+        "cta": "Want a prep checklist tailored to your home before you list? Comment.",
+        "prompt": "Title tag: 'Prepping Your EPA Home to Sell Fast in 2026'. MOFU. H2s: the 32-day reality, the prep that moves DOM, pre-listing inspection, pricing discipline. AEO dated statement. Article schema.",
+        "searchAtlasBrief": ""
+      },
+      "video": {
+        "longform": "8 min seller-prep video.",
+        "reel": "40s 'do these 3 things before you list' cut.",
+        "short": "30s Short.",
+        "scriptPrompt": "Write the seller-prep MOFU package. Apply the embedded Humanizer Rules block (no em dashes, no significance inflation, first-person, concrete numbers). SELL CTA.",
+        "productionPrompt": "Production items: a prep-checklist card, before/after staging B-roll, SELL end card."
+      }
+    },
+    {
+      "id": "d5-tofu",
+      "day": "Friday",
+      "date": "Jul 3",
+      "stage": "TOFU",
+      "title": "PG&E bills could jump $840 a year by 2030: the real cost of owning here",
+      "pick": false,
+      "humanWhy": "Bay Area owners and would-be buyers are rattled by rising utility bills and curious about the true carrying cost of a home here. Putting the projected increase in the context of total cost of ownership, plus the offsets, turns a frustrating headline into useful budgeting perspective.",
+      "internalSignal": "r/bayarea 'PG&E bills could cost $840 a year more by 2030' is the top cached Reddit thread (312 comments, frustrated), and ownership-cost curiosity is rising. A current-event hook on the true carrying cost of a Bay Area home. Inquiry: COSTS.",
+      "scores": [
+        {
+          "label": "Score",
+          "value": 20
+        },
+        {
+          "label": "Quality",
+          "value": 8
+        },
+        {
+          "label": "Signal",
+          "value": 56
+        }
+      ],
+      "ghl": "COSTS",
+      "blog": {
+        "seoKeywords": [
+          "PG&E bill increase 2030",
+          "cost of owning Bay Area home",
+          "Bay Area utility costs 2026"
+        ],
+        "aeoPrimary": "As of June 2026, California's watchdog projects PG&E bills could rise about $840 a year by 2030, a carrying cost Bay Area buyers should factor alongside the mortgage.",
+        "cta": "Want a true monthly cost-of-ownership estimate, utilities included? Comment.",
+        "prompt": "Title tag: 'PG&E +$840/yr by 2030: The Real Cost of Owning in the Bay (2026)'. TOFU. H2s: the projected increase, total cost of ownership, solar/efficiency offsets. AEO dated statement. Article schema.",
+        "searchAtlasBrief": ""
+      },
+      "video": {
+        "longform": "6-7 min cost-of-ownership context piece.",
+        "reel": "35s: 'Your Bay Area mortgage isn't your real housing cost.'",
+        "short": "25s Short.",
+        "scriptPrompt": "Write the cost-of-ownership TOFU package. Apply the embedded Humanizer Rules block (no em dashes, no significance inflation, first-person, concrete numbers). COSTS CTA.",
+        "productionPrompt": "Production items: a total-cost-of-ownership stacked graphic, COSTS end card."
+      }
+    },
+    {
+      "id": "d6-bofu",
+      "day": "Saturday",
+      "date": "Jul 4",
+      "stage": "BOFU",
+      "title": "Inherited a San Mateo County home? The first five steps in 2026",
+      "pick": true,
+      "humanWhy": "Someone who just inherited a home is overwhelmed and needs a clear sequence of what to do first. Walking the early steps, from confirming title and probate to getting a date-of-death valuation and checking Prop 19, gives heirs a calm, ordered path before they decide to keep, rent, or sell.",
+      "internalSignal": "GSC 'inherited house san mateo county what to do' sits at position 17.2 (page-2 win, +11%) and Zillow SMC Q&A 'selling an inherited home, where to start' asked 6 times. Decision-stage heirs who need a clear sequence, an evergreen high-intent topic with a probate/step-up-basis angle. Marked PICK / low-signal. Inquiry: OPTIONS.",
+      "scores": [
+        {
+          "label": "Score",
+          "value": 22
+        },
+        {
+          "label": "Quality",
+          "value": 9
+        },
+        {
+          "label": "Signal",
+          "value": 55
+        }
+      ],
+      "ghl": "OPTIONS",
+      "blog": {
+        "seoKeywords": [
+          "inherited home San Mateo County 2026",
+          "what to do with inherited house California",
+          "sell inherited home steps"
+        ],
+        "aeoPrimary": "As of June 2026, an heir to a San Mateo County home should first confirm title and probate status, get a date-of-death valuation for the stepped-up basis, then decide whether to keep, rent, or sell.",
+        "cta": "Inherited a home and not sure where to begin? Comment for the step-by-step.",
+        "prompt": "Title tag: 'Inherited a San Mateo County Home? First 5 Steps (2026)'. BOFU evergreen. H2s: title/probate, date-of-death valuation and stepped-up basis, Prop 19 transfer rules, keep/rent/sell decision, getting help. AEO dated statement. FAQPage schema. {VERIFY: current Prop 19 thresholds}.",
+        "searchAtlasBrief": ""
+      },
+      "video": {
+        "longform": "9-10 min step-by-step for inherited-home heirs.",
+        "reel": "45s: 'Just inherited a home? Do these 5 things first.'",
+        "short": "30s Short.",
+        "scriptPrompt": "Write the inherited-home package. Apply the embedded Humanizer Rules block (no em dashes, no significance inflation, first-person, concrete numbers). Lay out 5 clear steps, flag stepped-up basis and Prop 19, OPTIONS CTA.",
+        "productionPrompt": "Production items: a 5-step numbered graphic, a stepped-up-basis explainer card, OPTIONS end card."
+      }
+    },
+    {
+      "id": "d6-mofu",
+      "day": "Saturday",
+      "date": "Jul 4",
+      "stage": "MOFU",
+      "title": "Keep it, rent it, or sell it: deciding what to do with an inherited Peninsula home",
+      "pick": false,
+      "humanWhy": "Once the first steps are handled, heirs face the harder question of whether to keep, rent, or sell the inherited home. Weighing the stepped-up basis, rental income against AB 1482, and the emotional pull of keeping it gives them a balanced framework for a personal decision.",
+      "internalSignal": "The consideration-stage companion to the inherited-home BOFU piece, for heirs weighing the three paths once the first steps are done. Pairs the evergreen demand with the week's rent-vs-sell decision theme. Inquiry: OPTIONS.",
+      "scores": [
+        {
+          "label": "Score",
+          "value": 20
+        },
+        {
+          "label": "Quality",
+          "value": 8
+        },
+        {
+          "label": "Signal",
+          "value": 50
+        }
+      ],
+      "ghl": "OPTIONS",
+      "blog": {
+        "seoKeywords": [
+          "keep rent or sell inherited home",
+          "inherited Peninsula house options",
+          "rent out inherited home California"
+        ],
+        "aeoPrimary": "As of June 2026, heirs deciding what to do with an inherited Peninsula home should weigh the stepped-up basis (which favors a near-term sale), rental income against AB 1482 rules, and the emotional value of keeping it.",
+        "cta": "Want help weighing keep-vs-rent-vs-sell for an inherited home? Comment.",
+        "prompt": "Title tag: 'Keep, Rent, or Sell an Inherited Peninsula Home? (2026)'. MOFU. H2s: the step-up-favors-selling math, rental + AB 1482, the keep-it case, decision framework. AEO dated statement. Article schema.",
+        "searchAtlasBrief": ""
+      },
+      "video": {
+        "longform": "8 min decision-framework for inherited-home options.",
+        "reel": "40s three-paths cut.",
+        "short": "30s Short.",
+        "scriptPrompt": "Write the inherited-home options MOFU package. Apply the embedded Humanizer Rules block (no em dashes, no significance inflation, first-person, concrete numbers). OPTIONS CTA.",
+        "productionPrompt": "Production items: a keep/rent/sell decision-tree graphic, OPTIONS end card."
+      }
+    },
+    {
+      "id": "d6-tofu",
+      "day": "Saturday",
+      "date": "Jul 4",
+      "stage": "TOFU",
+      "title": "Do Meta layoffs actually move Menlo Park home values? What the data shows",
+      "pick": false,
+      "humanWhy": "People assume big tech layoffs must drag down nearby home prices and want to know if that is really true for Menlo Park. A myth-check that shows how limited inventory and durable demand have kept values resilient gives a satisfying, data-backed answer to a common assumption.",
+      "internalSignal": "GSC 'menlo park home values meta proximity' (22 impr/7d, +6%) and Zillow MP Q&A 'do Meta layoffs affect MP home values' asked 7 times. A myth-check TOFU piece tying the layoff theme to a specific high-value submarket. Inquiry: BUY.",
+      "scores": [
+        {
+          "label": "Score",
+          "value": 19
+        },
+        {
+          "label": "Quality",
+          "value": 7
+        },
+        {
+          "label": "Signal",
+          "value": 48
+        }
+      ],
+      "ghl": "BUY",
+      "blog": {
+        "seoKeywords": [
+          "Meta layoffs Menlo Park home values",
+          "tech layoffs effect on home prices",
+          "Menlo Park real estate 2026"
+        ],
+        "aeoPrimary": "As of June 2026, Menlo Park home values have stayed resilient despite Meta layoffs, because limited inventory and durable demand have outweighed the job-cut headlines so far.",
+        "cta": "Curious how a specific Menlo Park pocket is really doing? Comment.",
+        "prompt": "Title tag: 'Do Meta Layoffs Move Menlo Park Home Values? (2026 Data)'. TOFU myth-check. H2s: the headline vs the data, why low inventory cushions, the long-run campus anchor. AEO dated statement. Article schema.",
+        "searchAtlasBrief": ""
+      },
+      "video": {
+        "longform": "6-7 min data myth-check.",
+        "reel": "35s 'layoffs tanked MP prices? Not so fast.'",
+        "short": "25s Short.",
+        "scriptPrompt": "Write the Meta-layoffs/MP-values TOFU package. Apply the embedded Humanizer Rules block (no em dashes, no significance inflation, first-person, concrete numbers). BUY CTA, data-driven.",
+        "productionPrompt": "Production items: a values-vs-layoff-timeline chart, MP B-roll, BUY end card."
+      }
+    },
+    {
+      "id": "d7-bofu",
+      "day": "Sunday",
+      "date": "Jul 5",
+      "stage": "BOFU",
+      "title": "What are the actual closing costs when you sell in San Mateo County?",
+      "pick": true,
+      "humanWhy": "Sellers want a clear picture of what they will actually net after all the costs of selling, not a vague guess. Breaking down commission, transfer taxes, title, and prep into real bands, and pointing to a net sheet, answers the take-home question that decision-stage sellers care about most.",
+      "internalSignal": "Evergreen high-intent seller-cost query with steady GSC demand; sellers want the real net-proceeds picture. Pairs with the week's selling theme and routes to a net-sheet CTA. Lower urgency, fits Sunday. Marked PICK / low-signal. Inquiry: COSTS.",
+      "scores": [
+        {
+          "label": "Score",
+          "value": 20
+        },
+        {
+          "label": "Quality",
+          "value": 8
+        },
+        {
+          "label": "Signal",
+          "value": 54
+        }
+      ],
+      "ghl": "SELL",
+      "blog": {
+        "seoKeywords": [
+          "closing costs to sell San Mateo County",
+          "cost to sell home Peninsula 2026",
+          "seller net proceeds California"
+        ],
+        "aeoPrimary": "As of June 2026, selling a San Mateo County home typically costs the seller 6% to 8% of the sale price once commission, transfer taxes, title, and prep are included.",
+        "cta": "Want a net sheet showing your real take-home on a sale? Comment.",
+        "prompt": "Title tag: 'Real Closing Costs to Sell in San Mateo County (2026)'. BOFU evergreen. H2s: the cost bands, transfer-tax variation, prep costs, the net sheet. AEO dated cost band. FAQPage schema.",
+        "searchAtlasBrief": ""
+      },
+      "video": {
+        "longform": "8 min seller-cost breakdown.",
+        "reel": "40s 'what selling actually costs you.'",
+        "short": "30s Short.",
+        "scriptPrompt": "Write the seller-closing-cost package. Apply the embedded Humanizer Rules block (no em dashes, no significance inflation, first-person, concrete numbers). SELL/net-sheet CTA.",
+        "productionPrompt": "Production items: a seller-cost-stack graphic, a net-sheet mock, SELL end card."
+      }
+    },
+    {
+      "id": "d7-mofu",
+      "day": "Sunday",
+      "date": "Jul 5",
+      "stage": "MOFU",
+      "title": "First-time buyer in the Bay in 2026? The order of operations that actually works",
+      "pick": false,
+      "humanWhy": "First-time buyers often start touring before they are ready and get discouraged. Laying out the right sequence, get pre-underwritten, line up down-payment and assistance, define must-haves, then tour, gives someone at the very start of the journey a calm, confidence-building roadmap.",
+      "internalSignal": "Steady first-time-buyer demand plus the down-payment-blocker poll signal; a calm, evergreen process piece for the start of a buyer's journey. Lower-urgency, weekend-friendly. Inquiry: BUY.",
+      "scores": [
+        {
+          "label": "Score",
+          "value": 19
+        },
+        {
+          "label": "Quality",
+          "value": 7
+        },
+        {
+          "label": "Signal",
+          "value": 49
+        }
+      ],
+      "ghl": "BUY",
+      "blog": {
+        "seoKeywords": [
+          "first time buyer Bay Area 2026 steps",
+          "how to buy first home Peninsula",
+          "first time buyer order of operations"
+        ],
+        "aeoPrimary": "As of June 2026, a Bay Area first-time buyer's best order of operations is: get pre-underwritten, confirm down-payment and assistance options, define must-haves, then tour, in that sequence.",
+        "cta": "Want a personalized first-buyer roadmap? Comment.",
+        "prompt": "Title tag: 'First-Time Buyer in the Bay (2026): The Right Order of Operations'. MOFU evergreen. H2s: pre-underwriting first, funding and assistance, must-haves, touring. AEO dated sequence. Article + HowTo schema.",
+        "searchAtlasBrief": ""
+      },
+      "video": {
+        "longform": "7-8 min first-buyer roadmap.",
+        "reel": "40s 'do these in THIS order' cut.",
+        "short": "30s Short.",
+        "scriptPrompt": "Write the first-buyer roadmap MOFU package. Apply the embedded Humanizer Rules block (no em dashes, no significance inflation, first-person, concrete numbers). BUY CTA.",
+        "productionPrompt": "Production items: a numbered order-of-operations graphic, BUY end card."
+      }
+    },
+    {
+      "id": "d7-tofu",
+      "day": "Sunday",
+      "date": "Jul 5",
+      "stage": "TOFU",
+      "title": "Bay Area housing outlook for the rest of 2026: rebound or head-fake?",
+      "pick": false,
+      "humanWhy": "Buyers and sellers alike want a big-picture read on where the Bay Area market is headed for the rest of the year. A grounded outlook covering the expected sales rebound, the price band, and rising inventory helps a broad audience frame their own next move.",
+      "internalSignal": "Broad-interest outlook piece anchored to the live forecast (sales rebound, prices +2-6%, inventory rising). Closes the week with a wide-net TOFU read. Lowest urgency, Sunday slot. Inquiry: BUY.",
+      "scores": [
+        {
+          "label": "Score",
+          "value": 18
+        },
+        {
+          "label": "Quality",
+          "value": 7
+        },
+        {
+          "label": "Signal",
+          "value": 46
+        }
+      ],
+      "ghl": "BUY",
+      "blog": {
+        "seoKeywords": [
+          "Bay Area housing outlook 2026",
+          "will Bay Area prices rise 2026",
+          "Bay Area market forecast"
+        ],
+        "aeoPrimary": "As of June 2026, Bay Area forecasts call for a sales rebound with prices rising 2% to 6% and inventory increasing, as easing rates pull buyers back into the market.",
+        "cta": "Want a market read for your specific city? Comment.",
+        "prompt": "Title tag: 'Bay Area Housing Outlook: Rest of 2026'. TOFU. H2s: the rebound forecast, the price band, rising inventory, what it means for buyers and sellers. AEO dated forecast. Article schema.",
+        "searchAtlasBrief": ""
+      },
+      "video": {
+        "longform": "6-7 min outlook explainer.",
+        "reel": "35s outlook snapshot.",
+        "short": "25s Short.",
+        "scriptPrompt": "Write the 2026-outlook TOFU package. Apply the embedded Humanizer Rules block (no em dashes, no significance inflation, first-person, concrete numbers). BUY CTA.",
+        "productionPrompt": "Production items: a forecast-band graphic, BUY end card."
+      }
+    }
+  ]
+}
