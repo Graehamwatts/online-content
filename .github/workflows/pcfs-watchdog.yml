@@ -1,0 +1,30 @@
+name: PCFS Workflow Watchdog
+
+# Confirms the PCFS cloud n8n workflows actually ran today, by reading n8n's own
+# execution records (the real source of truth) — NOT by searching Gmail like the
+# retired n8n-internal watchdog did. Runs in the cloud so it can also warn if n8n
+# itself is down. Emails BRIEF_RECIPIENTS only when something is actually wrong.
+
+on:
+  schedule:
+    - cron: "0 19 * * *"   # 19:00 UTC = 12pm PDT / 11am PST — after the 8/9/10am workflows
+  workflow_dispatch: {}     # allow manual test runs
+
+jobs:
+  watchdog:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+      - name: Install tzdata
+        run: pip install --quiet tzdata
+      - name: Run PCFS watchdog
+        env:
+          N8N_API_URL: ${{ secrets.N8N_API_URL }}
+          N8N_API_KEY: ${{ secrets.N8N_API_KEY }}
+          GMAIL_USERNAME: ${{ secrets.GMAIL_USERNAME }}
+          GMAIL_APP_PASSWORD: ${{ secrets.GMAIL_APP_PASSWORD }}
+          BRIEF_RECIPIENTS: ${{ secrets.BRIEF_RECIPIENTS }}
+        run: python scripts/pcfs_watchdog.py
