@@ -1,0 +1,292 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Weekly Social Media Report — Jun 22–29, 2026 — Graeham Watts</title>
+<script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.1/dist/chart.umd.min.js"></script>
+<style>
+  :root{
+    --navy:#1B365D; --gold:#C5A258; --white:#FFFFFF; --lgray:#F5F5F5;
+    --ig:#C13584; --fb:#1877F2; --yt:#FF0000; --gmb:#34A853; --gsc:#FBBC04;
+    --red:#ff6b6b; --green:#4CAF50; --amber:#ff9800;
+    --ink:#1a1a2e; --muted:#5b6472; --line:#e4e7ec;
+  }
+  *{box-sizing:border-box}
+  body{margin:0;font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,Helvetica,Arial,sans-serif;background:var(--lgray);color:var(--ink);line-height:1.5}
+  header{background:linear-gradient(135deg,var(--navy),#24507f);color:#fff;padding:28px 32px;border-bottom:4px solid var(--gold)}
+  header h1{margin:0 0 4px;font-size:23px;letter-spacing:.2px}
+  header .sub{opacity:.85;font-size:13px}
+  .recovery{background:#fff3e0;border-left:4px solid var(--amber);color:#8a5200;padding:10px 32px;font-size:13px;font-weight:600}
+  .tabs{display:flex;flex-wrap:wrap;gap:2px;background:var(--navy);padding:0 16px}
+  .tab{background:transparent;color:#cdd8e6;border:0;padding:13px 18px;font-size:13.5px;font-weight:600;cursor:pointer;border-bottom:3px solid transparent}
+  .tab:hover{color:#fff}
+  .tab.active{color:#fff;border-bottom-color:var(--gold)}
+  .panel{display:none;padding:26px 32px;max-width:1180px;margin:0 auto}
+  .panel.active{display:block}
+  .grid{display:grid;gap:18px}
+  .g2{grid-template-columns:1fr 1fr}
+  .g3{grid-template-columns:repeat(3,1fr)}
+  .g4{grid-template-columns:repeat(4,1fr)}
+  @media(max-width:880px){.g2,.g3,.g4{grid-template-columns:1fr}}
+  .card{background:#fff;border:1px solid var(--line);border-radius:12px;padding:18px 20px;box-shadow:0 1px 3px rgba(20,30,50,.04)}
+  .card h3{margin:0 0 10px;font-size:14px;color:var(--navy);text-transform:uppercase;letter-spacing:.5px}
+  .score-wrap{display:flex;align-items:center;gap:24px;flex-wrap:wrap}
+  .score-ring{--p:64;width:150px;height:150px;border-radius:50%;display:grid;place-items:center;
+    background:conic-gradient(var(--amber) calc(var(--p)*1%), #eceff3 0);}
+  .score-ring .inner{width:116px;height:116px;border-radius:50%;background:#fff;display:grid;place-items:center;text-align:center}
+  .score-ring .num{font-size:38px;font-weight:800;color:var(--amber);line-height:1}
+  .score-ring .lbl{font-size:11px;color:var(--muted);text-transform:uppercase;letter-spacing:1px}
+  .kpi{display:flex;flex-direction:column;gap:2px}
+  .kpi .v{font-size:26px;font-weight:800}
+  .kpi .l{font-size:12px;color:var(--muted)}
+  .pill{display:inline-block;padding:2px 9px;border-radius:999px;font-size:11px;font-weight:700}
+  .p-red{background:#ffe9e9;color:#c0392b}.p-green{background:#e8f7ea;color:#2e7d32}.p-amber{background:#fff3e0;color:#b46c00}.p-navy{background:#e8eef6;color:var(--navy)}.p-gray{background:#eceff3;color:#5b6472}
+  table{width:100%;border-collapse:collapse;font-size:13px}
+  th,td{text-align:left;padding:9px 10px;border-bottom:1px solid var(--line)}
+  th{background:#f7f9fc;color:var(--navy);font-size:11px;text-transform:uppercase;letter-spacing:.4px}
+  tr:hover td{background:#fafbfd}
+  .note{font-size:12.5px;color:var(--muted)}
+  .chartbox{position:relative;height:230px}
+  ul.tight{margin:6px 0;padding-left:18px}ul.tight li{margin:5px 0;font-size:13.5px}
+  .rec{border-left:3px solid var(--gold);padding:8px 14px;background:#fbf8f1;border-radius:0 8px 8px 0;margin:10px 0}
+  .rec b{color:var(--navy)}
+  .src-live{color:var(--green);font-weight:700}.src-out{color:var(--red);font-weight:700}
+  .cal{display:grid;grid-template-columns:repeat(7,1fr);gap:6px;font-size:11.5px}
+  .cal .day{background:#f7f9fc;border:1px solid var(--line);border-radius:8px;padding:8px;min-height:92px}
+  .cal .dh{font-weight:700;color:var(--navy);font-size:11px;margin-bottom:4px}
+  .cal .post{background:#fff;border-radius:6px;padding:4px 6px;margin-top:4px;border-left:3px solid var(--ig)}
+  footer{padding:22px 32px;color:var(--muted);font-size:12px;text-align:center;border-top:1px solid var(--line);margin-top:20px}
+  code{background:#eef1f5;padding:1px 5px;border-radius:4px;font-size:12px}
+</style>
+</head>
+<body>
+<header>
+  <h1>Weekly Social Media Performance Report</h1>
+  <div class="sub">Graeham Watts · REALTOR · Intero Real Estate · DRE# 01466876 · graehamwatts.com &nbsp;|&nbsp; Week of June 22–29, 2026</div>
+</header>
+<div class="recovery">⚠ Manual recovery run — the scheduled Monday 9:00 AM PT job did not fire (Claude Code app was closed during its window). This report was generated and sent on recovery.</div>
+
+<div class="tabs">
+  <button class="tab active" data-t="dash">Dashboard</button>
+  <button class="tab" data-t="cal">Content Calendar</button>
+  <button class="tab" data-t="ig">Instagram</button>
+  <button class="tab" data-t="fb">Facebook</button>
+  <button class="tab" data-t="yt">YouTube</button>
+  <button class="tab" data-t="trk">Recommendation Tracker</button>
+</div>
+
+<!-- ===================== DASHBOARD ===================== -->
+<section class="panel active" id="dash">
+  <div class="grid g2" style="margin-bottom:18px">
+    <div class="card">
+      <h3>Overall Health Score</h3>
+      <div class="score-wrap">
+        <div class="score-ring"><div class="inner"><div><div class="num">64</div><div class="lbl">/ 100 · Amber</div></div></div></div>
+        <div style="flex:1;min-width:220px">
+          <p class="note" style="margin-top:0">Scored from the <b>live</b> sources only — Search Console, Google Business Profile, and CRM pipeline. The three social platforms (Instagram, Facebook, YouTube) could not be pulled this week and are <span class="src-out">excluded</span> from the score, not counted as zero. See the Data Source Health panel.</p>
+          <div class="grid g3" style="gap:10px">
+            <div class="kpi"><span class="v" style="color:var(--green)">79</span><span class="l">Google Business</span></div>
+            <div class="kpi"><span class="v" style="color:var(--amber)">57</span><span class="l">Search (GSC)</span></div>
+            <div class="kpi"><span class="v" style="color:var(--amber)">51</span><span class="l">CRM hygiene</span></div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="card">
+      <h3>Data Source Health — this run</h3>
+      <table>
+        <tr><th>Source</th><th>Status</th><th>Notes</th></tr>
+        <tr><td>Instagram</td><td><span class="pill p-red">UNAVAILABLE</span></td><td class="note">Windsor MCP not connected here; no Apify token for fallback dataset</td></tr>
+        <tr><td>Facebook</td><td><span class="pill p-red">UNAVAILABLE</span></td><td class="note">Same — Windsor <code>facebook_organic</code> + Apify both unavailable</td></tr>
+        <tr><td>YouTube</td><td><span class="pill p-red">UNAVAILABLE</span></td><td class="note">Same — Windsor <code>youtube</code> + Apify both unavailable (Shorts blind spot also applies)</td></tr>
+        <tr><td>Search Console</td><td><span class="pill p-green">LIVE</span></td><td class="note">SearchAtlas GSC connector — graehamwatts.com</td></tr>
+        <tr><td>Google Business</td><td><span class="pill p-green">LIVE</span></td><td class="note">SearchAtlas GBP connector — location 67414</td></tr>
+        <tr><td>GHL CRM</td><td><span class="pill p-green">LIVE</span></td><td class="note">Direct LeadConnector PIT — aggregates only (no contact PII published)</td></tr>
+      </table>
+    </div>
+  </div>
+
+  <div class="grid g4" style="margin-bottom:18px">
+    <div class="card"><div class="kpi"><span class="v">852</span><span class="l">GSC impressions (7d) <span class="pill p-green">LIVE</span></span></div></div>
+    <div class="card"><div class="kpi"><span class="v">12</span><span class="l">GSC clicks (7d) · 1.45% CTR</span></div></div>
+    <div class="card"><div class="kpi"><span class="v">4.9★</span><span class="l">Google rating · 29 reviews</span></div></div>
+    <div class="card"><div class="kpi"><span class="v" style="color:var(--amber)">48%</span><span class="l">Review reply rate <span class="pill p-red">below 80% benchmark</span></span></div></div>
+  </div>
+
+  <div class="grid g2" style="margin-bottom:18px">
+    <div class="card"><h3>Search Console — top queries by impressions (7d)</h3><div class="chartbox"><canvas id="cGsc"></canvas></div></div>
+    <div class="card"><h3>GSC traffic by device (7d)</h3><div class="chartbox"><canvas id="cDevice"></canvas></div></div>
+  </div>
+  <div class="grid g2" style="margin-bottom:18px">
+    <div class="card"><h3>Google review star distribution</h3><div class="chartbox"><canvas id="cStars"></canvas></div></div>
+    <div class="card"><h3>CRM pipeline distribution (opportunities)</h3><div class="chartbox"><canvas id="cPipe"></canvas></div></div>
+  </div>
+  <div class="grid g2" style="margin-bottom:18px">
+    <div class="card"><h3>Lead source quality (opportunities)</h3><div class="chartbox"><canvas id="cSource"></canvas></div></div>
+    <div class="card"><h3>Search visibility — lifetime vs this week</h3><div class="chartbox"><canvas id="cTrend"></canvas></div></div>
+  </div>
+
+  <div class="card" style="margin-bottom:18px">
+    <h3>Lead Lifecycle Funnel — from CRM (4,038 opportunities)</h3>
+    <table>
+      <tr><th>Pipeline</th><th>Opportunities</th><th>Share</th><th>Read</th></tr>
+      <tr><td>Investor / Flipper</td><td>1,891</td><td>46.8%</td><td><span class="pill p-navy">Largest segment</span></td></tr>
+      <tr><td>Buyer Pipeline</td><td>1,223</td><td>30.3%</td><td><span class="pill p-green">Active demand</span></td></tr>
+      <tr><td>Seller Pipeline</td><td>446</td><td>11.0%</td><td><span class="pill p-amber">Listing fuel</span></td></tr>
+      <tr><td>New Leads</td><td>180</td><td>4.5%</td><td><span class="pill p-amber">131 "Contacted – No Response"</span></td></tr>
+      <tr><td>Past Buyers</td><td>164</td><td>4.1%</td><td><span class="pill p-green">Repeat / referral base</span></td></tr>
+      <tr><td>Past Sellers</td><td>118</td><td>2.9%</td><td><span class="pill p-green">Repeat / referral base</span></td></tr>
+      <tr><td>Lost (already bought/sold)</td><td>16</td><td>0.4%</td><td><span class="pill p-gray">Closed out</span></td></tr>
+    </table>
+    <p class="note" style="margin-bottom:0">Status: 4,033 open / 5 lost. <b style="color:#c0392b">Data-hygiene flag:</b> 3,998 of 4,038 opportunities (99%) carry source <code>Unknown</code>, so true source→close attribution is not yet possible from the CRM. The few labeled sources that do exist: Contact Form (9), Facebook (9), Referral/SOI (4), Home Value Form (2), Open House (2). Fixing source tagging is the single highest-leverage CRM action — it's what unlocks real channel ROI in this report.</p>
+  </div>
+
+  <div class="grid g2">
+    <div class="card">
+      <h3>What's working</h3>
+      <ul class="tight">
+        <li><b>Brand search is strong.</b> "graeham watts" ranks #2 and "east palo alto realtor" ranks #2 — your name and your farm term both convert near the top of page one.</li>
+        <li><b>EPA SEO footprint is wide.</b> 186 ranking queries, dominated by East Palo Alto + Redwood City "homes for sale" intent — exactly the buyer demand you want.</li>
+        <li><b>Reputation is excellent.</b> 4.9★ across 29 reviews, 28 of them 5-star. That's well above the 4.0 benchmark and a genuine conversion asset.</li>
+        <li><b>Real pipeline depth.</b> 1,223 active buyer-pipeline opportunities and 446 seller-pipeline — there is plenty to nurture.</li>
+      </ul>
+    </div>
+    <div class="card">
+      <h3>What needs attention</h3>
+      <ul class="tight">
+        <li><b style="color:#c0392b">Review responses are behind.</b> 15 of 29 reviews are unreplied (48% reply rate vs the 80% benchmark). Each reply is a free local-SEO + trust signal.</li>
+        <li><b style="color:#c0392b">CTR is thin.</b> 852 impressions → 12 clicks (1.45%). Most rankings sit position 20–45 — title/meta and content depth are leaving clicks on the table.</li>
+        <li><b style="color:#b46c00">Social analytics are dark.</b> IG/FB/YT could not be pulled — renew the Windsor organic connectors (or add an Apify token) so next week's score reflects all five channels.</li>
+        <li><b style="color:#c0392b">CRM source tagging is broken.</b> 99% Unknown source blocks all channel ROI math.</li>
+      </ul>
+    </div>
+  </div>
+
+  <div class="card" style="margin-top:18px">
+    <h3>Strategic recommendations (specific)</h3>
+    <div class="rec"><b>1. Clear the review backlog this week.</b> Reply to all 15 unreplied Google reviews. Template for 5★: "Thank you, [Name] — it was a privilege helping you [buy/sell] in [city]. Wishing you all the best in the new chapter. — Graeham". Target: reply rate from 48% → 100%.</div>
+    <div class="rec"><b>2. Win the "east palo alto homes for sale" click.</b> It pulls 17 impressions at position 26. Publish/refresh a dedicated EPA "Homes for Sale" landing page with live inventory, median price, and a school/commute blurb — push it from page 3 toward page 1.</div>
+    <div class="rec"><b>3. Capture the smoke-detector question.</b> "are smoke detectors required when selling a house" is ranking (pos 47) with real impressions — a quick FAQ/short video answering CA point-of-sale requirements (smoke/CO detectors, water heater strapping) is easy authority content tied to a transactional moment.</div>
+    <div class="rec"><b>4. Fix CRM source tagging.</b> Set a required "Lead Source" field on intake and backfill where known. Until then, every "which channel drives closings" question in this report is unanswerable.</div>
+    <div class="rec"><b>5. Restore social telemetry.</b> Renew Windsor's organic connectors (instagram, facebook_organic, youtube) per the integrations playbook, or drop an <code>APIFY_API_TOKEN</code> so the post-level datasets can be read directly. This is the gap that's holding the health score in Amber.</div>
+  </div>
+</section>
+
+<!-- ===================== CONTENT CALENDAR ===================== -->
+<section class="panel" id="cal">
+  <div class="card">
+    <h3>Next 4 weeks — data-driven content plan</h3>
+    <p class="note">Built from this week's live signals: EPA + Redwood City "homes for sale" demand in GSC, the CA point-of-sale FAQ opportunity, and your 4.9★ reputation. Social platform mix is provisional until IG/FB/YT analytics are restored — these are the topics the search data says to make.</p>
+  </div>
+
+  <div class="card" style="margin-top:14px">
+    <h3>Week 1 (Jun 29 – Jul 5)</h3>
+    <div class="cal">
+      <div class="day"><div class="dh">Mon</div><div class="post">Reel: "3 things every EPA buyer gets wrong" · #eastpaloalto</div></div>
+      <div class="day"><div class="dh">Tue</div><div class="post">GBP post: new 5★ review spotlight</div></div>
+      <div class="day"><div class="dh">Wed</div><div class="post">Short/video: CA smoke + CO detector rules when selling</div></div>
+      <div class="day"><div class="dh">Thu</div><div class="post">Carousel: EPA median price + days-on-market</div></div>
+      <div class="day"><div class="dh">Fri</div><div class="post">Reel: Redwood City neighborhood tour</div></div>
+      <div class="day"><div class="dh">Sat</div><div class="post">Story: open house / weekend listings</div></div>
+      <div class="day"><div class="dh">Sun</div><div class="post">What's My Home Worth CTA (→ CMA)</div></div>
+    </div>
+    <table style="margin-top:12px">
+      <tr><th>Post</th><th>Caption (excerpt)</th><th>Hashtags</th><th>Time</th><th>Target keyword</th></tr>
+      <tr><td>Wed video</td><td>"Selling in California? Before you list, two safety items can stall your close — here's the 60-second version."</td><td>#california #homeselling #eastpaloalto #realestatetips</td><td>12:00 PT</td><td>are smoke detectors required when selling a house</td></tr>
+      <tr><td>Thu carousel</td><td>"East Palo Alto by the numbers this month — what buyers and sellers should know."</td><td>#eastpaloalto #bayarea #homesforsale</td><td>5:30 PT</td><td>east palo alto real estate</td></tr>
+    </table>
+  </div>
+
+  <div class="grid g3" style="margin-top:14px">
+    <div class="card"><h3>Week 2</h3><ul class="tight">
+      <li>EPA "homes for sale" landing-page promo reel (target pos-26 keyword)</li>
+      <li>Buyer FAQ: down-payment assistance on the Peninsula</li>
+      <li>GBP post + 2 review replies</li></ul></div>
+    <div class="card"><h3>Week 3</h3><ul class="tight">
+      <li>Redwood City condos explainer (pos-40 keyword, 7 impressions)</li>
+      <li>Seller piece: prep checklist (ties to point-of-sale FAQ series)</li>
+      <li>Past-client / referral spotlight</li></ul></div>
+    <div class="card"><h3>Week 4</h3><ul class="tight">
+      <li>"New construction in EPA" — multiple ranking queries, low CTR to capture</li>
+      <li>Market recap reel + monthly CMA CTA</li>
+      <li>Investor/flipper angle (your largest CRM segment)</li></ul></div>
+  </div>
+</section>
+
+<!-- ===================== INSTAGRAM ===================== -->
+<section class="panel" id="ig">
+  <div class="card">
+    <h3>Instagram — deep dive</h3>
+    <p><span class="pill p-red">DATA UNAVAILABLE THIS RUN</span></p>
+    <p class="note">Instagram post-level and aggregate metrics could not be pulled. The Windsor <code>instagram</code> connector (account 17841411632681720) is not connected in this Claude Code environment, and the direct Apify fallback (dataset <code>dsq8nWfQuIMD7JS0e</code>) requires an <code>APIFY_API_TOKEN</code> that is not present on this machine. <b>No numbers are shown rather than fabricated.</b></p>
+    <p class="note"><b>To restore:</b> renew Windsor's organic license for the <code>instagram</code> connector (its core purpose per the integrations playbook), or add the Apify token so <code>https://api.apify.com/v2/datasets/dsq8nWfQuIMD7JS0e/items</code> can be read. Benchmark when restored: 1.5–3% engagement good, 3%+ excellent. Reminder: <code>media_reach</code> is the real audience size — <code>reel_video_views</code> can read in the millions but is cumulative impressions, not unique viewers.</p>
+  </div>
+</section>
+
+<!-- ===================== FACEBOOK ===================== -->
+<section class="panel" id="fb">
+  <div class="card">
+    <h3>Facebook — deep dive</h3>
+    <p><span class="pill p-red">DATA UNAVAILABLE THIS RUN</span></p>
+    <p class="note">Facebook metrics could not be pulled — Windsor <code>facebook_organic</code> (account 375568976359198) not connected, and the Apify fallback dataset <code>gvteaTX1cX726dq9K</code> requires the absent Apify token. No numbers fabricated.</p>
+    <p class="note">Context: Facebook organic reach is structurally low for real-estate pages (benchmark 0.5–1% engagement good, 1%+ excellent), so this is the lowest-priority of the three dark channels to restore — but it should still be restored for completeness.</p>
+  </div>
+</section>
+
+<!-- ===================== YOUTUBE ===================== -->
+<section class="panel" id="yt">
+  <div class="card">
+    <h3>YouTube — deep dive</h3>
+    <p><span class="pill p-red">DATA UNAVAILABLE THIS RUN</span></p>
+    <p class="note">YouTube metrics could not be pulled — Windsor <code>youtube</code> (account 6631) not connected, Apify fallback dataset <code>Cj2FhJAe9nynZa372</code> needs the absent token. No numbers fabricated.</p>
+    <p class="note"><b>Known structural blind spot:</b> even when restored, the current Apify YouTube scraper does <b>not</b> capture YouTube Shorts — only regular uploads. So we never claim "zero uploads"; Shorts may exist that scrapers can't see. Fix: set <code>maxShorts:30</code> on the channel scraper or add <code>streamers/youtube-shorts-scraper</code>. Benchmark: 2–5% engagement good, 5%+ excellent.</p>
+  </div>
+</section>
+
+<!-- ===================== TRACKER ===================== -->
+<section class="panel" id="trk">
+  <div class="card">
+    <h3>Recommendation Tracker</h3>
+    <p class="note">First tracked edition of this V8 report (no prior published baseline existed). Statuses carry forward week over week from here.</p>
+    <table>
+      <tr><th>#</th><th>Recommendation</th><th>Opened</th><th>Status</th><th>Next action</th></tr>
+      <tr><td>1</td><td>Reply to all 15 unreplied Google reviews (→ 100% reply rate)</td><td>Jun 29</td><td><span class="pill p-amber">Open</span></td><td>Clear backlog this week; recheck reply rate next run</td></tr>
+      <tr><td>2</td><td>Build/refresh EPA "homes for sale" landing page</td><td>Jun 29</td><td><span class="pill p-amber">Open</span></td><td>Target pos-26 keyword; track movement in GSC</td></tr>
+      <tr><td>3</td><td>CA point-of-sale FAQ content (smoke/CO detectors)</td><td>Jun 29</td><td><span class="pill p-amber">Open</span></td><td>Publish short video + FAQ; capture pos-47 query</td></tr>
+      <tr><td>4</td><td>Fix CRM lead-source tagging (99% Unknown)</td><td>Jun 29</td><td><span class="pill p-red">Blocked-metric</span></td><td>Make Lead Source required; backfill known sources</td></tr>
+      <tr><td>5</td><td>Restore IG/FB/YT analytics (Windsor renew or Apify token)</td><td>Jun 29</td><td><span class="pill p-red">Infra gap</span></td><td>Renew Windsor organic license OR add APIFY_API_TOKEN</td></tr>
+    </table>
+  </div>
+</section>
+
+<footer>
+  Generated 2026-06-29 (manual recovery run for the missed Monday 9:00 AM PT schedule) · Graeham Watts · DRE# 01466876 · Intero Real Estate<br>
+  Live sources this run: Google Search Console, Google Business Profile, GoHighLevel CRM (aggregates only). Instagram / Facebook / YouTube unavailable — flagged, not fabricated.
+</footer>
+
+<script>
+// tabs
+document.querySelectorAll('.tab').forEach(b=>b.addEventListener('click',()=>{
+  document.querySelectorAll('.tab').forEach(x=>x.classList.remove('active'));
+  document.querySelectorAll('.panel').forEach(x=>x.classList.remove('active'));
+  b.classList.add('active');
+  document.getElementById(b.dataset.t).classList.add('active');
+}));
+const NAVY='#1B365D',GOLD='#C5A258',GREEN='#4CAF50',AMBER='#ff9800',RED='#ff6b6b',GSCc='#FBBC04',GMBc='#34A853';
+const noLeg={plugins:{legend:{display:false}}};
+new Chart(cGsc,{type:'bar',data:{labels:['epa real estate','east palo alto','epa homes for sale','rwc homes for sale','graeham watts','rwc houses for sale','epa ca real estate','epa ca homes for sale'],
+  datasets:[{label:'Impressions',data:[25,24,17,15,10,10,9,8],backgroundColor:GSCc}]},
+  options:{...noLeg,indexAxis:'y',scales:{x:{beginAtZero:true}}}});
+new Chart(cDevice,{type:'doughnut',data:{labels:['Desktop','Mobile','Tablet'],datasets:[{data:[555,364,2],backgroundColor:[NAVY,GOLD,'#9bb1cc']}]},options:{plugins:{legend:{position:'bottom'}}}});
+new Chart(cStars,{type:'bar',data:{labels:['5★','4★','3★','2★','1★'],datasets:[{label:'Reviews',data:[28,0,0,1,0],backgroundColor:[GREEN,GREEN,AMBER,RED,RED]}]},options:noLeg});
+new Chart(cPipe,{type:'bar',data:{labels:['Investor/Flipper','Buyer','Seller','New Leads','Past Buyers','Past Sellers','Lost'],
+  datasets:[{label:'Opportunities',data:[1891,1223,446,180,164,118,16],backgroundColor:NAVY}]},options:{...noLeg,indexAxis:'y'}});
+new Chart(cSource,{type:'doughnut',data:{labels:['Unknown (untagged)','Contact Form','Facebook','Referral/SOI','Other tagged'],
+  datasets:[{data:[3998,11,9,4,16],backgroundColor:[RED,NAVY,'#1877F2',GOLD,'#9bb1cc']}]},options:{plugins:{legend:{position:'bottom'}}}});
+new Chart(cTrend,{type:'bar',data:{labels:['Avg position (lifetime)','Avg position (7d)'],
+  datasets:[{label:'Avg position (lower is better)',data:[47,17.5],backgroundColor:[GOLD,GREEN]}]},
+  options:{...noLeg,scales:{y:{reverse:true,title:{display:true,text:'position (lower = better)'}}}}});
+</script>
+</body>
+</html>
