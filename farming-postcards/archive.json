@@ -18,12 +18,12 @@
       "lever": "Education + unlock",
       "front_headline": "Your Low Property Tax Rate Can Move With You",
       "back_headline": "The Rule Most Long-Time Owners Don't Know",
-      "cta_type": "Prop 19 guide",
-      "cta_line": "Get the plain-English Prop 19 guide",
+      "cta_type": "Call / text Graeham",
+      "cta_line": "Call or text me for your Prop 19 breakdown",
       "audience": "Both (strongest on 55+ long-tenure farm)",
       "preview_html": "2026-07-01-prop19-tax-transfer-preview.html",
-      "status": "ROUGH DRAFT — manual recovery",
-      "notes": "Built 2026-06-29 after the June 24 scheduled preview failed to fire (app closed). First run of archetype #9. Cadence-correct 1st-of-month education angle; passes all 4 differentiation axes (no villain, fresh CTA distinct from last 2 cards' valuation/market-report). Includes not-tax-advice disclaimer. QR target (Prop 19 guide page) + headshots pending."
+      "status": "PRINT-READY — with Peter (headshots + SMS QR)",
+      "notes": "Built 2026-06-29 after the June 24 scheduled preview failed to fire (app closed). First run of archetype #9. Cadence-correct 1st-of-month education angle; passes all 4 differentiation axes (no villain; call/text CTA last used 03/15/25, well outside cooldown). Rush-to-print: CTA swapped from a Prop 19 guide page to call/text (SMS QR keyword 'PROP 19' to 650-308-4727) to remove the landing-page blocker and hit July 1. Includes not-tax-advice disclaimer. Pending: headshots + static SMS QR."
     },
     {
       "id": "2026-06-15-low-inventory-timing",
