@@ -1,0 +1,65 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <style>
+    body { font-family: -apple-system, BlinkMacSystemFont, 'DM Sans', sans-serif; margin: 0; padding: 20px; background: #f9fafb; }
+    .container { max-width: 720px; margin: 0 auto; background: white; border-radius: 8px; overflow: hidden; box-shadow: 0 1px 3px rgba(0,0,0,0.1); }
+    .header { background: #0f1729; color: white; padding: 24px; }
+    .header h1 { margin: 0; font-size: 28px; font-weight: 600; }
+    .header p { margin: 8px 0 0 0; color: #d1d5db; font-size: 14px; }
+    .status { padding: 16px 24px; background: #ef4444; color: white; text-align: center; font-weight: 500; font-size: 13px; }
+    .section { padding: 24px; }
+    .section h2 { margin: 0 0 16px 0; font-size: 18px; font-weight: 600; color: #0f1729; }
+    .error-box { background: #fee2e2; padding: 16px; border-radius: 6px; border-left: 4px solid #ef4444; font-size: 14px; line-height: 1.6; color: #7f1d1d; margin-bottom: 16px; }
+    .code { font-family: 'Monaco', monospace; background: #f3f4f6; padding: 2px 6px; border-radius: 3px; }
+    .action-list { list-style: none; padding: 0; margin: 0; }
+    .action-list li { padding: 8px 0; padding-left: 24px; position: relative; }
+    .action-list li:before { content: "→"; position: absolute; left: 0; color: #f4b955; font-weight: 600; }
+    .footer { padding: 24px; background: #f9fafb; border-top: 1px solid #e5e7eb; text-align: center; font-size: 12px; color: #666; }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <div class="header">
+      <h1>Daily Attribution Brief</h1>
+      <p>2026-06-29 — Execution Failed</p>
+    </div>
+    <div class="status">⚠️ GHL Pull Failed — Workflow Deployment Blocked</div>
+
+    <div class="section">
+      <h2>What Happened</h2>
+      <div class="error-box">
+        <strong>The daily attribution brief could not be generated due to token scope limitations.</strong>
+        <p>The GitHub Personal Access Token (PAT) used for this repo has <code>repo</code> scope only, not <code>workflow</code> scope. GitHub refuses to create or update workflow files without the <code>workflow</code> permission.</p>
+      </div>
+      <p>
+        The <code>daily-attribution-brief.yml</code> workflow file was prepared locally but could not be deployed to the repo. Without the workflow deployed, the GitHub Action cannot run to pull GHL data.
+      </p>
+    </div>
+
+    <div class="section">
+      <h2>How to Fix</h2>
+      <ul class="action-list">
+        <li>Create a new Personal Access Token with <code>workflow</code> scope (in GitHub Settings → Developer Settings → Personal access tokens)</li>
+        <li>Store the new token at <code>C:\Users\Graeham Watts\Documents\GitHub Credentials\pat-workflow-scope.txt</code></li>
+        <li>Update the repo Secrets with <code>WORKFLOW_DEPLOY_PAT</code> (the new token)</li>
+        <li>Either push the workflow file manually using the new token, OR re-run this task once the token is in place</li>
+      </ul>
+    </div>
+
+    <div class="section">
+      <h2>Workflow Template Status</h2>
+      <p>✓ The workflow file has been created locally at <code>.github/workflows/daily-attribution-brief.yml</code></p>
+      <p>✗ Could not deploy to GitHub (token scope blocker)</p>
+      <p>The workflow is ready — it just needs a token with higher permissions to push it to the repo.</p>
+    </div>
+
+    <div class="footer">
+      <p>Execution failed at: 2026-06-30 07:23 PDT</p>
+      <p>Task: daily-attribution-brief (scheduled, Mon-Fri 7:15 AM PT)</p>
+    </div>
+  </div>
+</body>
+</html>
