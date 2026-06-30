@@ -1,0 +1,91 @@
+name: Farming Postcard Preview Reminder
+
+# Server-side safety net for the postcard "hook options" preview.
+# Replaces the LOCAL Claude Code scheduled task that only fired while the desktop
+# app was open — which silently no-showed the July 1, 2026 preview.
+# Runs headless on GitHub's servers regardless of app state.
+
+on:
+  schedule:
+    # 8th & 24th — REMIND. Two DST-safe UTC times (GitHub cron is UTC, no DST,
+    # can fire late). The drop-date idempotency marker makes the 2nd run a no-op.
+    - cron: '17 15 8,24 * *'   # ~08:17 PT (PDT) / 07:17 PT (PST)
+    - cron: '17 16 8,24 * *'   # backup hour for the PST half of the year
+    # Daily — WATCHDOG. Escalates if a drop is within 7 days and no marker exists.
+    - cron: '23 16 * * *'
+  workflow_dispatch:
+    inputs:
+      mode:
+        description: 'remind or watchdog'
+        type: choice
+        options: [remind, watchdog]
+        default: remind
+      dry_run:
+        description: 'Print instead of send'
+        type: boolean
+        default: false
+      force_target:
+        description: "Override drop date YYYY-MM-DD (optional)"
+        type: string
+        default: ''
+
+permissions:
+  contents: write   # commit the sent-marker
+  issues: write     # open an issue if a run fails (SMTP-independent alert)
+
+concurrency:
+  group: farming-postcard-preview
+  cancel-in-progress: false
+
+jobs:
+  postcard-preview:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          token: ${{ secrets.GITHUB_TOKEN }}
+
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+
+      - name: Resolve mode from trigger
+        run: |
+          if [ "${{ github.event_name }}" = "workflow_dispatch" ]; then
+            echo "MODE=${{ github.event.inputs.mode }}" >> "$GITHUB_ENV"
+            echo "FORCE_TARGET=${{ github.event.inputs.force_target }}" >> "$GITHUB_ENV"
+            [ "${{ github.event.inputs.dry_run }}" = "true" ] && echo "DRY_RUN=1" >> "$GITHUB_ENV" || true
+          elif [ "${{ github.event.schedule }}" = "23 16 * * *" ]; then
+            echo "MODE=watchdog" >> "$GITHUB_ENV"
+          else
+            echo "MODE=remind" >> "$GITHUB_ENV"
+          fi
+          echo "GITHUB_RUN_URL=${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }}" >> "$GITHUB_ENV"
+
+      - name: Send reminder / watchdog
+        env:
+          GMAIL_USERNAME:      ${{ secrets.GMAIL_USERNAME }}
+          GMAIL_APP_PASSWORD:  ${{ secrets.GMAIL_APP_PASSWORD }}
+          POSTCARD_RECIPIENTS: ${{ secrets.POSTCARD_RECIPIENTS }}
+          PYTHONUNBUFFERED:    "1"
+        run: python3 scripts/postcard_preview_reminder.py
+
+      - name: Commit sent-marker
+        if: env.MODE == 'remind' && env.DRY_RUN != '1'
+        run: |
+          git config user.email "graehamwatts@gmail.com"
+          git config user.name  "Graeham Watts"
+          git remote set-url origin https://x-access-token:${{ secrets.GITHUB_TOKEN }}@github.com/Graehamwatts/online-content.git
+          git add automation_state/farming_postcards/ || true
+          git diff --staged --quiet || git commit -m "postcard preview: sent-marker [skip ci]"
+          git diff --quiet HEAD origin/${{ github.ref_name }} 2>/dev/null || git push || true
+
+      - name: Open issue on failure
+        if: failure()
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: |
+          gh issue create \
+            --title "Postcard preview reminder FAILED ($(date -u +%Y-%m-%d))" \
+            --body "The farming-postcard preview workflow failed (mode: ${MODE:-unknown}). SMTP may be down, so this issue is the backup alert. Run: ${GITHUB_RUN_URL}. Generate the options manually via the farming-postcard skill if a drop is near." \
+            --label "automation" || true
