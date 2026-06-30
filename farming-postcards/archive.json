@@ -12,6 +12,34 @@
   },
   "cards": [
     {
+      "id": "2026-08-01-equity",
+      "mail_date": "2026-08-01",
+      "archetype": "Equity",
+      "lever": "Pride + education",
+      "front_headline": "You've Built More Wealth Here Than You Think",
+      "back_headline": "See What Your Home Has Earned You",
+      "cta_type": "Call / text Graeham",
+      "cta_line": "Text \"EQUITY\" to 650-308-4727 for your home's number",
+      "audience": "Both (strongest on long-tenure owners + past clients)",
+      "preview_html": "2026-08-01-equity-preview.html",
+      "status": "LINED UP — queued for August 1",
+      "notes": "Lined up 2026-06-29. Equity archetype not run since 03/2025; villain-free; wealth/pride framing kept distinct from the 06/01 Neighbor-envy 'real numbers on your street' card. No fabricated dollar stat on the card. CTA is call/text interim (SMS keyword EQUITY) pending a valuation landing page."
+    },
+    {
+      "id": "2026-07-15-buyer-tagged",
+      "mail_date": "2026-07-15",
+      "archetype": "Buyer-tagged",
+      "lever": "Demand + scarcity",
+      "front_headline": "Your Buyer Might Already Be Looking",
+      "back_headline": "Buyers Are Searching Streets Like Yours",
+      "cta_type": "Call / text Graeham",
+      "cta_line": "Text \"BUYERS\" to 650-308-4727 to see if you match",
+      "audience": "Both (strong on Farm)",
+      "preview_html": "2026-07-15-buyer-tagged-preview.html",
+      "status": "LINED UP — queued for July 15",
+      "notes": "Lined up 2026-06-29. Buyer-tagged archetype not used since 04/2025; core claim 'I have buyers' clean (>4 cards back); villain-free; demand theme distinct from July 1 (move) + Aug 1 (wealth). MUST verify Graeham has genuinely active buyers before mailing; kept generic (no fabricated count). CTA is call/text interim (SMS keyword BUYERS) pending an off-market-buyers landing page."
+    },
+    {
       "id": "2026-07-01-prop19-tax-transfer",
       "mail_date": "2026-07-01",
       "archetype": "Prop 19 Tax Transfer",
