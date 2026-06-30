@@ -1,0 +1,529 @@
+L111 [(pre)] DESC |  |  | 
+    
+L112 [(pre)] NOTE |  |  | 
+    
+L113 [(pre)] STUB |  |  | 
+    
+L114 [(pre)] STUB |  |  | 
+    
+L285 [pl-newleads] DESC |  |  | 
+    Every new lead enters here regardless of source. 12-day sprint to qualify and route. Fully automated except Day 1 live call and Day 12 review task.
+L286 [pl-newleads] BODY | Day 0 | ManyChat | auto
+    Meta leads only. Instant Messenger fires on form submit with GIF intro + "Are you looking to buy or sell?" Qualifying flow captures phone -> N8N -> GHL -> Adrian notified. All other sources skip to Day 1.
+L287 [pl-newleads] BODY | Day 1 · 5min | Live Call | manual
+    Adrian calls immediately. Use Buyer or Seller script depending on form type. Goal: qualify timeline, understand intent, book appointment.
+L288 [pl-newleads] BODY | Day 1 · No ans | VM/Lipdub | auto
+    Slybroadcast VM fires via N8N + simultaneous Lipdub GIF: "Hi [Name], it's Graeham, I just tried you. Shoot me a text when you get a sec and I'll help however I can." + calendar link.Slybroadcast script: "Hey, it's Graeham, sorry I just missed you. I'd be glad to help with your home search, so whenever you get a minute, text me or give me a call. Thanks."
+L289 [pl-newleads] BODY | Day 1 · +1hr | Email | auto
+    Same Lipdub video embedded as GIF + intro to Graeham + graehamwatts.com + calendar link. Subject: "I just tried to reach you -- quick video inside."
+L290 [pl-newleads] BODY | Day 2 | AI Text | auto
+    "Hey [Name], did you get a chance to watch that video? Reply with any questions or grab a time, whatever's easier." + calendar link.
+L291 [pl-newleads] BODY | Day 3 | AI Call/VM | auto
+    AI agent call. If no answer: Slybroadcast VM with different angle, mentions a recent sale or listing in their area.Slybroadcast script: "Hey, it's Graeham again. A place just sold right near you that's kind of interesting, and I thought you'd want to know. Give me a call when you get a chance and I'll tell you about it."
+L292 [pl-newleads] BODY | Day 4 | Static GIF | auto
+    "Hey, wanted to share a quick video about how we work with [buyers/sellers] in EPA." Jason library asset -- no name needed. + calendar link.
+L293 [pl-newleads] BODY | Day 5 | HeyGen | auto
+    HeyGen market update for their target area embedded as GIF. Subject: "What the EPA market looks like right now." Educational, no pitch.
+L294 [pl-newleads] BODY | Day 7 | AI Call/VM | auto
+    Second AI call + Slybroadcast VM. Different message -- timely market stat or new listing in their target area.Slybroadcast script: "Hey, it's Graeham. The market by you has done something this week I think you'd want to hear about, and a new listing just came up too. Call me back and I'll fill you in."
+L295 [pl-newleads] BODY | Day 8 | Email | auto
+    Testimonial video matching their type. YouTube GIF thumbnail. Subject: "How we helped a family just like yours."
+L296 [pl-newleads] BODY | Day 9 | AI Text | auto
+    GIF text -- casual. "Still thinking about [buying/selling]? No rush -- here's my calendar if you ever want to chat."
+L297 [pl-newleads] BODY | Day 10 | Live Call | manual
+    Adrian second personal call. Different time of day from Day 1. Use buyer or seller script -- note any responses received.
+L298 [pl-newleads] BODY | Day 11 | Static GIF | auto
+    "Here's how we've helped families in the area find success." YouTube video as GIF + calendar link.
+L299 [pl-newleads] BODY | Day 12 | AI Text | auto
+    "I'll stop bugging you for now. If your plans change I'm here. Want me to keep you posted on the market? Reply Yes or No."
+L300 [pl-newleads] BODY | Day 12 · EOD | Task | manual
+    ADRIAN: Review all data. Route to correct pipeline. Active/Within 3mo/Under 9mo/Over 9mo Buyer or Seller. Cold if no engagement. Unqualified if spam/wrong number. Nobody stays in New Leads after Day 12.
+L307 [pl-newleads] DESC |  |  | 
+    Adrian reached the contact but they didn't engage meaningfully. Continues the 12-day sprint cadence with adjusted messaging.
+L308 [pl-newleads] STUB |  |  | 
+    Cadence: Continues Days 2–12 of the New -- Uncontacted sequence. Adjustment: Adrian's Day 10 call references the prior contact attempt explicitly ("we connected briefly on [date], wanted to follow up").
+L315 [pl-newleads] DESC |  |  | 
+    Lead replied with intent. Highest-priority stage. Adrian's goal: book consultation in next 48 hours and route to correct active pipeline.
+L316 [pl-newleads] BODY | +15 min | Live Call | manual
+    Adrian calls back immediately. Discovery: timeline, criteria, motivation. Push for consultation booking.
+L317 [pl-newleads] BODY | +1 hr | AI Text | auto
+    If no live answer: "Hey [Name], thanks for the reply -- Adrian here. Grabbed a few options for you. When works for a quick 15-min call?" + calendar link.
+L318 [pl-newleads] BODY | Day 1 | Lipdub | auto
+    Personalized Lipdub from Graeham. "Hi [Name], glad you reached out. Here's how I work with [buyers/sellers] in EPA." + calendar link.
+L319 [pl-newleads] BODY | Day 2 | Live Call | manual
+    Adrian second attempt if no booking yet.
+L320 [pl-newleads] BODY | Day 3 | Task | manual
+    ADRIAN: Booked -> Appointment Scheduled. Qualified but not yet booked -> route to active pipeline by timeline. Unresponsive -> back to Contacted - No Response.
+L327 [pl-newleads] DESC |  |  | 
+    Lead engages via email or text but refuses calls. Long-cadence drip -- pure value, no calls.
+L328 [pl-newleads] STUB |  |  | 
+    Cadence: AI Text every 5 days, HeyGen Email every 10 days, Static GIF MMS every 14 days. No live calls. If they break silence, Adrian responds within 15 minutes. Day 14 task: Adrian re-evaluates, routes if engaged.
+L335 [pl-newleads] DESC |  |  | 
+    Sprint completed with zero meaningful engagement. Quarterly low-touch nurture.
+L336 [pl-newleads] STUB |  |  | 
+    Cadence: 1 touch every 90 days -- alternating HeyGen market video and Static GIF MMS. After 365 days zero engagement -> Unqualified.
+L343 [pl-newleads] DESC |  |  | 
+    Spam, wrong number, bad email, or explicitly not interested. No further automated touches. DND tag applied where applicable.
+L344 [pl-newleads] STUB |  |  | 
+    No cadence. Holding stage -- no further outbound.
+L362 [pl-buyer] DESC |  |  | 
+    Confirmed buyer who completed New Leads sprint with strong intent and clear timeline. High-frequency cadence to consultation.
+L363 [pl-buyer] BODY | Day 1 | Live Call | manual
+    Adrian confirms timeline + criteria, sets expectations, books consultation with Graeham within 7 days.
+L364 [pl-buyer] BODY | Day 2 | HeyGen | auto
+    "How we work with active buyers" -- what to expect, how Graeham operates. Calendar link.
+L365 [pl-buyer] BODY | Day 3 | AI Text | auto
+    Saved search confirmation + first matching listings.
+L366 [pl-buyer] BODY | Day 5 | Lipdub | auto
+    "Hi [Name], I've got a few options I think are worth a look. Want me to send them over?" + calendar link.
+L367 [pl-buyer] BODY | Day 7 | Task | manual
+    ADRIAN: Push for consultation. Booked -> Appointment Scheduled. Timeline 0–3mo -> Within 3 Months. Softens -> Under 9 Months.
+L374 [pl-buyer] DESC |  |  | 
+    Real urgency. Goal: get to consultation within 30 days. High frequency -- every 5–7 days.
+L375 [pl-buyer] BODY | Day 1 | Live Call | manual
+    Adrian. Confirm timeline, must-haves, offer saved search, push for consultation.
+L376 [pl-buyer] BODY | Day 1 · No ans | VM/Lipdub | auto
+    "Hi [Name], I've already got a couple places in EPA in mind for you. Want me to send them?" + calendar link.Slybroadcast script: "Hey, it's Graeham, sorry I missed you. I've already got a couple places in mind that might work for you. Shoot me a text and I'll send them over."
+L377 [pl-buyer] BODY | Day 3 | HeyGen | auto
+    "How we work with buyers" process video. Sets expectations, builds trust.
+L378 [pl-buyer] BODY | Day 5 | AI Text | auto
+    Saved search confirmation + first listing alert. "Just set up your home search -- first matches inside."
+L379 [pl-buyer] BODY | Day 7 | Static GIF | auto
+    "Hey, I've been keeping an eye out for properties matching what you want." + calendar link.
+L380 [pl-buyer] BODY | Day 10 | Email | auto
+    Buyer testimonial. Subject: "How [first name] found their home in EPA in 6 weeks."
+L381 [pl-buyer] BODY | Day 14 | AI Call/VM | auto
+    References a current listing matching their criteria.Slybroadcast script: "Hey, it's Graeham. Something just came up that's pretty much what you're looking for, and I didn't want you to miss it. Give me a call and I'll get it to you."
+L382 [pl-buyer] BODY | Day 17 | AI Text | auto
+    New listing alert -- GIF thumbnail. "Just hit the market -- matches your criteria."
+L383 [pl-buyer] BODY | Day 21 | HeyGen | auto
+    Market update for their target area. Stats, trends, inventory.
+L384 [pl-buyer] BODY | Day 25 | Live Call | manual
+    Adrian second personal call. Reference listings sent. Soft push toward tour or consultation.
+L385 [pl-buyer] BODY | Day 30 | Lipdub | auto
+    "Hi [Name], checking in on your home search -- market is moving, want to make sure you don't miss anything."
+L386 [pl-buyer] BODY | Day 35 | Email | auto
+    Educational -- mortgage tips, inspection overview, how to win in competitive market. Pure value.
+L387 [pl-buyer] BODY | Day 42 | AI Call/VM | auto
+    Different angle -- interest rate update or market shift relevant now.Slybroadcast script: "Hey, it's Graeham. Rates moved a little and it actually changes things for buyers right now. Give me a quick call when you can and I'll explain."
+L388 [pl-buyer] BODY | Day 45 | Static GIF | auto
+    "I have a property I think you'd love." Walkthrough video + calendar link.
+L389 [pl-buyer] BODY | Day 52 | AI Text | auto
+    GIF casual. "Anything caught your eye lately? I can set up a showing whenever works."
+L390 [pl-buyer] BODY | Day 60 | Email | auto
+    Second buyer testimonial -- different profile.
+L391 [pl-buyer] BODY | Day 67 | AI Call/VM | auto
+    Market is competitive -- worth getting ahead of it.Slybroadcast script: "Hey, it's Graeham again. It's pretty busy out there right now, and being ready ahead of time really helps. Call me back and we'll get you set so you can jump when the right place comes up."
+L392 [pl-buyer] BODY | Day 75 | Live Call | manual
+    Adrian third personal call. Timeline check.
+L393 [pl-buyer] BODY | Day 82 | Lipdub | auto
+    "Hi [Name], market is moving -- let's connect soon." + calendar link.
+L394 [pl-buyer] BODY | Day 90 | Task | manual
+    ADRIAN: Booked -> Appointment Scheduled. Timeline extended -> Under 9 Months. Silent 60+ -> Cold.
+L401 [pl-buyer] DESC |  |  | 
+    Stay top of mind. Moderate frequency -- every 10–15 days.
+L402 [pl-buyer] BODY | Day 1 | HeyGen | auto
+    Welcome + market overview video. Sets expectations. Calendar link.
+L403 [pl-buyer] BODY | Day 7 | AI Text | auto
+    Saved search confirmation. "Just making sure your home alerts are dialed in -- anything to adjust?"
+L404 [pl-buyer] BODY | Day 14 | Static GIF | auto
+    "Hey, keeping you posted while you plan your move." + calendar link.
+L405 [pl-buyer] BODY | Day 21 | AI Call/VM | auto
+    Timeline check -- anything changed?Slybroadcast script: "Hey, it's Graeham, just checking in. Has anything changed on your end? No rush, just give me a call and let me know where you're at."
+L406 [pl-buyer] BODY | Day 30 | HeyGen | auto
+    Market update + listings matching criteria. Subject: "What the market looks like this month."
+L407 [pl-buyer] BODY | Day 45 | AI Text | auto
+    "How's the search going? Anything I can help with -- even just answering questions?"
+L408 [pl-buyer] BODY | Day 60 | Lipdub | auto
+    "Hi [Name], personally checking in -- good movement in your target area." + calendar link.
+L409 [pl-buyer] BODY | Day 75 | Email | auto
+    Buyer testimonial. Subject: "A story that might feel familiar."
+L410 [pl-buyer] BODY | Day 90 | AI Call/VM | auto
+    Getting closer? Pre-approval early matters in this market.Slybroadcast script: "Hey, it's Graeham. If you're getting closer, getting your financing lined up early really helps in this market. Give me a call and I'll point you in the right direction, no pressure."
+L411 [pl-buyer] BODY | Day 105 | Static GIF | auto
+    Specific stat or trend for their target area.
+L412 [pl-buyer] BODY | Day 120 | HeyGen | auto
+    "Here's exactly what working with us looks like." Re-introduces the process.
+L413 [pl-buyer] BODY | Day 135 | AI Text | auto
+    "Still thinking about a move this year? No rush, just let me know when the timing's right."
+L414 [pl-buyer] BODY | Day 150 | Task | manual
+    ADRIAN: Timeline shortened -> Within 3 Months. Quiet -> Over 9 Months. Silent 60+ -> Cold.
+L421 [pl-buyer] DESC |  |  | 
+    Patient, low-frequency approach. Quarterly to semi-annual touches.
+L422 [pl-buyer] BODY | Day 1 | Email | auto
+    Check-in + comprehensive market guide. "No rush -- here's some reading for when the time is right."
+L423 [pl-buyer] BODY | Day 90 | HeyGen | auto
+    Buyer resource -- mortgage prep, what to look for.
+L424 [pl-buyer] BODY | Day 180 | AI Text | auto
+    "Hope you're doing well -- the market has had some interesting shifts."
+L425 [pl-buyer] BODY | Day 270 | HeyGen | auto
+    Quarterly market report -- data-driven, authoritative.
+L426 [pl-buyer] BODY | Day 360 | Email | auto
+    Buyer success stories. "A year goes fast -- here's what buyers who started where you are accomplished."
+L427 [pl-buyer] BODY | Day 450 | AI Call/VM | auto
+    Timeline check -- getting closer?Slybroadcast script: "Hey, it's Graeham. It's been a while, just wondering if a move is getting any closer for you. Give me a call whenever and we'll pick it back up."
+L428 [pl-buyer] BODY | Day 540 | AI Text | auto
+    "How are your buying plans coming along?"
+L429 [pl-buyer] BODY | Day 630 | HeyGen | auto
+    Market trends -- what's changed in the past year.
+L430 [pl-buyer] BODY | Day 720 | Static GIF | auto
+    Re-engagement. "Hey, been a while -- wanted to personally check in."
+L431 [pl-buyer] BODY | Day 810 | AI Call/VM | auto
+    Warm and direct.Slybroadcast script: "Hey, it's Graeham. Still thinking about buying? Whenever you're ready, just give me a call and we'll figure it out together."
+L432 [pl-buyer] BODY | Day 900 | Email | auto
+    Strategic buyer guide.
+L433 [pl-buyer] BODY | Day 990 | Lipdub | auto
+    "Hi [Name], are you still thinking about making a move?"
+L434 [pl-buyer] BODY | Day 990 | Task | manual
+    ADRIAN: Re-engaged -> Under 9 Months or Within 3 Months. No engagement -> archive or restart.
+L441 [pl-buyer] DESC |  |  | 
+    Buyer purchasing for investment / flip, not personal residence. Different content focus -- ROI, deal flow, off-market opportunities.
+L442 [pl-buyer] STUB |  |  | 
+    Cadence overview: Every 10 days, alternating off-market deal alerts (when available), ROI-focused HeyGen videos, and quarterly market analysis. Live call from Adrian every 30 days. Full cadence -- to be defined.
+L449 [pl-buyer] DESC |  |  | 
+    Confirmed consultation. Short pre-meeting sequence -- buyer walks in already trusting Graeham.
+L450 [pl-buyer] BODY | Immediately | AI Text | auto
+    "Your consultation with Graeham is confirmed for [Date] at [Time]. Looking forward to it!" + Calendly link.
+L451 [pl-buyer] BODY | Same day | HeyGen | auto
+    "What to expect in your buyer consultation." Subject: "Before we meet -- a quick video to get you ready."
+L452 [pl-buyer] BODY | Day 2 | Static GIF | auto
+    Static intro from Graeham -- "Hey, looking forward to meeting you. I've been doing some homework on your target area."
+L453 [pl-buyer] BODY | Day before | AI Text | auto
+    "See you tomorrow at [Time]! Let me know if anything comes up." + reschedule link.
+L454 [pl-buyer] BODY | Day of | AI Text | auto
+    "Looking forward to our conversation today at [Time]."
+L455 [pl-buyer] BODY | After | Task | manual
+    GRAEHAM + ADRIAN: Agreement signed -> Active Buyer + Giselle notified. Timeline pushed -> Within 3 / Under 9 Months. No-show -> back to Active Buyer drip.
+L462 [pl-buyer] DESC |  |  | 
+    Buyer rebooked after cancel/no-show. Intent is still there -- handle with warmth, no guilt.
+L463 [pl-buyer] BODY | Immediately | AI Text | auto
+    "No problem -- looking forward to [New Date] at [New Time]!" + updated Calendly link.
+L464 [pl-buyer] BODY | Same day | Email | auto
+    Reschedule confirmation + "What to expect" HeyGen video.
+L465 [pl-buyer] BODY | Day 2 | Static GIF | auto
+    "All set for [New Date] -- really looking forward to it."
+L466 [pl-buyer] BODY | Day before | AI Text | auto
+    "See you tomorrow at [Time]!"
+L467 [pl-buyer] BODY | Day of | AI Text | auto
+    "Looking forward to our meeting today at [Time]."
+L468 [pl-buyer] BODY | 2nd reschedule | Task | manual
+    GRAEHAM: Adrian flags Graeham. Personal call or move back to Within 3 / Under 9 Months.
+L475 [pl-buyer] DESC |  |  | 
+    Giselle owns transaction coordination. This sequence handles emotional / relationship side.
+L476 [pl-buyer] BODY | Offer accepted | AI Text | auto
+    "Congratulations [Name] -- your offer was accepted! Giselle will reach out shortly with next steps."
+L477 [pl-buyer] BODY | Day 1 | HeyGen | auto
+    "What to expect during escrow." Subject: "Here's your roadmap to closing day."
+L478 [pl-buyer] BODY | Day 7 | AI Text | auto
+    "How are you feeling? Totally normal to have questions -- we're here for anything."
+L479 [pl-buyer] BODY | Day 14 | Email | auto
+    Inspection-process video. Reduces anxiety.
+L480 [pl-buyer] BODY | Contingency | AI Text | auto
+    Milestone update -- Giselle provides dates to Adrian. "Quick update -- your [contingency] is due [Date]."
+L481 [pl-buyer] BODY | Day before COE | Static GIF | auto
+    "Almost there -- one more day! Here's what closing day looks like."
+L482 [pl-buyer] BODY | Day of COE | Lipdub | auto
+    "Hi [Name], today's the day -- congratulations on your new home!" Most impactful Lipdub in the buyer sequence.
+L483 [pl-buyer] BODY | Post-close | Task | manual
+    GISELLE -> ADRIAN: Enroll in Past Buyers immediately. Schedule 48-hour call. Closing gift confirmed. Climbo review primed.
+L490 [pl-buyer] DESC |  |  | 
+    Previously active buyer, silent 60+ days. Re-engagement focused.
+L491 [pl-buyer] BODY | Day 1 | Lipdub | auto
+    "Hi [Name], it's been a while -- still thinking about buying?" Lead with Lipdub to break silence.
+L492 [pl-buyer] BODY | Day 7 | HeyGen | auto
+    No-pressure market update. Pure value, no pitch.
+L493 [pl-buyer] BODY | Day 14 | AI Text | auto
+    "Hey [Name], still thinking about buying? No pressure."
+L494 [pl-buyer] BODY | Day 30 | Static GIF | auto
+    "The market has shifted -- here's what I'm seeing for buyers right now."
+L495 [pl-buyer] BODY | Day 45 | AI Call/VM | auto
+    Warm, not desperate.Slybroadcast script: "Hey, it's Graeham. No agenda here, just keeping in touch. If buying is still on your mind down the road, you've got my number. Take care."
+L496 [pl-buyer] BODY | Day 60 | Email | auto
+    Testimonial -- someone who took their time and found the right home.
+L497 [pl-buyer] BODY | Day 90 | Lipdub | auto
+    "Hi [Name], checking in one more time."
+L498 [pl-buyer] BODY | Day 120 | AI Text | auto
+    "If you're still thinking about buying, I'm here. No pressure."
+L499 [pl-buyer] BODY | Day 150 | Live Call | manual
+    Adrian final personal attempt. Genuinely warm.
+L500 [pl-buyer] BODY | Day 180 | Task | manual
+    ADRIAN: Re-engaged -> appropriate buyer stage. Zero engagement -> Unqualified.
+L507 [pl-buyer] DESC |  |  | 
+    Buyer who completed Cold sequence with zero engagement, or explicitly removed themselves.
+L508 [pl-buyer] STUB |  |  | 
+    No cadence. Holding stage. Annual audit by Adrian to confirm no accidental archives.
+L526 [pl-seller] DESC |  |  | 
+    Confirmed seller from Contacted - Responded with strong intent. Goal: book listing consultation within 7 days.
+L527 [pl-seller] BODY | Day 1 | Live Call | manual
+    Adrian confirms timeline + property, offers CMA, books consultation with Graeham.
+L528 [pl-seller] BODY | Day 1 | Email | auto
+    CMA preview + market video. Subject: "Your home's value in today's market."
+L529 [pl-seller] BODY | Day 3 | Lipdub | auto
+    "Hi [Name], I've got some thoughts on how to position your home right now." + calendar link.
+L530 [pl-seller] BODY | Day 5 | HeyGen | auto
+    "How we sell homes for top dollar." Process video.
+L531 [pl-seller] BODY | Day 7 | Task | manual
+    ADRIAN: Booked -> Appointment Scheduled. Timeline 0–3mo -> Within 3 Months. Softens -> Under 9 Months.
+L538 [pl-seller] DESC |  |  | 
+    Goal: signed listing agreement. High frequency.
+L539 [pl-seller] BODY | Day 1 | Live Call | manual
+    Adrian. Timeline, property, CMA offer, push for listing consultation.
+L540 [pl-seller] BODY | Day 1 · No ans | VM/Lipdub | auto
+    "Hi [Name], I pulled some numbers on your home's value, worth a look." + calendar link.Slybroadcast script: "Hey, it's Graeham, sorry I missed you. I ran some numbers on what your place could sell for these days and I think you'd want to see them. Give me a call and I'll walk you through it."
+L541 [pl-seller] BODY | Day 1 · +1hr | Email | auto
+    CMA report + HeyGen market video. Subject: "Your home's value in today's market."
+L542 [pl-seller] BODY | Day 3 | AI Text | auto
+    "Did you get a chance to look at the numbers? I can walk you through them anytime."
+L543 [pl-seller] BODY | Day 5 | Static GIF | auto
+    "Quick thought about the best time to list your home."
+L544 [pl-seller] BODY | Day 8 | Email | auto
+    Seller testimonial -- past seller who got top dollar.
+L545 [pl-seller] BODY | Day 14 | AI Call/VM | auto
+    Specific recent comparable sale showing strong pricing.Slybroadcast script: "Hey, it's Graeham. A home a lot like yours just sold close by, and it went for a really strong number. Call me back and I'll show you what that means for your place."
+L546 [pl-seller] BODY | Day 15 | AI Text | auto
+    Market stat for their neighborhood that sparks curiosity.
+L547 [pl-seller] BODY | Day 21 | Lipdub | auto
+    "Hi [Name], checking in on your selling timeline."
+L548 [pl-seller] BODY | Day 22 | HeyGen | auto
+    "How to attract top dollar." Staging, pricing, timing.
+L549 [pl-seller] BODY | Day 29 | AI Call/VM | auto
+    Is now a good time?Slybroadcast script: "Hey, it's Graeham. People keep asking me if now's a good time to sell, and for your area it's a fair question. Give me a call and I'll give you a straight answer."
+L550 [pl-seller] BODY | Day 36 | Static GIF | auto
+    "Here's what I'm seeing in EPA right now."
+L551 [pl-seller] BODY | Day 43 | Email | auto
+    Seller prep checklist -- repairs, staging, photography.
+L552 [pl-seller] BODY | Day 50 | AI Text | auto
+    "When are you thinking about making the move? Even a rough timeline helps."
+L553 [pl-seller] BODY | Day 57 | Live Call | manual
+    Adrian. Push for listing consultation. "30 minutes to put a full plan together."
+L554 [pl-seller] BODY | Day 64 | Email | auto
+    "Why timing matters."
+L555 [pl-seller] BODY | Day 71 | Lipdub | auto
+    "Hi [Name], let's put together a full plan."
+L556 [pl-seller] BODY | Day 78 | Task | manual
+    ADRIAN: Booked -> Appointment Scheduled. Extended -> Under 9 Months. Silent 60+ -> Cold.
+L563 [pl-seller] DESC |  |  | 
+    Stay top of mind. Moderate frequency.
+L564 [pl-seller] BODY | Day 1 | HeyGen | auto
+    Market overview. "Here's what the EPA market looks like."
+L565 [pl-seller] BODY | Day 8 | AI Text | auto
+    "Have you been keeping an eye on what homes are selling for in your neighborhood?"
+L566 [pl-seller] BODY | Day 15 | Static GIF | auto
+    "Keeping you updated on the market while you plan."
+L567 [pl-seller] BODY | Day 22 | AI Call/VM | auto
+    Timeline check.Slybroadcast script: "Hey, it's Graeham, just checking in. Has anything changed on your timeline to sell? Give me a quick call and let me know, no pressure."
+L568 [pl-seller] BODY | Day 29 | Email | auto
+    Market check -- current comparable sales for their property type.
+L569 [pl-seller] BODY | Day 43 | AI Text | auto
+    "Still thinking about selling this year?"
+L570 [pl-seller] BODY | Day 57 | Lipdub | auto
+    "Hi [Name], market has had some interesting movements."
+L571 [pl-seller] BODY | Day 71 | HeyGen | auto
+    "How to prepare your home for sale."
+L572 [pl-seller] BODY | Day 85 | AI Call/VM | auto
+    Mention recent successful sale in their area.Slybroadcast script: "Hey, it's Graeham. We just closed a really good sale in your neighborhood, and it's good news for your place too. Give me a call when you get a chance."
+L573 [pl-seller] BODY | Day 100 | Static GIF | auto
+    Equity/market positioning video.
+L574 [pl-seller] BODY | Day 120 | Email | auto
+    Seller testimonial. Subject: "How timing made all the difference."
+L575 [pl-seller] BODY | Day 135 | AI Text | auto
+    "Whenever you're ready to talk options, I'm here."
+L576 [pl-seller] BODY | Day 150 | Task | manual
+    ADRIAN: Shortened -> Within 3 Months. Distant -> Over 9 Months. Silent 60+ -> Cold.
+L583 [pl-seller] DESC |  |  | 
+    Low frequency, high value.
+L584 [pl-seller] BODY | Day 1 | Email | auto
+    Comprehensive seller education guide.
+L585 [pl-seller] BODY | Day 90 | AI Text | auto
+    "The [area] market has had some interesting movement."
+L586 [pl-seller] BODY | Day 180 | AI Text | auto
+    "Just a reminder I'm here whenever you're ready."
+L587 [pl-seller] BODY | Day 270 | AI Text | auto
+    "Want a fresh market analysis so you know exactly where you stand?"
+L588 [pl-seller] BODY | Day 360 | HeyGen | auto
+    Annual market update video.
+L589 [pl-seller] BODY | Day 450 | AI Call/VM | auto
+    Timeline check.Slybroadcast script: "Hey, it's Graeham. It's been a while, just wondering if selling is back on your mind. Give me a call whenever and we'll catch up."
+L590 [pl-seller] BODY | Day 540 | AI Text | auto
+    Equity review offer.
+L591 [pl-seller] BODY | Day 630 | AI Text | auto
+    "Inventory in your area is shifting -- worth knowing how that affects you."
+L592 [pl-seller] BODY | Day 720 | Static GIF | auto
+    CMA / equity check static video.
+L593 [pl-seller] BODY | Day 810 | AI Call/VM | auto
+    AI call + VM.Slybroadcast script: "Hey, it's Graeham. I'm still around whenever the timing's right to sell, and I'll make it as easy as I can for you. Just give me a call and we'll get going."
+L594 [pl-seller] BODY | Day 900 | Email | auto
+    Strategy reminder -- how to maximize sale price.
+L595 [pl-seller] BODY | Day 990 | Lipdub | auto
+    "Hi [Name], are you getting closer to making your move?"
+L596 [pl-seller] BODY | Day 990 | Task | manual
+    ADRIAN: Re-engaged -> Within 3 / Under 9. Zero engagement -> Unqualified.
+L603 [pl-seller] DESC |  |  | 
+    Listing consultation booked.
+L604 [pl-seller] BODY | Immediately | AI Text | auto
+    "Your listing consultation is confirmed for [Date] at [Time]."
+L605 [pl-seller] BODY | Same day | HeyGen | auto
+    "What to expect in your listing consultation."
+L606 [pl-seller] BODY | Day 2 | Static GIF | auto
+    "Hey, looking forward to meeting you."
+L607 [pl-seller] BODY | Day before | AI Text | auto
+    "See you tomorrow at [Time]!"
+L608 [pl-seller] BODY | Day of | AI Text | auto
+    "Looking forward to our meeting today."
+L609 [pl-seller] BODY | After | Task | manual
+    GRAEHAM + GISELLE: Listing signed -> Giselle initiates listing intake. No agreement -> Adrian moves to Within 3 / Under 9 Months.
+L616 [pl-seller] DESC |  |  | 
+    Seller rebooked. Handle with warmth.
+L617 [pl-seller] BODY | Immediately | AI Text | auto
+    "No problem -- looking forward to [New Date]."
+L618 [pl-seller] BODY | Same day | Email | auto
+    Reschedule confirmation + "What to expect" video.
+L619 [pl-seller] BODY | Day 2 | Static GIF | auto
+    "All set for [New Date] -- really looking forward to it."
+L620 [pl-seller] BODY | Day before | AI Text | auto
+    "See you tomorrow at [Time]!"
+L621 [pl-seller] BODY | Day of | AI Text | auto
+    "Looking forward to our meeting today."
+L622 [pl-seller] BODY | 2nd reschedule | Task | manual
+    GRAEHAM: Adrian flags Graeham. Personal call or move back.
+L629 [pl-seller] DESC |  |  | 
+    Giselle owns transaction coordination. This sequence handles relationship + emotional support.
+L630 [pl-seller] BODY | Listing live | AI Text | auto
+    "We're live -- your home is officially on the market!"
+L631 [pl-seller] BODY | Day 1 | HeyGen | auto
+    "What to expect during the listing process."
+L632 [pl-seller] BODY | Day 7 | AI Text | auto
+    "How are you feeling? Totally normal to have questions."
+L633 [pl-seller] BODY | Showings | AI Text | auto
+    "Showings are happening -- great sign."
+L634 [pl-seller] BODY | Offer received | AI Text | auto
+    "Great news -- we have an offer coming in!"
+L635 [pl-seller] BODY | Offer accepted | Lipdub | auto
+    "Hi [Name], your offer is accepted -- congratulations!"
+L636 [pl-seller] BODY | Contingency | AI Text | auto
+    "Quick update -- [contingency] cleared. On track for [COE date]."
+L637 [pl-seller] BODY | Day before COE | Static GIF | auto
+    "One more day -- you've done it!"
+L638 [pl-seller] BODY | Day of COE | Lipdub | auto
+    "Hi [Name], congratulations -- you did it!"
+L639 [pl-seller] BODY | Post-close | Task | manual
+    GISELLE -> ADRIAN: Enroll in Past Sellers. 48-hr call. Closing gift confirmed.
+L646 [pl-seller] DESC |  |  | 
+    Previously active seller, silent 60+ days.
+L647 [pl-seller] BODY | Day 1 | Lipdub | auto
+    "Hi [Name], it's been a while -- checking in on your selling plans."
+L648 [pl-seller] BODY | Day 7 | HeyGen | auto
+    Current market data for their area.
+L649 [pl-seller] BODY | Day 14 | AI Text | auto
+    "Still thinking about selling? No pressure."
+L650 [pl-seller] BODY | Day 30 | Static GIF | auto
+    "Market has shifted -- here's what it means for your home's value."
+L651 [pl-seller] BODY | Day 45 | AI Call/VM | auto
+    Warm tone -- not desperate.Slybroadcast script: "Hey, it's Graeham. No pressure at all, just letting you know I'm here if selling ever comes back up. Call me anytime. Take care."
+L652 [pl-seller] BODY | Day 60 | Email | auto
+    Testimonial -- someone who waited and sold.
+L653 [pl-seller] BODY | Day 90 | Lipdub | auto
+    "Hi [Name], checking in one more time."
+L654 [pl-seller] BODY | Day 120 | AI Text | auto
+    "If you're ever ready to talk options, I'm here."
+L655 [pl-seller] BODY | Day 150 | Live Call | manual
+    Adrian final personal attempt.
+L656 [pl-seller] BODY | Day 180 | Task | manual
+    ADRIAN: Re-engaged -> seller stage. Zero engagement -> Unqualified.
+L663 [pl-seller] DESC |  |  | 
+    Seller who completed Cold sequence with zero engagement.
+L664 [pl-seller] STUB |  |  | 
+    No cadence. Holding stage.
+L681 [pl-investor] DESC |  |  | 
+    Investors looking for off-market deals, distressed properties, flip opportunities. Lower frequency, more business-tone.
+L682 [pl-investor] STUB |  |  | 
+    Cadence (proposed): Off-market deal alerts as available. Quarterly market analysis email focused on investor metrics. Live call from Adrian/Graeham every 30 days. Full cadence -- to be defined.
+L698 [pl-pastbuyers] DESC |  |  | 
+    Within 30 days of close. Welcome cadence + Climbo review request + closing gift confirmation.
+L699 [pl-pastbuyers] STUB |  |  | 
+    Cadence: Day 0 Lipdub on close + Climbo link. Day 2 Adrian 48-hr call. Day 7 closing gift confirmation. Day 14 testimonial request. Day 30 -> Past Buyer stage.
+L706 [pl-pastbuyers] DESC |  |  | 
+    Enters on close + 30 days. Runs forever -- 12-month cycle anchored to closing anniversary.
+L707 [pl-pastbuyers] NOTE |  |  | 
+    SETUP: Tag 'Past Client' in GHL. Record exact closing date. Birthday on file enables Birthday Video months. Farming postcards run monthly.
+L708 [pl-pastbuyers] BODY | Month 1 | AI Text | auto
+    Seasonal text -- casual and warm. "Hope you're settling in well!" + farming postcard.
+L709 [pl-pastbuyers] BODY | Month 2 | Email | auto
+    CMA -- current value estimate. "Here's what your home is worth today." + farming postcard.
+L710 [pl-pastbuyers] BODY | Month 3 | Lipdub | auto
+    Birthday video on actual birthday if on file. Otherwise: farming postcard only.
+L711 [pl-pastbuyers] BODY | Month 4 | Live Call | manual
+    Seasonal call -- Adrian. Check in, natural referral ask. + farming postcard.
+L712 [pl-pastbuyers] BODY | Month 5 | HeyGen | auto
+    Quarterly market update video. + farming postcard.
+L713 [pl-pastbuyers] BODY | Month 6 | Static GIF | auto
+    Referral request video. "If you know anyone thinking about buying or selling..." + farming postcard.
+L714 [pl-pastbuyers] BODY | Month 7 | AI Text | auto
+    Second seasonal text. + farming postcard.
+L715 [pl-pastbuyers] BODY | Month 8 | Email | auto
+    6-month CMA update. + farming postcard.
+L716 [pl-pastbuyers] BODY | Month 9 | Lipdub | auto
+    Birthday video if applicable. Otherwise farming postcard only.
+L717 [pl-pastbuyers] BODY | Month 10 | Live Call | manual
+    Second seasonal call. + farming postcard.
+L718 [pl-pastbuyers] BODY | Month 11 | HeyGen | auto
+    Year-end market wrap. + farming postcard.
+L719 [pl-pastbuyers] BODY | Month 12 | Static GIF | auto
+    Second referral request + farming postcard. Cycle restarts.
+L726 [pl-pastbuyers] DESC |  |  | 
+    Past buyer signaled they want to buy again. Highest-value path in the entire system -- they already trust Graeham.
+L727 [pl-pastbuyers] STUB |  |  | 
+    Action: Adrian flags. Graeham personal call within 24 hours. Move to Buyer Pipeline. Tag "Repeat Business -- Buyer" for attribution. Past Buyers cycle pauses.
+L734 [pl-pastbuyers] DESC |  |  | 
+    Past buyer of a home now wants to sell that same home (or another).
+L735 [pl-pastbuyers] STUB |  |  | 
+    Action: Adrian flags. Graeham personal call within 24 hours. Move to Seller Pipeline. Tag "Repeat Business -- Seller". Past Buyers cycle pauses.
+L753 [pl-pastsellers] DESC |  |  | 
+    Within 30 days of close. Welcome cadence + Climbo review + closing gift.
+L754 [pl-pastsellers] STUB |  |  | 
+    Cadence: Day 0 Lipdub + Climbo link. Day 2 Adrian 48-hr call. Day 7 closing gift. Day 14 testimonial. Day 30 -> Past Seller.
+L761 [pl-pastsellers] DESC |  |  | 
+    Identical structure to Past Buyer cycle. CMA reports validate their timing decision.
+L762 [pl-pastsellers] NOTE |  |  | 
+    SETUP: Tag 'Past Client', record closing date and birthday.
+L763 [pl-pastsellers] BODY | Month 1 | AI Text | auto
+    "Hope the move went smoothly!" + farming postcard.
+L764 [pl-pastsellers] BODY | Month 2 | Email | auto
+    CMA for their sold property's neighborhood. + farming postcard.
+L765 [pl-pastsellers] BODY | Month 3 | Lipdub | auto
+    Birthday video if applicable.
+L766 [pl-pastsellers] BODY | Month 4 | Live Call | manual
+    Seasonal call. Referral ask. Ask if buying again. + farming postcard.
+L767 [pl-pastsellers] BODY | Month 5 | HeyGen | auto
+    Market update -- quarterly. + farming postcard.
+L768 [pl-pastsellers] BODY | Month 6 | Static GIF | auto
+    Referral request video. + farming postcard.
+L769 [pl-pastsellers] BODY | Month 7 | AI Text | auto
+    Second seasonal text. + farming postcard.
+L770 [pl-pastsellers] BODY | Month 8 | Email | auto
+    Neighborhood market update. + farming postcard.
+L771 [pl-pastsellers] BODY | Month 9 | Lipdub | auto
+    Birthday video if applicable.
+L772 [pl-pastsellers] BODY | Month 10 | Live Call | manual
+    Second seasonal call. + farming postcard.
+L773 [pl-pastsellers] BODY | Month 11 | HeyGen | auto
+    Year-end market wrap. + farming postcard.
+L774 [pl-pastsellers] BODY | Month 12 | Static GIF | auto
+    Second referral request. + farming postcard. Cycle restarts.
+L781 [pl-pastsellers] DESC |  |  | 
+    Past seller signaled they want to sell another property.
+L782 [pl-pastsellers] STUB |  |  | 
+    Action: Adrian flags. Graeham personal call within 24 hours. Move to Seller Pipeline.
+L789 [pl-pastsellers] DESC |  |  | 
+    Past seller now wants to buy. Common with downsizers, relocators.
+L790 [pl-pastsellers] STUB |  |  | 
+    Action: Adrian flags. Graeham personal call within 24 hours. Move to Buyer Pipeline.
+L807 [pl-lost] DESC |  |  | 
+    Lead bought through a different agent. Holding stage for tracking only.
+L808 [pl-lost] STUB |  |  | 
+    No cadence. Light annual touch (1 holiday HeyGen email). Tracked for analytics -- never re-marketed actively.
+L814 [pl-lost] DESC |  |  | 
+    Lead sold through a different agent.
+L815 [pl-lost] STUB |  |  | 
+    No cadence. Light annual touch only.
+TOTAL EDITABLE NODES: 264
