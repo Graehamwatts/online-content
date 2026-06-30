@@ -1,25 +1,28 @@
-name: Farming Postcard Preview Reminder
+name: Farming Postcard Preview
 
-# Server-side safety net for the postcard "hook options" preview.
-# Replaces the LOCAL Claude Code scheduled task that only fired while the desktop
-# app was open — which silently no-showed the July 1, 2026 preview.
-# Runs headless on GitHub's servers regardless of app state.
+# Server-side preview system for the farming-postcard program (per Fugu blueprint).
+# Replaces the LOCAL Claude Code scheduled task that only fired while the desktop app
+# was open (it silently no-showed the July 1, 2026 preview). Runs headless on GitHub.
+#
+# Modes:
+#   remind   (8th/24th)  — deterministic reminder email (no LLM). DEFAULT scheduled mode.
+#   generate (dispatch)  — calls Sakana/Fugu to GENERATE 3-5 rule-validated options + emails them.
+#                          Becomes the scheduled mode once SAKANA_API_KEY is set and it's verified
+#                          (change the "Resolve mode" step's scheduled branch from remind -> generate).
+#   watchdog (daily)     — escalates if a drop is <7 days out with no sent-marker.
 
 on:
   schedule:
-    # 8th & 24th — REMIND. Two DST-safe UTC times (GitHub cron is UTC, no DST,
-    # can fire late). The drop-date idempotency marker makes the 2nd run a no-op.
-    - cron: '17 15 8,24 * *'   # ~08:17 PT (PDT) / 07:17 PT (PST)
-    - cron: '17 16 8,24 * *'   # backup hour for the PST half of the year
-    # Daily — WATCHDOG. Escalates if a drop is within 7 days and no marker exists.
-    - cron: '23 16 * * *'
+    - cron: '17 15 8,24 * *'   # 8th/24th ~08:17 PT (PDT)
+    - cron: '17 16 8,24 * *'   # backup hour for PST half of the year
+    - cron: '23 16 * * *'      # daily watchdog
   workflow_dispatch:
     inputs:
       mode:
-        description: 'remind or watchdog'
+        description: 'remind | generate | watchdog'
         type: choice
-        options: [remind, watchdog]
-        default: remind
+        options: [remind, generate, watchdog]
+        default: generate
       dry_run:
         description: 'Print instead of send'
         type: boolean
@@ -30,11 +33,11 @@ on:
         default: ''
 
 permissions:
-  contents: write   # commit the sent-marker
-  issues: write     # open an issue if a run fails (SMTP-independent alert)
+  contents: write
+  issues: write
 
 concurrency:
-  group: farming-postcard-preview
+  group: farming-postcard-preview-${{ github.ref }}
   cancel-in-progress: false
 
 jobs:
@@ -58,11 +61,14 @@ jobs:
           elif [ "${{ github.event.schedule }}" = "23 16 * * *" ]; then
             echo "MODE=watchdog" >> "$GITHUB_ENV"
           else
+            # Scheduled 8th/24th. Default remind. To flip to server-side generation,
+            # change the next line to:  echo "MODE=generate" >> "$GITHUB_ENV"
             echo "MODE=remind" >> "$GITHUB_ENV"
           fi
           echo "GITHUB_RUN_URL=${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }}" >> "$GITHUB_ENV"
 
-      - name: Send reminder / watchdog
+      - name: Run (remind / watchdog)
+        if: env.MODE == 'remind' || env.MODE == 'watchdog'
         env:
           GMAIL_USERNAME:      ${{ secrets.GMAIL_USERNAME }}
           GMAIL_APP_PASSWORD:  ${{ secrets.GMAIL_APP_PASSWORD }}
@@ -70,14 +76,26 @@ jobs:
           PYTHONUNBUFFERED:    "1"
         run: python3 scripts/postcard_preview_reminder.py
 
-      - name: Commit sent-marker
-        if: env.MODE == 'remind' && env.DRY_RUN != '1'
+      - name: Run (generate options via Sakana)
+        if: env.MODE == 'generate'
+        env:
+          SAKANA_API_KEY:      ${{ secrets.SAKANA_API_KEY }}
+          SAKANA_BASE_URL:     ${{ vars.SAKANA_BASE_URL }}
+          SAKANA_MODEL:        ${{ vars.SAKANA_MODEL }}
+          GMAIL_USERNAME:      ${{ secrets.GMAIL_USERNAME }}
+          GMAIL_APP_PASSWORD:  ${{ secrets.GMAIL_APP_PASSWORD }}
+          POSTCARD_RECIPIENTS: ${{ secrets.POSTCARD_RECIPIENTS }}
+          PYTHONUNBUFFERED:    "1"
+        run: python3 scripts/postcard_preview_generate.py
+
+      - name: Commit state (markers + generated options)
+        if: env.DRY_RUN != '1'
         run: |
           git config user.email "graehamwatts@gmail.com"
           git config user.name  "Graeham Watts"
           git remote set-url origin https://x-access-token:${{ secrets.GITHUB_TOKEN }}@github.com/Graehamwatts/online-content.git
-          git add automation_state/farming_postcards/ || true
-          git diff --staged --quiet || git commit -m "postcard preview: sent-marker [skip ci]"
+          git add automation_state/farming_postcards/ data/farming-postcards/sent/ data/farming-postcards/previews/ 2>/dev/null || true
+          git diff --staged --quiet || git commit -m "postcard preview: state update [skip ci]"
           git diff --quiet HEAD origin/${{ github.ref_name }} 2>/dev/null || git push || true
 
       - name: Open issue on failure
@@ -86,6 +104,6 @@ jobs:
           GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         run: |
           gh issue create \
-            --title "Postcard preview reminder FAILED ($(date -u +%Y-%m-%d))" \
-            --body "The farming-postcard preview workflow failed (mode: ${MODE:-unknown}). SMTP may be down, so this issue is the backup alert. Run: ${GITHUB_RUN_URL}. Generate the options manually via the farming-postcard skill if a drop is near." \
+            --title "Postcard preview FAILED ($(date -u +%Y-%m-%d), mode ${MODE:-unknown})" \
+            --body "The farming-postcard preview workflow failed. SMTP may be down, so this issue is the backup alert. Run: ${GITHUB_RUN_URL}. If a drop is near, generate options manually via the farming-postcard skill." \
             --label "automation" || true
