@@ -1,0 +1,16 @@
+{
+  "schema_version": "farming_postcard_history.v1",
+  "note": "Canonical shipped/queued card history vendored into online-content (2026-06-29, per Fugu blueprint) so the scheduled generator never depends on a second repo at runtime. The finalize/ship step appends here. villain_type 'zillow_algorithm' drives the 2-card villain cooldown. status: shipped | print_ready | queued.",
+  "cards": [
+    { "drop_date": "2025-03-01", "status": "shipped", "archetype": "equity",        "cta_destination_id": "home_valuation",  "villain_type": "none",             "core_claim_slug": "know_your_equity",          "headline": "Do You Know How Much Equity You've Built This Year?" },
+    { "drop_date": "2025-03-15", "status": "shipped", "archetype": "buyer_tagged",   "cta_destination_id": "sms_keyword",     "villain_type": "none",             "core_claim_slug": "i_have_buyers",             "headline": "I Already Have Your Buyer TAGGED" },
+    { "drop_date": "2025-04-15", "status": "shipped", "archetype": "anti_zillow_pool","cta_destination_id": "off_market_buyers","villain_type": "zillow_algorithm","core_claim_slug": "i_have_buyers",             "headline": "I Have A List Of Buyers Who Don't Use Zillow" },
+    { "drop_date": "2026-05-01", "status": "shipped", "archetype": "ai_search",      "cta_destination_id": "ai_score_report", "villain_type": "none",             "core_claim_slug": "invisible_to_ai_search",    "headline": "Why Isn't ChatGPT Recommending Your Home?" },
+    { "drop_date": "2026-05-15", "status": "shipped", "archetype": "anti_zestimate", "cta_destination_id": "home_valuation",  "villain_type": "zillow_algorithm","core_claim_slug": "your_estimate_is_wrong",    "headline": "Your Zestimate Is Wrong" },
+    { "drop_date": "2026-06-01", "status": "shipped", "archetype": "neighbor_envy",  "cta_destination_id": "home_valuation",  "villain_type": "zillow_algorithm","core_claim_slug": "know_street_comps",         "headline": "What Did The Last 5 Homes On Your Street Really Sell For?" },
+    { "drop_date": "2026-06-15", "status": "shipped", "archetype": "low_inventory",  "cta_destination_id": "market_report",   "villain_type": "none",             "core_claim_slug": "timing_favors_seller",      "headline": "Right Now, Your Home Would Have Almost No Competition" },
+    { "drop_date": "2026-07-01", "status": "print_ready", "archetype": "prop_19",    "cta_destination_id": "sms_keyword",     "villain_type": "none",             "core_claim_slug": "tax_base_is_portable",      "headline": "Your Low Property Tax Rate Can Move With You" },
+    { "drop_date": "2026-07-15", "status": "queued", "archetype": "buyer_tagged",    "cta_destination_id": "sms_keyword",     "villain_type": "none",             "core_claim_slug": "i_have_buyers",             "headline": "Your Buyer Might Already Be Looking" },
+    { "drop_date": "2026-08-01", "status": "queued", "archetype": "equity",          "cta_destination_id": "sms_keyword",     "villain_type": "none",             "core_claim_slug": "wealth_you_built",          "headline": "You've Built More Wealth Here Than You Think" }
+  ]
+}
