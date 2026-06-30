@@ -8,9 +8,23 @@
     "market": "East Palo Alto / Peninsula",
     "vendor_default": "Universal Mail Works",
     "dashboard_url": "https://graehamwatts.github.io/online-content/farming-postcards/",
-    "last_updated": "2026-06-11"
+    "last_updated": "2026-06-29"
   },
   "cards": [
+    {
+      "id": "2026-07-01-prop19-tax-transfer",
+      "mail_date": "2026-07-01",
+      "archetype": "Prop 19 Tax Transfer",
+      "lever": "Education + unlock",
+      "front_headline": "Your Low Property Tax Rate Can Move With You",
+      "back_headline": "The Rule Most Long-Time Owners Don't Know",
+      "cta_type": "Prop 19 guide",
+      "cta_line": "Get the plain-English Prop 19 guide",
+      "audience": "Both (strongest on 55+ long-tenure farm)",
+      "preview_html": "2026-07-01-prop19-tax-transfer-preview.html",
+      "status": "ROUGH DRAFT — manual recovery",
+      "notes": "Built 2026-06-29 after the June 24 scheduled preview failed to fire (app closed). First run of archetype #9. Cadence-correct 1st-of-month education angle; passes all 4 differentiation axes (no villain, fresh CTA distinct from last 2 cards' valuation/market-report). Includes not-tax-advice disclaimer. QR target (Prop 19 guide page) + headshots pending."
+    },
     {
       "id": "2026-06-15-low-inventory-timing",
       "mail_date": "2026-06-15",
