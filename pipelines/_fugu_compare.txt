@@ -1,0 +1,209 @@
+[0] WHY: Drops the assumptive closer.
+  BEFORE: Hi [Name], it's Graeham, I just tried you. Shoot me a text when you get a sec and I'll help however I can.
+  MINE:   Hi [Name], it's Graeham, just gave you a call. Text me back whenever works and we'll get going.
+  FUGU:   Hi [Name], it's Graeham. Just gave you a call. Text me back when you get a chance.
+
+[4] WHY: Less clickbait, more concrete.
+  BEFORE: Hey, it's Graeham again. A place just sold right near you that's kind of interesting, and I thought you'd want to know. Give me a call when you get a chance and I'll tell you about it.
+  MINE:   Hey, it's Graeham again. A place just sold right near you and the number caught me off guard. Call me when you get a chance and I'll tell you about it.
+  FUGU:   Hey, it's Graeham again. A place just sold right near you, and the sale price matters for your place. Call me when you get a chance and I'll explain.
+
+[7] WHY: Replaces vague things moved.
+  BEFORE: Hey, it's Graeham. The market by you has done something this week I think you'd want to hear about, and a new listing just came up too. Call me back and I'll fill you in.
+  MINE:   Hey, it's Graeham. A couple things moved in your area this week, and a new listing just came up. Call me back and I'll fill you in.
+  FUGU:   Hey, it's Graeham. A couple homes sold in your area this week, and a new listing just came up. Call me back and I'll fill you in.
+
+[8] WHY: Avoids like yours cheese.
+  BEFORE: How we helped a family just like yours.
+  MINE:   How we helped a family like yours
+  FUGU:   A recent EPA client story
+
+[9] WHY: Cuts repeated still thinking and no rush.
+  BEFORE: Still thinking about [buying/selling]? No rush — here's my calendar if you ever want to chat.
+  MINE:   Still thinking about [buying/selling]? No rush at all. Here's my calendar if you ever want to talk it through.
+  FUGU:   If [buying/selling] is still on the table, here's my calendar if you want to talk it through.
+
+[21] WHY: Avoids checking in and worth showing.
+  BEFORE: Hi [Name], checking in on your home search — market is moving, want to make sure you don't miss anything.
+  MINE:   Hi [Name], wanted to check in on your search. A few places have come up lately I think are worth showing you.
+  FUGU:   Hi [Name], a few places came up lately that line up with your search. I can send them if you want.
+
+[23] WHY: Less hype than you'd love.
+  BEFORE: I have a property I think you'd love.
+  MINE:   I've got a place I think you'd love.
+  FUGU:   I've got a place that lines up with your search.
+
+[25] WHY: Removes market-pressure language.
+  BEFORE: Hey, it's Graeham again. It's pretty busy out there right now, and being ready ahead of time really helps. Call me back and we'll get you set so you can jump when the right place comes up.
+  MINE:   Hey, it's Graeham again. It's busy out there, and being ready early makes a real difference. Call me back and we'll get you set so you can move when the right place shows up.
+  FUGU:   Hey, it's Graeham again. Getting the basics lined up early makes the search easier. Call me back and we'll make sure you're set.
+
+[26] WHY: Makes the market note specific.
+  BEFORE: Hi [Name], market is moving — let's connect soon.
+  MINE:   Hi [Name], a lot has been happening in your area. Let's catch up soon.
+  FUGU:   Hi [Name], a couple nearby sales changed the pricing picture. Let's catch up soon.
+
+[32] WHY: Replaces vague good activity.
+  BEFORE: Hi [Name], personally checking in — good movement in your target area.
+  MINE:   Hi [Name], wanted to reach out myself. There has been some good activity in your area lately.
+  FUGU:   Hi [Name], wanted to reach out myself. A few homes nearby went pending or sold.
+
+[34] WHY: Softens pays off in this market.
+  BEFORE: Hey, it's Graeham. If you're getting closer, getting your financing lined up early really helps in this market. Give me a call and I'll point you in the right direction, no pressure.
+  MINE:   Hey, it's Graeham. If you're getting closer, lining up your financing early really pays off in this market. Call me back and I'll point you to the right people.
+  FUGU:   Hey, it's Graeham. If you're getting closer, lining up financing early can make the next steps simpler. Call me back and I'll point you to the right people.
+
+[36] WHY: Varies repeated still thinking opener.
+  BEFORE: Still thinking about a move this year? No rush, just let me know when the timing's right.
+  MINE:   Still thinking about a move this year? Whenever the timing feels right, just say the word.
+  FUGU:   If a move is still possible this year, send me a note when the timing feels right.
+
+[37] WHY: Drops another no rush.
+  BEFORE: No rush — here's some reading for when the time is right.
+  MINE:   No rush at all. Here's some reading for when the time is right.
+  FUGU:   Some reading for whenever the timing starts to make sense.
+
+[38] WHY: Less awkward than done things.
+  BEFORE: Hope you're doing well — the market has had some interesting shifts.
+  MINE:   Hope you're doing well. The market has done a few things lately I thought you'd find interesting.
+  FUGU:   Hope you're doing well. A few recent market changes seemed useful to pass along.
+
+[39] WHY: Fixes the awkward story tease.
+  BEFORE: A year goes fast — here's what buyers who started where you are accomplished.
+  MINE:   A year goes by fast. Here's what buyers who started right where you are ended up doing.
+  FUGU:   What a year can change for buyers
+
+[41] WHY: Before was more personal.
+  BEFORE: How are your buying plans coming along?
+  MINE:   How are the buying plans coming along?
+  FUGU:   How are your buying plans coming along?
+
+[43] WHY: Avoids another on your mind.
+  BEFORE: Hey, it's Graeham. Still thinking about buying? Whenever you're ready, just give me a call and we'll figure it out together.
+  MINE:   Hey, it's Graeham. Still got buying on your mind? Whenever you're ready, give me a call and we'll figure it out together.
+  FUGU:   Hey, it's Graeham. If buying has come back up, give me a call and we'll figure it out together.
+
+[44] WHY: Avoids repeated still thinking.
+  BEFORE: Hi [Name], are you still thinking about making a move?
+  MINE:   Hi [Name], still thinking about making a move?
+  FUGU:   Hi [Name], is a move still a possibility?
+
+[45] WHY: Removes third person polish.
+  BEFORE: Your consultation with Graeham is confirmed for [Date] at [Time]. Looking forward to it!
+  MINE:   You're confirmed with Graeham for [Date] at [Time]. He's looking forward to meeting you.
+  FUGU:   You're confirmed for [Date] at [Time]. Talk then.
+
+[49] WHY: Cuts repeated looking forward.
+  BEFORE: Looking forward to our conversation today at [Time].
+  MINE:   Looking forward to talking today at [Time].
+  FUGU:   Talk to you today at [Time].
+
+[53] WHY: Shorter and less padded.
+  BEFORE: How are you feeling? Totally normal to have questions — we're here for anything.
+  MINE:   How are you feeling about everything? Questions are totally normal at this stage, and we're here for any of them.
+  FUGU:   How are you feeling? Questions are normal at this stage. Send them our way.
+
+[57] WHY: Avoids repeated buying on your mind.
+  BEFORE: Hi [Name], it's been a while — still thinking about buying?
+  MINE:   Hi [Name], it's been a while. Still got buying on your mind?
+  FUGU:   Hi [Name], it's been a while. Is buying back in the picture?
+
+[58] WHY: Less templated than on your mind.
+  BEFORE: Hey [Name], still thinking about buying? No pressure.
+  MINE:   Hey [Name], is buying still on your mind? Totally fine either way.
+  FUGU:   Hey [Name], is buying still in the picture, or paused for now?
+
+[60] WHY: Cuts no agenda filler.
+  BEFORE: Hey, it's Graeham. No agenda here, just keeping in touch. If buying is still on your mind down the road, you've got my number. Take care.
+  MINE:   Hey, it's Graeham. No agenda, just staying in touch. If buying is still on your mind down the road, you've got my number. Take care.
+  FUGU:   Hey, it's Graeham. Just staying in touch. If buying comes back up later, you've got my number. Take care.
+
+[63] WHY: Removes top dollar cliché.
+  BEFORE: How we sell homes for top dollar.
+  MINE:   How I sell homes for top dollar.
+  FUGU:   How I price and market a home
+
+[65] WHY: Removes assumptive you want to see them.
+  BEFORE: Hey, it's Graeham, sorry I missed you. I ran some numbers on what your place could sell for these days and I think you'd want to see them. Give me a call and I'll walk you through it.
+  MINE:   Hey, it's Graeham, sorry I missed you. I ran the numbers on what your place could sell for right now, and I think you'd want to see them. Call me back and I'll walk you through it.
+  FUGU:   Hey, it's Graeham, sorry I missed you. I ran the numbers on what your place could sell for right now. Call me back if you want to go through them.
+
+[68] WHY: Replaces strong number sales language.
+  BEFORE: Hey, it's Graeham. A home a lot like yours just sold close by, and it went for a really strong number. Call me back and I'll show you what that means for your place.
+  MINE:   Hey, it's Graeham. A home a lot like yours just sold nearby, and it went for a strong number. Call me back and I'll show you what that means for your place.
+  FUGU:   Hey, it's Graeham. A home a lot like yours just sold nearby, and the sale price matters for your place. Call me for the quick read.
+
+[69] WHY: Avoids checking in.
+  BEFORE: Hi [Name], checking in on your selling timeline.
+  MINE:   Hi [Name], wanted to check in on your timeline to sell.
+  FUGU:   Hi [Name], wanted to see where your selling timeline stands.
+
+[73] WHY: Less clickbait.
+  BEFORE: Why timing matters.
+  MINE:   Why timing matters more than people think
+  FUGU:   Why timing matters when you sell
+
+[74] WHY: Makes full plan concrete.
+  BEFORE: Hi [Name], let's put together a full plan.
+  MINE:   Hi [Name], whenever you're ready, let's put a full plan together.
+  FUGU:   Hi [Name], when you're ready, let's map out pricing, prep, and timing.
+
+[76] WHY: Cleaner than wondering if.
+  BEFORE: Hey, it's Graeham, just checking in. Has anything changed on your timeline to sell? Give me a quick call and let me know, no pressure.
+  MINE:   Hey, it's Graeham. Wondering if anything has changed on your timeline to sell. Give me a quick call and let me know where you're at.
+  FUGU:   Hey, it's Graeham. Has your timeline to sell changed at all? Give me a quick call and let me know where you're at.
+
+[77] WHY: Replaces vague things moved.
+  BEFORE: Hi [Name], market has had some interesting movements.
+  MINE:   Hi [Name], a few things have moved in your area worth telling you about.
+  FUGU:   Hi [Name], a couple nearby sales may affect your pricing and timing.
+
+[78] WHY: Less promotional than strong sale.
+  BEFORE: Hey, it's Graeham. We just closed a really good sale in your neighborhood, and it's good news for your place too. Give me a call when you get a chance.
+  MINE:   Hey, it's Graeham. We just closed a strong sale in your neighborhood, and it's good news for your place too. Call me when you get a chance.
+  FUGU:   Hey, it's Graeham. We just closed a sale in your neighborhood, and the result gives us a better read on your place. Call me when you can.
+
+[81] WHY: Less vague than interesting things.
+  BEFORE: The [area] market has had some interesting movement.
+  MINE:   The [area] market has done a few interesting things lately.
+  FUGU:   A quick read on the [area] market
+
+[82] WHY: Avoids selling on your mind.
+  BEFORE: Hey, it's Graeham. It's been a while, just wondering if selling is back on your mind. Give me a call whenever and we'll catch up.
+  MINE:   Hey, it's Graeham. Been a while. Just wondering if selling is back on your mind. Call me whenever and we'll catch up.
+  FUGU:   Hey, it's Graeham. Been a while. If selling has come back up, call me whenever and we'll catch up.
+
+[83] WHY: Avoids overclaiming value impact.
+  BEFORE: Inventory in your area is shifting — worth knowing how that affects you.
+  MINE:   Inventory in your area is shifting, and it actually changes what your home is worth. Want the quick version?
+  FUGU:   Inventory in your area is shifting, which can affect pricing. Want the quick version?
+
+[84] WHY: Removes the easy process overpromise.
+  BEFORE: Hey, it's Graeham. I'm still around whenever the timing's right to sell, and I'll make it as easy as I can for you. Just give me a call and we'll get going.
+  MINE:   Hey, it's Graeham. I'm still around whenever the timing is right, and I'll make the whole thing as easy as I can for you. Give me a call and we'll get going.
+  FUGU:   Hey, it's Graeham. I'm around whenever the timing is right to sell. Give me a call and we can talk through the next step.
+
+[87] WHY: Saves exclamation for bigger moments.
+  BEFORE: We're live — your home is officially on the market!
+  MINE:   We're live. Your home is officially on the market!
+  FUGU:   We're live. Your home is officially on the market.
+
+[90] WHY: Calmer before acceptance.
+  BEFORE: Great news — we have an offer coming in!
+  MINE:   Good news, we've got an offer coming in!
+  FUGU:   Good news, we've got an offer coming in.
+
+[93] WHY: Avoids premature celebration.
+  BEFORE: One more day — you've done it!
+  MINE:   One more day. You've done it!
+  FUGU:   One more day. We're almost there.
+
+[96] WHY: Avoids another on your mind.
+  BEFORE: Still thinking about selling? No pressure.
+  MINE:   Still got selling on your mind? Totally fine if the timing isn't right yet.
+  FUGU:   Is selling still a possibility, or is the timing off for now?
+
+[103] WHY: Avoids checking in again.
+  BEFORE: Hi [Name], checking in one more time.
+  MINE:   Hi [Name], thought I'd check in one more time.
+  FUGU:   Hi [Name], one last note from me for now.
