@@ -1,0 +1,430 @@
+[
+ [
+  "\"Hi [Name], it's Graeham, I just tried you. Shoot me a text when you get a sec and I'll help however I can.\"",
+  "\"Hi [Name], it's Graeham, just gave you a call. Text me back whenever works and we'll get going.\""
+ ],
+ [
+  "\"Hey, it's Graeham, sorry I just missed you. I'd be glad to help with your home search, so whenever you get a minute, text me or give me a call. Thanks.\"",
+  "\"Hey, it's Graeham, sorry I missed you. Happy to help with your home search whenever you're ready. Text me or give me a call when you get a minute. Thanks.\""
+ ],
+ [
+  "\"I just tried to reach you — quick video inside.\"",
+  "\"Tried to reach you, quick video inside\""
+ ],
+ [
+  "\"Hey [Name], did you get a chance to watch that video? Reply with any questions or grab a time, whatever's easier.\"",
+  "\"Hey [Name], did you get a chance to watch that video? Any questions, just reply. Or grab a time here, whatever's easier.\""
+ ],
+ [
+  "\"Hey, it's Graeham again. A place just sold right near you that's kind of interesting, and I thought you'd want to know. Give me a call when you get a chance and I'll tell you about it.\"",
+  "\"Hey, it's Graeham again. A place just sold right near you and the number caught me off guard. Call me when you get a chance and I'll tell you about it.\""
+ ],
+ [
+  "\"Hey, wanted to share a quick video about how we work with [buyers/sellers] in EPA.\"",
+  "\"Hey, here's a quick video on how I work with [buyers/sellers] around EPA.\""
+ ],
+ [
+  "\"What the EPA market looks like right now.\"",
+  "\"What the EPA market looks like right now\""
+ ],
+ [
+  "\"Hey, it's Graeham. The market by you has done something this week I think you'd want to hear about, and a new listing just came up too. Call me back and I'll fill you in.\"",
+  "\"Hey, it's Graeham. A couple things moved in your area this week, and a new listing just came up. Call me back and I'll fill you in.\""
+ ],
+ [
+  "\"How we helped a family just like yours.\"",
+  "\"How we helped a family like yours\""
+ ],
+ [
+  "\"Still thinking about [buying/selling]? No rush — here's my calendar if you ever want to chat.\"",
+  "\"Still thinking about [buying/selling]? No rush at all. Here's my calendar if you ever want to talk it through.\""
+ ],
+ [
+  "\"I'll stop bugging you for now. If your plans change I'm here. Want me to keep you posted on the market? Reply Yes or No.\"",
+  "\"I'll give you some space. If your plans change, I'm around. Want me to keep you posted on the market in the meantime? Reply Yes or No.\""
+ ],
+ [
+  "\"Hey [Name], thanks for the reply — Adrian here. Grabbed a few options for you. When works for a quick 15-min call?\"",
+  "\"Hey [Name], Adrian here, thanks for getting back to me. I pulled a few options for you. When's good for a quick 15-minute call?\""
+ ],
+ [
+  "\"Hi [Name], glad you reached out. Here's how I work with [buyers/sellers] in EPA.\"",
+  "\"Hi [Name], glad you reached out. Here's how I work with [buyers/sellers] around EPA.\""
+ ],
+ [
+  "\"Hi [Name], I've got a few options I think are worth a look. Want me to send them over?\"",
+  "\"Hi [Name], I found a few places that fit what you're after. Want me to send them over?\""
+ ],
+ [
+  "\"Hi [Name], I've already got a couple places in EPA in mind for you. Want me to send them?\"",
+  "\"Hi [Name], I've already got a couple places around EPA in mind for you. Want me to send them over?\""
+ ],
+ [
+  "\"Hey, it's Graeham, sorry I missed you. I've already got a couple places in mind that might work for you. Shoot me a text and I'll send them over.\"",
+  "\"Hey, it's Graeham, sorry I missed you. Already got a couple places in mind that could be a fit. Text me back and I'll send them over.\""
+ ],
+ [
+  "\"Just set up your home search — first matches inside.\"",
+  "\"Set up your home search. First matches are inside.\""
+ ],
+ [
+  "\"Hey, I've been keeping an eye out for properties matching what you want.\"",
+  "\"Hey, I've been keeping an eye out for places that match what you're looking for.\""
+ ],
+ [
+  "\"How [first name] found their home in EPA in 6 weeks.\"",
+  "\"How [first name] found a home in EPA in six weeks\""
+ ],
+ [
+  "\"Hey, it's Graeham. Something just came up that's pretty much what you're looking for, and I didn't want you to miss it. Give me a call and I'll get it to you.\"",
+  "\"Hey, it's Graeham. Something just came up that's close to what you're after. Call me back and I'll send it over.\""
+ ],
+ [
+  "\"Just hit the market — matches your criteria.\"",
+  "\"Just hit the market, and it matches what you're looking for.\""
+ ],
+ [
+  "\"Hi [Name], checking in on your home search — market is moving, want to make sure you don't miss anything.\"",
+  "\"Hi [Name], wanted to check in on your search. A few places have come up lately I think are worth showing you.\""
+ ],
+ [
+  "\"Hey, it's Graeham. Rates moved a little and it actually changes things for buyers right now. Give me a quick call when you can and I'll explain.\"",
+  "\"Hey, it's Graeham. Rates shifted a bit, and it actually changes the math for buyers right now. Give me a quick call and I'll walk you through it.\""
+ ],
+ [
+  "\"I have a property I think you'd love.\"",
+  "\"I've got a place I think you'd love.\""
+ ],
+ [
+  "\"Anything caught your eye lately? I can set up a showing whenever works.\"",
+  "\"Anything catch your eye lately? Happy to set up a showing whenever works for you.\""
+ ],
+ [
+  "\"Hey, it's Graeham again. It's pretty busy out there right now, and being ready ahead of time really helps. Call me back and we'll get you set so you can jump when the right place comes up.\"",
+  "\"Hey, it's Graeham again. It's busy out there, and being ready early makes a real difference. Call me back and we'll get you set so you can move when the right place shows up.\""
+ ],
+ [
+  "\"Hi [Name], market is moving — let's connect soon.\"",
+  "\"Hi [Name], a lot has been happening in your area. Let's catch up soon.\""
+ ],
+ [
+  "\"Just making sure your home alerts are dialed in — anything to adjust?\"",
+  "\"Just making sure your home alerts are set up right. Anything you want to adjust?\""
+ ],
+ [
+  "\"Hey, keeping you posted while you plan your move.\"",
+  "\"Hey, just keeping you in the loop while you plan your move.\""
+ ],
+ [
+  "\"Hey, it's Graeham, just checking in. Has anything changed on your end? No rush, just give me a call and let me know where you're at.\"",
+  "\"Hey, it's Graeham. Wondering if anything has changed on your end. Give me a call when you get a chance and let me know where things stand.\""
+ ],
+ [
+  "\"What the market looks like this month.\"",
+  "\"What the market looks like this month\""
+ ],
+ [
+  "\"How's the search going? Anything I can help with — even just answering questions?\"",
+  "\"How's the search going? Happy to help with anything, even if it's just questions.\""
+ ],
+ [
+  "\"Hi [Name], personally checking in — good movement in your target area.\"",
+  "\"Hi [Name], wanted to reach out myself. There has been some good activity in your area lately.\""
+ ],
+ [
+  "\"A story that might feel familiar.\"",
+  "\"A story that might feel familiar\""
+ ],
+ [
+  "\"Hey, it's Graeham. If you're getting closer, getting your financing lined up early really helps in this market. Give me a call and I'll point you in the right direction, no pressure.\"",
+  "\"Hey, it's Graeham. If you're getting closer, lining up your financing early really pays off in this market. Call me back and I'll point you to the right people.\""
+ ],
+ [
+  "\"Here's exactly what working with us looks like.\"",
+  "\"Here's what working with me actually looks like.\""
+ ],
+ [
+  "\"Still thinking about a move this year? No rush, just let me know when the timing's right.\"",
+  "\"Still thinking about a move this year? Whenever the timing feels right, just say the word.\""
+ ],
+ [
+  "\"No rush — here's some reading for when the time is right.\"",
+  "\"No rush at all. Here's some reading for when the time is right.\""
+ ],
+ [
+  "\"Hope you're doing well — the market has had some interesting shifts.\"",
+  "\"Hope you're doing well. The market has done a few things lately I thought you'd find interesting.\""
+ ],
+ [
+  "\"A year goes fast — here's what buyers who started where you are accomplished.\"",
+  "\"A year goes by fast. Here's what buyers who started right where you are ended up doing.\""
+ ],
+ [
+  "\"Hey, it's Graeham. It's been a while, just wondering if a move is getting any closer for you. Give me a call whenever and we'll pick it back up.\"",
+  "\"Hey, it's Graeham. Been a while. Just wondering if a move has gotten any closer for you. Call me whenever and we'll pick up where we left off.\""
+ ],
+ [
+  "\"How are your buying plans coming along?\"",
+  "\"How are the buying plans coming along?\""
+ ],
+ [
+  "\"Hey, been a while — wanted to personally check in.\"",
+  "\"Hey, it has been a while. Wanted to reach out and see how you're doing.\""
+ ],
+ [
+  "\"Hey, it's Graeham. Still thinking about buying? Whenever you're ready, just give me a call and we'll figure it out together.\"",
+  "\"Hey, it's Graeham. Still got buying on your mind? Whenever you're ready, give me a call and we'll figure it out together.\""
+ ],
+ [
+  "\"Hi [Name], are you still thinking about making a move?\"",
+  "\"Hi [Name], still thinking about making a move?\""
+ ],
+ [
+  "\"Your consultation with Graeham is confirmed for [Date] at [Time]. Looking forward to it!\"",
+  "\"You're confirmed with Graeham for [Date] at [Time]. He's looking forward to meeting you.\""
+ ],
+ [
+  "\"Before we meet — a quick video to get you ready.\"",
+  "\"A quick video before we meet\""
+ ],
+ [
+  "\"Hey, looking forward to meeting you. I've been doing some homework on your target area.\"",
+  "\"Hey, looking forward to meeting you. I've already been doing some homework on your area.\""
+ ],
+ [
+  "\"See you tomorrow at [Time]! Let me know if anything comes up.\"",
+  "\"See you tomorrow at [Time]. Let me know if anything comes up.\""
+ ],
+ [
+  "\"Looking forward to our conversation today at [Time].\"",
+  "\"Looking forward to talking today at [Time].\""
+ ],
+ [
+  "\"No problem — looking forward to [New Date] at [New Time]!\"",
+  "\"No problem at all. See you [New Date] at [New Time].\""
+ ],
+ [
+  "\"Congratulations [Name] — your offer was accepted! Giselle will reach out shortly with next steps.\"",
+  "\"Congratulations [Name], your offer was accepted! Giselle will be in touch shortly with the next steps.\""
+ ],
+ [
+  "\"Here's your roadmap to closing day.\"",
+  "\"Your roadmap to closing day\""
+ ],
+ [
+  "\"How are you feeling? Totally normal to have questions — we're here for anything.\"",
+  "\"How are you feeling about everything? Questions are totally normal at this stage, and we're here for any of them.\""
+ ],
+ [
+  "\"Quick update — your [contingency] is due [Date].\"",
+  "\"Quick update: your [contingency] is due [Date].\""
+ ],
+ [
+  "\"Almost there — one more day! Here's what closing day looks like.\"",
+  "\"Almost there, one more day. Here's what closing day looks like.\""
+ ],
+ [
+  "\"Hi [Name], today's the day — congratulations on your new home!\"",
+  "\"Hi [Name], today's the day. Congratulations on the new home!\""
+ ],
+ [
+  "\"Hi [Name], it's been a while — still thinking about buying?\"",
+  "\"Hi [Name], it's been a while. Still got buying on your mind?\""
+ ],
+ [
+  "\"Hey [Name], still thinking about buying? No pressure.\"",
+  "\"Hey [Name], is buying still on your mind? Totally fine either way.\""
+ ],
+ [
+  "\"The market has shifted — here's what I'm seeing for buyers right now.\"",
+  "\"The market has shifted a bit. Here's what I'm seeing for buyers right now.\""
+ ],
+ [
+  "\"Hey, it's Graeham. No agenda here, just keeping in touch. If buying is still on your mind down the road, you've got my number. Take care.\"",
+  "\"Hey, it's Graeham. No agenda, just staying in touch. If buying is still on your mind down the road, you've got my number. Take care.\""
+ ],
+ [
+  "\"If you're still thinking about buying, I'm here. No pressure.\"",
+  "\"If buying is still somewhere on your list, I'm here whenever.\""
+ ],
+ [
+  "\"Hi [Name], I've got some thoughts on how to position your home right now.\"",
+  "\"Hi [Name], I've got a few thoughts on how to position your home in this market.\""
+ ],
+ [
+  "\"How we sell homes for top dollar.\"",
+  "\"How I sell homes for top dollar.\""
+ ],
+ [
+  "\"Hi [Name], I pulled some numbers on your home's value, worth a look.\"",
+  "\"Hi [Name], I pulled some numbers on what your home could sell for. Want me to send them over?\""
+ ],
+ [
+  "\"Hey, it's Graeham, sorry I missed you. I ran some numbers on what your place could sell for these days and I think you'd want to see them. Give me a call and I'll walk you through it.\"",
+  "\"Hey, it's Graeham, sorry I missed you. I ran the numbers on what your place could sell for right now, and I think you'd want to see them. Call me back and I'll walk you through it.\""
+ ],
+ [
+  "\"Did you get a chance to look at the numbers? I can walk you through them anytime.\"",
+  "\"Did you get a chance to look over the numbers? Happy to walk you through them whenever.\""
+ ],
+ [
+  "\"Quick thought about the best time to list your home.\"",
+  "\"A quick thought on the best time to list.\""
+ ],
+ [
+  "\"Hey, it's Graeham. A home a lot like yours just sold close by, and it went for a really strong number. Call me back and I'll show you what that means for your place.\"",
+  "\"Hey, it's Graeham. A home a lot like yours just sold nearby, and it went for a strong number. Call me back and I'll show you what that means for your place.\""
+ ],
+ [
+  "\"Hi [Name], checking in on your selling timeline.\"",
+  "\"Hi [Name], wanted to check in on your timeline to sell.\""
+ ],
+ [
+  "\"How to attract top dollar.\"",
+  "\"How to bring in the strongest offers.\""
+ ],
+ [
+  "\"Hey, it's Graeham. People keep asking me if now's a good time to sell, and for your area it's a fair question. Give me a call and I'll give you a straight answer.\"",
+  "\"Hey, it's Graeham. People keep asking me if now is a good time to sell, and for your area it's a fair question. Call me back and I'll give you a straight answer.\""
+ ],
+ [
+  "\"When are you thinking about making the move? Even a rough timeline helps.\"",
+  "\"When are you thinking of making the move? Even a rough timeline helps.\""
+ ],
+ [
+  "\"Why timing matters.\"",
+  "\"Why timing matters more than people think\""
+ ],
+ [
+  "\"Hi [Name], let's put together a full plan.\"",
+  "\"Hi [Name], whenever you're ready, let's put a full plan together.\""
+ ],
+ [
+  "\"Keeping you updated on the market while you plan.\"",
+  "\"Just keeping you posted on the market while you plan.\""
+ ],
+ [
+  "\"Hey, it's Graeham, just checking in. Has anything changed on your timeline to sell? Give me a quick call and let me know, no pressure.\"",
+  "\"Hey, it's Graeham. Wondering if anything has changed on your timeline to sell. Give me a quick call and let me know where you're at.\""
+ ],
+ [
+  "\"Hi [Name], market has had some interesting movements.\"",
+  "\"Hi [Name], a few things have moved in your area worth telling you about.\""
+ ],
+ [
+  "\"Hey, it's Graeham. We just closed a really good sale in your neighborhood, and it's good news for your place too. Give me a call when you get a chance.\"",
+  "\"Hey, it's Graeham. We just closed a strong sale in your neighborhood, and it's good news for your place too. Call me when you get a chance.\""
+ ],
+ [
+  "\"How timing made all the difference.\"",
+  "\"How timing made the difference\""
+ ],
+ [
+  "\"Whenever you're ready to talk options, I'm here.\"",
+  "\"Whenever you want to talk options, I'm here.\""
+ ],
+ [
+  "\"The [area] market has had some interesting movement.\"",
+  "\"The [area] market has done a few interesting things lately.\""
+ ],
+ [
+  "\"Hey, it's Graeham. It's been a while, just wondering if selling is back on your mind. Give me a call whenever and we'll catch up.\"",
+  "\"Hey, it's Graeham. Been a while. Just wondering if selling is back on your mind. Call me whenever and we'll catch up.\""
+ ],
+ [
+  "\"Inventory in your area is shifting — worth knowing how that affects you.\"",
+  "\"Inventory in your area is shifting, and it actually changes what your home is worth. Want the quick version?\""
+ ],
+ [
+  "\"Hey, it's Graeham. I'm still around whenever the timing's right to sell, and I'll make it as easy as I can for you. Just give me a call and we'll get going.\"",
+  "\"Hey, it's Graeham. I'm still around whenever the timing is right, and I'll make the whole thing as easy as I can for you. Give me a call and we'll get going.\""
+ ],
+ [
+  "\"Hi [Name], are you getting closer to making your move?\"",
+  "\"Hi [Name], getting any closer to making your move?\""
+ ],
+ [
+  "\"No problem — looking forward to [New Date].\"",
+  "\"No problem at all. See you [New Date].\""
+ ],
+ [
+  "\"We're live — your home is officially on the market!\"",
+  "\"We're live. Your home is officially on the market!\""
+ ],
+ [
+  "\"How are you feeling? Totally normal to have questions.\"",
+  "\"How are you holding up? Totally normal to have questions at this point.\""
+ ],
+ [
+  "\"Showings are happening — great sign.\"",
+  "\"Showings are picking up, that's a good sign.\""
+ ],
+ [
+  "\"Great news — we have an offer coming in!\"",
+  "\"Good news, we've got an offer coming in!\""
+ ],
+ [
+  "\"Hi [Name], your offer is accepted — congratulations!\"",
+  "\"Hi [Name], we've got an accepted offer on your home. Congratulations!\""
+ ],
+ [
+  "\"Quick update — [contingency] cleared. On track for [COE date].\"",
+  "\"Quick update: [contingency] cleared. We're on track for [COE date].\""
+ ],
+ [
+  "\"One more day — you've done it!\"",
+  "\"One more day. You've done it!\""
+ ],
+ [
+  "\"Hi [Name], congratulations — you did it!\"",
+  "\"Hi [Name], you did it. Congratulations!\""
+ ],
+ [
+  "\"Hi [Name], it's been a while — checking in on your selling plans.\"",
+  "\"Hi [Name], it's been a while. Wanted to see where you're at with selling.\""
+ ],
+ [
+  "\"Still thinking about selling? No pressure.\"",
+  "\"Still got selling on your mind? Totally fine if the timing isn't right yet.\""
+ ],
+ [
+  "\"Market has shifted — here's what it means for your home's value.\"",
+  "\"The market has shifted. Here's what it means for your home's value.\""
+ ],
+ [
+  "\"Hey, it's Graeham. No pressure at all, just letting you know I'm here if selling ever comes back up. Call me anytime. Take care.\"",
+  "\"Hey, it's Graeham. Just letting you know I'm around if selling ever comes back up. Call me anytime. Take care.\""
+ ],
+ [
+  "\"If you're ever ready to talk options, I'm here.\"",
+  "\"If the time ever feels right to talk it through, I'm here.\""
+ ],
+ [
+  "\"Hope you're settling in well!\"",
+  "\"Hope you're settling in well.\""
+ ],
+ [
+  "\"Hope the move went smoothly!\"",
+  "\"Hope the move went smoothly.\""
+ ],
+ [
+  "\"All set for [New Date] — really looking forward to it.\"",
+  "\"All set for [New Date]. See you then.\""
+ ],
+ [
+  "\"Hi [Name], checking in one more time.\"",
+  "\"Hi [Name], thought I'd check in one more time.\""
+ ],
+ [
+  "\"See you tomorrow at [Time]!\"",
+  "\"See you tomorrow at [Time].\""
+ ],
+ [
+  "\"Looking forward to our meeting today at [Time].\"",
+  "\"See you today at [Time].\""
+ ],
+ [
+  "\"Looking forward to our meeting today.\"",
+  "\"See you today.\""
+ ]
+]
