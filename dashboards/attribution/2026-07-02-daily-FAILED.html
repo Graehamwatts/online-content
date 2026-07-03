@@ -1,0 +1,116 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Daily Attribution Brief — July 2, 2026 (Action required)</title>
+<style>
+  body { font-family: 'DM Sans', -apple-system, BlinkMacSystemFont, sans-serif; margin:0; padding:24px 12px; background:#f1f5f9; color:#0f1729; }
+  .wrap { max-width:720px; margin:0 auto; background:#ffffff; border-radius:12px; overflow:hidden; box-shadow:0 4px 24px rgba(15,23,41,0.10); }
+  .topbar { background:#f4b955; color:#0f1729; padding:9px 24px; font-size:12px; font-weight:700; letter-spacing:0.4px; text-transform:uppercase; }
+  .header { background:#0f1729; color:#fff; padding:28px 24px; }
+  .header h1 { margin:0; font-size:26px; font-weight:700; letter-spacing:-0.3px; }
+  .header p { margin:8px 0 0; color:#94a3b8; font-size:13px; }
+  .status { padding:14px 24px; background:#dc2626; color:#fff; font-weight:600; font-size:13.5px; text-align:center; }
+  .section { padding:22px 24px; }
+  .section + .section { border-top:1px solid #eef2f7; }
+  h2 { margin:0 0 12px; font-size:12px; font-weight:700; text-transform:uppercase; letter-spacing:0.6px; color:#64748b; }
+  .read { font-size:15px; line-height:1.6; color:#1e293b; }
+  .read strong { color:#0f1729; }
+  .box { background:#fef2f2; border-left:4px solid #dc2626; border-radius:6px; padding:14px 16px; font-size:14px; line-height:1.6; color:#7f1d1d; }
+  code { font-family:'SF Mono',Monaco,Consolas,monospace; background:#0f1729; color:#f4b955; padding:2px 6px; border-radius:4px; font-size:12.5px; }
+  .receipt { font-family:'SF Mono',Monaco,Consolas,monospace; background:#0f1729; color:#e2e8f0; padding:12px 14px; border-radius:6px; font-size:12.5px; line-height:1.5; overflow-x:auto; margin-top:10px; }
+  .receipt .k { color:#f4b955; }
+  ol.fix { margin:0; padding-left:20px; }
+  ol.fix li { padding:5px 0; font-size:14.5px; line-height:1.55; color:#1e293b; }
+  ol.fix li strong { color:#0f1729; }
+  ul.verify { list-style:none; margin:0; padding:0; }
+  ul.verify li { position:relative; padding:7px 0 7px 26px; font-size:14px; line-height:1.55; color:#334155; }
+  ul.verify li:before { content:"✓"; position:absolute; left:0; color:#16a34a; font-weight:800; }
+  ul.verify li.x:before { content:"→"; color:#f4b955; }
+  table { width:100%; border-collapse:collapse; margin-top:6px; }
+  th { text-align:left; font-size:11px; text-transform:uppercase; letter-spacing:0.5px; color:#94a3b8; padding:0 12px 8px; border-bottom:2px solid #e5e7eb; }
+  th.r { text-align:right; }
+  .note { font-size:12.5px; color:#64748b; margin-top:10px; line-height:1.5; }
+  .pill { display:inline-block; background:#fef3c7; color:#92400e; font-size:12px; font-weight:600; padding:3px 10px; border-radius:999px; }
+  .footer { padding:22px 24px; background:#0f1729; color:#94a3b8; font-size:12px; line-height:1.7; }
+  .footer strong { color:#fff; }
+  .footer .dre { color:#f4b955; }
+</style>
+</head>
+<body>
+  <div class="wrap">
+    <div class="topbar">Daily Attribution Brief · July 2, 2026</div>
+    <div class="header">
+      <h1>Yesterday's brief couldn't run</h1>
+      <p>Thursday, July 2, 2026 &nbsp;·&nbsp; generated Fri Jul 3, 7:15&nbsp;AM PT &nbsp;·&nbsp; <span class="pill">Action required — 2 min</span></p>
+    </div>
+    <div class="status">⚠ GoHighLevel pull failed — the attribution token was never set</div>
+
+    <div class="section">
+      <h2>The Read</h2>
+      <p class="read">
+        No leads could be pulled for yesterday, and it's <strong>not</strong> a data problem or a broken pipeline —
+        the GoHighLevel token this brief uses is <strong>still the placeholder text</strong> that shipped with the setup
+        file. It was never replaced with a real key, so GoHighLevel rejects every request with a <strong>401</strong>.
+        This is the <strong>one</strong> thing standing between you and live daily briefs, and it's a two-minute fix:
+        paste a real token into one file. Good news — I confirmed the data path itself now works, so <strong>no GitHub
+        Action, secret, or infrastructure change is needed</strong> (the earlier "sandbox is firewalled" and "GitHub
+        permission" theories were both wrong — see below).
+      </p>
+    </div>
+
+    <div class="section">
+      <h2>Root cause (the receipt)</h2>
+      <div class="box">
+        The credential file <code>.claude-credentials/ghl-pit.txt</code> still contains the literal placeholder on line 1:
+        <code>pit-PASTE_YOUR&hellip;TOKEN&hellip;HERE</code> — not a real token. GoHighLevel's reply:
+      </div>
+      <div class="receipt"><span class="k">GET</span> /opportunities/pipelines &nbsp;→&nbsp; <span class="k">HTTP 401</span><br>{&quot;statusCode&quot;:401,&quot;message&quot;:&quot;Invalid Private Integration token&quot;}</div>
+    </div>
+
+    <div class="section">
+      <h2>The 2-minute fix</h2>
+      <ol class="fix">
+        <li>In <strong>GoHighLevel</strong> → <strong>Settings</strong> (gear, bottom-left) → <strong>Private Integrations</strong>.</li>
+        <li>Open <strong>"Claude Attribution"</strong> (or <strong>Create New Integration</strong>) → grant <strong>READ</strong> scopes for <strong>Contacts</strong> and <strong>Opportunities</strong>.</li>
+        <li>Copy the <code>pit-&hellip;</code> key.</li>
+        <li>Paste it as <strong>line 1</strong> of <code>Online Content\.claude-credentials\ghl-pit.txt</code>, replacing the placeholder. (Also update <code>Skills\ghl-pit.txt</code> so both copies match.)</li>
+        <li>Done. The next 7:15&nbsp;AM brief pulls live data automatically — nothing else to change.</li>
+      </ol>
+    </div>
+
+    <div class="section">
+      <h2>What I verified today</h2>
+      <ul class="verify">
+        <li>The runner <strong>can</strong> reach GoHighLevel — a direct call returned a real <strong>401 auth response</strong>, not a firewall/allowlist block. The "must route through a GitHub Action" workaround is no longer necessary.</li>
+        <li>Bare Python-urllib trips Cloudflare (error 1010); a normal browser-style client passes cleanly. Future pulls should use that client style.</li>
+        <li class="x"><strong>Correction:</strong> the Jun 30 blocker note blamed a missing GitHub <code>workflow</code> permission. That was a misdiagnosis — the workflow file is already in place. The <strong>only</strong> real blocker is the missing token.</li>
+      </ul>
+    </div>
+
+    <div class="section">
+      <h2>Meanwhile — last known CRM snapshot</h2>
+      <p class="note" style="margin-top:0">
+        So this isn't an empty page: here's the most recent good pull (Jun 29) for context. Note this is
+        <strong>all-time cumulative opportunities</strong>, not yesterday's new leads.
+      </p>
+      <table>
+        <thead><tr><th>Top attributed sources</th><th class="r">Opps</th></tr></thead>
+        <tbody><tr><td style="padding:10px 12px;border-bottom:1px solid #e5e7eb;font-weight:500;color:#0f1729">Contact Form - More Info</td><td style="padding:10px 12px;border-bottom:1px solid #e5e7eb;text-align:right;color:#334155">9</td></tr><tr><td style="padding:10px 12px;border-bottom:1px solid #e5e7eb;font-weight:500;color:#0f1729">Facebook</td><td style="padding:10px 12px;border-bottom:1px solid #e5e7eb;text-align:right;color:#334155">9</td></tr><tr><td style="padding:10px 12px;border-bottom:1px solid #e5e7eb;font-weight:500;color:#0f1729">referral from SOI</td><td style="padding:10px 12px;border-bottom:1px solid #e5e7eb;text-align:right;color:#334155">3</td></tr><tr><td style="padding:10px 12px;border-bottom:1px solid #e5e7eb;font-weight:500;color:#0f1729">Home Value Form</td><td style="padding:10px 12px;border-bottom:1px solid #e5e7eb;text-align:right;color:#334155">2</td></tr><tr><td style="padding:10px 12px;border-bottom:1px solid #e5e7eb;font-weight:500;color:#0f1729">CSV Import</td><td style="padding:10px 12px;border-bottom:1px solid #e5e7eb;text-align:right;color:#334155">2</td></tr><tr><td style="padding:10px 12px;border-bottom:1px solid #e5e7eb;font-weight:500;color:#0f1729">Open House</td><td style="padding:10px 12px;border-bottom:1px solid #e5e7eb;text-align:right;color:#334155">2</td></tr><tr><td style="padding:10px 12px;border-bottom:1px solid #e5e7eb;font-weight:500;color:#0f1729">contact form - more info</td><td style="padding:10px 12px;border-bottom:1px solid #e5e7eb;text-align:right;color:#334155">2</td></tr><tr><td style="padding:10px 12px;border-bottom:1px solid #e5e7eb;font-weight:500;color:#0f1729">Referral</td><td style="padding:10px 12px;border-bottom:1px solid #e5e7eb;text-align:right;color:#334155">1</td></tr></tbody>
+      </table>
+      <p class="note">
+        One thing worth a look: of <strong>4,038</strong> total opportunities, <strong>3,998 (99.0%)</strong>
+        carry <strong>no attribution source</strong> at all. Even once the token is live, the daily brief can only be as good
+        as the source tagging upstream — worth confirming your intake forms and ad UTMs are writing a source onto new contacts.
+      </p>
+    </div>
+
+    <div class="footer">
+      <strong>Graeham Watts</strong> — REALTOR®, Intero Real Estate<br>
+      DRE# <span class="dre">01466876</span> &nbsp;·&nbsp; Daily Attribution Brief (automated, Mon–Fri 7:15&nbsp;AM PT)<br>
+      This brief ran but could not pull data. It will keep failing each morning until the token above is set.
+    </div>
+  </div>
+</body>
+</html>
