@@ -1,0 +1,2025 @@
+[
+ {
+  "id": "pl-toolkit",
+  "title": "Universal Touchpoint Toolkit",
+  "stages": []
+ },
+ {
+  "id": "pl-newleads",
+  "title": "New Leads Pipeline",
+  "stages": [
+   {
+    "stage": "New Lead — Uncontacted",
+    "meta": "14 items",
+    "desc": "Every new lead enters here regardless of source. 12-day sprint to qualify and route. Fully automated except Day 1 live call and Day 12 review task. Copy here stays neutral (works for a buyer or a seller) until Day 12 routing moves them into the Buyer or Seller pipeline, where the messaging gets specific.",
+    "note": "",
+    "stub": "",
+    "cards": [
+     {
+      "day": "Day 0",
+      "types": [
+       "ManyChat"
+      ],
+      "mode": "auto",
+      "body": "Meta leads only. Instant Messenger fires on form submit with GIF intro + \"Are you looking to buy or sell?\" Qualifying flow captures phone → N8N → GHL → Adrian notified. All other sources skip to Day 1."
+     },
+     {
+      "day": "Day 1 · 5min",
+      "types": [
+       "Live Call"
+      ],
+      "mode": "manual",
+      "body": "Adrian calls immediately. Use Buyer or Seller script depending on form type. Goal: qualify timeline, understand intent, book appointment."
+     },
+     {
+      "day": "Day 1 · No ans",
+      "types": [
+       "VM",
+       "Lipdub"
+      ],
+      "mode": "auto",
+      "body": "Slybroadcast VM fires via N8N + simultaneous Lipdub GIF: \"Hi [Name], it's Graeham, just gave you a call. Text me back whenever works and we'll get going.\" + calendar link.\nSlybroadcast script: \"Hey, it's Graeham, sorry I missed you. Happy to help whenever you're ready, whether you're buying or selling. Text me or give me a call when you get a minute. Thanks.\""
+     },
+     {
+      "day": "Day 1 · +1hr",
+      "types": [
+       "Email"
+      ],
+      "mode": "auto",
+      "body": "Same Lipdub video embedded as GIF + intro to Graeham + graehamwatts.com + calendar link. Subject: \"Tried to reach you, quick video inside\""
+     },
+     {
+      "day": "Day 2",
+      "types": [
+       "AI Text"
+      ],
+      "mode": "auto",
+      "body": "\"Hey [Name], did you get a chance to watch that video? Any questions, just reply. Or grab a time here, whatever's easier.\" + calendar link."
+     },
+     {
+      "day": "Day 3",
+      "types": [
+       "AI Call",
+       "VM"
+      ],
+      "mode": "auto",
+      "body": "AI agent call. If no answer: Slybroadcast VM with different angle, mentions a recent sale or listing in their area.\nSlybroadcast script: \"Hey, it's Graeham again. A place just sold right near you and the number caught me off guard. Call me when you get a chance and I'll tell you about it.\""
+     },
+     {
+      "day": "Day 4",
+      "types": [
+       "Static GIF"
+      ],
+      "mode": "auto",
+      "body": "\"Hey, here's a quick video on how I work with [buyers/sellers] around EPA.\" Jason library asset — no name needed. + calendar link."
+     },
+     {
+      "day": "Day 5",
+      "types": [
+       "HeyGen"
+      ],
+      "mode": "auto",
+      "body": "HeyGen market update for their target area embedded as GIF. Subject: \"What the EPA market looks like right now\" Educational, no pitch."
+     },
+     {
+      "day": "Day 7",
+      "types": [
+       "AI Call",
+       "VM"
+      ],
+      "mode": "auto",
+      "body": "Second AI call + Slybroadcast VM. Different message — timely market stat or new listing in their target area.\nSlybroadcast script: \"Hey, it's Graeham. A couple homes sold in your area this week, and a new listing just came up. Call me back and I'll fill you in.\""
+     },
+     {
+      "day": "Day 8",
+      "types": [
+       "Email"
+      ],
+      "mode": "auto",
+      "body": "Testimonial video matching their type. YouTube GIF thumbnail. Subject: \"A recent EPA client story\""
+     },
+     {
+      "day": "Day 9",
+      "types": [
+       "AI Text"
+      ],
+      "mode": "auto",
+      "body": "GIF text — casual. \"If [buying/selling] is still on the table, here's my calendar if you want to talk it through.\""
+     },
+     {
+      "day": "Day 10",
+      "types": [
+       "Live Call"
+      ],
+      "mode": "manual",
+      "body": "Adrian second personal call. Different time of day from Day 1. Use buyer or seller script — note any responses received."
+     },
+     {
+      "day": "Day 11",
+      "types": [
+       "Static GIF"
+      ],
+      "mode": "auto",
+      "body": "\"Here's how we've helped families in the area find success.\" YouTube video as GIF + calendar link."
+     },
+     {
+      "day": "Day 12",
+      "types": [
+       "AI Text"
+      ],
+      "mode": "auto",
+      "body": "\"I'll give you some space. If your plans change, I'm around. Want me to keep you posted on the market in the meantime? Reply Yes or No.\""
+     },
+     {
+      "day": "Day 12 · EOD",
+      "types": [
+       "Task"
+      ],
+      "mode": "manual",
+      "body": "ADRIAN: Review all data. Route to correct pipeline. Active/Within 3mo/Under 9mo/Over 9mo Buyer or Seller. Cold if no engagement. Unqualified if spam/wrong number. Nobody stays in New Leads after Day 12."
+     }
+    ]
+   },
+   {
+    "stage": "Contacted — No Response",
+    "meta": "continues sprint",
+    "desc": "Adrian reached the contact but they didn't engage meaningfully. Continues the 12-day sprint cadence with adjusted messaging.",
+    "note": "",
+    "stub": "Cadence: Continues Days 2–12 of the New — Uncontacted sequence. Adjustment: Adrian's Day 10 call references the prior contact attempt explicitly (\"we connected briefly on [date], wanted to follow up\").",
+    "cards": []
+   },
+   {
+    "stage": "Contacted — Responded",
+    "meta": "5 items · highest priority",
+    "desc": "Lead replied with intent. Highest-priority stage. Adrian's goal: book consultation in next 48 hours and route to correct active pipeline.",
+    "note": "",
+    "stub": "",
+    "cards": [
+     {
+      "day": "+15 min",
+      "types": [
+       "Live Call"
+      ],
+      "mode": "manual",
+      "body": "Adrian calls back immediately. Discovery: timeline, criteria, motivation. Push for consultation booking."
+     },
+     {
+      "day": "+1 hr",
+      "types": [
+       "AI Text"
+      ],
+      "mode": "auto",
+      "body": "If no live answer: \"Hey [Name], Adrian here, thanks for getting back to me. I pulled a few options for you. When's good for a quick 15-minute call?\" + calendar link."
+     },
+     {
+      "day": "Day 1",
+      "types": [
+       "Lipdub"
+      ],
+      "mode": "auto",
+      "body": "Personalized Lipdub from Graeham. \"Hi [Name], glad you reached out. Here's how I work with [buyers/sellers] around EPA.\" + calendar link."
+     },
+     {
+      "day": "Day 2",
+      "types": [
+       "Live Call"
+      ],
+      "mode": "manual",
+      "body": "Adrian second attempt if no booking yet."
+     },
+     {
+      "day": "Day 3",
+      "types": [
+       "Task"
+      ],
+      "mode": "manual",
+      "body": "ADRIAN: Booked → Appointment Scheduled. Qualified but not yet booked → route to active pipeline by timeline. Unresponsive → back to Contacted - No Response."
+     }
+    ]
+   },
+   {
+    "stage": "Email/Text Only",
+    "meta": "drip — no calls",
+    "desc": "Lead engages via email or text but refuses calls. Long-cadence drip — pure value, no calls.",
+    "note": "",
+    "stub": "Cadence: AI Text every 5 days, HeyGen Email every 10 days, Static GIF MMS every 14 days. No live calls. If they break silence, Adrian responds within 15 minutes. Day 14 task: Adrian re-evaluates, routes if engaged.",
+    "cards": []
+   },
+   {
+    "stage": "Cold",
+    "meta": "quarterly nurture",
+    "desc": "Sprint completed with zero meaningful engagement. Quarterly low-touch nurture.",
+    "note": "",
+    "stub": "Cadence: 1 touch every 90 days — alternating HeyGen market video and Static GIF MMS. After 365 days zero engagement → Unqualified.",
+    "cards": []
+   },
+   {
+    "stage": "Unqualified",
+    "meta": "archive",
+    "desc": "Spam, wrong number, bad email, or explicitly not interested. No further automated touches. DND tag applied where applicable.",
+    "note": "",
+    "stub": "No cadence. Holding stage — no further outbound.",
+    "cards": []
+   }
+  ]
+ },
+ {
+  "id": "pl-buyer",
+  "title": "Buyer Pipeline",
+  "stages": [
+   {
+    "stage": "Active Buyer",
+    "meta": "5 items",
+    "desc": "Confirmed buyer who completed New Leads sprint with strong intent and clear timeline. High-frequency cadence to consultation.",
+    "note": "",
+    "stub": "",
+    "cards": [
+     {
+      "day": "Day 1",
+      "types": [
+       "Live Call"
+      ],
+      "mode": "manual",
+      "body": "Adrian confirms timeline + criteria, sets expectations, books consultation with Graeham within 7 days."
+     },
+     {
+      "day": "Day 2",
+      "types": [
+       "HeyGen"
+      ],
+      "mode": "auto",
+      "body": "\"How we work with active buyers\" — what to expect, how Graeham operates. Calendar link."
+     },
+     {
+      "day": "Day 3",
+      "types": [
+       "AI Text"
+      ],
+      "mode": "auto",
+      "body": "Saved search confirmation + first matching listings."
+     },
+     {
+      "day": "Day 5",
+      "types": [
+       "Lipdub"
+      ],
+      "mode": "auto",
+      "body": "\"Hi [Name], I found a few places that fit what you're after. Want me to send them over?\" + calendar link."
+     },
+     {
+      "day": "Day 7",
+      "types": [
+       "Task"
+      ],
+      "mode": "manual",
+      "body": "ADRIAN: Push for consultation. Booked → Appointment Scheduled. Timeline 0–3mo → Within 3 Months. Softens → Under 9 Months."
+     }
+    ]
+   },
+   {
+    "stage": "Buyer – Within 3 Months",
+    "meta": "20 items · 90-day",
+    "desc": "Real urgency. Goal: get to consultation within 30 days. High frequency — every 5–7 days.",
+    "note": "",
+    "stub": "",
+    "cards": [
+     {
+      "day": "Day 1",
+      "types": [
+       "Live Call"
+      ],
+      "mode": "manual",
+      "body": "Adrian. Confirm timeline, must-haves, offer saved search, push for consultation."
+     },
+     {
+      "day": "Day 1 · No ans",
+      "types": [
+       "VM",
+       "Lipdub"
+      ],
+      "mode": "auto",
+      "body": "\"Hi [Name], I've already got a couple places around EPA in mind for you. Want me to send them your way?\" + calendar link.\nSlybroadcast script: \"Hey, it's Graeham, sorry I missed you. Already got a couple places in mind that could be a fit. Text me back and I'll send them over.\""
+     },
+     {
+      "day": "Day 3",
+      "types": [
+       "HeyGen"
+      ],
+      "mode": "auto",
+      "body": "\"How we work with buyers\" process video. Sets expectations, builds trust."
+     },
+     {
+      "day": "Day 5",
+      "types": [
+       "AI Text"
+      ],
+      "mode": "auto",
+      "body": "Saved search confirmation + first listing alert. \"Set up your home search. First matches are inside.\""
+     },
+     {
+      "day": "Day 7",
+      "types": [
+       "Static GIF"
+      ],
+      "mode": "auto",
+      "body": "\"Hey, I've been keeping an eye out for places that match what you're looking for.\" + calendar link."
+     },
+     {
+      "day": "Day 10",
+      "types": [
+       "Email"
+      ],
+      "mode": "auto",
+      "body": "Buyer testimonial. Subject: \"How [first name] found a home in EPA in six weeks\""
+     },
+     {
+      "day": "Day 14",
+      "types": [
+       "AI Call",
+       "VM"
+      ],
+      "mode": "auto",
+      "body": "References a current listing matching their criteria.\nSlybroadcast script: \"Hey, it's Graeham. Something just came up that's close to what you're after. Call me back and I'll send it over.\""
+     },
+     {
+      "day": "Day 17",
+      "types": [
+       "AI Text"
+      ],
+      "mode": "auto",
+      "body": "New listing alert — GIF thumbnail. \"Just hit the market, and it matches what you're looking for.\""
+     },
+     {
+      "day": "Day 21",
+      "types": [
+       "HeyGen"
+      ],
+      "mode": "auto",
+      "body": "Market update for their target area. Stats, trends, inventory."
+     },
+     {
+      "day": "Day 25",
+      "types": [
+       "Live Call"
+      ],
+      "mode": "manual",
+      "body": "Adrian second personal call. Reference listings sent. Soft push toward tour or consultation."
+     },
+     {
+      "day": "Day 30",
+      "types": [
+       "Lipdub"
+      ],
+      "mode": "auto",
+      "body": "\"Hi [Name], a few places came up lately that line up with your search. I can send them if you want.\""
+     },
+     {
+      "day": "Day 35",
+      "types": [
+       "Email"
+      ],
+      "mode": "auto",
+      "body": "Educational — mortgage tips, inspection overview, how to win in competitive market. Pure value."
+     },
+     {
+      "day": "Day 42",
+      "types": [
+       "AI Call",
+       "VM"
+      ],
+      "mode": "auto",
+      "body": "Different angle — interest rate update or market shift relevant now.\nSlybroadcast script: \"Hey, it's Graeham. Rates shifted a bit, and it actually changes the math for buyers right now. Give me a quick call and I'll walk you through it.\""
+     },
+     {
+      "day": "Day 45",
+      "types": [
+       "Static GIF"
+      ],
+      "mode": "auto",
+      "body": "\"I've got a place I think you'd love.\" Walkthrough video + calendar link."
+     },
+     {
+      "day": "Day 52",
+      "types": [
+       "AI Text"
+      ],
+      "mode": "auto",
+      "body": "GIF casual. \"Anything catch your eye lately? Happy to set up a showing whenever works for you.\""
+     },
+     {
+      "day": "Day 60",
+      "types": [
+       "Email"
+      ],
+      "mode": "auto",
+      "body": "Second buyer testimonial — different profile."
+     },
+     {
+      "day": "Day 67",
+      "types": [
+       "AI Call",
+       "VM"
+      ],
+      "mode": "auto",
+      "body": "Market is competitive — worth getting ahead of it.\nSlybroadcast script: \"Hey, it's Graeham again. Getting the basics lined up early makes the search easier. Call me back and we'll make sure you're set.\""
+     },
+     {
+      "day": "Day 75",
+      "types": [
+       "Live Call"
+      ],
+      "mode": "manual",
+      "body": "Adrian third personal call. Timeline check."
+     },
+     {
+      "day": "Day 82",
+      "types": [
+       "Lipdub"
+      ],
+      "mode": "auto",
+      "body": "\"Hi [Name], a couple nearby sales changed the pricing picture. Let's catch up soon.\" + calendar link."
+     },
+     {
+      "day": "Day 90",
+      "types": [
+       "Task"
+      ],
+      "mode": "manual",
+      "body": "ADRIAN: Booked → Appointment Scheduled. Timeline extended → Under 9 Months. Silent 60+ → Cold."
+     }
+    ]
+   },
+   {
+    "stage": "Buyer - Under 9 Months",
+    "meta": "13 items · 150-day",
+    "desc": "Stay top of mind. Moderate frequency — every 10–15 days.",
+    "note": "",
+    "stub": "",
+    "cards": [
+     {
+      "day": "Day 1",
+      "types": [
+       "HeyGen"
+      ],
+      "mode": "auto",
+      "body": "Welcome + market overview video. Sets expectations. Calendar link."
+     },
+     {
+      "day": "Day 7",
+      "types": [
+       "AI Text"
+      ],
+      "mode": "auto",
+      "body": "Saved search confirmation. \"Just making sure your home alerts are set up right. Anything you want to adjust?\""
+     },
+     {
+      "day": "Day 14",
+      "types": [
+       "Static GIF"
+      ],
+      "mode": "auto",
+      "body": "\"Hey, just keeping you in the loop while you plan your move.\" + calendar link."
+     },
+     {
+      "day": "Day 21",
+      "types": [
+       "AI Call",
+       "VM"
+      ],
+      "mode": "auto",
+      "body": "Timeline check — anything changed?\nSlybroadcast script: \"Hey, it's Graeham. Wondering if anything has changed on your end. Give me a call when you get a chance and let me know where things stand.\""
+     },
+     {
+      "day": "Day 30",
+      "types": [
+       "HeyGen"
+      ],
+      "mode": "auto",
+      "body": "Market update + listings matching criteria. Subject: \"What the market looks like this month\""
+     },
+     {
+      "day": "Day 45",
+      "types": [
+       "AI Text"
+      ],
+      "mode": "auto",
+      "body": "\"How's the search going? Glad to help with anything, even if it's just questions.\""
+     },
+     {
+      "day": "Day 60",
+      "types": [
+       "Lipdub"
+      ],
+      "mode": "auto",
+      "body": "\"Hi [Name], wanted to reach out myself. A few homes nearby went pending or sold.\" + calendar link."
+     },
+     {
+      "day": "Day 75",
+      "types": [
+       "Email"
+      ],
+      "mode": "auto",
+      "body": "Buyer testimonial. Subject: \"A story that might feel familiar\""
+     },
+     {
+      "day": "Day 90",
+      "types": [
+       "AI Call",
+       "VM"
+      ],
+      "mode": "auto",
+      "body": "Getting closer? Pre-approval early matters in this market.\nSlybroadcast script: \"Hey, it's Graeham. If you're getting closer, lining up financing early can make the next steps simpler. Call me back and I'll point you to the right people.\""
+     },
+     {
+      "day": "Day 105",
+      "types": [
+       "Static GIF"
+      ],
+      "mode": "auto",
+      "body": "Specific stat or trend for their target area."
+     },
+     {
+      "day": "Day 120",
+      "types": [
+       "HeyGen"
+      ],
+      "mode": "auto",
+      "body": "\"Here's what working with me actually looks like.\" Re-introduces the process."
+     },
+     {
+      "day": "Day 135",
+      "types": [
+       "AI Text"
+      ],
+      "mode": "auto",
+      "body": "\"If a move is still possible this year, send me a note when the timing feels right.\""
+     },
+     {
+      "day": "Day 150",
+      "types": [
+       "Task"
+      ],
+      "mode": "manual",
+      "body": "ADRIAN: Timeline shortened → Within 3 Months. Quiet → Over 9 Months. Silent 60+ → Cold."
+     }
+    ]
+   },
+   {
+    "stage": "Buyer – Over 9 Months",
+    "meta": "13 items · 990-day",
+    "desc": "Patient, low-frequency approach. Quarterly to semi-annual touches.",
+    "note": "",
+    "stub": "",
+    "cards": [
+     {
+      "day": "Day 1",
+      "types": [
+       "Email"
+      ],
+      "mode": "auto",
+      "body": "Check-in + comprehensive market guide. \"Some reading for whenever the timing starts to make sense.\""
+     },
+     {
+      "day": "Day 90",
+      "types": [
+       "HeyGen"
+      ],
+      "mode": "auto",
+      "body": "Buyer resource — mortgage prep, what to look for."
+     },
+     {
+      "day": "Day 180",
+      "types": [
+       "AI Text"
+      ],
+      "mode": "auto",
+      "body": "\"Hope you're doing well. A few recent market changes seemed useful to pass along.\""
+     },
+     {
+      "day": "Day 270",
+      "types": [
+       "HeyGen"
+      ],
+      "mode": "auto",
+      "body": "Quarterly market report — data-driven, authoritative."
+     },
+     {
+      "day": "Day 360",
+      "types": [
+       "Email"
+      ],
+      "mode": "auto",
+      "body": "Buyer success stories. \"What a year can change for buyers\""
+     },
+     {
+      "day": "Day 450",
+      "types": [
+       "AI Call",
+       "VM"
+      ],
+      "mode": "auto",
+      "body": "Timeline check — getting closer?\nSlybroadcast script: \"Hey, it's Graeham. Been a while. Just wondering if a move has gotten any closer for you. Call me whenever and we'll pick up where we left off.\""
+     },
+     {
+      "day": "Day 540",
+      "types": [
+       "AI Text"
+      ],
+      "mode": "auto",
+      "body": "\"How are your buying plans coming along?\""
+     },
+     {
+      "day": "Day 630",
+      "types": [
+       "HeyGen"
+      ],
+      "mode": "auto",
+      "body": "Market trends — what's changed in the past year."
+     },
+     {
+      "day": "Day 720",
+      "types": [
+       "Static GIF"
+      ],
+      "mode": "auto",
+      "body": "Re-engagement. \"Hey, it has been a while. Wanted to reach out and see how you're doing.\""
+     },
+     {
+      "day": "Day 810",
+      "types": [
+       "AI Call",
+       "VM"
+      ],
+      "mode": "auto",
+      "body": "Warm and direct.\nSlybroadcast script: \"Hey, it's Graeham. If buying has come back up, give me a call and we'll figure it out together.\""
+     },
+     {
+      "day": "Day 900",
+      "types": [
+       "Email"
+      ],
+      "mode": "auto",
+      "body": "Strategic buyer guide."
+     },
+     {
+      "day": "Day 990",
+      "types": [
+       "Lipdub"
+      ],
+      "mode": "auto",
+      "body": "\"Hi [Name], still thinking about making a move?\""
+     },
+     {
+      "day": "Day 990",
+      "types": [
+       "Task"
+      ],
+      "mode": "manual",
+      "body": "ADRIAN: Re-engaged → Under 9 Months or Within 3 Months. No engagement → archive or restart."
+     }
+    ]
+   },
+   {
+    "stage": "Buyer Flipper",
+    "meta": "to be defined",
+    "desc": "Buyer purchasing for investment / flip, not personal residence. Different content focus — ROI, deal flow, off-market opportunities.",
+    "note": "",
+    "stub": "Cadence overview: Every 10 days, alternating off-market deal alerts (when available), ROI-focused HeyGen videos, and quarterly market analysis. Live call from Adrian every 30 days. Full cadence — to be defined.",
+    "cards": []
+   },
+   {
+    "stage": "Appointment Scheduled",
+    "meta": "6 items",
+    "desc": "Confirmed consultation. Short pre-meeting sequence — buyer walks in already trusting Graeham.",
+    "note": "",
+    "stub": "",
+    "cards": [
+     {
+      "day": "Immediately",
+      "types": [
+       "AI Text"
+      ],
+      "mode": "auto",
+      "body": "\"You're booked in with Graeham for [Date] at [Time]. See you then.\" + Calendly link."
+     },
+     {
+      "day": "Same day",
+      "types": [
+       "HeyGen"
+      ],
+      "mode": "auto",
+      "body": "\"What to expect in your buyer consultation.\" Subject: \"A quick video before we meet\""
+     },
+     {
+      "day": "Day 2",
+      "types": [
+       "Static GIF"
+      ],
+      "mode": "auto",
+      "body": "Static intro from Graeham — \"Hey, looking forward to meeting you. I've already been doing some homework on your area.\""
+     },
+     {
+      "day": "Day before",
+      "types": [
+       "AI Text"
+      ],
+      "mode": "auto",
+      "body": "\"See you tomorrow at [Time]. Let me know if anything comes up.\" + reschedule link."
+     },
+     {
+      "day": "Day of",
+      "types": [
+       "AI Text"
+      ],
+      "mode": "auto",
+      "body": "\"Talk to you today at [Time].\""
+     },
+     {
+      "day": "After",
+      "types": [
+       "Task"
+      ],
+      "mode": "manual",
+      "body": "GRAEHAM + ADRIAN: Agreement signed → Active Buyer + Giselle notified. Timeline pushed → Within 3 / Under 9 Months. No-show → back to Active Buyer drip."
+     }
+    ]
+   },
+   {
+    "stage": "Appointment Rescheduled",
+    "meta": "6 items",
+    "desc": "Buyer rebooked after cancel/no-show. Intent is still there — handle with warmth, no guilt.",
+    "note": "",
+    "stub": "",
+    "cards": [
+     {
+      "day": "Immediately",
+      "types": [
+       "AI Text"
+      ],
+      "mode": "auto",
+      "body": "\"No problem at all. See you [New Date] at [New Time].\" + updated Calendly link."
+     },
+     {
+      "day": "Same day",
+      "types": [
+       "Email"
+      ],
+      "mode": "auto",
+      "body": "Reschedule confirmation + \"What to expect\" HeyGen video."
+     },
+     {
+      "day": "Day 2",
+      "types": [
+       "Static GIF"
+      ],
+      "mode": "auto",
+      "body": "\"All set for [New Date]. See you then.\""
+     },
+     {
+      "day": "Day before",
+      "types": [
+       "AI Text"
+      ],
+      "mode": "auto",
+      "body": "\"See you tomorrow at [Time].\""
+     },
+     {
+      "day": "Day of",
+      "types": [
+       "AI Text"
+      ],
+      "mode": "auto",
+      "body": "\"See you today at [Time].\""
+     },
+     {
+      "day": "2nd reschedule",
+      "types": [
+       "Task"
+      ],
+      "mode": "manual",
+      "body": "GRAEHAM: Adrian flags Graeham. Personal call or move back to Within 3 / Under 9 Months."
+     }
+    ]
+   },
+   {
+    "stage": "Under Contract",
+    "meta": "8 milestones",
+    "desc": "Giselle owns transaction coordination. This sequence handles emotional / relationship side.",
+    "note": "",
+    "stub": "",
+    "cards": [
+     {
+      "day": "Offer accepted",
+      "types": [
+       "AI Text"
+      ],
+      "mode": "auto",
+      "body": "\"Congratulations [Name], your offer was accepted! Giselle will be in touch shortly with the next steps.\""
+     },
+     {
+      "day": "Day 1",
+      "types": [
+       "HeyGen"
+      ],
+      "mode": "auto",
+      "body": "\"What to expect during escrow.\" Subject: \"Your roadmap to closing day\""
+     },
+     {
+      "day": "Day 7",
+      "types": [
+       "AI Text"
+      ],
+      "mode": "auto",
+      "body": "\"How are you feeling? Questions are normal at this stage. Send them our way.\""
+     },
+     {
+      "day": "Day 14",
+      "types": [
+       "Email"
+      ],
+      "mode": "auto",
+      "body": "Inspection-process video. Reduces anxiety."
+     },
+     {
+      "day": "Contingency",
+      "types": [
+       "AI Text"
+      ],
+      "mode": "auto",
+      "body": "Milestone update — Giselle provides dates to Adrian. \"Quick update: your [contingency] is due [Date].\""
+     },
+     {
+      "day": "Day before COE",
+      "types": [
+       "Static GIF"
+      ],
+      "mode": "auto",
+      "body": "\"Almost there, one more day. Here's what closing day looks like.\""
+     },
+     {
+      "day": "Day of COE",
+      "types": [
+       "Lipdub"
+      ],
+      "mode": "auto",
+      "body": "\"Hi [Name], today's the day. Congratulations on the new home!\" Most impactful Lipdub in the buyer sequence."
+     },
+     {
+      "day": "Post-close",
+      "types": [
+       "Task"
+      ],
+      "mode": "manual",
+      "body": "GISELLE → ADRIAN: Enroll in Past Buyers immediately. Schedule 48-hour call. Closing gift confirmed. Climbo review primed."
+     }
+    ]
+   },
+   {
+    "stage": "Cold",
+    "meta": "10 items · 180-day",
+    "desc": "Previously active buyer, silent 60+ days. Re-engagement focused.",
+    "note": "",
+    "stub": "",
+    "cards": [
+     {
+      "day": "Day 1",
+      "types": [
+       "Lipdub"
+      ],
+      "mode": "auto",
+      "body": "\"Hi [Name], it's been a while. Is buying back in the picture?\" Lead with Lipdub to break silence."
+     },
+     {
+      "day": "Day 7",
+      "types": [
+       "HeyGen"
+      ],
+      "mode": "auto",
+      "body": "No-pressure market update. Pure value, no pitch."
+     },
+     {
+      "day": "Day 14",
+      "types": [
+       "AI Text"
+      ],
+      "mode": "auto",
+      "body": "\"Hey [Name], is buying still in the cards, or has it paused for now?\""
+     },
+     {
+      "day": "Day 30",
+      "types": [
+       "Static GIF"
+      ],
+      "mode": "auto",
+      "body": "\"The market has shifted a bit. Here's what I'm seeing for buyers right now.\""
+     },
+     {
+      "day": "Day 45",
+      "types": [
+       "AI Call",
+       "VM"
+      ],
+      "mode": "auto",
+      "body": "Warm, not desperate.\nSlybroadcast script: \"Hey, it's Graeham. Just staying in touch. If buying comes back up later, you've got my number. Take care.\""
+     },
+     {
+      "day": "Day 60",
+      "types": [
+       "Email"
+      ],
+      "mode": "auto",
+      "body": "Testimonial — someone who took their time and found the right home."
+     },
+     {
+      "day": "Day 90",
+      "types": [
+       "Lipdub"
+      ],
+      "mode": "auto",
+      "body": "\"Hi [Name], one last note from me for now.\""
+     },
+     {
+      "day": "Day 120",
+      "types": [
+       "AI Text"
+      ],
+      "mode": "auto",
+      "body": "\"If buying is still somewhere on your list, I'm here whenever.\""
+     },
+     {
+      "day": "Day 150",
+      "types": [
+       "Live Call"
+      ],
+      "mode": "manual",
+      "body": "Adrian final personal attempt. Genuinely warm."
+     },
+     {
+      "day": "Day 180",
+      "types": [
+       "Task"
+      ],
+      "mode": "manual",
+      "body": "ADRIAN: Re-engaged → appropriate buyer stage. Zero engagement → Unqualified."
+     }
+    ]
+   },
+   {
+    "stage": "Unqualified",
+    "meta": "archive",
+    "desc": "Buyer who completed Cold sequence with zero engagement, or explicitly removed themselves.",
+    "note": "",
+    "stub": "No cadence. Holding stage. Annual audit by Adrian to confirm no accidental archives.",
+    "cards": []
+   }
+  ]
+ },
+ {
+  "id": "pl-seller",
+  "title": "Seller Pipeline",
+  "stages": [
+   {
+    "stage": "Active Seller",
+    "meta": "5 items",
+    "desc": "Confirmed seller from Contacted - Responded with strong intent. Goal: book listing consultation within 7 days.",
+    "note": "",
+    "stub": "",
+    "cards": [
+     {
+      "day": "Day 1",
+      "types": [
+       "Live Call"
+      ],
+      "mode": "manual",
+      "body": "Adrian confirms timeline + property, offers CMA, books consultation with Graeham."
+     },
+     {
+      "day": "Day 1",
+      "types": [
+       "Email"
+      ],
+      "mode": "auto",
+      "body": "CMA preview + market video. Subject: \"Your home's value in today's market.\""
+     },
+     {
+      "day": "Day 3",
+      "types": [
+       "Lipdub"
+      ],
+      "mode": "auto",
+      "body": "\"Hi [Name], I've got a few thoughts on how to position your home in this market.\" + calendar link."
+     },
+     {
+      "day": "Day 5",
+      "types": [
+       "HeyGen"
+      ],
+      "mode": "auto",
+      "body": "\"How I sell homes for top dollar.\" Process video."
+     },
+     {
+      "day": "Day 7",
+      "types": [
+       "Task"
+      ],
+      "mode": "manual",
+      "body": "ADRIAN: Booked → Appointment Scheduled. Timeline 0–3mo → Within 3 Months. Softens → Under 9 Months."
+     }
+    ]
+   },
+   {
+    "stage": "Seller – Within 3 Months",
+    "meta": "18 items · 78-day",
+    "desc": "Goal: signed listing agreement. High frequency.",
+    "note": "",
+    "stub": "",
+    "cards": [
+     {
+      "day": "Day 1",
+      "types": [
+       "Live Call"
+      ],
+      "mode": "manual",
+      "body": "Adrian. Timeline, property, CMA offer, push for listing consultation."
+     },
+     {
+      "day": "Day 1 · No ans",
+      "types": [
+       "VM",
+       "Lipdub"
+      ],
+      "mode": "auto",
+      "body": "\"Hi [Name], I pulled some numbers on what your home could sell for. Want me to pass them along?\" + calendar link.\nSlybroadcast script: \"Hey, it's Graeham, sorry I missed you. I ran the numbers on what your place could sell for right now. Call me back if you want to go through them.\""
+     },
+     {
+      "day": "Day 1 · +1hr",
+      "types": [
+       "Email"
+      ],
+      "mode": "auto",
+      "body": "CMA report + HeyGen market video. Subject: \"Your home's value in today's market.\""
+     },
+     {
+      "day": "Day 3",
+      "types": [
+       "AI Text"
+      ],
+      "mode": "auto",
+      "body": "\"Did you get a chance to look over the numbers? I can walk you through them whenever.\""
+     },
+     {
+      "day": "Day 5",
+      "types": [
+       "Static GIF"
+      ],
+      "mode": "auto",
+      "body": "\"A quick thought on the best time to list.\""
+     },
+     {
+      "day": "Day 8",
+      "types": [
+       "Email"
+      ],
+      "mode": "auto",
+      "body": "Seller testimonial — past seller who got top dollar."
+     },
+     {
+      "day": "Day 14",
+      "types": [
+       "AI Call",
+       "VM"
+      ],
+      "mode": "auto",
+      "body": "Specific recent comparable sale showing strong pricing.\nSlybroadcast script: \"Hey, it's Graeham. A home a lot like yours just sold nearby, and the sale price matters for your place. Call me for the quick read.\""
+     },
+     {
+      "day": "Day 15",
+      "types": [
+       "AI Text"
+      ],
+      "mode": "auto",
+      "body": "Market stat for their neighborhood that sparks curiosity."
+     },
+     {
+      "day": "Day 21",
+      "types": [
+       "Lipdub"
+      ],
+      "mode": "auto",
+      "body": "\"Hi [Name], wanted to see where your selling timeline stands.\""
+     },
+     {
+      "day": "Day 22",
+      "types": [
+       "HeyGen"
+      ],
+      "mode": "auto",
+      "body": "\"How to bring in the strongest offers.\" Staging, pricing, timing."
+     },
+     {
+      "day": "Day 29",
+      "types": [
+       "AI Call",
+       "VM"
+      ],
+      "mode": "auto",
+      "body": "Is now a good time?\nSlybroadcast script: \"Hey, it's Graeham. People keep asking me if now is a good time to sell, and for your area it's a fair question. Call me back and I'll give you a straight answer.\""
+     },
+     {
+      "day": "Day 36",
+      "types": [
+       "Static GIF"
+      ],
+      "mode": "auto",
+      "body": "\"Here's what I'm seeing in EPA right now.\""
+     },
+     {
+      "day": "Day 43",
+      "types": [
+       "Email"
+      ],
+      "mode": "auto",
+      "body": "Seller prep checklist — repairs, staging, photography."
+     },
+     {
+      "day": "Day 50",
+      "types": [
+       "AI Text"
+      ],
+      "mode": "auto",
+      "body": "\"When are you thinking of making the move? Even a rough timeline helps.\""
+     },
+     {
+      "day": "Day 57",
+      "types": [
+       "Live Call"
+      ],
+      "mode": "manual",
+      "body": "Adrian. Push for listing consultation. \"30 minutes to put a full plan together.\""
+     },
+     {
+      "day": "Day 64",
+      "types": [
+       "Email"
+      ],
+      "mode": "auto",
+      "body": "\"Why timing matters when you sell\""
+     },
+     {
+      "day": "Day 71",
+      "types": [
+       "Lipdub"
+      ],
+      "mode": "auto",
+      "body": "\"Hi [Name], when you're ready, let's map out pricing, prep, and timing.\""
+     },
+     {
+      "day": "Day 78",
+      "types": [
+       "Task"
+      ],
+      "mode": "manual",
+      "body": "ADRIAN: Booked → Appointment Scheduled. Extended → Under 9 Months. Silent 60+ → Cold."
+     }
+    ]
+   },
+   {
+    "stage": "Seller - Under 9 Months",
+    "meta": "13 items · 150-day",
+    "desc": "Stay top of mind. Moderate frequency.",
+    "note": "",
+    "stub": "",
+    "cards": [
+     {
+      "day": "Day 1",
+      "types": [
+       "HeyGen"
+      ],
+      "mode": "auto",
+      "body": "Market overview. \"Here's what the EPA market looks like.\""
+     },
+     {
+      "day": "Day 8",
+      "types": [
+       "AI Text"
+      ],
+      "mode": "auto",
+      "body": "\"Have you been keeping an eye on what homes are selling for in your neighborhood?\""
+     },
+     {
+      "day": "Day 15",
+      "types": [
+       "Static GIF"
+      ],
+      "mode": "auto",
+      "body": "\"Just keeping you posted on the market while you plan.\""
+     },
+     {
+      "day": "Day 22",
+      "types": [
+       "AI Call",
+       "VM"
+      ],
+      "mode": "auto",
+      "body": "Timeline check.\nSlybroadcast script: \"Hey, it's Graeham. Has your timeline to sell changed at all? Give me a quick call and let me know where you're at.\""
+     },
+     {
+      "day": "Day 29",
+      "types": [
+       "Email"
+      ],
+      "mode": "auto",
+      "body": "Market check — current comparable sales for their property type."
+     },
+     {
+      "day": "Day 43",
+      "types": [
+       "AI Text"
+      ],
+      "mode": "auto",
+      "body": "\"Still thinking about selling this year?\""
+     },
+     {
+      "day": "Day 57",
+      "types": [
+       "Lipdub"
+      ],
+      "mode": "auto",
+      "body": "\"Hi [Name], a couple nearby sales may affect your pricing and timing.\""
+     },
+     {
+      "day": "Day 71",
+      "types": [
+       "HeyGen"
+      ],
+      "mode": "auto",
+      "body": "\"How to prepare your home for sale.\""
+     },
+     {
+      "day": "Day 85",
+      "types": [
+       "AI Call",
+       "VM"
+      ],
+      "mode": "auto",
+      "body": "Mention recent successful sale in their area.\nSlybroadcast script: \"Hey, it's Graeham. We just closed a sale in your neighborhood, and the result gives us a better read on your place. Call me when you can.\""
+     },
+     {
+      "day": "Day 100",
+      "types": [
+       "Static GIF"
+      ],
+      "mode": "auto",
+      "body": "Equity/market positioning video."
+     },
+     {
+      "day": "Day 120",
+      "types": [
+       "Email"
+      ],
+      "mode": "auto",
+      "body": "Seller testimonial. Subject: \"How timing made the difference\""
+     },
+     {
+      "day": "Day 135",
+      "types": [
+       "AI Text"
+      ],
+      "mode": "auto",
+      "body": "\"Whenever you want to talk options, I'm here.\""
+     },
+     {
+      "day": "Day 150",
+      "types": [
+       "Task"
+      ],
+      "mode": "manual",
+      "body": "ADRIAN: Shortened → Within 3 Months. Distant → Over 9 Months. Silent 60+ → Cold."
+     }
+    ]
+   },
+   {
+    "stage": "Seller – Over 9 Months",
+    "meta": "13 items · 990-day",
+    "desc": "Low frequency, high value.",
+    "note": "",
+    "stub": "",
+    "cards": [
+     {
+      "day": "Day 1",
+      "types": [
+       "Email"
+      ],
+      "mode": "auto",
+      "body": "Comprehensive seller education guide."
+     },
+     {
+      "day": "Day 90",
+      "types": [
+       "AI Text"
+      ],
+      "mode": "auto",
+      "body": "\"A quick read on the [area] market\""
+     },
+     {
+      "day": "Day 180",
+      "types": [
+       "AI Text"
+      ],
+      "mode": "auto",
+      "body": "\"Just a reminder I'm here whenever you're ready.\""
+     },
+     {
+      "day": "Day 270",
+      "types": [
+       "AI Text"
+      ],
+      "mode": "auto",
+      "body": "\"Want a fresh market analysis so you know exactly where you stand?\""
+     },
+     {
+      "day": "Day 360",
+      "types": [
+       "HeyGen"
+      ],
+      "mode": "auto",
+      "body": "Annual market update video."
+     },
+     {
+      "day": "Day 450",
+      "types": [
+       "AI Call",
+       "VM"
+      ],
+      "mode": "auto",
+      "body": "Timeline check.\nSlybroadcast script: \"Hey, it's Graeham. Been a while. If selling has come back up, call me whenever and we'll catch up.\""
+     },
+     {
+      "day": "Day 540",
+      "types": [
+       "AI Text"
+      ],
+      "mode": "auto",
+      "body": "Equity review offer."
+     },
+     {
+      "day": "Day 630",
+      "types": [
+       "AI Text"
+      ],
+      "mode": "auto",
+      "body": "\"Inventory in your area is shifting, which can affect pricing. Want the quick version?\""
+     },
+     {
+      "day": "Day 720",
+      "types": [
+       "Static GIF"
+      ],
+      "mode": "auto",
+      "body": "CMA / equity check static video."
+     },
+     {
+      "day": "Day 810",
+      "types": [
+       "AI Call",
+       "VM"
+      ],
+      "mode": "auto",
+      "body": "AI call + VM.\nSlybroadcast script: \"Hey, it's Graeham. I'm around whenever the timing is right to sell. Give me a call and we can talk through the next step.\""
+     },
+     {
+      "day": "Day 900",
+      "types": [
+       "Email"
+      ],
+      "mode": "auto",
+      "body": "Strategy reminder — how to maximize sale price."
+     },
+     {
+      "day": "Day 990",
+      "types": [
+       "Lipdub"
+      ],
+      "mode": "auto",
+      "body": "\"Hi [Name], getting any closer to making your move?\""
+     },
+     {
+      "day": "Day 990",
+      "types": [
+       "Task"
+      ],
+      "mode": "manual",
+      "body": "ADRIAN: Re-engaged → Within 3 / Under 9. Zero engagement → Unqualified."
+     }
+    ]
+   },
+   {
+    "stage": "Appointment Scheduled",
+    "meta": "6 items",
+    "desc": "Listing consultation booked.",
+    "note": "",
+    "stub": "",
+    "cards": [
+     {
+      "day": "Immediately",
+      "types": [
+       "AI Text"
+      ],
+      "mode": "auto",
+      "body": "\"Your listing consultation is confirmed for [Date] at [Time].\""
+     },
+     {
+      "day": "Same day",
+      "types": [
+       "HeyGen"
+      ],
+      "mode": "auto",
+      "body": "\"What to expect in your listing consultation.\""
+     },
+     {
+      "day": "Day 2",
+      "types": [
+       "Static GIF"
+      ],
+      "mode": "auto",
+      "body": "\"Hey, looking forward to meeting you.\""
+     },
+     {
+      "day": "Day before",
+      "types": [
+       "AI Text"
+      ],
+      "mode": "auto",
+      "body": "\"See you tomorrow at [Time].\""
+     },
+     {
+      "day": "Day of",
+      "types": [
+       "AI Text"
+      ],
+      "mode": "auto",
+      "body": "\"See you today.\""
+     },
+     {
+      "day": "After",
+      "types": [
+       "Task"
+      ],
+      "mode": "manual",
+      "body": "GRAEHAM + GISELLE: Listing signed → Giselle initiates listing intake. No agreement → Adrian moves to Within 3 / Under 9 Months."
+     }
+    ]
+   },
+   {
+    "stage": "Appointment Rescheduled",
+    "meta": "6 items",
+    "desc": "Seller rebooked. Handle with warmth.",
+    "note": "",
+    "stub": "",
+    "cards": [
+     {
+      "day": "Immediately",
+      "types": [
+       "AI Text"
+      ],
+      "mode": "auto",
+      "body": "\"No problem at all. See you [New Date].\""
+     },
+     {
+      "day": "Same day",
+      "types": [
+       "Email"
+      ],
+      "mode": "auto",
+      "body": "Reschedule confirmation + \"What to expect\" video."
+     },
+     {
+      "day": "Day 2",
+      "types": [
+       "Static GIF"
+      ],
+      "mode": "auto",
+      "body": "\"All set for [New Date]. See you then.\""
+     },
+     {
+      "day": "Day before",
+      "types": [
+       "AI Text"
+      ],
+      "mode": "auto",
+      "body": "\"See you tomorrow at [Time].\""
+     },
+     {
+      "day": "Day of",
+      "types": [
+       "AI Text"
+      ],
+      "mode": "auto",
+      "body": "\"See you today.\""
+     },
+     {
+      "day": "2nd reschedule",
+      "types": [
+       "Task"
+      ],
+      "mode": "manual",
+      "body": "GRAEHAM: Adrian flags Graeham. Personal call or move back."
+     }
+    ]
+   },
+   {
+    "stage": "Under Contract",
+    "meta": "10 milestones",
+    "desc": "Giselle owns transaction coordination. This sequence handles relationship + emotional support.",
+    "note": "",
+    "stub": "",
+    "cards": [
+     {
+      "day": "Listing live",
+      "types": [
+       "AI Text"
+      ],
+      "mode": "auto",
+      "body": "\"We're live. Your home is officially on the market.\""
+     },
+     {
+      "day": "Day 1",
+      "types": [
+       "HeyGen"
+      ],
+      "mode": "auto",
+      "body": "\"What to expect during the listing process.\""
+     },
+     {
+      "day": "Day 7",
+      "types": [
+       "AI Text"
+      ],
+      "mode": "auto",
+      "body": "\"How are you holding up? Totally normal to have questions at this point.\""
+     },
+     {
+      "day": "Showings",
+      "types": [
+       "AI Text"
+      ],
+      "mode": "auto",
+      "body": "\"Showings are picking up, that's a good sign.\""
+     },
+     {
+      "day": "Offer received",
+      "types": [
+       "AI Text"
+      ],
+      "mode": "auto",
+      "body": "\"Good news, we've got an offer coming in.\""
+     },
+     {
+      "day": "Offer accepted",
+      "types": [
+       "Lipdub"
+      ],
+      "mode": "auto",
+      "body": "\"Hi [Name], we've got an accepted offer on your home. Congratulations!\""
+     },
+     {
+      "day": "Contingency",
+      "types": [
+       "AI Text"
+      ],
+      "mode": "auto",
+      "body": "\"Quick update: [contingency] cleared. We're on track for [COE date].\""
+     },
+     {
+      "day": "Day before COE",
+      "types": [
+       "Static GIF"
+      ],
+      "mode": "auto",
+      "body": "\"One more day. We're almost there.\""
+     },
+     {
+      "day": "Day of COE",
+      "types": [
+       "Lipdub"
+      ],
+      "mode": "auto",
+      "body": "\"Hi [Name], you did it. Congratulations!\""
+     },
+     {
+      "day": "Post-close",
+      "types": [
+       "Task"
+      ],
+      "mode": "manual",
+      "body": "GISELLE → ADRIAN: Enroll in Past Sellers. 48-hr call. Closing gift confirmed."
+     }
+    ]
+   },
+   {
+    "stage": "Cold",
+    "meta": "10 items · 180-day",
+    "desc": "Previously active seller, silent 60+ days.",
+    "note": "",
+    "stub": "",
+    "cards": [
+     {
+      "day": "Day 1",
+      "types": [
+       "Lipdub"
+      ],
+      "mode": "auto",
+      "body": "\"Hi [Name], it's been a while. Wanted to see where you're at with selling.\""
+     },
+     {
+      "day": "Day 7",
+      "types": [
+       "HeyGen"
+      ],
+      "mode": "auto",
+      "body": "Current market data for their area."
+     },
+     {
+      "day": "Day 14",
+      "types": [
+       "AI Text"
+      ],
+      "mode": "auto",
+      "body": "\"Is selling still a possibility, or is the timing off for now?\""
+     },
+     {
+      "day": "Day 30",
+      "types": [
+       "Static GIF"
+      ],
+      "mode": "auto",
+      "body": "\"The market has shifted. Here's what it means for your home's value.\""
+     },
+     {
+      "day": "Day 45",
+      "types": [
+       "AI Call",
+       "VM"
+      ],
+      "mode": "auto",
+      "body": "Warm tone — not desperate.\nSlybroadcast script: \"Hey, it's Graeham. Just letting you know I'm around if selling ever comes back up. Call me anytime. Take care.\""
+     },
+     {
+      "day": "Day 60",
+      "types": [
+       "Email"
+      ],
+      "mode": "auto",
+      "body": "Testimonial — someone who waited and sold."
+     },
+     {
+      "day": "Day 90",
+      "types": [
+       "Lipdub"
+      ],
+      "mode": "auto",
+      "body": "\"Hi [Name], one last note from me for now.\""
+     },
+     {
+      "day": "Day 120",
+      "types": [
+       "AI Text"
+      ],
+      "mode": "auto",
+      "body": "\"If the time ever feels right to talk it through, I'm here.\""
+     },
+     {
+      "day": "Day 150",
+      "types": [
+       "Live Call"
+      ],
+      "mode": "manual",
+      "body": "Adrian final personal attempt."
+     },
+     {
+      "day": "Day 180",
+      "types": [
+       "Task"
+      ],
+      "mode": "manual",
+      "body": "ADRIAN: Re-engaged → seller stage. Zero engagement → Unqualified."
+     }
+    ]
+   },
+   {
+    "stage": "Unqualified",
+    "meta": "archive",
+    "desc": "Seller who completed Cold sequence with zero engagement.",
+    "note": "",
+    "stub": "No cadence. Holding stage.",
+    "cards": []
+   }
+  ]
+ },
+ {
+  "id": "pl-investor",
+  "title": "Investor / Flipper Pipeline",
+  "stages": [
+   {
+    "stage": "Investor / Flipper",
+    "meta": "to be defined",
+    "desc": "Investors looking for off-market deals, distressed properties, flip opportunities. Lower frequency, more business-tone.",
+    "note": "",
+    "stub": "Cadence (proposed): Off-market deal alerts as available. Quarterly market analysis email focused on investor metrics. Live call from Adrian/Graeham every 30 days. Full cadence — to be defined.",
+    "cards": []
+   }
+  ]
+ },
+ {
+  "id": "pl-pastbuyers",
+  "title": "Past Buyers Pipeline",
+  "stages": [
+   {
+    "stage": "Closed",
+    "meta": "first 30 days",
+    "desc": "Within 30 days of close. Welcome cadence + Climbo review request + closing gift confirmation.",
+    "note": "",
+    "stub": "Cadence: Day 0 Lipdub on close + Climbo link. Day 2 Adrian 48-hr call. Day 7 closing gift confirmation. Day 14 testimonial request. Day 30 → Past Buyer stage.",
+    "cards": []
+   },
+   {
+    "stage": "Past Buyer",
+    "meta": "12 months · annual cycle",
+    "desc": "Enters on close + 30 days. Runs forever — 12-month cycle anchored to closing anniversary.",
+    "note": "SETUP: Tag 'Past Client' in GHL. Record exact closing date. Birthday on file enables Birthday Video months. Farming postcards run monthly.",
+    "stub": "",
+    "cards": [
+     {
+      "day": "Month 1",
+      "types": [
+       "AI Text"
+      ],
+      "mode": "auto",
+      "body": "Seasonal text — casual and warm. \"Hope you're settling in well.\" + farming postcard."
+     },
+     {
+      "day": "Month 2",
+      "types": [
+       "Email"
+      ],
+      "mode": "auto",
+      "body": "CMA — current value estimate. \"Here's what your home is worth today.\" + farming postcard."
+     },
+     {
+      "day": "Month 3",
+      "types": [
+       "Lipdub"
+      ],
+      "mode": "auto",
+      "body": "Birthday video on actual birthday if on file. Otherwise: farming postcard only."
+     },
+     {
+      "day": "Month 4",
+      "types": [
+       "Live Call"
+      ],
+      "mode": "manual",
+      "body": "Seasonal call — Adrian. Check in, natural referral ask. + farming postcard."
+     },
+     {
+      "day": "Month 5",
+      "types": [
+       "HeyGen"
+      ],
+      "mode": "auto",
+      "body": "Quarterly market update video. + farming postcard."
+     },
+     {
+      "day": "Month 6",
+      "types": [
+       "Static GIF"
+      ],
+      "mode": "auto",
+      "body": "Referral request video. \"If you know anyone thinking about buying or selling...\" + farming postcard."
+     },
+     {
+      "day": "Month 7",
+      "types": [
+       "AI Text"
+      ],
+      "mode": "auto",
+      "body": "Second seasonal text. + farming postcard."
+     },
+     {
+      "day": "Month 8",
+      "types": [
+       "Email"
+      ],
+      "mode": "auto",
+      "body": "6-month CMA update. + farming postcard."
+     },
+     {
+      "day": "Month 9",
+      "types": [
+       "Lipdub"
+      ],
+      "mode": "auto",
+      "body": "Birthday video if applicable. Otherwise farming postcard only."
+     },
+     {
+      "day": "Month 10",
+      "types": [
+       "Live Call"
+      ],
+      "mode": "manual",
+      "body": "Second seasonal call. + farming postcard."
+     },
+     {
+      "day": "Month 11",
+      "types": [
+       "HeyGen"
+      ],
+      "mode": "auto",
+      "body": "Year-end market wrap. + farming postcard."
+     },
+     {
+      "day": "Month 12",
+      "types": [
+       "Static GIF"
+      ],
+      "mode": "auto",
+      "body": "Second referral request + farming postcard. Cycle restarts."
+     }
+    ]
+   },
+   {
+    "stage": "Looking to buy",
+    "meta": "repeat business",
+    "desc": "Past buyer signaled they want to buy again. Highest-value path in the entire system — they already trust Graeham.",
+    "note": "",
+    "stub": "Action: Adrian flags. Graeham personal call within 24 hours. Move to Buyer Pipeline. Tag \"Repeat Business — Buyer\" for attribution. Past Buyers cycle pauses.",
+    "cards": []
+   },
+   {
+    "stage": "Looking to sell",
+    "meta": "repeat business",
+    "desc": "Past buyer of a home now wants to sell that same home (or another).",
+    "note": "",
+    "stub": "Action: Adrian flags. Graeham personal call within 24 hours. Move to Seller Pipeline. Tag \"Repeat Business — Seller\". Past Buyers cycle pauses.",
+    "cards": []
+   }
+  ]
+ },
+ {
+  "id": "pl-pastsellers",
+  "title": "Past Sellers Pipeline",
+  "stages": [
+   {
+    "stage": "Closed",
+    "meta": "first 30 days",
+    "desc": "Within 30 days of close. Welcome cadence + Climbo review + closing gift.",
+    "note": "",
+    "stub": "Cadence: Day 0 Lipdub + Climbo link. Day 2 Adrian 48-hr call. Day 7 closing gift. Day 14 testimonial. Day 30 → Past Seller.",
+    "cards": []
+   },
+   {
+    "stage": "Past Seller",
+    "meta": "12 months · annual cycle",
+    "desc": "Identical structure to Past Buyer cycle. CMA reports validate their timing decision.",
+    "note": "SETUP: Tag 'Past Client', record closing date and birthday.",
+    "stub": "",
+    "cards": [
+     {
+      "day": "Month 1",
+      "types": [
+       "AI Text"
+      ],
+      "mode": "auto",
+      "body": "\"Hope the move went smoothly.\" + farming postcard."
+     },
+     {
+      "day": "Month 2",
+      "types": [
+       "Email"
+      ],
+      "mode": "auto",
+      "body": "CMA for their sold property's neighborhood. + farming postcard."
+     },
+     {
+      "day": "Month 3",
+      "types": [
+       "Lipdub"
+      ],
+      "mode": "auto",
+      "body": "Birthday video if applicable."
+     },
+     {
+      "day": "Month 4",
+      "types": [
+       "Live Call"
+      ],
+      "mode": "manual",
+      "body": "Seasonal call. Referral ask. Ask if buying again. + farming postcard."
+     },
+     {
+      "day": "Month 5",
+      "types": [
+       "HeyGen"
+      ],
+      "mode": "auto",
+      "body": "Market update — quarterly. + farming postcard."
+     },
+     {
+      "day": "Month 6",
+      "types": [
+       "Static GIF"
+      ],
+      "mode": "auto",
+      "body": "Referral request video. + farming postcard."
+     },
+     {
+      "day": "Month 7",
+      "types": [
+       "AI Text"
+      ],
+      "mode": "auto",
+      "body": "Second seasonal text. + farming postcard."
+     },
+     {
+      "day": "Month 8",
+      "types": [
+       "Email"
+      ],
+      "mode": "auto",
+      "body": "Neighborhood market update. + farming postcard."
+     },
+     {
+      "day": "Month 9",
+      "types": [
+       "Lipdub"
+      ],
+      "mode": "auto",
+      "body": "Birthday video if applicable."
+     },
+     {
+      "day": "Month 10",
+      "types": [
+       "Live Call"
+      ],
+      "mode": "manual",
+      "body": "Second seasonal call. + farming postcard."
+     },
+     {
+      "day": "Month 11",
+      "types": [
+       "HeyGen"
+      ],
+      "mode": "auto",
+      "body": "Year-end market wrap. + farming postcard."
+     },
+     {
+      "day": "Month 12",
+      "types": [
+       "Static GIF"
+      ],
+      "mode": "auto",
+      "body": "Second referral request. + farming postcard. Cycle restarts."
+     }
+    ]
+   },
+   {
+    "stage": "Looking to sell",
+    "meta": "repeat business",
+    "desc": "Past seller signaled they want to sell another property.",
+    "note": "",
+    "stub": "Action: Adrian flags. Graeham personal call within 24 hours. Move to Seller Pipeline.",
+    "cards": []
+   },
+   {
+    "stage": "Looking to buy",
+    "meta": "repeat business",
+    "desc": "Past seller now wants to buy. Common with downsizers, relocators.",
+    "note": "",
+    "stub": "Action: Adrian flags. Graeham personal call within 24 hours. Move to Buyer Pipeline.",
+    "cards": []
+   }
+  ]
+ },
+ {
+  "id": "pl-lost",
+  "title": "Lost Deal Pipeline",
+  "stages": [
+   {
+    "stage": "Bought with another agent",
+    "meta": "closed loss",
+    "desc": "Lead bought through a different agent. Holding stage for tracking only.",
+    "note": "",
+    "stub": "No cadence. Light annual touch (1 holiday HeyGen email). Tracked for analytics — never re-marketed actively.",
+    "cards": []
+   },
+   {
+    "stage": "Sold with another agent",
+    "meta": "closed loss",
+    "desc": "Lead sold through a different agent.",
+    "note": "",
+    "stub": "No cadence. Light annual touch only.",
+    "cards": []
+   }
+  ]
+ }
+]
