@@ -1,0 +1,7 @@
+{
+  "drop": "2026-07-01",
+  "status": "handled_manually",
+  "sent_at": "2026-06-29",
+  "note": "July 1 preview was missed by the old local task; card (Prop 19 Tax Transfer, call/text CTA) built manually 2026-06-29 and sent to Peter for print. Marker present so the watchdog treats this drop as handled and stays quiet.",
+  "source": "manual-recovery"
+}

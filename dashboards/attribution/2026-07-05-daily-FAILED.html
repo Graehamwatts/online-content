@@ -1,0 +1,121 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Daily Attribution Brief — July 5, 2026 (Action required)</title>
+<style>
+  body { font-family: 'DM Sans', -apple-system, BlinkMacSystemFont, sans-serif; margin:0; padding:24px 12px; background:#f1f5f9; color:#0f1729; }
+  .wrap { max-width:720px; margin:0 auto; background:#ffffff; border-radius:12px; overflow:hidden; box-shadow:0 4px 24px rgba(15,23,41,0.10); }
+  .topbar { background:#f4b955; color:#0f1729; padding:9px 24px; font-size:12px; font-weight:700; letter-spacing:0.4px; text-transform:uppercase; }
+  .header { background:#0f1729; color:#fff; padding:28px 24px; }
+  .header h1 { margin:0; font-size:26px; font-weight:700; letter-spacing:-0.3px; }
+  .header p { margin:8px 0 0; color:#94a3b8; font-size:13px; }
+  .status { padding:14px 24px; background:#dc2626; color:#fff; font-weight:600; font-size:13.5px; text-align:center; }
+  .section { padding:22px 24px; }
+  .section + .section { border-top:1px solid #eef2f7; }
+  h2 { margin:0 0 12px; font-size:12px; font-weight:700; text-transform:uppercase; letter-spacing:0.6px; color:#64748b; }
+  .read { font-size:15px; line-height:1.6; color:#1e293b; }
+  .read strong { color:#0f1729; }
+  .box { background:#fef2f2; border-left:4px solid #dc2626; border-radius:6px; padding:14px 16px; font-size:14px; line-height:1.6; color:#7f1d1d; }
+  code { font-family:'SF Mono',Monaco,Consolas,monospace; background:#0f1729; color:#f4b955; padding:2px 6px; border-radius:4px; font-size:12.5px; }
+  .receipt { font-family:'SF Mono',Monaco,Consolas,monospace; background:#0f1729; color:#e2e8f0; padding:12px 14px; border-radius:6px; font-size:12.5px; line-height:1.5; overflow-x:auto; margin-top:10px; }
+  .receipt .k { color:#f4b955; }
+  ol.fix { margin:0; padding-left:20px; }
+  ol.fix li { padding:5px 0; font-size:14.5px; line-height:1.55; color:#1e293b; }
+  ol.fix li strong { color:#0f1729; }
+  ul.verify { list-style:none; margin:0; padding:0; }
+  ul.verify li { position:relative; padding:7px 0 7px 26px; font-size:14px; line-height:1.55; color:#334155; }
+  ul.verify li:before { content:"\2713"; position:absolute; left:0; color:#16a34a; font-weight:800; }
+  ul.verify li.x:before { content:"\2192"; color:#f4b955; }
+  table { width:100%; border-collapse:collapse; margin-top:6px; }
+  th { text-align:left; font-size:11px; text-transform:uppercase; letter-spacing:0.5px; color:#94a3b8; padding:0 12px 8px; border-bottom:2px solid #e5e7eb; }
+  th.r { text-align:right; }
+  .note { font-size:12.5px; color:#64748b; margin-top:10px; line-height:1.5; }
+  .pill { display:inline-block; background:#fef3c7; color:#92400e; font-size:12px; font-weight:600; padding:3px 10px; border-radius:999px; }
+  .streak { display:inline-block; background:#fee2e2; color:#991b1b; font-size:12px; font-weight:700; padding:3px 10px; border-radius:999px; }
+  .footer { padding:22px 24px; background:#0f1729; color:#94a3b8; font-size:12px; line-height:1.7; }
+  .footer strong { color:#fff; }
+  .footer .dre { color:#f4b955; }
+</style>
+</head>
+<body>
+  <div class="wrap">
+    <div class="topbar">Daily Attribution Brief &middot; July 5, 2026</div>
+    <div class="header">
+      <h1>Yesterday's brief couldn't run &mdash; again</h1>
+      <p>Sunday, July 5, 2026 &nbsp;&middot;&nbsp; generated Mon Jul 6, 2026 &nbsp;&middot;&nbsp; <span class="pill">Action required &mdash; 2 min</span></p>
+    </div>
+    <div class="status">&#9888; GoHighLevel pull failed &mdash; the attribution token is still the setup placeholder</div>
+
+    <div class="section">
+      <h2>The Read</h2>
+      <p class="read">
+        Same wall as the last four mornings. Yesterday's leads couldn't be pulled &mdash; not because it was a quiet
+        Sunday, and not because anything is broken. The GoHighLevel token this brief runs on is <strong>still the
+        literal placeholder</strong> that shipped in the setup file, so GoHighLevel rejects every call with a
+        <strong>401</strong>. I re-ran the live check this morning to be sure nothing changed &mdash; it hadn't.
+        <strong>Every weekday brief since June&nbsp;30 has died on this one line &mdash; five mornings now</strong>, and
+        each one is another day you're flying blind on where your leads actually come from. The fix hasn't changed
+        either: paste one real token into one file, about two minutes, and tomorrow's 7:15 brief pulls live data on
+        its own. <span class="streak">5th failed weekday in a row</span>
+      </p>
+    </div>
+
+    <div class="section">
+      <h2>Root cause (the receipt)</h2>
+      <div class="box">
+        The credential file <code>.claude-credentials/ghl-pit.txt</code> still has the literal placeholder on line&nbsp;1
+        &mdash; <code>pit-PASTE_YOUR&hellip;TOKEN&hellip;HERE</code> &mdash; not a real key. Live response captured this
+        morning (Jul&nbsp;6):
+      </div>
+      <div class="receipt"><span class="k">GET</span> /opportunities/pipelines &nbsp;&rarr;&nbsp; <span class="k">HTTP 401</span><br>{&quot;statusCode&quot;:401,&quot;message&quot;:&quot;Invalid Private Integration token&quot;}</div>
+    </div>
+
+    <div class="section">
+      <h2>The 2-minute fix</h2>
+      <ol class="fix">
+        <li>In <strong>GoHighLevel</strong> &rarr; <strong>Settings</strong> (gear, bottom-left) &rarr; <strong>Private Integrations</strong>.</li>
+        <li>Open <strong>&ldquo;Claude Attribution&rdquo;</strong> (or <strong>Create New Integration</strong>) &rarr; grant <strong>READ</strong> scopes for <strong>Contacts</strong> and <strong>Opportunities</strong>.</li>
+        <li>Copy the <code>pit-&hellip;</code> key.</li>
+        <li>Paste it as <strong>line&nbsp;1</strong> of <code>Online Content\.claude-credentials\ghl-pit.txt</code>, replacing the placeholder. (Also update <code>Skills\ghl-pit.txt</code> so both copies match.)</li>
+        <li>Done. The next 7:15&nbsp;AM brief pulls live data automatically &mdash; nothing else to change.</li>
+      </ol>
+    </div>
+
+    <div class="section">
+      <h2>What I verified this morning</h2>
+      <ul class="verify">
+        <li>The runner <strong>can</strong> reach GoHighLevel &mdash; today's live call returned a real <strong>401 auth response</strong>, not a firewall/allowlist block. The old &ldquo;must route through a GitHub Action&rdquo; workaround is genuinely unnecessary; the brief can run start-to-finish from here once the token is real.</li>
+        <li>Bare Python-urllib trips Cloudflare (error 1010); a normal browser-style client passes cleanly. The pull already uses that client style.</li>
+        <li class="x"><strong>Nothing else is wrong.</strong> No missing GitHub permission, no broken workflow, no network issue. One placeholder token is the whole story &mdash; it has been since June&nbsp;30.</li>
+      </ul>
+    </div>
+
+    <div class="section">
+      <h2>Meanwhile &mdash; last known CRM snapshot</h2>
+      <p class="note" style="margin-top:0">
+        So this isn't a blank page: below is the last <em>successful</em> pull (Jun&nbsp;29), carried forward unchanged
+        because no pull has succeeded since. It's now about a week stale and it's <strong>all-time cumulative
+        opportunities</strong>, not yesterday's new leads &mdash; context only, not current numbers.
+      </p>
+      <table>
+        <thead><tr><th>Top attributed sources (Jun 29, cumulative &mdash; stale)</th><th class="r">Opps</th></tr></thead>
+        <tbody><tr><td style="padding:10px 12px;border-bottom:1px solid #e5e7eb;font-weight:500;color:#0f1729">Contact Form - More Info</td><td style="padding:10px 12px;border-bottom:1px solid #e5e7eb;text-align:right;color:#334155">9</td></tr><tr><td style="padding:10px 12px;border-bottom:1px solid #e5e7eb;font-weight:500;color:#0f1729">Facebook</td><td style="padding:10px 12px;border-bottom:1px solid #e5e7eb;text-align:right;color:#334155">9</td></tr><tr><td style="padding:10px 12px;border-bottom:1px solid #e5e7eb;font-weight:500;color:#0f1729">referral from SOI</td><td style="padding:10px 12px;border-bottom:1px solid #e5e7eb;text-align:right;color:#334155">3</td></tr><tr><td style="padding:10px 12px;border-bottom:1px solid #e5e7eb;font-weight:500;color:#0f1729">Home Value Form</td><td style="padding:10px 12px;border-bottom:1px solid #e5e7eb;text-align:right;color:#334155">2</td></tr><tr><td style="padding:10px 12px;border-bottom:1px solid #e5e7eb;font-weight:500;color:#0f1729">CSV Import</td><td style="padding:10px 12px;border-bottom:1px solid #e5e7eb;text-align:right;color:#334155">2</td></tr><tr><td style="padding:10px 12px;border-bottom:1px solid #e5e7eb;font-weight:500;color:#0f1729">Open House</td><td style="padding:10px 12px;border-bottom:1px solid #e5e7eb;text-align:right;color:#334155">2</td></tr><tr><td style="padding:10px 12px;border-bottom:1px solid #e5e7eb;font-weight:500;color:#0f1729">contact form - more info</td><td style="padding:10px 12px;border-bottom:1px solid #e5e7eb;text-align:right;color:#334155">2</td></tr><tr><td style="padding:10px 12px;border-bottom:1px solid #e5e7eb;font-weight:500;color:#0f1729">Referral</td><td style="padding:10px 12px;border-bottom:1px solid #e5e7eb;text-align:right;color:#334155">1</td></tr></tbody>
+      </table>
+      <p class="note">
+        The real tell in that last good pull: of <strong>4,038</strong> total opportunities, <strong>3,998 (99.0%)</strong>
+        carried <strong>no attribution source at all</strong>. Fix the token and this brief comes alive &mdash; but it can
+        only ever be as good as the tagging upstream. Worth confirming your intake forms and ad UTMs are stamping a
+        source onto every new contact, or even a live brief will read mostly &ldquo;Unknown.&rdquo;
+      </p>
+    </div>
+
+    <div class="footer">
+      <strong>Graeham Watts</strong> &mdash; REALTOR&reg;, Intero Real Estate<br>
+      DRE# <span class="dre">01466876</span> &nbsp;&middot;&nbsp; Daily Attribution Brief (automated, Mon&ndash;Fri 7:15&nbsp;AM PT)<br>
+      This brief ran but could not pull data. It will keep failing every morning until the token above is replaced.
+    </div>
+  </div>
+</body>
+</html>

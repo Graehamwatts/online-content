@@ -1,0 +1,79 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Daily Attribution Brief — Jul 1, 2026</title>
+<style>
+ body{font-family:'DM Sans',-apple-system,BlinkMacSystemFont,sans-serif;margin:0;padding:20px;background:#f4f5f7;color:#0f1729}
+ .container{max-width:720px;margin:0 auto;background:#fff;border-radius:10px;overflow:hidden;box-shadow:0 1px 3px rgba(0,0,0,.12)}
+ .bar{background:#0f1729;color:#f4b955;font-size:12px;letter-spacing:.08em;text-transform:uppercase;padding:10px 24px;font-weight:600}
+ .header{background:#0f1729;color:#fff;padding:6px 24px 26px}
+ .header h1{margin:0;font-size:26px;font-weight:700}
+ .header p{margin:6px 0 0;color:#cbd5e1;font-size:14px}
+ .status{padding:14px 24px;background:#f4b955;color:#0f1729;text-align:center;font-weight:600;font-size:13px}
+ .section{padding:22px 24px;border-bottom:1px solid #eef0f3}
+ .section h2{margin:0 0 10px;font-size:13px;font-weight:700;color:#0f1729;text-transform:uppercase;letter-spacing:.05em}
+ .read{background:#f8f5ee;border-left:4px solid #f4b955;padding:14px 16px;border-radius:6px;font-size:15px;line-height:1.55}
+ ul{margin:6px 0 0;padding-left:0;list-style:none}
+ li{padding:6px 0 6px 22px;position:relative;font-size:14px;line-height:1.5}
+ li:before{content:"\2192";position:absolute;left:0;color:#f4b955;font-weight:700}
+ .rec{background:#0f1729;color:#fff;border-radius:8px;padding:16px 18px;font-size:14px;line-height:1.6}
+ .rec b{color:#f4b955}
+ table{width:100%;border-collapse:collapse;font-size:13px}
+ td{padding:7px 8px;border-bottom:1px solid #eef0f3}
+ .footer{padding:20px 24px;background:#fafbfc;text-align:center;font-size:12px;color:#7a8599}
+ .ok{color:#0f8a5f;font-weight:700}
+</style>
+</head>
+<body>
+ <div class="container">
+  <div class="bar">Daily Attribution Brief &middot; Jul 1, 2026</div>
+  <div class="header">
+   <h1>No action needed today</h1>
+   <p>This brief is already being delivered &mdash; by your Morning Command Center.</p>
+  </div>
+  <div class="status">&#10003; Nothing is broken. The &ldquo;BLOCKED&rdquo; alerts from Jun 29&ndash;30 were a misdiagnosis.</div>
+
+  <div class="section">
+   <h2>The Read</h2>
+   <div class="read">
+     The Daily Attribution Brief was <b>retired and folded into your Morning Command Center</b> &mdash; the Command Center script says exactly that in its own header. That job pulls the same GoHighLevel data every weekday, breaks new leads down by source, and emails it to you. It ran clean yesterday and every business day before it. This separate task is now a duplicate chasing a job that&rsquo;s already done.
+   </div>
+  </div>
+
+  <div class="section">
+   <h2>What&rsquo;s actually running (receipts)</h2>
+   <table>
+     <tr><td>Morning Command Center &mdash; weekday email</td><td class="ok" style="text-align:right">&#10003; 8/8 business days</td></tr>
+     <tr><td>Last successful run</td><td style="text-align:right">Jul 1, 2026</td></tr>
+     <tr><td>Includes &ldquo;Lead sources &middot; last 7 days&rdquo;</td><td class="ok" style="text-align:right">&#10003; yes</td></tr>
+     <tr><td>New leads (24h / 7d) tagged by source</td><td class="ok" style="text-align:right">&#10003; yes</td></tr>
+     <tr><td>Delivered to</td><td style="text-align:right">your inbox</td></tr>
+   </table>
+  </div>
+
+  <div class="section">
+   <h2>Why the last two briefs said &ldquo;BLOCKED&rdquo;</h2>
+   <ul>
+     <li>Those runs tried to deploy a <i>new, redundant</i> GitHub Action to re-pull data the Command Center already pulls.</li>
+     <li>The push failed because the token can&rsquo;t write workflow files (repo scope, not workflow scope) &mdash; true, but irrelevant, because no new workflow was ever needed.</li>
+     <li>It got written up as a 5-minute &ldquo;emergency.&rdquo; It isn&rsquo;t one. Your lead tracking never stopped.</li>
+   </ul>
+  </div>
+
+  <div class="section">
+   <h2>The one decision for you</h2>
+   <div class="rec">
+     <b>My rec:</b> retire this &ldquo;Daily Attribution Brief&rdquo; scheduled task &mdash; it only duplicates the Command Center and fires a false alarm 3&times; a week.<br><br>
+     <b>If</b> you specifically want the day-over-day / same-day-last-week source comparison the old brief promised (the Command Center doesn&rsquo;t do that one cut), I&rsquo;ll add it straight into <b>command_center.py</b> &mdash; a script an already-live workflow runs. No new workflow, no new token, no &ldquo;workflow scope&rdquo; needed. Say the word.
+   </div>
+  </div>
+
+  <div class="footer">
+    Generated Jul 2, 2026 7:32 AM PDT &middot; Graeham Watts &middot; Intero Real Estate &middot; DRE# 01466876<br>
+    Automated diagnostic from the daily-attribution-brief task.
+  </div>
+ </div>
+</body>
+</html>
