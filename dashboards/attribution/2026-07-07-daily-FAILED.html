@@ -1,0 +1,143 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Daily Attribution Brief — July 7, 2026 (GHL pull failed — action required)</title>
+<style>
+  body { font-family: 'DM Sans', -apple-system, BlinkMacSystemFont, sans-serif; margin:0; padding:24px 12px; background:#f1f5f9; color:#0f1729; }
+  .wrap { max-width:720px; margin:0 auto; background:#ffffff; border-radius:12px; overflow:hidden; box-shadow:0 4px 24px rgba(15,23,41,0.10); }
+  .topbar { background:#f4b955; color:#0f1729; padding:9px 24px; font-size:12px; font-weight:700; letter-spacing:0.4px; text-transform:uppercase; }
+  .header { background:#0f1729; color:#fff; padding:28px 24px; }
+  .header h1 { margin:0; font-size:26px; font-weight:700; letter-spacing:-0.3px; }
+  .header p { margin:8px 0 0; color:#94a3b8; font-size:13px; }
+  .status { padding:14px 24px; background:#dc2626; color:#fff; font-weight:600; font-size:13.5px; text-align:center; }
+  .section { padding:22px 24px; }
+  .section + .section { border-top:1px solid #eef2f7; }
+  h2 { margin:0 0 12px; font-size:12px; font-weight:700; text-transform:uppercase; letter-spacing:0.6px; color:#64748b; }
+  .read { font-size:15px; line-height:1.6; color:#1e293b; }
+  .read strong { color:#0f1729; }
+  .box { background:#fef2f2; border-left:4px solid #dc2626; border-radius:6px; padding:14px 16px; font-size:14px; line-height:1.6; color:#7f1d1d; }
+  code { font-family:'SF Mono',Monaco,Consolas,monospace; background:#0f1729; color:#f4b955; padding:2px 6px; border-radius:4px; font-size:12.5px; }
+  .receipt { font-family:'SF Mono',Monaco,Consolas,monospace; background:#0f1729; color:#e2e8f0; padding:12px 14px; border-radius:6px; font-size:12.5px; line-height:1.5; overflow-x:auto; margin-top:10px; }
+  .receipt .k { color:#f4b955; }
+  ol.fix { margin:0; padding-left:20px; }
+  ol.fix li { padding:5px 0; font-size:14.5px; line-height:1.55; color:#1e293b; }
+  ol.fix li strong { color:#0f1729; }
+  ul.verify { list-style:none; margin:0; padding:0; }
+  ul.verify li { position:relative; padding:7px 0 7px 26px; font-size:14px; line-height:1.55; color:#334155; }
+  ul.verify li:before { content:"\2713"; position:absolute; left:0; color:#16a34a; font-weight:800; }
+  ul.verify li.x:before { content:"\2192"; color:#f4b955; }
+  .mute { background:#fffbeb; border:1px solid #fde68a; border-radius:8px; padding:16px 18px; }
+  .mute p { margin:0; font-size:14.5px; line-height:1.6; color:#334155; }
+  .mute strong { color:#0f1729; }
+  table { width:100%; border-collapse:collapse; margin-top:6px; }
+  th { text-align:left; font-size:11px; text-transform:uppercase; letter-spacing:0.5px; color:#94a3b8; padding:0 12px 8px; border-bottom:2px solid #e5e7eb; }
+  th.r { text-align:right; }
+  .note { font-size:12.5px; color:#64748b; margin-top:10px; line-height:1.5; }
+  .pill { display:inline-block; background:#fef3c7; color:#92400e; font-size:12px; font-weight:600; padding:3px 10px; border-radius:999px; }
+  .streak { display:inline-block; background:#fee2e2; color:#991b1b; font-size:12px; font-weight:700; padding:3px 10px; border-radius:999px; }
+  .footer { padding:22px 24px; background:#0f1729; color:#94a3b8; font-size:12px; line-height:1.7; }
+  .footer strong { color:#fff; }
+  .footer .dre { color:#f4b955; }
+</style>
+</head>
+<body>
+  <div class="wrap">
+    <div class="topbar">Daily Attribution Brief &middot; July 7, 2026</div>
+    <div class="header">
+      <h1>Day seven of a two-minute fix</h1>
+      <p>Tuesday, July 7, 2026 &nbsp;&middot;&nbsp; generated Wed Jul 8, 2026 &nbsp;&middot;&nbsp; <span class="pill">Action required &mdash; 2 min</span></p>
+    </div>
+    <div class="status">&#9888; GoHighLevel pull failed &mdash; the attribution token is still the setup placeholder (HTTP 401)</div>
+
+    <div class="section">
+      <h2>The Read</h2>
+      <p class="read">
+        Nothing broke overnight. Tuesday's leads couldn't be pulled for the same single reason as the six weekdays before it:
+        the GoHighLevel token this brief runs on is <strong>still the literal placeholder</strong> &mdash; the word
+        &ldquo;PASTE&rdquo; where a real key should be &mdash; so every call comes back <strong>401</strong>. I checked the
+        credential file directly this morning before writing this; line&nbsp;1 hasn't changed since Tuesday, June&nbsp;30.
+        The fix is the same two minutes it was a week ago, and only you can do it.
+        <span class="streak">7th failed weekday in a row</span>
+      </p>
+    </div>
+
+    <div class="section">
+      <h2>Root cause (the receipt)</h2>
+      <div class="box">
+        Direct inspection this morning: <code>.claude-credentials/ghl-pit.txt</code> line&nbsp;1 is still the literal
+        placeholder &mdash; <code>pit-PASTE_YOUR&hellip;TOKEN&hellip;HERE</code> &mdash; not a real key. Line&nbsp;2 (your
+        Location ID) is correct. Any authenticated call with that placeholder returns:
+      </div>
+      <div class="receipt"><span class="k">GET</span> /opportunities/pipelines &nbsp;&rarr;&nbsp; <span class="k">HTTP 401</span><br>{&quot;statusCode&quot;:401,&quot;message&quot;:&quot;Invalid Private Integration token&quot;}</div>
+    </div>
+
+    <div class="section">
+      <h2>The 2-minute fix</h2>
+      <ol class="fix">
+        <li>In <strong>GoHighLevel</strong> &rarr; <strong>Settings</strong> (gear, bottom-left) &rarr; <strong>Private Integrations</strong>.</li>
+        <li>Open <strong>&ldquo;Claude Attribution&rdquo;</strong> (or <strong>Create New Integration</strong>) &rarr; grant <strong>READ</strong> scopes for <strong>Contacts</strong> and <strong>Opportunities</strong>.</li>
+        <li>Copy the <code>pit-&hellip;</code> key.</li>
+        <li>Paste it as <strong>line&nbsp;1</strong> of <code>Online Content\.claude-credentials\ghl-pit.txt</code>, replacing the placeholder. (Also update <code>Skills\ghl-pit.txt</code> so both copies match.)</li>
+        <li>Done. The next 7:15&nbsp;AM brief pulls live data on its own &mdash; nothing else to change.</li>
+      </ol>
+    </div>
+
+    <div class="section">
+      <h2>What is and isn&rsquo;t wrong</h2>
+      <ul class="verify">
+        <li>Location ID on line&nbsp;2 is correct, and the credential folder is <code>.gitignore</code>d, so pasting the real token won&rsquo;t leak it into the repo.</li>
+        <li>The publishing path works &mdash; this brief reached GitHub and your inbox on a <code>repo</code>-scope token, no missing permission.</li>
+        <li class="x"><strong>Nothing else is broken.</strong> No network block, no workflow error, no scope problem. One placeholder token is the entire story &mdash; and only you can mint the replacement.</li>
+      </ul>
+    </div>
+
+    <div class="section">
+      <h2>My recommendation: mute this until the token&rsquo;s in</h2>
+      <div class="mute">
+        <p>
+          Seven identical &ldquo;fix the token&rdquo; emails in, this daily has stopped being a signal and become noise &mdash;
+          and a brief you train yourself to ignore is worse than no brief. <strong>I&rsquo;d pause the daily send until the
+          token lands.</strong> I did <strong>not</strong> touch your schedule on my own &mdash; it&rsquo;s your automation and
+          killing a recurring task unasked is the kind of thing that quietly breaks a week later. Say the word and I&rsquo;ll
+          pause <code>daily-attribution-brief</code>, then flip it back the day the token&rsquo;s in so the first thing you get
+          is a live brief, not reminder number eight. Until then it keeps arriving each weekday, unchanged.
+        </p>
+      </div>
+    </div>
+
+    <div class="section">
+      <h2>Meanwhile &mdash; last known CRM snapshot</h2>
+      <p class="note" style="margin-top:0">
+        So this isn&rsquo;t a blank page: below is the last <em>successful</em> pull (Jun&nbsp;29), carried forward unchanged
+        because nothing has succeeded since. It is now ~a week stale and it&rsquo;s <strong>all-time cumulative
+        opportunities</strong>, not Tuesday&rsquo;s new leads &mdash; context only, not current numbers.
+      </p>
+      <table>
+        <thead><tr><th>Top attributed sources (Jun 29, cumulative &mdash; stale)</th><th class="r">Opps</th></tr></thead>
+        <tbody>
+          <tr><td style="padding:10px 12px;border-bottom:1px solid #e5e7eb;font-weight:500;color:#0f1729">Contact Form - More Info</td><td style="padding:10px 12px;border-bottom:1px solid #e5e7eb;text-align:right;color:#334155">9</td></tr>
+          <tr><td style="padding:10px 12px;border-bottom:1px solid #e5e7eb;font-weight:500;color:#0f1729">Facebook</td><td style="padding:10px 12px;border-bottom:1px solid #e5e7eb;text-align:right;color:#334155">9</td></tr>
+          <tr><td style="padding:10px 12px;border-bottom:1px solid #e5e7eb;font-weight:500;color:#0f1729">referral from SOI</td><td style="padding:10px 12px;border-bottom:1px solid #e5e7eb;text-align:right;color:#334155">3</td></tr>
+          <tr><td style="padding:10px 12px;border-bottom:1px solid #e5e7eb;font-weight:500;color:#0f1729">Home Value Form</td><td style="padding:10px 12px;border-bottom:1px solid #e5e7eb;text-align:right;color:#334155">2</td></tr>
+          <tr><td style="padding:10px 12px;border-bottom:1px solid #e5e7eb;font-weight:500;color:#0f1729">Open House</td><td style="padding:10px 12px;border-bottom:1px solid #e5e7eb;text-align:right;color:#334155">2</td></tr>
+          <tr><td style="padding:10px 12px;border-bottom:1px solid #e5e7eb;font-weight:500;color:#0f1729">Referral</td><td style="padding:10px 12px;border-bottom:1px solid #e5e7eb;text-align:right;color:#334155">1</td></tr>
+        </tbody>
+      </table>
+      <p class="note">
+        The real tell in that last good pull: of <strong>4,038</strong> total opportunities, <strong>3,998 (99.0%)</strong>
+        carried <strong>no attribution source at all</strong>. Fixing the token brings this brief alive &mdash; but it can only
+        ever be as good as the tagging upstream. Worth confirming your intake forms and ad UTMs stamp a source onto every new
+        contact, or even a live brief reads mostly &ldquo;Unknown.&rdquo;
+      </p>
+    </div>
+
+    <div class="footer">
+      <strong>Graeham Watts</strong> &mdash; REALTOR&reg;, Intero Real Estate<br>
+      DRE# <span class="dre">01466876</span> &nbsp;&middot;&nbsp; Daily Attribution Brief (automated, Mon&ndash;Fri 7:15&nbsp;AM PT)<br>
+      This brief ran but could not pull data. It will keep failing every morning until the token above is replaced.
+    </div>
+  </div>
+</body>
+</html>
