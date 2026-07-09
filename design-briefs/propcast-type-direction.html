@@ -1,0 +1,151 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>PropCast / PropertyIQ — Type Direction</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;700&family=Inter:wght@400;500;600;800&family=JetBrains+Mono:wght@400;600&family=Geist:wght@400;500;600;900&family=Geist+Mono:wght@400;600&family=Bricolage+Grotesque:opsz,wght@12..96,400;12..96,600;12..96,800&family=Instrument+Serif:ital@0;1&family=IBM+Plex+Mono:wght@400;600&display=swap" rel="stylesheet">
+<style>
+  :root { --bg:#0A0E14; --panel:#101722; --line:#1E2836; --txt:#F2F6FA; --dim:#8A97A8; --accent:#53D7F0; --heat:#FFB43C; }
+  * { margin:0; padding:0; box-sizing:border-box; }
+  body { background:var(--bg); color:var(--txt); font-family:Inter,Arial,sans-serif; line-height:1.6; }
+  .wrap { max-width:1080px; margin:0 auto; padding:48px 28px 80px; }
+  .kicker { font-family:'JetBrains Mono',monospace; font-size:12px; letter-spacing:2px; color:var(--accent); text-transform:uppercase; }
+  h1 { font-size:34px; font-weight:800; margin:10px 0 6px; }
+  .lede { color:var(--dim); max-width:760px; margin-bottom:14px; }
+  .note { background:var(--panel); border:1px solid var(--line); border-left:3px solid var(--accent); border-radius:0 10px 10px 0; padding:14px 18px; color:#C7D2DE; font-size:14px; margin:18px 0 46px; }
+  .sys { border:1px solid var(--line); border-radius:16px; overflow:hidden; margin-bottom:44px; background:var(--panel); }
+  .sys-head { display:flex; justify-content:space-between; align-items:baseline; flex-wrap:wrap; gap:8px; padding:18px 26px; border-bottom:1px solid var(--line); }
+  .sys-name { font-size:19px; font-weight:800; }
+  .sys-stack { font-family:'JetBrains Mono',monospace; font-size:12px; color:var(--dim); }
+  .badge { font-family:'JetBrains Mono',monospace; font-size:11px; letter-spacing:1.5px; color:#0A0E14; background:var(--accent); border-radius:20px; padding:4px 12px; font-weight:600; }
+  .stage { padding:44px 26px 30px; background:radial-gradient(1200px 500px at 70% -10%, #12202f 0%, #0A0E14 60%); }
+  .chips { display:flex; gap:10px; flex-wrap:wrap; margin-bottom:26px; }
+  .chip { font-size:11.5px; letter-spacing:1.8px; text-transform:uppercase; color:var(--accent); border:1px solid #234; background:#0d1520; padding:6px 12px; border-radius:6px; }
+  .hero { font-weight:800; font-size:56px; line-height:1.02; letter-spacing:-0.5px; margin-bottom:14px; }
+  .hero em { font-style:normal; color:var(--accent); }
+  .sub { font-size:19px; color:#C7D2DE; margin-bottom:8px; }
+  .body { font-size:15px; color:var(--dim); max-width:640px; margin-bottom:28px; }
+  .cards { display:flex; gap:14px; flex-wrap:wrap; margin-bottom:28px; }
+  .stat { background:#0d1520; border:1px solid var(--line); border-radius:10px; padding:14px 18px; min-width:150px; }
+  .stat .lab { font-size:10.5px; letter-spacing:1.6px; text-transform:uppercase; color:var(--dim); }
+  .stat .val { font-size:24px; font-weight:700; margin-top:2px; }
+  .stat .del { font-size:11px; margin-top:2px; color:var(--heat); }
+  .cta { display:inline-block; background:var(--accent); color:#06222B; font-weight:700; font-size:14px; letter-spacing:1.2px; padding:13px 26px; border-radius:9px; }
+  .use { padding:16px 26px 22px; border-top:1px solid var(--line); font-size:13.5px; color:var(--dim); }
+  .use b { color:var(--txt); }
+  /* System A */
+  .sysA .hero, .sysA .sub, .sysA .sys-name-x { font-family:'Space Grotesk',sans-serif; }
+  .sysA .body, .sysA .stat .val { font-family:Inter,sans-serif; }
+  .sysA .chip, .sysA .stat .lab, .sysA .stat .del, .sysA .cta { font-family:'JetBrains Mono',monospace; }
+  /* System B */
+  .sysB .hero, .sysB .sub { font-family:Geist,sans-serif; letter-spacing:-1px; }
+  .sysB .body, .sysB .stat .val { font-family:Geist,sans-serif; }
+  .sysB .chip, .sysB .stat .lab, .sysB .stat .del, .sysB .cta { font-family:'Geist Mono',monospace; }
+  /* System C */
+  .sysC .hero { font-family:'Bricolage Grotesque',sans-serif; letter-spacing:-0.5px; }
+  .sysC .hero em { font-family:'Instrument Serif',serif; font-style:italic; font-weight:400; }
+  .sysC .sub { font-family:'Bricolage Grotesque',sans-serif; }
+  .sysC .body, .sysC .stat .val { font-family:Inter,sans-serif; }
+  .sysC .chip, .sysC .stat .lab, .sysC .stat .del, .sysC .cta { font-family:'IBM Plex Mono',monospace; }
+  table { width:100%; border-collapse:collapse; font-size:14px; margin:8px 0 26px; }
+  th, td { text-align:left; padding:10px 12px; border-bottom:1px solid var(--line); vertical-align:top; }
+  th { color:var(--dim); font-size:12px; letter-spacing:1.2px; text-transform:uppercase; font-family:'JetBrains Mono',monospace; }
+  .rec { background:linear-gradient(135deg,#0e1d2a,#101722); border:1px solid #23506b; border-radius:16px; padding:24px 26px; }
+  .rec h2 { font-size:20px; margin-bottom:8px; }
+  .rec li { margin:6px 0 6px 18px; color:#C7D2DE; font-size:14.5px; }
+</style>
+</head>
+<body>
+<div class="wrap">
+
+  <div class="kicker">PropCast / PropertyIQ · Design System</div>
+  <h1>Type Direction — three candidate systems</h1>
+  <p class="lede">Same PropCast content rendered in three complete font systems. Every font here is free and open-licensed (Google Fonts), so there are zero licensing costs or restrictions as the platform scales to many agents. Scroll, compare, pick.</p>
+  <div class="note"><b>How to judge:</b> read the big headline out loud, then squint at the little mono labels. The headline should feel confident and technical (not generic), and the mono labels are what make the product feel like <i>market intelligence</i> instead of a template. One display font + one UI font + one mono font — that's the whole system, everywhere: landing page, dashboard, reports, emails.</div>
+
+  <!-- SYSTEM A -->
+  <div class="sys sysA">
+    <div class="sys-head">
+      <div><span class="sys-name">System A — "Signal"</span> <span class="badge">RECOMMENDED</span></div>
+      <div class="sys-stack">Space Grotesk · Inter · JetBrains Mono</div>
+    </div>
+    <div class="stage">
+      <div class="chips"><span class="chip">Seller Intent Heat</span><span class="chip">Austin · 78701</span><span class="chip">Why it was made</span></div>
+      <div class="hero">Your market,<br>already <em>mapped</em>.</div>
+      <div class="sub">It doesn't guess what to post. It knows.</div>
+      <p class="body">PropCast watches what your market is searching, builds the content that answers it, and traces every lead back to the post that earned it. No dashboards to babysit.</p>
+      <div class="cards">
+        <div class="stat"><div class="lab">Median price</div><div class="val">$1.30M</div><div class="del">▲ 4.2% YoY</div></div>
+        <div class="stat"><div class="lab">Days on market</div><div class="val">21</div><div class="del">▼ faster</div></div>
+        <div class="stat"><div class="lab">Leads traced</div><div class="val">87</div><div class="del">this quarter</div></div>
+      </div>
+      <span class="cta">ANALYZE YOUR MARKET →</span>
+    </div>
+    <div class="use"><b>Why it fits:</b> Space Grotesk has a technical, slightly engineered voice — perfect for "the machine that knows." Inter is the most proven screen/UI font alive (dashboards, tables, buttons). JetBrains Mono makes every data label feel like instrumentation. <b>This is the balanced pick: distinctive marketing, bulletproof product UI.</b></div>
+  </div>
+
+  <!-- SYSTEM B -->
+  <div class="sys sysB">
+    <div class="sys-head">
+      <div><span class="sys-name">System B — "Instrument"</span></div>
+      <div class="sys-stack">Geist · Geist Mono (one family for everything)</div>
+    </div>
+    <div class="stage">
+      <div class="chips"><span class="chip">Seller Intent Heat</span><span class="chip">Austin · 78701</span><span class="chip">Why it was made</span></div>
+      <div class="hero">Your market,<br>already <em>mapped</em>.</div>
+      <div class="sub">It doesn't guess what to post. It knows.</div>
+      <p class="body">PropCast watches what your market is searching, builds the content that answers it, and traces every lead back to the post that earned it. No dashboards to babysit.</p>
+      <div class="cards">
+        <div class="stat"><div class="lab">Median price</div><div class="val">$1.30M</div><div class="del">▲ 4.2% YoY</div></div>
+        <div class="stat"><div class="lab">Days on market</div><div class="val">21</div><div class="del">▼ faster</div></div>
+        <div class="stat"><div class="lab">Leads traced</div><div class="val">87</div><div class="del">this quarter</div></div>
+      </div>
+      <span class="cta">ANALYZE YOUR MARKET →</span>
+    </div>
+    <div class="use"><b>Why it fits:</b> one family (sans + mono) covering everything — the cleanest, most modern-SaaS look (it's what Vercel built for exactly this kind of product). Minimal decisions, maximum consistency. <b>Trade-off: safest but least distinctive — you'll look premium, and a bit like every other 2026 dev-tool site.</b></div>
+  </div>
+
+  <!-- SYSTEM C -->
+  <div class="sys sysC">
+    <div class="sys-head">
+      <div><span class="sys-name">System C — "Editorial"</span></div>
+      <div class="sys-stack">Bricolage Grotesque · Instrument Serif (accent) · Inter · IBM Plex Mono</div>
+    </div>
+    <div class="stage">
+      <div class="chips"><span class="chip">Seller Intent Heat</span><span class="chip">Austin · 78701</span><span class="chip">Why it was made</span></div>
+      <div class="hero">Your market,<br>already <em>mapped</em>.</div>
+      <div class="sub">It doesn't guess what to post. It knows.</div>
+      <p class="body">PropCast watches what your market is searching, builds the content that answers it, and traces every lead back to the post that earned it. No dashboards to babysit.</p>
+      <div class="cards">
+        <div class="stat"><div class="lab">Median price</div><div class="val">$1.30M</div><div class="del">▲ 4.2% YoY</div></div>
+        <div class="stat"><div class="lab">Days on market</div><div class="val">21</div><div class="del">▼ faster</div></div>
+        <div class="stat"><div class="lab">Leads traced</div><div class="val">87</div><div class="del">this quarter</div></div>
+      </div>
+      <span class="cta">ANALYZE YOUR MARKET →</span>
+    </div>
+    <div class="use"><b>Why it fits:</b> the Urban Jungle move — a characterful display face plus an italic serif accent word for warmth (that <i>mapped</i>). Most personality, most memorable, most "brand." <b>Trade-off: needs the most design discipline to keep crisp; the serif accent must be used sparingly (one word per screen, max).</b></div>
+  </div>
+
+  <h1 style="font-size:24px; margin:10px 0 4px;">Where each font lives across the whole system</h1>
+  <table>
+    <tr><th>Surface</th><th>Display</th><th>Text / UI</th><th>Mono (data)</th></tr>
+    <tr><td>Landing / marketing pages</td><td>Headlines, section titles</td><td>Paragraphs, nav</td><td>Chips, map labels, ZIPs, "why it was made"</td></tr>
+    <tr><td>PropFlow / product dashboards</td><td>— (never; keep UI neutral)</td><td>Everything: tables, buttons, forms</td><td>Numbers, IDs, timestamps, code-ish values</td></tr>
+    <tr><td>Reports & CMAs (PDF/HTML)</td><td>Cover titles only</td><td>Body copy</td><td>Data tables, footnote metadata</td></tr>
+    <tr><td>Emails / newsletters</td><td>— (email-safe: Arial/Helvetica fallback)</td><td>System font stack</td><td>—</td></tr>
+  </table>
+
+  <div class="rec">
+    <h2>Recommendation</h2>
+    <li><b>Pick System A ("Signal")</b> — Space Grotesk (display) + Inter (UI) + JetBrains Mono (data). It's distinctive enough to own, neutral enough to never fight the 3D scenes, and Inter keeps the actual product screens rock-solid.</li>
+    <li>If you want the safest single-family route, System B. If you want maximum brand personality and trust the design discipline, System C.</li>
+    <li>All three: <b>set the mono font as the official "data voice"</b> — every ZIP, stat label, and machine annotation across landing, dashboard, and reports uses it. That texture is what makes PropCast feel like an instrument, not a template.</li>
+    <li>Weights: Display 500/700 only. UI 400/500/600. Mono 400/600. Nothing else — weight discipline is crispness.</li>
+  </div>
+
+</div>
+</body>
+</html>
