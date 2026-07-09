@@ -1,0 +1,150 @@
+<!DOCTYPE html><html lang="en"><head><meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+<title>PropCast — Font Picker</title>
+<link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;900&family=Space+Grotesk:wght@500;600;700&family=Sora:wght@500;600;700;800&family=Manrope:wght@500;600;700;800&family=Geist:wght@400;500;700;900&family=Geist+Mono:wght@400;500&family=Instrument+Serif:ital@0;1&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+:root{--bg:#05080B;--ink:#E8F1F4;--ink2:#8A9BA6;--ink3:#55656F;--cyan:#46C7E0;--cyan-hi:#8FE9FA;--amber:#E8A24C;--line:rgba(70,199,224,.15)}
+*{box-sizing:border-box;margin:0;padding:0}
+body{background:#05080B;color:var(--ink);font-family:'Inter',sans-serif;-webkit-font-smoothing:antialiased;padding:46px 34px 90px}
+.wrap{max-width:1100px;margin:0 auto}
+.kick{font-family:'JetBrains Mono',monospace;font-size:12px;letter-spacing:.16em;color:var(--cyan);text-transform:uppercase}
+h1{font-family:'Space Grotesk',sans-serif;font-size:36px;font-weight:700;letter-spacing:-.02em;margin:10px 0 8px}
+h1 .g{background:linear-gradient(100deg,var(--cyan-hi),var(--cyan));-webkit-background-clip:text;background-clip:text;color:transparent}
+.lead{color:var(--ink2);font-size:15px;line-height:1.6;max-width:780px;margin-bottom:34px}
+.lead b{color:var(--ink)}
+.card{background:linear-gradient(180deg,rgba(12,20,28,.72),rgba(8,13,19,.5));border:1px solid var(--line);border-radius:18px;padding:34px 36px;margin-bottom:26px;position:relative}
+.card.rec{border-color:rgba(70,199,224,.5);box-shadow:0 0 60px rgba(70,199,224,.08)}
+.star{position:absolute;top:20px;right:22px;font-family:'JetBrains Mono',monospace;font-size:10px;letter-spacing:.12em;color:#05080B;background:var(--cyan);padding:5px 11px;border-radius:7px;font-weight:700}
+.sysname{font-family:'JetBrains Mono',monospace;font-size:12px;color:var(--cyan);letter-spacing:.08em;margin-bottom:20px}
+.sysname b{color:var(--ink);font-size:13px}
+.hero{color:#fff;letter-spacing:-.022em;line-height:1.05;margin-bottom:12px}
+.hero .a{color:var(--cyan-hi)}
+.sub{color:var(--ink2);font-size:17px;margin-bottom:22px}
+.row{display:flex;gap:10px;align-items:center;flex-wrap:wrap;margin-bottom:20px}
+.chip{font-family:'JetBrains Mono',monospace;font-size:10.5px;letter-spacing:.1em;color:var(--ink2);border:1px solid var(--line);padding:7px 12px;border-radius:8px}
+.btn{font-size:13.5px;font-weight:600;color:#05080B;background:linear-gradient(100deg,var(--cyan-hi),var(--cyan));padding:10px 20px;border-radius:9px}
+.body-sample{color:var(--ink2);font-size:14.5px;line-height:1.65;max-width:680px;margin-bottom:20px}
+.weights{display:flex;gap:26px;flex-wrap:wrap;align-items:baseline;color:var(--ink);border-top:1px dashed rgba(70,199,224,.15);padding-top:18px;margin-bottom:18px}
+.weights span{font-size:26px}
+.weights small{display:block;font-family:'JetBrains Mono',monospace;font-size:9.5px;color:var(--ink3);letter-spacing:.1em;margin-top:2px}
+.verdict{font-size:13.5px;color:var(--ink2);line-height:1.6;max-width:720px}
+.verdict b{color:var(--ink)}
+.links{margin-top:16px;display:flex;gap:10px;flex-wrap:wrap}
+.flink{font-family:'JetBrains Mono',monospace;font-size:11px;letter-spacing:.06em;color:var(--cyan-hi);border:1px solid rgba(70,199,224,.4);padding:8px 14px;border-radius:9px;text-decoration:none}
+.flink:hover{background:rgba(70,199,224,.12)}
+.compare{background:linear-gradient(180deg,rgba(12,20,28,.72),rgba(8,13,19,.5));border:1px solid var(--line);border-radius:18px;padding:30px 36px;margin:10px 0 34px}
+.compare h2{font-family:'JetBrains Mono',monospace;font-size:12px;letter-spacing:.14em;text-transform:uppercase;color:var(--cyan-hi);margin-bottom:20px}
+.cmp{display:grid;grid-template-columns:150px 1fr;gap:14px;align-items:baseline;padding:12px 0;border-bottom:1px dashed rgba(70,199,224,.12)}
+.cmp .lbl{font-family:'JetBrains Mono',monospace;font-size:10.5px;color:var(--ink3);letter-spacing:.08em}
+.cmp .txt{font-size:30px;color:#fff;letter-spacing:-.02em;line-height:1.1}
+.cmp .txt .a{color:var(--cyan-hi)}
+</style></head><body><div class="wrap">
+
+<div class="kick">PropCast · PropertyIQ — type system picker</div>
+<h1>Pick the <span class="g">voice</span></h1>
+<p class="lead">Five complete systems, rendered live in the real fonts. Each card shows the same content: hero headline, subline, UI controls, data chips, body text, and the display font's weight range. <b>Click the buttons on each card to open the font on Google Fonts</b> and play with it yourself. All five are free and production-ready today.</p>
+
+<div class="compare">
+<h2>Same headline, five voices — squint test</h2>
+<div class="cmp"><div class="lbl">A · SPACE GROTESK</div><div class="txt" style="font-family:'Space Grotesk';font-weight:700">Your market, already <span class="a">mapped</span>.</div></div>
+<div class="cmp"><div class="lbl">B · GEIST</div><div class="txt" style="font-family:'Geist';font-weight:900">Your market, already <span class="a">mapped</span>.</div></div>
+<div class="cmp"><div class="lbl">C · SORA</div><div class="txt" style="font-family:'Sora';font-weight:700">Your market, already <span class="a">mapped</span>.</div></div>
+<div class="cmp"><div class="lbl">D · MANROPE</div><div class="txt" style="font-family:'Manrope';font-weight:800">Your market, already <span class="a">mapped</span>.</div></div>
+<div class="cmp" style="border-bottom:none"><div class="lbl">E · INTER + SERIF</div><div class="txt" style="font-family:'Inter';font-weight:900">Every home sends a <span class="a" style="font-family:'Instrument Serif';font-style:italic;font-weight:400">signal</span>.</div></div>
+</div>
+
+<div class="card rec"><span class="star">RECOMMENDED</span>
+<div class="sysname"><b>SYSTEM A — “THE ENGINE”</b> · display: Space Grotesk · ui: Inter · data: JetBrains Mono</div>
+<div class="hero" style="font-family:'Space Grotesk';font-weight:700;font-size:52px">Your market, already <span class="a">mapped</span>.</div>
+<div class="sub" style="font-family:'Inter'">When people ask AI who to call, it should be you.</div>
+<div class="row"><span class="btn" style="font-family:'Inter'">Analyze your market →</span><span class="chip">01 // SIGNALS</span><span class="chip">1,240 SIGNALS · ZIP 94303</span><span class="chip">INTENT 92%</span></div>
+<p class="body-sample" style="font-family:'Inter'">Body text in Inter: PropCast listens to everything your market is saying, ranks what matters by real buyer intent, and turns it into a week of content in your voice. Every post traces back to the closing it created.</p>
+<div class="weights">
+<div><span style="font-family:'Space Grotesk';font-weight:500">Aa Medium</span><small>SPACE GROTESK 500</small></div>
+<div><span style="font-family:'Space Grotesk';font-weight:600">Aa Semibold</span><small>SPACE GROTESK 600</small></div>
+<div><span style="font-family:'Space Grotesk';font-weight:700">Aa Bold</span><small>SPACE GROTESK 700</small></div>
+<div><span style="font-family:'JetBrains Mono'">0123 94303</span><small>JETBRAINS MONO</small></div>
+</div>
+<p class="verdict"><b>Why it wins:</b> Space Grotesk has machined, slightly technical letterforms — an engineered voice that says “intelligence engine” without costume. Inter is the bulletproof product-UI standard with tabular numbers for data screens. JetBrains Mono is already the data voice across the site and your dashboards. Distinctive and safe at the same time.</p>
+<div class="links">
+<a class="flink" href="https://fonts.google.com/specimen/Space+Grotesk?preview.text=Your%20market%2C%20already%20mapped.&preview.text_type=custom" target="_blank">SPACE GROTESK ↗</a>
+<a class="flink" href="https://fonts.google.com/specimen/Inter?preview.text=When%20people%20ask%20AI%20who%20to%20call%2C%20it%20should%20be%20you.&preview.text_type=custom" target="_blank">INTER ↗</a>
+<a class="flink" href="https://fonts.google.com/specimen/JetBrains+Mono?preview.text=1%2C240%20SIGNALS%20%C2%B7%20ZIP%2094303&preview.text_type=custom" target="_blank">JETBRAINS MONO ↗</a>
+</div>
+</div>
+
+<div class="card">
+<div class="sysname"><b>SYSTEM B — “TERMINAL”</b> · display + ui: Geist · data: Geist Mono</div>
+<div class="hero" style="font-family:'Geist';font-weight:900;font-size:52px">Your market, already <span class="a">mapped</span>.</div>
+<div class="sub" style="font-family:'Geist';font-weight:500">When people ask AI who to call, it should be you.</div>
+<div class="row"><span class="btn" style="font-family:'Geist'">Analyze your market →</span><span class="chip" style="font-family:'Geist Mono'">01 // SIGNALS</span><span class="chip" style="font-family:'Geist Mono'">1,240 SIGNALS · ZIP 94303</span></div>
+<p class="body-sample" style="font-family:'Geist'">Body text in Geist: PropCast listens to everything your market is saying, ranks what matters by real buyer intent, and turns it into a week of content in your voice. Every post traces back to the closing it created.</p>
+<div class="weights">
+<div><span style="font-family:'Geist';font-weight:400">Aa Regular</span><small>GEIST 400</small></div>
+<div><span style="font-family:'Geist';font-weight:700">Aa Bold</span><small>GEIST 700</small></div>
+<div><span style="font-family:'Geist';font-weight:900">Aa Black</span><small>GEIST 900</small></div>
+<div><span style="font-family:'Geist Mono'">0123 94303</span><small>GEIST MONO</small></div>
+</div>
+<p class="verdict"><b>Character:</b> Vercel's house font — the cleanest “modern dev-tool premium” available for free, and one superfamily covers display, UI, and mono. The tradeoff: half the AI startup world is adopting it, so it's less ownable.</p>
+<div class="links">
+<a class="flink" href="https://fonts.google.com/specimen/Geist?preview.text=Your%20market%2C%20already%20mapped.&preview.text_type=custom" target="_blank">GEIST ↗</a>
+<a class="flink" href="https://fonts.google.com/specimen/Geist+Mono?preview.text=1%2C240%20SIGNALS%20%C2%B7%20ZIP%2094303&preview.text_type=custom" target="_blank">GEIST MONO ↗</a>
+</div>
+</div>
+
+<div class="card">
+<div class="sysname"><b>SYSTEM C — “FUTURIST”</b> · display: Sora · ui: Inter · data: JetBrains Mono</div>
+<div class="hero" style="font-family:'Sora';font-weight:700;font-size:49px">Your market, already <span class="a">mapped</span>.</div>
+<div class="sub" style="font-family:'Inter'">When people ask AI who to call, it should be you.</div>
+<div class="row"><span class="btn" style="font-family:'Inter'">Analyze your market →</span><span class="chip">01 // SIGNALS</span><span class="chip">INTENT 92%</span></div>
+<p class="body-sample" style="font-family:'Inter'">Body text in Inter: PropCast listens to everything your market is saying, ranks what matters by real buyer intent, and turns it into a week of content in your voice. Every post traces back to the closing it created.</p>
+<div class="weights">
+<div><span style="font-family:'Sora';font-weight:500">Aa Medium</span><small>SORA 500</small></div>
+<div><span style="font-family:'Sora';font-weight:700">Aa Bold</span><small>SORA 700</small></div>
+<div><span style="font-family:'Sora';font-weight:800">Aa Extrabold</span><small>SORA 800</small></div>
+</div>
+<p class="verdict"><b>Character:</b> geometric and sharp-edged — the most “built by machines” of the five. Excellent at billboard sizes; a little cold for paragraphs, so it stays display-only.</p>
+<div class="links">
+<a class="flink" href="https://fonts.google.com/specimen/Sora?preview.text=Your%20market%2C%20already%20mapped.&preview.text_type=custom" target="_blank">SORA ↗</a>
+</div>
+</div>
+
+<div class="card">
+<div class="sysname"><b>SYSTEM D — “HUMANIST”</b> · display + ui: Manrope · data: JetBrains Mono</div>
+<div class="hero" style="font-family:'Manrope';font-weight:800;font-size:50px">Your market, already <span class="a">mapped</span>.</div>
+<div class="sub" style="font-family:'Manrope';font-weight:500">When people ask AI who to call, it should be you.</div>
+<div class="row"><span class="btn" style="font-family:'Manrope';font-weight:700">Analyze your market →</span><span class="chip">01 // SIGNALS</span><span class="chip">ZIP 94303</span></div>
+<p class="body-sample" style="font-family:'Manrope'">Body text in Manrope: PropCast listens to everything your market is saying, ranks what matters by real buyer intent, and turns it into a week of content in your voice. Every post traces back to the closing it created.</p>
+<div class="weights">
+<div><span style="font-family:'Manrope';font-weight:500">Aa Medium</span><small>MANROPE 500</small></div>
+<div><span style="font-family:'Manrope';font-weight:700">Aa Bold</span><small>MANROPE 700</small></div>
+<div><span style="font-family:'Manrope';font-weight:800">Aa Extrabold</span><small>MANROPE 800</small></div>
+</div>
+<p class="verdict"><b>Character:</b> one family runs the entire system — simplest to govern, and noticeably warmer. The right pick if PropertyIQ should feel approachable to everyday agents more than it feels high-tech.</p>
+<div class="links">
+<a class="flink" href="https://fonts.google.com/specimen/Manrope?preview.text=Your%20market%2C%20already%20mapped.&preview.text_type=custom" target="_blank">MANROPE ↗</a>
+</div>
+</div>
+
+<div class="card">
+<div class="sysname"><b>SYSTEM E — “EDITORIAL”</b> · display: Inter Black + Instrument Serif italic accent · ui: Inter · data: JetBrains Mono</div>
+<div class="hero" style="font-family:'Inter';font-weight:900;font-size:49px">Every home is sending a <span class="a" style="font-family:'Instrument Serif';font-style:italic;font-weight:400">signal</span>.</div>
+<div class="sub" style="font-family:'Inter'">When people ask AI who to call, it should be you.</div>
+<div class="row"><span class="btn" style="font-family:'Inter'">Analyze your market →</span><span class="chip">01 // SIGNALS</span><span class="chip">INTENT 92%</span></div>
+<p class="body-sample" style="font-family:'Inter'">Body text in Inter: PropCast listens to everything your market is saying, ranks what matters by real buyer intent, and turns it into a week of content in your voice. Every post traces back to the closing it created.</p>
+<div class="weights">
+<div><span style="font-family:'Inter';font-weight:700">Aa Bold</span><small>INTER 700</small></div>
+<div><span style="font-family:'Inter';font-weight:900">Aa Black</span><small>INTER 900</small></div>
+<div><span style="font-family:'Instrument Serif';font-style:italic">Aa signal</span><small>INSTRUMENT SERIF ITALIC</small></div>
+</div>
+<p class="verdict"><b>Character:</b> the Urban Jungle move — a serif italic on exactly one word per headline gives an editorial, human flourish against the machine. The most fashionable option, and the one that needs the most taste to keep consistent.</p>
+<div class="links">
+<a class="flink" href="https://fonts.google.com/specimen/Inter?preview.text=Every%20home%20is%20sending%20a%20signal.&preview.text_type=custom" target="_blank">INTER ↗</a>
+<a class="flink" href="https://fonts.google.com/specimen/Instrument+Serif?preview.text=signal&preview.text_type=custom" target="_blank">INSTRUMENT SERIF ↗</a>
+</div>
+</div>
+
+<p class="lead" style="margin-top:8px">Later, if the brand wants a voice nobody else can use, the display slot upgrades to a licensed face (Söhne, PP Neue Montreal, or ABC Diatype) — the system stays identical, only the font file changes.</p>
+
+</div></body></html>

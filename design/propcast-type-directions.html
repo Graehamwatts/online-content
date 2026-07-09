@@ -1,0 +1,141 @@
+<!DOCTYPE html><html lang="en"><head><meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+<title>PropCast — Six Type Directions</title>
+<link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Space+Grotesk:wght@600;700&family=JetBrains+Mono:wght@400;500;600;700&family=Michroma&family=Chakra+Petch:wght@600;700&family=Fraunces:opsz,wght@9..144,600;9..144,700;9..144,900&family=Syne:wght@700;800&family=Bricolage+Grotesque:opsz,wght@12..96,700;12..96,800&family=Archivo+Black&display=swap" rel="stylesheet">
+<link href="https://api.fontshare.com/v2/css?f[]=clash-display@500,600,700&f[]=technor@500,600,700&display=swap" rel="stylesheet">
+<style>
+:root{--bg:#05080B;--ink:#E8F1F4;--ink2:#8A9BA6;--ink3:#55656F;--cyan:#46C7E0;--cyan-hi:#8FE9FA;--amber:#E8A24C;--line:rgba(70,199,224,.15)}
+*{box-sizing:border-box;margin:0;padding:0}
+body{background:#05080B;color:var(--ink);font-family:'Inter',sans-serif;-webkit-font-smoothing:antialiased;padding:46px 34px 90px}
+.wrap{max-width:1080px;margin:0 auto}
+.kick{font-family:'JetBrains Mono',monospace;font-size:12px;letter-spacing:.16em;color:var(--cyan);text-transform:uppercase}
+h1{font-family:'Space Grotesk',sans-serif;font-size:36px;font-weight:700;letter-spacing:-.02em;margin:10px 0 8px}
+h1 .g{background:linear-gradient(100deg,var(--cyan-hi),var(--cyan));-webkit-background-clip:text;background-clip:text;color:transparent}
+.lead{color:var(--ink2);font-size:15px;line-height:1.65;max-width:840px;margin-bottom:30px}
+.lead b{color:var(--ink)}
+.compare{background:linear-gradient(180deg,rgba(12,20,28,.72),rgba(8,13,19,.5));border:1px solid var(--line);border-radius:18px;padding:28px 34px;margin:0 0 36px}
+.compare h2{font-family:'JetBrains Mono',monospace;font-size:12px;letter-spacing:.14em;text-transform:uppercase;color:var(--cyan-hi);margin-bottom:18px}
+.cmp{display:grid;grid-template-columns:170px 1fr;gap:14px;align-items:baseline;padding:13px 0;border-bottom:1px dashed rgba(70,199,224,.12)}
+.cmp:last-child{border-bottom:none}
+.cmp .lbl{font-family:'JetBrains Mono',monospace;font-size:10.5px;color:var(--ink3);letter-spacing:.08em}
+.cmp .txt{color:#fff;letter-spacing:-.01em;line-height:1.12}
+.cmp .txt .a{color:var(--cyan-hi)}
+.card{background:linear-gradient(180deg,rgba(12,20,28,.72),rgba(8,13,19,.5));border:1px solid var(--line);border-radius:18px;padding:30px 34px;margin-bottom:22px;position:relative}
+.card.rec{border-color:rgba(70,199,224,.5);box-shadow:0 0 60px rgba(70,199,224,.08)}
+.star{position:absolute;top:18px;right:20px;font-family:'JetBrains Mono',monospace;font-size:10px;letter-spacing:.12em;color:#05080B;background:var(--cyan);padding:5px 11px;border-radius:7px;font-weight:700}
+.star.alt{background:var(--amber)}
+.dname{font-family:'JetBrains Mono',monospace;font-size:12px;color:var(--cyan);letter-spacing:.08em;margin-bottom:16px}
+.dname b{color:var(--ink);font-size:13.5px}
+.hero{color:#fff;line-height:1.06;margin-bottom:10px}
+.hero .a{color:var(--cyan-hi)}
+.sub{color:var(--ink2);font-size:15px;margin-bottom:16px;font-family:'Inter',sans-serif}
+.row{display:flex;gap:10px;align-items:center;flex-wrap:wrap;margin-bottom:18px}
+.chip{font-family:'JetBrains Mono',monospace;font-size:10.5px;letter-spacing:.1em;color:var(--ink2);border:1px solid var(--line);padding:6px 11px;border-radius:8px}
+.btn{font-size:13px;font-weight:600;color:#05080B;background:linear-gradient(100deg,var(--cyan-hi),var(--cyan));padding:9px 18px;border-radius:9px;font-family:'Inter',sans-serif}
+.meta{display:grid;grid-template-columns:1fr 1fr;gap:8px 26px;font-size:13px;color:var(--ink2);line-height:1.55;max-width:820px}
+@media(max-width:760px){.meta{grid-template-columns:1fr}}
+.meta b{color:var(--ink)}
+.meta .risk b{color:var(--amber)}
+.paid{font-family:'JetBrains Mono',monospace;font-size:10.5px;color:var(--ink3);letter-spacing:.06em;margin-top:14px}
+.paid a{color:var(--cyan-hi);text-decoration:none}
+.verdictbox{background:rgba(70,199,224,.06);border:1px solid rgba(70,199,224,.4);border-radius:18px;padding:28px 34px;margin-top:38px;max-width:1080px}
+.verdictbox h2{font-family:'JetBrains Mono',monospace;font-size:12px;letter-spacing:.14em;text-transform:uppercase;color:var(--cyan-hi);margin-bottom:14px}
+.verdictbox p{color:var(--ink2);font-size:14.5px;line-height:1.7;margin-bottom:12px}
+.verdictbox p b{color:var(--ink)}
+</style></head><body><div class="wrap">
+
+<div class="kick">PropCast · PropertyIQ — six genuinely different type directions</div>
+<h1>Same headline, six <span class="g">different animals</span></h1>
+<p class="lead">You were right: the earlier shortlist was one genre wearing five outfits — the modern grotesque, the uniform of premium AI brands. Here are <b>six truly distinct directions</b>, every one rendered live in a real font (no stand-ins this time). Each card says what the voice communicates, the risk, and its paid upgrade if you want to own it harder.</p>
+
+<div class="compare">
+<h2>The squint test — six voices</h2>
+<div class="cmp"><div class="lbl">1 · SWISS GROTESQUE</div><div class="txt" style="font-family:'Space Grotesk';font-weight:700;font-size:32px">Your market, already <span class="a">mapped</span>.</div></div>
+<div class="cmp"><div class="lbl">2 · MACHINE SQUARED</div><div class="txt" style="font-family:'Technor';font-weight:700;font-size:30px">Your market, already <span class="a">mapped</span>.</div></div>
+<div class="cmp"><div class="lbl">3 · TERMINAL MONO</div><div class="txt" style="font-family:'JetBrains Mono';font-weight:700;font-size:27px;letter-spacing:-.01em">Your market, already <span class="a">mapped</span>.</div></div>
+<div class="cmp"><div class="lbl">4 · EDITORIAL SERIF</div><div class="txt" style="font-family:'Fraunces';font-weight:700;font-size:32px">Your market, already <span class="a">mapped</span>.</div></div>
+<div class="cmp"><div class="lbl">5 · CHARACTER GROTESK</div><div class="txt" style="font-family:'Clash Display';font-weight:600;font-size:32px">Your market, already <span class="a">mapped</span>.</div></div>
+<div class="cmp"><div class="lbl">6 · ART-HOUSE WIDE</div><div class="txt" style="font-family:'Syne';font-weight:800;font-size:29px">Your market, already <span class="a">mapped</span>.</div></div>
+</div>
+
+<div class="card rec"><span class="star">STILL MY PICK</span>
+<div class="dname"><b>1 — SWISS GROTESQUE</b> · Space Grotesk · free · the premium-tech uniform, worn well</div>
+<div class="hero" style="font-family:'Space Grotesk';font-weight:700;font-size:46px;letter-spacing:-.02em">Your market, already <span class="a">mapped</span>.</div>
+<div class="sub">When people ask AI who to call, it should be you.</div>
+<div class="row"><span class="btn">Analyze your market →</span><span class="chip">01 // SIGNALS</span><span class="chip">INTENT 92%</span></div>
+<div class="meta">
+<div><b>Says:</b> engineered, credible, serious software. The Linear / OpenAI register.</div>
+<div class="risk"><b>Risk:</b> it's the genre everyone in AI wears — premium but not unique.</div>
+</div>
+<div class="paid">PAID UPGRADE FOR THIS DIRECTION: <a href="https://klim.co.nz/retail-fonts/soehne/" target="_blank">Söhne (Klim)</a> · <a href="https://www.myfonts.com/collections/helvetica-now-font-monotype-imaging" target="_blank">Helvetica Now Display (MyFonts)</a></div>
+</div>
+
+<div class="card rec"><span class="star alt">THE ONE YOU FLAGGED — NOW UPGRADED</span>
+<div class="dname"><b>2 — MACHINE SQUARED</b> · Technor (Fontshare, free) · the modern version of the look you liked</div>
+<div class="hero" style="font-family:'Technor';font-weight:700;font-size:46px;letter-spacing:-.005em">Your market, already <span class="a">mapped</span>.</div>
+<div class="sub">When people ask AI who to call, it should be you. <span style="font-family:'Michroma';font-size:12px;color:#55656F">(the retro original, Michroma, now demoted to history)</span></div>
+<div class="row"><span class="btn">Analyze your market →</span><span class="chip" style="font-family:'Technor'">01 // SIGNALS</span><span class="chip" style="font-family:'Technor'">INTENT 92%</span></div>
+<div class="meta">
+<div><b>Says:</b> precision instrument, mission control, THE MACHINE — drawn in this decade. Full Extralight-to-Black range (Michroma has one weight). Nothing in proptech looks like this, and heavy squared forms hold ink on a dark map where thin grotesques shimmer.</div>
+<div class="risk"><b>Risk:</b> set too heavy in all-caps it drifts esports/gamer — keep medium-to-bold weights, generous tracking, sentence case for headlines.</div>
+</div>
+<div class="paid">PAID UPGRADES (THE REAL SHIP-IT VERSIONS): <a href="https://www.typemates.com/fonts/halvar" target="_blank">Halvar Breitschrift (TypeMates, €39–49/style, free trials)</a> · <a href="https://www.grillitype.com/typeface/gt-mechanik" target="_blank">GT Mechanik (Grilli Type, ~$75/style)</a> · <a href="https://generaltypestudio.com/typefaces/pilat" target="_blank">Pilat Wide (General Type)</a></div>
+</div>
+
+<div class="card">
+<div class="dname"><b>3 — TERMINAL MONO</b> · JetBrains Mono as the DISPLAY voice · free · the receipts brand</div>
+<div class="hero" style="font-family:'JetBrains Mono';font-weight:700;font-size:38px;letter-spacing:-.015em">Your market, already <span class="a">mapped</span>.</div>
+<div class="sub">When people ask AI who to call, it should be you.</div>
+<div class="row"><span class="btn">Analyze your market →</span><span class="chip">01 // SIGNALS</span><span class="chip">EVERY POST TRACED</span></div>
+<div class="meta">
+<div><b>Says:</b> a trading terminal for real estate — data, receipts, proof. Deeply on-concept for “every post traced to the closing it creates,” and already your data voice, so the system becomes ONE coherent machine.</div>
+<div class="risk"><b>Risk:</b> mono headlines eat horizontal space and can read “developer tool” to agents. Works best with ruthless short headlines (which you have).</div>
+</div>
+<div class="paid">PAID UPGRADE: <a href="https://usgraphics.com/products/berkeley-mono" target="_blank">Berkeley Mono (U.S. Graphics — cult classic, gorgeous)</a></div>
+</div>
+
+<div class="card"><span class="star alt">BOLDEST DIFFERENTIATOR</span>
+<div class="dname"><b>4 — EDITORIAL SERIF</b> · Fraunces · free · the Anthropic move</div>
+<div class="hero" style="font-family:'Fraunces';font-weight:700;font-size:48px;letter-spacing:-.015em">Your market, already <span class="a">mapped</span>.</div>
+<div class="sub">When people ask AI who to call, it should be you.</div>
+<div class="row"><span class="btn">Analyze your market →</span><span class="chip">01 // SIGNALS</span><span class="chip">INTENT 92%</span></div>
+<div class="meta">
+<div><b>Says:</b> human authority, judgment, a publication — intelligence as WISDOM, not circuitry. Against a dark 3D map + mono chips, a big serif is a stunning contrast, and NOBODY in AI-proptech looks like this. Anthropic built its whole identity on this move.</div>
+<div class="risk"><b>Risk:</b> needs discipline (serif for display ONLY, sans for everything else) or it drifts “law firm.” Pairs: Fraunces display + Inter UI + JetBrains Mono data.</div>
+</div>
+<div class="paid">PAID UPGRADE: <a href="https://klim.co.nz/retail-fonts/tiempos-headline/" target="_blank">Tiempos Headline (Klim)</a> · <a href="https://displaay.net/typeface/reckless-collection/reckless/" target="_blank">Reckless (Displaay)</a></div>
+</div>
+
+<div class="card">
+<div class="dname"><b>5 — CHARACTER GROTESK</b> · Clash Display (Fontshare) · free · confident consumer energy</div>
+<div class="hero" style="font-family:'Clash Display';font-weight:600;font-size:48px;letter-spacing:-.01em">Your market, already <span class="a">mapped</span>.</div>
+<div class="sub">When people ask AI who to call, it should be you.</div>
+<div class="row"><span class="btn">Analyze your market →</span><span class="chip">01 // SIGNALS</span><span class="chip">INTENT 92%</span></div>
+<div class="meta">
+<div><b>Says:</b> bold, modern, a little swagger — a consumer brand, not an enterprise tool. Very fashionable in 2024–26 startup land.</div>
+<div class="risk"><b>Risk:</b> personality ages faster than neutrality; less “precision instrument,” more “cool product.”</div>
+</div>
+<div class="paid">PAID UPGRADE: <a href="https://pangrampangram.com/products/right-grotesk" target="_blank">PP Right Grotesk (Pangram Pangram)</a></div>
+</div>
+
+<div class="card">
+<div class="dname"><b>6 — ART-HOUSE WIDE</b> · Syne ExtraBold · free · cinematic studio voice</div>
+<div class="hero" style="font-family:'Syne';font-weight:800;font-size:44px;letter-spacing:-.005em">Your market, already <span class="a">mapped</span>.</div>
+<div class="sub">When people ask AI who to call, it should be you.</div>
+<div class="row"><span class="btn">Analyze your market →</span><span class="chip">01 // SIGNALS</span><span class="chip">INTENT 92%</span></div>
+<div class="meta">
+<div><b>Says:</b> design-studio, cinematic, expensive — wide letterforms feel like a film title. Great for “OWN YOUR MARKET.”</div>
+<div class="risk"><b>Risk:</b> the artiest option — reads creative-agency more than intelligence-engine; wide type fights long headlines.</div>
+</div>
+<div class="paid">PAID UPGRADE: <a href="https://pangrampangram.com/products/monument-extended" target="_blank">PP Monument Extended (Pangram Pangram)</a></div>
+</div>
+
+<div class="verdictbox" id="verdict">
+<h2>Final recommendation — changed by the sweep</h2>
+<p><b>The adversarial review killed my original pick, and it was right to.</b> Its argument: Space Grotesk + Inter + JetBrains Mono “is not a brand decision, it is the absence of one” — the default stack of the 2021–24 AI wave, instantly recognizable as template-built. And agents don't buy dev-cred; they buy authority. Meanwhile your instinct (“the squared one looks most different”) is the correct differentiator — the mistake would be executing it with a 1962 signage face. Promote the instinct, modernize the face.</p>
+<p><b>The system to ship — “The Instrument”:</b> Display: <b>Halvar Breitschrift</b> (TypeMates, €39–49/style, free trial fonts — start with the free stand-in <b>Technor</b> today). UI: <b>Inter</b> stays — UI type should be invisible, and Inter is the best free screen face ever made. Data: upgrade the chips to <b>Berkeley Mono</b> ($75, U.S. Graphics) so the instrument-panel layer becomes a signature, with JetBrains Mono as the zero-budget fallback. Accent: Halvar's condensed cut (Engschrift) in tracked-out caps for section numbers and map HUD labels — the machine voice, built into the same family.</p>
+<p><b>Why this wins:</b> heavy squared forms hold ink on a near-black map where thin grotesque hairlines shimmer; one family covers hero-to-label; nobody in proptech or AI is wearing it; and it IS the thing you responded to, done at the Linear/Stripe craft level. <b>Runner-up stays Direction 4</b> (Fraunces/Tiempos serif — the Anthropic move) if you'd rather signal judgment than machinery. Rule out 5 and 6 (wrong story), and keep Direction 3's mono headlines in your pocket for the PROOF/receipts beats.</p>
+</div>
+
+</div></body></html>
