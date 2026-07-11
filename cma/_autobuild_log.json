@@ -91,5 +91,47 @@
     "sent_at": "2026-06-08T17:04:27Z",
     "data_source": "public_fallback",
     "run_id": "pcfs-cma-autobuild-weekly-2026-06-08"
+  },
+  {
+    "client_name": "Diana Moncada",
+    "client_email": "dianak.moncada@gmail.com",
+    "due_date": "Sun, Jul 12, 2026",
+    "property_address": "1624 Newbridge Ave, San Mateo, CA 94401",
+    "live_url": "https://graehamwatts.github.io/online-content/cma/CMA_1624_Newbridge_Ave.html",
+    "value_mid": 1370000,
+    "value_low": 1310000,
+    "value_high": 1430000,
+    "comps_used": 8,
+    "sent_at": "2026-07-11T02:30:00Z",
+    "data_source": "mls_full",
+    "run_id": "pcfs-cma-autobuild-live-repair-2026-07-10"
+  },
+  {
+    "client_name": "Peter Tangprasertchai",
+    "client_email": "petert1205@gmail.com",
+    "due_date": "Sat, Jul 11, 2026",
+    "property_address": "3535 Wawona St #532, San Francisco, CA 94116",
+    "live_url": "https://graehamwatts.github.io/online-content/cma/CMA_3535_Wawona_St_532.html",
+    "value_mid": 1100000,
+    "value_low": 1050000,
+    "value_high": 1200000,
+    "comps_used": 6,
+    "sent_at": "2026-07-11T02:30:00Z",
+    "data_source": "mls_full",
+    "run_id": "pcfs-cma-autobuild-live-repair-2026-07-10"
+  },
+  {
+    "client_name": "Neal Winslow",
+    "client_email": "nwinslow01@gmail.com",
+    "due_date": "Fri, Jul 10, 2026",
+    "property_address": "2309 Fremont Street, Minden, NV, 89423",
+    "live_url": "https://graehamwatts.github.io/online-content/cma/CMA_2309_Fremont_St.html",
+    "value_mid": 1210000,
+    "value_low": 1150000,
+    "value_high": 1320000,
+    "comps_used": 4,
+    "sent_at": "2026-07-11T02:30:00Z",
+    "data_source": "public_fallback",
+    "run_id": "pcfs-cma-autobuild-live-repair-2026-07-10"
   }
 ]
