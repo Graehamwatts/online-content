@@ -1,66 +1,58 @@
-# Daily Attribution Brief — Execution Blocker (CORRECTED)
+# Daily Attribution Brief — Execution Blocker (FINAL — Jul 13, 2026)
 
-**Status**: ❌ **BLOCKED** — GoHighLevel Private Integration Token is a placeholder (HTTP 401)
-**Date**: 2026-07-03 (Friday, 7:15 AM PT)
-**Scheduled Task**: `daily-attribution-brief` (Mon–Fri, 7:15 AM PT)
+**Status**: Task is functionally redundant. Not a token problem — never verify
+against `.claude-credentials/ghl-pit.txt` again, see why below.
 
-> **This supersedes the 2026-06-30 version of this doc, which was wrong.**
-> That version blamed a missing GitHub `workflow` token scope. That was a
-> misdiagnosis. The workflow file is already present in the repo. The real and
-> only blocker is that **no valid GHL token has ever been set.**
-
----
-
-## The real root cause
-
-`.claude-credentials/ghl-pit.txt` line 1 still contains the literal setup
-placeholder — `pit-PASTE_YOUR_..._TOKEN_...HERE` — not a real key. GoHighLevel
-therefore rejects every request:
-
-```
-GET /opportunities/pipelines  →  HTTP 401
-{"statusCode":401,"message":"Invalid Private Integration token"}
-```
-
-The same unfilled placeholder is almost certainly why every prior run failed
-too — the earlier runs just misattributed it to GitHub permissions.
-
-## The fix (2 minutes, requires Graeham — only he can mint the token)
-
-1. GoHighLevel → Settings → Private Integrations → open "Claude Attribution"
-   (or Create New Integration) → grant READ scopes for Contacts + Opportunities.
-2. Copy the `pit-…` key.
-3. Paste it as **line 1** of `.claude-credentials/ghl-pit.txt` (and the
-   `Documents\Claude\Skills\ghl-pit.txt` copy so both match), replacing the
-   placeholder.
-4. Re-run the task. It will pull live data.
+> This supersedes both prior versions of this doc (2026-06-30 and 2026-07-03).
+> Both were wrong in different ways. This version was verified against the
+> actual GitHub Actions run history and the live `command_center.py` source,
+> not a local file guess.
 
 ---
 
-## What was verified on 2026-07-03 (corrects the old assumptions)
+## The real, final root cause (verified Jul 13, 2026)
 
-- **The sandbox CAN reach GHL.** A direct call to
-  `services.leadconnectorhq.com` returned a real **401 auth response**, not a
-  `403 blocked-by-allowlist`. The old "sandbox proxy blocks GHL, so we must
-  fire a GitHub Action" premise is **stale** — the brief can run entirely from
-  the sandbox once a real token exists. No GitHub Action is required.
-- **Client signature matters.** Bare `python urllib` triggers Cloudflare
-  **error 1010** on the API paths. `curl` (and any browser-style User-Agent /
-  TLS fingerprint) passes cleanly. Any local pull script should use a
-  browser-style client, not bare urllib.
-- **The old workflow's email step is fake** — `.github/workflows/daily-attribution-brief.yml`
-  ends with `echo "Email would be sent…"`, so even a green Action never emailed.
-  Prefer the Gmail connector (draft) or SMTP with `GMAIL_APP_PASSWORD`.
+Two independent things are true at once, and prior runs conflated them:
 
-## Recommended go-forward architecture
+1. **`.github/workflows/daily-attribution-brief.yml` has a genuine YAML bug.**
+   The embedded Node script writes raw HTML starting at column 1 inside a
+   `run: |` block scalar, which terminates the block early. GitHub's parser
+   confirms this — the workflow shows up with no name in the Actions API and
+   rejects `workflow_dispatch` with a 422 ("Workflow does not have
+   'workflow_dispatch' trigger"). A fix requires a `workflow`-scope PAT to
+   push to `.github/workflows/`; the repo's PAT is `repo`-scope only, by
+   design (see main CLAUDE.md). Only Graeham can mint that token or edit the
+   file in the GitHub UI directly.
 
-Run the whole brief from the sandbox: read the (real) PIT from
-`.claude-credentials/ghl-pit.txt` → pull contacts/opps/pipelines with a
-browser-style client → build HTML → push to `dashboards/attribution/` with the
-`repo`-scope token (content files only, no `workflow` scope needed) → email via
-the Gmail connector. The GitHub Action becomes unnecessary.
+2. **The `GHL_PIT` GitHub secret has been valid the whole time.** Every prior
+   "401 — token is a placeholder" diagnosis (Jun 29 – Jul 7) was reading
+   `.claude-credentials/ghl-pit.txt`, a local file that this task's design
+   happens to check — never the real secret. Proof: `scripts/command_center.py`
+   uses the same `GHL_PIT` secret and has run successfully every business day,
+   including Jul 13 (run `29266632202`), pulling live GHL data. **Do not
+   diagnose this task's data pipeline against the local placeholder file
+   again — check Actions run history against the `GHL_PIT` secret instead.**
 
----
+## Why it doesn't matter anyway
 
-**Bottom line**: This is not an infrastructure, network, or GitHub-permission
-problem. One real GHL token, pasted into one file, unblocks everything.
+`scripts/command_center.py` line 6: *"Replaces the retired Daily Attribution
+Brief."* Morning Command Center (`.github/workflows/morning-command-center.yml`,
+cron `0 14 * * 1-5`) already pulls the same GHL data every weekday morning,
+includes a "Lead sources · last N days" section, and emails
+`BRIEF_RECIPIENTS`. This task (`daily-attribution-brief`) has not delivered
+anything Command Center doesn't already cover since at least early July.
+
+## What's genuinely missing (the actual gap, not a bug)
+
+Command Center's Jul 13 pull shows every lead in the last 7 days tagged
+**"Unknown"** source — 8/8. That's an upstream tagging gap (web forms / ad
+UTMs / GHL workflow triggers not stamping a source field onto new contacts),
+not a pull or delivery failure. Fixing it is a GHL configuration task, not an
+automation task.
+
+## Recommendation (not yet actioned — Graeham's call)
+
+Retire the `daily-attribution-brief` scheduled task. If the one thing it
+offered that Command Center doesn't — day-over-day / same-weekday-last-week
+lead comparison — is still wanted, add that single cut into
+`command_center.py` instead. No new
