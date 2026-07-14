@@ -73,6 +73,35 @@ footer{background:var(--b);color:#ddd;padding:34px 0;text-align:center;margin-to
 
 <div class="dv"></div>
 
+<section><div class="sh">Listing Activity Scoreboard. Week 1</div>
+<div style="background:#8a6d1f;background:linear-gradient(120deg,#8a6d1f,#b08d2e);color:#fff;border-radius:10px;padding:14px 20px;margin:6px 0 16px;font-size:14.5px"><strong style="font-family:Montserrat;letter-spacing:1px;text-transform:uppercase;font-size:12.5px">Status: Attention Needed</strong><br>Buyers are coming through, but the feedback is consistent on area and price, Sunday went quiet, and no visitor has left contact information yet. Active, not stalled, and worth watching closely.</div>
+<div class="stats">
+<div class="st"><div class="n">5</div><div class="l">Buyer Visits This Week</div></div>
+<div class="st"><div class="n">3</div><div class="l">Private Showings</div></div>
+<div class="st"><div class="n">2 / 0</div><div class="l">Open House Groups Sat / Sun</div></div>
+<div class="st"><div class="n">&ndash;</div><div class="l">Disclosure Downloads</div></div>
+</div>
+<div class="cb"><div class="cw" style="height:220px"><canvas id="actWk"></canvas></div><div class="cap">Buyer activity since the July 8 relaunch, by visit type. Week 1 sets the baseline this report tracks against every week going forward.</div></div>
+<table><thead><tr><th>Week</th><th style="text-align:center">Private Showings</th><th style="text-align:center">Open House Groups</th><th style="text-align:center">Disclosure Downloads</th><th>Feedback Theme</th></tr></thead><tbody>
+<tr><td><strong>Week 1</strong> (Jul 8 to 13)</td><td style="text-align:center">3</td><td style="text-align:center">2</td><td style="text-align:center">&ndash;</td><td>Area, location, and price point; unit itself well received</td></tr>
+<tr><td>Total since relaunch</td><td style="text-align:center">3</td><td style="text-align:center">2</td><td style="text-align:center">&ndash;</td><td></td></tr>
+</tbody></table>
+<table><thead><tr><th>Visit</th><th>When</th><th>Sign-In / Agent Info</th><th>Feedback</th></tr></thead><tbody>
+<tr><td>Private showing 1</td><td>Week of Jul 8</td><td>Declined both</td><td>Area, location, and price point</td></tr>
+<tr><td>Private showing 2</td><td>Week of Jul 8</td><td>Declined both</td><td>Area, location, and price point</td></tr>
+<tr><td>Private showing 3</td><td>Week of Jul 8</td><td>Declined both</td><td>Area, location, and price point</td></tr>
+<tr><td>Open house group 1</td><td>Sat Jul 11</td><td>Declined</td><td>Put off by the gathering and loud music out front; saw another car drive off</td></tr>
+<tr><td>Open house group 2</td><td>Sat Jul 11</td><td>Declined</td><td>Walked the unit, no specific objection shared</td></tr>
+<tr><td>Open house</td><td>Sun Jul 12</td><td></td><td>No visitors; woman standing at the gate through the open house window</td></tr>
+</tbody></table>
+<div class="card"><h4>What Buyers Are Telling Us</h4>
+<p style="margin-bottom:6px">&bull; The dominant theme, four of five parties: the <strong>area, location, and price point together</strong>, not the unit. Nobody criticized the home itself.</p>
+<p style="margin-bottom:6px">&bull; Saturday's environment cost us traffic: one buyer said the gathering out front put her off, and she watched another car drive away without coming in.</p>
+<p style="margin-bottom:0">&bull; No visitor has signed in or shared agent contact information, which caps our ability to follow up and is itself a signal of lukewarm intent at this price.</p></div>
+</section>
+
+<div class="dv"></div>
+
 <section><div class="sh">Single-Family vs. Condo &amp; Townhome. Two Different Markets</div>
 <p>You asked whether single-family homes and condos/townhomes are genuinely behaving differently right now, and the MLS data answers it clearly: yes, and your home is on the harder side of the split. All of the charts below are built from MLSListings Matrix statistics pulled July 13, 2026.</p>
 
@@ -189,6 +218,9 @@ footer{background:var(--b);color:#ddd;padding:34px 0;text-align:center;margin-to
 <div class="ds">Prepared July 13, 2026 for the owner of 117 Mission Drive, East Palo Alto. Market statistics from MLSListings Matrix Stats (pulled July 13, 2026); comparable sales from San Mateo County records and title data; rate data from Mortgage News Daily; San Francisco figures from published May and June 2026 market reports. Professional opinion of value, not a formal appraisal. Verify HOA dues, square footage, and tax treatment with the appropriate professionals.</div></div></footer>
 <script>
 const BLK='#1A1A1A',GLD='#C5A55A',DGLD='#A88B3D',COR='#d98c6a',RED='#c0392b',GRY='#9aa5b1',LGT='#cfd6dd';
+
+// Week 1 activity scoreboard
+new Chart(document.getElementById('actWk'),{type:'bar',data:{labels:['Private showings','Open house Sat','Open house Sun'],datasets:[{label:'Buyer visits',data:[3,2,0],backgroundColor:[BLK,GLD,COR],borderRadius:4,barThickness:42}]},options:{indexAxis:'y',responsive:true,maintainAspectRatio:false,plugins:{legend:{display:false},tooltip:{callbacks:{label:c=>c.parsed.x+(c.parsed.x===1?' visit':' visits')}}},scales:{x:{ticks:{stepSize:1},grid:{color:'#eee'},beginAtZero:true,suggestedMax:4},y:{grid:{display:false}}}}});
 const mn=['Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec'];
 let m2336=[];for(let y=23;y<=25;y++){mn.forEach(m=>m2336.push(m+" '"+y));}mn.slice(0,6).forEach(m=>m2336.push(m+" '26"));
 
