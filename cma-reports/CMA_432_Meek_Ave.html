@@ -14,6 +14,9 @@
 .hero .rl{color:var(--g);letter-spacing:8px;font-size:12px}.hero .lbl{background:var(--g);color:var(--b);display:inline-block;font-family:Montserrat;font-weight:800;letter-spacing:3px;font-size:12px;padding:6px 16px;border-radius:4px;margin-top:18px}
 .hero .ad{font-size:25px;font-weight:700;margin-top:14px}.hero .dt{color:#aaa;margin-top:10px;font-size:13px}.hero .cn{color:var(--g);font-size:12px;margin-top:14px}
 p{margin-bottom:13px;font-size:15px;color:#2a2a2a}.lead{font-size:16px}
+.stats{display:flex;flex-wrap:wrap;gap:12px;margin:18px 0}.st{background:var(--b);color:#fff;border-radius:8px;padding:16px;flex:1;min-width:150px;text-align:center}
+.st .n{color:var(--g);font-family:Montserrat;font-weight:800;font-size:21px}.st .l{color:#ccc;font-size:10px;text-transform:uppercase;letter-spacing:.5px;margin-top:4px}
+.st.red .n{color:#ff8a80}
 table{width:100%;border-collapse:collapse;margin:12px 0;font-size:13px;box-shadow:0 1px 5px rgba(0,0,0,.06)}
 th{background:var(--g);color:var(--b);text-align:left;padding:8px 9px;font-size:11px;text-transform:uppercase}td{padding:7px 9px;border-bottom:1px solid #eee;vertical-align:top}tbody tr:nth-child(even){background:var(--cr)}
 .nt{color:var(--gy);font-size:12.5px}
@@ -23,12 +26,13 @@ th{background:var(--g);color:var(--b);text-align:left;padding:8px 9px;font-size:
 .card{background:#fff;border:1px solid #eee;border-radius:8px;padding:18px;border-left:5px solid var(--g)}
 .card.grn{border-left-color:var(--grn)}.card.red{border-left-color:var(--red)}.card.nv{border-left-color:var(--nv)}
 .card .lbl{font-size:11px;text-transform:uppercase;color:var(--gy);letter-spacing:.5px;font-weight:700}
-.card .val{font-family:Montserrat;font-size:23px;font-weight:800;margin:6px 0}
+.card .val{font-family:Montserrat;font-size:22px;font-weight:800;margin:6px 0}
 .card .ds{font-size:13px;color:#444}
 .cb{background:#fff;border:1px solid #eee;border-radius:8px;padding:16px;margin:14px 0}.cw{position:relative;height:320px}.cap{font-size:12px;color:var(--gy);margin-top:6px;text-align:center}
 .verdict{background:var(--b);color:#fff;border-radius:8px;padding:20px 22px;margin:14px 0}.verdict b{color:var(--g)}
 .key{background:#eef2f8;border-left:6px solid var(--nv);padding:14px 18px;border-radius:8px;margin:12px 0;font-size:13.5px}
 .alert{background:#fff8e6;border-left:6px solid #d98c6a;padding:14px 18px;border-radius:8px;margin:12px 0;font-size:13.5px}
+.bigflag{background:#fdecea;border-left:6px solid var(--red);padding:16px 20px;border-radius:8px;margin:14px 0;font-size:14.5px}
 .mathrow{display:flex;justify-content:space-between;padding:7px 0;border-bottom:1px solid #eee;font-size:14.5px}
 .mathrow.total{font-weight:800;border-bottom:none;border-top:2px solid var(--b);padding-top:11px;margin-top:4px}
 .mathrow .neg{color:var(--red)}
@@ -40,18 +44,24 @@ footer{background:var(--b);color:#ddd;padding:28px 0;text-align:center;margin-to
 <header class="hero"><div class="wrap"><div class="nm">GRAEHAM WATTS</div><div class="rl">R E A L T O R</div>
 <div class="lbl">SELL AS ONE PARCEL VS. SUBDIVIDE: VALUE ANALYSIS</div>
 <div class="ad">428, 430 &amp; 432 Meek Avenue, Hayward, CA 94541</div>
-<div class="dt">New construction, 3 units on one parcel. Prepared July 2026.</div>
+<div class="dt">Three brand-new homes on one parcel, construction complete within weeks. Prepared July 2026.</div>
 <div class="cn">Graeham Watts. Intero Real Estate. DRE #01466876. 650-308-4727</div></div></header>
 <div class="wrap">
 
 <section style="padding-top:28px"><div class="sh">The Bottom Line, Up Front</div>
-<p class="lead">You built three brand-new homes on one Hayward parcel: a detached 3 bed / 2 bath house at 1,346 square feet, and an attached pair at 1,240 square feet each (3 bed / 1.5 bath), 3,826 square feet of finished living area in total, every unit with its own attached garage. The question is how to sell it. Here is where the numbers land, based on every comparable Hayward sale from the last 12 months.</p>
-<div class="cards3">
-<div class="card"><div class="lbl">Scenario A: Sell as one parcel now</div><div class="val">$1,550,000 to $1,750,000</div><div class="ds">One transaction, one buyer (investor or house-hacker). Fastest path, lowest cost, lowest gross.</div></div>
-<div class="card nv"><div class="lbl">Scenario B: Split into 2 parcels (SB 9)</div><div class="val">~$1,950,000 to $2,080,000</div><div class="ds">Detached house on its own lot + the duplex on its own lot. Two sales, moderate cost and time.</div></div>
-<div class="card grn"><div class="lbl">Scenario C: Three individual homes</div><div class="val">~$2,150,000 to $2,280,000</div><div class="ds">Condo map or subdivision so each home sells fee simple. Highest gross, highest cost, longest timeline.</div></div>
+<p class="lead">Construction is essentially finished: three brand-new homes, a detached 3 bed / 2 bath at 1,346 sq ft plus an attached pair at 1,240 sq ft each, with final touches (driveway pavers) wrapping in the next week or two. Every value below is for the COMPLETED project. The four numbers that frame the whole decision:</p>
+<div class="stats">
+<div class="st red"><div class="n">$1.65M</div><div class="l">Highest 2-4 unit sale in Hayward, last 12 months</div></div>
+<div class="st red"><div class="n">$1.24M</div><div class="l">Best TRIPLEX sale, last 12 months</div></div>
+<div class="st red"><div class="n">2 of 168</div><div class="l">Sales above $1.9M since Jan 2022, both on 18,000+ sf lots</div></div>
+<div class="st"><div class="n">~6.5-6.75%</div><div class="l">30-yr rate today; Fed leaning toward a HIKE, not a cut</div></div>
 </div>
-<div class="verdict"><b>Your instinct to pursue individual sales is right, and the data backs it: the gap between selling as-is and selling as three homes is roughly $500,000 to $600,000 gross.</b> Even after subtracting realistic mapping, carrying, and extra selling costs, splitting the property nets an estimated <b>$250,000 to $450,000 more</b> than selling it as one income parcel. The honest caveat is on the other side of the ledger: the as-one-parcel number is lower than most owners expect, because no small income property in Hayward has sold above $1.65 million in the last 12 months, and no triplex above $1.24 million. Retail buyers pay real money for new construction here; investors do not.</div>
+<div class="cards3">
+<div class="card"><div class="lbl">Scenario A: Sell as one parcel</div><div class="val">$1,550,000 to $1,750,000</div><div class="ds">The completed 3-home property, one transaction. Fastest, lowest cost, lowest gross.</div></div>
+<div class="card nv"><div class="lbl">Scenario B: Split into 2 parcels</div><div class="val">~$1,960,000 to $2,060,000 gross</div><div class="ds">Detached house on its own lot + the duplex on its own lot. The fallback if the three-way conversion stalls.</div></div>
+<div class="card grn"><div class="lbl">Scenario C: Three individual homes</div><div class="val">~$2,140,000 to $2,290,000 gross</div><div class="ds">Each home sold fee simple, townhome-style. The highest-value exit and the recommended target.</div></div>
+</div>
+<div class="verdict"><b>My recommendation stands: selling the three homes individually is the right strategy, and it is the only path with a realistic shot at a number starting with 2.</b> As a single income parcel, the honest range is $1.55M to $1.75M: in the last 12 months no 2-4 unit property in all of Hayward sold above $1.65M, and the best triplex went for $1,238,880. Going back four and a half years and 168 sales, only two ever cleared $1.9M, and both sat on lots more than twice yours. What you have built is, effectively, three brand-new townhomes, and retail buyers will pay for that. Investors will not.</div>
 </section>
 
 <div class="dv"></div>
@@ -59,93 +69,104 @@ footer{background:var(--b);color:#ddd;padding:28px 0;text-align:center;margin-to
 <section><div class="sh">The Subject Property</div>
 <div class="tscroll"><table><tbody>
 <tr><th>Address / APN</th><td>428, 430 &amp; 432 Meek Ave, Hayward 94541. APN 431-0056-021 (single parcel)</td></tr>
-<tr><th>Lot</th><td>8,280 sq ft (0.19 acre), acquired March 2023</td></tr>
-<tr><th>Improvements</th><td>New construction 2025: detached SFR (432) 1,346 sf, 3bd/2ba, 430 sf garage + attached duplex (428/430) 1,240 sf each, 3bd/1.5ba, 420 sf garages. 3,826 sf total living area, 9 bedrooms, 4 full + 2 half baths.</td></tr>
+<tr><th>Lot</th><td>8,280 sq ft (0.19 acre)</td></tr>
+<tr><th>Improvements</th><td>New construction 2025-26: detached SFR (432) 1,346 sf, 3bd/2ba, 430 sf garage + attached duplex (428/430) 1,240 sf each, 3bd/1.5ba, 420 sf garages. 3,826 sf total living area, 9 bedrooms, 4 full + 2 half baths.</td></tr>
 <tr><th>Permits</th><td>City of Hayward BL-NRES-2024-00067 &amp; -00068, issued Feb 2025. Permitted as detached SFR + duplex, not as a triplex.</td></tr>
-<tr><th>Status</th><td>Roughly 74% inspected. Not yet finaled, no Certificate of Occupancy.</td></tr>
+<tr><th>Status</th><td>Construction essentially complete; exterior flatwork (driveway pavers) in progress, roughly 1-2 weeks from done. Final inspections / Certificate of Occupancy pending.</td></tr>
 </tbody></table></div>
-<div class="alert"><strong>Before anything else: the Certificate of Occupancy is the gate.</strong> No scenario closes, retail or investor, until the buildings are finaled. Finishing inspections and getting the CO is the single highest-return task on this project right now, and it costs nothing but the remaining trades you already planned.</div>
+<div class="key"><strong>Final inspections and the Certificate of Occupancy are the last gate before any sale can close</strong>, and with construction wrapping in the next couple of weeks, getting finaled should happen naturally. Once the CO is in hand, every path below is open, and marketing can start immediately while any subdivision work runs in parallel.</div>
 </section>
 
 <div class="dv"></div>
 
-<section><div class="sh">Scenario A: What It Sells For As One Parcel</div>
-<p>Every 2 to 4 unit property sold in Hayward in the last 12 months, 37 sales in total. Here are the most relevant, sorted by price:</p>
+<section><div class="sh">Has Anything Like This Ever Sold For $2M Here? The 4.5-Year Answer</div>
+<p>To pressure-test the ceiling, this goes back to January 2022, through the strongest market in Hayward's history, and pulls every 2-4 unit and multiple-dwelling sale since: 168 closed sales. Here are the top 10. Red rows are the only two above $1.9M. The green row is the single closest thing to this project that has ever traded here: a 6-year-old 3-unit property.</p>
+<div class="tscroll"><table><thead><tr><th>Address</th><th>Sold Price</th><th>Size / Units</th><th>Lot</th><th>Age (yrs)</th></tr></thead><tbody>
+<tr style='background:#fdecea'><td>263 Medford Ave</td><td><strong>$3,300,000</strong></td><td>3 units, 3,952sf</td><td class='nt'>18,460sf lot (2.2x subject)</td><td>59</td></tr><tr style='background:#fdecea'><td>22711 Woodridge Dr</td><td><strong>$1,945,000</strong></td><td>3 units, 5,064sf</td><td class='nt'>18,176sf lot (2.2x subject)</td><td>72</td></tr><tr><td>2540 Grove Way</td><td><strong>$1,835,000</strong></td><td>7 units, 5,996sf</td><td class='nt'>13,788sf lot</td><td>60</td></tr><tr style='background:#eaf7ef'><td>24728 Fairview Ave</td><td><strong>$1,800,000</strong></td><td>3 units, 3,500sf, 6 YEARS OLD</td><td class='nt'>22,938sf lot (2.8x subject)</td><td>6</td></tr><tr><td>21621 Haviland Ave</td><td><strong>$1,730,000</strong></td><td>4 units, 4,784sf</td><td class='nt'>17,327sf lot</td><td>26</td></tr><tr><td>27942 Manon Avenue</td><td><strong>$1,675,000</strong></td><td>4 units, 2,991sf</td><td class='nt'>8,597sf lot</td><td>60</td></tr><tr><td>25793 Franklin Ave</td><td><strong>$1,670,000</strong></td><td>4 units, 4,118sf</td><td class='nt'>11,154sf lot</td><td>45</td></tr><tr><td>2468 Hidden Lane</td><td><strong>$1,650,000</strong></td><td>2,301sf</td><td class='nt'>1.25 ACRES</td><td>78</td></tr><tr><td>2123 Aldengate Way</td><td><strong>$1,600,000</strong></td><td>4 units, 4,192sf</td><td class='nt'>9,928sf lot</td><td>57</td></tr><tr><td>214 Flanders Ct</td><td><strong>$1,600,000</strong></td><td>4 units, 4,125sf</td><td class='nt'>5,893sf lot</td><td>60</td></tr>
+</tbody></table></div>
+<div class="cb"><div class="cw"><canvas id="histChart"></canvas></div><div class="cap"><strong>Top 10 Hayward small-income sales since January 2022 (of 168 total).</strong> Red = the only two sales ever above $1.9M, both on lots 2.2x this property's. Green = 24728 Fairview Ave, the only near-new comp in the record: 6 years old, 3 units, sold $1,800,000 on a lot 2.8x larger, during the stronger 2022-23 market. Source: MLSListings / BridgeMLS reciprocal.</div></div>
+<div class="bigflag"><strong>The honest read on a $2M+ single-parcel sale: the record does not support it.</strong> In four and a half years, nothing on a lot this size has come close. The only near-new project that ever sold (Fairview, 6 years old) brought $1.8M with almost three times the land, in a better rate environment. On this 8,280 sq ft lot, $2M+ as one income-property sale would require a buyer no Hayward precedent says exists. The path to $2M+ runs through selling the homes individually, not through waiting for a record-setting investor.</div>
+</section>
+
+<div class="dv"></div>
+
+<section><div class="sh">Scenario A: The Completed Property As One Sale</div>
+<p>Every 2-4 unit property sold in Hayward in the last 12 months, most relevant first:</p>
 <div class="tscroll"><table><thead><tr><th>Address</th><th>Sold Price</th><th>Size / Units</th><th>Type</th><th>Age (yrs)</th><th>DOM</th></tr></thead><tbody>
 <tr><td>2468 Hidden Lane</td><td>$1,650,000</td><td>2,301sf on 1.25 ACRES</td><td class='nt'>Multiple structures</td><td>78</td><td>51</td></tr><tr><td>484 B St</td><td>$1,530,000</td><td>4 units, 3,042sf</td><td class='nt'>Fourplex</td><td>87</td><td>10</td></tr><tr><td>22241 S Garden Ave</td><td>$1,505,000</td><td>5 units, 3,465sf</td><td class='nt'>Multiple structures</td><td>42</td><td>23</td></tr><tr><td>29869 Vanderbilt St</td><td>$1,440,000</td><td>4 units, 3,520sf</td><td class='nt'>Fourplex</td><td>62</td><td>16</td></tr><tr><td>761 Shepherd Ave</td><td>$1,380,000</td><td>4 units, 2,778sf</td><td class='nt'>Fourplex</td><td>61</td><td>33</td></tr><tr><td>21000 Ocean View Dr</td><td>$1,238,880</td><td>3 units, 3,785sf</td><td class='nt'>Triplex (best triplex sale)</td><td>34</td><td>37</td></tr><tr><td>664 Berry Ave</td><td>$1,225,000</td><td>3 units, 4,500sf</td><td class='nt'>Triplex</td><td>60</td><td>87</td></tr><tr><td>1143 D St</td><td>$1,200,000</td><td>4 units, 2,278sf</td><td class='nt'>Triplex</td><td>77</td><td>23</td></tr><tr><td>676 Berry Ave</td><td>$1,180,000</td><td>4 units, 3,224sf</td><td class='nt'>Multiple structures (house + units)</td><td>65</td><td>85</td></tr><tr><td>656 Berry Ave</td><td>$1,180,000</td><td>4 units, 3,296sf</td><td class='nt'>Multiple structures (house + units)</td><td>64</td><td>85</td></tr><tr><td>22357 S Garden Ave</td><td>$1,025,000</td><td>3 units, 2,389sf</td><td class='nt'>Triplex</td><td>70</td><td>149</td></tr><tr><td>24630 Soto Rd</td><td>$980,000</td><td>3 units, 2,267sf</td><td class='nt'>Triplex</td><td>68</td><td>18</td></tr>
 </tbody></table></div>
-<div class="cb"><div class="cw"><canvas id="mfChart"></canvas></div><div class="cap"><strong>Hayward 2-4 unit sales, last 12 months.</strong> Green = triplexes and house-plus-units configurations (the closest matches). Not one triplex broke $1.24M; the market ceiling for any small income property was $1.65M. Source: MLSListings / BridgeMLS reciprocal.</div></div>
-<p>The ceiling is unmistakable. The best triplex sale of the year was $1,238,880 (34 years old, 3,785 sq ft). The only sales above $1.5M were fourplexes and a property on 1.25 acres. Your property is newer and better than everything on this list, and new construction with market-rate rents and zero deferred maintenance deserves a premium. But investors price on income, not on newness alone.</p>
-<p>The income math confirms it. Three new 3-bedroom units at roughly $3,600 per month each is about $130,000 per year of gross scheduled income. Hayward small-income buyers have been paying 12 to 14 times gross rents, and 5.25 to 5.75 percent cap rates on realistic expenses. Both methods land in the same band: <strong>$1,565,000 to $1,830,000, with the realistic center at $1.6M to $1.7M</strong>. Setting the neighborhood record (which any sale above $1.65M would be) usually takes extra market time, and the two comparable "house plus units" sales on Berry Ave took 85 days each.</p>
-<div class="key">One genuine advantage in this scenario: because the property is legally a house plus a duplex, it can be marketed to owner-occupants who want to live in the detached home and rent the two attached units, financed on a standard residential 2-4 unit loan. That buyer pool pays more than pure investors, and it is the reason the top of the band ($1.75M) is reachable at all.</div>
+<div class="cb"><div class="cw"><canvas id="mfChart"></canvas></div><div class="cap"><strong>Hayward 2-4 unit sales, last 12 months.</strong> Green = triplexes and house-plus-units configurations (the closest matches to this property's legal layout). The ceiling: $1.65M for anything, $1.24M for a triplex. Source: MLSListings / BridgeMLS reciprocal.</div></div>
+<p>The income math lands in the same place. Three new 3-bedroom homes at roughly $3,600 per month each is about $130,000 per year of gross income. Hayward small-income buyers pay 12 to 14 times gross rents and 5.25 to 5.75 percent cap rates: both methods produce <strong>$1,565,000 to $1,830,000, centering at $1.6M to $1.7M</strong>. And with the Fed leaning toward a rate hike rather than a cut, investor financing costs are not coming down to rescue that number.</p>
+<div class="key">One real advantage if this route is chosen: legally this is a house plus a duplex, so it can be marketed to an owner-occupant who lives in the detached home and rents the two attached units, on a standard residential 2-4 unit loan. That buyer pays more than a pure investor, and it is the only realistic route to the top of the band.</div>
 </section>
 
 <div class="dv"></div>
 
-<section><div class="sh">Scenarios B and C: What the Homes Are Worth Individually</div>
-<p>What retail buyers actually paid for new and near-new small homes in Hayward over the last 12 months:</p>
+<section><div class="sh">Scenario C: Three Individual Sales, Priced</div>
+<p>What retail buyers paid for new and near-new small homes in Hayward over the last 12 months:</p>
 <div class="tscroll"><table><thead><tr><th>Address</th><th>Sold Price</th><th>$/SqFt</th><th>SqFt</th><th>Description</th><th>DOM</th></tr></thead><tbody>
 <tr><td>1513 Sylvia St</td><td>$850,000</td><td>$603/sqft</td><td>1,410</td><td class='nt'>Detached SFR, 8 yrs old, 3/2.5</td><td>93</td></tr><tr><td>29333 Hub Court</td><td>$825,000</td><td>$552/sqft</td><td>1,494</td><td class='nt'>Townhome, 5 yrs old</td><td>44</td></tr><tr><td>1515 Glenn Street</td><td>$820,000</td><td>$559/sqft</td><td>1,467</td><td class='nt'>Townhome, 9 yrs old</td><td>14</td></tr><tr><td>28954 Parkwood Ln #66</td><td>$808,000</td><td>$545/sqft</td><td>1,482</td><td class='nt'>Townhome, BRAND NEW (2025)</td><td>138</td></tr><tr><td>29284 Hub Lane</td><td>$800,000</td><td>$535/sqft</td><td>1,494</td><td class='nt'>Townhome-style condo, 8 yrs old</td><td>11</td></tr><tr><td>29322 Hub Ln</td><td>$800,000</td><td>$535/sqft</td><td>1,494</td><td class='nt'>Townhome, 6 yrs old</td><td>20</td></tr><tr><td>28976 Parkwood Ln #73</td><td>$799,000</td><td>$539/sqft</td><td>1,482</td><td class='nt'>Townhome, BRAND NEW (2025)</td><td>183</td></tr><tr><td>1591 Glenn Street</td><td>$790,000</td><td>$563/sqft</td><td>1,402</td><td class='nt'>Detached SFR, 10 yrs old, 3/2.5</td><td>64</td></tr>
 </tbody></table></div>
-<p>Applying these to your three homes, with credit for having no HOA (the townhome comps above carry monthly HOA dues) and being brand new, but recognizing your two attached units are smaller (1,240 sf) and have 1.5 baths versus the comps' 2 to 2.5:</p>
+<p>Applied to the three homes, with credit for being brand new with no HOA (the comps carry monthly dues), adjusted for the attached units' smaller size and 1.5 baths:</p>
 <div class="cards3">
-<div class="card"><div class="lbl">432 Meek (detached SFR, 1,346sf, 3/2)</div><div class="val">$780,000 to $840,000</div><div class="ds">Anchored on the two near-new detached sales ($790K to $850K at 1,400sf) with a new-construction offset for the smaller size.</div></div>
-<div class="card"><div class="lbl">428 Meek (attached, 1,240sf, 3/1.5)</div><div class="val">$680,000 to $725,000</div><div class="ds">Anchored on brand-new 1,482sf townhomes at $799K to $808K, adjusted for size and bath count, credited for no HOA.</div></div>
-<div class="card"><div class="lbl">430 Meek (attached, 1,240sf, 3/1.5)</div><div class="val">$680,000 to $725,000</div><div class="ds">Same basis as 428. Combined three-home gross: roughly $2,140,000 to $2,290,000.</div></div>
+<div class="card"><div class="lbl">432 Meek (detached, 1,346sf, 3/2)</div><div class="val">$780,000 to $840,000</div><div class="ds">Anchored on near-new detached sales at $790K to $850K.</div></div>
+<div class="card"><div class="lbl">428 Meek (attached, 1,240sf, 3/1.5)</div><div class="val">$680,000 to $725,000</div><div class="ds">Anchored on brand-new 1,482sf townhomes at $799K to $808K, size- and bath-adjusted.</div></div>
+<div class="card"><div class="lbl">430 Meek (attached, 1,240sf, 3/1.5)</div><div class="val">$680,000 to $725,000</div><div class="ds">Same basis as 428.</div></div>
 </div>
-<div class="alert"><strong>A sober note on market speed:</strong> the two truly brand-new townhomes in this comp set took 138 and 183 days to sell. New-construction retail product in Hayward is selling, but it is not flying. Budget 4 to 6 months of marketing per unit in the individual-sale scenarios, and expect the three sales to stagger rather than close together.</div>
+<p><strong>Combined, using midpoints:</strong></p>
+<div class="cb">
+<div class="mathrow"><span>432 Meek sale (midpoint)</span><span>$810,000</span></div>
+<div class="mathrow"><span>428 Meek sale (midpoint)</span><span>$702,500</span></div>
+<div class="mathrow"><span>430 Meek sale (midpoint)</span><span>$702,500</span></div>
+<div class="mathrow total"><span>Combined three-home gross</span><span>~$2,215,000 (range $2,140,000 to $2,290,000)</span></div>
+</div>
+<p>Against a one-parcel sale at the $1.65M midpoint, the three-home path grosses roughly <strong>$500,000 to $565,000 more</strong>. And because you have already completed and paid for the subdivision work, the surveys, city fees, utility separation, mapping, condo plans, and CC&amp;Rs, that usual cost-and-time drag is behind you: the comparison really is this clean.</p>
+<div class="alert"><strong>Market-speed reality:</strong> the two truly brand-new townhome comps took 138 and 183 days to sell, and rates near 6.75% with the Fed talking about a September hike will not shorten that. Budget 4 to 6 months of marketing per home and expect the three closings to stagger rather than land together.</div>
 </section>
 
 <div class="dv"></div>
 
-<section><div class="sh">The Math, Side By Side</div>
-<div class="cb">
-<div class="mathrow"><span><strong>Scenario A: one parcel, one sale</strong></span><span></span></div>
-<div class="mathrow"><span>Sale price (midpoint)</span><span>$1,650,000</span></div>
-<div class="mathrow"><span>Remaining cost: finish construction to CO</span><span class="neg">already budgeted</span></div>
-<div class="mathrow total"><span>Gross proceeds before standard selling costs</span><span>~$1,650,000</span></div>
-</div>
-<div class="cb">
-<div class="mathrow"><span><strong>Scenario B: SB 9 lot split, two sales (house + duplex)</strong></span><span></span></div>
-<div class="mathrow"><span>Detached house (midpoint)</span><span>$810,000</span></div>
-<div class="mathrow"><span>New duplex as income property (midpoint)</span><span>$1,200,000</span></div>
-<div class="mathrow"><span>Less: lot split costs (survey, city fees, utilities separation)</span><span class="neg">-$60,000 to -$100,000</span></div>
-<div class="mathrow"><span>Less: added carry during process (~6-9 months)</span><span class="neg">-$50,000 to -$90,000</span></div>
-<div class="mathrow total"><span>Estimated gross after split costs</span><span>~$1,850,000 to $1,900,000</span></div>
-</div>
-<div class="cb">
-<div class="mathrow"><span><strong>Scenario C: three fee-simple homes (condo map or subdivision)</strong></span><span></span></div>
-<div class="mathrow"><span>Three homes (midpoints)</span><span>$2,215,000</span></div>
-<div class="mathrow"><span>Less: mapping/legal/city costs (condo plan, CC&amp;Rs, fees)</span><span class="neg">-$90,000 to -$150,000</span></div>
-<div class="mathrow"><span>Less: added carry during approvals + staggered sales (~9-15 months)</span><span class="neg">-$90,000 to -$150,000</span></div>
-<div class="mathrow total"><span>Estimated gross after subdivision costs</span><span>~$1,950,000 to $2,050,000</span></div>
-</div>
-<div class="cb"><div class="cw" style="height:280px"><canvas id="scenChart"></canvas></div><div class="cap"><strong>Estimated proceeds by scenario, after scenario-specific costs, before standard selling costs.</strong> The individual-sale premium is real, roughly $300,000 to $400,000 over selling as-is, but it is earned through 9 to 15 months of additional time, cost, and execution risk.</div></div>
+<section><div class="sh">Scenario B: The Two-Parcel Fallback</div>
+<p>If the city's approval of the full three-home conversion stalls for any reason, splitting the parcel in two (the detached house on one lot, the duplex on the other) still captures most of the upside: roughly $810,000 for the house plus $1,150,000 to $1,250,000 for a brand-new duplex. The best recent duplex sales in Hayward, all of them decades old, cleared $1.05M to $1.35M; a brand-new one beats them. Combined gross: <strong>roughly $1,960,000 to $2,060,000</strong>. With the survey, utility separation, and mapping work you have already completed and paid for, this path carries no meaningful added cost either; it is simply the smaller version of the same conversion.</p>
+<div class="cb"><div class="cw" style="height:280px"><canvas id="scenChart"></canvas></div><div class="cap"><strong>Gross sale value by scenario.</strong> The three-home path is worth roughly $500,000 to $565,000 more than selling as one parcel, and it is the only scenario that reaches past $2M. Standard selling costs apply equally to every path and are not shown.</div></div>
 </section>
 
 <div class="dv"></div>
 
-<section><div class="sh">What This Means For Your Decision</div>
+<section><div class="sh">The Rate Environment Is Part of This Decision</div>
+<div class="stats">
+<div class="st"><div class="n">~6.4-6.6%</div><div class="l">30-yr fixed national avg, wk of Jul 13</div></div>
+<div class="st"><div class="n">~6.75%</div><div class="l">Typical CA retail quote today</div></div>
+<div class="st red"><div class="n">HIKE talk</div><div class="l">June Fed: majority now expect a raise, not a cut</div></div>
+<div class="st red"><div class="n">Sep 2026</div><div class="l">When markets price the possible hike</div></div>
+</div>
+<p>Rates matter to every scenario here. Inflation remains above the Fed's target, oil prices have added pressure since early this year, and the June Fed meeting turned hawkish, with most policymakers now expecting a rate increase rather than a cut, and markets pointing at late summer or September. For this project that cuts two ways: investor financing stays expensive (holding the Scenario A ceiling down), and retail buyers' payments stay stretched (explaining the long days-on-market on new construction). The strategic implication is simple: <strong>waiting for a better rate environment is not a plan this data supports.</strong> If anything, the window argues for getting the CO, starting the subdivision clock, and putting the first home on the market before financing gets more expensive, not less.</p>
+</section>
+
+<div class="dv"></div>
+
+<section><div class="sh">What This Means For The Decision</div>
 <div class="cards">
-<div class="card grn"><div class="lbl">The subdivision path is worth real money</div><div class="ds">Roughly $300,000 to $400,000 of additional net over a one-parcel sale in the full three-home scenario, even after mapping, carry, and staggered marketing. If the city cooperates and you have the patience, it is the higher-value exit.</div></div>
-<div class="card nv"><div class="lbl">The SB 9 middle path deserves a hard look</div><div class="ds">Splitting into just two parcels (house + duplex) captures most of the upside (~$200,000 to $250,000 over as-is) with a simpler, faster, state-protected process. Ministerial approval, no discretionary hearing. It also leaves the duplex as a clean rental if the market softens.</div></div>
-<div class="card red"><div class="lbl">The as-is number is the hard truth</div><div class="ds">If the target number for this project is above roughly $1.75M, a one-parcel sale in today's Hayward income market is unlikely to reach it. No small income property has sold above $1.65M here in 12 months. Newness earns a premium, but investors buy the income stream, not the drywall.</div></div>
-<div class="card"><div class="lbl">Finish the CO before deciding anything</div><div class="ds">Nothing sells, at any price, in any scenario, without final inspections and the Certificate of Occupancy. Getting finaled also starts the clock on marketing while the subdivision conversation with the city happens in parallel. These paths are not mutually exclusive on day one.</div></div>
+<div class="card grn"><div class="lbl">Sell them individually. It is the best exit.</div><div class="ds">Three brand-new townhome-style sales at $680K to $840K each, roughly $2.14M to $2.29M combined, about $500K to $565K more than a one-parcel sale. This is the path I recommended, and with the subdivision work already done and paid for, it is ready to execute the moment the city signs off.</div></div>
+<div class="card nv"><div class="lbl">The two-parcel split is the live fallback</div><div class="ds">If the three-way conversion stalls at the city, the house + duplex as two sales still grosses roughly $1.96M to $2.06M, most of the upside, using the same completed survey and utility work.</div></div>
+<div class="card red"><div class="lbl">Anchor expectations on the record, not the build cost</div><div class="ds">As one income parcel this is a $1.55M to $1.75M property. In 168 sales over 4.5 years, nothing on a comparable lot has done better, and the rate environment is moving the wrong way. Investment spent building does not change what investors will pay.</div></div>
+<div class="card"><div class="lbl">Sequence it: finish, get finaled, market immediately</div><div class="ds">Wrap the pavers, complete final inspections, and get the homes on the market while the city conversion finishes in parallel. If a strong one-parcel offer near $1.75M appears early, we can weigh it against the individual-sale path with real numbers in hand.</div></div>
 </div>
-<div class="key">Professional opinion of value, not a formal appraisal. Subdivision cost and timeline figures are planning-level estimates; the city's actual requirements (utility separation, park fees, map conditions) should be confirmed with a civil engineer and the Hayward Planning Division before committing to Scenario B or C.</div>
+<div class="key">Professional opinion of value, not a formal appraisal.</div>
 </section>
 
 <div class="dv"></div>
 
 <section><div class="sh">Staying In Touch</div>
-<p>Happy to walk the property, talk through the sequencing with the city, or model any of these scenarios against your actual cost basis whenever useful. Let me know how you would like to proceed.</p>
+<p>Happy to walk the project, model these scenarios against the actual cost basis and loan payoff, or get the mapping conversation started with the city whenever ready.</p>
 </section>
 
 </div>
 <footer><div class="fn">GRAEHAM WATTS</div><div class="fl">REALTOR | Intero Real Estate | DRE #01466876 | 650-308-4727 | graehamwatts.com</div>
-<div class="ds2">Prepared for the owner of 428-432 Meek Ave, Hayward. Comparable sales from MLSListings and reciprocal East Bay MLS data, July 2026. Parcel data from Alameda County records. Professional opinion of value, not a formal appraisal.</div></footer>
+<div class="ds2">Prepared for the owner of 428-432 Meek Ave, Hayward. Comparable sales from MLSListings and reciprocal East Bay MLS data, July 2026 (12-month cohort) and January 2022 onward (historical lookback, 168 sales). Rate data cross-referenced from Freddie Mac PMMS, Bankrate, and Mortgage News Daily, week of July 13, 2026. Parcel data from Alameda County records. Professional opinion of value, not a formal appraisal.</div></footer>
 
 <script>
+new Chart(document.getElementById('histChart'),{type:'bar',data:{labels:["263 Medford", "22711 Woodridge", "2540 Grove", "24728 Fairview", "21621 Haviland", "27942 Manon", "25793 Franklin", "2468 Hidden", "2123 Aldengate", "214 Flanders"],datasets:[{label:'Sold price',data:[3300000, 1945000, 1835000, 1800000, 1730000, 1675000, 1670000, 1650000, 1600000, 1600000],backgroundColor:["#c0392b", "#c0392b", "#A88B3D", "#4f9d69", "#A88B3D", "#A88B3D", "#A88B3D", "#A88B3D", "#A88B3D", "#A88B3D"],borderRadius:4}]},options:{responsive:true,maintainAspectRatio:false,animation:false,plugins:{legend:{display:false},tooltip:{callbacks:{label:c=>'$'+c.parsed.y.toLocaleString()}}},scales:{x:{ticks:{font:{size:9},maxRotation:55,minRotation:55}},y:{ticks:{callback:v=>'$'+(v/1000000).toFixed(1)+'M'},grid:{color:'#eee'}}}}});
 new Chart(document.getElementById('mfChart'),{type:'bar',data:{labels:["2468 Hidden", "484 B", "22241 S", "29869 Vanderbilt", "761 Shepherd", "21000 Ocean", "664 Berry", "1143 D", "676 Berry", "656 Berry", "22357 S", "24630 Soto"],datasets:[{label:'Sold price',data:[1650000, 1530000, 1505000, 1440000, 1380000, 1238880, 1225000, 1200000, 1180000, 1180000, 1025000, 980000],backgroundColor:["#A88B3D", "#A88B3D", "#A88B3D", "#A88B3D", "#A88B3D", "#4f9d69", "#4f9d69", "#4f9d69", "#4f9d69", "#4f9d69", "#4f9d69", "#4f9d69"],borderRadius:4}]},options:{responsive:true,maintainAspectRatio:false,animation:false,plugins:{legend:{display:false},tooltip:{callbacks:{label:c=>'$'+c.parsed.y.toLocaleString()}}},scales:{x:{ticks:{font:{size:9},maxRotation:55,minRotation:55}},y:{ticks:{callback:v=>'$'+(v/1000000).toFixed(1)+'M'},grid:{color:'#eee'}}}}});
-new Chart(document.getElementById('scenChart'),{type:'bar',data:{labels:['A: One parcel now','B: SB 9 split (2 sales)','C: Three homes'],datasets:[{label:'Est. proceeds',data:[1650000,1875000,2000000],backgroundColor:['#A88B3D','#343955','#4f9d69'],borderRadius:4}]},options:{indexAxis:'y',responsive:true,maintainAspectRatio:false,animation:false,plugins:{legend:{display:false},tooltip:{callbacks:{label:c=>'$'+c.parsed.x.toLocaleString()}}},scales:{x:{ticks:{callback:v=>'$'+(v/1000000).toFixed(2)+'M'},grid:{color:'#eee'},beginAtZero:true},y:{grid:{display:false},ticks:{font:{size:12}}}}}});
+new Chart(document.getElementById('scenChart'),{type:'bar',data:{labels:['A: One parcel','B: Two parcels','C: Three homes'],datasets:[{label:'Est. gross',data:[1650000,2010000,2215000],backgroundColor:['#A88B3D','#343955','#4f9d69'],borderRadius:4}]},options:{indexAxis:'y',responsive:true,maintainAspectRatio:false,animation:false,plugins:{legend:{display:false},tooltip:{callbacks:{label:c=>'$'+c.parsed.x.toLocaleString()}}},scales:{x:{ticks:{callback:v=>'$'+(v/1000000).toFixed(2)+'M'},grid:{color:'#eee'},beginAtZero:true},y:{grid:{display:false},ticks:{font:{size:12}}}}}});
 </script></body></html>
