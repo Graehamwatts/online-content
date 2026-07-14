@@ -26,15 +26,15 @@ th{background:var(--g);color:var(--b);text-align:left;padding:9px;font-size:11.5
 .card{border-radius:8px;padding:16px 18px;margin:12px 0;background:var(--cr);border-left:6px solid var(--g)}.card h4{font-family:Montserrat;font-size:14px;margin-bottom:5px}
 .alert{background:#fff8e6;border-left:6px solid #d98c6a;padding:14px 18px;border-radius:8px;margin:12px 0;font-size:13.5px}
 .tierlabel{display:inline-block;font-family:Montserrat;font-weight:800;font-size:11px;letter-spacing:1px;text-transform:uppercase;color:var(--dg);margin:18px 0 4px}
-.ratebanner{background:linear-gradient(120deg,#7a1f14,#c0392b);color:#fff;border-radius:12px;padding:30px 28px;margin:10px 0 22px;display:flex;flex-wrap:wrap;align-items:center;gap:26px;box-shadow:0 6px 22px rgba(192,57,43,.30)}
-.ratebanner .big{font-family:Montserrat;font-weight:800;font-size:64px;line-height:1;white-space:nowrap}
-.ratebanner .big .arrow{font-size:40px;vertical-align:18px}
+.ratebanner{background:linear-gradient(120deg,#20242c,#343955);color:#fff;border-radius:12px;border-left:8px solid #c0392b;padding:26px 26px;margin:10px 0 22px;display:flex;flex-wrap:wrap;align-items:center;gap:24px;box-shadow:0 4px 16px rgba(26,26,26,.22)}
+.ratebanner .big{font-family:Montserrat;font-weight:800;font-size:48px;line-height:1;white-space:nowrap}
+.ratebanner .big .arrow{font-size:28px;vertical-align:12px;color:#e07b6a}
 .ratebanner .side{flex:1;min-width:250px}
 .ratebanner .side .h{font-family:Montserrat;font-weight:800;font-size:16px;letter-spacing:1.5px;text-transform:uppercase;margin-bottom:6px}
-.ratebanner .side .d{font-size:14.5px;color:#ffe3dd}
-.ratebanner .chip{background:rgba(255,255,255,.16);border-radius:8px;padding:10px 16px;text-align:center}
-.ratebanner .chip .cn{font-family:Montserrat;font-weight:800;font-size:22px}
-.ratebanner .chip .cl{font-size:10.5px;letter-spacing:1px;text-transform:uppercase;color:#ffd9d2;margin-top:2px}
+.ratebanner .side .d{font-size:14.5px;color:#d8dce6}
+.ratebanner .chip{background:rgba(255,255,255,.10);border-radius:8px;padding:10px 16px;text-align:center}
+.ratebanner .chip .cn{font-family:Montserrat;font-weight:800;font-size:22px;color:var(--g)}
+.ratebanner .chip .cl{font-size:10.5px;letter-spacing:1px;text-transform:uppercase;color:#b9bfcc;margin-top:2px}
 footer{background:var(--b);color:#ddd;padding:34px 0;text-align:center;margin-top:30px}.fn{color:var(--g);font-family:Montserrat;font-weight:800;letter-spacing:3px;font-size:19px}.fl{font-size:12px;margin-top:6px;color:#bbb}.ds{font-size:10.5px;color:#888;max-width:720px;margin:16px auto 0}
 .note{font-size:12px;color:var(--gy);font-style:italic;margin-top:6px}
 </style></head><body>
@@ -93,7 +93,7 @@ footer{background:var(--b);color:#ddd;padding:34px 0;text-align:center;margin-to
 
 <div class="cb"><div class="cw"><canvas id="epaDOM"></canvas></div><div class="cap">East Palo Alto single-family median days to sell, by month, for 2024, 2025, and 2026. This spring's 34 to 36 day readings (coral line) are roughly triple the same months in 2024 (light line). Even the strong side of the local market is slowing at the edges. Source: MLSListings Matrix Stats, pulled 7/13/2026.</div></div>
 
-<div class="cb"><div class="cw"><canvas id="epaSL"></canvas></div><div class="cap">East Palo Alto single-family sale-to-list ratio, monthly. Spring 2024 routinely cleared 107 to 109% of asking; 2026 has run 99.7 to 102.9%. Overbidding has largely left this market. Source: MLSListings Matrix Stats, pulled 7/13/2026.</div></div>
+<div class="cb"><div class="cw"><canvas id="epaSL"></canvas></div><div class="cap">East Palo Alto sale-to-list ratio: single-family monthly (dark line) with condo/townhome annual figures overlaid (gold columns; 29 sales total, so annual only). Single-family spring 2024 routinely cleared 107 to 109% of asking; 2026 has run 99.7 to 102.9%. Condo/townhome sales cleared under asking in 2023 and 2024 (98.7%, 98.1%) before the handful of recent sales landed above it. One honest caveat: this ratio only counts homes that actually sold. The attached homes that couldn't find a buyer, including this property's two attempts this spring, were withdrawn and never enter this statistic, so the gold columns overstate how easy the condo market is. Source: MLSListings Matrix Stats, pulled 7/13/2026.</div></div>
 
 <p><strong>San Francisco is a different animal, and worth naming so nobody draws the wrong conclusion from headlines.</strong> SF single-family homes are up over 22% year over year to a $2.2M median, selling in about 12 days at nearly 25% over asking, and even SF condos have turned the corner, now selling in about 16 days at roughly 7% over asking. That recovery is being driven by the AI hiring wave, return-to-office mandates, and sky-high rents concentrated in San Francisco specifically. None of that demand engine sits in East Palo Alto's condo tier. Here and across San Mateo County, higher rates plus growing attached-home inventory are doing the opposite: prices drifting sideways to down, and market times more than doubling.</p>
 <p><strong>What this means for your sale in one sentence:</strong> your home is an attached property competing in the slowest-moving segment of the local market during a week when rates just made every buyer's payment bigger, and that reality should drive both the pricing posture and the urgency of fixing the fixable problems at the property.</p>
@@ -230,9 +230,13 @@ new Chart(document.getElementById('epaDOM'),{type:'line',data:{labels:mn,dataset
 {label:'2026',data:epaDOM26,borderColor:RED,tension:.3,pointRadius:3,borderWidth:2.6}
 ]},options:{responsive:true,maintainAspectRatio:false,plugins:{legend:{position:'bottom'},tooltip:{callbacks:{label:c=>c.dataset.label+': '+c.parsed.y+' days'}}},scales:{x:{grid:{display:false}},y:{title:{display:true,text:'Median days to sell',font:{size:11}},grid:{color:'#eee'},beginAtZero:true}}}});
 
-// EPA SFH sale-to-list
+// EPA sale-to-list: SFH monthly line + condo/TH annual columns
 const epaSL=[99.5,98.8,107.8,107.2,102.7,103.8,109.9,103.3,103.7,104.0,100.8,99.0,93.4,101.5,100.0,107.4,108.2,108.6,104.6,104.5,95.5,104.7,99.0,104.9,103.8,95.6,107.9,105.5,103.1,102.0,105.4,97.9,100.0,98.7,99.4,99.3,99.9,99.7,101.0,101.5,100.8,102.9];
-new Chart(document.getElementById('epaSL'),{type:'line',data:{labels:m2336,datasets:[{label:'Sale/List %',data:epaSL,borderColor:DGLD,backgroundColor:'rgba(197,165,90,.10)',fill:true,tension:.3,pointRadius:0,borderWidth:2}]},options:{responsive:true,maintainAspectRatio:false,plugins:{legend:{display:false},tooltip:{callbacks:{label:c=>c.parsed.y+'%'}}},scales:{x:{ticks:{maxTicksLimit:9,autoSkip:true},grid:{display:false}},y:{ticks:{callback:v=>v+'%'},grid:{color:'#eee'},suggestedMin:90,suggestedMax:112}}}});
+const condoSL=Array(42).fill(null);condoSL[5]=98.7;condoSL[17]=98.1;condoSL[29]=101.0;condoSL[39]=103.8;
+new Chart(document.getElementById('epaSL'),{data:{labels:m2336,datasets:[
+{type:'line',label:'Single-Family Sale/List % (monthly)',data:epaSL,borderColor:BLK,tension:.3,pointRadius:0,borderWidth:2},
+{type:'bar',label:'Condo/Townhome Sale/List % (annual)',data:condoSL,backgroundColor:GLD,barThickness:26,borderRadius:4}
+]},options:{responsive:true,maintainAspectRatio:false,plugins:{legend:{position:'bottom'},tooltip:{callbacks:{label:c=>c.dataset.label.split(' (')[0]+': '+c.parsed.y+'%'}}},scales:{x:{ticks:{maxTicksLimit:9,autoSkip:true},grid:{display:false}},y:{ticks:{callback:v=>v+'%'},grid:{color:'#eee'},suggestedMin:90,suggestedMax:112}}}});
 
 // Comp $/sqft with subject reference line
 const compLabels=['142 Mission Dr (EPA)','137 Mission Dr (EPA)','WC #137 (EPA)','WC #121 (EPA)','WC #229 (EPA)',"O'Keefe #17 (PA)","O'Keefe #10 (PA)","O'Keefe #3 (PA)"];
