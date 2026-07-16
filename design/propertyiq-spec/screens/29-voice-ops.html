@@ -1,0 +1,492 @@
+<title>PropertyIQ · Screen 29 — Voice Ops (Wattson)</title>
+<link href="https://api.fontshare.com/v2/css?f[]=technor@500,600,700&display=swap" rel="stylesheet">
+<link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<style>
+  /* Type system — Technor for display, Inter for UI. */
+  :root{ --font-display:'Technor', Inter, -apple-system, 'Segoe UI', sans-serif; --font-ui: Inter, -apple-system, 'Segoe UI', Roboto, sans-serif; }
+</style>
+<style>
+  /* Palette v4 — PropFlow design language: neutral ink UI, ink-as-accent, color reserved for data. (extracted verbatim from propsearch-design-draft.html) */
+  :root, :root[data-theme="dark"], :root[data-theme="light"]{
+    --ink:#23282f; --paper:#fbfaf8; --surface:#f1efe9; --line:#e2dfd6;
+    --mut:#6b7076; --soft:#9b9f9f;
+    --brand:#2e6b53; --brand-ink:#ffffff; --brand-soft:#eaf1ec; --brand-deep:#1e4c3a;
+    --signal:#b07a2e;
+    --good:#2e7d4f; --warn:#a8630a; --crit:#b3372f;
+    --r:10px;
+  }
+  .intel .score, .mintel{ color:var(--brand-deep) }
+  .intel{ border-left:3px solid var(--brand) }
+  h1{ letter-spacing:-.02em }
+  .stat b{ letter-spacing:-.01em }
+  body[data-agent="watts"]{ --brand:#2e6b53; --brand-soft:#eaf1ec; --brand-deep:#1e4c3a; }
+
+  *{box-sizing:border-box; margin:0}
+  body{font:15px/1.55 var(--font-ui); color:var(--ink); background:var(--paper); padding-bottom:80px}
+  h1,h2,h3{line-height:1.15; text-wrap:balance; font-family:var(--font-display); font-weight:600}
+  h1{letter-spacing:-.01em}
+  .site{box-shadow:0 1px 2px rgba(20,24,32,.04), 0 8px 32px rgba(20,24,32,.06)}
+  .stat{box-shadow:0 1px 2px rgba(20,24,32,.03); transition:box-shadow .15s, transform .15s}
+  .stat:hover{box-shadow:0 4px 14px rgba(20,24,32,.08)}
+  .chip{transition:all .12s}
+  button{font-family:var(--font-ui)}
+  .num{font-variant-numeric:tabular-nums}
+  .wrap{max-width:1180px; margin:0 auto; padding:0 20px}
+
+  .bar{position:sticky; top:0; z-index:50; background:var(--paper); border-bottom:1px solid var(--line); padding:10px 0; backdrop-filter:blur(8px)}
+  .bar .wrap{display:flex; flex-wrap:wrap; gap:10px; align-items:center}
+  .bar .ttl{font-weight:700; margin-right:auto}
+  .bar .ttl small{display:block; font-weight:400; color:var(--mut)}
+  .bar a{color:var(--brand); font-size:13px; text-decoration:none}
+
+  .note{background:var(--surface); border:1px solid var(--line); border-radius:var(--r); padding:14px 16px; margin:0 0 22px; font-size:13.5px; color:var(--mut)}
+  .note b{color:var(--ink)}
+
+  .site{border:1px solid var(--line); border-radius:14px; overflow:hidden; background:var(--paper)}
+  .sitehead{display:flex; align-items:center; gap:14px; padding:14px 22px; border-bottom:1px solid var(--line)}
+  .avatar{width:38px; height:38px; border-radius:50%; background:var(--brand); color:var(--brand-ink); display:grid; place-items:center; font-weight:700}
+  .sitehead .who b{display:block}
+  .sitehead .who small{color:var(--mut)}
+  .sitehead nav{margin-left:auto; display:flex; gap:18px; font-size:13.5px; color:var(--mut)}
+  .sitehead nav a{color:inherit; text-decoration:none}
+  .sitehead nav a:hover{color:var(--brand)}
+
+  .chip{display:inline-flex; align-items:center; gap:6px; font-size:12.5px; font-weight:500; border:1px solid var(--line); border-radius:99px; padding:6px 12px; background:var(--paper); cursor:pointer; color:var(--ink)}
+  .chip:hover{border-color:var(--brand)}
+  .chip.on{background:var(--brand); border-color:var(--brand); color:var(--brand-ink); font-weight:600; box-shadow:0 2px 8px color-mix(in srgb, var(--brand) 30%, transparent)}
+
+  .statrow{display:grid; grid-template-columns:repeat(4,1fr); gap:10px}
+  .stat{background:var(--surface); border:1px solid var(--line); border-radius:var(--r); padding:12px}
+  .stat small{display:block; color:var(--mut); font-size:11.5px; text-transform:uppercase; letter-spacing:.05em}
+  .stat b{font-size:18px}
+  .stat .up{color:var(--good); font-size:12px}
+
+  .bdg{font-size:11.5px; border-radius:6px; padding:3px 8px; background:var(--surface); border:1px solid var(--line); color:var(--mut)}
+  .bdg.good{color:var(--good); border-color:color-mix(in srgb,var(--good) 30%,var(--line))}
+  .bdg.warn{color:var(--warn); border-color:color-mix(in srgb,var(--warn) 30%,var(--line))}
+  .bdg.crit{color:var(--crit); border-color:color-mix(in srgb,var(--crit) 30%,var(--line))}
+
+  .dtable{width:100%; border-collapse:collapse; font-size:13px}
+  .dtable td,.dtable th{border-bottom:1px solid var(--line); padding:8px 10px; text-align:left}
+  .dtable th{font-size:11px; text-transform:uppercase; letter-spacing:.05em; color:var(--soft)}
+
+  @media (max-width:860px){ .statrow{grid-template-columns:repeat(2,1fr)} .maingrid{grid-template-columns:1fr !important} .console{grid-template-columns:1fr !important} .rail{display:none !important} }
+  @media (max-width:1100px){ .voicerail{display:none !important} .maingrid{grid-template-columns:1fr !important} }
+  @media (prefers-reduced-motion: reduce){ *{transition:none!important} }
+
+  /* ---- page-specific additions (kept in the same design language) ---- */
+  .anno{font-size:11px; color:var(--soft)}
+  .cardbox{border:1px solid var(--line); border-radius:10px; padding:11px 14px; font-size:12.5px; background:var(--paper)}
+  .btn-ink{background:var(--ink); color:#fff; border:0; border-radius:7px; padding:7px 12px; font-size:11.5px; cursor:pointer; font-weight:600}
+  .btn-ghost{background:var(--paper); border:1px solid var(--line); border-radius:7px; padding:7px 12px; font-size:11.5px; cursor:pointer}
+  .btn-crit{background:var(--crit); color:#fff; border:0; border-radius:7px; padding:7px 12px; font-size:11.5px; cursor:pointer; font-weight:600}
+  .sechead{font-size:14px; font-weight:700; margin:0 0 8px; font-family:var(--font-display)}
+  .cov td.ok{color:var(--good); font-weight:700}
+  .specdoc h2{font-size:18px; margin:26px 0 8px}
+  .specdoc h3{font-size:15px; margin:18px 0 6px}
+  .specdoc p, .specdoc li{font-size:13.5px; color:var(--mut)}
+  .specdoc b{color:var(--ink)}
+  .specdoc table{margin:8px 0}
+  .livedot{display:inline-block; width:9px; height:9px; border-radius:50%; background:var(--good); box-shadow:0 0 0 3px color-mix(in srgb, var(--good) 25%, transparent); animation:pulse 1.6s infinite}
+  @keyframes pulse{ 50%{opacity:.45} }
+  .meter{height:7px; border-radius:99px; background:var(--surface); border:1px solid var(--line); overflow:hidden; margin-top:5px}
+  .meter i{display:block; height:100%; background:var(--brand)}
+  .meter i.warn{background:var(--warn)}
+  .transcript{background:var(--surface); border-radius:8px; padding:10px 12px; font-size:12px}
+  .transcript .ai{color:var(--brand-deep)}
+  .transcript .caller{color:var(--ink)}
+  .transcript .esc{color:var(--crit); font-weight:600}
+</style>
+
+<!-- ============ (1) slim header ============ -->
+<div class="bar">
+  <div class="wrap">
+    <div class="ttl">PropertyIQ · Screen 29 — Voice Ops (Wattson) <small>Full-density per-screen mock · wireframe fidelity · dev-facing annotations in gray</small></div>
+    <a href="../wireframe.html">← All screens</a>
+  </div>
+</div>
+
+<!-- ============ (2) THE FULL MOCK ============ -->
+<div class="wrap" style="padding-top:24px">
+  <div class="note"><b>Screen 29 — Voice Ops (Wattson).</b> The 24/7 phone layer's control surface: inbound calls answered by the AI in the agent's cloned voice with live streaming transcripts, an outbound queue that is <b>permanently review-gated</b> (List A #17 — no trust-promotion path), hard escalation to the human in ~10 seconds with the transcript-so-far, and the voice-identity + calling-hours + usage-meter settings. Every call opens with the signed AI disclosure; disclosure tokens render read-only from identity config. Primary user: agent/owner; CRM coordinator = escalation backup only.</div>
+
+  <div class="site" data-agent="watts">
+    <!-- app-wide live-call banner (sticky, BEST GUESS per spec) -->
+    <div id="el-live-banner" style="background:var(--brand-deep); color:#fff; padding:7px 22px; font-size:12px; display:flex; gap:10px; align-items:center">
+      <span class="livedot" style="background:#7fd9a8"></span> <b>Live call in progress — inbound, 2:41</b> <span style="opacity:.75">unknown number · postcard callback</span>
+      <a href="#el-live" style="color:#cfe8da; margin-left:auto; text-decoration:none">Open live card ↓</a>
+      <span class="anno" style="color:#a8c9b8">App-wide sticky banner while any call is live [BEST GUESS] — escalation is time-critical</span>
+    </div>
+
+    <!-- header: avatar, Voice, calling-hours subtitle, live dot, Settings nav (spec Layout) -->
+    <div class="sitehead">
+      <div class="avatar">GW</div>
+      <div class="who"><b>Voice <span class="livedot" title="a call is active"></span></b><small class="num">Calling hours 9 AM–8 PM · after-hours = AI answer + morning summary</small></div>
+      <span id="el-afterhours" class="bdg" style="cursor:pointer" title="click → log filtered to after-hours">🌙 4 after-hours calls overnight → morning brief</span>
+      <nav><a href="#el-settings">⚙ Settings</a></nav>
+    </div>
+    <div class="anno" style="padding:4px 22px 0">Display note (Brain C10): enforced outbound hours are 09:00–20:00 local — the draft's "9–7" subtitle is corrected here to render the actual configured hours. Inbound stays 24/7 (toggle in Settings). After-hours chip = count of overnight AI-answered calls feeding the morning brief; click filters the log.</div>
+
+    <div class="console" style="display:grid; grid-template-columns:172px 1fr">
+      <!-- persistent agent-console left rail (same chrome as Screen 9) -->
+      <div class="rail" style="border-right:1px solid var(--line); padding:14px 10px; font-size:12.5px; display:flex; flex-direction:column; gap:2px; background:var(--surface)">
+        <a href="#" style="text-decoration:none; color:var(--ink); border-radius:8px; padding:8px 10px">☰ Today</a>
+        <a href="#" style="text-decoration:none; color:var(--ink); border-radius:8px; padding:8px 10px">🗺 Farm map</a>
+        <a href="#" style="text-decoration:none; color:var(--ink); border-radius:8px; padding:8px 10px">🤝 Past clients</a>
+        <a href="#" style="text-decoration:none; color:var(--ink); border-radius:8px; padding:8px 10px">👤 Leads & clients</a>
+        <a href="#" style="text-decoration:none; color:var(--ink); border-radius:8px; padding:8px 10px">💬 Comms <span class="bdg" style="font-size:9.5px">6</span></a>
+        <a href="#" style="text-decoration:none; color:#fff; background:var(--ink); border-radius:8px; padding:8px 10px; font-weight:600">📞 Voice <span class="livedot" style="width:7px;height:7px"></span></a>
+        <a href="#" style="text-decoration:none; color:var(--ink); border-radius:8px; padding:8px 10px">📋 Transactions <span class="bdg" style="font-size:9.5px">2</span></a>
+        <a href="#" style="text-decoration:none; color:var(--ink); border-radius:8px; padding:8px 10px">🎬 Content studio</a>
+        <a href="#" style="text-decoration:none; color:var(--ink); border-radius:8px; padding:8px 10px">📣 Ads & funnels</a>
+        <a href="#" style="text-decoration:none; color:var(--ink); border-radius:8px; padding:8px 10px">📈 Reports</a>
+        <div style="margin-top:auto; padding-top:10px; border-top:1px solid var(--line)">
+          <a href="#el-settings" style="text-decoration:none; color:var(--ink); border-radius:8px; padding:8px 10px; display:block">⚙ Settings</a>
+          <div class="anno" style="padding:6px 10px">Global chrome: persistent agent-console rail (Screen 9 pattern). Consumer pages never show it.</div>
+        </div>
+      </div>
+
+      <div class="maingrid" style="display:grid; grid-template-columns:1fr 300px; gap:14px; padding:14px 22px">
+        <!-- ===== main stacked column ===== -->
+        <div style="display:grid; gap:12px; align-content:start">
+
+          <!-- LIVE inbound call card -->
+          <div id="el-live">
+            <div class="cardbox" style="border:1.5px solid var(--good); background:#f2f8f4">
+              <div style="display:flex; gap:8px; align-items:center; flex-wrap:wrap">
+                <span class="livedot"></span><b>LIVE — inbound, unknown number</b>
+                <span id="el-attribution" class="bdg warn" style="cursor:pointer" title="click → source detail">📮 postcard callback — campaign line (650) 555-0182</span>
+                <span class="bdg num">2:41 / 10:00 max</span>
+              </div>
+              <div class="transcript" style="margin-top:8px; font-style:italic">
+                <div class="ai">Wattson: "Hi, this is Wattson, an AI assistant calling on behalf of Graeham Watts, DRE #01466876, Intero Real Estate." <span class="bdg good" style="font-style:normal">disclosure played ✓ logged</span></div>
+                <div class="caller" style="margin-top:4px">Caller: "…yeah I got the card about home values, we're on Poplar, thinking about maybe spring…"</div>
+                <div class="ai" style="margin-top:4px">Wattson: "Happy to help with that. Would a quick chat with Graeham be useful? I can offer Thursday 10 AM or Friday 2 PM." <span class="anno" style="font-style:normal">pre-approved slots only, neutral language — never negotiates price or makes commitments (Never-Autonomous List)</span></div>
+                <div class="anno" style="font-style:normal; margin-top:4px">▍streaming… ElevenLabs Agents webhook → real-time transcript (retention class VOICE_TRANSCRIPT_24M)</div>
+              </div>
+              <div style="display:flex; gap:6px; margin-top:8px; flex-wrap:wrap">
+                <button class="btn-ink">Take over now</button>
+                <button class="btn-ghost">Let AI finish + book</button>
+              </div>
+              <div class="anno" style="margin-top:5px">"Take over now" bridges the agent's phone in — the AI goes silent the moment the human joins. "Let AI finish + book" → AI may offer only pre-approved slots → creates booking_request_task, emits BOOKING_REQUESTED (unless auto-book into pre-approved slots is explicitly enabled). Inbound lead-initiated calls run under the regulated-autonomy exception: approved scripts + disclosure + hard escalation, 24/7. Unknown-number source guess comes from per-campaign phone-number mapping in the attribution ledger [BEST GUESS on mechanism].</div>
+            </div>
+          </div>
+
+          <!-- Escalation protocol card + hard-escalation firewall -->
+          <div id="el-escalation">
+            <div class="sechead">Escalation protocol</div>
+            <div class="cardbox">
+              <b>Triggers → your phone rings within ~10 seconds, transcript-so-far on screen</b>
+              <div style="color:var(--mut); font-size:12px; margin-top:4px">Caller asks for a human · pricing negotiation · distress signals · serious-lead signal. The AI says <i>"I'm going to connect you with Graeham right now. One moment."</i> and goes silent when you join. <b style="color:var(--ink)">Missed escalation:</b> voicemail + immediate SMS to you + SMS to the lead ("Graeham will call back shortly") + GHL task + top of Today queue (Command Center). Routing: owner primary → CRM coordinator backup → voicemail + callback task.</div>
+              <div style="display:flex; gap:6px; margin-top:7px"><button class="btn-ghost">Expand full trigger list ▾</button></div>
+              <div id="el-firewall" style="border-top:1px solid var(--line); margin-top:9px; padding-top:9px; font-size:12px">
+                <b style="color:var(--crit)">Hard-escalation sensitive-topic firewall (read-only — ComplianceProvider config)</b>
+                <div style="display:flex; gap:5px; flex-wrap:wrap; margin-top:6px">
+                  <span class="bdg crit">divorce / separation / legal proceedings</span>
+                  <span class="bdg crit">death / estate / probate</span>
+                  <span class="bdg crit">financial distress / bankruptcy / foreclosure</span>
+                  <span class="bdg crit">explicit human request</span>
+                  <span class="bdg crit">anger signals</span>
+                  <span class="bdg crit">any mention of legal action</span>
+                </div>
+                <div class="anno" style="margin-top:5px">On any of these, the ONLY automated output is human_handoff_required = true — no score change, no field write, no audience inclusion, no automated outreach (Brain C1/B1.8). Voice calls and comment-to-DM flows share this one escalation architecture (Part 14) — one pattern, multiple channels.</div>
+              </div>
+            </div>
+          </div>
+
+          <!-- Escalation alert modal (event mock, framed) -->
+          <div id="el-esc-modal">
+            <div class="sechead">Escalation alert modal <span class="anno" style="font-weight:400">(event, not resident — full-screen takeover; shown here framed for reference)</span></div>
+            <div style="background:var(--ink); border-radius:12px; padding:16px; max-width:480px">
+              <div style="background:var(--paper); border-radius:10px; padding:14px; font-size:12.5px">
+                <div style="display:flex; gap:8px; align-items:center"><span class="livedot" style="background:var(--crit); box-shadow:0 0 0 3px color-mix(in srgb, var(--crit) 25%, transparent)"></span><b style="color:var(--crit)">ESCALATION — caller asked for a human</b><span class="bdg num">ringing you · 0:06</span></div>
+                <div style="margin-top:6px"><b>Maria Delgado</b> <span class="bdg">known contact · buyer lead (Screen 14)</span></div>
+                <div class="transcript" style="margin-top:7px">
+                  <div class="caller">"…we already sold our old place and honestly the timing is stressful —"</div>
+                  <div class="esc">"can I just talk to Graeham directly?"  ← escalation point</div>
+                </div>
+                <div style="display:flex; gap:6px; margin-top:9px"><button class="btn-ink" style="flex:1">📞 Answer</button><button class="btn-ghost" style="flex:1">Send to voicemail</button></div>
+              </div>
+              <div class="anno" style="color:#9b9f9f; margin-top:8px">Context-so-far transcript shown BEFORE pickup (matrix requirement). Answer bridges the live call. On mobile this modal is the primary Voice experience.</div>
+            </div>
+          </div>
+
+          <!-- Outbound queue -->
+          <div id="el-outbound">
+            <div class="sechead">Outbound queue — REVIEW_REQUIRED, always <span class="bdg crit" style="font-weight:400">permanent · no trust-promotion path (List A #17)</span></div>
+            <div style="display:grid; gap:8px">
+              <div class="cardbox" style="display:flex; gap:10px; align-items:center; flex-wrap:wrap">
+                <span>📤</span>
+                <div style="flex:1; min-width:240px"><b>Torres — confirm-consult reminder</b>
+                  <div style="color:var(--mut); font-size:11.5px; margin-top:2px">Draft script: "Hi, this is Wattson, an AI assistant calling on behalf of Graeham Watts… confirming your Thursday 10 AM consult. Reply 1 to confirm…" · <a href="#" style="color:var(--brand)">view full script</a></div>
+                  <div id="el-compliance" style="display:flex; gap:5px; margin-top:5px; flex-wrap:wrap">
+                    <span class="bdg good">DNC clear ✓</span><span class="bdg good">voice consent ✓</span><span class="bdg good">within calling hours ✓</span>
+                  </div>
+                </div>
+                <div style="display:flex; gap:5px"><button class="btn-ink">Approve → dials in hours</button><button class="btn-ghost">Edit script</button><button class="btn-ghost">Reject</button></div>
+              </div>
+              <div class="cardbox" style="display:flex; gap:10px; align-items:center; flex-wrap:wrap">
+                <span>📤</span>
+                <div style="flex:1; min-width:240px"><b>Henderson — rotation call assist</b>
+                  <div style="color:var(--mut); font-size:11.5px; margin-top:2px">AI dials + briefs you, <b style="color:var(--ink)">you talk</b> (human-voice call; the AI never speaks to the client on this one)</div>
+                  <div style="display:flex; gap:5px; margin-top:5px; flex-wrap:wrap"><span class="bdg good">DNC clear ✓</span><span class="bdg good">voice consent ✓</span><span class="bdg good">within calling hours ✓</span></div>
+                </div>
+                <div style="display:flex; gap:5px"><button class="btn-ink">Approve</button><button class="btn-ghost">Edit</button><button class="btn-ghost">Reject</button></div>
+              </div>
+              <div class="cardbox" style="display:flex; gap:10px; align-items:center; flex-wrap:wrap; opacity:.85">
+                <span>⛔</span>
+                <div style="flex:1; min-width:240px"><b>Nakamura — CMA follow-up call</b> <span class="bdg crit">BLOCKED</span>
+                  <div style="display:flex; gap:5px; margin-top:5px; flex-wrap:wrap"><span class="bdg crit">DNC: on registry ✗ (daily scrub, Jul 15)</span><span class="bdg good">consent ✓</span><span class="bdg good">hours ✓</span></div>
+                  <div class="anno" style="margin-top:3px">Exact failing check shown; DNC_BLOCK emitted by the compliance layer. Approve stays disabled until the block clears.</div>
+                </div>
+                <div style="display:flex; gap:5px"><button class="btn-ink" disabled style="opacity:.4; cursor:not-allowed">Approve</button><button class="btn-ghost">Reject</button></div>
+              </div>
+            </div>
+            <div class="anno" style="margin-top:5px">Pre-call compliance chip per row = ComplianceProvider.check_outbound_contact(): dnc_status + voice_consent_status + RegionProfile calling-hour check, run before ANY outbound dial (Brain C9/B6.4). Approved calls dial only inside calling hours. Coordinator approval of queue items: interim NO — approval routes to the owner or an Admin-Console-delegated approver [DECIDE].</div>
+          </div>
+
+          <!-- Inbound call log table -->
+          <div id="el-log">
+            <div class="sechead">Call log — inbound 24/7 answering <span class="anno" style="font-weight:400">(+ outbound completed)</span></div>
+            <div class="cardbox" style="padding:0; overflow:hidden">
+              <div style="display:flex; gap:6px; padding:9px 12px; border-bottom:1px solid var(--line); flex-wrap:wrap; align-items:center">
+                <input placeholder="Search transcripts…" style="border:1px solid var(--line); border-radius:7px; padding:6px 10px; font-size:12px; background:var(--paper); flex:1; min-width:160px">
+                <button class="chip on" style="font-size:10.5px">All</button><button class="chip" style="font-size:10.5px">🌙 After-hours</button><button class="chip" style="font-size:10.5px">Escalated</button><button class="chip" style="font-size:10.5px">Booked</button>
+              </div>
+              <div style="overflow-x:auto">
+              <table class="dtable" style="font-size:11.5px; min-width:640px">
+                <tr><th>Time</th><th>Caller</th><th>Dir</th><th>Dur</th><th>Outcome</th><th>Disclosure</th><th>Transcript</th></tr>
+                <tr><td class="num">Jul 15 · 2:41 AM 🌙</td><td>unknown → matched: R. Alvarez</td><td>in</td><td class="num">4:12</td><td><span class="bdg good">qualified</span></td><td class="num">✓</td><td><a href="#el-transcript" style="color:var(--brand)">view</a></td></tr>
+                <tr><td class="num">Jul 15 · 1:05 AM 🌙</td><td>unknown (postcard line)</td><td>in</td><td class="num">1:38</td><td><span class="bdg">voicemail</span></td><td class="num">✓</td><td><a href="#" style="color:var(--brand)">view</a></td></tr>
+                <tr style="background:var(--brand-soft)"><td class="num">Jul 14 · 6:22 PM</td><td>Maria Delgado</td><td>in</td><td class="num">3:57</td><td><span class="bdg warn">escalated → you answered</span></td><td class="num">✓</td><td><a href="#el-transcript" style="color:var(--brand)">view ▸ open below</a></td></tr>
+                <tr><td class="num">Jul 14 · 3:10 PM</td><td>Torres</td><td>out</td><td class="num">2:04</td><td><span class="bdg good">booked ✓ → Calendar</span></td><td class="num">✓</td><td><a href="#" style="color:var(--brand)">view</a></td></tr>
+                <tr><td class="num">Jul 14 · 11:48 AM</td><td>D. Whitfield</td><td>in</td><td class="num">10:00 ⏱</td><td><span class="bdg">cutoff → callback task</span></td><td class="num">✓</td><td><a href="#" style="color:var(--brand)">view</a></td></tr>
+              </table>
+              </div>
+              <div class="anno" style="padding:7px 12px">Rows from CALL_RECEIVED / CALL_PLACED / CALL_COMPLETED events. disclosure_played logged on every call — omission forbidden (C21/B6.3). Row click → transcript viewer; caller click → contact timeline (Screen 14). Booked outcome → BOOKING_REQUESTED → Calendar confirm queue. 10:00 = the max-call-duration hard cutoff with graceful end.</div>
+            </div>
+          </div>
+
+          <!-- Transcript viewer drawer -->
+          <div id="el-transcript">
+            <div class="sechead">Transcript viewer <span class="anno" style="font-weight:400">(drawer — shown expanded for the Delgado call)</span></div>
+            <div class="cardbox" style="border-left:3px solid var(--brand)">
+              <div style="display:flex; gap:8px; align-items:center; flex-wrap:wrap"><b>Maria Delgado · Jul 14, 6:22 PM · 3:57</b>
+                <button class="btn-ghost">▶ Play audio</button><button class="btn-ghost">Copy</button><button class="btn-ghost">Jump to contact timeline →</button>
+              </div>
+              <div class="transcript" style="margin-top:8px">
+                <div class="ai">Wattson: [disclosure opener — logged ✓]</div>
+                <div class="caller" style="margin-top:3px">Delgado: "We're pre-approved and we loved the Beech open house…"</div>
+                <div class="ai" style="margin-top:3px">Wattson: "Great — I can offer Thursday 10 AM or Friday 2 PM with Graeham."</div>
+                <div class="esc" style="margin-top:3px; border-top:1px dashed var(--crit); padding-top:3px">— ESCALATION POINT 2:31 · trigger: explicit human request — "can I just talk to Graeham directly?"</div>
+                <div class="caller" style="margin-top:3px">[bridged → Graeham joined 2:41 · AI silent]</div>
+              </div>
+              <div class="anno" style="margin-top:5px">Source: Audit Log real-time transcript stream · retention class VOICE_TRANSCRIPT_24M (24 months). Escalation point marked inline. Transcript attaches to the contact timeline.</div>
+            </div>
+          </div>
+
+          <!-- Disclosure footer -->
+          <div id="el-disclosure" class="cardbox" style="background:var(--surface); font-size:11.5px; color:var(--mut)">
+            <b style="color:var(--ink)">🔒 Disclosure (read-only by design)</b> — every call opens with the signed AI disclosure: <i>"Hi, this is Wattson, an AI assistant calling on behalf of [agent_name], [DRE_number], [brokerage_name]."</i> → renders as <i>"…on behalf of Graeham Watts, DRE #01466876, Intero Real Estate."</i>
+            <div class="anno" style="margin-top:4px">Mandatory tokens: agent_name · brokerage_name · DRE_number · region · ai_disclosure_phrase · region_required_language — rendered read-only from identity config (shared-references/identity.json; the identity.json blocklist is enforced repo-wide). The opener is immutable at agent-config level; omission forbidden; logged per call (C21/B6.3). No edit affordance exists on this screen — that is intentional.</div>
+          </div>
+        </div>
+
+        <!-- ===== right rail (desktop ≥1100px) [BEST GUESS layout] ===== -->
+        <div class="voicerail" style="display:grid; gap:10px; align-content:start">
+          <!-- usage meters -->
+          <div id="el-meters" class="cardbox">
+            <b>Usage meters</b> <span class="anno">click any → Settings limits panel</span>
+            <div style="font-size:11.5px; margin-top:7px" class="num">
+              <div>Voice minutes today <b>38 / 120</b> <span class="anno">rate limit 120 min/user/day</span><div class="meter"><i style="width:32%"></i></div></div>
+              <div style="margin-top:8px">Voice API spend today <b>$4.90 / $15.00</b> <span class="anno">budget cap</span><div class="meter"><i style="width:33%"></i></div></div>
+              <div style="margin-top:8px">This month (plan meter) <b>212 min</b> · base covers ~first $30/mo <span class="bdg warn" style="font-size:10px">overage billing TBD</span><div class="meter"><i class="warn" style="width:64%"></i></div></div>
+              <div style="margin-top:8px">Calls per number <b>1 / 2</b> per day · max call duration <b>10:00</b> hard cutoff</div>
+              <div style="margin-top:6px" class="anno">Also enforced platform-wide: api_calls_total 5,000/user/day (Brain Part 13). Overage rate is a List B open item — no invented rates shown [DECIDE].</div>
+            </div>
+          </div>
+
+          <!-- voice identity card -->
+          <div id="el-identity" class="cardbox">
+            <b>Voice identity</b> <span class="bdg good">signed ✓</span>
+            <table class="dtable" style="font-size:11px; margin-top:6px">
+              <tr><td>Clone type</td><td>PVC (Professional Voice Clone)</td></tr>
+              <tr><td>Provider</td><td>ElevenLabs · voice ID <span class="num">Pa3vOYQHHpLJn1Tf7hnP</span></td></tr>
+              <tr><td>Consent signed</td><td class="num">Mar 3, 2026</td></tr>
+              <tr><td>Allowed use</td><td>inbound answer · approved outbound · milestone VO</td></tr>
+              <tr><td>Fallback voice</td><td>Neutral stock voice v2</td></tr>
+            </table>
+            <button class="btn-crit" style="margin-top:8px; width:100%">Revoke voice authorization</button>
+            <div class="anno" style="margin-top:5px">Revoke → confirm modal; revocation is immediately effective — falls back to the fallback voice or disables AI calling (List A #19: no cloned voice without a signed VoiceIdentity). Owner-only action (Stage 1).</div>
+          </div>
+
+          <!-- calling hours summary / settings -->
+          <div id="el-settings" class="cardbox">
+            <b>Calling hours & limits</b> <span class="bdg">owner-only edit</span>
+            <div style="font-size:11.5px; color:var(--mut); margin-top:6px" class="num">
+              Outbound: <b style="color:var(--ink)">09:00–20:00 local</b> (default, per account/region — RegionProfile / AccountSettings override)<br>
+              Inbound 24/7 allowed: <b style="color:var(--ink)">ON</b> ▣<br>
+              Call cutoff: <b style="color:var(--ink)">10 min</b> · calls/number/day: <b style="color:var(--ink)">2</b>
+            </div>
+            <div style="border-top:1px solid var(--line); margin-top:7px; padding-top:7px; font-size:11px; color:var(--mut)">
+              Voice settings (read-only display): stability 0.50 · similarity 0.80 · style 0.00 · speaker_boost true · rate 0.90–0.93
+            </div>
+            <button class="btn-ghost" style="margin-top:7px">Edit in Settings →</button>
+            <div class="anno" style="margin-top:4px">Hours are enforced at the routing layer via ComplianceProvider, not in this UI (C10/B6.2). Edits are REVIEW/owner-only; coordinator role sees log + escalation-backup alerts only [role split BEST GUESS from the routing table].</div>
+          </div>
+
+          <!-- cost tile -->
+          <div id="el-cost" class="cardbox">
+            <b>Your voice cost this month</b>
+            <div class="num" style="font-size:18px; font-weight:700; margin-top:4px">$21.40</div>
+            <div style="font-size:11.5px; color:var(--mut)">vs. human ISA benchmark $15–25/hr — Wattson runs ~$0.05–0.15/min, 24/7</div>
+            <a href="#" style="font-size:11px; color:var(--brand)">Full cost dashboard → Admin Console (if role permits)</a>
+            <div class="anno" style="margin-top:4px">Brain places the full comparison on the Admin Console; this tile shows only the tenant's own spend [BEST GUESS placement].</div>
+          </div>
+        </div>
+      </div>
+
+      <!-- ===== states strip ===== -->
+      <div id="el-states" style="padding:0 22px 14px">
+        <div class="sechead">States (dev reference — compact labeled strip)</div>
+        <div style="display:grid; grid-template-columns:repeat(auto-fit,minmax(220px,1fr)); gap:8px">
+          <div class="cardbox" style="font-size:11.5px"><b>Loading</b><div style="color:var(--mut); margin-top:3px">Transcript stream connecting → skeleton lines: <span style="display:inline-block; width:90px; height:8px; background:var(--surface); border-radius:4px"></span> <span style="display:inline-block; width:60px; height:8px; background:var(--surface); border-radius:4px"></span> "connecting to live transcript…"</div></div>
+          <div id="el-empty" class="cardbox" style="font-size:11.5px"><b>Empty</b><div style="color:var(--mut); margin-top:3px">"No calls yet — your AI answers 24/7 at <b class="num" style="color:var(--ink)">(650) 555-0140</b>. Forward your line or publish this number." <button class="btn-ghost" style="font-size:10px; padding:3px 8px">Copy number</button> · Outbound queue empty → "nothing waiting for review."</div></div>
+          <div class="cardbox" style="font-size:11.5px; border-color:var(--warn)"><b style="color:var(--warn)">Degraded — voice provider down (fail-closed)</b><div style="color:var(--mut); margin-top:3px">Banner: "AI answering unavailable — calls route straight to your phone/voicemail." Outbound approvals disabled — never dial without the disclosure-capable agent.</div></div>
+          <div class="cardbox" style="font-size:11.5px; border-color:var(--warn)"><b style="color:var(--warn)">Degraded — ComplianceProvider unreachable (fail-closed)</b><div style="color:var(--mut); margin-top:3px">ALL outbound blocked with reason shown. Inbound answering may continue (lead-initiated exception) with disclosure from cached tokens [BEST GUESS] — if tokens unavailable, AI answering disables entirely. COMPLIANCE_BLOCKED emitted.</div></div>
+          <div class="cardbox" style="font-size:11.5px; border-color:var(--crit)"><b style="color:var(--crit)">Kill switch active</b><div style="color:var(--mut); margin-top:3px">Red banner across the app · active voice sessions terminated in &lt;5s (Temporal cancel + connector.stop() + policy flag + session termination — SIGSTOP removed) · queue frozen.</div></div>
+          <div class="cardbox" style="font-size:11.5px"><b>Permission-limited</b><div style="color:var(--mut); margin-top:3px">Stage 1: settings + revocation owner-only. Coordinator sees the log + escalation-backup alerts only; can never approve REVIEW_REQUIRED outbound items [DECIDE].</div></div>
+          <div class="cardbox" style="font-size:11.5px"><b>Failure policy</b><div style="color:var(--mut); margin-top:3px">A failed step logs, routes to the right human, and stops — retry max 3, then escalate to the owner; never silent retries around a broken path (Brain Part 13).</div></div>
+        </div>
+      </div>
+
+      <!-- ===== mobile variant strip ===== -->
+      <div id="el-mobile" style="padding:0 22px 18px">
+        <div class="sechead">Mobile variant (375px) — escalation is the primary experience</div>
+        <div style="display:flex; gap:10px; overflow-x:auto">
+          <div style="min-width:150px; border:1px solid var(--line); border-radius:14px; padding:8px; background:var(--surface); font-size:9.5px">
+            <div style="background:var(--paper); border-radius:9px; padding:7px; border:1.5px solid var(--good)"><span class="livedot" style="width:6px;height:6px"></span> <b>LIVE 2:41</b><div style="color:var(--mut); font-style:italic; margin-top:2px">"…got the card about home values…"</div><div style="display:flex; gap:3px; margin-top:4px"><span class="btn-ink" style="padding:3px 6px; font-size:8.5px">Take over</span><span class="btn-ghost" style="padding:3px 6px; font-size:8.5px">AI books</span></div></div>
+            <div class="anno" style="margin-top:4px">LIVE card first + sticky</div>
+          </div>
+          <div style="min-width:150px; border:1px solid var(--line); border-radius:14px; padding:8px; background:var(--ink); font-size:9.5px">
+            <div style="background:var(--paper); border-radius:9px; padding:7px"><b style="color:var(--crit)">ESCALATION</b><div style="color:var(--mut); margin-top:2px">Delgado · "talk to Graeham directly?"</div><div style="display:flex; gap:3px; margin-top:4px"><span class="btn-ink" style="padding:3px 6px; font-size:8.5px">Answer</span><span class="btn-ghost" style="padding:3px 6px; font-size:8.5px">Voicemail</span></div></div>
+            <div class="anno" style="color:#9b9f9f; margin-top:4px">Full-screen takeover — this is a phone moment</div>
+          </div>
+          <div style="min-width:150px; border:1px solid var(--line); border-radius:14px; padding:8px; background:var(--surface); font-size:9.5px">
+            <div style="background:var(--paper); border-radius:9px; padding:7px"><b>Log → cards</b><div style="color:var(--mut); margin-top:2px">2:41 AM 🌙 Alvarez · qualified ✓<br>6:22 PM Delgado · escalated</div></div>
+            <div class="anno" style="margin-top:4px">Table becomes a card list; read-mostly</div>
+          </div>
+          <div style="min-width:150px; border:1px solid var(--line); border-radius:14px; padding:8px; background:var(--surface); font-size:9.5px">
+            <div style="background:var(--paper); border-radius:9px; padding:7px"><b>Meters strip</b><div class="num" style="color:var(--mut); margin-top:2px">38/120 min · $4.90/$15 · 1/2 calls</div><div class="meter"><i style="width:32%"></i></div></div>
+            <div class="anno" style="margin-top:4px">Meters collapse to one strip</div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ============ Spec gaps found ============ -->
+  <div class="note" style="margin-top:26px"><b>Spec gaps found (Wattson Master Brain items the spec missed or under-specified — rendered above):</b>
+    (1) Missed escalation also sends an <b>SMS to the lead</b> ("[agent_name] will call back shortly") — Part 14 step 7; spec only listed voicemail + owner SMS + task. Rendered in the escalation protocol card.
+    (2) <b>Cross-channel escalation parity</b>: voice and comment-to-DM flows share ONE escalation architecture (Part 14) — annotated on the firewall card.
+    (3) <b>Failure policy</b>: retry max 3 → escalate to owner, never silent retries around a broken path (Part 13) — added as a states-strip card.
+    (4) Kill-switch mechanics: stop = Temporal cancel/pause + connector.stop() + emergency policy flag + active voice-session termination; <b>SIGSTOP removed everywhere</b> (C14/B7.4) — noted on the kill-switch state.
+    (5) Platform meter <b>api_calls_total 5,000/user/day</b> exists alongside the voice meters (Part 13) — noted in the meters card.
+  </div>
+
+  <!-- ============ (3) ELEMENT COVERAGE ============ -->
+  <h2 style="font-size:20px; margin:24px 0 10px">Element coverage — spec inventory → this page</h2>
+  <table class="dtable cov" style="font-size:12.5px">
+    <tr><th>Spec inventory element</th><th>Rendered at</th><th>Status</th></tr>
+    <tr><td>LIVE inbound call card (streaming transcript, Take over / Let AI finish + book)</td><td><a href="#el-live">LIVE card</a></td><td class="ok">✓</td></tr>
+    <tr><td>Caller attribution chip (postcard callback, campaign-number mapping)</td><td><a href="#el-attribution">chip on LIVE card</a></td><td class="ok">✓</td></tr>
+    <tr><td>Escalation protocol card (triggers, ~10s ring, missed → voicemail/SMS/task/Today queue)</td><td><a href="#el-escalation">Escalation protocol</a></td><td class="ok">✓</td></tr>
+    <tr><td>Escalation alert modal (context-so-far before pickup, Answer / voicemail)</td><td><a href="#el-esc-modal">framed modal mock</a></td><td class="ok">✓</td></tr>
+    <tr><td>Hard-escalation trigger display (sensitive-topic firewall, handoff-only output)</td><td><a href="#el-firewall">firewall list</a></td><td class="ok">✓</td></tr>
+    <tr><td>Outbound queue card (REVIEW_REQUIRED permanent, approve/edit/reject)</td><td><a href="#el-outbound">Outbound queue</a></td><td class="ok">✓</td></tr>
+    <tr><td>Pre-call compliance chip (DNC / consent / hours; blocked rows show failing check)</td><td><a href="#el-compliance">per-row chips + blocked row</a></td><td class="ok">✓</td></tr>
+    <tr><td>Inbound call log table (24/7 log, disclosure-played ✓, search, after-hours filter)</td><td><a href="#el-log">Call log</a></td><td class="ok">✓</td></tr>
+    <tr><td>Transcript viewer drawer (escalation point marked, audio, jump to timeline)</td><td><a href="#el-transcript">Transcript viewer</a></td><td class="ok">✓</td></tr>
+    <tr><td>Usage meters (120 min/day, $15/day cap, monthly meter, 2 calls/number, 10-min cutoff)</td><td><a href="#el-meters">right-rail meters</a></td><td class="ok">✓</td></tr>
+    <tr><td>Voice identity card (PVC, ElevenLabs voice ID, consent, fallback, Revoke)</td><td><a href="#el-identity">Voice identity</a></td><td class="ok">✓</td></tr>
+    <tr><td>Calling-hours settings (09:00–20:00 default, inbound 24/7 toggle, cutoffs, owner-only)</td><td><a href="#el-settings">Calling hours & limits</a></td><td class="ok">✓</td></tr>
+    <tr><td>Disclosure footer (token-rendered opener, read-only, omission forbidden)</td><td><a href="#el-disclosure">Disclosure footer</a></td><td class="ok">✓</td></tr>
+    <tr><td>After-hours summary chip (overnight count → morning brief, click → filtered log)</td><td><a href="#el-afterhours">header chip</a></td><td class="ok">✓</td></tr>
+    <tr><td>Cost comparison tile (tenant's own spend; full comparison lives on Admin Console)</td><td><a href="#el-cost">Cost tile</a></td><td class="ok">✓</td></tr>
+    <tr><td>Empty state (no calls yet — number + copy action; empty outbound queue)</td><td><a href="#el-empty">states strip</a></td><td class="ok">✓</td></tr>
+  </table>
+  <div style="border:1.5px solid var(--good); background:#f2f8f4; border-radius:10px; padding:12px 16px; margin:12px 0 0; font-weight:700; color:var(--good)">16 of 16 spec elements rendered ✓ <span style="font-weight:400; color:var(--mut); font-size:12.5px">— plus prompt-required regions beyond the inventory: app-wide live-call sticky banner, full states strip (loading / empty / two degraded modes / kill switch / permission-limited / failure policy), mobile variant strip, and the 5 Master-Brain additions listed above.</span></div>
+
+  <!-- ============ (4) FULL SPEC AS HTML ============ -->
+  <div class="specdoc">
+    <h1 style="font-size:24px; margin:40px 0 6px">Spec — 29 · Voice Ops (Wattson)</h1>
+    <p><b>Purpose</b> The 24/7 phone layer's control surface: inbound calls answered by the AI in the agent's cloned voice with live streaming transcripts, an outbound queue that is permanently review-gated, hard escalation to the human in ~10 seconds with the transcript-so-far, and the voice-identity + calling-hours + usage-meter settings. (Wattson Master Brain Part 7 + Part 13 + Part 14.)</p>
+    <p><b>Primary users</b> Agent/owner (primary); CRM coordinator as escalation backup (Wattson routing table: voice_escalation → owner primary, coordinator backup). Solo mode: everything routes to the owner.</p>
+    <p><b>Entry points</b> Left nav "Voice"; escalation push notification / full-screen alert (phone rings within ~10s); morning-brief "after-hours calls" summary links; contact timeline call entries; Prospecting/Past-Client screens' call actions.</p>
+    <p><b>Exit points</b> "Take over now" → live call joins on the agent's phone; transcript row → contact detail timeline; booking created → Calendar screen (BOOKING_REQUESTED → confirm queue); Settings link → calling hours/voice identity panels; missed escalation → voicemail + top of Today queue (Command Center).</p>
+
+    <h2>Layout</h2>
+    <p><b>Header:</b> avatar chip, "Voice", subtitle "Calling hours 9–7 · after-hours = AI answer + morning summary" (display note: enforced hours are 09:00–20:00 local per Brain C10; render actual configured hours), nav: Settings. Live-call indicator dot when any call is active. <b>Main (desktop, single column of stacked cards per draft):</b> (1) LIVE call card (green-bordered, top) when a call is in progress; (2) Escalation protocol card; (3) Outbound queue card; (4) inbound call log table (added below the draft's cards — the matrix requires an "inbound 24/7 answering log"); (5) footer disclosure note. <b>Right rail (desktop, ≥1100px) [BEST GUESS]:</b> usage meters (voice minutes vs cap, calls-per-number), voice-identity status card, calling-hours summary. <b>Mobile (375px):</b> LIVE card first and sticky; escalation alerts take over the full screen (primarily a phone moment); log becomes a card list; meters collapse into a single strip. <b>Sticky:</b> live-call banner persists across the whole app while a call is live [BEST GUESS], since escalation is time-critical.</p>
+
+    <h2>Element inventory</h2>
+    <div style="overflow-x:auto">
+    <table class="dtable">
+      <tr><th>Element</th><th>What it shows/does</th><th>Data source</th><th>Interactions</th><th>Spec source</th></tr>
+      <tr><td>LIVE inbound call card</td><td>"● LIVE — inbound, unknown number (postcard callback)" + streaming transcript excerpt in italics</td><td>ElevenLabs Agents webhook → real-time transcript stream (retention class VOICE_TRANSCRIPT_24M)</td><td><b>Take over now</b> (agent's phone bridges in; AI goes silent the moment the human joins); <b>Let AI finish + book</b> (AI may offer only pre-approved slots in neutral language → creates booking_request_task, emits BOOKING_REQUESTED, unless auto-book into pre-approved slots explicitly enabled)</td><td>Wattson Brain Part 7; draft s29</td></tr>
+      <tr><td>Caller attribution chip</td><td>Source guess for unknown numbers (e.g. "postcard callback") from campaign phone-number mapping</td><td>attribution/ledger</td><td>click → source detail</td><td>draft s29; [BEST GUESS on mechanism]</td></tr>
+      <tr><td>Escalation protocol card</td><td>Trigger list + behavior summary: caller asks for a human, pricing negotiation, distress signals → phone rings within ~10s with transcript-so-far on screen; missed → voicemail + immediate SMS + GHL task + top of Today queue</td><td>EscalationTrigger config (read-only display)</td><td>expand to full trigger list</td><td>Wattson Brain Part 7 + Part 14; draft s29</td></tr>
+      <tr><td>Escalation alert modal (event, not resident)</td><td>Full-screen: caller, context-so-far transcript, Answer / Send to voicemail</td><td>live call session</td><td>answer bridges call</td><td>matrix: "escalation alert modal shows context-so-far before pickup"</td></tr>
+      <tr><td>Hard-escalation trigger display</td><td>The sensitive-topic firewall list: divorce/separation/legal proceedings; death/estate/probate; financial distress/bankruptcy/foreclosure; explicit human request; anger signals; any mention of legal action. On these the ONLY automated output is human_handoff_required=true — no score change, no field write, no audience inclusion, no automated outreach</td><td>ComplianceProvider / firewall config (read-only)</td><td>none</td><td>Wattson Brain C1/B1.8</td></tr>
+      <tr><td>Outbound queue card</td><td>REVIEW_REQUIRED queue — always; permanent, no trust-promotion path for outbound client-facing AI calls (List A #17). Rows: purpose + contact + draft script ("Torres confirm-consult reminder", "Henderson rotation call assist — AI dials + briefs you, you talk")</td><td>Wattson task queue</td><td>Approve (dials within calling hours), Edit script, Reject; per-row DNC/consent pre-check result shown BEFORE approve enables</td><td>Wattson Brain Part 7; draft s29</td></tr>
+      <tr><td>Pre-call compliance chip (per outbound row)</td><td>Result of ComplianceProvider.check_outbound_contact(): dnc_status, voice_consent_status, calling-hour check (daily DNC scrub)</td><td>ComplianceProvider</td><td>blocked rows show the exact failing check; approve disabled</td><td>Wattson Brain C9/B6.4</td></tr>
+      <tr><td>Inbound call log table</td><td>All calls: time, caller, direction, duration, outcome (qualified/booked/escalated/voicemail), transcript link, disclosure-played ✓ (logged on every CALL_PLACED/CALL_RECEIVED)</td><td>CALL_RECEIVED/CALL_PLACED/CALL_COMPLETED events + transcripts</td><td>row → transcript viewer; search transcripts; filter after-hours</td><td>Wattson Brain Part 7 events; matrix "inbound 24/7 answering log"</td></tr>
+      <tr><td>Transcript viewer (drawer)</td><td>Full transcript with escalation point marked; audio playback</td><td>Audit Log transcript stream, VOICE_TRANSCRIPT_24M</td><td>play, copy, jump-to contact timeline</td><td>Wattson Brain Part 7</td></tr>
+      <tr><td>Usage meters</td><td>voice minutes vs cap (Stage 1 defaults: 120 min/user/day rate limit; voice_api_spend $15/user/day budget cap; draft shows monthly "12/60 min this month" — render both daily caps and the plan's monthly meter), calls-per-number 2/day, max call duration 10 min hard cutoff</td><td>rate-limit/budget policy + usage counters</td><td>click → Settings limits panel</td><td>Wattson Brain Part 13; draft s29</td></tr>
+      <tr><td>Voice identity card</td><td>Signed VoiceIdentity status: clone type PVC, provider ElevenLabs (voice ID shown), consent signed date, allowed use, fallback voice, <b>Revoke</b> action</td><td>VoiceIdentity record</td><td>Revoke (confirm modal; falls back to fallback voice / disables AI calling)</td><td>Wattson Brain Part 7, List A #19; matrix "voice-identity signing/revocation"</td></tr>
+      <tr><td>Calling-hours settings (via Settings)</td><td>outbound 09:00–20:00 local default, configurable per account/region (RegionProfile/AccountSettings override); inbound 24/7 allowed toggle; call-cutoff settings</td><td>ComplianceProvider-enforced config</td><td>edit (REVIEW: owner-only)</td><td>Wattson Brain C10/B6.2</td></tr>
+      <tr><td>Disclosure footer</td><td>"Every call opens with the signed AI disclosure ('Hi, this is Wattson, an AI assistant calling on behalf of [agent_name], [DRE_number], [brokerage_name].') — tokens rendered read-only from identity config; omission forbidden"</td><td>mandatory tokens: agent_name, brokerage_name, DRE_number, region, ai_disclosure_phrase, region_required_language</td><td>none — read-only by design</td><td>Wattson Brain C21/B6.3; draft s29</td></tr>
+      <tr><td>After-hours summary chip</td><td>Count of overnight AI-answered calls feeding the morning brief</td><td>call log</td><td>click → filtered log</td><td>draft s29 header</td></tr>
+      <tr><td>Cost comparison tile [BEST GUESS placement]</td><td>"Human ISA $15–25/hr vs Wattson ~$0.05–0.15/min 24/7" — Brain says this lives on the Admin Console; here show only the tenant's own voice cost this month</td><td>Admin cost dashboard</td><td>link to Admin (if role permits)</td><td>Wattson Brain Part 7/12</td></tr>
+      <tr><td>Empty state</td><td>"No calls yet — your AI answers 24/7 at [number]. Forward your line or publish this number."</td><td>—</td><td>copy number</td><td>[BEST GUESS]</td></tr>
+    </table>
+    </div>
+
+    <h2>States</h2>
+    <ul>
+      <li><b>Default:</b> no live call → log + queue; live call → LIVE card pinned.</li>
+      <li><b>Loading:</b> transcript stream connecting → skeleton lines with "connecting to live transcript…".</li>
+      <li><b>Empty:</b> see empty-state row; outbound queue empty → "nothing waiting for review."</li>
+      <li><b>Error/degraded (fail-closed):</b> ElevenLabs/VoiceAgentProvider down → banner "AI answering unavailable — calls route straight to your phone/voicemail," outbound approvals disabled (never dial without the disclosure-capable agent); ComplianceProvider unreachable → ALL outbound blocked with reason (fail closed), inbound answering may continue [BEST GUESS: inbound is lead-initiated exception but disclosure still renders from cached tokens — if tokens unavailable, disable AI answering entirely].</li>
+      <li><b>Kill switch active:</b> red banner; active voice sessions terminated (&lt;5s), queue frozen (Wattson Brain Part 13).</li>
+      <li><b>Permission-limited:</b> Stage 1 owner-only for settings/revocation; coordinator sees log + escalation backup alerts only [role split BEST GUESS from routing table].</li>
+      <li><b>Mobile:</b> escalation modal is the primary experience; everything else read-mostly.</li>
+    </ul>
+
+    <h2>Data fields</h2>
+    <p>Caller number/contact_id, direction, started/ended, duration (≤10 min hard cutoff), outcome enum, disclosure_played (bool, logged), transcript (VOICE_TRANSCRIPT_24M retention), escalation trigger type + timestamp, booking_request payload, dnc_status, voice_consent_status, VoiceIdentity {consent, allowed_use, provider_voice_id (pilot Pa3vOYQHHpLJn1Tf7hnP), revocation_path, fallback_voice}, voice settings (stability 0.50, similarity 0.80, style 0.00, speaker_boost true, rate 0.90–0.93 — read-only display in Settings), meters (email 200/d, sms 100/d context; voice 120 min/d; calls/number 2/d).</p>
+
+    <h2>Rules & compliance</h2>
+    <ul>
+      <li>Disclosure opener immutable at agent-config level; never omitted; logged per call.</li>
+      <li>Outbound client-facing AI calls: StepPermissionMode = REVIEW_REQUIRED, <b>permanent</b> (List A #17). Inbound lead-initiated: regulated-autonomy exception — approved scripts, disclosure, hard escalation, 24/7.</li>
+      <li>DNC + consent + calling-hours check before ANY outbound dial; blocks emit DNC_BLOCK / COMPLIANCE_BLOCKED.</li>
+      <li>Sensitive-topic firewall: hard escalation only; no other automated output.</li>
+      <li>Voice agent must never negotiate price or make commitments (Never-Autonomous List); may offer pre-approved slots only.</li>
+      <li>No cloned voice without signed VoiceIdentity; revocation immediately effective.</li>
+      <li>Calling hours enforced at the routing layer via ComplianceProvider, not in the UI.</li>
+    </ul>
+
+    <h2>Cross-links</h2>
+    <p><b>In:</b> Command Center Today queue, escalation push, contact timeline, Prospecting drafted call scripts, Past Client OS call assist. <b>Out:</b> contact detail (transcripts attach to timeline), Calendar (BOOKING_REQUESTED → BOOKING_CONFIRMED via PropFlow), Settings (hours/limits), Admin Console (cost, kill switch). <b>Events emitted/consumed:</b> CALL_PLACED, CALL_RECEIVED, CALL_COMPLETED (transcript_retention_class), BOOKING_REQUESTED; consumes DNC_BLOCK / COMPLIANCE_BLOCKED from the compliance layer; escalations create GHL/PropFlow tasks + SMS notifications.</p>
+
+    <h2>Open decisions</h2>
+    <ul>
+      <li>[DECIDE] Voicemail drop content for missed escalations (AI-voiced vs pre-recorded human) — interim: pre-recorded human greeting, since AI voicemail content is client-facing REVIEW territory.</li>
+      <li>[DECIDE] Whether coordinators can approve outbound queue items — interim NO: a team member's instance can never approve REVIEW_REQUIRED output; approval routes to the owner or an Admin-Console-delegated approver.</li>
+      <li>[DECIDE] Monthly voice metering/overage display (Brain: base covers ~first $30/mo of voice, overage cost+20% is a List B open item) — interim: show the meter and "overage billing TBD" label, no invented rates.</li>
+      <li>[BEST GUESS] Live-call banner persistence app-wide; right-rail layout; caller-source attribution via per-campaign phone numbers.</li>
+    </ul>
+    <p class="anno" style="margin-top:20px">Wireframe fidelity — colors are placeholders from the locked PropFlow design language. All caller names/numbers are realistic fake data. Agent identity: Graeham Watts, Intero Real Estate, DRE# 01466876 (from shared-references/identity.json — never hardcode elsewhere; the identity.json blocklist is enforced).</p>
+  </div>
+</div>

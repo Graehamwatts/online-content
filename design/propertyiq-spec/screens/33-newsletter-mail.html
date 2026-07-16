@@ -1,0 +1,559 @@
+<title>PropertyIQ · Screen 33 — Newsletter & Mail</title>
+<link href="https://api.fontshare.com/v2/css?f[]=technor@500,600,700&display=swap" rel="stylesheet">
+<link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<style>
+  /* Type system — Technor for display, Inter for UI. */
+  :root{ --font-display:'Technor', Inter, -apple-system, 'Segoe UI', sans-serif; --font-ui: Inter, -apple-system, 'Segoe UI', Roboto, sans-serif; }
+</style>
+<style>
+  /* Palette v4 — PropFlow design language: neutral ink UI, ink-as-accent, color reserved for data. (extracted verbatim from propsearch-design-draft.html) */
+  :root, :root[data-theme="dark"], :root[data-theme="light"]{
+    --ink:#23282f; --paper:#fbfaf8; --surface:#f1efe9; --line:#e2dfd6;
+    --mut:#6b7076; --soft:#9b9f9f;
+    --brand:#2e6b53; --brand-ink:#ffffff; --brand-soft:#eaf1ec; --brand-deep:#1e4c3a;
+    --signal:#b07a2e;
+    --good:#2e7d4f; --warn:#a8630a; --crit:#b3372f;
+    --r:10px;
+  }
+  .intel .score, .mintel{ color:var(--brand-deep) }
+  .intel{ border-left:3px solid var(--brand) }
+  h1{ letter-spacing:-.02em }
+  .stat b{ letter-spacing:-.01em }
+  body[data-agent="watts"]{ --brand:#2e6b53; --brand-soft:#eaf1ec; --brand-deep:#1e4c3a; }
+
+  *{box-sizing:border-box; margin:0}
+  body{font:15px/1.55 var(--font-ui); color:var(--ink); background:var(--paper); padding-bottom:80px}
+  h1,h2,h3{line-height:1.15; text-wrap:balance; font-family:var(--font-display); font-weight:600}
+  h1{letter-spacing:-.01em}
+  .site{box-shadow:0 1px 2px rgba(20,24,32,.04), 0 8px 32px rgba(20,24,32,.06)}
+  .stat{box-shadow:0 1px 2px rgba(20,24,32,.03); transition:box-shadow .15s, transform .15s}
+  .stat:hover{box-shadow:0 4px 14px rgba(20,24,32,.08)}
+  .chip{transition:all .12s}
+  button{font-family:var(--font-ui)}
+  .num{font-variant-numeric:tabular-nums}
+  .wrap{max-width:1180px; margin:0 auto; padding:0 20px}
+
+  .bar{position:sticky; top:0; z-index:50; background:var(--paper); border-bottom:1px solid var(--line); padding:10px 0; backdrop-filter:blur(8px)}
+  .bar .wrap{display:flex; flex-wrap:wrap; gap:10px; align-items:center}
+  .bar .ttl{font-weight:700; margin-right:auto}
+  .bar .ttl small{display:block; font-weight:400; color:var(--mut)}
+  .bar a{color:var(--brand); font-size:13px; text-decoration:none}
+
+  .note{background:var(--surface); border:1px solid var(--line); border-radius:var(--r); padding:14px 16px; margin:0 0 22px; font-size:13.5px; color:var(--mut)}
+  .note b{color:var(--ink)}
+
+  .site{border:1px solid var(--line); border-radius:14px; overflow:hidden; background:var(--paper)}
+  .sitehead{display:flex; align-items:center; gap:14px; padding:14px 22px; border-bottom:1px solid var(--line)}
+  .avatar{width:38px; height:38px; border-radius:50%; background:var(--brand); color:var(--brand-ink); display:grid; place-items:center; font-weight:700}
+  .sitehead .who b{display:block}
+  .sitehead .who small{color:var(--mut)}
+  .sitehead nav{margin-left:auto; display:flex; gap:18px; font-size:13.5px; color:var(--mut)}
+  .sitehead nav a{color:inherit; text-decoration:none}
+  .sitehead nav a:hover{color:var(--brand)}
+
+  .chip{display:inline-flex; align-items:center; gap:6px; font-size:12.5px; font-weight:500; border:1px solid var(--line); border-radius:99px; padding:6px 12px; background:var(--paper); cursor:pointer; color:var(--ink)}
+  .chip:hover{border-color:var(--brand)}
+  .chip.on{background:var(--brand); border-color:var(--brand); color:var(--brand-ink); font-weight:600; box-shadow:0 2px 8px color-mix(in srgb, var(--brand) 30%, transparent)}
+
+  .statrow{display:grid; grid-template-columns:repeat(4,1fr); gap:10px}
+  .stat{background:var(--surface); border:1px solid var(--line); border-radius:var(--r); padding:12px}
+  .stat small{display:block; color:var(--mut); font-size:11.5px; text-transform:uppercase; letter-spacing:.05em}
+  .stat b{font-size:18px}
+  .stat .up{color:var(--good); font-size:12px}
+
+  .bdg{font-size:11.5px; border-radius:6px; padding:3px 8px; background:var(--surface); border:1px solid var(--line); color:var(--mut)}
+  .bdg.good{color:var(--good); border-color:color-mix(in srgb,var(--good) 30%,var(--line))}
+  .bdg.warn{color:var(--warn); border-color:color-mix(in srgb,var(--warn) 30%,var(--line))}
+
+  .dtable{width:100%; border-collapse:collapse; font-size:13px}
+  .dtable td,.dtable th{border-bottom:1px solid var(--line); padding:8px 10px; text-align:left}
+  .dtable th{font-size:11px; text-transform:uppercase; letter-spacing:.05em; color:var(--soft)}
+
+  @media (max-width:860px){ .statrow{grid-template-columns:repeat(2,1fr)} .maingrid{grid-template-columns:1fr !important} .console{grid-template-columns:1fr !important} .rail{display:none !important} }
+  @media (prefers-reduced-motion: reduce){ *{transition:none!important} }
+
+  /* ---- page-specific additions (kept in the same design language) ---- */
+  .anno{font-size:11px; color:var(--soft)}
+  .cardbox{border:1px solid var(--line); border-radius:10px; padding:11px 14px; font-size:12.5px; background:var(--paper)}
+  .btn-ink{background:var(--ink); color:#fff; border:0; border-radius:7px; padding:7px 12px; font-size:11.5px; cursor:pointer; font-weight:600}
+  .btn-ghost{background:var(--paper); border:1px solid var(--line); border-radius:7px; padding:7px 12px; font-size:11.5px; cursor:pointer}
+  .sechead{font-size:14px; font-weight:700; margin:0 0 8px; font-family:var(--font-display)}
+  .cov td.ok{color:var(--good); font-weight:700}
+  .specdoc h2{font-size:18px; margin:26px 0 8px}
+  .specdoc h3{font-size:15px; margin:18px 0 6px}
+  .specdoc p, .specdoc li{font-size:13.5px; color:var(--mut)}
+  .specdoc b{color:var(--ink)}
+  .specdoc table{margin:8px 0}
+  /* newsletter preview letter */
+  .nlbody{background:#fff; border:1px solid var(--line); border-radius:8px; padding:12px; font-size:11.5px}
+  .nlsec{border:1px dashed var(--line); border-radius:6px; padding:8px 10px; margin-top:6px; position:relative; cursor:pointer}
+  .nlsec:hover{border-color:var(--brand)}
+  .nlsec .tag{position:absolute; top:-8px; right:8px; font-size:9px; background:var(--surface); border:1px solid var(--line); border-radius:5px; padding:1px 6px; color:var(--soft); text-transform:uppercase; letter-spacing:.04em}
+  /* postcard */
+  .pcard{border:1px solid var(--line); border-radius:8px; overflow:hidden; background:#fff; cursor:pointer; position:relative}
+  .pcard:hover{border-color:var(--brand)}
+  .pcard.picked{border:2px solid var(--brand); box-shadow:0 2px 10px color-mix(in srgb,var(--brand) 25%, transparent)}
+  .pchead{background:#141414; color:#e8c258; padding:10px 10px 8px; font-family:var(--font-display); font-size:12px; line-height:1.25; min-height:58px}
+  .pcbody{padding:8px 10px; font-size:10.5px; color:var(--mut)}
+  .pcqr{width:26px; height:26px; background:
+    repeating-linear-gradient(0deg,#141414,#141414 2px,#fff 2px,#fff 4px),
+    repeating-linear-gradient(90deg,#141414,#141414 2px,#fff 2px,#fff 4px);
+    background-blend-mode:multiply; border:2px solid #141414; float:right; margin-left:6px}
+  .contactstrip{background:#141414; color:#fff; font-size:9px; padding:6px 10px; display:flex; gap:8px; align-items:center}
+  .contactstrip .gold{color:#e8c258; font-weight:700}
+  /* mail calendar */
+  .mailcal{display:grid; grid-template-columns:repeat(8,1fr); gap:6px}
+  .mdrop{border:1px solid var(--line); border-radius:8px; padding:7px 8px; font-size:10.5px; background:var(--paper); cursor:pointer}
+  .mdrop b{display:block; font-size:11px}
+  .mdrop:hover{border-color:var(--brand)}
+  .mdrop.ship{background:var(--brand-soft); border-color:color-mix(in srgb,var(--brand) 35%, var(--line))}
+  .mdrop.rem{background:var(--surface)}
+</style>
+
+<!-- ============ (1) slim header ============ -->
+<div class="bar">
+  <div class="wrap">
+    <div class="ttl">PropertyIQ · Screen 33 — Newsletter & Mail <small>Full-density per-screen mock · wireframe fidelity · dev-facing annotations in gray</small></div>
+    <a href="../wireframe.html">← All screens</a>
+  </div>
+</div>
+
+<!-- ============ (2) THE FULL MOCK ============ -->
+<div class="wrap" style="padding-top:24px">
+  <div class="note"><b>Screen 33 — Newsletter Builder + Direct Mail.</b> The two recurring paper/inbox machines on one screen: (1) the per-segment personalized newsletter builder — 3-layer/two-axis personalization, section editor, per-segment preview switching, approval gate into the Outbox; (2) the direct-mail postcard composer — monthly farming postcards with the option-picker queue, mail calendar, one-card-one-goal-one-QR rule, locked contact block, print-spec output. Primary users: agent/owner (approves); content team edits sections role-scoped [BEST GUESS]. Recipients (CRM segments, farm mail list) are referenced here, never edited. Nothing mails or emails directly from this screen — everything exits via the Outbox (review-first).</div>
+
+  <div class="site" data-agent="watts">
+    <!-- header per spec Layout: avatar chip, title, next deadlines, Archive nav -->
+    <div class="sitehead">
+      <div class="avatar">GW</div>
+      <div class="who"><b>Newsletter &amp; mail</b><small class="num">Farm letter Thu · postcard drop Aug 1</small></div>
+      <nav><a href="#el-archive">Archive</a><a href="#">Search (⌘K)</a><a href="#">🔔 2</a></nav>
+    </div>
+
+    <div class="console" style="display:grid; grid-template-columns:172px 1fr">
+      <!-- persistent agent-console left rail (Screen 9 chrome) -->
+      <div class="rail" style="border-right:1px solid var(--line); padding:14px 10px; font-size:12.5px; display:flex; flex-direction:column; gap:2px; background:var(--surface)">
+        <a href="#" style="text-decoration:none; color:var(--ink); border-radius:8px; padding:8px 10px">☰ Today</a>
+        <a href="#" style="text-decoration:none; color:var(--ink); border-radius:8px; padding:8px 10px">🗺 Farm map</a>
+        <a href="#" style="text-decoration:none; color:var(--ink); border-radius:8px; padding:8px 10px">🤝 Past clients</a>
+        <a href="#" style="text-decoration:none; color:var(--ink); border-radius:8px; padding:8px 10px">👤 Leads &amp; clients</a>
+        <a href="#" style="text-decoration:none; color:var(--ink); border-radius:8px; padding:8px 10px">💬 Comms <span class="bdg" style="font-size:9.5px">6</span></a>
+        <a href="#" style="text-decoration:none; color:var(--ink); border-radius:8px; padding:8px 10px">📋 Transactions</a>
+        <a href="#" style="text-decoration:none; color:var(--ink); border-radius:8px; padding:8px 10px">🎬 Content studio</a>
+        <a href="#" style="text-decoration:none; color:#fff; background:var(--ink); border-radius:8px; padding:8px 10px; font-weight:600">📰 Newsletter &amp; mail</a>
+        <a href="#" style="text-decoration:none; color:var(--ink); border-radius:8px; padding:8px 10px">📣 Ads &amp; funnels</a>
+        <a href="#" style="text-decoration:none; color:var(--ink); border-radius:8px; padding:8px 10px">⚙ Playbooks</a>
+        <a href="#" style="text-decoration:none; color:var(--ink); border-radius:8px; padding:8px 10px">📈 Reports</a>
+        <div style="margin-top:auto; padding-top:10px; border-top:1px solid var(--line)">
+          <a href="#" style="text-decoration:none; color:var(--ink); border-radius:8px; padding:8px 10px; display:block">⚙ Settings</a>
+          <div class="anno" style="padding:6px 10px">Global chrome: persistent agent-console rail (Screen 9 pattern). Consumer pages never show it. Entry points: this rail · Command Center briefing card ("farm letter due Thu") · option-picker reminder email (8th/24th, server-side) · Past Client OS cadence rows · Outbox items link back here for edits.</div>
+        </div>
+      </div>
+
+      <div>
+        <!-- option-picker queue banner -->
+        <div id="el-picker-queue" style="padding:14px 22px 0">
+          <div class="cardbox" style="border-color:var(--signal); background:#fdf6ee; display:flex; gap:10px; align-items:center; flex-wrap:wrap">
+            <span style="color:var(--signal)">📮</span>
+            <div style="flex:1; min-width:260px"><b>3 options awaiting your pick for the Aug 1 drop</b>
+              <div style="color:var(--mut); font-size:12px">Emailed Jul 25 (7 days ahead, farming-postcard cadence) · not yet picked · reminder fires server-side on the 24th — this banner is where the reminder email deep-links to.</div>
+            </div>
+            <button class="btn-ink">Pick below ↓</button>
+            <div class="anno" style="width:100%">Option cache state = EMAILED_NOT_PICKED. Reminder cadence (8th/24th) + daily watchdog run as a server-side GitHub-Action-class cron — never a local task (the July-1 silently-missed-drop incident is why). Picking from the reminder email deep-links straight to the option carousel on mobile.</div>
+          </div>
+        </div>
+
+        <!-- main two-column: newsletter builder / postcard composer -->
+        <div class="maingrid" style="padding:14px 22px; display:grid; grid-template-columns:1fr 1fr; gap:14px">
+
+          <!-- ================= LEFT: NEWSLETTER BUILDER ================= -->
+          <div style="display:grid; gap:10px; align-content:start">
+            <div id="el-issue-header">
+              <div class="sechead">Newsletter builder</div>
+              <div class="cardbox">
+                <div style="display:flex; gap:8px; align-items:center; flex-wrap:wrap">
+                  <b>July farm letter — 3-layer personalization</b>
+                  <button class="btn-ghost" style="font-size:10.5px">✎ Rename</button>
+                  <span class="bdg" style="margin-left:auto">issue NL-2026-07</span>
+                </div>
+                <div class="anno" style="margin-top:3px">Issue header from the newsletter build record. Cadence: past-client segment runs monthly per Wattson Playbook Library (past-client-monthly-newsletter); the seller weekly-listing-update embed is the WEEKLY email surface — this screen builds the MONTHLY issue. Cadence itself is read-only here; edited in Settings/Playbooks [DECIDE].</div>
+
+                <!-- segment chips -->
+                <div id="el-segment-chips" style="display:flex; gap:6px; margin:10px 0 4px; flex-wrap:wrap">
+                  <button class="chip on" style="font-size:11px">Owners (388)</button>
+                  <button class="chip" style="font-size:11px">Buyers (61)</button>
+                  <button class="chip" style="font-size:11px">Investors (24)</button>
+                  <a href="#" style="font-size:11px; color:var(--brand); align-self:center; text-decoration:none">Segment definitions → Audience Builder (30)</a>
+                </div>
+                <div class="anno">Counts are AFTER-compliance counts from the audience layer (PropFlow/PropReach segment supply): consent/DNC-excluded contacts already removed — imported contacts with unknown consent are excluded and shown as excluded (473 eligible of 512 total; 39 excluded: 31 unknown consent · 8 unsubscribed). Clicking a chip switches the live preview below to that segment's variant. Variant count is fixed at the audience layer, not hardcoded to 3 [BEST GUESS].</div>
+
+                <!-- per-segment preview pane -->
+                <div id="el-preview" style="margin-top:8px">
+                  <div style="display:flex; gap:8px; align-items:center"><b style="font-size:12px">Live preview — Owners variant</b><span class="bdg good">compliance ✓</span><span class="anno">click any section → section editor</span></div>
+                  <div class="nlbody" style="margin-top:6px">
+                    <div style="font-weight:700; font-size:12.5px">Your July neighborhood letter · Friendly Acres</div>
+                    <div class="nlsec"><span class="tag">market numbers</span><b>Your street's numbers:</b> Friendly Acres median <span class="num">$1.42M</span> (↑2.1% QoQ) · 2 recent solds: 118 Beech St <span class="num">$1.51M</span> (9 DOM) · 2240 Oakwood Ave <span class="num">$1.38M</span> (14 DOM)<div class="anno" style="float:right">geo layer · feed-traced</div></div>
+                    <div class="nlsec"><span class="tag">news module</span><b>ADU rule change:</b> the city's new ordinance means roughly 4 in 10 lots in the farm can now add a unit — what that does to lot value…</div>
+                    <div class="nlsec" style="border-color:color-mix(in srgb,var(--brand) 45%, var(--line))"><span class="tag">per-reader</span><b>Anniversary equity module</b> (applicable readers only): "Three years in your home this month — here's what it's done." <span class="anno">drops out entirely for readers with no equity data — never invented</span></div>
+                    <div class="nlsec"><span class="tag">listing module</span><b>Just listed nearby:</b> 2369 Oakwood — thumbnail links to the blog tour page</div>
+                    <div class="nlsec"><span class="tag">cta</span><b>Want your own number?</b> Reply, or grab your home-value report → <span style="color:var(--brand)">graehamwatts.com/value</span></div>
+                  </div>
+                  <div class="anno" style="margin-top:4px">Owner variant leads with "your street's numbers," then ADU-rule change, then anniversary-equity for applicable readers. Buyer variant reorders new-inventory first; investor variant leads with rent/ADU yield. "Same skeleton, three stories." Source: newsletter module library + local-intelligence feed (PropCast).</div>
+                </div>
+
+                <!-- personalization layer indicator -->
+                <div id="el-layers" style="display:flex; gap:6px; margin-top:8px; flex-wrap:wrap; font-size:10.5px">
+                  <span class="bdg good" title="Owners lead with equity story">Layer 1 · segment story ✓</span>
+                  <span class="bdg good" title="Friendly Acres median + solds">Layer 2 · geo data ✓</span>
+                  <span class="bdg good" title="anniversary-equity for 41 of 388 readers">Layer 3 · per-reader modules ✓ (41/388)</span>
+                  <span class="anno" style="align-self:center">hover a layer for what it applied to this previewed reader class (personalization engine)</span>
+                </div>
+
+                <!-- compliance chip -->
+                <div id="el-compliance" style="margin-top:8px">
+                  <div class="cardbox" style="border-color:var(--warn); background:#fdf6ee; font-size:11.5px">
+                    <b style="color:var(--warn)">⚠ Fair-Housing scan — Buyers variant: needs_review</b>
+                    <div style="color:var(--mut); margin-top:3px">Blocked phrase in the news module: <i>"perfect for young families"</i> — familial-status steering class language. Suggested rewrite: <i>"walkable to parks and the new library"</i> (describes the property/area, not the people). Owners ✓ · Investors ✓.</div>
+                    <div style="display:flex; gap:6px; margin-top:6px"><button class="btn-ink">Accept rewrite</button><button class="btn-ghost">Edit manually</button></div>
+                    <div class="anno" style="margin-top:4px">ComplianceProvider scans every variant's copy (same engine as Screen 24). Approve is disabled while ANY variant is needs_review. Fail-closed: compliance service down → Approve disabled with reason shown.</div>
+                  </div>
+                </div>
+
+                <!-- approve button -->
+                <div id="el-approve" style="display:flex; gap:8px; margin-top:10px; align-items:center; flex-wrap:wrap">
+                  <button class="btn-ink" style="opacity:.45; cursor:not-allowed" title="Buyers variant needs_review">Approve all 3 → Outbox</button>
+                  <button class="btn-ghost" id="btn-editsections">Edit sections</button>
+                  <span class="anno">disabled: 1 variant needs_review · one decision ships ALL segment variants to the Outbox as review-first sends (Screen 24) — client-facing = review-first; approval record stamps who/when · owner-only (or delegated approver) [BEST GUESS]</span>
+                </div>
+              </div>
+            </div>
+
+            <!-- section editor -->
+            <div id="el-section-editor">
+              <div class="sechead">Section editor ("Edit sections")</div>
+              <div class="cardbox">
+                <table class="dtable" style="font-size:11.5px">
+                  <tr><th></th><th>Module</th><th>Own</th><th>Buy</th><th>Inv</th><th></th></tr>
+                  <tr><td>⠿</td><td><b>Market numbers</b> <span class="bdg" style="font-size:9.5px">v3</span></td><td>1st</td><td>2nd</td><td>2nd</td><td><button class="btn-ghost" style="font-size:10px">↻ Regenerate</button></td></tr>
+                  <tr><td>⠿</td><td><b>News: ADU ordinance</b> <span class="bdg warn" style="font-size:9.5px">v2 · re-scan pending</span></td><td>2nd</td><td>3rd</td><td>1st</td><td><button class="btn-ghost" style="font-size:10px">✎ Edit</button></td></tr>
+                  <tr><td>⠿</td><td><b>Anniversary-equity</b> (per-reader)</td><td>✓</td><td>—</td><td>—</td><td><button class="btn-ghost" style="font-size:10px">✎ Edit</button></td></tr>
+                  <tr><td>⠿</td><td><b>New inventory</b></td><td>4th</td><td><b>1st</b></td><td>3rd</td><td><button class="btn-ghost" style="font-size:10px">✎ Edit</button></td></tr>
+                  <tr><td>⠿</td><td><b>CTA — home-value report</b></td><td>✓</td><td>✓</td><td>✓</td><td><button class="btn-ghost" style="font-size:10px">✎ Edit</button></td></tr>
+                  <tr><td colspan="6"><button class="btn-ghost" style="font-size:10.5px">+ Add module from library</button></td></tr>
+                </table>
+                <div class="anno" style="margin-top:5px">Modular section list per the module-library model: add/remove/reorder (drag handles), per-section regenerate, per-segment inclusion toggles (columns). Editing text creates a NEW VERSION → new compliance pass → new lock (ContentLock rule) — the ADU module above shows the pending re-scan after an edit. Any post-approval edit repeats the same cycle.</div>
+              </div>
+            </div>
+
+            <!-- link + audience policy notes -->
+            <div style="display:grid; grid-template-columns:1fr 1fr; gap:10px">
+              <div id="el-link-policy" class="cardbox" style="font-size:11.5px">
+                <b>🔗 Link policy</b>
+                <div style="color:var(--mut); margin-top:3px">Newsletter links go to the agent's blog/site, <b style="color:var(--ink)">never directly to YouTube</b>; video thumbnails embedded as clickable images pointing at the blog post. Every link carries utm_medium=newsletter + content_id for the attribution roll-up (Screen 31).</div>
+                <div class="anno" style="margin-top:4px">PropCast Brain CRM-email rule (lines 73/1613/1635). Non-editable policy note.</div>
+              </div>
+              <div id="el-audience-note" class="cardbox" style="font-size:11.5px">
+                <b>📅 Send audience &amp; cadence</b>
+                <div style="color:var(--mut); margin-top:3px">Past-client segment: monthly per <b style="color:var(--ink)">WPB past-client-monthly-newsletter</b>. Seller weekly-listing-update embed = the weekly surface. This screen builds the monthly issue. <a href="#" style="color:var(--brand)">Cadence board (27) →</a></div>
+                <div class="anno" style="margin-top:4px">Consent + unsubscribe handled by PropFlow/NotificationProvider at send time, outside PropCast (Brain integration table) — this builder only produces the content package (PropCastNewsletterContentPackage).</div>
+              </div>
+            </div>
+          </div>
+
+          <!-- ================= RIGHT: POSTCARD COMPOSER ================= -->
+          <div style="display:grid; gap:10px; align-content:start">
+            <div id="el-drop-header">
+              <div class="sechead">Direct mail — postcard composer</div>
+              <div class="cardbox">
+                <div style="display:flex; gap:8px; align-items:center; flex-wrap:wrap"><b>Aug 1 postcard — pick one of 3 options</b><span class="bdg warn" style="margin-left:auto">pick due Jul 29</span></div>
+                <div class="anno" style="margin-top:2px">From the farming-postcard option cache; options generated 7 days ahead. Archetypes drawn from the 6 historical headline archetypes: equity · buyer-tagged · anti-Zillow · AI search · anti-Zestimate · neighbor envy.</div>
+
+                <!-- option cards -->
+                <div id="el-options" style="display:grid; grid-template-columns:repeat(3,1fr); gap:8px; margin-top:8px">
+                  <div class="pcard">
+                    <div class="pchead">SOLD IN 9 DAYS.<br>3 DOORS DOWN.</div>
+                    <div class="pcbody"><div class="pcqr"></div>A · Just-sold proof (neighbor-envy archetype) · goal: home-value requests</div>
+                    <div class="contactstrip"><span class="gold">GRAEHAM WATTS</span> · Intero · DRE# 01466876</div>
+                  </div>
+                  <div class="pcard picked">
+                    <div class="pchead">41% OF LOTS HERE CAN ADD AN ADU.<br>IS YOURS ONE?</div>
+                    <div class="pcbody"><div class="pcqr"></div>B · ADU eligibility (equity archetype) · goal: ADU-check page visits <span class="bdg good" style="font-size:9px">PICKED</span></div>
+                    <div class="contactstrip"><span class="gold">GRAEHAM WATTS</span> · Intero · DRE# 01466876</div>
+                  </div>
+                  <div class="pcard">
+                    <div class="pchead">YOUR HOME'S REAL NUMBER.<br>NOT THE ZESTIMATE.</div>
+                    <div class="pcbody"><div class="pcqr"></div>C · Home-value QR (anti-Zestimate archetype) · goal: value-report scans</div>
+                    <div class="contactstrip"><span class="gold">GRAEHAM WATTS</span> · Intero · DRE# 01466876</div>
+                  </div>
+                </div>
+                <div style="display:flex; gap:6px; margin-top:8px; flex-wrap:wrap">
+                  <button class="btn-ink">Confirm pick: B</button>
+                  <button class="btn-ghost">View full 6×4 front/back</button>
+                  <button class="btn-ghost">↻ Regenerate options</button>
+                </div>
+                <div class="anno" style="margin-top:4px">Click to pick; full-preview shows front AND back at print size. Uploaded past postcards are CANONICAL design references — layout never redesigned; only headline, message, CTA, QR destination, agent-image variation change (Post Card creation Brain design-authority rule). No Zillow-style language, no filler, no repeated contact info in body copy.</div>
+              </div>
+            </div>
+
+            <!-- rules strip -->
+            <div id="el-rules" class="cardbox" style="border-left:3px solid var(--ink)">
+              <b>Rules enforced (non-editable)</b>
+              <div style="display:flex; gap:5px; flex-wrap:wrap; margin-top:6px; font-size:10.5px">
+                <span class="bdg">1 card · 1 goal · 1 QR · 1 destination</span>
+                <span class="bdg">QR label: AUG-PC</span>
+                <span class="bdg">locked contact block w/ DRE</span>
+                <span class="bdg">audience = farm owners − Do-Not-Mail</span>
+                <span class="bdg">print-spec PDF on pick</span>
+                <span class="bdg">8th/24th reminders server-side</span>
+              </div>
+              <div class="anno" style="margin-top:5px">Hard composer constraints from farming-postcard + Post Card creation Brain ("one postcard = one goal = one QR = one destination"). Direct-mail compliance routes through ComplianceProvider (PropReach rule). Rules render inline so the composer can never silently drift.</div>
+            </div>
+
+            <!-- locked contact block -->
+            <div id="el-contact-block" class="cardbox">
+              <b>Locked contact block (read-only)</b>
+              <div class="contactstrip" style="margin-top:6px; font-size:11px; border-radius:6px; padding:9px 12px">
+                <span class="gold">GRAEHAM WATTS</span>
+                <span>· Intero Real Estate</span>
+                <span>· DRE# 01466876</span>
+                <span style="margin-left:auto; color:#c9c9c9">gold + black · chevron lockup</span>
+                <span title="read-only">🔒</span>
+              </div>
+              <div class="anno" style="margin-top:5px">Brand-continuity strip sourced from identity.json / brand vault — never hand-typed. The brand tripwire blocks any DRE on the identity.json blocklist before render or push; the ONLY valid DRE is 01466876. Non-editable in the composer.</div>
+            </div>
+
+            <!-- QR label + router -->
+            <div id="el-qr" class="cardbox">
+              <b>QR label &amp; destination router</b>
+              <table class="dtable" style="font-size:11.5px; margin-top:6px">
+                <tr><th>Field</th><th>Value</th></tr>
+                <tr><td>QR label</td><td class="num">AUG-PC <span class="anno">→ scan analytics on Attribution (31)</span></td></tr>
+                <tr><td>Short link</td><td class="num">gw.link/aug-pc <span class="anno">minted via owned link shortener (switchy)</span></td></tr>
+                <tr><td>Destination</td><td>ADU-check landing page <button class="btn-ghost" style="font-size:10px">Change ▾</button> <span class="anno">approved pages only (POSTCARD_QR rule)</span></td></tr>
+                <tr><td>Attribution</td><td class="num">content_id PC-2026-08 · utm_source=postcard · lock identity carried in the QR mapping (non-skippable)</td></tr>
+              </table>
+              <div class="anno" style="margin-top:5px">CTA→landing-page router: destination selectable ONLY from approved landing/listing pages (PropReach POSTCARD_QR destination rule). QR mapping carries content_lock_id + lock_hash + approved_version_id when tied to locked creative. Print QR usage is REVIEW_REQUIRED (PropReach QR rule) — the pick lands in the review queue, never straight to print.</div>
+            </div>
+
+            <!-- audience count -->
+            <div id="el-audience-count" class="cardbox">
+              <div style="display:flex; gap:10px; align-items:center; flex-wrap:wrap">
+                <div><b class="num" style="font-size:18px">1,186</b><div class="anno">mailing to (after suppression)</div></div>
+                <div style="color:var(--mut); font-size:11.5px" class="num">= 1,213 farm owners − <b style="color:var(--ink)">27 Do-Not-Mail</b> (Sharon's list, synced Jul 12)</div>
+                <a href="#" style="margin-left:auto; font-size:11px; color:var(--brand); text-decoration:none">View list (read-only) →</a>
+              </div>
+              <div class="anno" style="margin-top:4px">Mail list + Do-Not-Mail suppression list; suppression count always shown. Fail-closed: Do-Not-Mail list unreachable → pick BLOCKED — never mail without suppression applied. List is referenced here, edited only in its own system.</div>
+            </div>
+
+            <!-- print spec output -->
+            <div id="el-print" class="cardbox">
+              <b>Print-spec output</b>
+              <div style="display:flex; gap:8px; align-items:center; margin-top:6px; flex-wrap:wrap">
+                <span style="font-size:20px">📄</span>
+                <div style="flex:1; min-width:200px; font-size:11.5px; color:var(--mut)"><b style="color:var(--ink)">PC-2026-08-B.pdf</b> — 6×4 print-ready, Universal Mail Works specs (bleed + safe zone), front/back · generates on pick</div>
+                <button class="btn-ghost">⬇ Download PDF</button>
+                <button class="btn-ink">Send to printer</button>
+              </div>
+              <div class="anno" style="margin-top:4px">"Send to printer" is a review-required HUMAN step — interim vendor integration is manual PDF handoff + an "I sent this to print" confirmation (ChatGPT-Ads manual-channel pattern) [DECIDE: Universal Mail Works API depth]. Listing facts on any listing-postcard variant pull from the IDX feed (interim data floor, PropSearch Brain).</div>
+            </div>
+          </div>
+        </div>
+
+        <!-- ============ mail calendar strip (full width) ============ -->
+        <div id="el-mail-calendar" style="padding:0 22px 14px">
+          <div style="border:1.5px solid var(--brand); border-radius:12px; padding:14px 16px; background:var(--brand-soft)">
+            <div style="display:flex; gap:8px; align-items:center; flex-wrap:wrap">
+              <b style="font-size:14px">Mail calendar — drops, reminders, newsletter sends</b>
+              <span class="anno">1st/15th postcard drops · 8th/24th option-preview reminders (server-side) · monthly newsletter sends · click a date → that drop's record [BEST GUESS placement]</span>
+            </div>
+            <div class="mailcal" style="margin-top:10px">
+              <div class="mdrop ship"><b>Jul 1</b>📮 postcard · shipped ✓ <span class="anno num">1,190 mailed · JUL-PC: 38 scans</span></div>
+              <div class="mdrop rem"><b>Jul 8</b>⏰ option reminder · sent ✓</div>
+              <div class="mdrop ship"><b>Jul 12</b>📰 July letter · <span class="bdg warn" style="font-size:9px">in review</span></div>
+              <div class="mdrop ship"><b>Jul 15</b>📮 postcard · shipped ✓ <span class="anno num">1,188 mailed</span></div>
+              <div class="mdrop rem"><b>Jul 24</b>⏰ option reminder · scheduled</div>
+              <div class="mdrop"><b>Aug 1</b>📮 postcard · <span class="bdg warn" style="font-size:9px">awaiting pick</span></div>
+              <div class="mdrop"><b>Aug 9</b>📰 Aug letter · draft opens</div>
+              <div class="mdrop"><b>Aug 15</b>📮 postcard · options gen Aug 8</div>
+            </div>
+            <div class="anno" style="margin-top:6px">Data: schedule + archive. Shipped/pending status per drop; scan counts flow back from Attribution (31) per QR label. Reminder rows are the server-side cron touchpoints — shown so a missed drop is never silent (daily watchdog opens an issue on failure).</div>
+          </div>
+        </div>
+
+        <!-- ============ archive rail ============ -->
+        <div id="el-archive" style="padding:0 22px 14px">
+          <div class="cardbox">
+            <div style="display:flex; gap:8px; align-items:center"><b>Archive — past issues &amp; postcards</b><span class="anno">published-content archive + attribution ledger · open · duplicate-as-template [BEST GUESS placement]</span></div>
+            <div style="overflow-x:auto">
+            <table class="dtable" style="font-size:11.5px; margin-top:6px; min-width:700px">
+              <tr><th>Piece</th><th>Sent</th><th>Audience</th><th>Results</th><th></th></tr>
+              <tr><td>📮 Jul 15 postcard — "Sold in 11 days" (just-sold)</td><td class="num">Jul 15</td><td class="num">1,188</td><td class="num">JUL15-PC: 21 scans (6d)</td><td><button class="btn-ghost" style="font-size:10px">Duplicate as template</button></td></tr>
+              <tr><td>📮 Jul 1 postcard — equity update</td><td class="num">Jul 1</td><td class="num">1,190</td><td class="num">JUL-PC: 38 scans · 9 value-report runs</td><td><button class="btn-ghost" style="font-size:10px">Duplicate</button></td></tr>
+              <tr><td>📰 June farm letter (3 variants)</td><td class="num">Jun 12</td><td class="num">468</td><td class="num">open 51% · click 8.2% · 2 CMA requests</td><td><button class="btn-ghost" style="font-size:10px">Open</button></td></tr>
+              <tr><td>📰 May farm letter (3 variants)</td><td class="num">May 13</td><td class="num">461</td><td class="num">open 48% · click 6.9%</td><td><button class="btn-ghost" style="font-size:10px">Open</button></td></tr>
+            </table>
+            </div>
+            <div class="anno" style="margin-top:4px">Open/click stats per issue feed seller-signal flags (e.g. the CMA-open propensity pattern on Screen 27). Scan analytics keyed by QR label → Attribution (31).</div>
+          </div>
+        </div>
+
+        <!-- ============ states strip ============ -->
+        <div id="el-states" style="padding:0 22px 8px">
+          <div class="cardbox" style="font-size:11.5px">
+            <b>States (dev reference)</b>
+            <div style="color:var(--mut); margin-top:4px">
+              <b style="color:var(--ink)">Default:</b> current issue + next drop side by side (as above).
+              <b style="color:var(--ink)">Loading:</b> variant preview regenerating → skeleton with "personalizing for Buyers…".
+              <b style="color:var(--ink)">Empty:</b> no issue in progress → "Start July letter" (pulls module suggestions from the local-intelligence feed) · no postcard options yet → "Options generate 7 days before the 1st/15th — <b style="color:var(--ink)">generate now</b>" button.
+              <b style="color:var(--ink)">Degraded (all fail-closed):</b> local-intelligence feed down → market-number sections render <b style="color:var(--ink)">"data unavailable"</b>, never stale/fabricated numbers · compliance service down → Approve disabled with reason · mortgage/equity data missing for a reader → equity module drops out for that reader (no invented equity) · Do-Not-Mail list unreachable → postcard pick <b style="color:var(--ink)">blocked</b>.
+              <b style="color:var(--ink)">Permission-limited:</b> Approve = owner/delegated approver only; team edits sections only [BEST GUESS].
+            </div>
+            <div style="display:flex; gap:8px; margin-top:8px; flex-wrap:wrap">
+              <div style="flex:1; min-width:170px; border:1px dashed var(--line); border-radius:8px; padding:8px; font-size:10.5px"><b>Loading</b><div style="height:8px; background:var(--surface); border-radius:4px; margin-top:5px; width:80%"></div><div style="height:8px; background:var(--surface); border-radius:4px; margin-top:4px; width:60%"></div><div class="anno" style="margin-top:4px">"personalizing for Buyers…"</div></div>
+              <div style="flex:1; min-width:170px; border:1px dashed var(--line); border-radius:8px; padding:8px; font-size:10.5px"><b>Empty</b><div style="color:var(--mut); margin-top:4px">No issue in progress. <button class="btn-ink" style="font-size:10px">Start July letter</button></div></div>
+              <div style="flex:1; min-width:170px; border:1px dashed var(--crit); border-radius:8px; padding:8px; font-size:10.5px"><b style="color:var(--crit)">Degraded</b><div style="color:var(--mut); margin-top:4px">Market numbers: <b style="color:var(--crit)">data unavailable</b> — feed down; section held, never fabricated.</div></div>
+              <div style="flex:1; min-width:170px; border:1px dashed var(--crit); border-radius:8px; padding:8px; font-size:10.5px"><b style="color:var(--crit)">Pick blocked</b><div style="color:var(--mut); margin-top:4px">Do-Not-Mail list unreachable — suppression is mandatory before any pick finalizes.</div></div>
+            </div>
+          </div>
+        </div>
+
+        <!-- mobile variant strip -->
+        <div id="el-mobile" style="padding:0 22px 18px">
+          <div class="cardbox" style="font-size:11.5px">
+            <b>Mobile (375px) variant</b>
+            <div style="color:var(--mut); margin-top:4px">Stacked cards, newsletter first · segment chips scroll horizontally · the 3 postcard options become a swipeable carousel (dots + pick button under the active card) · approval buttons full-width sticky at each card's bottom · picking from the reminder email deep-links straight to the carousel.</div>
+            <div style="display:flex; gap:10px; margin-top:8px; overflow-x:auto">
+              <div style="min-width:120px; border:1px solid var(--line); border-radius:14px; padding:8px; font-size:9px">
+                <div style="font-weight:700">Newsletter &amp; mail</div>
+                <div style="display:flex; gap:3px; margin-top:4px; overflow:hidden"><span class="bdg" style="font-size:8px; background:var(--brand); color:#fff; border:0">Owners</span><span class="bdg" style="font-size:8px">Buyers</span><span class="bdg" style="font-size:8px">Inv…</span></div>
+                <div style="height:34px; background:var(--surface); border-radius:6px; margin-top:4px; display:grid; place-items:center; color:var(--soft)">variant preview</div>
+                <div style="background:var(--ink); color:#fff; border-radius:6px; text-align:center; padding:4px; margin-top:4px; font-weight:700">Approve all 3 → Outbox</div>
+                <div class="anno" style="font-size:8px; margin-top:2px">sticky full-width</div>
+              </div>
+              <div style="min-width:120px; border:1px solid var(--line); border-radius:14px; padding:8px; font-size:9px">
+                <div style="font-weight:700">Aug 1 postcard</div>
+                <div style="height:40px; background:#141414; color:#e8c258; border-radius:6px; margin-top:4px; display:grid; place-items:center; text-align:center">B · 41% ADU<br>◂ swipe ▸</div>
+                <div style="text-align:center; color:var(--soft); margin-top:3px">○ ● ○</div>
+                <div style="background:var(--ink); color:#fff; border-radius:6px; text-align:center; padding:4px; margin-top:3px; font-weight:700">Pick this card</div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ============ spec gaps found ============ -->
+  <div class="note" style="margin-top:26px"><b>Spec gaps found (Master Brain / source-skill details the spec missed — rendered above):</b>
+    (1) <b>"One destination"</b> — the Post Card creation Brain rule is one card = one goal = one QR = <b>one destination</b>; the spec's rules strip said only "one goal · one QR" → added to the rules strip.
+    (2) <b>Design-authority rule</b> — uploaded past postcards are canonical design references; layout is never redesigned, only headline/message/CTA/QR-destination/agent-image vary → annotated on the option cards.
+    (3) <b>No-Zillow-language / no-filler / no-repeated-contact-info</b> copy rules (same Brain) → option-card annotation.
+    (4) <b>Consent/unsubscribe handled outside PropCast</b> — PropFlow/NotificationProvider owns send-time consent; this screen only produces the PropCastNewsletterContentPackage (Brain integration table) → audience-note annotation.
+    (5) <b>POSTCARD_QR destination restriction</b> — destination must be an approved listing/landing page (PropReach §POSTCARD_QR) → router table.
+    (6) <b>Lock identity in the QR mapping</b> — content_lock_id + lock_hash + approved_version_id carried in the short-link/QR mapping, non-skippable (PropCast Brain 810) → router annotation.
+    (7) <b>Direct-mail compliance routes through ComplianceProvider</b> (PropReach 825) — compliance isn't email-only → rules-strip annotation.
+    (8) <b>IDX feed = interim data floor for postcard listing facts</b> (PropSearch Brain) → print-output annotation.
+  </div>
+
+  <!-- ============ (3) ELEMENT COVERAGE ============ -->
+  <h2 style="font-size:20px; margin:20px 0 10px">Element coverage — spec inventory → this page</h2>
+  <table class="dtable cov" style="font-size:12.5px">
+    <tr><th>Spec inventory element</th><th>Rendered at</th><th>Status</th></tr>
+    <tr><td>Newsletter issue header (name + cadence, rename)</td><td><a href="#el-issue-header">Newsletter builder card</a></td><td class="ok">✓</td></tr>
+    <tr><td>Segment chips (after-compliance counts, preview switching)</td><td><a href="#el-segment-chips">Segment chips</a></td><td class="ok">✓</td></tr>
+    <tr><td>Per-segment preview pane (owner variant, "same skeleton, three stories")</td><td><a href="#el-preview">Live preview</a></td><td class="ok">✓</td></tr>
+    <tr><td>Section editor (add/remove/reorder, regenerate, per-segment inclusion, version → compliance pass)</td><td><a href="#el-section-editor">Section editor</a></td><td class="ok">✓</td></tr>
+    <tr><td>Personalization-layer indicator (3 layers, hover explains)</td><td><a href="#el-layers">Layer badges</a></td><td class="ok">✓</td></tr>
+    <tr><td>Compliance chip (pass/needs_review, blocked language + suggested rewrite)</td><td><a href="#el-compliance">Fair-Housing scan card</a></td><td class="ok">✓</td></tr>
+    <tr><td>"Approve all 3 → Outbox" button (review-first, disabled while needs_review)</td><td><a href="#el-approve">Approve row</a></td><td class="ok">✓</td></tr>
+    <tr><td>Link policy note (blog/site only, thumbnail image, utm_medium=newsletter)</td><td><a href="#el-link-policy">Link policy</a></td><td class="ok">✓</td></tr>
+    <tr><td>Send audience note (monthly playbook cadence vs weekly embed)</td><td><a href="#el-audience-note">Send audience &amp; cadence</a></td><td class="ok">✓</td></tr>
+    <tr><td>Postcard drop header ("Aug 1 — pick one of 3")</td><td><a href="#el-drop-header">Postcard composer card</a></td><td class="ok">✓</td></tr>
+    <tr><td>Option cards ×3 (archetypes, pick, regenerate, full 6×4 preview)</td><td><a href="#el-options">Option cards</a></td><td class="ok">✓</td></tr>
+    <tr><td>Rules strip (one goal/QR/destination, QR label, locked block, suppression, print spec, 8th/24th)</td><td><a href="#el-rules">Rules enforced</a></td><td class="ok">✓</td></tr>
+    <tr><td>Locked contact block preview (identity.json, tripwire, DRE 01466876)</td><td><a href="#el-contact-block">Locked contact block</a></td><td class="ok">✓</td></tr>
+    <tr><td>QR label + router (owned shortener, approved destinations, lock identity)</td><td><a href="#el-qr">QR label &amp; router</a></td><td class="ok">✓</td></tr>
+    <tr><td>Audience count card (farm owners − Do-Not-Mail, suppression count shown)</td><td><a href="#el-audience-count">Audience count</a></td><td class="ok">✓</td></tr>
+    <tr><td>Print-spec output (6×4 PDF, vendor handoff, review-required print step)</td><td><a href="#el-print">Print-spec output</a></td><td class="ok">✓</td></tr>
+    <tr><td>Mail calendar strip (1st/15th drops, 8th/24th reminders, newsletter sends, status per drop)</td><td><a href="#el-mail-calendar">Mail calendar</a></td><td class="ok">✓</td></tr>
+    <tr><td>Archive (past issues + postcards, audience size, scan/open stats, duplicate-as-template)</td><td><a href="#el-archive">Archive rail</a></td><td class="ok">✓</td></tr>
+    <tr><td>Option-picker queue state (banner "3 options awaiting your pick")</td><td><a href="#el-picker-queue">Picker-queue banner</a></td><td class="ok">✓</td></tr>
+  </table>
+  <div style="border:1.5px solid var(--good); background:#f2f8f4; border-radius:10px; padding:12px 16px; margin:12px 0 0; font-weight:700; color:var(--good)">19 of 19 spec elements rendered ✓ <span style="font-weight:400; color:var(--mut); font-size:12.5px">— plus the states strip (loading/empty/degraded/pick-blocked), the mobile variant strip, and the 8 Master-Brain additions listed in "Spec gaps found" above.</span></div>
+
+  <!-- ============ (4) FULL SPEC AS HTML ============ -->
+  <div class="specdoc">
+    <h1 style="font-size:24px; margin:40px 0 6px">Spec — 33 · Newsletter Builder + Direct Mail</h1>
+    <p><b>Purpose</b> The two recurring paper/inbox machines on one screen: (1) the per-segment personalized newsletter builder — 3-layer/two-axis personalization, section editor, per-segment preview switching, approval gate into the Outbox; (2) the direct-mail postcard composer — monthly farming postcards with the option-picker queue, mail-date calendar, one-card-one-goal-one-QR rule, locked contact block, and print-spec output. (Skills library: newsletter-generator + farming-postcard; PropCast Master Brain CRM-email rules.)</p>
+    <p><b>Primary users</b> Agent/owner (approves); content team members may edit sections (role-scoped) [BEST GUESS]. Recipients are the CRM database segments and the farm mailing list — never edited here, only referenced.</p>
+    <p><b>Entry points</b> Left nav "Newsletter &amp; mail"; Command Center briefing card ("farm letter due Thu"); scheduled option-picker email/notification 7 days before the 1st and 15th (farming-postcard preview cadence — server-side reminder on the 8th/24th per the cron-gap fix); Past Client OS cadence board (newsletter touch rows); Outbox items link back here for edits.</p>
+    <p><b>Exit points</b> "Approve all 3 → Outbox" → Universal Review Queue (Screen 24) as a pending send; postcard "pick" → print-spec PDF generated + Outbox/vendor handoff; Archive link → published-content archive; QR labels → attribution dashboard (Screen 31) scan analytics; segment chips → Audience Builder (Screen 30) definitions.</p>
+
+    <h2>Layout</h2>
+    <p><b>Header:</b> avatar chip, "Newsletter &amp; mail", subtitle with next deadlines ("Farm letter Thu · postcard drop Aug 1"), nav: Archive. <b>Main (desktop): two equal columns</b> per draft — left = newsletter builder card, right = postcard composer card. Below [BEST GUESS extension]: full-width mail calendar strip (1st/15th drops, newsletter cadence) and the archive rail.</p>
+    <p><b>Mobile (375px):</b> stacked cards, newsletter first; segment chips scroll horizontally; the 3 postcard options become a swipeable carousel; approval buttons full-width sticky at card bottom.</p>
+
+    <h2>Element inventory</h2>
+    <div style="overflow-x:auto">
+    <table class="dtable">
+      <tr><th>Element</th><th>What it shows/does</th><th>Data source</th><th>Interactions</th><th>Spec source</th></tr>
+      <tr><td>Newsletter issue header</td><td>Issue name + cadence ("July farm letter — 3-layer personalization")</td><td>newsletter build record</td><td>rename</td><td>draft s33; propiq-newsletter-build (3-layer/two-axis)</td></tr>
+      <tr><td>Segment chips</td><td>Owners (388) / Buyers (61) / Investors (24) — counts are AFTER-compliance counts from the audience layer</td><td>Audience segments (PropFlow/PropReach segment supply)</td><td>click switches the live preview to that segment's variant</td><td>draft s33; matrix "segment selector drives preview switching"</td></tr>
+      <tr><td>Per-segment preview pane</td><td>Rendered variant: owner variant leads with "your street's numbers" block (median + 2 recent solds), then ADU-rule change, then anniversary-equity module for applicable readers; buyer variant reorders new-inventory first — "same skeleton, three stories"</td><td>newsletter module library + local-intelligence feed (PropCast)</td><td>scroll; click a section → section editor</td><td>draft s33</td></tr>
+      <tr><td>Section editor ("Edit sections")</td><td>Modular section list (market numbers, news module, equity module, listing module, CTA) with add/remove/reorder per the module-library model; per-section regenerate</td><td>module library; content pipeline</td><td>edit text (creates new version → new compliance pass), toggle per-segment inclusion</td><td>draft s33; matrix; ContentLock version rule (corrections list)</td></tr>
+      <tr><td>Personalization-layer indicator</td><td>Shows which of the 3 layers applied to the previewed reader class (segment story / geo data / per-reader modules like anniversary-equity)</td><td>personalization engine</td><td>hover explains each layer</td><td>propiq-newsletter-build</td></tr>
+      <tr><td>Compliance chip</td><td>Pass/needs_review from ComplianceProvider (Fair-Housing scan of copy; blocks steering-class language)</td><td>ComplianceProvider</td><td>blocked → shows reason + suggested rewrite</td><td>matrix corrections (consent/compliance everywhere); Screen 24 pattern</td></tr>
+      <tr><td>"Approve all 3 → Outbox" button</td><td>One decision ships all segment variants to the Outbox as review-first sends (client-facing = review-first rule)</td><td>approval record</td><td>click → confirm → Outbox items created</td><td>draft s33</td></tr>
+      <tr><td>Link policy note</td><td>Newsletter links go to the agent's blog/site, never directly to YouTube; thumbnail embedded as clickable image; utm_medium=newsletter carried for attribution roll-up</td><td>PropCast Brain CRM-email row</td><td>none</td><td>PropCast Brain lines 73/1613/1635</td></tr>
+      <tr><td>Send audience note</td><td>Past-client segment runs monthly per Wattson Playbook Library (past-client-monthly-newsletter); seller weekly-listing-update embed is the weekly surface — this screen builds the monthly issue</td><td>Wattson Playbook Library</td><td>link to cadence board</td><td>PropCast Brain line 73</td></tr>
+      <tr><td>Postcard drop header</td><td>"Aug 1 postcard — pick one of 3 options"</td><td>farming-postcard option cache</td><td>—</td><td>draft s33</td></tr>
+      <tr><td>Option cards (3)</td><td>A · Just-sold proof / B · "41% of lots allow an ADU" / C · Home-value QR — previews of 3-5 hook options generated 7 days ahead; archetypes drawn from the 6 historical headline archetypes (equity, buyer-tagged, anti-Zillow, AI search, anti-Zestimate, neighbor envy)</td><td>farming-postcard skill option cache</td><td>click to pick; "regenerate options"; view full 6x4 preview front/back</td><td>draft s33; farming-postcard SKILL</td></tr>
+      <tr><td>Rules strip</td><td>Enforced constraints inline: one goal · one QR (labeled e.g. AUG-PC) · locked contact block w/ DRE · audience = farm owners minus Do-Not-Mail (Sharon's list) · print-spec PDF on pick · mail calendar 8th/24th touchpoints server-side</td><td>postcard composer config</td><td>none (rules are non-editable)</td><td>draft s33</td></tr>
+      <tr><td>Locked contact block preview</td><td>The brand-continuity contact strip (Intero + Graeham lockup, gold+black, DRE #01466876) — read-only from identity.json; brand tripwire blocks blocklisted DRE</td><td>identity.json / brand vault</td><td>none</td><td>farming-postcard skill; CLAUDE.md brand rule</td></tr>
+      <tr><td>QR label + router</td><td>QR minted through the owned link shortener with campaign label; CTA→landing-page router selection (which landing page the scan hits)</td><td>switchy-engine / link shortener; content_id + UTM</td><td>pick destination from approved pages</td><td>PropCast Brain line 810; farming-postcard</td></tr>
+      <tr><td>Audience count card</td><td>Farm owners count minus Do-Not-Mail suppressions, with suppression count shown</td><td>mail list + Do-Not-Mail list</td><td>click → list detail (read-only here)</td><td>draft s33</td></tr>
+      <tr><td>Print-spec output</td><td>On pick: 6x4 print-ready PDF (Universal Mail Works specs) + order handoff</td><td>postcard render pipeline</td><td>download PDF; "send to printer" = review-required human step</td><td>farming-postcard skill</td></tr>
+      <tr><td>Mail calendar strip</td><td>1st/15th drop dates, option-preview reminder dates (8th/24th), newsletter send dates; shipped/pending status per drop</td><td>schedule + archive</td><td>click a date → that drop's record</td><td>farming-postcard memory (server-side action); draft header</td></tr>
+      <tr><td>Archive</td><td>Past issues + postcards with sent date, audience size, scan/open stats</td><td>published-content archive + attribution ledger</td><td>open, duplicate-as-template</td><td>draft s33 nav; matrix "archive"</td></tr>
+      <tr><td>Option-picker queue state</td><td>If options were emailed and not yet picked: banner "3 options awaiting your pick for Aug 1"</td><td>option cache</td><td>pick from banner</td><td>matrix "option-picker queue"</td></tr>
+    </table>
+    </div>
+
+    <h2>States</h2>
+    <ul>
+      <li><b>Default:</b> current issue + next drop side by side.</li>
+      <li><b>Loading:</b> variant preview regenerating → skeleton with "personalizing for [segment]…".</li>
+      <li><b>Empty:</b> no issue in progress → "Start July letter" (module suggestions from the local-intelligence feed); no postcard options yet → "Options generate 7 days before the 1st/15th — generate now" button.</li>
+      <li><b>Error/degraded (fail-closed):</b> local-intelligence feed unavailable → market-number sections render "data unavailable," never stale/fabricated numbers; compliance service down → Approve disabled with reason; mortgage/equity data missing for a reader → equity module drops out for that reader (no invented equity); Do-Not-Mail list unreachable → postcard pick blocked (never mail without suppression applied).</li>
+      <li><b>Permission-limited:</b> approve buttons owner-only (or delegated approver); team edits sections only [BEST GUESS].</li>
+      <li><b>Mobile:</b> see Layout; picking a postcard option from the reminder email deep-links to the carousel.</li>
+    </ul>
+
+    <h2>Data fields</h2>
+    <p>Issue id/name, segment ids + after-compliance counts, per-segment variant HTML, module list + versions, compliance result per variant, utm fields (content_id, utm_medium=newsletter), approval record (who/when), postcard option set {archetype, headline, art, goal, QR label, destination URL}, pick record, print-spec PDF URL, drop date, audience snapshot (count + suppression count), scan analytics per QR label, open/click stats per issue (feeds seller-signal flags, e.g. CMA-open propensity pattern from Screen 27).</p>
+
+    <h2>Rules &amp; compliance</h2>
+    <ul>
+      <li>Client-facing sends are review-first: everything exits via the Outbox to the Graeham + Adrian pattern; nothing mails/emails directly from this screen.</li>
+      <li>One card · one goal · one QR (hard composer constraint; Brain adds: one destination); locked contact block non-editable.</li>
+      <li>Newsletter never links directly to YouTube (blog/site only).</li>
+      <li>Fair-Housing scan on all copy; steering-adjacent language blocked pre-approval with rewrite suggestion.</li>
+      <li>Do-Not-Mail suppression mandatory before any postcard pick finalizes; email sends respect consent/DNC via ComplianceProvider (imported contacts with unknown consent are excluded and shown as excluded).</li>
+      <li>Any post-approval edit = new version → new compliance pass → new lock (ContentLock rule).</li>
+      <li>Print QR usage is REVIEW_REQUIRED (PropReach QR rule).</li>
+      <li>Numbers in market blocks trace to the data feed; no LLM-invented stats.</li>
+    </ul>
+
+    <h2>Cross-links</h2>
+    <p><b>In:</b> Command Center briefing, cadence board (Screen 27), option-reminder notification, Audience Builder segments (Screen 30). <b>Out:</b> Outbox (Screen 24), Attribution (Screen 31 — QR scans, opens, utm roll-up), Published archive, switchy link/QR minting, landing pages (funnel-page builder for QR destinations). <b>Emits:</b> approval + version/lock events, MAIL_DROP scheduled/shipped [name BEST GUESS], NOTIFICATION_QUEUED for reminder emails; <b>consumes:</b> audience snapshots, local-intelligence feed, attribution scan events.</p>
+
+    <h2>Open decisions</h2>
+    <ul>
+      <li>[DECIDE] Print vendor integration depth (Universal Mail Works API vs manual PDF handoff) — interim: generate print-spec PDF + a human "I sent this to print" confirmation (matches ChatGPT-Ads manual-channel pattern).</li>
+      <li>[DECIDE] Whether newsletter cadence (monthly past-client + farm) is editable here or only in Playbook settings — interim: read-only here, edit in Settings/Playbooks.</li>
+      <li>[BEST GUESS] Mail calendar strip and archive rail placement (draft shows only the two cards); segment-variant count fixed at the audience layer, not hardcoded to 3.</li>
+    </ul>
+    <p class="anno" style="margin-top:20px">Wireframe fidelity — colors are placeholders from the locked PropFlow design language; postcard gold/black is the locked farming-postcard brand system. All names/numbers are realistic fake data. Agent identity: Graeham Watts, Intero Real Estate, DRE# 01466876 (from shared-references/identity.json — never hardcode elsewhere; the identity.json blocklist is enforced by the brand tripwire). No crime data anywhere on this screen.</p>
+  </div>
+</div>

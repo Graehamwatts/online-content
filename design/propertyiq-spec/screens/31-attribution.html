@@ -1,0 +1,560 @@
+<title>PropertyIQ · Screen 31 — Attribution & Analytics</title>
+<link href="https://api.fontshare.com/v2/css?f[]=technor@500,600,700&display=swap" rel="stylesheet">
+<link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<style>
+  /* Type system — Technor for display (the squared machine look from the font exploration), Inter for UI. */
+  :root{ --font-display:'Technor', Inter, -apple-system, 'Segoe UI', sans-serif; --font-ui: Inter, -apple-system, 'Segoe UI', Roboto, sans-serif; }
+</style>
+<style>
+  /* Palette v4 — PropFlow design language: neutral ink UI, ink-as-accent, color reserved for data. (extracted verbatim from propsearch-design-draft.html) */
+  :root, :root[data-theme="dark"], :root[data-theme="light"]{
+    --ink:#23282f; --paper:#fbfaf8; --surface:#f1efe9; --line:#e2dfd6;
+    --mut:#6b7076; --soft:#9b9f9f;
+    --brand:#2e6b53; --brand-ink:#ffffff; --brand-soft:#eaf1ec; --brand-deep:#1e4c3a;
+    --signal:#b07a2e;
+    --good:#2e7d4f; --warn:#a8630a; --crit:#b3372f;
+    --r:10px;
+  }
+  .intel .score, .mintel{ color:var(--brand-deep) }
+  .intel{ border-left:3px solid var(--brand) }
+  h1{ letter-spacing:-.02em }
+  .stat b{ letter-spacing:-.01em }
+  body[data-agent="watts"]{ --brand:#2e6b53; --brand-soft:#eaf1ec; --brand-deep:#1e4c3a; }
+
+  *{box-sizing:border-box; margin:0}
+  body{font:15px/1.55 var(--font-ui); color:var(--ink); background:var(--paper); padding-bottom:80px}
+  h1,h2,h3{line-height:1.15; text-wrap:balance; font-family:var(--font-display); font-weight:600}
+  h1{letter-spacing:-.01em}
+  .site{box-shadow:0 1px 2px rgba(20,24,32,.04), 0 8px 32px rgba(20,24,32,.06)}
+  .stat{box-shadow:0 1px 2px rgba(20,24,32,.03); transition:box-shadow .15s, transform .15s}
+  .stat:hover{box-shadow:0 4px 14px rgba(20,24,32,.08)}
+  .chip{transition:all .12s}
+  button{font-family:var(--font-ui)}
+  .num{font-variant-numeric:tabular-nums}
+  .wrap{max-width:1180px; margin:0 auto; padding:0 20px}
+
+  .bar{position:sticky; top:0; z-index:50; background:var(--paper); border-bottom:1px solid var(--line); padding:10px 0; backdrop-filter:blur(8px)}
+  .bar .wrap{display:flex; flex-wrap:wrap; gap:10px; align-items:center}
+  .bar .ttl{font-weight:700; margin-right:auto}
+  .bar .ttl small{display:block; font-weight:400; color:var(--mut)}
+  .bar a{color:var(--brand); font-size:13px; text-decoration:none}
+
+  .note{background:var(--surface); border:1px solid var(--line); border-radius:var(--r); padding:14px 16px; margin:0 0 22px; font-size:13.5px; color:var(--mut)}
+  .note b{color:var(--ink)}
+
+  .site{border:1px solid var(--line); border-radius:14px; overflow:hidden; background:var(--paper)}
+  .sitehead{display:flex; align-items:center; gap:14px; padding:14px 22px; border-bottom:1px solid var(--line)}
+  .avatar{width:38px; height:38px; border-radius:50%; background:var(--brand); color:var(--brand-ink); display:grid; place-items:center; font-weight:700}
+  .sitehead .who b{display:block}
+  .sitehead .who small{color:var(--mut)}
+  .sitehead nav{margin-left:auto; display:flex; gap:18px; font-size:13.5px; color:var(--mut)}
+  .sitehead nav a{color:inherit; text-decoration:none}
+  .sitehead nav a:hover{color:var(--brand)}
+
+  .chip{display:inline-flex; align-items:center; gap:6px; font-size:12.5px; font-weight:500; border:1px solid var(--line); border-radius:99px; padding:6px 12px; background:var(--paper); cursor:pointer; color:var(--ink)}
+  .chip:hover{border-color:var(--brand)}
+  .chip.on{background:var(--brand); border-color:var(--brand); color:var(--brand-ink); font-weight:600; box-shadow:0 2px 8px color-mix(in srgb, var(--brand) 30%, transparent)}
+
+  .statrow{display:grid; grid-template-columns:repeat(4,1fr); gap:10px}
+  .stat{background:var(--surface); border:1px solid var(--line); border-radius:var(--r); padding:12px}
+  .stat small{display:block; color:var(--mut); font-size:11.5px; text-transform:uppercase; letter-spacing:.05em}
+  .stat b{font-size:18px}
+  .stat .up{color:var(--good); font-size:12px}
+
+  .bdg{font-size:11.5px; border-radius:6px; padding:3px 8px; background:var(--surface); border:1px solid var(--line); color:var(--mut)}
+  .bdg.good{color:var(--good); border-color:color-mix(in srgb,var(--good) 30%,var(--line))}
+  .bdg.warn{color:var(--warn); border-color:color-mix(in srgb,var(--warn) 30%,var(--line))}
+
+  .dtable{width:100%; border-collapse:collapse; font-size:13px}
+  .dtable td,.dtable th{border-bottom:1px solid var(--line); padding:8px 10px; text-align:left}
+  .dtable th{font-size:11px; text-transform:uppercase; letter-spacing:.05em; color:var(--soft)}
+
+  @media (max-width:860px){ .statrow{grid-template-columns:repeat(2,1fr)} .maingrid{grid-template-columns:1fr !important} .console{grid-template-columns:1fr !important} .rail{display:none !important} }
+  @media (prefers-reduced-motion: reduce){ *{transition:none!important} }
+
+  /* ---- page-specific additions (kept in the same design language) ---- */
+  .anno{font-size:11px; color:var(--soft)}
+  .cardbox{border:1px solid var(--line); border-radius:10px; padding:11px 14px; font-size:12.5px; background:var(--paper)}
+  .btn-ink{background:var(--ink); color:#fff; border:0; border-radius:7px; padding:7px 12px; font-size:11.5px; cursor:pointer; font-weight:600}
+  .btn-ghost{background:var(--paper); border:1px solid var(--line); border-radius:7px; padding:7px 12px; font-size:11.5px; cursor:pointer}
+  .sechead{font-size:14px; font-weight:700; margin:0 0 8px; font-family:var(--font-display)}
+  .cov td.ok{color:var(--good); font-weight:700}
+  .specdoc h2{font-size:18px; margin:26px 0 8px}
+  .specdoc h3{font-size:15px; margin:18px 0 6px}
+  .specdoc p, .specdoc li{font-size:13.5px; color:var(--mut)}
+  .specdoc b{color:var(--ink)}
+  .specdoc table{margin:8px 0}
+  .rung{display:inline-flex; gap:2px; align-items:center; vertical-align:middle}
+  .rung i{width:8px; height:8px; border-radius:2px; background:var(--surface); border:1px solid var(--line); font-style:normal}
+  .rung i.on{background:var(--brand); border-color:var(--brand)}
+  .rung i.mid{background:var(--warn); border-color:var(--warn)}
+  .funnel-arrow{align-self:center; color:var(--soft); font-size:16px; text-align:center}
+  .tabrow{display:flex; gap:0; border-bottom:1px solid var(--line); font-size:12.5px}
+  .tabrow span{padding:9px 16px; cursor:pointer; color:var(--mut); border-bottom:2px solid transparent}
+  .tabrow span.on{color:var(--ink); font-weight:700; border-bottom-color:var(--brand)}
+  .spark{display:flex; gap:1px; align-items:flex-end; height:22px}
+  .spark i{flex:1; background:var(--brand); opacity:.75; border-radius:1px}
+</style>
+
+<!-- ============ (1) slim header ============ -->
+<div class="bar">
+  <div class="wrap">
+    <div class="ttl">PropertyIQ · Screen 31 — Attribution &amp; Analytics <small>Full-density per-screen mock · wireframe fidelity · dev-facing annotations in gray</small></div>
+    <a href="../wireframe.html">← All screens</a>
+  </div>
+</div>
+
+<!-- ============ (2) THE FULL MOCK ============ -->
+<div class="wrap" style="padding-top:24px">
+  <div class="note"><b>Screen 31 — Attribution &amp; Analytics ("Results").</b> The ledger-driven proof layer: views → sessions → leads → pipeline GCI per ContentLock, closed-deal traces, the hook-autopsy browser, the AEO/LLM-citation tab, and the Monday proof-email mirror. Every number comes from the Event Ledger; multi-touch models are labeled reporting assumptions; nulls render "unknown" — never fabricated (correlation ≠ causation, rule C42). Primary users: agent/owner (the ROI receipt that drives renewal), team lead (content decisions), admin (model-weight config).</div>
+
+  <div class="site" data-agent="watts">
+    <!-- header: Results + window picker + model switcher + nav (spec Layout) -->
+    <div class="sitehead">
+      <div class="avatar">GW</div>
+      <div class="who"><b>Results</b><small class="num">Event Ledger · last synced 6:02 AM · 100% of rows at exact lock identity or labeled rung</small></div>
+      <div style="display:inline-flex; border:1px solid var(--line); border-radius:99px; overflow:hidden; font-size:12px; margin-left:10px">
+        <span style="padding:6px 12px; color:var(--mut); cursor:pointer">7d</span>
+        <span style="padding:6px 12px; background:var(--ink); color:#fff; font-weight:600">30 days</span>
+        <span style="padding:6px 12px; color:var(--mut); cursor:pointer">90d</span>
+        <span style="padding:6px 12px; color:var(--mut); cursor:pointer">YTD</span>
+        <span style="padding:6px 12px; color:var(--mut); cursor:pointer">Custom…</span>
+      </div>
+      <div id="el-model-switcher" style="font-size:12px; border:1px solid var(--line); border-radius:8px; padding:6px 10px; margin-left:6px">
+        model: <b>LINEAR_DECAY_REPORTING ▾</b> <span class="bdg warn" style="font-size:10px">assumption, switchable</span>
+        <div class="anno">FIRST_TOUCH · LAST_TOUCH · LINEAR_DECAY_REPORTING (weights: paid click 0.4 · organic view 0.3 · SEO page 0.2 · direct outreach 0.1 — admin-configurable). Switching recomputes report views only. "Position-based" naming retired [DECIDE].</div>
+      </div>
+      <nav><a href="#el-proof-email">Weekly proof email</a><a href="#el-autopsy">Hook autopsies</a></nav>
+    </div>
+
+    <div class="console" style="display:grid; grid-template-columns:172px 1fr">
+      <!-- persistent agent-console left rail (same chrome as Screen 9) -->
+      <div class="rail" style="border-right:1px solid var(--line); padding:14px 10px; font-size:12.5px; display:flex; flex-direction:column; gap:2px; background:var(--surface)">
+        <a href="#" style="text-decoration:none; color:var(--ink); border-radius:8px; padding:8px 10px">☰ Today</a>
+        <a href="#" style="text-decoration:none; color:var(--ink); border-radius:8px; padding:8px 10px">🗺 Farm map</a>
+        <a href="#" style="text-decoration:none; color:var(--ink); border-radius:8px; padding:8px 10px">🤝 Past clients</a>
+        <a href="#" style="text-decoration:none; color:var(--ink); border-radius:8px; padding:8px 10px">👤 Leads &amp; clients</a>
+        <a href="#" style="text-decoration:none; color:var(--ink); border-radius:8px; padding:8px 10px">💬 Comms <span class="bdg" style="font-size:9.5px">6</span></a>
+        <a href="#" style="text-decoration:none; color:var(--ink); border-radius:8px; padding:8px 10px">📋 Transactions <span class="bdg" style="font-size:9.5px">2</span></a>
+        <a href="#" style="text-decoration:none; color:var(--ink); border-radius:8px; padding:8px 10px">🎬 Content studio</a>
+        <a href="#" style="text-decoration:none; color:var(--ink); border-radius:8px; padding:8px 10px">📣 Ads &amp; funnels</a>
+        <a href="#" style="text-decoration:none; color:var(--ink); border-radius:8px; padding:8px 10px">⚙ Playbooks</a>
+        <a href="#" style="text-decoration:none; color:#fff; background:var(--ink); border-radius:8px; padding:8px 10px; font-weight:600">📈 Results</a>
+        <div style="margin-top:auto; padding-top:10px; border-top:1px solid var(--line)">
+          <a href="#" style="text-decoration:none; color:var(--ink); border-radius:8px; padding:8px 10px; display:block">⚙ Settings</a>
+          <div class="anno" style="padding:6px 10px">Global chrome: persistent agent-console rail (Screen 9 pattern). Consumer pages never show it. Entry points: this rail, Content Flow row drill (19), Campaign "Report" (18), Command Center tiles, Monday email links, Wattson ("what made money this month?"), QR-label analytics from Creative Library (30).</div>
+        </div>
+      </div>
+
+      <div>
+        <!-- model-honesty banner -->
+        <div id="el-honesty-banner" style="padding:12px 22px 0">
+          <div class="cardbox" style="background:var(--surface); display:flex; gap:10px; align-items:center">
+            <span>⚖️</span>
+            <div style="flex:1"><b>Reporting assumption</b> — the attribution model shapes these report views only. It <b>never</b> feeds lead_score, content_performance_score, likelihood_to_list, outreach priority, or audience eligibility (§14.9). All lift copy below is phrased as correlation, not causation (rule C42).</div>
+            <span class="bdg">read-only rule</span>
+          </div>
+        </div>
+
+        <!-- Zone 1: funnel stat row -->
+        <div id="el-funnel" style="padding:12px 22px 0">
+          <div class="statrow" style="grid-template-columns:1fr 24px 1fr 24px 1fr 24px 1fr">
+            <div class="stat"><small>Content views</small><b class="num">48.2K</b> <span class="up num">▲ 12% vs prior 30d</span><div class="spark"><i style="height:40%"></i><i style="height:55%"></i><i style="height:45%"></i><i style="height:70%"></i><i style="height:62%"></i><i style="height:88%"></i><i style="height:100%"></i></div></div>
+            <div class="funnel-arrow">→</div>
+            <div class="stat"><small>Site sessions</small><b class="num">2,140</b> <span class="anno num">4.4% view→session</span><div class="spark"><i style="height:35%"></i><i style="height:50%"></i><i style="height:44%"></i><i style="height:66%"></i><i style="height:58%"></i><i style="height:80%"></i><i style="height:100%"></i></div></div>
+            <div class="funnel-arrow">→</div>
+            <div class="stat"><small>Leads</small><b class="num">19</b> <span class="anno num">0.9% session→lead</span><div class="spark"><i style="height:20%"></i><i style="height:60%"></i><i style="height:0%"></i><i style="height:40%"></i><i style="height:80%"></i><i style="height:60%"></i><i style="height:100%"></i></div></div>
+            <div class="funnel-arrow">→</div>
+            <div class="stat" style="border-left:3px solid var(--brand)"><small>Pipeline GCI</small><b class="num">$66K</b> <span class="anno num">2 deals closed · $42K</span></div>
+          </div>
+          <div class="anno" style="margin-top:4px">Ledger aggregates, window-scoped: CONTENT_VIEWED / PAGE_VIEWED / LEAD_CAPTURED / PIPELINE_MOVED × deal value. Window picker recalculates. Trend lines = ECharts with dataZoom brush [DECIDE, adopted]. Rybbit is the primary owned-page analytics provider; GA4 secondary reconciliation only (§14.1). Missing metric renders "—" with reason, never 0.</div>
+        </div>
+
+        <!-- tabs above zone 2 -->
+        <div id="el-tabs" style="padding:14px 22px 0">
+          <div class="tabrow">
+            <span class="on">Content</span><span>Campaigns (paid)</span><span>Deals</span><span>Hook autopsies</span><span>AEO</span>
+          </div>
+          <div class="anno" style="margin-top:4px">Tab organization is [BEST GUESS] per spec — one Results screen, Content/Campaigns/Deals tabs reading the shared ledger; no new attribution DB [DECIDE]. All five tabs rendered below in sequence for coverage; mobile: tabs scroll horizontally.</div>
+        </div>
+
+        <!-- Zone 2: per-piece table (Content tab) -->
+        <div id="el-piece-table" style="padding:12px 22px 0">
+          <div class="sechead">Content — per-piece attribution (30 days)</div>
+          <div style="overflow-x:auto">
+          <table class="dtable" style="font-size:12px; min-width:820px">
+            <tr><th>Piece (ContentLock)</th><th>Rung</th><th>Views</th><th>Leads</th><th>Pipeline</th><th>Note</th></tr>
+            <tr style="cursor:pointer">
+              <td><b>July market update</b><br><span class="anno num">CL-0412 · PC-20260701-EPA-VID-3f9a</span></td>
+              <td><span class="rung" title="exact lock identity"><i class="on"></i><i></i><i></i></span></td>
+              <td class="num">21,040</td><td class="num">7</td><td class="num">$18K</td>
+              <td class="anno">hook autopsy: dollar-number open correlated 2.3× vs question-open → <a href="#el-autopsy" style="color:var(--brand)">autopsy</a></td>
+            </tr>
+            <tr style="cursor:pointer">
+              <td><b>ADU rules video</b><br><span class="anno num">CL-0398 · PC-20260618-EPA-VID-8c21</span></td>
+              <td><span class="rung" title="exact lock identity"><i class="on"></i><i></i><i></i></span></td>
+              <td class="num">14,220</td><td class="num">6</td><td class="num">$24K</td>
+              <td class="anno">drove 4 valuation runs incl. Torres · A/B: title variant B won</td>
+            </tr>
+            <tr style="cursor:pointer">
+              <td><b>Farm postcard (July)</b><br><span class="anno num">CL-0405 · print · QR label JUL-PC</span></td>
+              <td><span class="rung" title="exact lock identity via QR short-link"><i class="on"></i><i></i><i></i></span></td>
+              <td class="num">412 sent</td><td class="num">5</td><td class="num">$24K</td>
+              <td class="anno">QR-label attribution: 31 scans · sign-QR 0 (rotate) → <a href="#el-qr" style="color:var(--brand)">QR analytics</a></td>
+            </tr>
+            <tr style="cursor:pointer">
+              <td><b>Community guide — Friendly Acres</b><br><span class="anno num">CL-0371 · SEO page</span></td>
+              <td><span class="rung" title="stepped down: content_id roll-up (webhook dropped lock identity Jul 9)"><i></i><i class="mid"></i><i></i></span> <span class="bdg warn" style="font-size:9.5px">content_id rung</span></td>
+              <td class="num">6,310</td><td class="num">1</td><td class="num">—</td>
+              <td class="anno">pipeline "—": no PIPELINE_MOVED yet (unknown, not zero) · 9 AI citations → <a href="#el-aeo" style="color:var(--brand)">AEO</a></td>
+            </tr>
+            <tr style="cursor:pointer">
+              <td><b>Beech St teaser reel</b><br><span class="anno num">CL-0420</span></td>
+              <td><span class="rung" title="campaign/platform rung — tracking blocked on TikTok lane"><i></i><i></i><i class="mid"></i></span> <span class="bdg warn" style="font-size:9.5px">platform rung</span></td>
+              <td class="num">unknown</td><td class="num">0</td><td class="num">—</td>
+              <td class="anno">views "unknown" — platform metrics unavailable on TikTok (API quota hold); first-party lane shows 214 owned-link clicks</td>
+            </tr>
+          </table>
+          </div>
+          <div id="el-degradation" class="anno" style="margin-top:5px"><b style="color:var(--ink)">Degradation-rung indicator</b> <span class="rung"><i class="on"></i><i></i><i></i></span> = exact lock identity (content_lock_id) → <span class="rung"><i></i><i class="mid"></i><i></i></span> content_id roll-up → <span class="rung"><i></i><i></i><i class="mid"></i></span> campaign/platform level. Tooltip explains each rung; stepped-down rows are labeled — never fabricated (same honesty rule as ad impressions). Source: nightly sync sheet → native ledger queries; append-only, one row per content_lock_id per day. Row click → drill drawer ↓</div>
+        </div>
+
+        <!-- drill-down drawer -->
+        <div id="el-drill" style="padding:12px 22px 0">
+          <div style="border:1.5px solid var(--brand); border-radius:12px; padding:14px 16px; background:var(--brand-soft)">
+            <div style="display:flex; gap:8px; align-items:center; flex-wrap:wrap">
+              <b style="font-size:14px">Drill drawer — July market update</b>
+              <span class="bdg num" style="font-size:10px">CL-0412 · approved_version_id v3 · lock_hash 9e4f…a2</span>
+              <span class="bdg good" style="font-size:10px">exact lock identity</span>
+              <div style="margin-left:auto; display:flex; gap:6px"><button class="btn-ghost">Open in Content Flow (19)</button><button class="btn-ghost">Request re-poll</button><button class="btn-ghost">✕</button></div>
+            </div>
+            <div style="overflow-x:auto; margin-top:10px">
+            <table class="dtable num" style="font-size:11px; min-width:820px; background:var(--paper); border-radius:8px">
+              <tr><th>Checkpoint ladder</th><th>Day 1</th><th>Day 2</th><th>Day 3</th><th>Day 5</th><th>Day 7</th><th>Day 14</th><th>Day 30</th><th>Day 60+</th></tr>
+              <tr><td><b>Instagram</b></td><td>3.1K</td><td>5.8K</td><td>7.2K</td><td>8.4K</td><td>9.0K</td><td>9.6K</td><td>9.9K</td><td style="color:var(--soft)">tracker closed (Meta closes at Day 30)</td></tr>
+              <tr><td><b>TikTok</b></td><td>2.2K</td><td>4.0K</td><td>4.9K</td><td>5.3K</td><td>5.5K</td><td>5.8K</td><td>5.9K</td><td style="color:var(--soft)">closed</td></tr>
+              <tr><td><b>YouTube</b></td><td>410</td><td>780</td><td>1.1K</td><td>1.6K</td><td>2.1K</td><td>3.0K</td><td>4.2K</td><td>every 30d → Day 365 (search compounds)</td></tr>
+              <tr><td><b>First-party lane</b></td><td colspan="8" style="color:var(--mut)">owned-link clicks 388 · landing sessions 402 · GA4 divergence −3.4% (ledger wins; GA4 reconciliation-only note) · <b style="color:var(--ink)">never expires</b> — platform lane decays, first-party lane doesn't</td></tr>
+            </table>
+            </div>
+            <div style="display:grid; grid-template-columns:1fr 1fr; gap:10px; margin-top:10px; font-size:11.5px">
+              <div style="background:var(--paper); border:1px solid var(--line); border-radius:9px; padding:10px">
+                <b>Variant A/B pairs</b>
+                <div style="color:var(--mut); margin-top:4px" class="num">Title A "What July did to EPA prices" vs <b style="color:var(--good)">B "EPA prices moved $31K in July" ✓ winner</b> (contacts 2 vs 5) · Thumb A face vs B chart — B ✓ · logged as {content_lock_id, platform, variant_id, field}; winners feed the learning layer + hook autopsy.</div>
+              </div>
+              <div style="background:var(--paper); border:1px solid var(--line); border-radius:9px; padding:10px">
+                <b>Re-open triggers</b>
+                <div style="color:var(--mut); margin-top:4px">Tracker re-opens on: first-party spike above trailing baseline · entering a PropReach paid flight (flight + 7 days) · manual re-poll (button above). Fresh checkpoint ladder, then closes again. No piece is polled outside its checkpoints or indefinitely.</div>
+              </div>
+            </div>
+            <div class="anno" style="margin-top:6px">Per-checkpoint metrics: batch endpoints, per-platform daily quota budgets (PropCast MB metrics schedule). Each event batch carries its own degradation-rung badge. lock_hash shown drill-only.</div>
+          </div>
+        </div>
+
+        <!-- Deals tab: closed-deal traces + six CRM fields -->
+        <div id="el-deals" style="padding:14px 22px 0">
+          <div class="sechead">Deals — closed-deal traces (2 this window)</div>
+          <div class="maingrid" style="display:grid; grid-template-columns:1.3fr 1fr; gap:12px">
+            <div style="display:grid; gap:8px; align-content:start">
+              <div id="el-deal-trace" class="cardbox">
+                <b>412 Poplar Ave — closed Jul 8 · $21K GCI (Torres)</b> <span class="bdg good" style="font-size:10px">full chain</span>
+                <table class="dtable num" style="font-size:11px; margin-top:6px">
+                  <tr><th>Touch</th><th>Channel</th><th>Date</th><th>Identity rung</th></tr>
+                  <tr><td>LINK_SCANNED (QR, postcard JUL-PC)</td><td>Direct mail</td><td>Apr 14</td><td><span class="bdg good" style="font-size:9.5px">exact lock</span> <span class="anno">first touch</span></td></tr>
+                  <tr><td>PAGE_VIEWED — valuation page ×3</td><td>Owned site</td><td>Apr 14–May 2</td><td><span class="bdg good" style="font-size:9.5px">exact lock</span></td></tr>
+                  <tr><td>CONTENT_VIEWED — ADU rules video</td><td>Organic YT</td><td>May 20</td><td><span class="bdg good" style="font-size:9.5px">exact lock</span></td></tr>
+                  <tr><td>LEAD_CAPTURED → PIPELINE_MOVED ×3</td><td>CRM</td><td>May 21–Jun 30</td><td><span class="bdg" style="font-size:9.5px">contact_id</span></td></tr>
+                  <tr><td>DEAL_CLOSED</td><td>PropClose</td><td>Jul 8</td><td><span class="bdg good" style="font-size:9.5px">✓</span></td></tr>
+                </table>
+                <div style="display:flex; gap:6px; margin-top:6px"><button class="btn-ghost">Transaction record (PropClose)</button><button class="btn-ghost">Contact record (PropFlow)</button></div>
+              </div>
+              <div class="cardbox">
+                <b>2 Beech St — closed Jun 27 · $21K GCI (Kim)</b>
+                <div style="color:var(--mut); font-size:11.5px; margin-top:3px">first touch: community page organic (Friendly Acres guide) → newsletter click → open house → closed. <a href="#" style="color:var(--brand)">Open full chain ▸</a></div>
+              </div>
+              <div class="anno">Ledger trace by contact_id + DEAL_CLOSED, every touch in order with channel, date, identity rung. Deal traces show <b style="color:var(--ink)">channel-level touches only — never inferred life events</b>; no sensitive-topic data appears in any trace or insight (§12.3). Under the selected model, credit splits are labeled assumptions.</div>
+            </div>
+            <div style="display:grid; gap:8px; align-content:start">
+              <div id="el-crm-fields" class="cardbox">
+                <b>Attribution story on a captured lead — the six CRM fields (Torres)</b>
+                <table class="dtable" style="font-size:11px; margin-top:6px">
+                  <tr><td class="anno">content_id</td><td class="num">PC-20260401-EPA-PST-4b02</td></tr>
+                  <tr><td class="anno">content_lock_id</td><td class="num">CL-0405</td></tr>
+                  <tr><td class="anno">approved_version_id</td><td class="num">v2</td></tr>
+                  <tr><td class="anno">capture platform / source</td><td>QR → valuation landing page</td></tr>
+                  <tr><td class="anno">lead magnet</td><td>Home-value report</td></tr>
+                  <tr><td class="anno">capture_source</td><td>OWNED_PAGE</td></tr>
+                </table>
+                <div class="anno" style="margin-top:4px">Populated automatically at the capture moment (webhook → parse UTM → write back). Field names shown are the interim [BEST GUESS] set — confirm against the PropCast Master Brain docx table before schema freeze [DECIDE]. Viewed from the lead drill; read-only here.</div>
+              </div>
+              <div id="el-feedback" class="cardbox">
+                <b>Lead feedback (improves platform optimization)</b>
+                <div style="color:var(--mut); font-size:11.5px; margin-top:4px">3 campaign leads awaiting your verdict:</div>
+                <div style="display:flex; gap:6px; margin-top:6px; flex-wrap:wrap; font-size:11px">
+                  <span class="bdg">M. Chen — Meta lead</span><button class="btn-ghost" style="font-size:10px">Converted ✓</button><button class="btn-ghost" style="font-size:10px">Junk ✗</button>
+                </div>
+                <div class="anno" style="margin-top:4px">Marking converted/junk feeds platform conversion corrections where APIs allow (§21.6). Never changes ledger history.</div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Campaigns (paid) tab -->
+        <div id="el-campaigns" style="padding:14px 22px 0">
+          <div class="sechead">Campaigns (paid) — PropReachWeeklyReport surface</div>
+          <div class="statrow" style="grid-template-columns:repeat(4,1fr)">
+            <div class="stat"><small>Spend (30d)</small><b class="num">$1,240</b> <span class="anno num">Meta $780 · Google $410 · LSA $50</span></div>
+            <div class="stat"><small>CPL avg</small><b class="num">$65</b> <span class="anno num">Meta $58 · Search $74 · EPA mkt $61</span></div>
+            <div class="stat"><small>Pipeline impact</small><b class="num">11 contacts</b> <span class="anno num">4 active opps · est. $38K</span></div>
+            <div class="stat"><small>Assisted conversions</small><b class="num">6</b> <span class="anno num">view-through (Display/YT): 3 — blended context</span></div>
+          </div>
+          <div style="display:grid; grid-template-columns:1fr 1fr; gap:10px; margin-top:10px; font-size:12px">
+            <div class="cardbox">
+              <b>Top campaigns by ROI · top content by paid lift</b>
+              <table class="dtable num" style="font-size:11px; margin-top:6px">
+                <tr><th>Campaign</th><th>Spend</th><th>Leads</th><th>Pipeline</th></tr>
+                <tr><td>Beech seller ad (CMP-M-0093)</td><td>$420</td><td>5</td><td>$18K</td></tr>
+                <tr><td>ADU video boost (CMP-M-0090)</td><td>$310</td><td>4</td><td>$14K</td></tr>
+                <tr><td>Search — "EPA home value"</td><td>$410</td><td>2</td><td>$6K</td></tr>
+              </table>
+              <div class="anno" style="margin-top:4px">Top content by paid lift: ADU rules video, July market update. Campaign click → Campaign Manager (18). Spend splits by platform / geo market level / objective per §21.5.</div>
+            </div>
+            <div style="display:grid; gap:8px; align-content:start">
+              <div class="cardbox" style="border-color:var(--warn); background:#fdf6ee">
+                <b>Budget recommendation (review-required)</b>
+                <div style="color:var(--mut); font-size:11.5px; margin-top:3px">"Shift $150/wk from Search to Beech seller ad — CPL $58 vs $74; rationale facts attached." approval_required: true, always.</div>
+                <div style="display:flex; gap:6px; margin-top:6px"><button class="btn-ink">Review → Approvals</button><button class="btn-ghost">Dismiss</button></div>
+              </div>
+              <div class="cardbox">
+                <b>Creative health</b>
+                <div style="display:flex; gap:6px; flex-wrap:wrap; margin-top:5px"><span class="bdg good" style="font-size:10px">Beech reel · RELEASED</span><span class="bdg warn" style="font-size:10px">"$1.4M gets you" static · FATIGUE_FLAGGED (freq 4.1) → rotate</span><span class="bdg" style="font-size:10px; color:var(--crit)">Zestimate-compare · LEGAL_BLOCKED</span></div>
+                <div class="anno" style="margin-top:4px">+ 1 manual_review_flag: LSA lead dispute pending credit.</div>
+              </div>
+              <div id="el-impression-honesty" class="cardbox" style="font-size:11.5px">
+                <b>Impression honesty</b> <span class="bdg" style="font-size:9.5px">§14.6</span>
+                <div style="color:var(--mut); margin-top:3px">Ad impressions are shown at campaign/audience level (identity_scope = CAMPAIGN or AUDIENCE, contact_id = null). Contact-level only when identity_scope = CONTACT_DETERMINISTIC. This screen never says "this person saw your ad."</div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Hook autopsy tab -->
+        <div id="el-autopsy" style="padding:14px 22px 0">
+          <div class="sechead">Hook autopsies — pattern browser</div>
+          <div class="cardbox">
+            <div style="display:flex; gap:5px; flex-wrap:wrap"><button class="chip on" style="font-size:10.5px">All patterns</button><button class="chip" style="font-size:10.5px">Hooks</button><button class="chip" style="font-size:10.5px">Titles</button><button class="chip" style="font-size:10.5px">Thumbnails</button><button class="chip" style="font-size:10.5px">Format ▾</button><button class="chip" style="font-size:10.5px">Geo ▾</button></div>
+            <table class="dtable" style="font-size:11.5px; margin-top:8px">
+              <tr><th>#</th><th>Pattern (this quarter)</th><th>Evidence</th><th></th></tr>
+              <tr><td class="num">1</td><td><b>Specific-dollar-number opens</b></td><td class="anno num">correlated 2.3× vs question-opens across 14 A/B pairs (correlation, not causation)</td><td><button class="btn-ghost" style="font-size:10px">Save to swipe file</button></td></tr>
+              <tr><td class="num">2</td><td>Chart thumbnails vs face</td><td class="anno num">chart won 4 of 5 pairs on market-update format</td><td><button class="btn-ghost" style="font-size:10px">Save to swipe file</button></td></tr>
+              <tr><td class="num">3</td><td>"What $X gets you" title frame</td><td class="anno num">top contacts-per-view on IG · fatigue watch on paid</td><td><button class="btn-ghost" style="font-size:10px">Save to swipe file</button></td></tr>
+            </table>
+            <div class="anno" style="margin-top:5px">A/B pair log + learning layer; extends to titles/thumbnails (PropCast MB Part 10). Saved patterns → swipe file / hook library (Video Studio 32, 61 hooks) and concept-forge inputs. If VideoIntelligence/ScoringService is down this tab shows "pattern analysis unavailable" — never fabricated patterns (§13.2).</div>
+          </div>
+        </div>
+
+        <!-- Zone 3: AEO panel + Monday proof email mirror -->
+        <div style="padding:14px 22px 0; display:grid; grid-template-columns:1fr 1fr; gap:12px" class="maingrid">
+          <div id="el-aeo" class="cardbox">
+            <b>AEO / AI citations</b> <span class="bdg" style="font-size:10px">LLM_CITATION_DETECTED</span>
+            <table class="dtable num" style="font-size:11.5px; margin-top:6px">
+              <tr><th>Engine</th><th>Citations (30d)</th><th>Cited page</th></tr>
+              <tr><td>ChatGPT</td><td>5</td><td><a href="#" style="color:var(--brand)">Friendly Acres community guide</a></td></tr>
+              <tr><td>Perplexity</td><td>3</td><td><a href="#" style="color:var(--brand)">Friendly Acres community guide</a></td></tr>
+              <tr><td>AI Overviews</td><td>1</td><td><a href="#" style="color:var(--brand)">ADU rules explainer page</a></td></tr>
+            </table>
+            <div style="color:var(--mut); font-size:11.5px; margin-top:5px" class="num">+ 2 leads self-reported "asked ChatGPT" at intake (lead-source self-report — kept separate from detected citations).</div>
+            <div class="anno" style="margin-top:4px">Click cited page → SEO console. Consumed events per §17.4; detected_at timestamps in drill.</div>
+          </div>
+          <div id="el-proof-email" class="cardbox">
+            <b>Monday proof email — mirror</b> <span class="bdg good" style="font-size:10px">sends Mon 7:00 AM · send-not-draft</span>
+            <div style="background:var(--surface); border-radius:8px; padding:10px 12px; margin-top:6px; font-size:11.5px; color:var(--mut)">
+              <b style="color:var(--ink)">Subject: What made money — wk of Jul 13</b>
+              <div style="margin-top:4px" class="num">Top 3 by <b style="color:var(--ink)">contacts created (not views)</b>: ① ADU video (4) ② July market update (3) ③ Farm postcard (2) · Pipeline moves attributed: 5 · <b style="color:var(--ink)">Content-to-deal:</b> "This week's 412 Poplar Ave deal was first touched by [Farm postcard July] on Apr 14, locked as CL-0405." · Insight: market updates correlate with 3× more contacts than lifestyle content — consider doubling frequency.</div>
+            </div>
+            <div style="display:flex; gap:6px; margin-top:6px"><button class="btn-ghost">Past emails</button><button class="btn-ghost">Recipient settings</button></div>
+            <div class="anno" style="margin-top:4px">Exactly the weekly email (PropCast MB); vanity metrics never headline. Send-not-draft is Graeham's standing rule (CLAUDE.md 2026-06-13). Sending logs a REPORT_GENERATED-style audit entry [BEST GUESS — verify name against the Event Registry; never invent a ledger event without registering it, C6].</div>
+          </div>
+        </div>
+
+        <!-- QR-label analytics + calibration proposals -->
+        <div style="padding:12px 22px 0; display:grid; grid-template-columns:1fr 1fr; gap:12px" class="maingrid">
+          <div id="el-qr" class="cardbox">
+            <b>QR-label analytics</b> <span class="bdg" style="font-size:10px">LINK_SCANNED · scan_type=QR</span>
+            <table class="dtable num" style="font-size:11.5px; margin-top:6px">
+              <tr><th>Label</th><th>Scans (30d)</th><th></th></tr>
+              <tr><td>Postcard · JUL-PC</td><td>31</td><td><span class="bdg good" style="font-size:9.5px">working</span></td></tr>
+              <tr><td>Flyer · BEECH-FLY</td><td>12</td><td></td></tr>
+              <tr><td>Mailer · EQ-MAIL</td><td>7</td><td></td></tr>
+              <tr><td>Sign · BEECH-SIGN</td><td>0</td><td><span class="bdg warn" style="font-size:9.5px">rotate recommended</span></td></tr>
+            </table>
+            <div class="anno" style="margin-top:4px">Per-label counts via the Owned Link Shortener (§10.3–10.4). Room-level scan rates expected low — treated as a low-cost experiment. → Creative Library QR pack (30). Retarget pixel fires only if privacy checks pass (GPC / DNT / opt-out).</div>
+          </div>
+          <div id="el-calibration" class="cardbox" style="border-color:var(--warn); background:#fdf6ee">
+            <b>Calibration proposals — never silently applied</b>
+            <div style="color:var(--mut); font-size:11.5px; margin-top:4px">Learning layer proposes: "Raise the market-update format weight in the content gauntlet from 1.0 → 1.2 based on this quarter's contacts-per-piece." Confirm to apply; decline logs the decision.</div>
+            <div style="display:flex; gap:6px; margin-top:6px"><button class="btn-ink">Confirm</button><button class="btn-ghost">Decline</button></div>
+            <div class="anno" style="margin-top:4px">Feedback-loop calibration surfaces as confirm/decline cards (matrix rule). Attribution models themselves never feed these weights (§14.9) — proposals cite contact/deal outcomes only.</div>
+          </div>
+        </div>
+
+        <!-- null rendering + retention footer -->
+        <div id="el-null" style="padding:12px 22px 0">
+          <div class="cardbox" style="font-size:11.5px; display:flex; gap:10px; align-items:center; flex-wrap:wrap">
+            <b>Null rendering rule</b>
+            <span style="color:var(--mut)">Any missing metric renders <b style="color:var(--ink)">"unknown" / "—" with a reason</b> ("tracking blocked", "platform metrics unavailable", "no PIPELINE_MOVED yet") — never fabricated, never rendered as 0 (rule C42). Retention: attribution records 7 years (ATTRIBUTION_7Y), behavioral events 24 months (BEHAVIORAL_24M).</span>
+          </div>
+        </div>
+
+        <!-- states strip -->
+        <div id="el-states" style="padding:12px 22px 0">
+          <div class="cardbox" style="font-size:11.5px">
+            <b>States (dev reference)</b>
+            <div style="color:var(--mut); margin-top:4px">
+              <b style="color:var(--ink)">Loading:</b> stat-tile skeletons + table shimmer — loading ≠ zero, never render 0 for unknown.
+              <b style="color:var(--ink)">Empty:</b> "No attributed activity in this window — attribution starts the moment your first tracked link goes out."
+              <b style="color:var(--ink)">Degraded (all fail-closed):</b> ledger query failure → screen-level error + retry, no cached fabrication · platform lane missing → first-party numbers with "platform metrics unavailable on &lt;platform&gt;" · GA4/Rybbit divergence → ledger wins + reconciliation note (GA4 reconciliation-only, §14.1) · ScoringService/VideoIntelligence outage → autopsy tab shows "pattern analysis unavailable", rest of screen unaffected (§13.2).
+              <b style="color:var(--ink)">Permission-limited:</b> model-weight editing admin-only · team sees read-only · budget-recommendation approvals owner-only.
+            </div>
+            <div style="display:flex; gap:8px; margin-top:8px; flex-wrap:wrap; font-size:10.5px">
+              <span class="bdg">skeleton ▢▢▢▢</span>
+              <span class="bdg">empty: "No attributed activity…"</span>
+              <span class="bdg warn">degraded: "platform metrics unavailable on TikTok"</span>
+              <span class="bdg" style="color:var(--crit)">error: "Ledger query failed — Retry" (no cache)</span>
+              <span class="bdg">read-only (team role)</span>
+            </div>
+          </div>
+        </div>
+
+        <!-- mobile variant strip -->
+        <div id="el-mobile" style="padding:12px 22px 18px">
+          <div class="cardbox" style="font-size:11.5px">
+            <b>Mobile variant (375px)</b>
+            <div style="display:flex; gap:10px; margin-top:8px; overflow-x:auto">
+              <div style="min-width:170px; border:1px solid var(--line); border-radius:14px; padding:10px; background:var(--surface)">
+                <div style="font-size:10px; font-weight:700">Results · 30d</div>
+                <div style="display:grid; grid-template-columns:1fr 1fr; gap:4px; margin-top:6px; font-size:9px" class="num">
+                  <div style="background:var(--paper); border:1px solid var(--line); border-radius:6px; padding:5px">Views<br><b>48.2K</b></div>
+                  <div style="background:var(--paper); border:1px solid var(--line); border-radius:6px; padding:5px">Sessions<br><b>2,140</b></div>
+                  <div style="background:var(--paper); border:1px solid var(--line); border-radius:6px; padding:5px">Leads<br><b>19</b></div>
+                  <div style="background:var(--paper); border:1px solid var(--line); border-radius:6px; padding:5px">Pipeline<br><b>$66K</b></div>
+                </div>
+                <div class="anno" style="margin-top:3px">stat tiles 2×2 grid</div>
+              </div>
+              <div style="min-width:170px; border:1px solid var(--line); border-radius:14px; padding:10px; background:var(--surface)">
+                <div style="font-size:9px; color:var(--mut); white-space:nowrap; overflow:hidden">Content · Campaigns · Deals · Autops…</div>
+                <div style="background:var(--paper); border:1px solid var(--line); border-radius:8px; padding:6px; margin-top:5px; font-size:9px"><b>July market update</b><br><span class="num">21K · 7 leads · $18K</span><br><span class="anno">autopsy: $-number open 2.3×</span></div>
+                <div class="anno" style="margin-top:3px">stacked piece cards (lock id, three numbers, note) · tabs scroll horizontally</div>
+              </div>
+              <div style="min-width:170px; border:1px solid var(--line); border-radius:14px; padding:10px; background:var(--surface)">
+                <div style="background:var(--paper); border:1px solid var(--line); border-radius:8px 8px 0 0; padding:6px; font-size:9px; border-bottom:2px solid var(--brand)"><b>CL-0412 — drill</b><br><span class="anno">checkpoint ladder · variants · rungs</span></div>
+                <div class="anno" style="margin-top:3px">drawer = full sheet</div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ============ Spec gaps found ============ -->
+  <div class="note" style="margin-top:26px"><b>Spec gaps found (Master Brain specifies, spec inventory missed — rendered above):</b> (1) <b>Retention footer</b> — attribution records kept 7 years (ATTRIBUTION_7Y), behavioral events 24 months (BEHAVIORAL_24M) per PropReach MB §24.8 → rendered in the null-rendering footer. (2) <b>Tracker re-open triggers</b> — first-party spike above trailing baseline / PropReach paid flight + 7 days / manual re-poll (PropCast MB nightly-sync spec); the spec listed only "re-poll request" → rendered in the drill drawer. (3) <b>Rybbit-primary analytics</b> — Rybbit is the primary owned-page analytics provider, GA4 secondary reconciliation only (§14.1) → surfaced in the funnel annotation. (4) <b>manual_review_flags + LSA disputes/credits</b> in the weekly-report schema (§21.5, §24.7) → rendered in creative health. (5) <b>Scan-to-retarget privacy gate</b> — retarget pixel fires only if GPC/DNT/opt-out checks pass (§10.4) → rendered in QR analytics annotation.</div>
+
+  <!-- ============ (3) ELEMENT COVERAGE ============ -->
+  <h2 style="font-size:20px; margin:20px 0 10px">Element coverage — spec inventory → this page</h2>
+  <table class="dtable cov" style="font-size:12.5px">
+    <tr><th>Spec inventory element</th><th>Rendered at</th><th>Status</th></tr>
+    <tr><td>Funnel stat tiles (views → sessions → leads → pipeline GCI, window-scoped)</td><td><a href="#el-funnel">Zone 1 funnel row</a></td><td class="ok">✓</td></tr>
+    <tr><td>Model switcher (3 canonical models, decay weights labeled assumptions)</td><td><a href="#el-model-switcher">Header model switcher</a></td><td class="ok">✓</td></tr>
+    <tr><td>Model-honesty banner (never feeds scoring/priority/eligibility)</td><td><a href="#el-honesty-banner">Reporting-assumption banner</a></td><td class="ok">✓</td></tr>
+    <tr><td>Per-piece row (lock id, views, leads, pipeline, note column)</td><td><a href="#el-piece-table">Content table</a></td><td class="ok">✓</td></tr>
+    <tr><td>Lock-level drill drawer (checkpoint ladder, platform splits, A/B pairs, lanes)</td><td><a href="#el-drill">Drill drawer</a></td><td class="ok">✓</td></tr>
+    <tr><td>Degradation-rung indicator (exact → content_id → campaign, labeled)</td><td><a href="#el-degradation">Rung legend + table badges</a></td><td class="ok">✓</td></tr>
+    <tr><td>Six CRM attribution fields panel (contact drill)</td><td><a href="#el-crm-fields">Six-fields card (Torres)</a></td><td class="ok">✓</td></tr>
+    <tr><td>Closed-deal trace row (full ordered chain, channel + rung per touch)</td><td><a href="#el-deal-trace">Deals tab traces</a></td><td class="ok">✓</td></tr>
+    <tr><td>Campaigns (paid) tab (weekly-report schema: spend/CPL/pipeline/ROI/creative health/recommendations)</td><td><a href="#el-campaigns">Campaigns tab</a></td><td class="ok">✓</td></tr>
+    <tr><td>Impression-honesty note (identity_scope, never "this person saw your ad")</td><td><a href="#el-impression-honesty">Impression honesty card</a></td><td class="ok">✓</td></tr>
+    <tr><td>Hook autopsy browser (ranked patterns, filters, save to swipe file)</td><td><a href="#el-autopsy">Hook autopsies tab</a></td><td class="ok">✓</td></tr>
+    <tr><td>AEO / AI citations panel (by engine, cited page, self-reported leads)</td><td><a href="#el-aeo">AEO panel</a></td><td class="ok">✓</td></tr>
+    <tr><td>Monday proof email mirror (contacts-not-views, deal highlight, send-not-draft)</td><td><a href="#el-proof-email">Proof email mirror</a></td><td class="ok">✓</td></tr>
+    <tr><td>QR-label analytics (per-label scans, rotate recommendations)</td><td><a href="#el-qr">QR-label analytics</a></td><td class="ok">✓</td></tr>
+    <tr><td>Calibration proposal cards (confirm/decline, never silent)</td><td><a href="#el-calibration">Calibration proposals</a></td><td class="ok">✓</td></tr>
+    <tr><td>Lead feedback prompts (converted/junk)</td><td><a href="#el-feedback">Lead feedback card</a></td><td class="ok">✓</td></tr>
+    <tr><td>Null rendering ("unknown" / "—" with reason)</td><td><a href="#el-null">Null rule footer</a> + table cells</td><td class="ok">✓</td></tr>
+  </table>
+  <div style="border:1.5px solid var(--good); background:#f2f8f4; border-radius:10px; padding:12px 16px; margin:12px 0 0; font-weight:700; color:var(--good)">17 of 17 spec elements rendered ✓ <span style="font-weight:400; color:var(--mut); font-size:12.5px">— plus prompt-required regions beyond the inventory: window picker, tabs strip, states strip, mobile-variant strip; plus the 5 Master-Brain gap additions listed above.</span></div>
+
+  <!-- ============ (4) FULL SPEC AS HTML ============ -->
+  <div class="specdoc">
+    <h1 style="font-size:24px; margin:40px 0 6px">Spec — 31 · Attribution &amp; Analytics</h1>
+    <p><b>Purpose</b> The ledger-driven proof layer: views → site sessions → leads → pipeline GCI per ContentLock, closed-deal traces, the hook-autopsy browser, the AEO/LLM-citation tab, and the Monday proof-email mirror. Every number comes from the Event Ledger; multi-touch models are labeled reporting assumptions, nulls render as "unknown" — never fabricated (correlation ≠ causation, rule C42).</p>
+    <p><b>Primary users</b> Agent/owner (the ROI receipt that drives renewal); team lead for content decisions; admin for model-weight configuration.</p>
+    <p><b>Entry points</b> Left-nav "Results"; Content Flow row drill (19); Campaign "Report" (18); Command Center stat tiles; Monday proof email links; Wattson ("what made money this month?"); QR-label analytics from Creative Library (30).</p>
+    <p><b>Exit points</b> Piece row → lock/version detail + Content Flow row; campaign slice → Campaign Manager (18); hook autopsy → concept/swipe-file (Video Studio 32 hook library); AEO cited page → SEO console; "Weekly proof email" → email mirror view + send settings; closed-deal trace → transaction record (PropClose) + contact record (PropFlow).</p>
+
+    <h2>Layout</h2>
+    <p>Desktop: <b>Header</b> — "Results" + time-window picker (30 days default) + model switcher labeled "model: … (assumption, switchable)" — canonical options FIRST_TOUCH / LAST_TOUCH / LINEAR_DECAY_REPORTING; nav: Weekly proof email, Hook autopsies. <b>Zone 1</b> — funnel stat row: Content views → Site sessions → Leads → Pipeline GCI. <b>Zone 2</b> — per-piece table: Piece (ContentLock id) | Views | Leads | Pipeline | Note; closed-deal trace rows. <b>Zone 3</b> — 2-up panels: AEO / AI citations · Monday proof email mirror. <b>Tabs above zone 2 [BEST GUESS]:</b> Content · Campaigns (paid) · Deals · Hook autopsies · AEO. <b>Drill-down drawer:</b> click a piece → lock-level detail: per-checkpoint metrics (Day 1/2/3/5/7, 14, 30…), per-platform splits, variant A/B pairs, degradation-rung indicator per event batch.</p>
+    <p>Mobile (375px): stat tiles 2×2 grid; table becomes stacked piece cards (lock id, three numbers, note); tabs scroll horizontally; drawer = full sheet.</p>
+
+    <h2>Element inventory</h2>
+    <div style="overflow-x:auto">
+    <table class="dtable">
+      <tr><th>Element</th><th>What it shows/does</th><th>Data source</th><th>Interactions</th><th>Spec source</th></tr>
+      <tr><td>Funnel stat tiles</td><td>48.2K views → 2,140 sessions → 19 leads → $66K pipeline GCI (window-scoped)</td><td>Event Ledger aggregates (CONTENT_VIEWED, PAGE_VIEWED, LEAD_CAPTURED, PIPELINE_MOVED × deal value)</td><td>window picker recalculates</td><td>draft s31; PropCast MB attribution part</td></tr>
+      <tr><td>Model switcher</td><td>FIRST_TOUCH / LAST_TOUCH / LINEAR_DECAY_REPORTING; decay weights displayed and labeled "reporting assumptions, not proof of causation" — defaults paid click 0.4, organic content view 0.3, SEO page view 0.2, direct outreach 0.1 (admin-configurable)</td><td>AttributionModel config</td><td>switch recomputes report views only</td><td>PropReach MB §14.9</td></tr>
+      <tr><td>Model-honesty banner</td><td>"Reporting assumption — never feeds lead_score, content score, outreach priority, or audience eligibility"</td><td>static rule</td><td>—</td><td>MB §14.9</td></tr>
+      <tr><td>Per-piece row</td><td>title + ContentLock id (CL-xxxx), views, leads, pipeline $, note column (e.g. "hook autopsy: dollar-number open beat question-open 2.3×", "QR-label attribution: 31 scans, sign-QR 0 (rotate)")</td><td>nightly sync sheet → native ledger queries; append-only one row per content_lock_id per day</td><td>click → drill drawer; note → autopsy/QR detail</td><td>draft s31; PropCast MB nightly sync</td></tr>
+      <tr><td>Lock-level drill drawer</td><td>exact-identity metrics per checkpoint ladder (Day 1,2,3,5,7 all platforms; +14/30 Meta/TikTok; YT through Day 365); per-platform availability notes; variant A/B pairs with winners; first-party lane (never expires) vs platform lane distinction</td><td>platform metrics collection + owned-link/GA4/Rybbit/GSC/CRM</td><td>expand checkpoints; re-poll request (tracker re-open trigger)</td><td>PropCast MB metrics schedule</td></tr>
+      <tr><td>Degradation-rung indicator</td><td>per row/event batch: exact lock identity → content_id roll-up → campaign/platform level; stepped-down rows labeled, never fabricated</td><td>attribution degradation ladder</td><td>tooltip explains rung</td><td>PropCast MB ladder; matrix</td></tr>
+      <tr><td>Six CRM attribution fields panel (contact drill)</td><td>the attribution story on any captured lead: propcast content_id + lock identity + platform/source + lead-magnet/capture fields populated at capture moment [BEST GUESS on exact six field names — MB table cell not in converted text; interim = content_id, content_lock_id, approved_version_id, capture platform, lead magnet, capture_source until verified against the docx master]</td><td>CRM custom fields via webhook/API write-back</td><td>view on lead drill</td><td>PropCast MB "CRM Field Mapping"</td></tr>
+      <tr><td>Closed-deal trace row</td><td>"first touch: postcard (Torres path) · community page organic (Kim path)" + full chain view per deal: every ledger touch in order with channel, date, identity rung</td><td>ledger trace by contact_id + DEAL_CLOSED</td><td>open full-chain timeline</td><td>draft s31; PropCast MB weekly email</td></tr>
+      <tr><td>Campaigns (paid) tab</td><td>weekly-report schema surfaced: spend by platform/market-level/objective, CPL avg + splits, pipeline impact, top campaigns by ROI, top content by paid lift, assisted conversions, view-through conversions for Display/YT remarketing (blended context), creative health list, budget recommendations (review-required)</td><td>PropReachWeeklyReport + CampaignPerformanceSnapshot</td><td>recommendation → Approvals; campaign → 18</td><td>PropReach MB §21.5, §21.6</td></tr>
+      <tr><td>Impression-honesty note</td><td>ad impressions shown campaign/audience-level; contact-level only when identity_scope=CONTACT_DETERMINISTIC; never "this person saw your ad"</td><td>AD_IMPRESSION identity_scope</td><td>tooltip</td><td>PropReach MB §14.6</td></tr>
+      <tr><td>Hook autopsy browser (tab)</td><td>per-piece hook pattern results extended to titles/thumbnails; ranked patterns; feeds swipe file</td><td>A/B pair log + learning layer</td><td>filter by pattern/format/geo; save to swipe file</td><td>PropCast MB Part 10; draft s32 swipe file</td></tr>
+      <tr><td>AEO / AI citations panel</td><td>citations count by engine (ChatGPT / Perplexity / AI Overviews), cited page, self-reported "asked ChatGPT" leads</td><td>LLM_CITATION_DETECTED events + lead-source self-report</td><td>click → cited page in SEO console</td><td>draft s31; PropReach MB §17.4</td></tr>
+      <tr><td>Monday proof email mirror</td><td>exactly the weekly email: top 3 pieces by CRM contacts created (not views), pipeline moves attributed, content-to-deal highlight, one model-generated insight; sends Monday 7:00 AM, send-not-draft</td><td>weekly performance email job</td><td>view past emails; recipient settings</td><td>PropCast MB weekly email; draft s31; scheduled-reports send policy</td></tr>
+      <tr><td>QR-label analytics</td><td>per-label scan counts (sign/flyer/postcard/mailer) with rotate recommendations</td><td>LINK_SCANNED scan_type=QR by label</td><td>→ Creative Library pack</td><td>PropReach MB §10.3–10.4; draft s31</td></tr>
+      <tr><td>Calibration proposal cards</td><td>feedback-loop proposals surface as confirm/decline cards — never silently applied</td><td>learning layer</td><td>confirm/decline</td><td>matrix</td></tr>
+      <tr><td>Lead feedback prompts</td><td>mark converted/junk to improve platform optimization</td><td>campaign leads</td><td>per-lead action</td><td>PropReach MB §21.6</td></tr>
+      <tr><td>Null rendering</td><td>any missing metric renders "unknown" / "—" with reason (tracking blocked, platform metrics unavailable)</td><td>—</td><td>—</td><td>matrix; rule C42</td></tr>
+    </table>
+    </div>
+
+    <h2>States</h2>
+    <ul>
+      <li><b>Default / Loading</b>: stat tiles skeleton; table shimmer. Never render 0 for unknown — loading ≠ zero.</li>
+      <li><b>Empty</b>: "No attributed activity in this window — attribution starts the moment your first tracked link goes out."</li>
+      <li><b>Error/degraded (fail-closed)</b>: ledger query failure → screen-level error with retry, no cached fabrication; platform lane missing → first-party numbers shown with "platform metrics unavailable on &lt;platform&gt;"; GA4/Rybbit divergence → ledger wins, reconciliation note (GA4 is reconciliation only, MB §14.1); ScoringService/VideoIntelligence outage does not affect this screen except autopsy tab shows "pattern analysis unavailable" (never fabricated patterns, MB §13.2).</li>
+      <li><b>Permission-limited</b>: model-weight editing admin-only; team sees read-only; recommendation approvals owner-only.</li>
+      <li><b>Mobile</b>: per Layout.</li>
+    </ul>
+
+    <h2>Data fields</h2>
+    <p>Funnel: views, sessions, leads (int), pipeline GCI (USD). Piece rows: content_id (PC-YYYYMMDD-GEO-TYPE-hex format), content_lock_id, approved_version_id, lock_hash (drill only), per-metric nullable ints/moneys. Model weights: 0–1 floats summing 1.0, admin-editable. Weekly report: full PropReachWeeklyReport schema (§21.5). Deal trace: ordered events with event_type, timestamp, channel, identity rung. AEO: engine, count, cited URL, detected_at. Windows: TimeWindow ISO pairs; default 30 days [draft].</p>
+
+    <h2>Rules &amp; compliance</h2>
+    <ul>
+      <li><b>Event Ledger is the attribution source of truth</b> from MVP0; GA4 secondary, Sheets export-only (PropReach MB §14.1, §2.4). Rybbit is the primary owned-page analytics provider.</li>
+      <li><b>Reporting-only models:</b> LINEAR_DECAY must never change lead_score, content_performance_score, likelihood_to_list, outreach priority, audience eligibility, or Scoring Master outputs (§14.9).</li>
+      <li><b>Impression honesty</b> (§14.6) and <b>degradation ladder honesty</b> (PropCast MB): step down a rung, never fabricate.</li>
+      <li><b>Correlation ≠ causation (C42):</b> all lift/insight copy phrased as correlation; model switcher labeled assumption.</li>
+      <li><b>Contacts ranked by contacts-created, not views</b> in the proof email — vanity metrics never headline.</li>
+      <li><b>No sensitive-topic data</b> appears in any trace or insight; deal traces show channel-level touches, not inferred life events (§12.3).</li>
+      <li><b>Send-not-draft:</b> the Monday email actually sends (Graeham standing rule, CLAUDE.md 2026-06-13) to configured recipients.</li>
+      <li><b>Retention:</b> attribution records ATTRIBUTION_7Y; behavioral events BEHAVIORAL_24M (§24.8, MB addition).</li>
+    </ul>
+
+    <h2>Cross-links</h2>
+    <p>In: Distribution Content Flow (19), Campaign Manager (18), Creative Library QR packs (30), Command Center, SEO console (SEO_PAGE_PUBLISHED / PAGE_ORGANIC_TRAFFIC_SPIKE / LLM_CITATION_DETECTED), PropFlow contact records (six attribution fields), PropClose (DEAL_CLOSED + case-study facts). Out: hook autopsies → swipe file (32) and concept-forge inputs; budget recommendations → Approvals; cited pages → SEO console; traces → transaction/contact detail. <b>Ledger:</b> pure consumer — CONTENT_VIEWED, ORGANIC_VIDEO_VIEWED, PAGE_VIEWED, LINK_SCANNED, LEAD_CAPTURED, PIPELINE_MOVED, DEAL_CLOSED, CAMPAIGN_LAUNCHED, CAMPAIGN_PERFORMANCE_SIGNAL, LLM_CITATION_DETECTED; emits nothing except report-generated/email-sent audit records [BEST GUESS: REPORT_GENERATED-style audit entry — verify event name against the Event Registry before build; never invent a new ledger event without registering it, C6].</p>
+
+    <h2>Open decisions</h2>
+    <ul>
+      <li>[DECIDE] Draft header says "position-based" model while the canonical enum is FIRST_TOUCH/LAST_TOUCH/LINEAR_DECAY_REPORTING (Phase-3 sketch was 40/40/20): interim = ship the three canonical models; label LINEAR_DECAY's default weights in the switcher; "position-based" naming retired.</li>
+      <li>[DECIDE] Exact six CRM attribution field names: interim set listed above [BEST GUESS] — confirm against the PropCast Master Brain docx table (the converted md dropped the table body) before schema freeze.</li>
+      <li>[DECIDE] Dashboard tech: matrix results-dashboard memory says ECharts with dataZoom brush for trend lines — interim = adopt; UI contract unaffected.</li>
+      <li>[DECIDE] Whether this screen is the "platform read-model cockpit" superset (propiq-results-dashboard memory) or PropReach-scoped: interim = one Results screen with Content/Campaigns/Deals tabs reading the shared ledger — no new attribution DB.</li>
+    </ul>
+    <p class="anno" style="margin-top:20px">Wireframe fidelity — colors are placeholders from the locked PropFlow design language. All names/numbers are realistic fake data. Agent identity: Graeham Watts, Intero Real Estate, DRE# 01466876 (from shared-references/identity.json — never hardcode elsewhere; the identity.json blocklist value must never appear anywhere).</p>
+  </div>
+</div>

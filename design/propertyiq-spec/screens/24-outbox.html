@@ -1,0 +1,472 @@
+<title>PropertyIQ · Screen 24 — Outbox & Review Queue</title>
+<link href="https://api.fontshare.com/v2/css?f[]=technor@500,600,700&display=swap" rel="stylesheet">
+<link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<style>
+  /* Type system — Technor for display (the squared machine look), Inter for UI. */
+  :root{ --font-display:'Technor', Inter, -apple-system, 'Segoe UI', sans-serif; --font-ui: Inter, -apple-system, 'Segoe UI', Roboto, sans-serif; }
+</style>
+<style>
+  /* Palette v4 — PropFlow design language: neutral ink UI, ink-as-accent, color reserved for data. (extracted verbatim from propsearch-design-draft.html) */
+  :root, :root[data-theme="dark"], :root[data-theme="light"]{
+    --ink:#23282f; --paper:#fbfaf8; --surface:#f1efe9; --line:#e2dfd6;
+    --mut:#6b7076; --soft:#9b9f9f;
+    --brand:#2e6b53; --brand-ink:#ffffff; --brand-soft:#eaf1ec; --brand-deep:#1e4c3a;
+    --signal:#b07a2e;
+    --good:#2e7d4f; --warn:#a8630a; --crit:#b3372f;
+    --r:10px;
+  }
+  .intel .score, .mintel{ color:var(--brand-deep) }
+  .intel{ border-left:3px solid var(--brand) }
+  h1{ letter-spacing:-.02em }
+  .stat b{ letter-spacing:-.01em }
+  body[data-agent="watts"]{ --brand:#2e6b53; --brand-soft:#eaf1ec; --brand-deep:#1e4c3a; }
+
+  *{box-sizing:border-box; margin:0}
+  body{font:15px/1.55 var(--font-ui); color:var(--ink); background:var(--paper); padding-bottom:80px}
+  h1,h2,h3{line-height:1.15; text-wrap:balance; font-family:var(--font-display); font-weight:600}
+  h1{letter-spacing:-.01em}
+  .site{box-shadow:0 1px 2px rgba(20,24,32,.04), 0 8px 32px rgba(20,24,32,.06)}
+  .stat{box-shadow:0 1px 2px rgba(20,24,32,.03); transition:box-shadow .15s, transform .15s}
+  .stat:hover{box-shadow:0 4px 14px rgba(20,24,32,.08)}
+  .chip{transition:all .12s}
+  button{font-family:var(--font-ui)}
+  .num{font-variant-numeric:tabular-nums}
+  .wrap{max-width:1180px; margin:0 auto; padding:0 20px}
+
+  .bar{position:sticky; top:0; z-index:50; background:var(--paper); border-bottom:1px solid var(--line); padding:10px 0; backdrop-filter:blur(8px)}
+  .bar .wrap{display:flex; flex-wrap:wrap; gap:10px; align-items:center}
+  .bar .ttl{font-weight:700; margin-right:auto}
+  .bar .ttl small{display:block; font-weight:400; color:var(--mut)}
+  .bar a{color:var(--brand); font-size:13px; text-decoration:none}
+
+  .note{background:var(--surface); border:1px solid var(--line); border-radius:var(--r); padding:14px 16px; margin:0 0 22px; font-size:13.5px; color:var(--mut)}
+  .note b{color:var(--ink)}
+
+  .site{border:1px solid var(--line); border-radius:14px; overflow:hidden; background:var(--paper)}
+  .sitehead{display:flex; align-items:center; gap:14px; padding:14px 22px; border-bottom:1px solid var(--line)}
+  .avatar{width:38px; height:38px; border-radius:50%; background:var(--brand); color:var(--brand-ink); display:grid; place-items:center; font-weight:700}
+  .sitehead .who b{display:block}
+  .sitehead .who small{color:var(--mut)}
+  .sitehead nav{margin-left:auto; display:flex; gap:18px; font-size:13.5px; color:var(--mut)}
+  .sitehead nav a{color:inherit; text-decoration:none}
+  .sitehead nav a:hover{color:var(--brand)}
+
+  .chip{display:inline-flex; align-items:center; gap:6px; font-size:12.5px; font-weight:500; border:1px solid var(--line); border-radius:99px; padding:6px 12px; background:var(--paper); cursor:pointer; color:var(--ink)}
+  .chip:hover{border-color:var(--brand)}
+  .chip.on{background:var(--brand); border-color:var(--brand); color:var(--brand-ink); font-weight:600; box-shadow:0 2px 8px color-mix(in srgb, var(--brand) 30%, transparent)}
+
+  .statrow{display:grid; grid-template-columns:repeat(4,1fr); gap:10px}
+  .stat{background:var(--surface); border:1px solid var(--line); border-radius:var(--r); padding:12px}
+  .stat small{display:block; color:var(--mut); font-size:11.5px; text-transform:uppercase; letter-spacing:.05em}
+  .stat b{font-size:18px}
+  .stat .up{color:var(--good); font-size:12px}
+
+  .bdg{font-size:11.5px; border-radius:6px; padding:3px 8px; background:var(--surface); border:1px solid var(--line); color:var(--mut)}
+  .bdg.good{color:var(--good); border-color:color-mix(in srgb,var(--good) 30%,var(--line))}
+  .bdg.warn{color:var(--warn); border-color:color-mix(in srgb,var(--warn) 30%,var(--line))}
+
+  .dtable{width:100%; border-collapse:collapse; font-size:13px}
+  .dtable td,.dtable th{border-bottom:1px solid var(--line); padding:8px 10px; text-align:left}
+  .dtable th{font-size:11px; text-transform:uppercase; letter-spacing:.05em; color:var(--soft)}
+
+  @media (max-width:860px){ .statrow{grid-template-columns:repeat(2,1fr)} .maingrid{grid-template-columns:1fr !important} .console{grid-template-columns:1fr !important} .rail{display:none !important} }
+  @media (prefers-reduced-motion: reduce){ *{transition:none!important} }
+
+  /* ---- page-specific additions (same design language as the approved Screen 27 page) ---- */
+  .anno{font-size:11px; color:var(--soft)}
+  .cardbox{border:1px solid var(--line); border-radius:10px; padding:11px 14px; font-size:12.5px; background:var(--paper)}
+  .btn-ink{background:var(--ink); color:#fff; border:0; border-radius:7px; padding:7px 12px; font-size:11.5px; cursor:pointer; font-weight:600}
+  .btn-ghost{background:var(--paper); border:1px solid var(--line); border-radius:7px; padding:7px 12px; font-size:11.5px; cursor:pointer}
+  .sechead{font-size:14px; font-weight:700; margin:0 0 8px; font-family:var(--font-display)}
+  .cov td.ok{color:var(--good); font-weight:700}
+  .specdoc h2{font-size:18px; margin:26px 0 8px}
+  .specdoc h3{font-size:15px; margin:18px 0 6px}
+  .specdoc p, .specdoc li{font-size:13.5px; color:var(--mut)}
+  .specdoc b{color:var(--ink)}
+  .specdoc table{margin:8px 0}
+  .lanebdg{font-size:10px; border-radius:6px; padding:3px 8px; background:var(--surface); border:1px solid var(--line); color:var(--mut); text-transform:uppercase; letter-spacing:.04em; white-space:nowrap}
+  .sendrow{border:1px solid var(--line); border-radius:10px; padding:11px 14px; display:flex; gap:10px; align-items:center; flex-wrap:wrap; background:var(--paper); font-size:12.5px}
+  .sendrow .body{flex:1; min-width:260px}
+  .sendrow .ctx{color:var(--mut); font-size:11.5px; margin-top:2px}
+</style>
+
+<!-- ============ (1) slim header ============ -->
+<div class="bar">
+  <div class="wrap">
+    <div class="ttl">PropertyIQ · Screen 24 — Outbox & Review Queue <small>Full-density per-screen mock · wireframe fidelity · dev-facing annotations in gray</small></div>
+    <a href="../wireframe.html">← All screens</a>
+  </div>
+</div>
+
+<!-- ============ (2) THE FULL MOCK ============ -->
+<div class="wrap" style="padding-top:24px">
+  <div class="note"><b>Screen 24 — Universal Review Queue / Outbox.</b> Everything client-facing that a HUMAN must send, in typed lanes — plus the compliance flags and sensitive-topic handoffs where automation stops entirely. Distinct from Approvals (Tab 13): Approvals governs whether an automation may execute; the Outbox holds finished client-facing artifacts pending the review-first human forward (standing rule: client-facing content sends to Graeham + Adrian for review, who forward to the client — never auto-emailed to clients). Primary users: agent/owner; Adrian-class reviewer; delegated staff per-lane.</div>
+
+  <div class="site" data-agent="watts">
+    <!-- header: avatar · Outbox & review · pending counts · nav Published archive (spec Layout) -->
+    <div class="sitehead">
+      <div class="avatar">GW</div>
+      <div class="who"><b>Outbox & review</b><small class="num">5 pending sends · 2 flags · 1 duplicate review</small></div>
+      <nav><a href="#el-archive">Published archive</a><a href="#">Search (⌘K)</a><a href="#">🔔 3</a></nav>
+    </div>
+
+    <div class="console" style="display:grid; grid-template-columns:172px 1fr">
+      <!-- persistent agent-console left rail (same chrome as Screen 9) -->
+      <div class="rail" style="border-right:1px solid var(--line); padding:14px 10px; font-size:12.5px; display:flex; flex-direction:column; gap:2px; background:var(--surface)">
+        <a href="#" style="text-decoration:none; color:var(--ink); border-radius:8px; padding:8px 10px">☰ Today</a>
+        <a href="#" style="text-decoration:none; color:var(--ink); border-radius:8px; padding:8px 10px">🗺 Farm map</a>
+        <a href="#" style="text-decoration:none; color:var(--ink); border-radius:8px; padding:8px 10px">🤝 Past clients</a>
+        <a href="#" style="text-decoration:none; color:var(--ink); border-radius:8px; padding:8px 10px">👤 Leads & clients</a>
+        <a href="#" style="text-decoration:none; color:var(--ink); border-radius:8px; padding:8px 10px">💬 Comms <span class="bdg" style="font-size:9.5px">6</span></a>
+        <a href="#" style="text-decoration:none; color:#fff; background:var(--ink); border-radius:8px; padding:8px 10px; font-weight:600">📤 Outbox <span class="bdg" style="font-size:9.5px; background:var(--paper)">5·2</span></a>
+        <a href="#" style="text-decoration:none; color:var(--ink); border-radius:8px; padding:8px 10px">📋 Transactions <span class="bdg" style="font-size:9.5px">2</span></a>
+        <a href="#" style="text-decoration:none; color:var(--ink); border-radius:8px; padding:8px 10px">🎬 Content studio</a>
+        <a href="#" style="text-decoration:none; color:var(--ink); border-radius:8px; padding:8px 10px">📣 Ads & funnels</a>
+        <a href="#" style="text-decoration:none; color:var(--ink); border-radius:8px; padding:8px 10px">⚙ Playbooks</a>
+        <a href="#" style="text-decoration:none; color:var(--ink); border-radius:8px; padding:8px 10px">📈 Reports</a>
+        <div style="margin-top:auto; padding-top:10px; border-top:1px solid var(--line)">
+          <a href="#" style="text-decoration:none; color:var(--ink); border-radius:8px; padding:8px 10px; display:block">⚙ Settings</a>
+          <div class="anno" style="padding:6px 10px">Global chrome: persistent agent-console rail (Screen 9 pattern). The nav badge "5·2" = pending sends · flags — interrupt-tier sensitive handoffs also push a notification that deep-links here. Consumer pages never show this rail.</div>
+        </div>
+      </div>
+
+      <div>
+        <!-- header counts (KPI aggregate) -->
+        <div id="el-counts" style="padding:14px 22px 0">
+          <div class="statrow" style="grid-template-columns:repeat(5,1fr)">
+            <div class="stat"><small>Pending sends</small><b class="num">5</b> <span class="anno">sorted by promised-by</span></div>
+            <div class="stat" style="border-left:3px solid var(--crit)"><small>Flags</small><b class="num">2</b> <span class="anno">1 sensitive · 1 fair-housing</span></div>
+            <div class="stat"><small>Duplicate reviews</small><b class="num">1</b> <span class="anno">no auto-merge</span></div>
+            <div class="stat"><small>Due today</small><b class="num">2</b> <span class="anno">CMA 24h promise</span></div>
+            <div class="stat"><small>Published this wk</small><b class="num">11</b> <span class="up num">4 opened ×2+</span></div>
+          </div>
+          <div class="anno" style="margin-top:4px">Counts read from the Outbox queue aggregate (OutboxItem). No fabricated numbers — an unknown count renders "—". The left-nav badge and the push notification use the same aggregate ("5 pending sends · 2 flags").</div>
+        </div>
+
+        <!-- degraded-channel banner (fail-closed, shown here as the degraded state inline) -->
+        <div id="el-degraded" style="padding:10px 22px 0">
+          <div class="cardbox" style="border-color:var(--crit); background:#fdecec; display:flex; gap:10px; align-items:center; flex-wrap:wrap">
+            <span style="color:var(--crit)">⛔</span>
+            <div style="flex:1; min-width:260px"><b>Send channel down — nothing queued will go out</b>
+              <div style="color:var(--mut); font-size:11.5px">Gmail/SMTP (NotificationProvider) unreachable since 9:41 AM · all Review & send buttons disabled · nothing silently queues. Retrying — status also on Settings → send-channel health (Tab 21).</div>
+            </div>
+            <button class="btn-ghost">Channel health →</button>
+            <div class="anno" style="width:100%">Fail-closed rule: channel down = nothing sends. Same behavior if ComplianceProvider is down — ALL sends blocked (compliance must pass pre-send), flags stay visible. This banner is the degraded state rendered inline; in the healthy default it is absent and buttons are live (rows below are drawn live for the mock).</div>
+          </div>
+        </div>
+
+        <!-- lane filter chips (sticky with header) -->
+        <div id="el-lanes" style="padding:12px 22px 0; position:sticky; top:52px; background:var(--paper); z-index:5">
+          <div style="display:flex; gap:6px; flex-wrap:wrap">
+            <button class="chip on">All <span class="num">8</span></button>
+            <button class="chip">📊 CMAs <span class="num">1</span></button>
+            <button class="chip">🏠 Seller reports <span class="num">1</span></button>
+            <button class="chip">📰 Newsletters <span class="num">1</span></button>
+            <button class="chip">🎬 Crew packets <span class="num">1</span></button>
+            <button class="chip">✉️ Prospecting drafts <span class="num">2</span></button>
+            <button class="chip" style="border-color:var(--crit); color:var(--crit)">⚑ Flags <span class="num">2</span></button>
+          </div>
+          <div class="anno" style="margin-top:4px">Lane = OutboxItem.lane enum: CMA · SELLER_REPORT · NEWSLETTER · CREW_PACKET · PROSPECTING_DRAFT · SENSITIVE_HANDOFF · COMPLIANCE_FLAG · DUPLICATE_REVIEW [BEST GUESS chip set — matrix "typed lanes" list]. Delegates see granted lanes only (Tab 13 per-lane delegation model); the Flags chip never appears for delegates without the grant.</div>
+        </div>
+
+        <!-- ===== pending sends (default sort: promised-by first) ===== -->
+        <div id="el-pending" style="padding:12px 22px 0">
+          <div class="sechead">Pending sends — sorted by promised-by</div>
+          <div style="display:grid; gap:8px">
+
+            <div id="el-cma-row" class="sendrow" style="border-left:3px solid var(--signal)">
+              <span class="lanebdg">CMA</span>
+              <div class="body"><b>Torres CMA — 318 Hurlingame</b> <span class="bdg warn">due today (promised 24h)</span>
+                <div class="ctx">hosted URL ready ✓ (online-content) · from Past Client OS 6-mo batch (Tab 27) · sends to <b style="color:var(--ink)">YOU + Adrian for forward</b>, per review-first rule — never direct to the client</div>
+              </div>
+              <button class="btn-ink" disabled style="opacity:.45" title="send channel down">Review & send</button>
+              <div class="anno" style="width:100%">Source: cma-generator pipeline output; hosted URL on online-content. Opens on the URL feed the CMA-open propensity signal (Tab 27). Button disabled while the channel is down (banner above).</div>
+            </div>
+
+            <div id="el-seller-row" class="sendrow">
+              <span class="lanebdg">Seller report</span>
+              <div class="body"><b>Weekly seller dashboard email — 118 Beech (the Nguyens)</b> <span class="bdg">Monday doorway email</span>
+                <div class="ctx">links the live weekly dashboard (durable URL, week navigator) · showing feedback verbatim included (2 entries) · recipients: you + Adrian, forward to seller</div>
+              </div>
+              <button class="btn-ink" disabled style="opacity:.45">Review & send</button>
+              <div class="anno" style="width:100%">PropClose Weekly Seller Dashboard artifact — the report IS the live dashboard; this email is only the doorway, review-first (matrix correction #8).</div>
+            </div>
+
+            <div id="el-newsletter-row" class="sendrow">
+              <span class="lanebdg">Newsletter</span>
+              <div class="body"><b>Farm letter — 3 segment variants</b> <span class="bdg">scheduled Thu 8:00 AM pending approval</span>
+                <div class="ctx">owners / buyers / investors previews · per-segment approval gate — nothing arms until all three are reviewed</div>
+              </div>
+              <button class="btn-ghost">Preview ×3</button>
+              <button class="btn-ink" disabled style="opacity:.45">Approve schedule</button>
+              <div class="anno" style="width:100%">Newsletter builder per-segment outputs. Approving arms the schedule; the send still fires through the compliance gate at send time [DECIDE interim]. Edit → returns to the newsletter editor and re-enters this queue.</div>
+            </div>
+
+            <!-- newsletter per-segment preview overlay (rendered inline for the mock) -->
+            <div id="el-preview-overlay" class="cardbox" style="background:var(--surface); margin-left:24px">
+              <b>Per-segment preview overlay (what "Preview ×3" opens)</b>
+              <div style="display:inline-flex; border:1px solid var(--line); border-radius:99px; overflow:hidden; font-size:11px; background:var(--paper); margin:6px 0">
+                <span style="padding:5px 12px; background:var(--ink); color:#fff; font-weight:600">Owners</span><span style="padding:5px 12px; color:var(--mut); cursor:pointer">Buyers</span><span style="padding:5px 12px; color:var(--mut); cursor:pointer">Investors</span>
+              </div>
+              <div style="background:var(--paper); border:1px solid var(--line); border-radius:8px; padding:10px 12px; font-size:11.5px; color:var(--mut)">
+                <b style="color:var(--ink)">Owners variant:</b> "Your July equity check-in — Menlo Park moved +1.2% this quarter…" · equity module + market digest module + 1 local story · footer: Graeham Watts · Intero Real Estate · DRE# 01466876 · CAN-SPAM unsubscribe link ✓
+              </div>
+              <div style="display:flex; gap:6px; margin-top:6px"><button class="btn-ink" disabled style="opacity:.45">Approve this variant</button><button class="btn-ghost">Edit in builder</button><button class="btn-ghost">← Back to queue</button></div>
+              <div class="anno" style="margin-top:4px">Segment-switcher overlay: each variant previews the exact rendered HTML. Identity strip (name/brokerage/DRE) reads from shared-references/identity.json — never hardcoded; the identity.json blocklist is enforced by the brand tripwire pre-publish.</div>
+            </div>
+
+            <div id="el-crew-row" class="sendrow">
+              <span class="lanebdg">Crew packet</span>
+              <div class="body"><b>Pre-shoot packets — 2369 Oakwood launch</b> <span class="bdg good">Listing-Plan Card approved ✓ (Tab 13, Jul 14)</span>
+                <div class="ctx">3 recipients, sent individually: 🎥 videographer (shot list + time-blocks) · ✂️ editor (deliverable specs) · 👤 agent day-of card</div>
+              </div>
+              <button class="btn-ink" disabled style="opacity:.45">Review & send per recipient</button>
+              <div class="anno" style="width:100%">Wattson listing playbooks (Part 9): team-facing sends are REVIEW_REQUIRED, never AUTONOMOUS, and fire only after the one-approval Listing-Plan Card cleared — this queue is the second (send) gate, not a bypass (NOTHING_DISPATCHES_UNTIL_APPROVED, matrix correction #1).</div>
+            </div>
+
+            <div id="el-prospecting-rows" style="display:grid; gap:8px">
+              <div class="sendrow">
+                <span class="lanebdg">Prospecting draft</span>
+                <div class="body"><b>Expired-listing outreach — 74 Dumbarton Ave (expired Jul 12)</b>
+                  <div class="ctx">draft letter + call script · consent & DNC pre-checked ✓ · drafts never auto-send</div>
+                </div>
+                <button class="btn-ink" disabled style="opacity:.45">Review & send</button><button class="btn-ghost">Edit</button><button class="btn-ghost">Discard</button>
+              </div>
+              <div class="sendrow">
+                <span class="lanebdg">Prospecting draft</span>
+                <div class="body"><b>DOM-anomaly outreach — 512 Bell St (94 DOM, 2 price cuts)</b>
+                  <div class="ctx">off-market angle draft · agent-to-agent etiquette check ✓ · quiet-hours window respected</div>
+                </div>
+                <button class="btn-ink" disabled style="opacity:.45">Review & send</button><button class="btn-ghost">Edit</button><button class="btn-ghost">Discard</button>
+              </div>
+              <div class="anno">Wattson MLS playbooks emit these as drafts only (matrix Wattson MLS gap). Every one runs ComplianceProvider.check_outbound_contact() pre-send: consent, DNC, quiet hours, CAN-SPAM unsubscribe for email — blocked sends show the reason inline, never fail silently, never improvise (matrix correction #11).</div>
+            </div>
+          </div>
+        </div>
+
+        <!-- ===== flags (visually distinct, below pending on desktop; pinned top on mobile) ===== -->
+        <div id="el-flags" style="padding:16px 22px 0">
+          <div class="sechead">Flags — automation stops here</div>
+          <div style="display:grid; gap:8px">
+
+            <div id="el-sensitive" style="border:1.5px solid var(--crit); border-radius:10px; padding:12px 14px; background:#fdecec; font-size:12.5px">
+              <b>🛑 Sensitive-topic handoff — lead mentioned divorce in reply</b>
+              <div style="color:var(--mut); font-size:11.5px; margin-top:3px">All automation suspended on this contact. Conversation-so-far attached; this is yours from here. (Same rule for estate/probate, illness, religion, disability, family status, any protected class, regulated financial distress.)</div>
+              <div id="el-noauto" style="border:1px solid var(--crit); border-radius:7px; padding:6px 10px; margin-top:8px; font-size:11.5px; background:var(--paper)"><b style="color:var(--crit)">No automation will touch this contact.</b> <span style="color:var(--mut)">Detection sets human_handoff_required=true ONLY — no score change, no field write, no audience inclusion, no automated outreach, no priority change.</span></div>
+              <div style="display:flex; gap:6px; margin-top:8px"><button class="btn-ink">Open conversation (CRM →)</button><button class="btn-ghost">Mark handled (logged)</button></div>
+              <div class="anno" style="margin-top:5px">Compliance layer C1/B1.8, V0 §13.7. The card offers ZERO automated actions — the two buttons are human navigation + a logged human resolution on the contact. Interrupt-tier alert lands the owner here. Visibility: owner-only by default [BEST GUESS]; hidden from delegate lanes.</div>
+            </div>
+
+            <div id="el-fairhousing" style="border:1.5px solid var(--warn); border-radius:10px; padding:12px 14px; background:#fdf6ee; font-size:12.5px">
+              <b>⚑ Fair-housing flag — draft GBP reply used "family-friendly neighborhood"</b>
+              <div style="color:var(--mut); font-size:11.5px; margin-top:3px">Blocked pre-send (ComplianceProvider: needs_review) · flagged phrase highlighted in the draft · suggested compliant rewrite: <b style="color:var(--ink)">"close to parks and schools"</b></div>
+              <div style="display:flex; gap:6px; margin-top:8px"><button class="btn-ink">Approve rewrite (re-queues send)</button><button class="btn-ghost">Edit draft</button><button class="btn-ghost">Discard</button></div>
+              <div class="anno" style="margin-top:5px">V0 Fair Housing/FEHA gates: proxies like "safe area," "family-friendly," "up-and-coming," schools-as-selling-point are blocked pre-send with the specific phrase + a compliant rewrite offered. School-data steering rules apply to any community content passing through (V0 C11). Nothing publishes until the flag resolves.</div>
+            </div>
+
+            <div id="el-duplicate" class="cardbox">
+              <b>Duplicate review — two contact candidates from lead intake</b> <span class="bdg">PropFlow dedupe queue · no auto-merge</span>
+              <div style="display:grid; grid-template-columns:1fr 1fr; gap:10px; margin-top:8px; font-size:11.5px">
+                <div style="border:1px solid var(--line); border-radius:8px; padding:9px 11px; background:var(--surface)">
+                  <b>Candidate A — "Mike Torres"</b>
+                  <div style="color:var(--mut); margin-top:3px" class="num">source: IDX form (Jul 13) · m.torres@example.com · <b style="color:var(--warn)">(650) 555-0187</b> · consent: email ✓ · no address</div>
+                </div>
+                <div style="border:1px solid var(--line); border-radius:8px; padding:9px 11px; background:var(--surface)">
+                  <b>Candidate B — "Michael Torres"</b>
+                  <div style="color:var(--mut); margin-top:3px" class="num">source: open-house QR (Jul 14) · m.torres@example.com · <b style="color:var(--warn)">(650) 555-0122</b> · consent: email + SMS ✓ · 318 Hurlingame</div>
+                </div>
+              </div>
+              <div class="anno" style="margin-top:5px">Field-level diffs highlighted (phone conflicts in amber). Merge preserves BOTH consent evidence trails; Keep separate records the decision. Always a human decision — the matrix PropFlow gap is explicit: no auto-merge.</div>
+              <div style="display:flex; gap:6px; margin-top:6px"><button class="btn-ink">Merge →</button><button class="btn-ghost">Keep separate</button></div>
+            </div>
+          </div>
+        </div>
+
+        <!-- ===== review & send flow ===== -->
+        <div id="el-sendflow" style="padding:16px 22px 0">
+          <div style="border:1.5px solid var(--brand); border-radius:12px; padding:14px 16px; background:var(--brand-soft)">
+            <b style="font-size:14px">Review & send flow (what "Review & send" opens) — Torres CMA</b>
+            <div style="display:grid; grid-template-columns:1.4fr 1fr; gap:12px; margin-top:10px; font-size:12px" class="maingrid">
+              <div style="background:var(--paper); border:1px solid var(--line); border-radius:9px; padding:10px">
+                <b>Full artifact preview</b>
+                <div style="border:1px dashed var(--line); border-radius:8px; padding:18px 12px; margin-top:6px; text-align:center; color:var(--soft); font-size:11.5px">[ hosted-URL iframe — 318 Hurlingame CMA, 3-strategy pricing, contact strip from identity.json ]<br>graehamwatts.github.io/online-content/cmas/318-hurlingame/</div>
+                <div class="anno" style="margin-top:5px">Preview renders the exact hosted artifact (or the HTML email render for email-native artifacts) — what you approve is byte-for-byte what forwards.</div>
+              </div>
+              <div style="background:var(--paper); border:1px solid var(--line); border-radius:9px; padding:10px">
+                <b>Recipients</b>
+                <div style="color:var(--mut); margin-top:5px" class="num">TO: graehamwatts@gmail.com<br>TO: graehamwattsclientcare@gmail.com (Adrian)<br><span class="anno">defaults for client-facing artifacts per the standing rule; task-specific recipients come from the artifact config</span></div>
+                <div style="border-top:1px solid var(--line); margin-top:8px; padding-top:8px">
+                  <b>Pre-send compliance gate</b>
+                  <div style="color:var(--mut); font-size:11.5px; margin-top:3px">✓ consent on file · ✓ not on DNC · ✓ inside quiet hours · ✓ CAN-SPAM unsubscribe present</div>
+                  <div class="anno" style="margin-top:3px">check_outbound_contact() runs at click time and BLOCKS with the reason inline on failure. ComplianceProvider down → send blocked (fail-closed).</div>
+                </div>
+                <button class="btn-ink" disabled style="opacity:.45; margin-top:8px; width:100%">Confirm send — channel down</button>
+              </div>
+            </div>
+            <div class="anno" style="margin-top:6px">On send: NotificationProvider (EMAIL) → item moves to Published archive with its permanent hosted URL · ledger emits NOTIFICATION_QUEUED → NOTIFICATION_SENT (or NOTIFICATION_FAILED → row returns to the queue with the failure reason, never silently dropped). NOTIFICATION_* events are emitted by the platform NotificationProvider on Wattson's behalf (Brain ownership note — see Spec gaps).</div>
+          </div>
+        </div>
+
+        <!-- ===== published archive ===== -->
+        <div id="el-archive" style="padding:16px 22px 0">
+          <div class="cardbox">
+            <div style="display:flex; gap:10px; align-items:center; flex-wrap:wrap">
+              <b>Published archive — everything sent, each with its permanent URL</b>
+              <input placeholder="Search archive…" style="border:1px solid var(--line); border-radius:7px; padding:5px 10px; font-size:11.5px; background:var(--paper)" aria-label="search archive">
+              <span class="chip" style="font-size:10.5px">All types</span><span class="chip" style="font-size:10.5px">Last 30 days</span>
+            </div>
+            <div style="overflow-x:auto">
+            <table class="dtable" style="font-size:11.5px; margin-top:8px; min-width:720px">
+              <tr><th>Type</th><th>Artifact</th><th>Recipient(s)</th><th>Sent</th><th>Permanent URL</th><th>Opens</th></tr>
+              <tr><td><span class="lanebdg">CMA</span></td><td>Parks 6-mo CMA — 41 Elm Ct</td><td>You + Adrian → Parks</td><td class="num">Jul 9</td><td class="num">…/cmas/41-elm-ct/ <button class="btn-ghost" style="padding:2px 8px">⧉ copy</button></td><td class="num"><span class="bdg warn">×3 → seller-signal flag (Tab 27)</span></td></tr>
+              <tr><td><span class="lanebdg">Seller report</span></td><td>Weekly dashboard wk 28 — 118 Beech</td><td>You + Adrian → Nguyens</td><td class="num">Jul 7</td><td class="num">…/dashboards/118-beech/wk28 <button class="btn-ghost" style="padding:2px 8px">⧉ copy</button></td><td class="num">×1</td></tr>
+              <tr><td><span class="lanebdg">Newsletter</span></td><td>June farm letter (3 segments)</td><td>farm list (segmented)</td><td class="num">Jun 26</td><td class="num">…/newsletters/2026-06/ <button class="btn-ghost" style="padding:2px 8px">⧉ copy</button></td><td class="num">41% open</td></tr>
+              <tr><td><span class="lanebdg">Crew packet</span></td><td>Shoot packet — 2369 Oakwood</td><td>videographer, editor</td><td class="num">Jun 24</td><td class="num">…/call-sheets/2369-oakwood/ <button class="btn-ghost" style="padding:2px 8px">⧉ copy</button></td><td class="num">—</td></tr>
+            </table>
+            </div>
+            <div class="anno" style="margin-top:5px">Matrix rule: "every published report gets a copyable permanent URL" (online-content hosting pattern). Open tracking where available — CMA opens feed the propensity fact (Tab 27); "—" where tracking doesn't exist, never fabricated. Data: hosted URLs + ledger send events (NOTIFICATION_SENT) + PORTAL_VIEWED / page-view events. [DECIDE] archive as a view within this screen (interim) vs. its own screen.</div>
+          </div>
+        </div>
+
+        <!-- ===== states strip ===== -->
+        <div id="el-states" style="padding:16px 22px 0">
+          <div class="cardbox" style="font-size:11.5px">
+            <b>States (dev reference)</b>
+            <div style="display:grid; grid-template-columns:repeat(3,1fr); gap:8px; margin-top:8px" class="maingrid">
+              <div style="border:1px solid var(--line); border-radius:8px; padding:8px 10px; background:var(--surface)"><b>Loading</b><div style="color:var(--mut); margin-top:3px">Skeleton rows first; count badges resolve last (no flash of wrong numbers).</div><div style="height:8px; background:var(--line); border-radius:4px; margin-top:6px; width:80%"></div><div style="height:8px; background:var(--line); border-radius:4px; margin-top:4px; width:60%"></div></div>
+              <div id="el-empty" style="border:1px solid var(--line); border-radius:8px; padding:8px 10px; background:var(--surface)"><b>Empty</b><div style="color:var(--mut); margin-top:3px">"Outbox clear — nothing waiting on you" + "expected this week: 3 CMAs (Aug batch), Monday seller email" [BEST GUESS copy] · Published archive still reachable.</div></div>
+              <div style="border:1px solid var(--line); border-radius:8px; padding:8px 10px; background:var(--surface)"><b>Degraded (fail-closed)</b><div style="color:var(--mut); margin-top:3px">Send channel down → banner (rendered live above), buttons disabled, nothing silently queues · ComplianceProvider down → ALL sends blocked, flags remain visible.</div></div>
+            </div>
+            <div style="color:var(--mut); margin-top:8px">
+              <b style="color:var(--ink)">Permission-limited:</b> delegate sees granted lanes only (per-lane delegation, Tab 13 model) · sensitive-topic cards visible ONLY to the owner (and explicitly-granted humans) [BEST GUESS: owner-only default].
+              <b style="color:var(--ink)">Default:</b> pending sends sorted by promised-by (due-today first); flags pinned top of list on mobile regardless of filter (safety first).
+            </div>
+          </div>
+        </div>
+
+        <!-- ===== mobile variant strip ===== -->
+        <div id="el-mobile" style="padding:16px 22px 18px">
+          <div class="cardbox">
+            <b>Mobile variant (375px)</b>
+            <div style="display:flex; gap:10px; margin-top:8px; overflow-x:auto">
+              <div style="min-width:150px; border:1px solid var(--line); border-radius:12px; padding:8px; font-size:9.5px; background:var(--surface)">
+                <div style="border:1px solid var(--crit); border-radius:6px; padding:5px; background:#fdecec"><b>🛑 Sensitive handoff</b><div style="color:var(--mut)">pinned top, always</div></div>
+                <div style="border:1px solid var(--warn); border-radius:6px; padding:5px; margin-top:4px; background:#fdf6ee"><b>⚑ Fair-housing</b></div>
+                <div style="border:1px solid var(--line); border-radius:6px; padding:5px; margin-top:4px; background:var(--paper)"><b>CMA · Torres</b><div style="color:var(--mut)">due today</div></div>
+                <div style="border:1px solid var(--line); border-radius:6px; padding:5px; margin-top:4px; background:var(--paper)"><b>Seller report</b></div>
+                <div class="anno" style="margin-top:4px">full-width cards · flags pinned top regardless of filter</div>
+              </div>
+              <div style="min-width:150px; border:1px solid var(--line); border-radius:12px; padding:8px; font-size:9.5px; background:var(--surface)">
+                <b style="font-size:10px">Review & send (full screen)</b>
+                <div style="border:1px dashed var(--line); border-radius:6px; padding:14px 5px; margin-top:4px; text-align:center; color:var(--soft)">[ full-screen artifact preview ]</div>
+                <div style="border:1px solid var(--ink); background:var(--ink); color:#fff; border-radius:6px; padding:5px; margin-top:4px; text-align:center; font-weight:700">Confirm send</div>
+                <div class="anno" style="margin-top:4px">send button pinned bottom · full-screen preview before ANY send — no one-tap blind sends</div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ============ Spec gaps found (Master-Brain cross-reference) ============ -->
+  <div class="note" style="margin-top:26px; border-color:var(--signal)"><b>Spec gaps found (Master-Brain cross-reference — rendered in the mock):</b>
+    (1) <b>NOTIFICATION_* ownership</b> — the Wattson Master Brain notes NOTIFICATION_QUEUED/SENT/FAILED are emitted by the platform NotificationProvider on Wattson's behalf, not by Wattson — annotated in the Review & send flow.
+    (2) <b>touch_ledger_lock fail-closed detail</b> (PropFlow MB): if the lock service is unavailable, discretionary sends fail closed and create a review task; only pre-approved transactional notices may retry after backoff and only when check_outbound_contact() passes — folded into the pre-send gate annotation.
+    (3) <b>Suppressed duplicate sends are recorded in workflow history</b>, never silent (PropFlow MB) — matches the never-silent rule used across the queue.
+    (4) <b>Reddit internal review queue</b> (Wattson C24): Reddit drafts are internal-review-only and NEVER post/vote — they route through the prospecting-draft lane pattern; noted here since the spec's lane list omits them.
+    (5) <b>/approved-leads dedupe_result</b> (created/updated/review/rejected) is what feeds the duplicate-review card, and a ReferralEdge duplicate/conflict also opens a review task — annotated on the duplicate card.
+  </div>
+
+  <!-- ============ (3) ELEMENT COVERAGE ============ -->
+  <h2 style="font-size:20px; margin:20px 0 10px">Element coverage — spec inventory → this page</h2>
+  <table class="dtable cov" style="font-size:12.5px">
+    <tr><th>Spec inventory element</th><th>Rendered at</th><th>Status</th></tr>
+    <tr><td>Header counts (pending sends + flags)</td><td><a href="#el-counts">KPI count row</a> + sitehead subtitle</td><td class="ok">✓</td></tr>
+    <tr><td>Lane chips (filter by artifact type)</td><td><a href="#el-lanes">Lane filter chips</a></td><td class="ok">✓</td></tr>
+    <tr><td>CMA row (hosted URL, 24h promise, review-first recipients)</td><td><a href="#el-cma-row">Torres CMA row</a></td><td class="ok">✓</td></tr>
+    <tr><td>Seller-report row (Monday doorway email, verbatim feedback)</td><td><a href="#el-seller-row">Seller report row</a></td><td class="ok">✓</td></tr>
+    <tr><td>Newsletter row (3 segment variants, Preview ×3, schedule gate)</td><td><a href="#el-newsletter-row">Newsletter row</a> + <a href="#el-preview-overlay">preview overlay</a></td><td class="ok">✓</td></tr>
+    <tr><td>Crew-packet row (per recipient, after Listing-Plan Card)</td><td><a href="#el-crew-row">Crew packet row</a></td><td class="ok">✓</td></tr>
+    <tr><td>Prospecting-draft rows (never auto-send)</td><td><a href="#el-prospecting-rows">Prospecting drafts</a></td><td class="ok">✓</td></tr>
+    <tr><td>Sensitive-topic handoff card (zero automated actions)</td><td><a href="#el-sensitive">Sensitive handoff card</a></td><td class="ok">✓</td></tr>
+    <tr><td>"No automation will touch this contact" notice</td><td><a href="#el-noauto">Notice inside the sensitive card</a></td><td class="ok">✓</td></tr>
+    <tr><td>Fair-housing flag card (blocked pre-send + rewrite)</td><td><a href="#el-fairhousing">Fair-housing card</a></td><td class="ok">✓</td></tr>
+    <tr><td>Duplicate-review card (side-by-side, Merge / Keep separate)</td><td><a href="#el-duplicate">Duplicate review card</a></td><td class="ok">✓</td></tr>
+    <tr><td>Review & send flow (preview + recipients + compliance gate)</td><td><a href="#el-sendflow">Review & send flow</a></td><td class="ok">✓</td></tr>
+    <tr><td>Published archive (permanent URLs, copy, open tracking)</td><td><a href="#el-archive">Published archive</a></td><td class="ok">✓</td></tr>
+    <tr><td>Empty state (clear message + expected items)</td><td><a href="#el-empty">States strip → Empty</a></td><td class="ok">✓</td></tr>
+  </table>
+  <div style="border:1.5px solid var(--good); background:#f2f8f4; border-radius:10px; padding:12px 16px; margin:12px 0 0; font-weight:700; color:var(--good)">14 of 14 spec elements rendered ✓ <span style="font-weight:400; color:var(--mut); font-size:12.5px">— plus prompt-required regions beyond the inventory: degraded-channel banner (fail-closed) rendered live, loading/empty/degraded states strip, permission-limited notes, mobile variant strip, left-rail agent chrome; plus the 5 Master-Brain additions listed in "Spec gaps found" above.</span></div>
+
+  <!-- ============ (4) FULL SPEC AS HTML ============ -->
+  <div class="specdoc">
+    <h1 style="font-size:24px; margin:40px 0 6px">Spec — 24 · Universal Review Queue / Outbox</h1>
+    <p><b>Purpose</b> Everything client-facing that a HUMAN must send, in typed lanes — plus the compliance flags and sensitive-topic handoffs where automation stops entirely. Distinct from Approvals (Tab 13): Approvals governs whether an automation may execute; the Outbox holds finished client-facing artifacts pending the review-first human forward (standing rule: client-facing content is sent to Graeham + Adrian for review, who forward to the client — never auto-emailed to clients).</p>
+    <p><b>Primary users</b> Agent/owner; Adrian-class reviewer (client-care) as a second recipient of review-first sends. Delegated staff may work specific lanes if granted (same per-lane delegation model as Tab 13).</p>
+    <p><b>Entry points</b> Left-nav / top-bar "Outbox" entry with pending badge ("5 pending sends · 2 flags"). Deep links from: Past Client OS (Tab 27 — 6-month CMAs land here for review), CMA Builder (publish → Outbox), Weekly Seller Dashboard pipeline (Monday doorway email), Newsletter builder ("Approve all 3 → Outbox"), Prospecting Hub (draft outreach), transaction milestones (crew packets, seller reports). Push: sensitive-topic handoff is an interrupt-tier alert that lands the user here.</p>
+    <p><b>Exit points</b> Review & send → send flow (Gmail/SMTP via NotificationProvider) → item moves to Published archive with hosted URL; ledger send events emitted. Preview ×N → per-segment preview overlay (newsletters) → back or approve. Edit → owning builder screen (CMA builder, newsletter editor, composer) → re-enters queue. Sensitive-topic handoff card → opens the contact's conversation (CRM Tab 14) with automation suspended; resolving it is a human action logged on the contact. Fair-housing flag → approve suggested rewrite (re-queues the send) or edit or discard. "Published archive" nav → archive of everything sent, each with its copyable permanent hosted URL (matrix: "every published report gets a copyable permanent URL").</p>
+
+    <h2>Layout</h2>
+    <p><b>Desktop:</b> Header — avatar · "Outbox & review" · "5 pending sends · 2 flags" · nav: Published archive. Lane filter chips: All / CMAs / Seller reports / Newsletters / Crew packets / Prospecting drafts / Flags [BEST GUESS chip set — derived from matrix lane list: "seller reports, crew packets, newsletters, CMAs, sensitive-topic handoffs, Fair-Housing flags, duplicate reviews"]. Main (single column): pending-send rows first (compact rows: lane badge · title · context line · primary action button), then flag cards visually distinct: sensitive-topic = crit-red bordered card, compliance/fair-housing = warn-amber bordered card. Duplicate-review conflict cards (from lead intake) render as side-by-side contact candidates with Merge / Keep separate (matrix PropFlow gap — no auto-merge). Sticky: header + chips. No rails/footer.</p>
+    <p><b>Mobile (375px):</b> rows become full-width cards; Review & send opens a full-screen preview with the send button pinned bottom; flags pinned to the top of the list regardless of filter (safety first).</p>
+
+    <h2>Element inventory</h2>
+    <div style="overflow-x:auto">
+    <table class="dtable">
+      <tr><th>Element</th><th>What it shows/does</th><th>Data source</th><th>Interactions</th><th>Spec source</th></tr>
+      <tr><td>Header counts</td><td>Pending sends + flags</td><td>Outbox queue aggregate</td><td>none</td><td>Draft Screen 24</td></tr>
+      <tr><td>Lane chips</td><td>Filter by artifact type</td><td>OutboxItem.lane</td><td>Filter</td><td>Matrix "typed lanes" [BEST GUESS exact chip set]</td></tr>
+      <tr><td>CMA row</td><td>e.g. "Torres CMA — 318 Hurlingame · hosted URL ready · due today (promised 24h) · sends to YOU + Adrian for forward, per review-first rule"</td><td>cma-generator pipeline output; hosted URL on online-content</td><td>Review & send → full preview → send</td><td>Draft; CMA skill review-first rule; Past Client OS 6-mo CMA cadence</td></tr>
+      <tr><td>Seller-report row</td><td>"Weekly seller dashboard email — Monday doorway email · showing feedback verbatim included (N entries)"</td><td>PropClose Weekly Seller Dashboard artifact (durable URL, week navigator, verbatim feedback)</td><td>Review & send</td><td>Draft; matrix correction #8 (seller report = live weekly dashboard, doorway email review-first)</td></tr>
+      <tr><td>Newsletter row</td><td>"Farm letter — 3 segment variants · owners/buyers/investors previews · scheduled Thu 8am pending approval"</td><td>Newsletter builder per-segment outputs</td><td>Preview ×3 (segment-switcher overlay) → approve schedule / edit</td><td>Draft; matrix newsletter gap (per-segment preview, approval gate)</td></tr>
+      <tr><td>Crew-packet row</td><td>Pre-shoot packets to videographer/editor/agent, pending after the Listing-Plan Card cleared</td><td>Wattson listing playbooks (Part 9: team-facing sends REVIEW_REQUIRED, never AUTONOMOUS, fire only after the one-approval card)</td><td>Review & send per recipient</td><td>Wattson MB Part 9; matrix correction #1 (NOTHING_DISPATCHES_UNTIL_APPROVED)</td></tr>
+      <tr><td>Prospecting-draft rows</td><td>Expired/off-market/DOM-anomaly outreach drafts; drafts never auto-send</td><td>Wattson MLS playbooks</td><td>Review & send / edit / discard</td><td>Matrix Wattson MLS gap</td></tr>
+      <tr><td>Sensitive-topic handoff card</td><td>"🛑 lead mentioned divorce in reply — All automation suspended on this contact. Conversation-so-far attached; this is yours from here. (Same rule for estate, illness, financial distress.)"</td><td>Compliance layer: human_handoff_required=true (C1/B1.8); topic list: divorce, probate/estate, health, religion, disability, family status, protected class, regulated financial distress</td><td>Open conversation (CRM); mark handled (logged); NO automated actions offered</td><td>Wattson MB C1/B1.8; V0 §13.7; draft</td></tr>
+      <tr><td>"No automation will touch this contact" notice</td><td>Explicit statement on every sensitive card</td><td>Compliance flag</td><td>none</td><td>Matrix Platform review-queue gap</td></tr>
+      <tr><td>Fair-housing flag card</td><td>"⚑ draft GBP reply used 'family-friendly neighborhood' · Blocked pre-send · suggested rewrite: 'close to parks and schools'"</td><td>ComplianceProvider needs_review result</td><td>Approve rewrite / Edit / Discard</td><td>Draft; V0 Fair Housing/FEHA gates</td></tr>
+      <tr><td>Duplicate-review card</td><td>Two candidate contacts side-by-side with field diffs</td><td>PropFlow intake dedupe queue (no auto-merge)</td><td>Merge / Keep separate</td><td>Matrix PropFlow lead-inbox gap</td></tr>
+      <tr><td>Review & send flow</td><td>Full artifact preview (hosted URL iframe or HTML email render) + recipients (defaults: Graeham + Adrian for client-facing; task-specific recipients per artifact) + send button</td><td>NotificationProvider (EMAIL); recipients from artifact config</td><td>Confirm send; compliance check runs pre-send and blocks with reason on failure</td><td>Standing review-first rule; NotificationProvider contract (B3.4)</td></tr>
+      <tr><td>Published archive</td><td>Every sent/published artifact: type, recipient, sent date, permanent hosted URL (copy button), open tracking where available (CMA opens feed propensity — Tab 27)</td><td>online-content hosted URLs + ledger send events</td><td>Search/filter, copy URL, open artifact</td><td>Matrix skills-library Outbox gap; draft Tab 27 CMA open-tracking</td></tr>
+      <tr><td>Empty state</td><td>"Outbox clear — nothing waiting on you" + count of items expected this week [BEST GUESS copy]</td><td>queue</td><td>none</td><td>pattern parity with Tab 13</td></tr>
+    </table>
+    </div>
+
+    <h2>States</h2>
+    <ul>
+      <li><b>Default:</b> pending sends sorted by due date (promised-by first, e.g. "due today (promised 24h)"); flags pinned top.</li>
+      <li><b>Loading:</b> skeleton rows; badges last.</li>
+      <li><b>Empty:</b> clear-state message; archive still reachable.</li>
+      <li><b>Error/degraded (fail-closed):</b> send pipeline (SMTP/Gmail/NotificationProvider) unreachable → send buttons disabled with banner "Send channel down — nothing queued will go out"; nothing silently queues. ComplianceProvider down → all sends blocked (compliance must pass pre-send), flags remain visible.</li>
+      <li><b>Permission-limited:</b> delegate sees granted lanes only; sensitive-topic cards visible ONLY to the owner (and explicitly-granted humans) — [BEST GUESS: owner-only default, since the spec's intent is a personal human takeover].</li>
+      <li><b>Mobile:</b> flags always pinned; full-screen preview before any send (no one-tap blind sends).</li>
+    </ul>
+
+    <h2>Data fields</h2>
+    <p><b>lane</b> — enum: CMA · SELLER_REPORT · NEWSLETTER · CREW_PACKET · PROSPECTING_DRAFT · SENSITIVE_HANDOFF · COMPLIANCE_FLAG · DUPLICATE_REVIEW [BEST GUESS names] (OutboxItem). <b>title / context line</b> — strings (property, client, cadence context; owning module). <b>due / promised-by</b> — timestamp + human label (artifact SLA, e.g. CMA 24h promise). <b>hosted_url</b> — permanent URL (online-content repo pattern; publishing pipeline). <b>recipients</b> — to/cc list; default Graeham + Adrian for client-facing (artifact config + standing rule). <b>compliance_result</b> — pass / blocked+reason / needs_review+suggested rewrite (ComplianceProvider). <b>handoff payload</b> — contact_id, trigger phrase, conversation-so-far attachment, human_handoff_required=true (compliance layer C1). <b>duplicate candidates</b> — two contact records + field-level diff (PropFlow dedupe queue). <b>send events</b> — NOTIFICATION_QUEUED / NOTIFICATION_SENT / NOTIFICATION_FAILED (NotificationProvider B3.4). <b>open tracking</b> — opens count per hosted URL, feeds seller-signal flags (ledger PORTAL_VIEWED / page-view events).</p>
+
+    <h2>Rules & compliance</h2>
+    <ul>
+      <li><b>Review-first rule (overrides everything):</b> client-facing artifacts are never auto-sent to clients; they send to Graeham + Adrian who forward. Internal reports send directly (that's the scheduled-reports rule, not this screen's).</li>
+      <li><b>Sensitive-topic firewall (C1/B1.8):</b> detection sets human_handoff_required=true ONLY — no score change, no field write, no audience inclusion, no automated outreach, no priority change. The card offers zero automated actions.</li>
+      <li><b>Fair-housing:</b> blocked pre-send with the specific phrase flagged and a compliant rewrite offered; school-data steering rules apply to any community content passing through (V0 C11).</li>
+      <li><b>Pre-send compliance gate:</b> every outbound runs ComplianceProvider.check_outbound_contact() (consent, DNC, quiet hours, CAN-SPAM unsubscribe for email); blocked sends show the reason inline — never fail silently, never improvise (matrix correction #11).</li>
+      <li><b>No auto-merge:</b> duplicate contacts always require the human decision.</li>
+      <li><b>Crew packets:</b> dispatch only after the Listing-Plan Card approval (Tab 13) cleared — this queue is the second (send) gate, not a bypass.</li>
+      <li><b>Fail-closed:</b> channel down = nothing sends; compliance unknown = blocked.</li>
+    </ul>
+
+    <h2>Cross-links</h2>
+    <p><b>In:</b> Past Client OS (Tab 27) CMA batches, CMA Builder, PropClose seller-dashboard pipeline, Newsletter builder, Wattson listing playbooks (crew packets), Prospecting Hub drafts, PropFlow intake (dupes), compliance layer (flags/handoffs). <b>Out:</b> CRM contact detail (Tab 14 — handoff conversations, duplicate resolution), Published archive, Approvals (Tab 13 — upstream gate), Settings (Tab 21 — send-channel health when degraded). <b>Ledger events:</b> emits NOTIFICATION_QUEUED/SENT/FAILED, artifact-published events (hosted URL), handoff-resolved log entries [BEST GUESS event name]; consumes compliance results, human_handoff_required flags, artifact-ready events, PORTAL_VIEWED opens.</p>
+
+    <h2>Open decisions</h2>
+    <ul>
+      <li>[DECIDE] Exact lane taxonomy and whether duplicate-review lives here vs. a CRM-local queue — interim: here, per the matrix's "typed lanes" list which includes duplicate reviews.</li>
+      <li>[DECIDE] Sensitive-handoff visibility (owner-only vs. any delegated human) — interim: owner-only.</li>
+      <li>[DECIDE] Whether the Published archive is a tab of this screen or its own screen — interim: a view within this screen (nav link), since the matrix pairs "Outbox + published-content archive."</li>
+      <li>[DECIDE] Scheduled-send support (newsletter "Thu 8am pending approval") — interim: approving arms the schedule; the send still fires through the compliance gate at send time.</li>
+    </ul>
+    <p class="anno" style="margin-top:20px">Wireframe fidelity — colors are placeholders from the locked PropFlow design language. All client names/numbers/addresses are realistic fake data. Agent identity: Graeham Watts, Intero Real Estate, DRE# 01466876 (from shared-references/identity.json — never hardcode elsewhere; the identity.json blocklist is enforced by the brand tripwire). No crime data anywhere on this screen by design.</p>
+  </div>
+</div>

@@ -1,0 +1,647 @@
+<title>PropertyIQ · Screen 06 — Community Page</title>
+<link href="https://api.fontshare.com/v2/css?f[]=technor@500,600,700&display=swap" rel="stylesheet">
+<link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<style>
+  /* Type system — Technor for display, Inter for UI. */
+  :root{ --font-display:'Technor', Inter, -apple-system, 'Segoe UI', sans-serif; --font-ui: Inter, -apple-system, 'Segoe UI', Roboto, sans-serif; }
+</style>
+<style>
+  /* Palette v4 — PropFlow design language: neutral ink UI, ink-as-accent, color reserved for data. (extracted verbatim from propsearch-design-draft.html) */
+  :root, :root[data-theme="dark"], :root[data-theme="light"]{
+    --ink:#23282f; --paper:#fbfaf8; --surface:#f1efe9; --line:#e2dfd6;
+    --mut:#6b7076; --soft:#9b9f9f;
+    --brand:#2e6b53; --brand-ink:#ffffff; --brand-soft:#eaf1ec; --brand-deep:#1e4c3a;
+    --signal:#b07a2e;
+    --good:#2e7d4f; --warn:#a8630a; --crit:#b3372f;
+    --r:10px;
+  }
+  .intel .score, .mintel{ color:var(--brand-deep) }
+  .intel{ border-left:3px solid var(--brand) }
+  h1{ letter-spacing:-.02em }
+  .stat b{ letter-spacing:-.01em }
+  body[data-agent="watts"]{ --brand:#2e6b53; --brand-soft:#eaf1ec; --brand-deep:#1e4c3a; }
+
+  *{box-sizing:border-box; margin:0}
+  body{font:15px/1.55 var(--font-ui); color:var(--ink); background:var(--paper); padding-bottom:80px}
+  h1,h2,h3{line-height:1.15; text-wrap:balance; font-family:var(--font-display); font-weight:600}
+  h1{letter-spacing:-.01em}
+  .site{box-shadow:0 1px 2px rgba(20,24,32,.04), 0 8px 32px rgba(20,24,32,.06)}
+  .stat, .comm{box-shadow:0 1px 2px rgba(20,24,32,.03)}
+  .stat{transition:box-shadow .15s, transform .15s}
+  .stat:hover{box-shadow:0 4px 14px rgba(20,24,32,.08)}
+  .chip{transition:all .12s}
+  button{font-family:var(--font-ui)}
+  .num{font-variant-numeric:tabular-nums}
+  .wrap{max-width:1180px; margin:0 auto; padding:0 20px}
+
+  .bar{position:sticky; top:0; z-index:50; background:var(--paper); border-bottom:1px solid var(--line); padding:10px 0; backdrop-filter:blur(8px)}
+  .bar .wrap{display:flex; flex-wrap:wrap; gap:10px; align-items:center}
+  .bar .ttl{font-weight:700; margin-right:auto}
+  .bar .ttl small{display:block; font-weight:400; color:var(--mut)}
+  .bar a{color:var(--brand); font-size:13px; text-decoration:none}
+
+  .note{background:var(--surface); border:1px solid var(--line); border-radius:var(--r); padding:14px 16px; margin:0 0 22px; font-size:13.5px; color:var(--mut)}
+  .note b{color:var(--ink)}
+
+  .site{border:1px solid var(--line); border-radius:14px; overflow:hidden; background:var(--paper)}
+  .sitehead{display:flex; align-items:center; gap:14px; padding:14px 22px; border-bottom:1px solid var(--line)}
+  .avatar{width:38px; height:38px; border-radius:50%; background:var(--brand); color:var(--brand-ink); display:grid; place-items:center; font-weight:700}
+  .sitehead .who b{display:block}
+  .sitehead .who small{color:var(--mut)}
+  .sitehead nav{margin-left:auto; display:flex; gap:18px; font-size:13.5px; color:var(--mut)}
+  .sitehead nav a{color:inherit; text-decoration:none}
+  .sitehead nav a:hover{color:var(--brand)}
+  .poweredby{font-size:11px; color:var(--soft); letter-spacing:.04em; text-transform:uppercase}
+
+  .chip{display:inline-flex; align-items:center; gap:6px; font-size:12.5px; font-weight:500; border:1px solid var(--line); border-radius:99px; padding:6px 12px; background:var(--paper); cursor:pointer; color:var(--ink)}
+  .chip:hover{border-color:var(--brand)}
+  .chip.on{background:var(--brand); border-color:var(--brand); color:var(--brand-ink); font-weight:600; box-shadow:0 2px 8px color-mix(in srgb, var(--brand) 30%, transparent)}
+
+  .statrow{display:grid; grid-template-columns:repeat(4,1fr); gap:10px}
+  .stat{background:var(--surface); border:1px solid var(--line); border-radius:var(--r); padding:12px}
+  .stat small{display:block; color:var(--mut); font-size:11.5px; text-transform:uppercase; letter-spacing:.05em}
+  .stat b{font-size:18px}
+  .stat .up{color:var(--good); font-size:12px}
+
+  .bdg{font-size:11.5px; border-radius:6px; padding:3px 8px; background:var(--surface); border:1px solid var(--line); color:var(--mut)}
+  .bdg.good{color:var(--good); border-color:color-mix(in srgb,var(--good) 30%,var(--line))}
+  .bdg.warn{color:var(--warn); border-color:color-mix(in srgb,var(--warn) 30%,var(--line))}
+
+  .dtable{width:100%; border-collapse:collapse; font-size:13px}
+  .dtable td,.dtable th{border-bottom:1px solid var(--line); padding:8px 10px; text-align:left}
+  .dtable th{font-size:11px; text-transform:uppercase; letter-spacing:.05em; color:var(--soft)}
+
+  /* community-page classes (verbatim from the draft) */
+  .statgrid6{display:grid; grid-template-columns:repeat(3,1fr); gap:10px; margin:16px 0}
+  .proselike{max-width:none; color:var(--mut); font-size:14px}
+  .proselike p{max-width:none}
+  .proselike b{color:var(--ink)}
+  .crumbs{font-size:12px; color:var(--soft); padding:14px 22px 0}
+  .crumbs a{color:var(--brand); text-decoration:none}
+  .secttl{font-size:17px; margin:26px 0 10px}
+  .faq details{border:1px solid var(--line); border-radius:var(--r); padding:12px 14px; margin-bottom:8px}
+  .faq summary{cursor:pointer; font-weight:600; font-size:14px}
+  .faq p{margin-top:8px; font-size:13.5px; color:var(--mut); max-width:65ch}
+  .nearby{display:grid; grid-template-columns:repeat(3,1fr); gap:10px}
+  .nearby a{border:1px solid var(--line); border-radius:var(--r); padding:12px 14px; text-decoration:none; color:var(--ink); font-size:13.5px; display:block}
+  .nearby a b{display:block; color:var(--brand)}
+  .nearby a small{color:var(--mut)}
+  .commgrid{display:grid; grid-template-columns:repeat(3,1fr); gap:12px}
+  .comm{border:1px solid var(--line); border-radius:var(--r); overflow:hidden}
+  .comm .ph{border:0; border-radius:0; min-height:90px}
+  .comm div{padding:10px 12px}
+  .comm b{font-size:14px}
+  .comm small{color:var(--mut); display:block}
+  .ph{background:var(--surface); border:1px solid var(--line); border-radius:8px; min-height:104px; display:grid; place-items:center; color:var(--soft); font-size:11px}
+  .prompt{display:flex; border:1.5px solid var(--line); border-radius:14px; background:var(--paper); padding:6px; box-shadow:0 2px 6px rgba(20,24,32,.05)}
+  .prompt input{flex:1; border:0; background:none; padding:12px 14px; font-size:14px; color:var(--ink); outline:none; min-width:0}
+  .prompt button{background:var(--ink); color:#fff; border:0; border-radius:10px; padding:0 22px; font-weight:600; cursor:pointer}
+  .seo{border:1px solid var(--line); border-radius:var(--r); margin:18px 0 4px; overflow:hidden}
+  .seo summary{cursor:pointer; padding:10px 14px; font-size:12.5px; font-weight:600; color:var(--brand); background:var(--brand-soft); list-style:none}
+  .seo summary::before{content:"⌄ "}
+  .seo table{width:100%; border-collapse:collapse; font-size:12.5px}
+  .seo td{border-top:1px solid var(--line); padding:8px 14px; vertical-align:top}
+  .seo td:first-child{width:130px; color:var(--soft); text-transform:uppercase; font-size:10.5px; letter-spacing:.06em; padding-top:10px}
+  .seo code{font-family:Consolas,Menlo,monospace; font-size:12px; color:var(--ink)}
+
+  @media (max-width:860px){ .statrow,.statgrid6{grid-template-columns:repeat(2,1fr)} .commgrid,.nearby{grid-template-columns:1fr 1fr} }
+  @media (prefers-reduced-motion: reduce){ *{transition:none!important} }
+
+  /* ---- page-specific additions (same design language) ---- */
+  .anno{font-size:11px; color:var(--soft)}
+  .cardbox{border:1px solid var(--line); border-radius:10px; padding:11px 14px; font-size:12.5px; background:var(--paper)}
+  .btn-ink{background:var(--ink); color:#fff; border:0; border-radius:7px; padding:7px 12px; font-size:11.5px; cursor:pointer; font-weight:600}
+  .btn-ghost{background:var(--paper); border:1px solid var(--line); border-radius:7px; padding:7px 12px; font-size:11.5px; cursor:pointer}
+  .cov td.ok{color:var(--good); font-weight:700}
+  .specdoc h2{font-size:18px; margin:26px 0 8px}
+  .specdoc h3{font-size:15px; margin:18px 0 6px}
+  .specdoc p, .specdoc li{font-size:13.5px; color:var(--mut)}
+  .specdoc b{color:var(--ink)}
+  .specdoc table{margin:8px 0}
+  .disc{font-size:10.5px; color:var(--soft); border-left:2px solid var(--line); padding-left:10px; margin-top:8px}
+  .sparkline{display:flex; align-items:flex-end; gap:2px; height:46px; padding:8px 10px 0}
+  .sparkline i{flex:1; background:var(--brand); border-radius:2px 2px 0 0; display:block}
+  .phone{width:290px; border:2px solid var(--line); border-radius:26px; overflow:hidden; background:var(--paper)}
+  .phone .ph-head{padding:12px 14px; border-bottom:1px solid var(--line); display:flex; align-items:center; gap:8px; font-size:12.5px}
+  .phone .avatar{width:26px; height:26px; font-size:11px}
+  .phone .body{padding:12px}
+</style>
+
+<!-- ============ (1) slim header ============ -->
+<div class="bar">
+  <div class="wrap">
+    <div class="ttl">PropertyIQ · Screen 06 — Community Page <small>Full-density per-screen mock · programmatic SEO template /{city}/{neighborhood}/ · dev-facing annotations in gray</small></div>
+    <a href="../wireframe.html">← All screens</a>
+  </div>
+</div>
+
+<!-- ============ (2) THE FULL MOCK ============ -->
+<div class="wrap" style="padding-top:24px">
+  <div class="note"><b>Screen 06 — Community page (programmatic SEO template, v2).</b> The ranking engine of every agent instance: templated, data-fed neighborhood guide combining <b>editorial narrative + exhaustive live data + internal-link mesh + FAQ schema</b>, generated per <code>/{city}/{neighborhood}</code>. Only data, photos, and brand vary per agent. It doubles as the highest-converting seller-capture surface (in-page valuation module, 2–5%). Crime data removed everywhere (fair housing) — hazard/climate is the compliant substitute. Consumer chrome: agent-branded top nav + "Powered by PropertyIQ" footer; no agent-console rail on consumer screens.</div>
+
+  <details class="seo"><summary>Per-page SEO spec — the community page (the ranking engine)</summary><table>
+    <tr><td>Title tag</td><td><code>{Neighborhood}, {City}, {ST} — Homes for Sale & Market Statistics {year}</code></td></tr>
+    <tr><td>Meta description</td><td><code>{Neighborhood} median price {median} ({yoy}). {n} homes for sale, schools rated up to {top}, live market data updated daily.</code></td></tr>
+    <tr><td>H1 / H2s</td><td>H1 = neighborhood + city + "market statistics"; H2s hit query variants: prices, trends by property type, schools, homes for sale, FAQ</td></tr>
+    <tr><td>Canonical / schema</td><td><code>/{city}/{neighborhood}/</code> · city rollup at <code>/{city}/</code> · <code>Place + Dataset + FAQPage + BreadcrumbList + ItemList</code></td></tr>
+    <tr><td>Freshness</td><td>Stats re-render daily with visible "updated {date}"; editorial numbers re-render monthly</td></tr>
+    <tr><td>Sitemaps / images</td><td>Per-type sitemaps with lastmod · WebP photos + image sitemap · auto alt text per photo</td></tr>
+    <tr><td>Auto-SEO (OTTO)</td><td>Per-instance GSC feeds title/meta/heading tuning + internal-link suggestions <b>through variable slots only, never raw HTML</b>; approvals + change log in SEO Console (Screen 20, MB §12.12); "Submit to SEO" routes through OTTO preview+approve</td></tr>
+  </table></details>
+
+  <div class="site" data-agent="watts">
+    <!-- consumer chrome: agent-branded top nav -->
+    <div class="sitehead">
+      <div class="avatar">GW</div>
+      <div class="who"><b>Graeham Watts</b><small>Communities / Redwood City</small></div>
+      <nav><a href="#">Search this area</a><a href="#">Home value</a><a href="#">Contact</a></nav>
+    </div>
+
+    <!-- breadcrumb -->
+    <div id="el-breadcrumb" class="crumbs"><a href="#">California</a> › <a href="#">San Mateo County</a> › <a href="#">Redwood City</a> › <b style="color:var(--ink)">Friendly Acres</b> <span class="anno" style="margin-left:8px">BreadcrumbList schema · every crumb links up the mesh (parent city rollup /redwood-city/)</span></div>
+
+    <div style="padding:14px 22px 26px">
+      <!-- H1 + freshness -->
+      <div id="el-h1">
+        <h1 style="font-size:26px">Friendly Acres, Redwood City, CA — Neighborhood Guide &amp; Market Statistics</h1>
+        <p style="color:var(--mut); margin-top:4px">Suburban neighborhood in Redwood City · San Mateo County 94063 · <b style="color:var(--ink)">Live data, updated daily</b> · July 2026 <span class="anno">— render timestamp; the visible freshness signal beats hand-maintained pages</span></p>
+      </div>
+
+      <!-- hero 6-stat grid -->
+      <div id="el-hero-stats">
+        <div class="statgrid6">
+          <div class="stat"><small>Median sale price (12 mo)</small><b class="num">$1.42M</b> <span class="up num">+3.1% YoY</span></div>
+          <div class="stat"><small>Avg price / sqft</small><b class="num">$925</b></div>
+          <div class="stat"><small>Homes for sale</small><b class="num">31</b></div>
+          <div class="stat"><small>Median days on market</small><b class="num">12</b> <span style="font-size:11px;color:var(--mut)">vs. 57 national</span></div>
+          <div class="stat"><small>Sale-to-list</small><b class="num">102%</b></div>
+          <div class="stat"><small>Months of supply</small><b class="num">1.4</b></div>
+        </div>
+        <div class="anno">MarketDataSnapshot (MLS), daily re-render, as-of date carried per stat. Hover = metric definition tooltip [BEST GUESS]. Unknown metric renders "—", never fabricated. On mobile a compact inline "What's my home worth →" value link appears directly below this grid.</div>
+      </div>
+
+      <!-- 30-second read -->
+      <div id="el-30sec">
+        <h2 class="secttl">Life in Friendly Acres <span class="anno" style="font-weight:400">— editorial block: AI-drafted from snapshots, agent-reviewed before publish (E-E-A-T)</span></h2>
+        <div class="proselike">
+          <p><b>The 30-second read:</b> Friendly Acres is Redwood City's value pocket east of El Camino — Caltrain access and downtown revival at 60% of Menlo Park's price point. Inventory is tight (31 actives vs. 48 last July), and well-priced homes under $1.4M draw multiple offers within two weekends. <b>Quoted agent voice:</b> “Buyers who lose out in Menlo Park keep landing here — same commute, $900K less,” says Graeham Watts, who has closed 14 sales in the neighborhood.</p>
+        </div>
+        <div class="anno">LLM draft over MarketDataSnapshot; agent edits in the review flow; review timestamp stored. ComplianceProvider pass on all agent-edited prose — no demographic steering language.</div>
+      </div>
+
+      <!-- Living in {hood} -->
+      <div id="el-living">
+        <h2 class="secttl">Living in Friendly Acres</h2>
+        <div class="proselike">
+          <p>Friendly Acres sits east of El Camino Real between Woodside Road and Fifth Avenue, a grid of mostly 1950s ranch homes on 5,000–6,000 sqft lots. The neighborhood's draw is practical: Caltrain at Redwood City station is an eight-minute drive, US-101 is two, and downtown's restaurant row is close enough to walk on a warm evening. Streets here are wide and low-traffic; you'll see basketball hoops at the curb and gardens that have been tended for decades.</p>
+        </div>
+        <div class="anno">~150-word templated editorial from LocalDataProvider POI/geo data + LLM, agent-reviewed, unique per neighborhood per agent (uniqueness validator input, see publish gate below). Facts not characterizations (MB §16.1): "family-friendly area" / "best neighborhood" phrasing is on the forbidden list.</div>
+      </div>
+
+      <!-- Housing stock & costs -->
+      <div id="el-housing">
+        <h2 class="secttl">Housing stock &amp; what things cost</h2>
+        <div class="proselike">
+          <p>Most homes are 3-bed, 1–2-bath single-stories between 1,100 and 1,600 sqft; a growing minority have been expanded or rebuilt two-story. Original-condition homes trade in the $1.1M–$1.25M range, updated ones $1.35M–$1.55M, and full rebuilds have cleared $1.8M. Lots here are the quiet asset: <b>41% allow an ADU by right</b>, and 87 lots are zoned for more units than they carry.</p>
+        </div>
+        <div class="disc">Zoning and ADU information is sourced from third-party data and must be verified with the local jurisdiction before design, permitting, purchase, or construction decisions. This is not legal, architectural, or permitting advice. <span class="anno">(Verbatim zoning disclaimer MB §17.3 — Brain requirement wherever ADU/zoning claims render; spec gap #3.)</span></div>
+        <div class="anno">MLS + Zoneomics (ZoningLookupRecord, 30-day cache); numbers re-render monthly. Zoning claims obey the §17.2 confidence/coverage gates — below threshold the claim is suppressed, not hedged.</div>
+      </div>
+
+      <!-- Getting around -->
+      <div id="el-getting-around">
+        <h2 class="secttl">Getting around</h2>
+        <div class="proselike">
+          <p>Morning drives run 18 minutes to Menlo Park, 22 to Palo Alto, and about 42 to San Francisco; Caltrain's Baby Bullet makes the city in 45. Walkability scores 72 — errands on Woodside Road are doable on foot, and the Bay Trail is a ten-minute ride.</p>
+        </div>
+        <div class="anno">Commute engine (same as the property-page commute layer, 8am departures) + LocalDataProvider. Walk/bike score displays only if a licensed provider is connected — tile hides otherwise (fail-closed, open decision).</div>
+      </div>
+
+      <!-- trends table -->
+      <div id="el-trends">
+        <h2 class="secttl">Market trends by property type <span class="anno" style="font-weight:400">— the data-depth play, kept fresh automatically</span></h2>
+        <div style="overflow-x:auto">
+        <table class="dtable num" style="min-width:640px">
+          <tr><th>Last 12 months</th><th>Median sale</th><th>$ / sqft</th><th>Sold</th><th>DOM</th><th>Sale-to-list</th><th>YoY</th></tr>
+          <tr><td>Single-family</td><td>$1,455,000</td><td>$942</td><td>38</td><td>11</td><td>103%</td><td style="color:var(--good)">+3.8%</td></tr>
+          <tr><td>Townhouse</td><td>$1,180,000</td><td>$818</td><td>14</td><td>14</td><td>101%</td><td style="color:var(--good)">+2.2%</td></tr>
+          <tr><td>Condo</td><td>$842,000</td><td>$760</td><td>19</td><td>18</td><td>99%</td><td style="color:var(--crit)">−1.4%</td></tr>
+          <tr style="color:var(--soft)"><td>Multi-family</td><td colspan="6">Insufficient sales to report (2 in 12 mo) — per-row suppression, never thin content [BEST GUESS threshold]</td></tr>
+        </table>
+        </div>
+        <div class="anno">MarketDataSnapshot per property type. Horizontal scroll in-container on mobile; the page never scrolls sideways.</div>
+      </div>
+
+      <!-- 3 chart cards -->
+      <div id="el-charts" style="margin-top:12px">
+        <div class="commgrid">
+          <div class="comm">
+            <div class="sparkline" title="static-rendered SVG, hover values only"><i style="height:38%"></i><i style="height:42%"></i><i style="height:40%"></i><i style="height:47%"></i><i style="height:52%"></i><i style="height:50%"></i><i style="height:58%"></i><i style="height:61%"></i><i style="height:57%"></i><i style="height:66%"></i><i style="height:72%"></i><i style="height:70%"></i><i style="height:76%"></i><i style="height:82%"></i><i style="height:79%"></i><i style="height:85%"></i><i style="height:90%"></i><i style="height:88%"></i><i style="height:94%"></i><i style="height:100%"></i></div>
+            <div><b>Price trends</b><small>5-yr median, quarterly, by property type · hover shows values</small></div>
+          </div>
+          <div class="comm">
+            <div class="sparkline"><i style="height:90%; background:var(--signal)"></i><i style="height:82%; background:var(--signal)"></i><i style="height:74%; background:var(--signal)"></i><i style="height:70%; background:var(--signal)"></i><i style="height:64%; background:var(--signal)"></i><i style="height:58%; background:var(--signal)"></i><i style="height:52%; background:var(--signal)"></i><i style="height:48%; background:var(--signal)"></i><i style="height:44%; background:var(--signal)"></i><i style="height:40%; background:var(--signal)"></i><i style="height:38%; background:var(--signal)"></i><i style="height:34%; background:var(--signal)"></i></div>
+            <div><b>Supply &amp; speed</b><small>Actives, new listings, days on market</small></div>
+          </div>
+          <div class="comm"><div class="ph">Map: recent sales heat (closed MLS, 12 mo)</div><div><b>Recent sales map</b><small>Every closing, last 12 months</small></div></div>
+        </div>
+        <div class="anno">Charts = static-rendered SVG with hover values only (performance budget first; ECharts reserved for agent-side analytics — open decision). Below-fold charts/maps lazy-load; the page shell is server-rendered static.</div>
+      </div>
+
+      <!-- neighborhood facts -->
+      <div id="el-facts">
+        <h2 class="secttl">Neighborhood facts</h2>
+        <div class="statgrid6">
+          <div class="stat"><small>Number of homes</small><b class="num">1,240</b></div>
+          <div class="stat"><small>Median year built</small><b class="num">1954</b></div>
+          <div class="stat"><small>Median lot size</small><b class="num">5,400 sqft</b></div>
+          <div class="stat"><small>Owner vs. renter</small><b class="num">64% own</b></div>
+          <div class="stat"><small>Median rent (3bd)</small><b class="num">$4,700/mo</b> <span class="anno">RentEstimateSnapshot</span></div>
+          <div class="stat"><small>Walk / bike score</small><b class="num">72 / 68</b> <span class="anno">licensed provider only</span></div>
+        </div>
+        <div class="anno">PropertyRecord aggregate + RentEstimateSnapshot (Rentometer) + LocalData. Every local-data fact carries source attribution (MB §16 local data floor) — e.g. "Park boundary source: [Provider], last updated [date]".</div>
+      </div>
+
+      <!-- proprietary data-engine grid -->
+      <div id="el-proprietary">
+        <h2 class="secttl">What the data engine knows about this neighborhood <span class="anno" style="font-weight:400">— proprietary metrics nobody else publishes (the uncopyable SEO/AEO blocks)</span></h2>
+        <div class="statgrid6">
+          <div class="stat" style="border-left:3px solid var(--good)"><small>ADU-eligible parcels</small><b class="num">41%</b> <span style="font-size:11px;color:var(--mut)">of lots allow an ADU by right</span></div>
+          <div class="stat"><small>Development upside</small><b class="num">87 lots</b> <span style="font-size:11px;color:var(--mut)">zoned for more units than built</span></div>
+          <div class="stat"><small>Gross rent yield</small><b class="num">4.4%</b> <span style="font-size:11px;color:var(--good)">vs 3.8% Peninsula avg</span></div>
+          <div class="stat"><small>Commute (8am)</small><b class="num">Menlo 18 · PA 22 · SF 42</b></div>
+          <div class="stat" style="border-left:3px solid var(--warn); cursor:pointer" title="click → contributing facts"><small>Market forecast</small><b class="num">72<span style="font-size:12px;color:var(--mut)">/100</span></b> <span style="font-size:11px;color:var(--warn)">elevated risk · why? →</span></div>
+          <div class="stat"><small>Hazard profile</small><b>Fire low · Flood minimal · Quake mod.</b> <span class="anno">FEMA / CAL FIRE</span></div>
+        </div>
+        <div class="anno">Zoneomics + RentEstimate + ScoringService forecast + FEMA/CAL FIRE. Forecast tile click → contributing facts panel [BEST GUESS, mirrors map-pin explainability rule]. <b>Fail-closed:</b> ScoringService down → tile hidden ("score unavailable"), never stale/fabricated. Zoneomics past its 30-day cache → ADU/upzone tiles show "verify — data refresh pending". Zoning disclaimer (§17.3) applies to the two zoning tiles.</div>
+      </div>
+
+      <!-- ask this page -->
+      <div id="el-ask" style="border:1.5px solid var(--line); border-radius:var(--r); padding:12px 14px; background:var(--surface); margin-top:16px">
+        <b style="font-size:13px">Ask this page a question</b>
+        <div class="prompt" style="margin-top:8px; padding:4px; background:var(--paper)"><input placeholder="What are the ADU rules here? Which blocks feed Roy Cloud? Commute to Apple?" aria-label="Neighborhood question"><button>Ask</button></div>
+        <div class="anno" style="margin-top:6px">Same parser/answer engine as Screen 1, scoped to this neighborhood; answers render inline. Zoning answers cite the municipal code + carry the §17.3 disclaimer; school answers carry the §16.3 disclaimers. Anonymous by default (no hard gate); behavior-triggered soft capture after 3 questions [BEST GUESS, open decision]. Emits NL_QUESTION_ASKED.</div>
+      </div>
+
+      <!-- schools -->
+      <div id="el-schools">
+        <h2 class="secttl">Schools serving Friendly Acres</h2>
+        <div style="overflow-x:auto">
+        <table class="dtable" style="min-width:560px">
+          <tr><th>School</th><th>Grades</th><th>Type</th><th>Rating</th><th>Distance</th></tr>
+          <tr><td><a href="#" style="color:var(--brand)">Roy Cloud Elementary</a></td><td>K–8</td><td>Public</td><td class="num">9/10</td><td class="num">0.6 mi</td></tr>
+          <tr><td><a href="#" style="color:var(--brand)">Kennedy Middle School</a></td><td>5–8</td><td>Public</td><td class="num">7/10</td><td class="num">1.1 mi</td></tr>
+          <tr><td><a href="#" style="color:var(--brand)">Sequoia High School</a></td><td>9–12</td><td>Public</td><td class="num">8/10</td><td class="num">1.4 mi</td></tr>
+        </table>
+        </div>
+        <div class="anno">School ratings provided by [Provider] · <a href="#" style="color:var(--brand)">provider methodology</a> — attribution + methodology link required by MB §16.2 (spec gap #2). SchoolDataResponse flags: <code>school_data_used_for_default_ranking: false</code> · <code>school_data_used_for_ad_targeting: false</code>. Each school row links its page.</div>
+      </div>
+
+      <!-- school action buttons (OUTSIDE the schools data module) -->
+      <div id="el-school-buttons" style="display:flex; gap:10px; margin-top:12px; flex-wrap:wrap">
+        <button class="btn-ink" style="font-size:12.5px; padding:9px 16px; border-radius:9px">Which schools serve a specific address? →</button>
+        <button class="btn-ghost" style="font-size:12.5px; padding:9px 16px; border-radius:9px">Search homes assigned to Roy Cloud (9/10)</button>
+        <span class="anno" style="width:100%">Deliberately placed OUTSIDE the schools data module (matrix correction #4; MB §16.4). Both are user-initiated (school_boundary_user_filter): address lookup flow / school-filtered search. School data never feeds ranking, scoring, targeting, or lead capture.</span>
+      </div>
+
+      <!-- school disclaimer (verbatim, non-removable) -->
+      <div id="el-school-disclaimer" class="disc">
+        School attendance boundaries are provided by a third party and are subject to change. Proximity to a school does not guarantee enrollment. Verify attendance zones directly with the school district before relying on this information.<br>
+        School ratings are provided by [Provider] as a starting point and are not the only factor in choosing a school or home. PropSearch does not endorse or guarantee these ratings.<br>
+        The same school information is available to every user.
+        <span class="anno">(All three §16.3 disclaimers verbatim — boundary + rating + equal-service; the spec named two, the Brain requires three: spec gap #1. Non-removable, template-locked.)</span>
+      </div>
+
+      <!-- commute / climate / lifestyle cards -->
+      <div id="el-ccl">
+        <h2 class="secttl">Commute, climate &amp; lifestyle <span class="anno" style="font-weight:400">— no crime data anywhere (fair-housing compliance)</span></h2>
+        <div class="commgrid">
+          <div class="comm"><div class="ph">Map: hazard zones (fire / flood / quake)</div><div><b>Climate &amp; natural hazards</b><small>Objective FEMA / CAL FIRE data · card → expanded map [BEST GUESS]</small></div></div>
+          <div class="comm"><div class="ph">Map: 8am drive-time isochrones</div><div><b>Commute</b><small class="num">Menlo Park 18 min · Palo Alto 22 · SF 42</small></div></div>
+          <div class="comm"><div class="ph">List: parks &amp; dining</div><div><b>Parks, dining &amp; shopping</b><small>Named local spots (editorial, templated)</small></div></div>
+        </div>
+        <div class="anno">LocalDataProvider + hazard providers. Hazard/climate is the compliant substitute for crime; no "safe for families" style characterizations (§16.1 forbidden wording).</div>
+      </div>
+
+      <!-- homes for sale -->
+      <div id="el-listings">
+        <h2 class="secttl">Homes for sale in Friendly Acres <span class="anno" style="font-weight:400">— live listings keep the page fresh for crawlers</span></h2>
+        <div class="commgrid">
+          <div class="comm"><div class="ph">Photo (WebP, auto alt text)</div><div><b class="num">$1,289,000</b><small>742 Hurlingame Ave · 3bd 2ba · 1,240 sqft</small></div></div>
+          <div class="comm"><div class="ph">Photo</div><div><b class="num">$1,350,000</b><small>118 Beech St · 3bd 2ba · 1,410 sqft</small></div></div>
+          <div class="comm"><div class="ph">Photo</div><div><b class="num">$998,000</b><small>510 Cedar St · 2bd 1ba · 980 sqft</small></div></div>
+        </div>
+        <div style="margin-top:12px; display:flex; gap:10px; flex-wrap:wrap">
+          <button style="background:var(--brand); color:var(--brand-ink); border:0; border-radius:9px; padding:10px 18px; font-weight:600; cursor:pointer">See all 31 homes for sale →</button>
+          <button style="background:var(--paper); color:var(--brand); border:1.5px solid var(--brand); border-radius:9px; padding:10px 18px; font-weight:600; cursor:pointer">Get the monthly market report</button>
+        </div>
+        <div class="anno">IDXDisplayCache, MLS whitelist fields only. Card → listing detail (Screen 3). "See all 31" → curated filter-URL result page (Screen 2, IDXFilterUrlRecord — never a raw query URL). "Monthly market report" → subscribe capture, emits REPORT_SUBSCRIBED.</div>
+      </div>
+
+      <!-- parks & dining editorial -->
+      <div id="el-parks">
+        <h2 class="secttl">Parks, dining &amp; everyday life</h2>
+        <div class="proselike">
+          <p>Stafford Park anchors the neighborhood's north end with its playground and summer concert series; Red Morton's fields and rec center are a five-minute drive. Grocery runs happen at the Woodside Road corridor (Chavez Supermarket for produce, Sigona's for the farmers-market crowd), and downtown's Theatre District — Angelicas, Vesta, the Fox — is close enough for a walkable date night.</p>
+        </div>
+        <div class="anno">Named local POIs from LocalDataProvider + LLM, agent-reviewed — the "lived-in" specificity that separates ranking guides from thin ones. Each POI fact carries source attribution.</div>
+      </div>
+
+      <!-- buying/selling service paragraph -->
+      <div id="el-service">
+        <h2 class="secttl">Buying or selling in Friendly Acres</h2>
+        <div class="proselike">
+          <p><b>Buyers:</b> homes here move in about 12 days, so set up an <a href="#" style="color:var(--brand)">instant alert</a> and get pre-approved before you tour — multiple offers are the norm under $1.4M. <b>Sellers:</b> 41% of lots qualify for an ADU by right, which changes what your buyer pool will pay; start with an <a href="#" style="color:var(--brand)">instant home value</a> and ask Graeham about the ADU premium in your pricing.</p>
+        </div>
+        <div class="anno">Targets "buying/selling a home in {neighborhood}" long-tail; the live DOM stat is templated in. Both links are capture surfaces: instant alert → ALERT_CREATED; instant value → the valuation flow → CRM (LEAD_CREATED, source community_friendly-acres_value).</div>
+      </div>
+
+      <!-- recently sold hub -->
+      <div id="el-sold">
+        <h2 class="secttl">Recently sold in Friendly Acres</h2>
+        <div class="proselike" style="font-size:12.5px">
+          <p>15 homes sold here in the last 12 months at a median of $1,420,000. The most recent: <a href="#" style="color:var(--brand)">742 Hurlingame Ave</a> ($1,415,000, 8 days, 3 offers), <a href="#" style="color:var(--brand)">12 Fair Oaks Ln</a> ($1,510,000, 104% of list), and <a href="#" style="color:var(--brand)">510 Cedar St</a> ($985,000). <a href="#" style="color:var(--brand)">See all 15 sold homes →</a></p>
+        </div>
+        <div class="anno">Closed MLS. Each address links its permanent sold page — the pages that rank for "{address}" / "what did X sell for"; each sold page links back here, closing the loop.</div>
+      </div>
+
+      <!-- related searches -->
+      <div id="el-related">
+        <h2 class="secttl">Related searches</h2>
+        <div style="display:flex; gap:6px; flex-wrap:wrap; font-size:12px; margin-bottom:8px">
+          <a href="#" class="chip" style="text-decoration:none">Homes for sale in Friendly Acres</a>
+          <a href="#" class="chip" style="text-decoration:none">Friendly Acres homes with ADU</a>
+          <a href="#" class="chip" style="text-decoration:none">Condos under $900K nearby</a>
+          <a href="#" class="chip" style="text-decoration:none">Friendly Acres sold prices</a>
+          <a href="#" class="chip" style="text-decoration:none">Redwood City market report</a>
+        </div>
+        <div class="anno">Rendered from the IDXFilterUrlRecord library — server-rendered, canonicalized, compliance-checked, MLS-license compliant, so links never 404 (MB §15.2). Each carries index_policy INDEX_ALLOWED vs NOINDEX_DYNAMIC + compliance/fair-housing flags (§15.3 contract — spec gap #4). Indexable caps: 250/market, 5,000/global; dynamic long-tail = NOINDEX unless approved. Emits FILTER_URL_CLICKED.</div>
+      </div>
+
+      <!-- FAQ -->
+      <div id="el-faq">
+        <h2 class="secttl">Frequently asked questions <span class="anno" style="font-weight:400">— FAQPage schema, ~2.7× AI-citation rate; hard number + date in sentence one</span></h2>
+        <div class="faq">
+          <details open><summary>How much does a home cost in Friendly Acres?</summary><p>The median sale price over the last 12 months is $1.42M (+3.1% year over year, as of July 2026). Single-family homes median $1,455,000; condos median $842,000. Data updates daily from MLS.</p></details>
+          <details><summary>Is Friendly Acres a good place to invest?</summary><p>Median 3-bedroom rent is $4,700/mo, implying a ~4.4% gross yield at current prices — above the Peninsula average of 3.8%.</p></details>
+          <details><summary>What schools serve Friendly Acres?</summary><p>Roy Cloud Elementary (rated 9/10 by [Provider]), Kennedy Middle (7/10), and Sequoia High (8/10). Boundaries can shift — verify with the district.</p></details>
+        </div>
+        <div class="anno">Templated from snapshots; 3+ Q&amp;As with hard numbers, atomic answer sentences (AEO formatting).</div>
+      </div>
+
+      <!-- nearby mesh -->
+      <div id="el-nearby">
+        <h2 class="secttl">Nearby neighborhoods <span class="anno" style="font-weight:400">— the internal-link mesh: every page links siblings + parent city</span></h2>
+        <div class="nearby">
+          <a href="#"><b>Redwood Oaks</b><small class="num">Median $1.38M · 8 active</small></a>
+          <a href="#"><b>Centennial</b><small class="num">Median $1.21M · 6 active</small></a>
+          <a href="#"><b>Woodside Plaza</b><small class="num">Median $1.65M · 9 active</small></a>
+          <a href="#"><b>Farm Hill</b><small class="num">Median $1.88M · 5 active</small></a>
+          <a href="#"><b>Emerald Hills</b><small class="num">Median $2.45M · 7 active</small></a>
+          <a href="#"><b>All Redwood City →</b><small class="num">Median $1.42M · 31 active — parent rollup /redwood-city/</small></a>
+        </div>
+        <div class="anno">Community index. The mesh gives crawlers infinite paths and consolidates topical authority per market.</div>
+      </div>
+
+      <!-- seller valuation module -->
+      <div id="el-valuation" style="margin-top:26px; border:2px solid var(--brand); border-radius:14px; padding:18px; background:var(--brand-soft)">
+        <b style="font-size:13px">Own a home in Friendly Acres?</b>
+        <div style="display:flex; gap:10px; margin-top:8px; flex-wrap:wrap; align-items:center">
+          <div class="prompt" style="flex:1; min-width:240px; padding:4px; background:var(--paper)"><input placeholder="Enter your address for an instant value…" aria-label="Address"><button>Get value</button></div>
+          <small style="color:var(--mut)">Highest-converting module on any agent page (2–5%) — seller capture inside the SEO engine</small>
+        </div>
+        <div class="anno" style="margin-top:6px">AVMProvider + lead intake; lead source tag <code>community_friendly-acres_value</code> → CRM (emits VALUATION_REQUESTED + LEAD_CREATED). <b>AVM honesty (matrix correction #7):</b> result shows range + confidence + as-of date, or "estimate unavailable" — never a bare point value. <b>Fail-closed:</b> AVM down → module keeps address capture, drops the instant promise ("we'll send your value shortly"). Brand-bordered = the one brand-colored frame on the page.</div>
+      </div>
+
+      <!-- E-E-A-T authored-by -->
+      <div id="el-eeat" style="margin-top:14px; border:1px solid var(--line); border-radius:14px; padding:18px; display:flex; gap:16px; align-items:center; flex-wrap:wrap">
+        <div class="avatar" style="width:52px;height:52px">GW</div>
+        <div style="flex:1; min-width:220px">
+          <b>Written &amp; verified by Graeham Watts</b>
+          <div style="font-size:13px;color:var(--mut)">14 sales in Friendly Acres · Intero Real Estate · DRE #01466876 · <a href="#" style="color:var(--brand)">Google reviews</a></div>
+          <div style="font-size:12.5px; color:var(--mut); margin-top:4px; font-style:italic">"I've walked every street in this neighborhood — ask me about the blocks the data can't see."</div>
+        </div>
+        <button style="background:var(--brand); color:var(--brand-ink); border:0; border-radius:9px; padding:11px 20px; font-weight:600; cursor:pointer">Ask about this neighborhood</button>
+        <div class="anno" style="width:100%">Brand vault + production records (sales-in-hood count is computed, never claimed). First-person note is agent-authored once, shown on every page (post-HCU E-E-A-T; near-YMYL category). Identity from shared-references/identity.json — the DRE above is the only valid one; anything matching the identity.json blocklist is banned repo-wide. CTA → contact (emits LEAD_CREATED, source community_friendly-acres_contact).</div>
+      </div>
+    </div>
+
+    <!-- consumer footer -->
+    <div id="el-footer" style="padding:12px 22px; border-top:1px solid var(--line); display:flex; justify-content:space-between; flex-wrap:wrap; gap:8px">
+      <span class="poweredby">Powered by PropertyIQ</span>
+      <span style="font-size:11.5px; color:var(--soft)">Schema: Place + Dataset + FAQPage + BreadcrumbList + ItemList · canonical /redwood-city/friendly-acres/ · sitemap lastmod daily</span>
+    </div>
+  </div>
+
+  <!-- agent/dev-side gates: uniqueness validator + OTTO -->
+  <div style="display:grid; grid-template-columns:1fr 1fr; gap:12px; margin-top:14px" class="commgrid-like">
+    <div id="el-uniqueness" class="cardbox">
+      <b>Uniqueness validator — hard publish gate (agent-side, not on the public page)</b>
+      <div style="margin-top:6px; border:1px solid color-mix(in srgb, var(--crit) 40%, var(--line)); border-radius:8px; padding:9px 11px; font-size:12px; background:color-mix(in srgb, var(--crit) 5%, var(--paper))">
+        <b style="color:var(--crit)">⛔ Publish blocked</b> — "Living in Friendly Acres" is 91% similar to another agent's instance of this neighborhood.
+        <div style="color:var(--mut); margin-top:4px">Side-by-side diff of the offending blocks shown here [BEST GUESS on report format] · page stays on last approved version until resolved. Fix: agent edits the editorial slots, resubmits.</div>
+        <div style="display:flex; gap:6px; margin-top:6px"><button class="btn-ghost">View diff</button><button class="btn-ghost">Edit editorial blocks</button></div>
+      </div>
+      <div class="anno" style="margin-top:5px">White-labeled near-identical pages are Google's named doorway-page pattern — the one existential SEO risk. Threshold + scope (per-metro vs global) is an open decision. Rollout is farm-first (~15–30 neighborhoods), never metro-wide bulk. Below the page-generation data floor (interim: farm-configured neighborhoods with ≥10 sales/12mo [BEST GUESS]) the page is not generated at all.</div>
+    </div>
+    <div id="el-otto" class="cardbox">
+      <b>OTTO auto-SEO layer — per-instance tuning through variable slots only</b>
+      <table class="dtable" style="font-size:11.5px; margin-top:6px">
+        <tr><th>Change (GSC-fed)</th><th>Slot</th><th>Status</th></tr>
+        <tr><td>Title: append "2026" (CTR +14% on year queries)</td><td>title_year</td><td><span class="bdg good">DEPLOYED Jul 9</span></td></tr>
+        <tr><td>Add H2 "Friendly Acres home prices"</td><td>h2_variant_3</td><td><span class="bdg warn">AWAITING APPROVAL (Screen 20)</span></td></tr>
+        <tr><td>Internal link: sold hub → city rollup</td><td>link_slot_2</td><td><span class="bdg">PROPOSED</span></td></tr>
+      </table>
+      <div class="anno" style="margin-top:5px">SearchAtlas/OTTO via SeoProvider (MB §12.12, §15.4): never raw HTML edits, so the locked layout can't break. Approvals + full change log live in SEO Console (Screen 20); per-page freeze flag respected. PropSearch never deploys OTTO fixes without approval or bypasses SeoProvider. GBP loop: the weekly GBP post links this URL (PropCast Channel 3) — the GBP → site loop compounds local rankings.</div>
+    </div>
+  </div>
+
+  <!-- states strip -->
+  <div id="el-states" class="cardbox" style="font-size:11.5px; margin-top:12px">
+    <b>States (dev reference)</b>
+    <div style="color:var(--mut); margin-top:4px">
+      <b style="color:var(--ink)">Default:</b> fully populated, "updated {date}" visible.
+      <b style="color:var(--ink)">Loading:</b> server-rendered static shell is the norm; charts/maps lazy-load below the fold — no skeleton flash above it.
+      <b style="color:var(--ink)">Empty / sparse-data:</b> sections with insufficient data auto-hide rather than render thin content (&lt;3 sales in 12 mo suppresses trends-by-type rows with "insufficient sales to report" [BEST GUESS]); below the data floor the page is not generated at all [DECIDE].
+      <b style="color:var(--ink)">Degraded (all fail-closed):</b> ScoringService down → forecast tile hidden ("score unavailable"), never stale/fabricated (matrix correction #12 pattern) · Zoneomics stale &gt;30-day cache → ADU/upzone tiles show "verify — data refresh pending" · school provider down → schools section hides entirely (disclaimer block retained off with it) · AVM down → valuation module keeps capture, drops the instant promise · walk/bike unlicensed → tile hides.
+      <b style="color:var(--ink)">Unpublished / blocked:</b> uniqueness-validator failure blocks publish; page stays on last approved version.
+      <b style="color:var(--ink)">Permission-limited:</b> public read; editorial edit + publish restricted to agent/team; OTTO deploys gated by Screen 20 approval (freeze flag per page).
+    </div>
+  </div>
+
+  <!-- mobile variant strip -->
+  <div id="el-mobile" class="cardbox" style="margin-top:12px">
+    <b>Mobile variant (375px)</b>
+    <div style="display:flex; gap:20px; flex-wrap:wrap; margin-top:10px; align-items:flex-start">
+      <div class="phone">
+        <div class="ph-head"><div class="avatar">GW</div><b style="font-size:12px">Graeham Watts</b><span class="poweredby" style="margin-left:auto">PropertyIQ</span></div>
+        <div class="body">
+          <div style="font-size:10px; color:var(--soft)">CA › San Mateo › Redwood City › <b style="color:var(--ink)">Friendly Acres</b></div>
+          <div style="font-weight:700; font-size:14px; margin-top:6px; font-family:var(--font-display)">Friendly Acres — Guide &amp; Market Statistics</div>
+          <div style="display:grid; grid-template-columns:1fr 1fr; gap:6px; margin-top:8px">
+            <div class="stat" style="padding:8px"><small style="font-size:9px">Median (12mo)</small><b class="num" style="font-size:14px">$1.42M</b></div>
+            <div class="stat" style="padding:8px"><small style="font-size:9px">$/sqft</small><b class="num" style="font-size:14px">$925</b></div>
+            <div class="stat" style="padding:8px"><small style="font-size:9px">For sale</small><b class="num" style="font-size:14px">31</b></div>
+            <div class="stat" style="padding:8px"><small style="font-size:9px">DOM</small><b class="num" style="font-size:14px">12</b></div>
+          </div>
+          <a href="#" style="display:block; font-size:11.5px; color:var(--brand); margin-top:8px; font-weight:600">What's my home worth? — instant value →</a>
+          <div style="border:1px solid var(--line); border-radius:8px; margin-top:8px; overflow:hidden"><div class="ph" style="min-height:56px; border:0; border-radius:0">Trends table — scrolls horizontally in-container →</div></div>
+          <div style="position:relative; margin-top:10px; border-top:1px solid var(--line); padding-top:8px; display:flex; gap:6px">
+            <button class="btn-ink" style="flex:1">Get home value</button><button class="btn-ghost" style="flex:1">Search this area</button>
+          </div>
+          <div style="font-size:9px; color:var(--soft); margin-top:4px">↑ sticky bottom CTA bar [BEST GUESS, mirrors homepage pattern]</div>
+        </div>
+      </div>
+      <div style="flex:1; min-width:240px" class="anno">Single column; stat grids 2-up; trends + schools tables scroll horizontally inside their own <code>overflow-x</code> containers (the page body never scrolls sideways); chart cards stack; compact inline value link appears right after the hero stats; the full valuation module stays near the end; sticky bottom "Get home value · Search this area" bar [BEST GUESS].</div>
+    </div>
+  </div>
+
+  <!-- ============ Spec gaps found (Master Brain vs spec) ============ -->
+  <div class="note" style="margin-top:22px"><b>Spec gaps found — Master Brain requirements the spec missed (all rendered above):</b>
+    (1) <b>§16.3 requires THREE verbatim school disclaimers</b> — boundary, rating, AND equal-service — the spec named the boundary disclaimer + equal-service note; the rating disclaimer ("provided by [Provider] as a starting point… does not endorse or guarantee") is rendered verbatim in the <a href="#el-school-disclaimer" style="color:var(--brand)">disclaimer block</a>.
+    (2) <b>§16.2 display conditions</b> — school ratings must show source attribution + provider methodology link; added to the <a href="#el-schools" style="color:var(--brand)">schools table</a>.
+    (3) <b>§17.3 zoning disclaimer</b> — mandatory wherever ADU/zoning claims render (housing-stock prose, the two proprietary zoning tiles, ask-box zoning answers), plus §17.2 confidence/coverage suppression; rendered under <a href="#el-housing" style="color:var(--brand)">Housing stock</a>.
+    (4) <b>§15.3 filter-URL contract</b> — every related-search chip carries index_policy (INDEX_ALLOWED / NOINDEX_DYNAMIC) + compliance_flags + fair_housing_flags; annotated on <a href="#el-related" style="color:var(--brand)">Related searches</a>.
+    (5) <b>§16.1 facts-not-characterizations wording lists</b> — allowed/forbidden phrasing governs ALL editorial blocks (not just "no steering language"); annotated on Living-in and Commute/climate sections.
+    (6) <b>PropCast Channel 3 GBP loop</b> — one GBP post weekly links this community URL (review-recency + weekly-activity targets); noted on the <a href="#el-otto" style="color:var(--brand)">OTTO card</a>.
+  </div>
+
+  <!-- ============ (3) ELEMENT COVERAGE ============ -->
+  <h2 style="font-size:20px; margin:30px 0 10px">Element coverage — spec inventory → this page</h2>
+  <table class="dtable cov" style="font-size:12.5px">
+    <tr><th>Spec inventory element</th><th>Rendered at</th><th>Status</th></tr>
+    <tr><td>Breadcrumb (BreadcrumbList schema)</td><td><a href="#el-breadcrumb">Breadcrumb</a></td><td class="ok">✓</td></tr>
+    <tr><td>H1 + freshness line</td><td><a href="#el-h1">H1 + updated-daily line</a></td><td class="ok">✓</td></tr>
+    <tr><td>Hero 6-stat grid</td><td><a href="#el-hero-stats">Hero stats</a></td><td class="ok">✓</td></tr>
+    <tr><td>30-second read (editorial + quoted agent voice)</td><td><a href="#el-30sec">Life in Friendly Acres</a></td><td class="ok">✓</td></tr>
+    <tr><td>"Living in {hood}" prose</td><td><a href="#el-living">Living in Friendly Acres</a></td><td class="ok">✓</td></tr>
+    <tr><td>Housing stock &amp; costs prose (ADU % + upzoned lots)</td><td><a href="#el-housing">Housing stock</a></td><td class="ok">✓</td></tr>
+    <tr><td>Getting around prose</td><td><a href="#el-getting-around">Getting around</a></td><td class="ok">✓</td></tr>
+    <tr><td>Trends-by-type table (incl. sparse-row suppression)</td><td><a href="#el-trends">Market trends table</a></td><td class="ok">✓</td></tr>
+    <tr><td>3 chart cards (5-yr trend, inventory/DOM, sales heat map)</td><td><a href="#el-charts">Chart cards</a></td><td class="ok">✓</td></tr>
+    <tr><td>Neighborhood facts grid</td><td><a href="#el-facts">Neighborhood facts</a></td><td class="ok">✓</td></tr>
+    <tr><td>Proprietary data-engine grid (forecast fail-closed, hazard, yield)</td><td><a href="#el-proprietary">Data-engine grid</a></td><td class="ok">✓</td></tr>
+    <tr><td>Ask-this-page box (zoning cites code, school disclaimer)</td><td><a href="#el-ask">Ask this page</a></td><td class="ok">✓</td></tr>
+    <tr><td>Schools table (third-party attributed, row links)</td><td><a href="#el-schools">Schools table</a></td><td class="ok">✓</td></tr>
+    <tr><td>School action buttons (OUTSIDE the data module)</td><td><a href="#el-school-buttons">School buttons</a></td><td class="ok">✓</td></tr>
+    <tr><td>School disclaimer (verbatim §16.3, non-removable)</td><td><a href="#el-school-disclaimer">Disclaimer block (all 3)</a></td><td class="ok">✓</td></tr>
+    <tr><td>Commute/climate/lifestyle cards (no crime data)</td><td><a href="#el-ccl">Commute, climate &amp; lifestyle</a></td><td class="ok">✓</td></tr>
+    <tr><td>Homes-for-sale cards + CTAs (See all N / monthly report)</td><td><a href="#el-listings">Homes for sale</a></td><td class="ok">✓</td></tr>
+    <tr><td>Parks &amp; dining editorial</td><td><a href="#el-parks">Parks, dining &amp; everyday life</a></td><td class="ok">✓</td></tr>
+    <tr><td>Buying/selling service paragraph (2 capture links)</td><td><a href="#el-service">Buying or selling</a></td><td class="ok">✓</td></tr>
+    <tr><td>Recently-sold hub block (permanent sold-page links)</td><td><a href="#el-sold">Recently sold</a></td><td class="ok">✓</td></tr>
+    <tr><td>Related-searches chips (filter-URL library, never 404)</td><td><a href="#el-related">Related searches</a></td><td class="ok">✓</td></tr>
+    <tr><td>FAQ block (FAQPage schema, hard numbers)</td><td><a href="#el-faq">FAQ</a></td><td class="ok">✓</td></tr>
+    <tr><td>Nearby-neighborhoods mesh + parent rollup</td><td><a href="#el-nearby">Nearby neighborhoods</a></td><td class="ok">✓</td></tr>
+    <tr><td>Seller-valuation module (brand-bordered, source-tagged)</td><td><a href="#el-valuation">Own a home here?</a></td><td class="ok">✓</td></tr>
+    <tr><td>E-E-A-T authored-by block (sales count, DRE, reviews, CTA)</td><td><a href="#el-eeat">Written &amp; verified by</a></td><td class="ok">✓</td></tr>
+    <tr><td>Footer (Powered by PropertyIQ + schema/canonical note)</td><td><a href="#el-footer">Footer</a></td><td class="ok">✓</td></tr>
+    <tr><td>Uniqueness validator (blocking publish gate + diff report)</td><td><a href="#el-uniqueness">Uniqueness validator card</a></td><td class="ok">✓</td></tr>
+    <tr><td>OTTO auto-SEO layer (variable slots, change log, Screen 20 approvals)</td><td><a href="#el-otto">OTTO card</a></td><td class="ok">✓</td></tr>
+  </table>
+  <div style="border:1.5px solid var(--good); background:#f2f8f4; border-radius:10px; padding:12px 16px; margin:12px 0 0; font-weight:700; color:var(--good)">28 of 28 spec elements rendered ✓ <span style="font-weight:400; color:var(--mut); font-size:12.5px">— plus prompt-required regions beyond the inventory: SEO spec strip, states strip, mobile-variant strip, ledger-event annotations, and the 6 Master-Brain spec gaps listed above.</span></div>
+
+  <!-- ============ (4) FULL SPEC AS HTML ============ -->
+  <div class="specdoc">
+    <h1 style="font-size:24px; margin:40px 0 6px">Spec — 06 · Community Page (programmatic SEO template, /{city}/{neighborhood}/)</h1>
+    <p><b>Purpose</b> The ranking engine of every agent instance: a templated, data-fed neighborhood guide combining editorial narrative + exhaustive live market data + internal-link mesh + FAQ schema. Generated per /{city}/{neighborhood}; only data, photos, and brand vary per agent. It doubles as the highest-converting seller-capture surface (in-page valuation module, 2–5% conversion per draft research).</p>
+    <p><b>Primary users</b> Consumers researching an area (buyers, sellers, owners); crawlers + LLMs (AI-citation/AEO target); the agent reviews editorial blocks; SEO Console (Screen 20) tunes variable slots.</p>
+    <p><b>Entry points</b> Organic search ("{neighborhood} homes for sale", "{neighborhood} statistics/prices", "{address} sold" via sold-page backlinks), homepage areas-served/footer/neighborhood cards, sibling-neighborhood mesh links, GBP posts, listing-page breadcrumbs, related-searches chips, monthly farm letter links.</p>
+    <p><b>Exit points</b> Listings → Screen 3 detail; "See all N homes" + related-searches chips → filter-URL curated results (Screen 2); school buttons → address-lookup flow / school-filtered search; valuation module + "instant home value" links → value capture → CRM; "monthly market report" → subscribe capture; ask-this-page box → NL answer flow (same engine as Screen 1); sibling/parent links → other community pages; sold links → permanent sold pages; "Ask about this neighborhood" → contact.</p>
+
+    <h2>Layout</h2>
+    <p>Desktop: branded site chrome (header + "Search this area" nav) → breadcrumb (State › County › City › Neighborhood) → H1 + freshness line → hero 6-stat grid → sections in order: 30-second editorial read → Living in {hood} → Housing stock &amp; costs → Getting around → Market trends by property type (table + 3 chart cards) → Neighborhood facts (6 stats) → Proprietary data-engine stats (6 tiles) → Ask-this-page box → Schools table + address buttons + disclaimer → Commute/climate/lifestyle cards → Homes for sale (live cards + CTAs) → Parks &amp; dining editorial → Buying/selling service paragraph → Recently-sold hub block → Related searches chips → FAQ (schema) → Nearby neighborhoods mesh → Seller-valuation capture module (brand-bordered) → E-E-A-T authored-by block → footer (schema note + Powered by PropertyIQ).</p>
+    <p>Mobile (375px): single column; stat grids 2-up; the trends table and schools table scroll horizontally inside overflow-x containers; chart cards stack; sticky bottom CTA [BEST GUESS: "Get home value · Search this area" bar mirroring homepage pattern]; valuation module stays near end but a compact inline value link appears after the hero stats.</p>
+
+    <h2>Element inventory</h2>
+    <div style="overflow-x:auto">
+    <table class="dtable">
+      <tr><th>Element</th><th>What it shows/does</th><th>Data source</th><th>Interactions</th><th>Spec source</th></tr>
+      <tr><td>Breadcrumb</td><td>CA › San Mateo County › Redwood City › Friendly Acres; BreadcrumbList schema</td><td>Geo hierarchy config</td><td>Links up the mesh</td><td>Draft s6</td></tr>
+      <tr><td>H1 + freshness line</td><td>"{Hood}, {City}, CA — Neighborhood Guide &amp; Market Statistics" · "Live data, updated daily · {month year}"</td><td>Template + render timestamp</td><td>none</td><td>Draft s6 SEO spec</td></tr>
+      <tr><td>Hero 6-stat grid</td><td>Median sale (12mo) + YoY, $/sqft, homes for sale, median DOM (vs national), sale-to-list, months of supply</td><td>MarketDataSnapshot (MLS), daily re-render</td><td>Hover defs [BEST GUESS]</td><td>Draft s6</td></tr>
+      <tr><td>30-second read (editorial)</td><td>AI-drafted-from-data summary + quoted agent voice line</td><td>LLM draft over snapshots; agent-reviewed before publish</td><td>Agent edit in review flow</td><td>Draft s6 (E-E-A-T)</td></tr>
+      <tr><td>"Living in {hood}" prose</td><td>~150-word templated editorial from POI/geo data, unique per neighborhood per agent</td><td>LocalDataProvider + LLM; agent-reviewed</td><td>—</td><td>Draft s6</td></tr>
+      <tr><td>Housing stock &amp; costs prose</td><td>Stock description + price bands + ADU-by-right % + upzoned-lot count; numbers re-render monthly</td><td>MLS + Zoneomics (ZoningLookupRecord)</td><td>—</td><td>Draft s6</td></tr>
+      <tr><td>Getting around prose</td><td>Drive times, Caltrain, walk score</td><td>Commute engine (same as property-page commute layer) + LocalDataProvider</td><td>—</td><td>Draft s6</td></tr>
+      <tr><td>Trends-by-type table</td><td>SFH/TH/Condo: median, $/sqft, sold count, DOM, sale-to-list, YoY</td><td>MarketDataSnapshot per type</td><td>Horiz-scroll on mobile</td><td>Draft s6 (data-depth play)</td></tr>
+      <tr><td>3 chart cards</td><td>5-yr price trend, inventory &amp; DOM, recent-sales heat map</td><td>MarketDataSnapshot series; map from closed MLS</td><td>Chart interactions [BEST GUESS: hover values only]</td><td>Draft s6</td></tr>
+      <tr><td>Neighborhood facts grid</td><td>Home count, median year built, median lot, own-vs-rent, median rent (3bd), walk/bike</td><td>PropertyRecord aggregate + RentEstimateSnapshot + LocalData</td><td>—</td><td>Draft s6</td></tr>
+      <tr><td>Proprietary data-engine grid</td><td>ADU-eligible %, development-upside lots, gross rent yield vs Peninsula avg, 8am commutes, market forecast /100 + risk label, hazard profile</td><td>Zoneomics, RentEstimate, ScoringService forecast, FEMA/CAL FIRE</td><td>Forecast tile click → contributing facts [BEST GUESS, mirrors map-pin explainability rule]</td><td>Draft s6 ("uncopyable SEO/AEO blocks")</td></tr>
+      <tr><td>Ask-this-page box</td><td>NL Q&amp;A scoped to the neighborhood; zoning answers cite municipal code; school answers carry disclaimer</td><td>Same parser/answer engine as Screen 1 + LocalDataProvider</td><td>Submit → answer inline</td><td>Draft s6</td></tr>
+      <tr><td>Schools table</td><td>School, grades, type, rating, distance; each school links its page</td><td>LocalDataProvider SchoolDataResponse (third-party ratings, attributed)</td><td>Row links</td><td>Draft s6; PropSearch MB §16</td></tr>
+      <tr><td>School action buttons</td><td>"Which schools serve a specific address?" + "Search homes assigned to {school}" — placed OUTSIDE the schools data module</td><td>User-initiated filter (school_boundary_user_filter)</td><td>Address lookup / filtered search</td><td>Matrix correction #4; MB §16.4</td></tr>
+      <tr><td>School disclaimer</td><td>Verbatim: third-party sources, ratings/boundaries change, verify with district; equal-service note</td><td>Static template §16.3</td><td>none, non-removable</td><td>MB §16.3</td></tr>
+      <tr><td>Commute/climate/lifestyle cards</td><td>Hazard-zone map (FEMA/CAL FIRE objective data), drive-time map, parks/dining list — NO crime data</td><td>LocalDataProvider + hazard providers</td><td>Card → expanded map [BEST GUESS]</td><td>Draft s6</td></tr>
+      <tr><td>Homes-for-sale cards + CTAs</td><td>Live listings; "See all N →" (filter URL) + "Get the monthly market report"</td><td>IDXDisplayCache; filter-URL library</td><td>Card → detail; CTAs</td><td>Draft s6</td></tr>
+      <tr><td>Parks &amp; dining editorial</td><td>Named local POIs, agent-reviewed</td><td>LocalDataProvider + LLM</td><td>—</td><td>Draft s6</td></tr>
+      <tr><td>Buying/selling service paragraph</td><td>Long-tail targeting; instant-alert + instant-value capture links</td><td>Template + live DOM stat</td><td>2 capture links</td><td>Draft s6</td></tr>
+      <tr><td>Recently-sold hub block</td><td>12-mo sold count/median + 3 recent sales, each address links its permanent sold page (loop closes back)</td><td>Closed MLS</td><td>Links</td><td>Draft s6</td></tr>
+      <tr><td>Related-searches chips</td><td>5+ curated query links rendered from the filter-URL library (never 404)</td><td>IDXFilterUrlRecord</td><td>Links → curated result pages</td><td>Draft s6; MB §15</td></tr>
+      <tr><td>FAQ block</td><td>3+ Q&amp;As with hard numbers; FAQPage schema (~2.7× AI-citation rate)</td><td>Templated from snapshots</td><td>Expand/collapse</td><td>Draft s6</td></tr>
+      <tr><td>Nearby-neighborhoods mesh</td><td>Sibling cards (name, median, actives) + "All {city} →" parent rollup</td><td>Community index</td><td>Links</td><td>Draft s6</td></tr>
+      <tr><td>Seller-valuation module</td><td>"Own a home in {hood}?" address capture, brand-bordered</td><td>AVMProvider + lead intake, source tag community_{hood}_value</td><td>Submit → value flow + CRM</td><td>Draft s6 (highest-converting element)</td></tr>
+      <tr><td>E-E-A-T authored-by block</td><td>"Written &amp; verified by {agent}" + sales-in-hood count + DRE + reviews link + first-person note (agent-authored once) + "Ask about this neighborhood" CTA</td><td>Brand vault + production records</td><td>CTA → contact</td><td>Draft s6</td></tr>
+      <tr><td>Footer</td><td>Powered by PropertyIQ + schema/canonical note</td><td>Platform</td><td>—</td><td>Draft s6</td></tr>
+      <tr><td>Uniqueness validator (publish gate)</td><td>Blocks publish if page too similar to other agents' instances (doorway-page risk)</td><td>Platform validator</td><td>Blocking state in publish flow with diff report [BEST GUESS on report format]</td><td>Draft s6 note</td></tr>
+      <tr><td>OTTO auto-SEO layer</td><td>Per-instance GSC-fed title/meta/heading tuning + internal-link suggestions through variable slots only, never raw HTML</td><td>SearchAtlas/OTTO via SeoProvider; approvals in Screen 20</td><td>Change log visible in SEO Console</td><td>Draft s6 SEO spec; MB §12.12</td></tr>
+    </table>
+    </div>
+
+    <h2>States</h2>
+    <ul>
+      <li><b>Default</b>: fully populated, "updated {date}" visible.</li>
+      <li><b>Loading</b>: server-rendered (static shell is the norm); charts/maps lazy-load below fold.</li>
+      <li><b>Empty/sparse-data neighborhood</b>: sections with insufficient data auto-hide rather than render thin content (e.g. &lt;3 sales in 12mo hides trends-by-type rows [BEST GUESS: per-row suppression with "insufficient sales to report" note]); page is not generated at all below a data floor [BEST GUESS threshold — flag to product].</li>
+      <li><b>Degraded (fail-closed)</b>: ScoringService down → forecast tile hidden ("score unavailable"), never a stale/fabricated score (matrix correction #12 pattern); Zoneomics stale beyond 30-day cache → ADU/upzone tiles show "verify — data refresh pending" [derived from MB 30-day zoning cache rule]; school provider down → schools section hides with the disclaimer block retained off; AVM down → valuation module keeps capture, drops instant promise.</li>
+      <li><b>Unpublished/blocked</b>: uniqueness-validator failure blocks publish; page stays on last approved version.</li>
+      <li><b>Permission-limited</b>: public read; editorial edit + publish restricted to agent/team; OTTO deploys gated by Screen 20 approval (freeze flag per page respected).</li>
+      <li><b>Mobile</b>: per Layout; tables scroll in-container, page never scrolls horizontally.</li>
+    </ul>
+
+    <h2>Data fields</h2>
+    <div style="overflow-x:auto">
+    <table class="dtable">
+      <tr><th>Field</th><th>Format</th><th>Source of truth</th></tr>
+      <tr><td>All market stats (median, $/sqft, DOM, sale-to-list, supply, YoY)</td><td>currency/int/%/months, as-of date</td><td>MarketDataSnapshot (MLS), daily re-render</td></tr>
+      <tr><td>ADU-by-right %, upzoned lot count</td><td>%, int</td><td>ZoningLookupRecord (Zoneomics, 30-day cache)</td></tr>
+      <tr><td>Gross rent yield, median rent</td><td>%, $/mo</td><td>RentEstimateSnapshot (Rentometer)</td></tr>
+      <tr><td>Forecast score</td><td>0–100 + risk label</td><td>ScoringService (fail-closed)</td></tr>
+      <tr><td>Hazard profile</td><td>categorical (fire/flood/quake)</td><td>FEMA / CAL FIRE objective data</td></tr>
+      <tr><td>Schools: name, grades, type, rating, distance</td><td>third-party attributed</td><td>SchoolDataResponse (school_data_used_for_default_ranking: false, ..._ad_targeting: false)</td></tr>
+      <tr><td>Commute times</td><td>minutes at 8am</td><td>Commute engine</td></tr>
+      <tr><td>POIs (parks, dining)</td><td>named list</td><td>LocalDataRecord</td></tr>
+      <tr><td>Listings / solds</td><td>MLS whitelist fields</td><td>IDXDisplayCache / closed records</td></tr>
+      <tr><td>Editorial blocks</td><td>text, agent-reviewed flag + review timestamp</td><td>LLM draft + agent approval record</td></tr>
+      <tr><td>Canonical URL, schema payloads</td><td>/{city}/{neighborhood}/; Place + Dataset + FAQPage + BreadcrumbList + ItemList</td><td>Template engine</td></tr>
+      <tr><td>Sitemap entries</td><td>per-type sitemaps with lastmod; WebP images + image sitemap</td><td>Instance sitemap generator</td></tr>
+    </table>
+    </div>
+
+    <h2>Rules &amp; compliance</h2>
+    <ul>
+      <li><b>Schools firewall (MB §16)</b>: school data user-initiated in behavior, identical for all users, never feeds ranking/scoring/targeting/lead capture; conversion CTAs sit OUTSIDE the schools module; verbatim §16.3 disclaimers + equal-service note non-removable; school ratings never a default ranking input.</li>
+      <li><b>Fair housing</b>: no crime data (hazard/climate is the compliant substitute); no demographic steering language in editorial; ComplianceProvider pass on all agent-edited prose.</li>
+      <li><b>Filter-URL governance (MB §15)</b>: every curated link is server-rendered, canonicalized, compliance-checked, MLS-license compliant; indexable caps 250/market and 5,000/global; dynamic long-tail = NOINDEX unless approved; "Submit to SEO" routes through the OTTO preview+approve flow (Screen 20).</li>
+      <li><b>AVM honesty</b>: instant values show range/confidence/as-of or "estimate unavailable" (matrix correction #7).</li>
+      <li><b>Doorway-page defense</b>: uniqueness validator is a hard publish gate; rollout farm-first (~15–30 neighborhoods), never metro-wide bulk.</li>
+      <li><b>Data attribution</b>: every local-data fact carries source attribution (MB §16 local data floor).</li>
+      <li><b>Freshness</b>: stats re-render daily with visible updated-date; editorial numbers monthly.</li>
+      <li><b>Zoning claims (MB §17, Brain addition)</b>: confidence/coverage gates on every claim; verbatim §17.3 disclaimer wherever ADU/zoning data renders; below thresholds the claim is suppressed.</li>
+    </ul>
+
+    <h2>Cross-links</h2>
+    <p>In: homepage (§4, 8c, footer), sibling/parent community pages, sold pages, listing breadcrumbs, GBP posts, ads/QR destinations. Out: listing detail (S3), curated filter-URL results (S2), sold pages, city rollup /{city}/, school pages, contact/value capture (→ CRM S14). <b>Ledger events emitted</b>: PAGE_VIEWED, VALUATION_REQUESTED, REPORT_SUBSCRIBED, NL_QUESTION_ASKED, ALERT_CREATED, LEAD_CREATED (source community_{slug}_*), FILTER_URL_CLICKED. <b>Consumed</b>: daily MarketDataSnapshot renders, listing/closing events, OTTO deploy approvals (S20), agent editorial approvals.</p>
+
+    <h2>Open decisions</h2>
+    <ul>
+      <li>[DECIDE] Page-generation data floor (min sales/actives before a neighborhood page exists). Interim: generate only for farm-configured neighborhoods with ≥10 sales/12mo [BEST GUESS], expand on approval.</li>
+      <li>[DECIDE] Uniqueness-validator threshold + scope (per-metro vs global). Interim: block publish when cross-instance similarity exceeds the platform default; show side-by-side diff of offending blocks [BEST GUESS].</li>
+      <li>[DECIDE] Ask-this-page answer engine gating (anonymous vs soft-capture after N questions). Interim: anonymous, mirroring the no-hard-gate organic policy; behavior-triggered soft prompt after 3 questions [BEST GUESS].</li>
+      <li>[DECIDE] Chart library/interactivity level. Interim: static-rendered SVG with hover values (performance budget first); ECharts reserved for agent-side analytics (per results-dashboard memory).</li>
+      <li>[DECIDE] Walk/bike score licensing (Walk Score API vs computed). Interim: display only if licensed provider connected; tile hides otherwise (fail-closed).</li>
+    </ul>
+    <p class="anno" style="margin-top:20px">Wireframe fidelity — colors are placeholders from the locked PropFlow design language. All neighborhood numbers/POIs are realistic fake data. Agent identity: Graeham Watts, Intero Real Estate, DRE# 01466876 (from shared-references/identity.json — never hardcode elsewhere; the identity.json blocklist number must never appear).</p>
+  </div>
+</div>

@@ -1,0 +1,439 @@
+<title>PropertyIQ · Screen 11 — Competitor & Channel Intelligence</title>
+<link href="https://api.fontshare.com/v2/css?f[]=technor@500,600,700&display=swap" rel="stylesheet">
+<link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<style>
+  /* Type system — Technor for display, Inter for UI. */
+  :root{ --font-display:'Technor', Inter, -apple-system, 'Segoe UI', sans-serif; --font-ui: Inter, -apple-system, 'Segoe UI', Roboto, sans-serif; }
+</style>
+<style>
+  /* Palette v4 — PropFlow design language: neutral ink UI, ink-as-accent, color reserved for data. (extracted verbatim from propsearch-design-draft.html) */
+  :root, :root[data-theme="dark"], :root[data-theme="light"]{
+    --ink:#23282f; --paper:#fbfaf8; --surface:#f1efe9; --line:#e2dfd6;
+    --mut:#6b7076; --soft:#9b9f9f;
+    --brand:#2e6b53; --brand-ink:#ffffff; --brand-soft:#eaf1ec; --brand-deep:#1e4c3a;
+    --signal:#b07a2e;
+    --good:#2e7d4f; --warn:#a8630a; --crit:#b3372f;
+    --r:10px;
+  }
+  .intel .score, .mintel{ color:var(--brand-deep) }
+  .intel{ border-left:3px solid var(--brand) }
+  h1{ letter-spacing:-.02em }
+  .stat b{ letter-spacing:-.01em }
+  body[data-agent="watts"]{ --brand:#2e6b53; --brand-soft:#eaf1ec; --brand-deep:#1e4c3a; }
+
+  *{box-sizing:border-box; margin:0}
+  body{font:15px/1.55 var(--font-ui); color:var(--ink); background:var(--paper); padding-bottom:80px}
+  h1,h2,h3{line-height:1.15; text-wrap:balance; font-family:var(--font-display); font-weight:600}
+  h1{letter-spacing:-.01em}
+  .site{box-shadow:0 1px 2px rgba(20,24,32,.04), 0 8px 32px rgba(20,24,32,.06)}
+  .stat{box-shadow:0 1px 2px rgba(20,24,32,.03); transition:box-shadow .15s, transform .15s}
+  .stat:hover{box-shadow:0 4px 14px rgba(20,24,32,.08)}
+  .chip{transition:all .12s}
+  button{font-family:var(--font-ui)}
+  .num{font-variant-numeric:tabular-nums}
+  .wrap{max-width:1180px; margin:0 auto; padding:0 20px}
+
+  .bar{position:sticky; top:0; z-index:50; background:var(--paper); border-bottom:1px solid var(--line); padding:10px 0; backdrop-filter:blur(8px)}
+  .bar .wrap{display:flex; flex-wrap:wrap; gap:10px; align-items:center}
+  .bar .ttl{font-weight:700; margin-right:auto}
+  .bar .ttl small{display:block; font-weight:400; color:var(--mut)}
+  .bar a{color:var(--brand); font-size:13px; text-decoration:none}
+
+  .note{background:var(--surface); border:1px solid var(--line); border-radius:var(--r); padding:14px 16px; margin:0 0 22px; font-size:13.5px; color:var(--mut)}
+  .note b{color:var(--ink)}
+
+  .site{border:1px solid var(--line); border-radius:14px; overflow:hidden; background:var(--paper)}
+  .sitehead{display:flex; align-items:center; gap:14px; padding:14px 22px; border-bottom:1px solid var(--line)}
+  .avatar{width:38px; height:38px; border-radius:50%; background:var(--brand); color:var(--brand-ink); display:grid; place-items:center; font-weight:700}
+  .sitehead .who b{display:block}
+  .sitehead .who small{color:var(--mut)}
+  .sitehead nav{margin-left:auto; display:flex; gap:18px; font-size:13.5px; color:var(--mut)}
+  .sitehead nav a{color:inherit; text-decoration:none}
+  .sitehead nav a:hover{color:var(--brand)}
+
+  .chip{display:inline-flex; align-items:center; gap:6px; font-size:12.5px; font-weight:500; border:1px solid var(--line); border-radius:99px; padding:6px 12px; background:var(--paper); cursor:pointer; color:var(--ink)}
+  .chip:hover{border-color:var(--brand)}
+  .chip.on{background:var(--brand); border-color:var(--brand); color:var(--brand-ink); font-weight:600; box-shadow:0 2px 8px color-mix(in srgb, var(--brand) 30%, transparent)}
+
+  .statrow{display:grid; grid-template-columns:repeat(4,1fr); gap:10px}
+  .stat{background:var(--surface); border:1px solid var(--line); border-radius:var(--r); padding:12px}
+  .stat small{display:block; color:var(--mut); font-size:11.5px; text-transform:uppercase; letter-spacing:.05em}
+  .stat b{font-size:18px}
+  .stat .up{color:var(--good); font-size:12px}
+
+  .bdg{font-size:11.5px; border-radius:6px; padding:3px 8px; background:var(--surface); border:1px solid var(--line); color:var(--mut)}
+  .bdg.good{color:var(--good); border-color:color-mix(in srgb,var(--good) 30%,var(--line))}
+  .bdg.warn{color:var(--warn); border-color:color-mix(in srgb,var(--warn) 30%,var(--line))}
+
+  .dtable{width:100%; border-collapse:collapse; font-size:13px}
+  .dtable td,.dtable th{border-bottom:1px solid var(--line); padding:8px 10px; text-align:left}
+  .dtable th{font-size:11px; text-transform:uppercase; letter-spacing:.05em; color:var(--soft)}
+
+  @media (max-width:860px){ .statrow{grid-template-columns:repeat(2,1fr)} .maingrid{grid-template-columns:1fr !important} .console{grid-template-columns:1fr !important} .rail{display:none !important} }
+  @media (prefers-reduced-motion: reduce){ *{transition:none!important} }
+
+  /* ---- page-specific additions (kept in the same design language) ---- */
+  .anno{font-size:11px; color:var(--soft)}
+  .cardbox{border:1px solid var(--line); border-radius:10px; padding:11px 14px; font-size:12.5px; background:var(--paper)}
+  .btn-ink{background:var(--ink); color:#fff; border:0; border-radius:7px; padding:7px 12px; font-size:11.5px; cursor:pointer; font-weight:600}
+  .btn-ghost{background:var(--paper); border:1px solid var(--line); border-radius:7px; padding:7px 12px; font-size:11.5px; cursor:pointer}
+  .sechead{font-size:14px; font-weight:700; margin:0 0 8px; font-family:var(--font-display)}
+  .cov td.ok{color:var(--good); font-weight:700}
+  .specdoc h2{font-size:18px; margin:26px 0 8px}
+  .specdoc h3{font-size:15px; margin:18px 0 6px}
+  .specdoc p, .specdoc li{font-size:13.5px; color:var(--mut)}
+  .specdoc b{color:var(--ink)}
+  .specdoc table{margin:8px 0}
+  .gapchip{font-size:10px; border-radius:5px; padding:2px 6px; border:1px solid var(--line); background:var(--surface); color:var(--mut); letter-spacing:.03em; cursor:pointer; white-space:nowrap}
+  .movelink{color:var(--brand); text-decoration:none; font-weight:600}
+  .skel{background:linear-gradient(90deg, var(--surface), #e9e6de, var(--surface)); border-radius:6px; height:12px}
+</style>
+
+<!-- ============ (1) slim header ============ -->
+<div class="bar">
+  <div class="wrap">
+    <div class="ttl">PropertyIQ · Screen 11 — Competitor & Channel Intelligence <small>Full-density per-screen mock · wireframe fidelity · dev-facing annotations in gray</small></div>
+    <a href="../wireframe.html">← All screens</a>
+  </div>
+</div>
+
+<!-- ============ (2) THE FULL MOCK ============ -->
+<div class="wrap" style="padding-top:24px">
+  <div class="note"><b>Screen 11 — Competitor & Channel Intelligence.</b> The analysis layer for competing agents: one profile fusing MLS production data, official-API channel monitoring (YouTube / Instagram / GBP / website), and SearchAtlas keyword-gap data into a gap matrix and a living, tracked counter-plan. Every insight terminates in a counter-move action (no-dead-end-alerts rule). Agent-only; read-only without strategy permission; never client-facing and never republished. Nothing dispatches from this screen — the Queue button queues work into gauntlet / Approvals / review tasks.</div>
+
+  <div class="site" data-agent="watts">
+    <!-- header identity: competitor avatar (crit), name+brokerage, watch meta, nav (spec Layout) -->
+    <div class="sitehead">
+      <div class="avatar" style="background:var(--crit)">JL</div>
+      <div class="who"><b>J. Lee — Keller Williams</b><small>Competitor profile · watching since May · farm overlap: Friendly Acres north blocks · DRE shown display-only from MLS agent record</small></div>
+      <nav><a href="#">← Farm watch</a><a href="#el-watchlist" style="font-weight:600; color:var(--ink)">Watch list (3)</a></nav>
+    </div>
+
+    <div class="console" style="display:grid; grid-template-columns:172px 1fr">
+      <!-- persistent agent-console left rail (Screen 9 chrome) -->
+      <div class="rail" style="border-right:1px solid var(--line); padding:14px 10px; font-size:12.5px; display:flex; flex-direction:column; gap:2px; background:var(--surface)">
+        <a href="#" style="text-decoration:none; color:var(--ink); border-radius:8px; padding:8px 10px">☰ Today</a>
+        <a href="#" style="text-decoration:none; color:#fff; background:var(--ink); border-radius:8px; padding:8px 10px; font-weight:600">🗺 Farm map</a>
+        <a href="#" style="text-decoration:none; color:var(--ink); border-radius:8px; padding:8px 10px">🤝 Past clients</a>
+        <a href="#" style="text-decoration:none; color:var(--ink); border-radius:8px; padding:8px 10px">👤 Leads & clients</a>
+        <a href="#" style="text-decoration:none; color:var(--ink); border-radius:8px; padding:8px 10px">💬 Comms <span class="bdg" style="font-size:9.5px">6</span></a>
+        <a href="#" style="text-decoration:none; color:var(--ink); border-radius:8px; padding:8px 10px">📋 Transactions <span class="bdg" style="font-size:9.5px">2</span></a>
+        <a href="#" style="text-decoration:none; color:var(--ink); border-radius:8px; padding:8px 10px">🎬 Content studio</a>
+        <a href="#" style="text-decoration:none; color:var(--ink); border-radius:8px; padding:8px 10px">📣 Ads & funnels</a>
+        <a href="#" style="text-decoration:none; color:var(--ink); border-radius:8px; padding:8px 10px">⚙ Playbooks</a>
+        <a href="#" style="text-decoration:none; color:var(--ink); border-radius:8px; padding:8px 10px">📈 Reports</a>
+        <div style="margin-top:auto; padding-top:10px; border-top:1px solid var(--line)">
+          <a href="#" style="text-decoration:none; color:var(--ink); border-radius:8px; padding:8px 10px; display:block">⚙ Settings</a>
+          <div class="anno" style="padding:6px 10px">Global chrome: this rail is persistent across all agent-console screens (Screen 9 pattern). Competitor profiles live under Farm map / farm watch — there is no dedicated rail entry.</div>
+        </div>
+      </div>
+
+      <div>
+        <!-- watch-list panel -->
+        <div id="el-watchlist" style="padding:14px 22px 0">
+          <div class="cardbox" style="display:flex; gap:8px; align-items:center; flex-wrap:wrap; background:var(--surface)">
+            <b>Watch list — Friendly Acres farm (3 of 5)</b>
+            <span class="chip on" style="font-size:11px">JL · J. Lee</span>
+            <span class="chip" style="font-size:11px">MT · M. Tran</span>
+            <span class="chip" style="font-size:11px">RS · R. Silva</span>
+            <button class="btn-ghost">＋ Watch an agent</button>
+            <div class="anno" style="width:100%">Watch-list store · cap ~5 agents per farm (interim hard cap 5 with admin override [DECIDE]). At cap, the add button disables with an explanation ("unwatch an agent to add another"). Add/remove here or from any listing's agent attribution. Weekly refresh; changes surface on the Command Center farm-watch card and Monday briefing.</div>
+          </div>
+        </div>
+
+        <!-- stat row (5 tiles) -->
+        <div id="el-stats" style="padding:12px 22px 0">
+          <div class="statrow" style="grid-template-columns:repeat(5,1fr)">
+            <div class="stat" id="el-stat-listings"><small>Farm listings (12mo)</small><b class="num">5</b> <span style="font-size:11px;color:var(--crit)">3 of last 5 new</span> <span class="anno" style="display:block">click → listing list</span></div>
+            <div class="stat" id="el-stat-stl"><small>Avg sale-to-list</small><b class="num">99.2%</b> <span style="font-size:11px;color:var(--good)">yours: 103%</span> <span class="anno" style="display:block">tooltip: n=5 · 12-mo window</span></div>
+            <div class="stat" id="el-stat-dom"><small>Avg DOM</small><b class="num">19</b> <span style="font-size:11px;color:var(--good)">yours: 9</span> <span class="anno" style="display:block">tooltip: same sample/window</span></div>
+            <div class="stat" id="el-stat-acc"><small>Price accuracy</small><b class="num">−3.1% vs model</b> <span style="font-size:11px;color:var(--mut)">tends to underprice</span> <span class="anno" style="display:block">tooltip: per-listing breakdown · "vs model" = platform AVM midpoint at list date [DECIDE]</span></div>
+            <div class="stat" id="el-stat-ads"><small>Est. ad activity</small><b>Meta: active</b> <span style="font-size:11px;color:var(--mut)">2 listing campaigns</span> <span class="anno" style="display:block">Meta Ad Library API only · click → minimal-record ad list ↓</span></div>
+          </div>
+          <div class="anno" style="margin-top:4px">MLS/IDX closed + active data with sample window on every tooltip. Comparators ("yours:") come from your own MLS production; a missing comparator renders "—", never 0. Google/TikTok ad libraries are OFF until legally approved (PR §13.3) — no tile ever shows data from them.</div>
+        </div>
+
+        <!-- ad-activity minimal-record expander -->
+        <div id="el-adrecords" style="padding:10px 22px 0">
+          <div class="cardbox">
+            <b>Meta Ad Library — minimal records (2)</b> <span class="bdg">storage: hash / URL / excerpt / summary — and nothing more (PR §13.4)</span>
+            <table class="dtable" style="font-size:11.5px; margin-top:6px">
+              <tr><th>Source</th><th>ad_library_url</th><th>Short excerpt</th><th>Analysis summary</th><th>Created</th></tr>
+              <tr><td>META_AD_LIBRARY</td><td class="num">fb.com/ads/library/…88231</td><td>"Just listed in Friendly Acres — 3bd charmer…"</td><td>Listing-lead gen · reel format · urgency hook · CTA at 0:04</td><td class="num">Jul 12</td></tr>
+              <tr><td>META_AD_LIBRARY</td><td class="num">fb.com/ads/library/…90417</td><td>"What's your Friendly Acres home worth?"</td><td>Seller-lead gen · static · valuation offer framing</td><td class="num">Jul 9</td></tr>
+            </table>
+            <div class="anno" style="margin-top:4px">COMPETITOR_AD_ANALYZED ledger events. Stored fields limited to the allowed list: content_hash, url, basic_metadata, short_excerpt, ai_summary, created_at, source. Forbidden: full bodies, full comment threads, third-party PII beyond minimal public metadata. Retention = REDDIT_MINIMAL_24M-class policy. Structural pattern learning only — never copying.</div>
+          </div>
+        </div>
+
+        <!-- two-column: channels / gap matrix -->
+        <div class="maingrid" style="padding:14px 22px 0; display:grid; grid-template-columns:1fr 1fr; gap:14px">
+          <!-- channels card -->
+          <div id="el-channels" style="border:1px solid var(--line); border-radius:12px; padding:14px 16px">
+            <b style="font-size:14px" id="el-channels-header">Channels — official APIs & public data only <span class="bdg" style="font-weight:400">no scraping · store hash/URL/excerpt, never full copies</span></b>
+            <div class="anno">The legal-access boundary is stated on-screen by design (matrix correction #5). All rows carry an as-of date; weekly refresh.</div>
+            <div style="font-size:12.5px; color:var(--mut); margin-top:10px; display:grid; gap:10px">
+              <div id="el-yt" class="num">▶ <b style="color:var(--ink)">YouTube</b> — 2.1K subs · 3 videos/mo · avg 480 views · top: "Redwood City market update" series (1.2K avg) · 7-day view velocity: +38% vs channel norm <a href="#" class="movelink" style="font-size:11px">expand ▾</a>
+                <div class="anno">YouTube Data API (official, free). Full 90-day output set — not just hits — normalized for channel age + subscriber count (survivorship-bias guard). Expand → recent videos, metadata only. as of Jul 13.</div>
+              </div>
+              <div id="el-ig" class="num">📸 <b style="color:var(--ink)">Instagram</b> — 4.8K followers · 5 posts/wk · reels avg 2.3K views · <b style="color:var(--ink)">listing reels outperform her talking-head 4:1</b> <a href="#" class="movelink" style="font-size:11px">expand ▾</a>
+                <div class="anno">Official/legal-access path only [DECIDE — IG Graph API business-discovery where OAuth-accessible, manual-review fallback; the UI is unaffected by which compliant path wins]. Normalized by creator size, account age, recency; saves + shares weighted 10× over likes. as of Jul 13.</div>
+              </div>
+              <div id="el-gbp" class="num">🏠 <b style="color:var(--ink)">GBP</b> — 41 reviews (4.8★) · posts weekly · <span style="color:var(--good)">yours: 62 reviews (4.9★)</span> <a href="#" class="movelink" style="font-size:11px">SEO Console local grid →</a>
+                <div class="anno">GBP / Places public data. as of Jul 14.</div>
+              </div>
+              <div id="el-web" class="num">🌐 <b style="color:var(--ink)">Website</b> — Luxury Presence template · ranks #2 for "Friendly Acres homes for sale" · <b style="color:var(--ink)">no ADU/investor content at all</b> <a href="#" class="movelink" style="font-size:11px">SEO Console gap tab →</a>
+                <div class="anno">SearchAtlas rank API (shared with Screen 20) + crawl of public pages only — nothing behind logins. as of Jul 14.</div>
+              </div>
+            </div>
+          </div>
+
+          <!-- gap matrix -->
+          <div id="el-gapmatrix" style="border:1px solid var(--line); border-radius:12px; padding:14px 16px">
+            <b style="font-size:14px">Gap matrix — where she wins, where you win, what's unclaimed</b>
+            <div id="el-gaptags" style="display:flex; gap:5px; flex-wrap:wrap; margin-top:8px">
+              <span class="gapchip" style="background:var(--brand); color:#fff; border-color:var(--brand)">ALL</span>
+              <span class="gapchip">VOLUME_GAP</span><span class="gapchip">QUALITY_GAP</span><span class="gapchip">GEO_GAP</span><span class="gapchip">FORMAT_GAP</span><span class="gapchip">RECENCY_GAP</span><span class="gapchip">ANGLE_GAP</span><span class="gapchip">DEPTH_GAP</span>
+            </div>
+            <div class="anno" style="margin-top:3px">7-type gap classification (PropCast supply-intelligence classifier — legacy MISSING/WEAK/BETTER_THAN/SATURATED labels retired). Tag chips filter the matrix.</div>
+            <div style="overflow-x:auto; margin-top:8px">
+            <table class="dtable" style="font-size:11.5px">
+              <tr><th>Territory</th><th>Her</th><th>You</th><th>Gap type</th><th>Move</th></tr>
+              <tr><td>Market-update video (YT)</td><td style="color:var(--crit)">strong</td><td>none</td><td><span class="gapchip">VOLUME_GAP</span></td><td><a href="#" class="movelink">PropCast: counter-series brief →</a></td></tr>
+              <tr><td>"Friendly Acres homes" SEO</td><td style="color:var(--crit)">#2</td><td>#4</td><td><span class="gapchip">DEPTH_GAP</span></td><td><a href="#" class="movelink">OTTO: gap plan →</a></td></tr>
+              <tr><td>ADU / investor content</td><td>—</td><td style="color:var(--good)">unclaimed → yours</td><td><span class="gapchip">ANGLE_GAP</span></td><td><a href="#" class="movelink">3 drafts queued ✓ (PropCast queue)</a></td></tr>
+              <tr><td>Spanish-language content</td><td>—</td><td>—</td><td><span class="gapchip">GEO_GAP</span></td><td><a href="#" class="movelink">open-lane brief (EPA) →</a></td></tr>
+              <tr><td>Listing reels format</td><td style="color:var(--crit)">4:1 vs talking-head</td><td>mixed</td><td><span class="gapchip">FORMAT_GAP</span></td><td><a href="#" class="movelink">format note → counter-series brief →</a></td></tr>
+              <tr><td>Google reviews</td><td class="num">41</td><td class="num" style="color:var(--good)">62</td><td><span class="gapchip">QUALITY_GAP</span></td><td>hold — cadence auto-asks ✓</td></tr>
+            </table>
+            </div>
+            <div class="anno" style="margin-top:4px">Fusion of the three engines (MLS + channels + SearchAtlas). <b>No row without a Move</b> — every cell is an action link or an explicit "hold" state (no-dead-end-alerts rule). SEO gap rows share keyword / her-rank / your-rank / volume fields with Screen 20. No protected-class or steering inputs anywhere in gap analysis (no school quality, family status, etc.). No crime data.</div>
+          </div>
+        </div>
+
+        <!-- Wattson summary card -->
+        <div id="el-wattson" style="padding:14px 22px 0">
+          <div style="border:1.5px solid var(--brand); border-radius:12px; padding:14px 16px; background:var(--brand-soft)">
+            <div style="display:flex; gap:8px; align-items:center; flex-wrap:wrap">
+              <b style="font-size:14px">Wattson's summary — the read in plain English</b>
+              <button class="btn-ghost" style="margin-left:auto">↻ Regenerate</button>
+              <a href="#" class="movelink" style="font-size:11.5px">cite sources ▾</a>
+            </div>
+            <div style="font-size:12.5px; color:var(--mut); margin-top:6px">She's beating you on <b style="color:var(--ink)">consistency</b> (3 videos/month for 14 months straight) and it's converting to listings in the north blocks — but she's weak everywhere your engine is strong: no investor/ADU content, no Spanish content, underprices by 3.1% (a seller-presentation talking point: "her sellers leave money on the table"), and her site can't answer a single zoning or commute question. <b style="color:var(--ink)">You don't need to out-post her</b> — own the two unclaimed lanes and put your sale-to-list numbers in front of her farm.</div>
+            <div class="anno" style="margin-top:4px">Wattson over the fused data. Survivorship-bias guard: reasons from gaps in the full normalized 90-day set, never "copy her winners." Regenerate runs on weekly refresh + on-demand, rate-limited [DECIDE / BEST GUESS]. Cite-sources expander lists the engine rows behind each claim [BEST GUESS].</div>
+            <div id="el-actioncols" style="display:grid; grid-template-columns:repeat(3,1fr); gap:8px; margin-top:10px; font-size:11.5px">
+              <div style="background:var(--paper); border:1px solid var(--line); border-radius:9px; padding:10px"><b>This week</b><div style="color:var(--mut); margin-top:3px">✅ 3 ADU drafts queued (done) · <span class="bdg warn">in Approvals</span> counter-series ep. 1 → <a href="#" class="movelink">Approvals Inbox</a> · ⏳ postcard the 5 high-propensity owners south of Oak → <a href="#" class="movelink">review task</a></div></div>
+              <div style="background:var(--paper); border:1px solid var(--line); border-radius:9px; padding:10px"><b>This month</b><div style="color:var(--mut); margin-top:3px">⏳ OTTO gap plan "Friendly Acres homes" #4→top-3 → <a href="#" class="movelink">SEO Console</a> · ⏳ Spanish market-update pilot (EPA) → <a href="#" class="movelink">PropCast brief</a> · ⏳ seller-presentation slide: your 103% vs her 99.2%</div></div>
+              <div style="background:var(--paper); border:1px solid var(--line); border-radius:9px; padding:10px"><b>Watch & measure</b><div style="color:var(--mut); margin-top:3px">Her next 3 listings' DOM/pricing · your farm share <span class="num">20% → target 30%</span> by Dec (target user-set; listings taken ÷ total farm listings, trailing 12mo [DECIDE]) · re-scored monthly</div></div>
+            </div>
+            <div id="el-livingplan" style="font-size:10.5px; color:var(--soft); margin-top:8px">Living plan: each action deep-links to its module (PropCast / OTTO / PropReach / cadence); completion (✓ / pending / in Approvals) is tracked from the ledger; the monthly re-score updates the plan automatically and changes land in the Monday briefing — strategy with a scoreboard, not a memo.</div>
+          </div>
+        </div>
+
+        <!-- counter-plan bar -->
+        <div id="el-counterplan" style="padding:14px 22px 0">
+          <div style="border:1.5px solid var(--line); border-radius:12px; padding:14px 16px; background:var(--surface); display:flex; gap:14px; align-items:center; flex-wrap:wrap">
+            <b style="font-size:13px">Wattson's counter-plan:</b>
+            <span style="font-size:12.5px; color:var(--mut); flex:1; min-width:280px">Her machine is listing reels + a market-update series; her blind spots are investor/ADU content and the Spanish-speaking half of EPA. Don't fight her strength — own the two unclaimed lanes and out-review her. Est. effort: 2 shoots/mo, drafts auto-queued in PropCast.</span>
+            <button class="btn-ink" style="padding:9px 16px; font-size:12.5px">Queue the counter-plan</button>
+            <div class="anno" style="width:100%">Queue creates the plan object (plan_id, actions[], farm-share metric + target, rescore_date) and emits COUNTER_PLAN_QUEUED [BEST GUESS]. Content items → PropCast gauntlet (ContentLock + one-approval, correction #9) → Approvals; ads/postcards → PropReach wizard / direct-mail flow, all approval-gated. Owner-targeting items become <b>review tasks, never auto-outreach</b>; predictive-seller HIGH-tier owners can NEVER auto-outreach; unknown consent/DNC → consent-capture task, not a send (correction #2). <b>This button queues work — it never sends anything.</b></div>
+          </div>
+        </div>
+
+        <!-- compliance rail -->
+        <div id="el-compliance" style="padding:12px 22px 0">
+          <div style="font-size:11px; color:var(--soft); border-top:1px solid var(--line); padding-top:10px">Compliance rail (always visible): official APIs & public data only (MLS, public channels, public site) · no scraping behind logins · Google/TikTok ad libraries off until legally approved · storage limited to hash/URL/excerpt/summary minimal records · insights are for the agent's strategy, <b style="color:var(--mut)">never republished</b> · never claim or imply a named contact visited a competitor site or watched competitor videos (competitor-intent segments are Display/YouTube-only intent approximation, handled in PropReach) · no protected-class or steering inputs · watch list caps at ~5 agents per farm · refreshed weekly, re-scored monthly · changes land in the Command Center farm-watch card.</div>
+        </div>
+
+        <!-- states strip -->
+        <div id="el-states" style="padding:14px 22px 10px">
+          <div class="cardbox" style="font-size:11.5px">
+            <b>States (dev reference)</b>
+            <div style="display:grid; grid-template-columns:repeat(3,1fr); gap:8px; margin-top:8px">
+              <div style="border:1px solid var(--line); border-radius:8px; padding:8px">
+                <b style="font-size:11px">LOADING</b>
+                <div style="display:grid; gap:5px; margin-top:6px"><div class="skel" style="width:80%"></div><div class="skel" style="width:60%"></div><div class="skel" style="width:70%"></div></div>
+                <div class="anno" style="margin-top:4px">Skeleton stat tiles; channel card rows shimmer.</div>
+              </div>
+              <div style="border:1px solid var(--line); border-radius:8px; padding:8px">
+                <b style="font-size:11px">EMPTY — new watch</b>
+                <div style="color:var(--mut); margin-top:4px">"Collecting data — first full profile after the next weekly refresh." MLS stats render as soon as available; channel rows show "first refresh pending."</div>
+                <div class="anno" style="margin-top:4px">No watched agents at all → intro card: "watch an agent from farm watch or any listing."</div>
+              </div>
+              <div style="border:1px solid var(--line); border-radius:8px; padding:8px">
+                <b style="font-size:11px">DEGRADED (fail-closed)</b>
+                <div style="display:flex; gap:4px; flex-wrap:wrap; margin-top:4px"><span class="bdg warn">pattern analysis unavailable</span><span class="bdg warn">rank data unavailable</span><span class="bdg warn">ad activity: unknown</span></div>
+                <div class="anno" style="margin-top:4px">VideoIntelligence v1 down → format insights + gap tags disappear, manual-review flag logged, MLS + rank remain; <b>never fabricate pattern data</b> (PR §13.2). Rank API down → SEO rows "rank data unavailable." Ad Library unreachable → tile shows "unknown," never last-known-as-current. Missing comparator → "—", never 0.</div>
+              </div>
+            </div>
+            <div style="color:var(--mut); margin-top:8px">
+              <b style="color:var(--ink)">Permission-limited:</b> read-only — "Queue the counter-plan" and all Move actions hidden; watch-list editing disabled.
+              <b style="color:var(--ink)">Stale:</b> weekly refresh missed → banner "Data last refreshed Jul 6 — refresh overdue" across the top; every channel row keeps its as-of date.
+            </div>
+          </div>
+        </div>
+
+        <!-- mobile variant strip -->
+        <div id="el-mobile" style="padding:0 22px 18px">
+          <div class="cardbox" style="font-size:11.5px">
+            <b>Mobile variant (375px)</b>
+            <div style="display:flex; gap:10px; margin-top:8px; overflow-x:auto">
+              <div style="min-width:150px; border:1px solid var(--line); border-radius:10px; padding:8px; font-size:9.5px">
+                <div style="display:flex; gap:5px; align-items:center"><span class="avatar" style="width:18px;height:18px;font-size:8px;background:var(--crit)">JL</span><b>J. Lee — KW</b></div>
+                <div style="display:grid; grid-template-columns:1fr 1fr; gap:3px; margin-top:5px">
+                  <div style="background:var(--surface); border-radius:5px; padding:4px">Listings <b class="num">5</b></div>
+                  <div style="background:var(--surface); border-radius:5px; padding:4px">STL <b class="num">99.2%</b></div>
+                  <div style="background:var(--surface); border-radius:5px; padding:4px">DOM <b class="num">19</b></div>
+                  <div style="background:var(--surface); border-radius:5px; padding:4px">Accuracy <b class="num">−3.1%</b></div>
+                  <div style="background:var(--surface); border-radius:5px; padding:4px; grid-column:1/-1">Ads: Meta active (last)</div>
+                </div>
+              </div>
+              <div style="min-width:150px; border:1px solid var(--line); border-radius:10px; padding:8px; font-size:9.5px">
+                <b>Channels ↓ then gap matrix</b>
+                <div style="background:var(--surface); border-radius:5px; padding:4px; margin-top:4px">▶ YT · 📸 IG · 🏠 GBP · 🌐 Web (stacked)</div>
+                <div style="background:var(--surface); border-radius:5px; padding:4px; margin-top:3px; overflow:hidden; white-space:nowrap">Gap matrix → scrolls horizontally in own container ⇢</div>
+              </div>
+              <div style="min-width:150px; border:1px solid var(--line); border-radius:10px; padding:8px; font-size:9.5px">
+                <b>Wattson columns stack</b>
+                <div style="background:var(--surface); border-radius:5px; padding:4px; margin-top:4px">This week (first)</div>
+                <div style="background:var(--surface); border-radius:5px; padding:4px; margin-top:3px">This month</div>
+                <div style="background:var(--surface); border-radius:5px; padding:4px; margin-top:3px">Watch & measure</div>
+                <div style="background:var(--ink); color:#fff; border-radius:5px; padding:5px; margin-top:5px; text-align:center; font-weight:700">Queue the counter-plan (sticky, full-width)</div>
+              </div>
+            </div>
+            <div class="anno" style="margin-top:5px">Stat row 2-up then 1 (ad activity last) · channels above gap matrix, stacked · matrix horizontal-scrolls in its own container · Wattson columns vertical, This-week first · counter-plan button full-width sticky at bottom.</div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div style="padding:12px 22px; border-top:1px solid var(--line)"><span style="font-size:11.5px; color:var(--soft)">PropertyIQ · agent console</span></div>
+  </div>
+
+  <!-- ============ spec gaps found ============ -->
+  <div class="note" style="margin-top:24px"><b>Spec gaps found (Master Brain items the spec missed — rendered above):</b> (1) <b>Metrics-availability rule</b> (PropCast MB Part 10/14): platform metrics are collected only where the platform grants them — Meta requires an Instagram Business Account linked to a Facebook Page (a tenant onboarding requirement) and TikTok analytics scopes are restricted; the loop runs available-metrics-only and degrades gracefully — reflected in the IG row annotation and degraded-states strip. (2) <b>7-day view-velocity signal</b> on YouTube (velocity vs total views, PropCast MB supply layer) rendered in the YT row — the spec mentioned it only in passing. (3) <b>Legacy gap labels retired</b>: MISSING/WEAK/BETTER_THAN/SATURATED are explicitly replaced by the 7-enum gap_type (PropCast MB) — noted under the tag chips. (4) <b>VideoIntelligence v0/v1 split</b> (PR §13.3.2): MVP v0 must not be required for pattern queries; on v1 outage the screen must skip pattern logic, log a manual-review flag, continue safe workflows, and not crash — rendered in the degraded card. (5) <b>Ad-analysis framing</b>: Meta Ad Library data is a conversion signal layered on top of demand + normalized supply, structural learning only, never copying (PR §13 header) — rendered in the minimal-record card.</div>
+
+  <!-- ============ (3) ELEMENT COVERAGE ============ -->
+  <h2 style="font-size:20px; margin:20px 0 10px">Element coverage — spec inventory → this page</h2>
+  <table class="dtable cov" style="font-size:12.5px">
+    <tr><th>Spec inventory element</th><th>Rendered at</th><th>Status</th></tr>
+    <tr><td>Header identity (name, brokerage, watch-since, farm overlap)</td><td><a href="#el-watchlist">Site header</a></td><td class="ok">✓</td></tr>
+    <tr><td>Watch list nav (cap ~5, add disabled at cap)</td><td><a href="#el-watchlist">Watch-list panel</a></td><td class="ok">✓</td></tr>
+    <tr><td>Farm listings stat (12mo + trend note)</td><td><a href="#el-stat-listings">Stat row</a></td><td class="ok">✓</td></tr>
+    <tr><td>Sale-to-list stat (vs yours + sample tooltip)</td><td><a href="#el-stat-stl">Stat row</a></td><td class="ok">✓</td></tr>
+    <tr><td>DOM stat (vs yours)</td><td><a href="#el-stat-dom">Stat row</a></td><td class="ok">✓</td></tr>
+    <tr><td>Price-accuracy stat (vs model + talking point)</td><td><a href="#el-stat-acc">Stat row</a></td><td class="ok">✓</td></tr>
+    <tr><td>Ad-activity stat (Meta Ad Library only)</td><td><a href="#el-stat-ads">Stat row</a> + <a href="#el-adrecords">minimal-record list</a></td><td class="ok">✓</td></tr>
+    <tr><td>Channels card header (official-API boundary on-screen)</td><td><a href="#el-channels-header">Channels card</a></td><td class="ok">✓</td></tr>
+    <tr><td>YouTube row (90-day set, normalized, 7-day velocity)</td><td><a href="#el-yt">Channels card</a></td><td class="ok">✓</td></tr>
+    <tr><td>Instagram row (normalized, saves+shares 10×, [DECIDE] path)</td><td><a href="#el-ig">Channels card</a></td><td class="ok">✓</td></tr>
+    <tr><td>GBP row (reviews vs yours, cadence, local-grid link)</td><td><a href="#el-gbp">Channels card</a></td><td class="ok">✓</td></tr>
+    <tr><td>Website row (platform, ranking, content-absence insight)</td><td><a href="#el-web">Channels card</a></td><td class="ok">✓</td></tr>
+    <tr><td>Gap matrix table (Her / You / Move — no row without a Move)</td><td><a href="#el-gapmatrix">Gap matrix</a></td><td class="ok">✓</td></tr>
+    <tr><td>Format-gap classification (7-type gap_type chips as filters)</td><td><a href="#el-gaptags">Gap-type chips</a></td><td class="ok">✓</td></tr>
+    <tr><td>Wattson summary (anti-survivorship read, regenerate, cite sources)</td><td><a href="#el-wattson">Wattson card</a></td><td class="ok">✓</td></tr>
+    <tr><td>This week / This month / Watch & measure columns (tracked completion)</td><td><a href="#el-actioncols">Action columns</a></td><td class="ok">✓</td></tr>
+    <tr><td>Living-plan footnote (monthly re-score, farm-share metric)</td><td><a href="#el-livingplan">Living-plan footnote</a></td><td class="ok">✓</td></tr>
+    <tr><td>Counter-plan bar (queue button — queues work, never sends)</td><td><a href="#el-counterplan">Counter-plan bar</a></td><td class="ok">✓</td></tr>
+    <tr><td>Compliance rail (always visible)</td><td><a href="#el-compliance">Compliance rail</a></td><td class="ok">✓</td></tr>
+    <tr><td>Empty state (new watch — partial profile)</td><td><a href="#el-states">States strip</a></td><td class="ok">✓</td></tr>
+    <tr><td>Degraded state (per-engine fail-closed chips)</td><td><a href="#el-states">States strip</a></td><td class="ok">✓</td></tr>
+  </table>
+  <div style="border:1.5px solid var(--good); background:#f2f8f4; border-radius:10px; padding:12px 16px; margin:12px 0 0; font-weight:700; color:var(--good)">21 of 21 spec elements rendered ✓ <span style="font-weight:400; color:var(--mut); font-size:12.5px">— plus prompt-required regions beyond the inventory: loading/permission-limited/stale states, mobile-variant strip, ad-record minimal-storage table, watch-list switcher panel; plus the 5 Master-Brain additions in the "Spec gaps found" note above.</span></div>
+
+  <!-- ============ (4) FULL SPEC AS HTML ============ -->
+  <div class="specdoc">
+    <h1 style="font-size:24px; margin:40px 0 6px">Spec — 11 · Competitor & Channel Intelligence</h1>
+    <p><b>Purpose</b> The analysis layer for competing agents: one profile screen that fuses MLS production data, official-API channel monitoring (YouTube/Instagram/GBP/website), and SearchAtlas keyword-gap data into a gap matrix and a living, tracked counter-plan. Every insight terminates in a counter-move action — the no-dead-end-alerts rule.</p>
+    <p><b>Primary users</b> The agent. Read-only for team members without strategy permission. Never client-facing; insights are for the agent's strategy and are never republished (draft compliance rail).</p>
+    <p><b>Entry points</b> Click a competing agent anywhere: farm watch card (Command Center), a map pin's listing agent, a listing page's agent attribution. "Watch list (N)" nav within this screen (up to ~5 agents per farm). Monday briefing / Command Center farm-watch card links when the weekly refresh detects changes. SEO Console keyword-gap tab links to the matching competitor profile.</p>
+    <p><b>Exit points</b> Gap-matrix "Move" links: PropCast counter-series brief; SEO Console (OTTO gap plan); PropCast drafts queue; open-lane content brief. "Queue the counter-plan" → creates the plan object; content items → PropCast gauntlet → Approvals; ads/postcards → PropReach campaign wizard / direct-mail flow (all approval-gated downstream). Counter-series episode approval → Global Approvals Inbox. Postcard action → farming/direct-mail flow; HIGH-tier predictive-seller owners route to a review task, never auto-outreach (matrix correction #2). "← Farm watch" back to Command Center.</p>
+
+    <h2>Layout</h2>
+    <p><b>Desktop.</b> Header (site strip): competitor avatar/initials (crit color), name + brokerage, meta line ("Competitor profile · watching since {month} · farm overlap: {area}"), nav "← Farm watch" · "Watch list (N)". Row 1 — stat row (5 tiles): Farm listings (12mo), Avg sale-to-list (with "yours:" comparator), Avg DOM (comparator), Price accuracy vs model, Est. ad activity. Row 2 — two-column grid: left = Channels card (YouTube / Instagram / GBP / Website rows); right = Gap matrix table (Territory | Her | You | Move). Row 3 — Wattson's summary card (brand-soft): plain-English read + three action columns (This week / This month / Watch & measure) + living-plan footnote. Row 4 — Counter-plan bar: one-line strategy + "Queue the counter-plan" button. Footer — compliance rail (small, always visible): official-API/public-data-only boundary, storage limits, watch-list cap, weekly refresh.</p>
+    <p><b>Mobile (375px).</b> Stat row becomes a 2-up grid then 1 (ad activity last). Channels card above gap matrix, stacked. Gap matrix scrolls horizontally in its own container. Wattson summary columns stack vertically (This week first). Counter-plan button full-width sticky at bottom.</p>
+
+    <h2>Element inventory</h2>
+    <div style="overflow-x:auto">
+    <table class="dtable">
+      <tr><th>Element</th><th>What it shows/does</th><th>Data source</th><th>Interactions</th><th>Spec source</th></tr>
+      <tr><td>Header identity</td><td>Competitor name, brokerage, watch-since date, farm overlap area</td><td>watch-list record + MLS agent data</td><td>back link; watch-list switcher</td><td>Draft Screen 11</td></tr>
+      <tr><td>Watch list nav</td><td>Count of watched agents (cap ~5 per farm)</td><td>watch-list store</td><td>open list; add/remove agent; add disabled at cap with explanation</td><td>Draft compliance rail</td></tr>
+      <tr><td>Farm listings stat</td><td>Competitor listings in the farm, 12mo + trend note ("3 of last 5 new")</td><td>MLS/IDX production data</td><td>click → listing list</td><td>Draft</td></tr>
+      <tr><td>Sale-to-list stat</td><td>Competitor avg vs yours</td><td>MLS closed data</td><td>tooltip: sample size + window</td><td>Draft</td></tr>
+      <tr><td>DOM stat</td><td>Competitor avg DOM vs yours</td><td>MLS</td><td>tooltip</td><td>Draft</td></tr>
+      <tr><td>Price-accuracy stat</td><td>List vs model delta ("−3.1% vs model — tends to underprice")</td><td>MLS + valuation model</td><td>tooltip: per-listing breakdown; becomes a seller-presentation talking point in the summary</td><td>Draft</td></tr>
+      <tr><td>Ad-activity stat</td><td>Estimated paid activity per platform ("Meta: active · 2 listing campaigns")</td><td>Meta Ad Library API only (official, free); Google/TikTok ad libraries OFF until legally approved</td><td>click → minimal-record ad list (hash/URL/excerpt/summary)</td><td>PropReach MB §13.3/13.4; PropCast MB API table</td></tr>
+      <tr><td>Channels card header</td><td>"Official APIs & public data only (no scraping; store hash/URL/excerpt, never full copies)"</td><td>—</td><td>none — the boundary is stated on-screen</td><td>Matrix correction #5; PR §13.4</td></tr>
+      <tr><td>YouTube row</td><td>Subs, cadence, avg views, top series</td><td>YouTube Data API (official, free) — full 90-day set, normalized for channel age/subscribers, 7-day view velocity noted</td><td>expand → recent videos (metadata only)</td><td>PropCast MB Demand/Supply layer</td></tr>
+      <tr><td>Instagram row</td><td>Followers, cadence, reels avg, format insight ("listing reels outperform talking-head 4:1")</td><td>official/legal-access path; normalize by creator size, account age, recency; saves+shares weighted 10× over likes</td><td>expand</td><td>PropCast MB supply intelligence; [DECIDE] IG access path</td></tr>
+      <tr><td>GBP row</td><td>Review count + rating vs yours, posting cadence</td><td>GBP/Places public data</td><td>link to SEO Console local grid</td><td>Draft</td></tr>
+      <tr><td>Website row</td><td>Platform/template, key ranking ("#2 for {keyword}"), content-absence insight ("no ADU/investor content")</td><td>SearchAtlas rank + site crawl of public pages</td><td>link to SEO Console gap tab</td><td>Draft</td></tr>
+      <tr><td>Gap matrix table</td><td>Territory rows: content lanes, SEO keywords, reviews, unclaimed lanes; columns Her / You / Move</td><td>fusion of the three engines</td><td>every Move cell is an action link (counter-series brief, OTTO gap plan, queued drafts, open-lane brief, "hold" states) — no row without a Move</td><td>Draft; no-dead-end-alerts rule</td></tr>
+      <tr><td>Format-gap classification</td><td>Gap rows tagged with the 7-type gap code: VOLUME_GAP, QUALITY_GAP, GEO_GAP, FORMAT_GAP, RECENCY_GAP, ANGLE_GAP, DEPTH_GAP</td><td>PropCast supply-intelligence classifier</td><td>tag chip filters the matrix</td><td>PropCast MB "7-type competitor gap classification"</td></tr>
+      <tr><td>Wattson summary</td><td>Plain-English strategic read; explicitly avoids survivorship-bias copying ("you don't need to out-post her — own the unclaimed lanes")</td><td>Wattson over fused data</td><td>regenerate; cite-sources expander [BEST GUESS]</td><td>Draft; PropCast MB survivorship bias</td></tr>
+      <tr><td>This week / This month / Watch & measure columns</td><td>Concrete tracked actions with completion state (✓ / pending / in Approvals)</td><td>plan object + ledger completion tracking</td><td>each action deep-links to its module</td><td>Draft ("strategy with a scoreboard, not a memo")</td></tr>
+      <tr><td>Living-plan footnote</td><td>Re-scored monthly; plan auto-updates; changes land in Monday briefing; farm-share metric (e.g. 20% → target 30%)</td><td>monthly re-score job</td><td>none</td><td>Draft</td></tr>
+      <tr><td>Counter-plan bar</td><td>One-line plan + effort estimate + Queue the counter-plan button</td><td>Wattson plan generator</td><td>queue → creates plan; all outbound items route to gauntlet/Approvals/review tasks — button queues work, never sends anything</td><td>Draft; matrix corrections #1/#2</td></tr>
+      <tr><td>Compliance rail</td><td>Public-data-only, no scraping behind logins, never republished, cap ~5 agents, weekly refresh, changes → farm-watch card</td><td>—</td><td>none</td><td>Draft</td></tr>
+      <tr><td>Empty state (new watch)</td><td>"Collecting data — first full profile after the next weekly refresh"; MLS stats appear first</td><td>—</td><td>—</td><td>[BEST GUESS]</td></tr>
+      <tr><td>Degraded state</td><td>Per-engine unavailability chips (see States)</td><td>—</td><td>—</td><td>PR §13.2 fail-closed pattern</td></tr>
+    </table>
+    </div>
+
+    <h2>States</h2>
+    <ul>
+      <li><b>Default:</b> full profile as drafted.</li>
+      <li><b>Loading:</b> skeleton stat tiles; channels card rows shimmer.</li>
+      <li><b>Empty:</b> newly-watched agent → partial profile (MLS stats render as soon as available; channel rows show "first refresh pending"). No watched agents → intro card + "watch an agent from farm watch or any listing."</li>
+      <li><b>Error/degraded (fail-closed):</b> VideoIntelligence v1 unavailable → pattern/format insights (e.g. "reels outperform 4:1", format-gap tags) disappear and a chip says "pattern analysis unavailable"; a manual-review flag is logged; MLS and rank data remain. <b>Never fabricate pattern data</b> (PR §13.2). Rank API down → SEO rows show "rank data unavailable." Ad Library unreachable → ad-activity tile shows "unknown," not last-known-as-current. Any comparator missing ("yours:") renders as "—", never 0.</li>
+      <li><b>Permission-limited:</b> read-only; "Queue the counter-plan" and Move actions hidden; watch-list editing disabled.</li>
+      <li><b>Mobile:</b> per Layout.</li>
+      <li><b>Stale:</b> all channel data carries an as-of date; if a weekly refresh is missed, a stale banner shows the last refresh date.</li>
+    </ul>
+
+    <h2>Data fields</h2>
+    <div style="overflow-x:auto">
+    <table class="dtable">
+      <tr><th>Field</th><th>Format</th><th>Source of truth</th></tr>
+      <tr><td>competitor_agent_id, name, brokerage, DRE (display only)</td><td>ids/strings</td><td>MLS agent record</td></tr>
+      <tr><td>watch_since, farm_overlap_area</td><td>date; geo label</td><td>watch-list record</td></tr>
+      <tr><td>farm_listings_12mo, sale_to_list_pct, avg_dom, price_accuracy_delta</td><td>numbers with sample window</td><td>MLS/IDX closed + active data</td></tr>
+      <tr><td>own comparators (your sale-to-list, DOM, review count, farm share)</td><td>numbers</td><td>own MLS production + GBP + farm analytics</td></tr>
+      <tr><td>ad activity</td><td>platform + status + campaign count</td><td>Meta Ad Library API (minimal records)</td></tr>
+      <tr><td>Competitor-ad record</td><td>source, ad_library_url, content_hash, short_excerpt, analysis_summary, created_at — and nothing more</td><td>COMPETITOR_AD_ANALYZED storage-allowed list (PR §13.4)</td></tr>
+      <tr><td>Channel metrics</td><td>subs/followers, cadence, avg views, top series; normalized scores</td><td>YouTube Data API / IG path / GBP; PropCast normalization layer</td></tr>
+      <tr><td>Gap row</td><td>territory, her_status, your_status, gap_type (7-enum), move_action(ref), move_status</td><td>fusion layer + plan object</td></tr>
+      <tr><td>SEO gap keywords</td><td>keyword, her rank, your rank, volume</td><td>SearchAtlas rank API (shared with Screen 20)</td></tr>
+      <tr><td>Counter-plan</td><td>plan_id, actions[] (module ref, due bucket, completion), farm-share metric + target, rescore_date</td><td>plan store + ledger</td></tr>
+      <tr><td>Refresh metadata</td><td>last_refresh_at (weekly), next_rescore (monthly)</td><td>scheduler</td></tr>
+    </table>
+    </div>
+
+    <h2>Rules & compliance</h2>
+    <ul>
+      <li><b>Official APIs or manual review only — no scraping</b> of competitor channels; the design labels monitoring "official-API monitoring" and shows the legal-access-first boundary on-screen (matrix correction #5). Google/TikTok ad-library scraping is off-limits until legally approved (PR §13.3). No data from behind logins.</li>
+      <li><b>Minimal storage:</b> competitor content stored only as content_hash, url, basic_metadata, short_excerpt, ai_summary, created_at, source. Forbidden: full bodies, full comment threads, third-party PII beyond minimal public metadata (PR §13.4). Retention per REDDIT_MINIMAL_24M-class policy for competitor-ad minimal records.</li>
+      <li><b>Never republish</b> competitor insights; agent-strategy use only.</li>
+      <li><b>No auto-outreach:</b> counter-plan postcard/outreach items targeting owners route through review tasks; Predictive-Seller HIGH-tier candidates can NEVER auto-outreach; unknown consent/DNC produces consent-capture tasks, not sends (matrix correction #2). Counter-series content goes through PropCast's ContentLock + one-approval flow (correction #9); nothing dispatches from this screen.</li>
+      <li><b>No implied surveillance of named people:</b> never claim or imply a named contact visited a competitor site or watched competitor videos (PR §8.8, §12). Competitor-intent custom segments (if a plan action creates one) are Display/YouTube-only intent approximation with the forbidden-inputs list — handled in PropReach, linked from here.</li>
+      <li><b>No protected-class/steering inputs</b> anywhere in gap analysis or plan actions (school quality, family status, etc. — PR forbidden-segment list).</li>
+      <li><b>Survivorship-bias guard:</b> channel analysis uses the full 90-day competitor output (not just hits), normalized for creator size/account age/recency; saves+shares weighted 10× over likes (PropCast MB). Wattson's summary must reason from gaps, not "copy their winners."</li>
+      <li><b>Fail closed</b> on missing engines (see States) — no fabricated patterns or ratings.</li>
+      <li>Watch list capped at ~5 agents per farm; weekly refresh; monthly re-score.</li>
+    </ul>
+
+    <h2>Cross-links</h2>
+    <p><b>In:</b> Command Center farm-watch card; map pins; listing pages; Monday briefing; SEO Console keyword-gap tab. <b>Out:</b> PropCast (counter-series brief, ADU/open-lane drafts, gauntlet); SEO Console Screen 20 (OTTO gap plan, local grid); PropReach (campaign wizard, competitor-intent segment); direct-mail/farming flow (review-gated); Global Approvals Inbox (all content/campaign approvals); Ideation Canvas (COMPETITOR_VIDEO nodes, P2).</p>
+    <p><b>Ledger events consumed:</b> COMPETITOR_AD_ANALYZED, VIDEO_INTELLIGENCE_PATTERNS_UPDATED, MLS listing events for farm stats, plan-action completion events. <b>Ledger events emitted:</b> [BEST GUESS] COUNTER_PLAN_QUEUED / plan-action state changes as ledger rows (completion "tracked from the ledger" per draft); review-task creation events for outreach items.</p>
+
+    <h2>Open decisions</h2>
+    <ul>
+      <li><b>[DECIDE] Instagram data path:</b> the legacy PropCast pipeline used Apify scraping; the PropReach legal-access-first rule and matrix correction #5 mandate official-API/manual-review. Interim design: label the row "official/public data" and populate from the IG Graph API where OAuth-accessible (own + business-discovery metadata) with manual-review fallback; UI unaffected by which compliant path wins.</li>
+      <li><b>[DECIDE] Valuation model for price-accuracy:</b> interim = the platform's own AVM midpoint at list date; shown as "vs model" with tooltip disclosure.</li>
+      <li><b>[DECIDE] Farm-share metric definition:</b> interim = listings taken by agent ÷ total farm listings, trailing 12mo ([BEST GUESS]); targets user-set (the 20%→30% figure in the draft is example data, not a spec number).</li>
+      <li><b>[DECIDE] Watch-list cap exact number:</b> draft says "~5 per farm" — interim hard cap 5 with an admin override.</li>
+      <li><b>[DECIDE] Wattson summary regeneration cost controls:</b> interim = regenerate on weekly refresh + on-demand button, rate-limited [BEST GUESS].</li>
+    </ul>
+  </div>
+</div>

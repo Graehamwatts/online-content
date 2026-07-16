@@ -1,0 +1,522 @@
+<title>PropertyIQ · Screen 05 — Agent Homepage</title>
+<link href="https://api.fontshare.com/v2/css?f[]=technor@500,600,700&display=swap" rel="stylesheet">
+<link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<style>
+  /* Type system — Technor for display, Inter for UI (extracted verbatim from propsearch-design-draft.html) */
+  :root{ --font-display:'Technor', Inter, -apple-system, 'Segoe UI', sans-serif; --font-ui: Inter, -apple-system, 'Segoe UI', Roboto, sans-serif; }
+</style>
+<style>
+  /* Palette v4 — PropFlow design language: neutral ink UI, ink-as-accent, color reserved for data. (extracted verbatim) */
+  :root, :root[data-theme="dark"], :root[data-theme="light"]{
+    --ink:#23282f; --paper:#fbfaf8; --surface:#f1efe9; --line:#e2dfd6;
+    --mut:#6b7076; --soft:#9b9f9f;
+    --brand:#2e6b53; --brand-ink:#ffffff; --brand-soft:#eaf1ec; --brand-deep:#1e4c3a;
+    --signal:#b07a2e;
+    --good:#2e7d4f; --warn:#a8630a; --crit:#b3372f;
+    --r:10px;
+  }
+  .intel .score, .mintel{ color:var(--brand-deep) }
+  .intel{ border-left:3px solid var(--brand) }
+  h1{ letter-spacing:-.02em }
+  .stat b{ letter-spacing:-.01em }
+  body[data-agent="watts"]{ --brand:#2e6b53; --brand-soft:#eaf1ec; --brand-deep:#1e4c3a; }
+
+  *{box-sizing:border-box; margin:0}
+  body{font:15px/1.55 var(--font-ui); color:var(--ink); background:var(--paper); padding-bottom:80px}
+  h1,h2,h3{line-height:1.15; text-wrap:balance; font-family:var(--font-display); font-weight:600}
+  h1{letter-spacing:-.01em}
+  .site{box-shadow:0 1px 2px rgba(20,24,32,.04), 0 8px 32px rgba(20,24,32,.06)}
+  .stat{box-shadow:0 1px 2px rgba(20,24,32,.03); transition:box-shadow .15s, transform .15s}
+  .stat:hover{box-shadow:0 4px 14px rgba(20,24,32,.08)}
+  .chip{transition:all .12s}
+  button{font-family:var(--font-ui)}
+  .num{font-variant-numeric:tabular-nums}
+  .wrap{max-width:1180px; margin:0 auto; padding:0 20px}
+
+  .bar{position:sticky; top:0; z-index:50; background:var(--paper); border-bottom:1px solid var(--line); padding:10px 0; backdrop-filter:blur(8px)}
+  .bar .wrap{display:flex; flex-wrap:wrap; gap:10px; align-items:center}
+  .bar .ttl{font-weight:700; margin-right:auto}
+  .bar .ttl small{display:block; font-weight:400; color:var(--mut)}
+  .bar a{color:var(--brand); font-size:13px; text-decoration:none}
+
+  .note{background:var(--surface); border:1px solid var(--line); border-radius:var(--r); padding:14px 16px; margin:0 0 22px; font-size:13.5px; color:var(--mut)}
+  .note b{color:var(--ink)}
+
+  .site{border:1px solid var(--line); border-radius:14px; overflow:hidden; background:var(--paper)}
+  .sitehead{display:flex; align-items:center; gap:14px; padding:14px 22px; border-bottom:1px solid var(--line)}
+  .avatar{width:38px; height:38px; border-radius:50%; background:var(--brand); color:var(--brand-ink); display:grid; place-items:center; font-weight:700}
+  .sitehead .who b{display:block}
+  .sitehead .who small{color:var(--mut)}
+  .sitehead nav{margin-left:auto; display:flex; gap:18px; font-size:13.5px; color:var(--mut)}
+  .sitehead nav a{color:inherit; text-decoration:none}
+  .sitehead nav a:hover{color:var(--brand)}
+  .poweredby{font-size:11px; color:var(--soft); letter-spacing:.04em; text-transform:uppercase}
+
+  .chip{display:inline-flex; align-items:center; gap:6px; font-size:12.5px; font-weight:500; border:1px solid var(--line); border-radius:99px; padding:6px 12px; background:var(--paper); cursor:pointer; color:var(--ink); text-decoration:none}
+  .chip:hover{border-color:var(--brand)}
+  .chip.on{background:var(--brand); border-color:var(--brand); color:var(--brand-ink); font-weight:600; box-shadow:0 2px 8px color-mix(in srgb, var(--brand) 30%, transparent)}
+
+  .statrow{display:grid; grid-template-columns:repeat(4,1fr); gap:10px}
+  .stat{background:var(--surface); border:1px solid var(--line); border-radius:var(--r); padding:12px}
+  .stat small{display:block; color:var(--mut); font-size:11.5px; text-transform:uppercase; letter-spacing:.05em}
+  .stat b{font-size:18px}
+  .stat .up{color:var(--good); font-size:12px}
+
+  .bdg{font-size:11.5px; border-radius:6px; padding:3px 8px; background:var(--surface); border:1px solid var(--line); color:var(--mut)}
+  .bdg.good{color:var(--good); border-color:color-mix(in srgb,var(--good) 30%,var(--line))}
+  .bdg.warn{color:var(--warn); border-color:color-mix(in srgb,var(--warn) 30%,var(--line))}
+
+  .dtable{width:100%; border-collapse:collapse; font-size:13px}
+  .dtable td,.dtable th{border-bottom:1px solid var(--line); padding:8px 10px; text-align:left}
+  .dtable th{font-size:11px; text-transform:uppercase; letter-spacing:.05em; color:var(--soft)}
+
+  .prompt{display:flex; border:1.5px solid var(--line); border-radius:14px; background:var(--paper); padding:6px; box-shadow:0 2px 6px rgba(20,24,32,.05)}
+  .prompt input{flex:1; border:0; background:none; padding:10px 12px; font-size:14px; color:var(--ink); outline:none; min-width:0}
+  .prompt button{background:var(--ink); color:#fff; border:0; border-radius:10px; padding:0 18px; font-weight:600; cursor:pointer}
+
+  .hsec{border-bottom:1px dashed var(--line); padding:26px 22px; position:relative}
+  .hsec .tag{position:absolute; top:10px; right:14px; font-size:10.5px; text-transform:uppercase; letter-spacing:.07em; color:var(--soft); border:1px solid var(--line); border-radius:6px; padding:2px 7px; background:var(--paper); z-index:2}
+  .herohome{text-align:center; padding:48px 22px}
+  .herohome h1{font-size:clamp(24px,3.4vw,36px); font-weight:800}
+  .herohome p{color:var(--mut); margin:8px 0 22px}
+  .commgrid{display:grid; grid-template-columns:repeat(3,1fr); gap:12px}
+  .comm{border:1px solid var(--line); border-radius:var(--r); overflow:hidden; box-shadow:0 1px 2px rgba(20,24,32,.03)}
+  .comm .ph{border:0; border-radius:0; min-height:90px}
+  .comm > div{padding:10px 12px}
+  .comm b{font-size:14px}
+  .comm small{color:var(--mut); display:block}
+  .ph{background:var(--surface); border:1px solid var(--line); border-radius:8px; min-height:104px; display:grid; place-items:center; color:var(--soft); font-size:11px; text-align:center; padding:6px}
+  .mintel{background:var(--brand-soft); font-size:11px; padding:5px 11px; color:var(--brand-deep)}
+  .faq details{border:1px solid var(--line); border-radius:var(--r); padding:12px 14px; margin-bottom:8px}
+  .faq summary{cursor:pointer; font-weight:600; font-size:14px}
+  .faq p{margin-top:8px; font-size:13.5px; color:var(--mut); max-width:65ch}
+  .proselike{color:var(--mut); font-size:14px}
+  .proselike b{color:var(--ink)}
+
+  @media (max-width:860px){ .statrow{grid-template-columns:repeat(2,1fr)} .commgrid{grid-template-columns:1fr 1fr} .sitehead nav{display:none} }
+  @media (prefers-reduced-motion: reduce){ *{transition:none!important} }
+
+  /* ---- page-specific additions (same design language as the approved exemplar) ---- */
+  .anno{font-size:11px; color:var(--soft)}
+  .cardbox{border:1px solid var(--line); border-radius:10px; padding:11px 14px; font-size:12.5px; background:var(--paper)}
+  .btn-ink{background:var(--ink); color:#fff; border:0; border-radius:7px; padding:7px 12px; font-size:11.5px; cursor:pointer; font-weight:600}
+  .btn-ghost{background:var(--paper); border:1px solid var(--line); border-radius:7px; padding:7px 12px; font-size:11.5px; cursor:pointer}
+  .sechead{font-size:14px; font-weight:700; margin:0 0 8px; font-family:var(--font-display)}
+  .cov td.ok{color:var(--good); font-weight:700}
+  .specdoc h2{font-size:18px; margin:26px 0 8px}
+  .specdoc h3{font-size:15px; margin:18px 0 6px}
+  .specdoc p, .specdoc li{font-size:13.5px; color:var(--mut)}
+  .specdoc b{color:var(--ink)}
+  .specdoc table{margin:8px 0}
+  .farmmap{position:relative; background:var(--surface); border:1px solid var(--line); border-radius:10px; min-height:220px; overflow:hidden}
+  .farmmap .grid{position:absolute; inset:0; background-image:linear-gradient(var(--line) 1px,transparent 1px),linear-gradient(90deg,var(--line) 1px,transparent 1px); background-size:40px 40px; opacity:.55}
+  .pin{position:absolute; font-size:10.5px; font-weight:700; padding:3px 8px; border-radius:99px; background:var(--ink); color:#fff}
+  .pin.sold{background:var(--brand); color:var(--brand-ink); box-shadow:0 0 0 4px var(--brand-soft)}
+  .phone{width:270px; border:2px solid var(--line); border-radius:24px; overflow:hidden; background:var(--paper); flex-shrink:0}
+  .phone .phd{padding:10px 12px; border-bottom:1px solid var(--line); display:flex; align-items:center; gap:8px; font-size:11.5px}
+  .phone .avatar{width:24px; height:24px; font-size:10px}
+</style>
+
+<!-- ============ (1) slim header ============ -->
+<div class="bar">
+  <div class="wrap">
+    <div class="ttl">PropertyIQ · Screen 05 — Agent Homepage <small>Full-density per-screen mock · wireframe fidelity · dev-facing annotations in gray</small></div>
+    <a href="../wireframe.html">← All screens</a>
+  </div>
+</div>
+
+<!-- ============ (2) THE FULL MOCK ============ -->
+<div class="wrap" style="padding-top:24px">
+  <div class="note"><b>Screen 05 — Agent Homepage (consumer-facing, per-agent white-label instance).</b> The public front door: seller-first (66% of sellers arrive by referral and use the site to <b>validate</b> the agent — NAR), so it leads with dual capture (home value + NL search) in the first viewport, then auto-updated farm proof, Just-Sold "nosey neighbor" cards, community routes, listings, GBP reviews, agent + video, PropCast content, FAQ/areas-served/SEO blocks. It is the link-equity hub for the whole instance. Consumer chrome (agent-branded top nav + "Powered by PropertyIQ" footer) — the agent-console left rail never appears on consumer pages. Agents may <b>reorder/hide sections, never redesign</b> (locked template; brand vault variables only).</div>
+
+  <div class="site" data-agent="watts">
+    <!-- ELEMENT: site header -->
+    <div class="sitehead" id="el-header">
+      <div class="avatar">GW</div>
+      <div class="who"><b>Graeham Watts</b><small>Bay Area Real Estate · Intero Real Estate · DRE #01466876</small></div>
+      <nav><a href="#">Search</a><a href="#">Communities</a><a href="#">Sell</a><a href="#">Reviews</a><a href="#">Contact</a></nav>
+    </div>
+    <div class="anno" style="padding:6px 22px; border-bottom:1px dashed var(--line)">Identity (name, brokerage, DRE, phone) renders ONLY from identity.json / brand vault — read-only on page. The legacy wrong DRE is repo-blocklisted (see the identity.json blocklist); the brand tripwire blocks any render containing it. Nav collapses to hamburger on mobile.</div>
+
+    <div class="sectionstack">
+      <!-- ELEMENT: hero (H1, background, dual capture, lens chips) -->
+      <div class="hsec herohome" id="el-hero" style="background:linear-gradient(color-mix(in srgb, var(--paper) 88%, transparent), var(--paper)), var(--surface)">
+        <span class="tag">1 · Hero — dual CTA, seller-first, first viewport</span>
+        <div class="anno" style="text-align:right; margin-top:-4px" id="el-hero-bg">Hero background: soft <b style="color:var(--mut)">aerial photo of the FARM itself</b> (ImageryProvider, never stock), dimmed 88% + brand-tinted — the locality is the design. Mobile serves a mobile crop.</div>
+        <h1>Redwood City &amp; East Palo Alto real estate, with the data other agents don't have.</h1>
+        <p style="max-width:62ch; margin-left:auto; margin-right:auto">Sell for more with proof, not promises. Buy with commute times, school assignments, and ADU rules on every single listing. Graeham Watts · 14 homes sold in this neighborhood.</p>
+        <div class="anno" style="margin:-12px 0 14px">H1 + subhead are agent-editable variable slots, keyword-guided (market + value prop + farm proof) — edits pass ComplianceProvider + the cross-instance uniqueness validator before publish (fail-closed to last approved version). Valuation capture must sit in the first viewport: below-fold widgets lose 60–70% of submissions.</div>
+        <div style="display:grid; grid-template-columns:1fr 1fr; gap:14px; max-width:840px; margin:0 auto; text-align:left">
+          <div id="el-value-card" style="border:2px solid var(--brand); border-radius:14px; padding:16px; background:var(--brand-soft)">
+            <b style="font-size:13px">What's your home worth?</b>
+            <div class="prompt" style="margin-top:8px; padding:4px"><input placeholder="Enter your address…" aria-label="Home address"><button>Get value</button></div>
+            <small style="color:var(--mut); font-size:11.5px; display:block; margin-top:6px">Instant range now · precise valuation from Graeham Watts in 24h</small>
+            <label style="display:flex; gap:6px; font-size:11px; color:var(--mut); margin-top:8px; align-items:flex-start"><input type="checkbox" style="margin-top:2px"> Text me my home value — I agree to receive texts from Graeham Watts (msg &amp; data rates may apply, reply STOP to opt out).</label>
+            <div class="anno" style="margin-top:6px">Step 1 = address only; contact fields appear on step 2 (progressive capture). Submit → instant AVM range page (AVMSnapshot: range + confidence + as-of date, sources ATTOM/RentCast/DataTree-class) → lead to <b style="color:var(--mut)">/approved-leads</b> source-tagged <span class="num">homepage_value</span> → CRM (Screen 14). Instant AI text-back fires ONLY with the SMS consent checkbox above (TCPA evidence stored per channel; imported/unknown consent blocks outreach). <b>Fail-closed:</b> AVM down → card keeps address capture, promises "valuation in 24h" only — never a fabricated instant number.</div>
+          </div>
+          <div id="el-search-card" style="border:1.5px solid var(--line); border-radius:14px; padding:16px; background:var(--paper)">
+            <b style="font-size:13px">Find your next home</b>
+            <div class="prompt" style="margin-top:8px; padding:4px"><input placeholder="3bd, good schools, 30 min to Palo Alto…" aria-label="Search homes"><button>Search</button></div>
+            <small style="color:var(--mut); font-size:11.5px; display:block; margin-top:6px">AI search that shows its reasoning — no sign-up required</small>
+            <div style="display:flex; gap:6px; margin-top:8px; flex-wrap:wrap"><span class="bdg">try: "duplex with ADU potential"</span><span class="bdg">🌐 buscar en español</span></div>
+            <div class="anno" style="margin-top:6px">Submit → Screen 1 parse → Screen 2 results (SearchRecord). No hard gate on organic traffic — ever (draft s3 policy). Multilingual chip renders when the brand-vault "Se habla español" flag is on [DECIDE interim]. Parser respects the sensitive-topic firewall + Fair Housing forbidden list.</div>
+          </div>
+        </div>
+        <div style="margin-top:18px" id="el-lens-chips">
+          <h2 style="font-size:13px; color:var(--mut); font-weight:600; margin-bottom:10px">Every listing on this site answers the questions portals can't:</h2>
+          <div style="display:flex; gap:8px; justify-content:center; flex-wrap:wrap">
+            <a href="#" class="chip" style="padding:9px 16px; font-size:13px; font-weight:600">🚗 Commute Lens</a>
+            <a href="#" class="chip" style="padding:9px 16px; font-size:13px; font-weight:600">🎓 School Boundaries</a>
+            <a href="#" class="chip" style="padding:9px 16px; font-size:13px; font-weight:600">🏗 ADU Check · <span class="num">214</span></a>
+            <a href="#" class="chip" style="padding:9px 16px; font-size:13px; font-weight:600">📈 Yield Engine</a>
+            <a href="#" class="chip" style="padding:9px 16px; font-size:13px; font-weight:600">🔥 Risk Lens</a>
+            <a href="#" class="chip" style="padding:9px 16px; font-size:13px; font-weight:600">⚡ Market Signals</a>
+          </div>
+          <div class="anno" style="margin-top:8px">Six named lenses — the ONE canonical capability pattern site-wide (same set as the search page). Each chip deep-links into its guided flow AND its indexable feature-explainer page (6 pages targeting "homes by commute time", "ADU eligible homes"…). ADU count (214) live from Zoneomics via the feature registry. Fair housing: the lens set deliberately excludes any steering lens — no crime data anywhere on the instance; hazard/climate (Risk Lens) is the compliant substitute.</div>
+        </div>
+      </div>
+
+      <!-- ELEMENT: farm proof -->
+      <div class="hsec" id="el-farm-proof"><span class="tag">2 · Farm proof — auto-updated referral validation</span>
+        <div style="display:flex; align-items:center; gap:12px; margin-bottom:12px; flex-wrap:wrap"><h2 style="font-size:19px">Redwood City &amp; East Palo Alto, by the numbers</h2><button class="btn-ink" style="margin-left:auto; padding:10px 18px; font-size:12.5px; border-radius:9px">Get your street's numbers →</button></div>
+        <div style="display:grid; grid-template-columns:1.2fr 1fr; gap:14px">
+          <div class="farmmap">
+            <div class="grid"></div>
+            <span class="pin sold" style="top:18%; left:22%">SOLD $1.41M</span>
+            <span class="pin sold" style="top:44%; left:55%">SOLD $1.73M</span>
+            <span class="pin sold" style="top:66%; left:30%">SOLD $985K</span>
+            <span class="pin sold" style="top:30%; left:72%">SOLD $1.52M</span>
+            <span class="pin" style="top:58%; left:70%">ACTIVE $1.29M</span>
+            <span class="pin" style="top:76%; left:58%">ACTIVE $998K</span>
+            <div class="anno" style="position:absolute; bottom:8px; left:10px">Interactive map: every farm sale (sold + active pins) · pin → sold page / listing page</div>
+          </div>
+          <div class="statrow" style="grid-template-columns:1fr 1fr">
+            <div class="stat"><small>Homes sold in this farm</small><b class="num">14</b></div>
+            <div class="stat"><small>Total volume</small><b class="num">$19.4M</b></div>
+            <div class="stat"><small>Avg sale-to-list</small><b class="num">103%</b></div>
+            <div class="stat"><small>Avg days on market</small><b class="num">9 <span style="font-size:11px; color:var(--good)">vs 12 area</span></b></div>
+          </div>
+        </div>
+        <div class="anno" style="margin-top:6px">Stats auto-refresh from MLS closed data + agent production records [BEST GUESS: nightly] — never hand-typed, never stale. "Get your street's numbers" scrolls to the value capture (one-ask-per-viewport: this section's CTA hides on mobile where the sticky bar owns the ask). <b>Empty state:</b> whole section auto-hides until ≥1 closed sale — never show zeros.</div>
+      </div>
+
+      <!-- ELEMENT: just sold -->
+      <div class="hsec" id="el-just-sold"><span class="tag">3 · Just Sold — auto-generated nosey-neighbor cards</span>
+        <h2 style="font-size:19px; margin-bottom:12px">Just sold nearby</h2>
+        <div class="commgrid">
+          <div class="comm"><div class="ph">Photo (MLS media, licensed)</div><div><b class="num">Sold · $1,415,000</b><small class="num">Hurlingame Ave · listed $1.35M · 8 days · 3 offers</small></div></div>
+          <div class="comm"><div class="ph">Photo</div><div><b class="num">Sold · $1,730,000</b><small class="num">Beech St · listed $1.68M · 11 days</small></div></div>
+          <div class="comm"><div class="ph">Photo</div><div><b class="num">Sold · $985,000</b><small class="num">Cedar St · listed $949K · 7 days · over ask</small></div></div>
+        </div>
+        <div style="margin-top:12px"><button style="background:var(--paper); color:var(--brand); border:1.5px solid var(--brand); border-radius:9px; padding:9px 16px; font-weight:600; cursor:pointer">Curious what yours would get? →</button></div>
+        <div class="anno" style="margin-top:6px">Cards auto-generate on each closing (consumes listing-closed events) from the MLS field whitelist only — sold price, street, list price, DOM, offers; IDX display policy + retention rules apply (IDXDisplayCache). Card → permanent sold page; CTA → value capture. <b>Empty state:</b> hides with farm proof until first close.</div>
+      </div>
+
+      <!-- ELEMENT: explore the farm -->
+      <div class="hsec" id="el-explore"><span class="tag">4 · Explore the farm — routes into community pages</span>
+        <h2 style="font-size:19px; margin-bottom:12px">Neighborhoods I know street by street</h2>
+        <div class="commgrid">
+          <div class="comm"><div class="ph">Photo</div><div><b>Friendly Acres</b><small class="num">Median $1.42M · 31 active · <a href="#" style="color:var(--brand)">monthly report</a></small></div></div>
+          <div class="comm"><div class="ph">Photo</div><div><b>Redwood Oaks</b><small class="num">Median $1.38M · 8 active · <a href="#" style="color:var(--brand)">monthly report</a></small></div></div>
+          <div class="comm"><div class="ph">Photo</div><div><b>East Palo Alto</b><small class="num">Median $985K · 12 active · <a href="#" style="color:var(--brand)">monthly report</a></small></div></div>
+        </div>
+        <div class="anno" style="margin-top:6px">Data from the community-page engine (MarketDataSnapshot per neighborhood, Screen 6). Card → community page; "monthly report" → report-subscribe capture (email consent evidence recorded, source tag <span class="num">homepage_report</span>, emits REPORT_SUBSCRIBED).</div>
+      </div>
+
+      <!-- ELEMENT: featured listings -->
+      <div class="hsec" id="el-listings"><span class="tag">5 · Featured listings — buyer hook, demos the intelligence strip</span>
+        <h2 style="font-size:19px; margin-bottom:12px">On the market now</h2>
+        <div class="commgrid">
+          <div class="comm"><div class="ph">Photo</div><div><b class="num">$1,289,000</b><small>742 Hurlingame Ave · 3bd 2ba</small><div class="mintel num" style="border-radius:6px; margin-top:6px">⚡ $8,120/mo all-in · 22 min to Menlo Park</div></div></div>
+          <div class="comm"><div class="ph">Photo</div><div><b class="num">$1,350,000</b><small>118 Beech St · 3bd 2ba</small><div class="mintel num" style="border-radius:6px; margin-top:6px">⚡ ADU potential · 4.5% rent yield</div></div></div>
+          <div class="comm"><div class="ph">Photo</div><div><b class="num">$998,000</b><small>510 Cedar St · 2bd 1ba</small><div class="mintel num" style="border-radius:6px; margin-top:6px">⚡ Priced 3% under comps</div></div></div>
+        </div>
+        <div class="anno" style="margin-top:6px">IDXDisplayCache + intelligence engines (all-in monthly from CashflowEstimateSnapshot, ADU from Zoneomics, vs-comps). Card → Screen 3 detail. <b>Fallback:</b> agent has no own listings → farm actives render instead [BEST GUESS]. Intelligence line only renders deterministic, sourced numbers — unknown = line omitted, never guessed.</div>
+      </div>
+
+      <!-- ELEMENT: reviews -->
+      <div class="hsec" id="el-reviews"><span class="tag">6 · Reviews — seller stories first, GBP stars live</span>
+        <div style="display:flex; gap:18px; align-items:center; flex-wrap:wrap">
+          <div style="font-size:26px; font-weight:800" class="num">4.9★</div>
+          <div style="flex:1; min-width:260px; font-size:13.5px; color:var(--mut)">"Graeham sold our Friendly Acres home in 8 days, $65K over asking. His pricing analysis was the difference." <b style="color:var(--ink)">— seller, Hurlingame Ave</b></div>
+          <a href="#" style="color:var(--brand); font-size:12.5px; text-decoration:none">62 Google reviews →</a>
+        </div>
+        <div class="anno" style="margin-top:6px">Live-pulled from the GBP API — one honest source, real count (Zillow reviews = [DECIDE], interim GBP only). Link → GBP profile. <b>Empty/degraded:</b> strip hides below ~5 reviews [BEST GUESS] and hides entirely if GBP is unreachable — never a cached stale count presented as live.</div>
+      </div>
+
+      <!-- ELEMENT: meet the agent + video -->
+      <div class="hsec" id="el-agent"><span class="tag">7 · Meet the agent + brand video</span>
+        <div style="display:grid; grid-template-columns:1fr 1.1fr; gap:22px; align-items:center">
+          <div>
+            <div style="display:flex; gap:14px; align-items:center; margin-bottom:12px">
+              <div class="avatar" style="width:64px;height:64px; font-size:20px">GW</div>
+              <div><b style="font-size:18px">Graeham Watts</b><div style="font-size:13px;color:var(--mut)">15 years on the Peninsula · Intero Real Estate · DRE #01466876</div></div>
+            </div>
+            <p style="font-size:13.5px; color:var(--mut); max-width:48ch; margin-bottom:14px">I grew up here, I've sold 14 homes in this farm, and I built this site so my clients see the same data I do — commutes, schools, zoning, and what your home is really worth.</p>
+            <button class="btn-ink" style="padding:12px 22px; border-radius:9px; font-size:13px">Work with me</button>
+          </div>
+          <div class="ph" style="min-height:230px; font-size:14px; border-radius:12px">▶ Intro video (16:9, auto-fed from PropCast avatar pipeline · AI-disclosure baked into the video where required)</div>
+        </div>
+        <div class="anno" style="margin-top:6px">Bio/years = brand-vault variable slots; DRE + brokerage locked read-only from identity.json (brand tripwire). "Work with me" → contact &amp; booking (PropFlow slots, Screen 21 settings). Video renders only ContentLock-approved versions.</div>
+      </div>
+
+      <!-- ELEMENT: latest content -->
+      <div class="hsec" id="el-content"><span class="tag">8 · Latest content — auto-fed from PropCast</span>
+        <h2 style="font-size:19px; margin-bottom:12px">This month in your market</h2>
+        <div class="commgrid">
+          <div class="comm"><div class="ph">▶ Video</div><div><small>July market update: what $1.4M buys now</small></div></div>
+          <div class="comm"><div class="ph">▶ Video</div><div><small>ADU rules changed in Redwood City — here's what it means</small></div></div>
+          <div class="comm"><div class="ph">📄 Letter</div><div><small>Get the monthly farm letter → <a href="#" style="color:var(--brand)">subscribe</a></small></div></div>
+        </div>
+        <div class="anno" style="margin-top:6px">Consumes content-published events; ONLY ContentLock-approved versions render — a revoked lock removes the card immediately (matrix correction #10). Play emits CONTENT_PLAYED (attribution-keyed). Subscribe = email consent capture. <b>Empty:</b> feed empty → section hides.</div>
+      </div>
+
+      <!-- ELEMENT: FAQ -->
+      <div class="hsec" id="el-faq"><span class="tag">8b · FAQ — FAQPage schema</span>
+        <h2 style="font-size:17px; margin-bottom:8px">Questions people ask</h2>
+        <div class="faq">
+          <details><summary>How much is my Redwood City home worth?</summary><p>Enter your address above for an instant range from live MLS comparables — then Graeham verifies it in person. Median here is $1.42M, up 3.1% this year.</p></details>
+          <details><summary>What does it cost to sell a home with Graeham Watts?</summary><p>Commission is discussed up front at the listing consult, with a written net sheet so you see your exact walk-away before you commit. No surprise fees. <span style="color:var(--soft)">(Agent-editable slot — ComplianceProvider pass required before publish, fail-closed to previous approved answer.)</span></p></details>
+          <details><summary>Which neighborhoods does Graeham cover?</summary><p>Friendly Acres, Redwood Oaks, Centennial, Emerald Hills and 10 more Peninsula neighborhoods — with a live market guide for each.</p></details>
+        </div>
+        <div class="anno" style="margin-top:4px">Templated from farm data, 3+ Q&amp;As, FAQPage schema emitted (≈2.7× AI-citation rate). The commission answer is the compliance-sensitive slot: every edit routes through ComplianceProvider. No demographic characterizations permitted in any editorial answer (fair housing).</div>
+      </div>
+
+      <!-- ELEMENT: areas served -->
+      <div class="hsec" id="el-areas"><span class="tag">8c · Areas served — geo-SEO paragraph</span>
+        <div class="proselike" style="font-size:13px">
+          <p><b>Serving the mid-Peninsula:</b> <a href="#" style="color:var(--brand)">Redwood City</a> (including <a href="#" style="color:var(--brand)">Friendly Acres</a>, <a href="#" style="color:var(--brand)">Redwood Oaks</a>, <a href="#" style="color:var(--brand)">Centennial</a>, <a href="#" style="color:var(--brand)">Farm Hill</a>), <a href="#" style="color:var(--brand)">East Palo Alto</a>, <a href="#" style="color:var(--brand)">Menlo Park</a>, <a href="#" style="color:var(--brand)">San Carlos</a>, and <a href="#" style="color:var(--brand)">Emerald Hills</a> — buyer representation, listings, and investment analysis. Se habla español.</p>
+        </div>
+        <div class="anno" style="margin-top:4px">Every neighborhood name links into its community guide (Screen 6). List generated from farm config and mirrors the LocalBusiness areaServed schema exactly. "Se habla español" renders from the brand-vault multilingual flag [DECIDE interim].</div>
+      </div>
+
+      <!-- ELEMENT: SEO text block -->
+      <div class="hsec" id="el-seo-block"><span class="tag">9 · SEO text block — crawlable body copy</span>
+        <h2 style="font-size:17px; margin-bottom:8px">Redwood City &amp; East Palo Alto real estate, done with better data</h2>
+        <div class="proselike">
+          <p>Graeham Watts is a Redwood City and East Palo Alto real estate agent with Intero Real Estate, serving buyers, sellers, and investors across the Peninsula — Friendly Acres, Redwood Oaks, Centennial, Emerald Hills, and 10 more neighborhoods. This site runs on PropertyIQ: search homes for sale by commute time, school assignment, ADU eligibility, and rental return; get an instant home value backed by live MLS comparables; and read data-driven neighborhood guides updated daily. Whether you're selling a Friendly Acres ranch home or hunting for a duplex with ADU potential in East Palo Alto, the same market intelligence I use professionally is open to you here.</p>
+        </div>
+        <div class="anno" style="margin-top:4px">~120-word templated block (agent name, brokerage, city keywords, neighborhood internal links, feature keywords) auto-generated from brand vault + farm config; agent-editable via CMS-lite with ComplianceProvider + <b>cross-instance uniqueness validator</b> — near-identical white-label pages are Google's named doorway-page pattern, so publish blocks if too similar to another agent's instance.</div>
+      </div>
+
+      <!-- ELEMENT: SEO footer -->
+      <div class="hsec" id="el-seo-footer" style="border-bottom:0"><span class="tag">SEO footer — 4 columns, auto-generated</span>
+        <div style="display:grid; grid-template-columns:repeat(4,1fr); gap:14px; font-size:12.5px">
+          <div><b style="font-size:11px; text-transform:uppercase; letter-spacing:.06em; color:var(--soft)">Neighborhoods</b><div style="margin-top:6px; display:grid; gap:4px"><a href="#" style="color:var(--brand); text-decoration:none">Friendly Acres</a><a href="#" style="color:var(--brand); text-decoration:none">Redwood Oaks</a><a href="#" style="color:var(--brand); text-decoration:none">Emerald Hills</a><a href="#" style="color:var(--brand); text-decoration:none">All 14 areas →</a></div></div>
+          <div><b style="font-size:11px; text-transform:uppercase; letter-spacing:.06em; color:var(--soft)">Popular searches</b><div style="margin-top:6px; display:grid; gap:4px"><a href="#" style="color:var(--brand); text-decoration:none">Homes under $1.4M</a><a href="#" style="color:var(--brand); text-decoration:none">Homes with ADU potential</a><a href="#" style="color:var(--brand); text-decoration:none">New this week</a></div></div>
+          <div><b style="font-size:11px; text-transform:uppercase; letter-spacing:.06em; color:var(--soft)">Market data</b><div style="margin-top:6px; display:grid; gap:4px"><a href="#" style="color:var(--brand); text-decoration:none">Redwood City statistics</a><a href="#" style="color:var(--brand); text-decoration:none">Monthly market report</a><a href="#" style="color:var(--brand); text-decoration:none">Home value estimator</a></div></div>
+          <div><b style="font-size:11px; text-transform:uppercase; letter-spacing:.06em; color:var(--soft)">Work with me</b><div style="margin-top:6px; display:grid; gap:4px"><a href="#" style="color:var(--brand); text-decoration:none">Sell your home</a><a href="#" style="color:var(--brand); text-decoration:none">Book a consult</a><a href="#" style="color:var(--brand); text-decoration:none">Reviews</a></div></div>
+        </div>
+        <div class="anno" style="margin-top:6px">"Popular searches" come from the IDX filter-URL library — stable server-rendered URLs for approved filter combinations, so footer links never 404 (Brain §, filter-URL build rule); same URLs are reused by PropReach ads, QR/short links, and GBP posts. Neighborhood column from the community index. This footer + the areas-served mesh make the homepage the link-equity hub.</div>
+      </div>
+
+      <!-- ELEMENT: behavior-triggered soft prompt (rendered as an overlay example) -->
+      <div id="el-soft-prompt" style="padding:14px 22px; border-bottom:1px dashed var(--line)">
+        <div class="cardbox" style="max-width:440px; box-shadow:0 8px 26px rgba(20,24,32,.12); display:flex; gap:10px; align-items:flex-start">
+          <span>👋</span>
+          <div style="flex:1"><b>Welcome back — 3 new homes match your last search.</b>
+            <div style="color:var(--mut); font-size:12px; margin-top:2px">Want them emailed when they hit the market? <a href="#" style="color:var(--brand)">Yes, alert me</a></div>
+          </div>
+          <button class="btn-ghost" aria-label="Dismiss">✕</button>
+        </div>
+        <div class="anno" style="margin-top:6px">Behavior-triggered soft prompt (repeat visit / save behavior, from visitor session events) — dismissible, never a hard gate on organic traffic; hard gates are reserved for PPC and agent-configurable (draft s3 lead policy, applies site-wide).</div>
+      </div>
+
+      <!-- ELEMENT: sticky CTA bar -->
+      <div id="el-sticky-cta" style="position:sticky; bottom:0; background:var(--paper); border-top:1px solid var(--line); padding:10px 22px; display:flex; gap:10px; align-items:center; flex-wrap:wrap; box-shadow:0 -6px 18px rgba(0,0,0,.05); z-index:3">
+        <span style="font-size:12.5px; color:var(--mut)">Ready when you are:</span>
+        <button class="btn-ink" style="padding:10px 18px; border-radius:9px; font-size:12.5px; font-weight:700">Get my home's value</button>
+        <button style="background:var(--paper); color:var(--ink); border:1.5px solid var(--ink); border-radius:9px; padding:10px 18px; font-size:12.5px; font-weight:600; cursor:pointer">Search homes</button>
+        <button style="background:var(--paper); color:var(--ink); border:1px solid var(--line); border-radius:9px; padding:10px 18px; font-size:12.5px; cursor:pointer">📞 Call Graeham</button>
+        <span class="anno" style="margin-left:auto">appears once the hero scrolls away · one-ask-per-viewport: on mobile it REPLACES section CTAs, never stacks · each click emits CTA_CLICKED (attribution-keyed)</span>
+      </div>
+
+      <!-- ELEMENT: footer strip -->
+      <div id="el-footer" style="padding:12px 22px; display:flex; justify-content:space-between; align-items:center; border-top:1px solid var(--line)"><span class="poweredby">Powered by PropertyIQ</span><span style="font-size:12px;color:var(--soft)">🏠 Equal Housing Opportunity</span></div>
+    </div>
+  </div>
+
+  <!-- ============ agent-view overlay: CMS-lite + OTTO (not consumer-visible) ============ -->
+  <div style="display:grid; grid-template-columns:1fr 1fr; gap:14px; margin-top:18px">
+    <div id="el-cms" class="cardbox">
+      <b>Agent view — CMS-lite section controls (owning agent/team roles only)</b>
+      <table class="dtable" style="font-size:11.5px; margin-top:6px">
+        <tr><th></th><th>Section</th><th>Visible</th><th>Editable slots</th></tr>
+        <tr><td>⠿</td><td>1 · Hero</td><td><span class="bdg good">on (locked first)</span></td><td>H1, subhead (compliance-checked)</td></tr>
+        <tr><td>⠿</td><td>2 · Farm proof</td><td><span class="bdg good">on</span></td><td>— (auto data)</td></tr>
+        <tr><td>⠿</td><td>3 · Just Sold</td><td><span class="bdg good">on</span></td><td>—</td></tr>
+        <tr><td>⠿</td><td>6 · Reviews</td><td><span class="bdg warn">auto-hidden &lt;5 reviews</span></td><td>—</td></tr>
+        <tr><td>⠿</td><td>8b · FAQ</td><td><span class="bdg good">on</span></td><td>answers (compliance-checked)</td></tr>
+      </table>
+      <div class="anno" style="margin-top:5px">Drag ⠿ to reorder, toggle to hide — <b>reorder/hide only, never redesign</b> (locked template; brand vault variables only). Surfaced in Settings → Website [DECIDE interim]. Consumers never see these controls (permission-limited: public page is read-only for everyone else).</div>
+    </div>
+    <div id="el-otto" class="cardbox">
+      <b>OTTO SEO layer (invisible on page — dev reference)</b>
+      <div style="color:var(--mut); font-size:12px; margin-top:4px">Title: <span class="num" style="color:var(--ink)">Graeham Watts — Redwood City Real Estate Agent | Intero Real Estate</span><br>Meta: "Redwood City homes with Graeham Watts: search by commute &amp; schools, get instant home values, live market data for 14 neighborhoods."<br>Schema emitted: RealEstateAgent + LocalBusiness (NAP, DRE, areaServed, stars) · WebSite + SearchAction · FAQPage.</div>
+      <div class="anno" style="margin-top:5px">SearchAtlas/OTTO via shared SeoProvider (Brain §12.12): tuning through template variable slots ONLY; every live change routes through SEO Console preview + approve (Screen 20) with an audit trail — OTTO never deploys directly. Site connection default = Cloudflare Worker, OTTO Pixel fallback. LCP budget &lt; 2.5s: sections static-rendered, widgets (map, value input) lazy-load.</div>
+    </div>
+  </div>
+
+  <!-- ============ states strip ============ -->
+  <div id="el-states" style="margin-top:14px">
+    <div class="cardbox" style="font-size:11.5px">
+      <b>States (dev reference)</b>
+      <div style="color:var(--mut); margin-top:4px">
+        <b style="color:var(--ink)">Loading:</b> static-rendered section shell first paint; map + value widget lazy-load into place (LCP &lt; 2.5s budget).
+        <b style="color:var(--ink)">Empty / new agent:</b> farm-proof + Just-Sold auto-hide until ≥1 closed sale (never zeros) · reviews hide &lt;5 reviews [BEST GUESS] · featured listings fall back to farm actives [BEST GUESS].
+        <b style="color:var(--ink)">Degraded (all fail-closed):</b> AVM down → address capture stays, "valuation from Graeham in 24h" only, never a fabricated number · GBP unreachable → reviews strip hides · PropCast feed empty/lock revoked → content section hides · map tiles fail → stat tiles remain, map placeholder + retry.
+        <b style="color:var(--ink)">Permission-limited:</b> consumers see everything (public); CMS-lite controls only for owning agent/team roles.
+      </div>
+    </div>
+  </div>
+
+  <!-- ============ mobile variant strip ============ -->
+  <div id="el-mobile" style="margin-top:14px">
+    <div class="sechead">Mobile variant (375px)</div>
+    <div style="display:flex; gap:16px; overflow-x:auto; padding-bottom:6px">
+      <div class="phone">
+        <div class="phd"><div class="avatar">GW</div><b>Graeham Watts</b><span style="margin-left:auto; color:var(--mut)">☰</span></div>
+        <div style="padding:12px; font-size:12px">
+          <b style="font-size:14px; font-family:var(--font-display)">Redwood City &amp; EPA real estate, with better data.</b>
+          <div style="border:2px solid var(--brand); border-radius:12px; padding:10px; background:var(--brand-soft); margin-top:8px"><b style="font-size:11.5px">What's your home worth?</b><div class="prompt" style="margin-top:6px; padding:3px"><input placeholder="Your address…" style="font-size:11.5px; padding:6px"><button style="padding:0 10px; font-size:11px">Go</button></div></div>
+          <div style="border:1px solid var(--line); border-radius:12px; padding:10px; margin-top:6px"><b style="font-size:11.5px">Find your next home</b><div class="prompt" style="margin-top:6px; padding:3px"><input placeholder="3bd, good schools…" style="font-size:11.5px; padding:6px"><button style="padding:0 10px; font-size:11px">Go</button></div></div>
+          <div style="display:flex; gap:5px; overflow-x:auto; margin-top:8px"><span class="chip" style="font-size:10.5px; white-space:nowrap">🚗 Commute</span><span class="chip" style="font-size:10.5px; white-space:nowrap">🎓 Schools</span><span class="chip" style="font-size:10.5px; white-space:nowrap">🏗 ADU</span><span class="chip" style="font-size:10.5px; white-space:nowrap">📈 Yield</span></div>
+        </div>
+      </div>
+      <div class="phone">
+        <div class="phd"><div class="avatar">GW</div><b>…scrolled</b></div>
+        <div style="padding:12px; font-size:11.5px">
+          <div class="statrow" style="grid-template-columns:1fr 1fr; gap:6px"><div class="stat" style="padding:8px"><small style="font-size:9.5px">Sold in farm</small><b class="num" style="font-size:14px">14</b></div><div class="stat" style="padding:8px"><small style="font-size:9.5px">Volume</small><b class="num" style="font-size:14px">$19.4M</b></div><div class="stat" style="padding:8px"><small style="font-size:9.5px">Sale-to-list</small><b class="num" style="font-size:14px">103%</b></div><div class="stat" style="padding:8px"><small style="font-size:9.5px">DOM</small><b class="num" style="font-size:14px">9</b></div></div>
+          <div class="comm" style="margin-top:8px"><div class="ph" style="min-height:56px">Photo</div><div style="padding:7px 9px"><b class="num" style="font-size:12px">Sold · $1,415,000</b><small class="num" style="font-size:10.5px">Hurlingame Ave · 8 days · 3 offers</small></div></div>
+          <div style="position:sticky; bottom:0; background:var(--paper); border-top:1px solid var(--line); margin:10px -12px -12px; padding:8px 10px; display:flex; gap:6px"><button class="btn-ink" style="flex:1">Home value</button><button class="btn-ghost" style="flex:1">Search</button><button class="btn-ghost">📞</button></div>
+        </div>
+      </div>
+    </div>
+    <div class="anno" style="margin-top:4px">Same section stack: hero cards stack vertically (value card FIRST), lens chips wrap to a horizontal scroll row, stat grids collapse 2-up, nav → hamburger, hero aerial served at mobile crop. Section CTAs are removed — the sticky bottom CTA bar is the sole persistent ask (one-ask-per-viewport).</div>
+  </div>
+
+  <!-- ============ spec gaps found ============ -->
+  <div class="note" style="margin-top:22px"><b>Spec gaps found (Master Brain specifies, spec inventory missed — rendered above):</b> (1) <b>AVMSnapshot contract</b> (Brain §10.10): instant value must carry range (avm_low/high), 0–1 factual confidence, as_of_date and a named source (ATTOM / RentCast / DataTree / USER_PROVIDED) — annotated on the value card; the spec said "range + confidence + as-of" but not the source-attribution requirement. (2) <b>/approved-leads canonical payload</b> (Brain R11): the IDX adapter assembles the nested ApprovedLeadRequest with tenant_id, captured_at, idempotency_key, correlation_id and per-channel consent evidence — PropFlow owns identity and emits LEAD_CAPTURED; annotated on the value card. (3) <b>Filter-URL library rule</b> (Brain §, filter-URL build rule): footer "popular searches" must be stable server-rendered approved filter URLs reused by ads/QR/GBP — the never-404 guarantee is a Brain contract, annotated on the SEO footer. (4) <b>SeoProvider transport detail</b> (Brain §12.12): OTTO changes require preview + approval; default site connection = Cloudflare Worker, OTTO Pixel fallback — annotated in the OTTO card. (5) <b>MLS field whitelist + IDX display/retention policy</b> governs Just-Sold card fields and photo licensing (IDXDisplayCache) — annotated on Just Sold.</div>
+
+  <!-- ============ (3) ELEMENT COVERAGE ============ -->
+  <h2 style="font-size:20px; margin:26px 0 10px">Element coverage — spec inventory → this page</h2>
+  <table class="dtable cov" style="font-size:12.5px">
+    <tr><th>Spec inventory element</th><th>Rendered at</th><th>Status</th></tr>
+    <tr><td>Site header (avatar, name, nav)</td><td><a href="#el-header">Site header</a></td><td class="ok">✓</td></tr>
+    <tr><td>Hero H1 + subhead (keyword-bearing, agent-editable)</td><td><a href="#el-hero">Hero</a></td><td class="ok">✓</td></tr>
+    <tr><td>Hero background (farm aerial, dimmed 88%, brand-tinted)</td><td><a href="#el-hero-bg">Hero background note</a></td><td class="ok">✓</td></tr>
+    <tr><td>Home-value capture card (AVM range, consent opt-in, /approved-leads)</td><td><a href="#el-value-card">Value card</a></td><td class="ok">✓</td></tr>
+    <tr><td>NL search card (no sign-up)</td><td><a href="#el-search-card">Search card</a></td><td class="ok">✓</td></tr>
+    <tr><td>Six lens chips (canonical capability pattern + explainer pages)</td><td><a href="#el-lens-chips">Lens chips</a></td><td class="ok">✓</td></tr>
+    <tr><td>Farm proof (interactive map + 4 stats, auto-updated)</td><td><a href="#el-farm-proof">Farm proof</a></td><td class="ok">✓</td></tr>
+    <tr><td>Just Sold cards (3+, nosey-neighbor, auto-generated)</td><td><a href="#el-just-sold">Just sold</a></td><td class="ok">✓</td></tr>
+    <tr><td>Explore-the-farm neighborhood cards (+ monthly report capture)</td><td><a href="#el-explore">Explore the farm</a></td><td class="ok">✓</td></tr>
+    <tr><td>Featured listings (3, intelligence strip)</td><td><a href="#el-listings">Featured listings</a></td><td class="ok">✓</td></tr>
+    <tr><td>Reviews strip (GBP live aggregate + seller quote)</td><td><a href="#el-reviews">Reviews</a></td><td class="ok">✓</td></tr>
+    <tr><td>Meet-the-agent + video (locked DRE, Work-with-me CTA)</td><td><a href="#el-agent">Meet the agent</a></td><td class="ok">✓</td></tr>
+    <tr><td>Latest content cards (ContentLock'd PropCast feed + subscribe)</td><td><a href="#el-content">Latest content</a></td><td class="ok">✓</td></tr>
+    <tr><td>FAQ block (FAQPage schema, compliance-checked commission answer)</td><td><a href="#el-faq">FAQ</a></td><td class="ok">✓</td></tr>
+    <tr><td>Areas-served geo paragraph (links + areaServed mirror + español flag)</td><td><a href="#el-areas">Areas served</a></td><td class="ok">✓</td></tr>
+    <tr><td>SEO text block (~120 words, uniqueness-validated)</td><td><a href="#el-seo-block">SEO text block</a></td><td class="ok">✓</td></tr>
+    <tr><td>SEO footer (4 columns, filter-URL library, never-404)</td><td><a href="#el-seo-footer">SEO footer</a></td><td class="ok">✓</td></tr>
+    <tr><td>Sticky CTA bar (value · search · call, one-ask rule)</td><td><a href="#el-sticky-cta">Sticky CTA bar</a></td><td class="ok">✓</td></tr>
+    <tr><td>Footer strip (Powered by PropertyIQ + Equal Housing)</td><td><a href="#el-footer">Footer strip</a></td><td class="ok">✓</td></tr>
+    <tr><td>Behavior-triggered soft prompts (no hard gate on organic)</td><td><a href="#el-soft-prompt">Soft prompt</a></td><td class="ok">✓</td></tr>
+    <tr><td>CMS-lite section controls (agent view, reorder/hide only)</td><td><a href="#el-cms">CMS-lite panel</a></td><td class="ok">✓</td></tr>
+    <tr><td>OTTO SEO layer (variable slots only, preview+approve, audit trail)</td><td><a href="#el-otto">OTTO card</a></td><td class="ok">✓</td></tr>
+  </table>
+  <div style="border:1.5px solid var(--good); background:#f2f8f4; border-radius:10px; padding:12px 16px; margin:12px 0 0; font-weight:700; color:var(--good)">22 of 22 spec elements rendered ✓ <span style="font-weight:400; color:var(--mut); font-size:12.5px">— plus prompt-required regions beyond the inventory: states strip, mobile-variant strip, SMS-consent checkbox, agent-view CMS/OTTO panels; plus the 5 Master-Brain additions in the "Spec gaps found" note above.</span></div>
+
+  <!-- ============ (4) FULL SPEC AS HTML ============ -->
+  <div class="specdoc">
+    <h1 style="font-size:24px; margin:40px 0 6px">Spec — 05 · Agent Homepage</h1>
+    <p><b>Purpose</b> The public front door of each agent's white-labeled PropertyIQ instance. Seller-first: NAR data shows 66% of sellers arrive by referral and use the site to <b>validate</b> the agent, so the page leads with dual capture (home value + search), then automated farm proof. It is also the link-equity hub for the whole instance (every community page, listing page, and curated search inherits authority from here).</p>
+    <p><b>Primary users</b> Consumers (sellers validating a referral, buyers, nosey neighbors); secondarily the agent (section reorder/hide via CMS-lite controls) and crawlers/LLMs (SEO/AEO surface).</p>
+    <p><b>Entry points</b> Direct/referral traffic, GBP profile link, postcard QR codes (switchy short links), email signatures, PropReach ad landing fallback, organic search for "{agent name}" and "{market} real estate agent", internal links from community/listing/sold pages.</p>
+    <p><b>Exit points</b> Home-value widget → instant AVM range page + lead intake (/approved-leads, source-tagged) → CRM (Screen 14) + AI text-back; NL search box → Screen 1/2; lens chips → 6 guided-flow + feature-explainer pages; farm map &amp; Just-Sold cards → sold pages / Screen 10 seller-report capture; neighborhood cards + areas-served links + footer mesh → Screen 6 community pages; "monthly report" links → report-subscribe capture; listings → Screen 3 detail; reviews → GBP; "Work with me"/call/book → contact &amp; booking (PropFlow slots, Screen 21); PropCast content cards → content/video pages; sticky CTA bar → value / search / call.</p>
+
+    <h2>Layout</h2>
+    <p>Desktop: single-column <b>section stack</b> inside the branded site chrome (header: avatar, agent name + tagline, nav Search·Communities·Sell·Reviews·Contact). Default order: 1 Hero → 2 Farm proof → 3 Just Sold → 4 Explore the farm → 5 Featured listings → 6 Reviews → 7 Meet the agent + video → 8 Latest content → 8b FAQ → 8c Areas served → 9 SEO text block → SEO footer → sticky CTA bar → "Powered by PropertyIQ" + Equal Housing footer. Agents may <b>reorder/hide sections, never redesign</b> (locked template; brand vault variables only). Valuation capture must sit in the first viewport — below-fold widgets lose 60–70% of submissions.</p>
+    <p>Mobile (375px): same stack, hero cards stack vertically (value card first), lens chips wrap to horizontal scroll row, stat grids collapse 2-up, section CTAs are replaced by the sticky bottom CTA bar (one-ask-per-viewport rule — the sticky bar never stacks with section CTAs), nav collapses to hamburger, hero aerial image served at mobile crop.</p>
+
+    <h2>Element inventory</h2>
+    <div style="overflow-x:auto">
+    <table class="dtable">
+      <tr><th>Element</th><th>What it shows/does</th><th>Data source</th><th>Interactions</th><th>Spec source</th></tr>
+      <tr><td>Site header (avatar, name, nav)</td><td>Agent identity + top nav</td><td>Brand vault / identity config (name, DRE 01466876, brokerage)</td><td>Nav links</td><td>Draft s5; brand-vault flow (Screen 8/23)</td></tr>
+      <tr><td>Hero H1 + subhead</td><td>Keyword-bearing headline: market + value prop + farm proof ("14 homes sold in this neighborhood")</td><td>Brand vault + farm sales stats (MLS)</td><td>Agent-editable, keyword-guided</td><td>Draft s5 §1</td></tr>
+      <tr><td>Hero background</td><td>Soft aerial photo of the FARM itself, dimmed 88%, brand-tinted</td><td>ImageryProvider (farm aerial)</td><td>none</td><td>Draft s5 §1 note</td></tr>
+      <tr><td>Home-value capture card (primary, brand-bordered)</td><td>Address input → instant AVM range; "precise valuation from {agent} in 24h"</td><td>AVMProvider → AVMSnapshot; lead → /approved-leads</td><td>Submit → value page + lead created + instant AI text-back (consent-gated) + CRM source tag homepage_value</td><td>Draft s5 §1; PropFlow intake; matrix correction (consent)</td></tr>
+      <tr><td>NL search card</td><td>"3bd, good schools, 30 min to Palo Alto…" → Screen 1 flow, no sign-up</td><td>SearchRecord / parser</td><td>Submit → results (Screen 2)</td><td>Draft s5 §1</td></tr>
+      <tr><td>Six lens chips</td><td>Commute Lens · School Boundaries · ADU Check · Yield Engine · Risk Lens · Market Signals — ONE canonical capability pattern site-wide</td><td>Feature registry; ADU count from Zoneomics</td><td>Each deep-links into guided flow AND its indexable feature-explainer page (6 pages)</td><td>Draft s5 §1</td></tr>
+      <tr><td>Farm proof section</td><td>"By the numbers": interactive map of every farm sale (sold + active pins) + 4 stats: homes sold (14), volume ($19.4M), sale-to-list (103%), DOM vs area (9 vs 12)</td><td>MLS via IDXProvider; agent production records; auto-updated</td><td>"Get your street's numbers →" → value capture; map pins → sold/listing pages</td><td>Draft s5 §2</td></tr>
+      <tr><td>Just Sold cards (3+)</td><td>Auto-generated nosey-neighbor cards: sold price, street, list price, days, offers</td><td>MLS closed data; auto-generated on each closing</td><td>Card → permanent sold page; "Curious what yours would get?" → value capture</td><td>Draft s5 §3</td></tr>
+      <tr><td>Explore-the-farm neighborhood cards</td><td>Photo, name, median, active count, "monthly report" link</td><td>Community-page data engine (Screen 6)</td><td>Card → community page; report link → subscribe capture (email consent)</td><td>Draft s5 §4</td></tr>
+      <tr><td>Featured listings (3)</td><td>Price, address, beds/baths + one-line intelligence strip (all-in monthly / ADU / vs-comps)</td><td>IDXDisplayCache + intelligence engines</td><td>Card → Screen 3 detail</td><td>Draft s5 §5</td></tr>
+      <tr><td>Reviews strip</td><td>Star aggregate (e.g. 4.9★), one seller-story quote, "62 Google reviews →"</td><td>GBP API (live-pulled)</td><td>Link → GBP reviews</td><td>Draft s5 §6</td></tr>
+      <tr><td>Meet-the-agent + video</td><td>Bio, years, brokerage, DRE (locked from identity.json), "Work with me" CTA, 16:9 intro video</td><td>Brand vault; video auto-fed from PropCast avatar pipeline</td><td>CTA → contact/booking; video play</td><td>Draft s5 §7; brand tripwire</td></tr>
+      <tr><td>Latest content cards</td><td>2 videos + farm-letter subscribe</td><td>PropCast published content (ContentLock'd versions only)</td><td>Play / subscribe</td><td>Draft s5 §8; ContentLock rule (matrix correction #10)</td></tr>
+      <tr><td>FAQ block (FAQPage schema)</td><td>3+ agent-market Q&amp;As; commission answer is agent-editable + compliance-checked</td><td>Templated from farm data; ComplianceProvider pass on edits</td><td>Expand/collapse</td><td>Draft s5 §8b</td></tr>
+      <tr><td>Areas-served geo paragraph</td><td>Every neighborhood name = link into its guide; "Se habla español"; mirrors LocalBusiness areaServed schema</td><td>Farm config</td><td>Links → community pages</td><td>Draft s5 §8c</td></tr>
+      <tr><td>SEO text block</td><td>~120-word templated crawlable body copy (agent, brokerage, city keywords, neighborhood links, feature keywords), auto-generated from brand vault + farm config, agent-editable</td><td>Brand vault + farm config</td><td>Edit via CMS-lite (compliance-checked)</td><td>Draft s5 §9</td></tr>
+      <tr><td>SEO footer (4 columns)</td><td>Neighborhoods / Popular searches / Market data / Work with me link lists</td><td>Filter-URL library (links never 404) + community index</td><td>Links</td><td>Draft s5 footer; PropSearch MB §15</td></tr>
+      <tr><td>Sticky CTA bar</td><td>Appears once hero scrolls away: Get my home's value · Search homes · 📞 Call</td><td>—</td><td>3 CTAs; replaces section CTAs on mobile</td><td>Draft s5</td></tr>
+      <tr><td>Footer strip</td><td>"Powered by PropertyIQ" + "Equal Housing Opportunity"</td><td>Platform</td><td>none</td><td>Draft s5</td></tr>
+      <tr><td>Behavior-triggered soft prompts</td><td>Repeat-visit / save behavior soft capture (no hard gate on organic)</td><td>Visitor session events</td><td>Dismissible prompt</td><td>Draft s3 lead policy, applies site-wide</td></tr>
+      <tr><td>CMS-lite section controls (agent view)</td><td>Reorder / hide sections; edit variable slots</td><td>Instance config</td><td>Drag-reorder, toggle</td><td>Draft s5 note ("agents reorder/hide, never redesign")</td></tr>
+      <tr><td>OTTO SEO layer</td><td>Title/meta/heading tuning through template variable slots only; changes route via SEO Console preview+approve (Screen 20)</td><td>SearchAtlas/OTTO via SeoProvider</td><td>Not user-visible; audit trail in SEO console</td><td>Matrix gap (SEO console); PropSearch MB §12.12</td></tr>
+    </table>
+    </div>
+
+    <h2>States</h2>
+    <ul>
+      <li><b>Default</b>: all sections populated from live data.</li>
+      <li><b>Loading</b>: static-rendered shell (sections are server-rendered); widgets (map, value input) lazy-load — LCP budget &lt; 2.5s (draft SEO spec).</li>
+      <li><b>Empty/new agent</b>: farm-proof and Just-Sold sections auto-hide until ≥1 closed sale exists (never show zeros); reviews strip hides below a review threshold [BEST GUESS: hide if &lt; 5 reviews]; featured listings falls back to farm actives if the agent has no own listings [BEST GUESS].</li>
+      <li><b>Degraded (fail-closed)</b>: AVM unavailable → value card keeps address capture but promises "valuation from {agent} in 24h" only, never a fabricated instant number (matrix correction #7); GBP unreachable → reviews strip hides; PropCast feed empty → content section hides; farm map tile failure → stat tiles remain, map placeholder with retry.</li>
+      <li><b>Permission-limited</b>: consumers see everything (public page); CMS-lite controls only for the owning agent/team roles.</li>
+      <li><b>Mobile</b>: as in Layout; sticky CTA bar is the sole persistent ask.</li>
+    </ul>
+
+    <h2>Data fields</h2>
+    <div style="overflow-x:auto">
+    <table class="dtable">
+      <tr><th>Field</th><th>Format</th><th>Source of truth</th></tr>
+      <tr><td>Agent name, brokerage, DRE, phone, email, markets</td><td>text; DRE always 01466876 for Graeham's instance</td><td>identity.json / brand vault (read-only on page)</td></tr>
+      <tr><td>Farm stats: homes sold, volume, sale-to-list %, DOM</td><td>int, $abbrev, %, days</td><td>MLS closed data + agent production, auto-refresh [BEST GUESS: nightly]</td></tr>
+      <tr><td>Just-sold card: address, sold $, list $, DOM, offer count</td><td>MLS whitelist fields only</td><td>IDXListingRecord (closed)</td></tr>
+      <tr><td>Neighborhood card: name, median $, active count</td><td>from community data engine</td><td>MarketDataSnapshot per neighborhood</td></tr>
+      <tr><td>Listing card: price, address, bd/ba, intelligence line</td><td>MLS + computed</td><td>IDXDisplayCache + CashflowEstimateSnapshot</td></tr>
+      <tr><td>Review aggregate + quote</td><td>float 1 decimal + text</td><td>GBP API</td></tr>
+      <tr><td>Value-capture lead: address, contact info (progressive)</td><td>address first; contact on step 2</td><td>LeadIntake /approved-leads, source tag homepage_* per widget</td></tr>
+      <tr><td>Schema payloads</td><td>RealEstateAgent + LocalBusiness (NAP, DRE, areaServed, stars), WebSite + SearchAction, FAQPage</td><td>Rendered from brand vault + farm config</td></tr>
+    </table>
+    </div>
+
+    <h2>Rules &amp; compliance</h2>
+    <ul>
+      <li><b>Brand tripwire</b>: DRE renders only from identity.json; the known-bad legacy DRE is blocklisted repo-wide (see the identity.json blocklist).</li>
+      <li><b>Consent</b>: every form submission creates a contact with captured-consent evidence for the channel used; instant AI text-back fires only with SMS consent capture at the form (checkbox + TCPA language) — imported/unknown consent blocks outreach (matrix correction #11). [BEST GUESS: form includes an explicit "text me my value" opt-in line.]</li>
+      <li><b>Fair housing</b>: no crime data anywhere; no demographic characterizations in editorial slots; Equal Housing Opportunity mark in footer; lens set excludes any steering lens.</li>
+      <li><b>No hard lead gate on organic traffic</b> — behavior-triggered soft prompts only; hard gates reserved for PPC and agent-configurable (draft s3 policy).</li>
+      <li><b>Compliance pass on agent-editable text</b> (FAQ, hero H1, SEO block) before publish — ComplianceProvider, fail-closed to previous approved version.</li>
+      <li><b>AVM display honesty</b>: instant value always shows range + confidence + as-of date, or "estimate unavailable" (matrix correction #7).</li>
+      <li><b>PropCast content</b>: only ContentLock-approved versions render; a revoked lock removes the card (matrix gap: revocation checklist).</li>
+      <li>Uniqueness across agent instances: hero/editorial variable slots must differ per agent enough to pass the platform uniqueness validator (shared with Screen 6) [BEST GUESS: same validator applies to homepage editorial blocks].</li>
+    </ul>
+
+    <h2>Cross-links</h2>
+    <p>In: GBP, postcards/QR, ads, community pages, sold pages, email signatures. Out: Screens 1/2 (search), 3 (detail), 6 (community), 10 (seller report capture path), sold pages, contact/booking. <b>Ledger events emitted</b>: PAGE_VIEWED, VALUATION_REQUESTED, SEARCH_SUBMITTED, LEAD_CREATED (with source tag), REPORT_SUBSCRIBED, CTA_CLICKED, CONTENT_PLAYED — all attribution-keyed for Screen 31. <b>Consumed</b>: content-published (PropCast), listing-closed (MLS) to refresh Just Sold, review updates (GBP).</p>
+
+    <h2>Open decisions</h2>
+    <ul>
+      <li>[DECIDE] Instant AVM range shown pre-contact vs after contact capture. Interim: show range instantly with confidence + as-of date (trust-first, matches "no sign-up required" search promise); precise valuation is the contact hook.</li>
+      <li>[DECIDE] AI text-back vendor/path (GHL interim vs PropFlow native). Interim: route through PropFlow messaging with ComplianceProvider pre-send check; UI unaffected.</li>
+      <li>[DECIDE] Review source beyond GBP (Zillow reviews?). Interim: GBP only — one live source, honest count.</li>
+      <li>[DECIDE] Section-stack CMS editing surface (in-app vs onboarding-only). Interim: simple reorder/hide panel in Settings &gt; Website [BEST GUESS].</li>
+      <li>[DECIDE] "Se habla español" / multilingual toggle per agent. Interim: brand-vault boolean flag rendering the line + multilingual NL search chip.</li>
+    </ul>
+    <p class="anno" style="margin-top:20px">Wireframe fidelity — colors are placeholders from the locked PropFlow design language. All addresses/prices/counts are realistic fake data. Agent identity: Graeham Watts, Intero Real Estate, DRE #01466876 (from shared-references/identity.json — never hardcode elsewhere).</p>
+  </div>
+</div>

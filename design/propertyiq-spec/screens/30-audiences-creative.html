@@ -1,0 +1,539 @@
+<title>PropertyIQ · Screen 30 — Audiences & Creative</title>
+<link href="https://api.fontshare.com/v2/css?f[]=technor@500,600,700&display=swap" rel="stylesheet">
+<link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<style>
+  /* Type system — Technor for display, Inter for UI. */
+  :root{ --font-display:'Technor', Inter, -apple-system, 'Segoe UI', sans-serif; --font-ui: Inter, -apple-system, 'Segoe UI', Roboto, sans-serif; }
+</style>
+<style>
+  /* Palette v4 — PropFlow design language: neutral ink UI, ink-as-accent, color reserved for data. (extracted verbatim from propsearch-design-draft.html) */
+  :root, :root[data-theme="dark"], :root[data-theme="light"]{
+    --ink:#23282f; --paper:#fbfaf8; --surface:#f1efe9; --line:#e2dfd6;
+    --mut:#6b7076; --soft:#9b9f9f;
+    --brand:#2e6b53; --brand-ink:#ffffff; --brand-soft:#eaf1ec; --brand-deep:#1e4c3a;
+    --signal:#b07a2e;
+    --good:#2e7d4f; --warn:#a8630a; --crit:#b3372f;
+    --r:10px;
+  }
+  .intel .score, .mintel{ color:var(--brand-deep) }
+  .intel{ border-left:3px solid var(--brand) }
+  h1{ letter-spacing:-.02em }
+  .stat b{ letter-spacing:-.01em }
+  body[data-agent="watts"]{ --brand:#2e6b53; --brand-soft:#eaf1ec; --brand-deep:#1e4c3a; }
+
+  *{box-sizing:border-box; margin:0}
+  body{font:15px/1.55 var(--font-ui); color:var(--ink); background:var(--paper); padding-bottom:80px}
+  h1,h2,h3{line-height:1.15; text-wrap:balance; font-family:var(--font-display); font-weight:600}
+  h1{letter-spacing:-.01em}
+  .site{box-shadow:0 1px 2px rgba(20,24,32,.04), 0 8px 32px rgba(20,24,32,.06)}
+  .stat{box-shadow:0 1px 2px rgba(20,24,32,.03); transition:box-shadow .15s, transform .15s}
+  .stat:hover{box-shadow:0 4px 14px rgba(20,24,32,.08)}
+  .chip{transition:all .12s}
+  button{font-family:var(--font-ui)}
+  .num{font-variant-numeric:tabular-nums}
+  .wrap{max-width:1180px; margin:0 auto; padding:0 20px}
+
+  .bar{position:sticky; top:0; z-index:50; background:var(--paper); border-bottom:1px solid var(--line); padding:10px 0; backdrop-filter:blur(8px)}
+  .bar .wrap{display:flex; flex-wrap:wrap; gap:10px; align-items:center}
+  .bar .ttl{font-weight:700; margin-right:auto}
+  .bar .ttl small{display:block; font-weight:400; color:var(--mut)}
+  .bar a{color:var(--brand); font-size:13px; text-decoration:none}
+
+  .note{background:var(--surface); border:1px solid var(--line); border-radius:var(--r); padding:14px 16px; margin:0 0 22px; font-size:13.5px; color:var(--mut)}
+  .note b{color:var(--ink)}
+
+  .site{border:1px solid var(--line); border-radius:14px; overflow:hidden; background:var(--paper)}
+  .sitehead{display:flex; align-items:center; gap:14px; padding:14px 22px; border-bottom:1px solid var(--line)}
+  .avatar{width:38px; height:38px; border-radius:50%; background:var(--brand); color:var(--brand-ink); display:grid; place-items:center; font-weight:700}
+  .sitehead .who b{display:block}
+  .sitehead .who small{color:var(--mut)}
+  .sitehead nav{margin-left:auto; display:flex; gap:18px; font-size:13.5px; color:var(--mut)}
+  .sitehead nav a{color:inherit; text-decoration:none}
+  .sitehead nav a:hover{color:var(--brand)}
+
+  .chip{display:inline-flex; align-items:center; gap:6px; font-size:12.5px; font-weight:500; border:1px solid var(--line); border-radius:99px; padding:6px 12px; background:var(--paper); cursor:pointer; color:var(--ink)}
+  .chip:hover{border-color:var(--brand)}
+  .chip.on{background:var(--brand); border-color:var(--brand); color:var(--brand-ink); font-weight:600; box-shadow:0 2px 8px color-mix(in srgb, var(--brand) 30%, transparent)}
+
+  .statrow{display:grid; grid-template-columns:repeat(4,1fr); gap:10px}
+  .stat{background:var(--surface); border:1px solid var(--line); border-radius:var(--r); padding:12px}
+  .stat small{display:block; color:var(--mut); font-size:11.5px; text-transform:uppercase; letter-spacing:.05em}
+  .stat b{font-size:18px}
+  .stat .up{color:var(--good); font-size:12px}
+
+  .bdg{font-size:11.5px; border-radius:6px; padding:3px 8px; background:var(--surface); border:1px solid var(--line); color:var(--mut)}
+  .bdg.good{color:var(--good); border-color:color-mix(in srgb,var(--good) 30%,var(--line))}
+  .bdg.warn{color:var(--warn); border-color:color-mix(in srgb,var(--warn) 30%,var(--line))}
+  .bdg.crit{color:var(--crit); border-color:color-mix(in srgb,var(--crit) 30%,var(--line))}
+
+  .dtable{width:100%; border-collapse:collapse; font-size:13px}
+  .dtable td,.dtable th{border-bottom:1px solid var(--line); padding:8px 10px; text-align:left}
+  .dtable th{font-size:11px; text-transform:uppercase; letter-spacing:.05em; color:var(--soft)}
+
+  @media (max-width:860px){ .statrow{grid-template-columns:repeat(2,1fr)} .maingrid{grid-template-columns:1fr !important} .console{grid-template-columns:1fr !important} .rail{display:none !important} }
+  @media (prefers-reduced-motion: reduce){ *{transition:none!important} }
+
+  /* ---- page-specific additions (same design language) ---- */
+  .anno{font-size:11px; color:var(--soft)}
+  .cardbox{border:1px solid var(--line); border-radius:10px; padding:11px 14px; font-size:12.5px; background:var(--paper)}
+  .btn-ink{background:var(--ink); color:#fff; border:0; border-radius:7px; padding:7px 12px; font-size:11.5px; cursor:pointer; font-weight:600}
+  .btn-ghost{background:var(--paper); border:1px solid var(--line); border-radius:7px; padding:7px 12px; font-size:11.5px; cursor:pointer}
+  .sechead{font-size:14px; font-weight:700; margin:0 0 8px; font-family:var(--font-display)}
+  .cov td.ok{color:var(--good); font-weight:700}
+  .specdoc h2{font-size:18px; margin:26px 0 8px}
+  .specdoc h3{font-size:15px; margin:18px 0 6px}
+  .specdoc p, .specdoc li{font-size:13.5px; color:var(--mut)}
+  .specdoc b{color:var(--ink)}
+  .specdoc table{margin:8px 0}
+  .tile{border:1px solid var(--line); border-radius:10px; overflow:hidden; background:var(--paper)}
+  .tile .thumb{height:58px; background:var(--surface); display:grid; place-items:center; font-size:20px; color:var(--soft); border-bottom:1px solid var(--line)}
+  .tile .meta{padding:7px 9px; font-size:10.5px}
+  .pchip{font-size:9.5px; border-radius:5px; padding:2px 6px; border:1px solid var(--line); color:var(--mut); background:var(--surface)}
+  .drawer{border:1.5px solid var(--brand); border-radius:12px; background:var(--brand-soft); padding:12px 14px}
+</style>
+
+<!-- ============ (1) slim header ============ -->
+<div class="bar">
+  <div class="wrap">
+    <div class="ttl">PropertyIQ · Screen 30 — Audiences & Creative <small>Full-density per-screen mock · wireframe fidelity · dev-facing annotations in gray</small></div>
+    <a href="../wireframe.html">← All screens</a>
+  </div>
+</div>
+
+<!-- ============ (2) THE FULL MOCK ============ -->
+<div class="wrap" style="padding-top:24px">
+  <div class="note"><b>Screen 30 — Audience Builder + Creative Library (PropReach).</b> The two governed inventories every campaign draws from. Segments always show raw vs after-compliance counts with the attestation trail and match-size preflight — nothing uploads without passing (§8). Creatives are governed assets with release/legal/fatigue/compliance states, persuasion metadata, and the generators: listing-to-ads, QR packs, case-study recycling (§9–11). Primary users: agent/owner; marketing/content team member for creative curation; Sharon-class list manager for farm lists [BEST GUESS on role].</div>
+
+  <div class="site" data-agent="watts">
+    <!-- header: counts + actions (spec Layout) -->
+    <div class="sitehead">
+      <div class="avatar">GW</div>
+      <div class="who"><b>Audiences & creative</b><small class="num">6 segments · 34 released assets</small></div>
+      <nav><a href="#">+ Segment</a><a href="#">+ From PropSearch</a><a href="#">Search (⌘K)</a></nav>
+    </div>
+
+    <div class="console" style="display:grid; grid-template-columns:172px 1fr">
+      <!-- persistent agent-console left rail (Screen 9 chrome) -->
+      <div class="rail" style="border-right:1px solid var(--line); padding:14px 10px; font-size:12.5px; display:flex; flex-direction:column; gap:2px; background:var(--surface)">
+        <a href="#" style="text-decoration:none; color:var(--ink); border-radius:8px; padding:8px 10px">☰ Today</a>
+        <a href="#" style="text-decoration:none; color:var(--ink); border-radius:8px; padding:8px 10px">🗺 Farm map</a>
+        <a href="#" style="text-decoration:none; color:var(--ink); border-radius:8px; padding:8px 10px">🤝 Past clients</a>
+        <a href="#" style="text-decoration:none; color:var(--ink); border-radius:8px; padding:8px 10px">👤 Leads & clients</a>
+        <a href="#" style="text-decoration:none; color:var(--ink); border-radius:8px; padding:8px 10px">💬 Comms <span class="bdg" style="font-size:9.5px">6</span></a>
+        <a href="#" style="text-decoration:none; color:var(--ink); border-radius:8px; padding:8px 10px">📋 Transactions</a>
+        <a href="#" style="text-decoration:none; color:var(--ink); border-radius:8px; padding:8px 10px">🎬 Content studio</a>
+        <a href="#" style="text-decoration:none; color:#fff; background:var(--ink); border-radius:8px; padding:8px 10px; font-weight:600">📣 Ads & funnels</a>
+        <a href="#" style="text-decoration:none; color:var(--ink); border-radius:8px; padding:8px 10px">⚙ Playbooks</a>
+        <a href="#" style="text-decoration:none; color:var(--ink); border-radius:8px; padding:8px 10px">📈 Reports</a>
+        <div style="margin-top:auto; padding-top:10px; border-top:1px solid var(--line)">
+          <a href="#" style="text-decoration:none; color:var(--ink); border-radius:8px; padding:8px 10px; display:block">⚙ Settings</a>
+          <div class="anno" style="padding:6px 10px">Global chrome: persistent agent-console rail (Screen 9 pattern). "Audiences & creative" lives under Ads & funnels. Consumer pages never show it.</div>
+        </div>
+      </div>
+
+      <div>
+        <!-- ============ MAIN TWO-COLUMN SPLIT: Audiences | Creative ============ -->
+        <div class="maingrid" style="padding:14px 22px; display:grid; grid-template-columns:1fr 1fr; gap:14px">
+
+          <!-- ================= LEFT: AUDIENCES ================= -->
+          <div style="display:grid; gap:10px; align-content:start">
+            <div class="sechead">Audiences — 6 segments <span class="anno" style="font-weight:400">every one carries its compliance evidence</span></div>
+
+            <!-- segment cards -->
+            <div id="el-segment-card">
+              <div class="cardbox">
+                <div style="display:flex; gap:8px; flex-wrap:wrap; align-items:center"><b>Farm owners — Friendly Acres</b><span class="bdg">GEOGRAPHIC</span><span class="bdg">GEOGRAPHIC_ONLY</span><span class="bdg">Meta · Google Display</span></div>
+                <div style="color:var(--mut); margin-top:3px; font-size:11.5px" class="num">geo: 94303 / EPA-Friendly-Acres · market level: NEIGHBORHOOD · Raw 412 → after compliance <b style="color:var(--ink)">388</b> (24 suppressed: 11 DNC · 9 opt-out · 4 in-escrow) · attestation ✓ first-party · match preflight: 388 ≥ 100 ✓</div>
+                <div style="display:flex; gap:6px; margin-top:6px"><button class="btn-ink">Use in campaign</button><button class="btn-ghost">Open drawer</button><button class="btn-ghost">Refresh</button><button class="btn-ghost">Archive</button></div>
+              </div>
+              <div class="cardbox" style="margin-top:8px">
+                <div style="display:flex; gap:8px; flex-wrap:wrap; align-items:center"><b>Past clients + sphere (first-party)</b><span class="bdg">FIRST_PARTY_CONTACTS</span><span class="bdg">CUSTOM_AUDIENCE</span><span class="bdg">Meta</span></div>
+                <div style="color:var(--mut); margin-top:3px; font-size:11.5px" class="num">Raw 214 → after compliance 197 (17 suppressed: 8 DNC · 6 opt-out · 3 in-escrow) · <b style="color:var(--ink)">attestation ✓ signed Jul 2</b> · matched users est. 164 <span class="bdg warn">164 &lt; 500 — WARN</span></div>
+              </div>
+              <div class="cardbox" style="margin-top:8px">
+                <div style="display:flex; gap:8px; flex-wrap:wrap; align-items:center"><b>QR + owned-page retargeting (30d)</b><span class="bdg">OWNED_ENGAGEMENT</span><span class="bdg">CUSTOM_AUDIENCE</span><span class="bdg">Meta · YouTube</span></div>
+                <div style="color:var(--mut); margin-top:3px; font-size:11.5px" class="num">Raw 341 → after compliance 296 (45 suppressed: GPC/DNT 31 · opt-out 14) · matched est. <span class="bdg">pending</span> — upload blocked until preflight returns</div>
+              </div>
+              <div class="anno" style="margin-top:4px">Card = AudienceSegment (§8.3): name, source_type (GEOGRAPHIC / FIRST_PARTY_CONTACTS / OWNED_ENGAGEMENT / WEBSITE_VISITORS / PROPCAST_ENGAGEMENT / GOOGLE_CUSTOM_SEGMENT / PURCHASED_LIST_SEED / PROPSEARCH_SEGMENT), targeting_method, platform_targets, geo codes + market level. member_count_* nullable → "pending", never fabricated. Blocked items warn-styled. CUSTOM_AUDIENCE always implies Meta Housing Special Ad Category + Fair Housing/FEHA gate (§8.1).</div>
+            </div>
+
+            <!-- PropSearch segment picker -->
+            <div id="el-propsearch-picker" class="cardbox">
+              <div style="display:flex; gap:8px; flex-wrap:wrap; align-items:center"><b>Saved-search buyers under $1.4M</b><span class="bdg">PROPSEARCH_SEGMENT</span><span class="bdg good">refreshes nightly</span></div>
+              <div style="color:var(--mut); margin-top:3px; font-size:11.5px" class="num">61 members · imported from PropSearch saved-search cohort "EPA buyers ≤$1.4M" · last refresh 2:04 AM ✓</div>
+              <div style="display:flex; gap:6px; margin-top:6px"><button class="btn-ghost">+ Import another PropSearch segment</button><button class="btn-ghost">Refresh cadence…</button></div>
+              <div class="anno" style="margin-top:4px">PropSearch segment supply (§8.2): saved-search/filter cohorts become segments. Interim cadence = nightly for PROPSEARCH_SEGMENT, manual refresh elsewhere [DECIDE].</div>
+            </div>
+
+            <!-- purchased-list consent wall -->
+            <div id="el-consent-wall" class="cardbox" style="border-color:var(--warn); background:#fdf6ee">
+              <div style="display:flex; gap:8px; flex-wrap:wrap; align-items:center"><b>⚠ Purchased list import — blocked at the consent wall</b><span class="bdg">PURCHASED_LIST_SEED</span><span class="bdg warn">DIRECT MAIL ONLY</span></div>
+              <div style="color:var(--mut); margin-top:3px; font-size:11.5px">"Absentee owners — San Mateo Co." (1,840 rows). <b style="color:var(--ink)">Rule cited on the block (§8.9):</b> no documented opt-in evidence → usable for direct MAIL only, never digital upload. Imported contacts default consent = unknown. Not direct-outreach eligible until DNC, consent, opt-out, and ComplianceProfile checks pass. Platform requires first-party origin → upload blocked absent logged legal/compliance approval.</div>
+              <div style="display:flex; gap:6px; margin-top:6px"><button class="btn-ink">Route to consent-capture tasks (PropFlow queue)</button><button class="btn-ghost">View full rule</button></div>
+              <div class="anno" style="margin-top:4px">Consent wall = ComplianceProfile + list import (§8.9, §2.5). contains_imported_or_purchased_contacts = true, imported_contacts_defaulted_to_unknown_consent = true on the segment record.</div>
+            </div>
+
+            <!-- segment drawer: compliance trail -->
+            <div id="el-compliance-trail" class="drawer">
+              <b>Segment drawer — "Past clients + sphere" · compliance trail (read-only audit view)</b>
+              <table class="dtable" style="font-size:11px; margin-top:6px; background:var(--paper); border-radius:8px">
+                <tr><th>Field</th><th>Value</th></tr>
+                <tr><td>compliance_check_id</td><td class="num">cc_9f21e4</td></tr>
+                <tr><td>audience_list_service_check_id</td><td class="num">als_5510ab (Jul 14, 6:02 AM)</td></tr>
+                <tr><td>source_facts[]</td><td class="num">3 facts: GHL contact export cc_ref · consent snapshot · suppression run log</td></tr>
+                <tr><td>contains_imported_or_purchased_contacts</td><td>false</td></tr>
+                <tr><td>imported_contacts_defaulted_to_unknown_consent</td><td>false</td></tr>
+                <tr><td>raw_member_file_retention_policy</td><td><b>DO_NOT_STORE</b> — raw member files are never kept beyond temporary secure processing (hashed_members_ref only)</td></tr>
+              </table>
+              <div class="anno" style="margin-top:4px">Drawer also shows membership counts, sources, and suppressions (per Layout). §8.3: raw files DO_NOT_STORE / TEMPORARY_SECURE_PROCESSING — this line renders on every drawer.</div>
+            </div>
+
+            <!-- attestation modal -->
+            <div id="el-attestation" class="cardbox">
+              <b>Attestation modal — required for Meta housing Customer List uploads (§8.4)</b>
+              <div style="background:var(--surface); border-radius:8px; padding:10px; margin-top:6px; font-size:11.5px">
+                <div style="color:var(--mut)"><b style="color:var(--ink)">attestation_text:</b> "I certify this customer list was not created using protected-class characteristics or other prohibited data."</div>
+                <div style="margin-top:5px"><label style="display:flex; gap:6px; align-items:center"><input type="checkbox" checked> protected_data_not_used</label></div>
+                <div class="num" style="color:var(--mut); margin-top:4px">platform: META · attested_by: Graeham Watts · attested_at: 2026-07-02 09:41 PT</div>
+                <div style="display:flex; gap:6px; margin-top:6px"><button class="btn-ink">Sign attestation → logged</button><button class="btn-ghost">Cancel</button></div>
+              </div>
+              <div class="anno" style="margin-top:4px">Hard block: CUSTOM_AUDIENCE upload is disabled without the signed attestation — the button on the segment card stays dead, with this modal as the only path. Signed → ✓ appears on the card. Logged to Approvals.</div>
+            </div>
+
+            <!-- match preflight -->
+            <div id="el-match-preflight" class="cardbox">
+              <b>Match-size preflight — AudienceListService (§8.5)</b>
+              <div style="display:grid; gap:6px; margin-top:6px; font-size:11.5px">
+                <div style="display:flex; gap:8px; align-items:center; flex-wrap:wrap"><span class="bdg good">388 ≥ 100 ✓ PASS</span><span style="color:var(--mut)">Farm owners — upload allowed</span></div>
+                <div style="display:flex; gap:8px; align-items:center; flex-wrap:wrap"><span class="bdg warn">164 &lt; 500 — WARN</span><span style="color:var(--mut)">Past clients — allowed, with fallback recommendations:</span></div>
+                <div style="background:var(--surface); border-radius:8px; padding:8px 10px; color:var(--mut)">① owned engagement audience · ② website retargeting · ③ compliant Google custom segment · ④ owner-approved list growth</div>
+                <div style="display:flex; gap:8px; align-items:center; flex-wrap:wrap"><span class="bdg crit">&lt; 100 matched = BLOCK</span><span style="color:var(--mut)">Google/YouTube Customer Match hard minimum — upload disabled, LIST_TOO_SMALL</span></div>
+              </div>
+              <div class="anno" style="margin-top:4px">GOOGLE_CUSTOMER_MATCH_MIN = 100 · YOUTUBE min = 100 · WARN_IF_UNDER = 500. Mandatory preflight before every Customer Match export — fail-closed if the service is unreachable (see states strip).</div>
+            </div>
+
+            <!-- retargeting source builder -->
+            <div id="el-retargeting-builder" class="cardbox">
+              <b>Retargeting source builder — allowed sources only (§8.6)</b>
+              <div style="display:flex; gap:5px; flex-wrap:wrap; margin-top:6px">
+                <button class="chip on" style="font-size:10.5px">LINK_SCANNED</button><button class="chip on" style="font-size:10.5px">PAGE_VIEWED</button><button class="chip" style="font-size:10.5px">CONTENT_VIEWED</button><button class="chip" style="font-size:10.5px">ORGANIC_VIDEO_VIEWED</button><button class="chip" style="font-size:10.5px">FORM_STARTED w/o LEAD_CAPTURED</button><button class="chip" style="font-size:10.5px">Owned landing pages</button><button class="chip" style="font-size:10.5px">PropCast engagement</button>
+              </div>
+              <div style="display:flex; gap:8px; align-items:center; margin-top:6px; font-size:11.5px; color:var(--mut)">Window: <span class="bdg">30 days ▾</span> <span class="bdg good">GPC / DNT / opt-out respected — filtered at pixel fire</span></div>
+              <div class="anno" style="margin-top:4px">Sources = event ledger only (owned engagement). Retargeting is an approved exception to the organic-traction gate but still requires ComplianceProvider approval; sensitive-topic detection may never increase inclusion or priority (§8.6, §12.3).</div>
+            </div>
+
+            <!-- suppression settings -->
+            <div id="el-suppression" class="cardbox">
+              <b>Suppression settings (§8.7)</b>
+              <div style="color:var(--mut); margin-top:4px; font-size:11.5px">Active pipeline · in-escrow · DNC · opt-out lists applied as <b style="color:var(--ink)">pre-upload membership filtering</b> — <span class="bdg crit">platform exclusions blocked for Meta housing</span>. "Don't spend against" recommendations render in reporting only, never as platform exclusion features.</div>
+              <div style="display:flex; gap:6px; margin-top:6px"><button class="btn-ghost">Edit suppression lists</button></div>
+              <div class="anno" style="margin-top:4px">The corrected approach (§8.7): filter membership before upload when ComplianceProvider + platform policy allow. Never implement prohibited exclusion features.</div>
+            </div>
+
+            <!-- Google competitor-intent segment builder -->
+            <div id="el-competitor-segment" class="cardbox">
+              <b>Google competitor-intent segment builder (§8.8)</b>
+              <div style="color:var(--mut); margin-top:4px; font-size:11.5px" class="num">Eligible: <span class="bdg">GOOGLE_DISPLAY</span> <span class="bdg">YOUTUBE</span> only (never Google Search) · Inputs (5–10 required): zillow.com/homes · redfin.com · realtor.com · "home value estimate" · "sell my house" · trulia.com <span class="bdg good">6 of 5–10 ✓</span></div>
+              <div style="background:var(--surface); border-radius:8px; padding:8px 10px; margin-top:6px; font-size:11.5px; color:var(--mut)"><b style="color:var(--ink)">Honesty label (non-removable):</b> "Intent approximation — this never claims a named person visited Zillow, Redfin, or any competitor site."</div>
+              <div style="border:1px solid color-mix(in srgb,var(--crit) 30%,var(--line)); border-radius:8px; padding:8px 10px; margin-top:6px; font-size:11px; color:var(--mut)"><b style="color:var(--crit)">Forbidden inputs (enforced, §8.8 + §12.3):</b> school quality · family status · race · religion · health · divorce · probate · estate · disability · regulated financial distress · protected class · any protected-class proxy. Sensitive-topic firewall: none of these may appear in any segment input or custom-segment term.</div>
+              <div class="anno" style="margin-top:4px">Behavioral approximation only, not literal retargeting. No crime data anywhere in the platform.</div>
+            </div>
+
+            <!-- list builder import -->
+            <div id="el-list-builder" class="cardbox">
+              <b>List Builder import — matching &amp; merge discipline (§8.10)</b>
+              <div style="display:grid; grid-template-columns:repeat(4,1fr); gap:5px; margin-top:6px; font-size:10.5px; text-align:center">
+                <div style="background:var(--surface); border-radius:7px; padding:7px 5px"><b>1</b><div style="color:var(--mut)">exact address</div></div>
+                <div style="background:var(--surface); border-radius:7px; padding:7px 5px"><b>2</b><div style="color:var(--mut)">exact phone</div></div>
+                <div style="background:var(--surface); border-radius:7px; padding:7px 5px"><b>3</b><div style="color:var(--mut)">exact email</div></div>
+                <div style="background:var(--surface); border-radius:7px; padding:7px 5px; border:1px solid var(--warn)"><b>4</b><div style="color:var(--mut)">probabilistic = <b style="color:var(--warn)">human review only</b></div></div>
+              </div>
+              <div style="color:var(--mut); margin-top:6px; font-size:11.5px" class="num">Import "farm-crossref-jul.csv": 1,840 rows → 1,712 matched · <span class="bdg warn">3 phone/email conflicts → review tasks (never auto-merged)</span> · 125 net-new → routed via <b style="color:var(--ink)">/approved-leads</b> with required intake fields</div>
+              <div style="display:flex; gap:6px; margin-top:6px"><button class="btn-ghost">Upload list</button><button class="btn-ink">Review 3 conflicts</button></div>
+              <div class="anno" style="margin-top:4px">Inputs: GHL-now contacts · PropFlow contacts (post-approved-migration) · owner-approved purchased lists · PropSearch segments · owner geography. Phone vs email pointing at different contacts → NotificationProvider review task. Net-new only through the front door (/approved-leads: lead_schema_version, lead_source, capture_source, capture_provider, nullable content/campaign/asset ids).</div>
+            </div>
+          </div>
+
+          <!-- ================= RIGHT: CREATIVE ================= -->
+          <div style="display:grid; gap:10px; align-content:start">
+            <div class="sechead">Creative library — 34 released <span class="anno" style="font-weight:400">governed inventory, not a media folder</span></div>
+
+            <!-- creative asset grid -->
+            <div id="el-asset-tile">
+              <div style="display:grid; grid-template-columns:repeat(3,1fr); gap:8px">
+                <div class="tile"><div class="thumb">🎬</div><div class="meta"><b>Beech walkthrough reel</b><div style="display:flex; gap:3px; flex-wrap:wrap; margin-top:3px"><span class="bdg good" style="font-size:9.5px">ACTIVE</span><span class="pchip">VIDEO</span><span class="pchip">AREA_LEVEL</span></div><div class="anno" style="margin-top:3px">Use in campaign ✓</div></div></div>
+                <div class="tile"><div class="thumb">🖼</div><div class="meta"><b>"$1.4M gets you" static</b><div style="display:flex; gap:3px; flex-wrap:wrap; margin-top:3px"><span class="bdg warn" style="font-size:9.5px">FATIGUE_FLAGGED</span><span class="pchip">IMAGE</span><span class="pchip">AREA_LEVEL</span></div><div class="anno" style="margin-top:3px">freq 4.1 → rotate ↓</div></div></div>
+                <div class="tile"><div class="thumb">📄</div><div class="meta"><b>Zestimate-compare template</b><div style="display:flex; gap:3px; flex-wrap:wrap; margin-top:3px"><span class="bdg crit" style="font-size:9.5px">LEGAL_BLOCKED</span><span class="pchip">AD_VARIANT</span></div><div class="anno" style="margin-top:3px">legal approval req. ↓</div></div></div>
+                <div class="tile"><div class="thumb">🏡</div><div class="meta"><b>ADU potential ad — EPA</b><div style="display:flex; gap:3px; flex-wrap:wrap; margin-top:3px"><span class="bdg" style="font-size:9.5px">TESTING</span><span class="pchip">VIDEO</span><span class="pchip">PROPERTY_SPECIFIC</span></div><div class="anno" style="margin-top:3px">claim-ladder L2 ↓</div></div></div>
+                <div class="tile"><div class="thumb">🗣</div><div class="meta"><b>Kim testimonial cut</b><div style="display:flex; gap:3px; flex-wrap:wrap; margin-top:3px"><span class="bdg crit" style="font-size:9.5px">COMPLIANCE_BLOCKED</span><span class="pchip">VIDEO</span><span class="pchip">OWNER_SPECIFIC</span></div><div class="anno" style="margin-top:3px">no ReleaseRecord ↓</div></div></div>
+                <div class="tile"><div class="thumb">🤖</div><div class="meta"><b>"Hi {first}" equity video</b><div style="display:flex; gap:3px; flex-wrap:wrap; margin-top:3px"><span class="bdg" style="font-size:9.5px">DRAFT_ONLY</span><span class="pchip">VIDEO</span><span class="pchip">CONTACT_PII</span><span class="pchip" style="border-color:var(--signal); color:var(--signal)">AI · disclosure req.</span></div><div class="anno" style="margin-top:3px">PII consent gate ↓</div></div></div>
+                <div class="tile"><div class="thumb">🗺</div><div class="meta"><b>Farm aerial (Mapbox)</b><div style="display:flex; gap:3px; flex-wrap:wrap; margin-top:3px"><span class="bdg good" style="font-size:9.5px">ACTIVE</span><span class="pchip">IMAGE</span><span class="pchip">AREA_LEVEL</span></div><div class="anno" style="margin-top:3px">© Mapbox badge ↓</div></div></div>
+                <div class="tile"><div class="thumb">📰</div><div class="meta"><b>July market carousel</b><div style="display:flex; gap:3px; flex-wrap:wrap; margin-top:3px"><span class="bdg good" style="font-size:9.5px">ACTIVE</span><span class="pchip">CAROUSEL</span><span class="pchip">AREA_LEVEL</span></div><div class="anno" style="margin-top:3px">copy metadata ↓</div></div></div>
+                <div class="tile"><div class="thumb">🔗</div><div class="meta"><b>Beech landing variant B</b><div style="display:flex; gap:3px; flex-wrap:wrap; margin-top:3px"><span class="bdg" style="font-size:9.5px">RETIRED</span><span class="pchip">LANDING_PAGE_VARIANT</span></div><div class="anno" style="margin-top:3px">history retained</div></div></div>
+              </div>
+              <div class="anno" style="margin-top:5px">Tile = CreativeAsset (§9.2): thumbnail, asset_type (VIDEO/IMAGE/CAROUSEL/COPY/PDF/LANDING_PAGE_VARIANT/AD_VARIANT), status badge (ACTIVE / TESTING / FATIGUE_FLAGGED / RETIRED / LEGAL_BLOCKED / COMPLIANCE_BLOCKED / DRAFT_ONLY), personalization chip (AREA_LEVEL / CONTACT_PII / PROPERTY_SPECIFIC / OWNER_SPECIFIC), AI-generated flag + disclosure-required. "Use in campaign" enabled only for RELEASED/ACTIVE. Click → detail drawer ↓.</div>
+            </div>
+
+            <!-- asset drawer -->
+            <div id="el-asset-drawer" class="drawer">
+              <b>Asset drawer — "Beech walkthrough reel"</b>
+              <table class="dtable" style="font-size:11px; margin-top:6px; background:var(--paper); border-radius:8px">
+                <tr><th>Field</th><th>Value</th></tr>
+                <tr><td>asset_url / sha256</td><td class="num">cdn…/beech-reel-v3.mp4 · sha256 8c1f…e2a0</td></tr>
+                <tr><td>lineage</td><td class="num">originating_content_id CL-0398 · variant_id var_112 (PropCast canonical variant model)</td></tr>
+                <tr><td>allowed_platforms / objectives</td><td>META, YOUTUBE · SELLER_LEADS, BRAND</td></tr>
+                <tr><td>release_record_ids</td><td class="num">rel_2201 (seller on-camera, scope=advertising)</td></tr>
+                <tr><td>license_flags</td><td>MAPBOX · <span class="bdg warn">ATTRIBUTION_REQUIRED</span> (statuses: APPROVED / BLOCKED / LEGAL_APPROVAL_REQUIRED / ATTRIBUTION_REQUIRED / RETENTION_LIMITED; providers: MAPBOX / GOOGLE_EARTH / ZILLOW / IDX / MLS / CLIENT_OWNED / MANUAL_RELEASE)</td></tr>
+                <tr><td>compliance / legal</td><td class="num">compliance_check_id cc_7b03 ✓ · legal_approval_required false</td></tr>
+                <tr><td>copy metadata (§9.3, §18.7)</td><td>awareness_stage: PROBLEM_AWARE · lever: social proof · framework: PAS · failure_audit_result: PASS</td></tr>
+                <tr><td>performance history</td><td class="num">21K views · CTR 1.9% · freq 2.2 · 6 leads</td></tr>
+              </table>
+              <div style="display:flex; gap:6px; margin-top:6px"><button class="btn-ghost">Request legal approval</button><button class="btn-ghost">Request variant → PropCast (CONTENT_VARIANT_CREATED)</button><button class="btn-ink">Use in campaign</button></div>
+              <div class="anno" style="margin-top:4px">Copy Persuasion Standard applies to every generated copy asset (§9.4): one dominant lever, failure audit, hard line "persuasion never manipulation" — no fabricated urgency/scarcity, no "great schools", no family-status framing. Override order: Compliance &gt; brand voice &gt; copy diagnosis.</div>
+            </div>
+
+            <!-- fatigue card -->
+            <div id="el-fatigue" class="cardbox" style="border-color:var(--warn)">
+              <b>⚠ Fatigue flag — "$1.4M gets you" static (§9.5)</b>
+              <div style="color:var(--mut); margin-top:3px; font-size:11.5px" class="num">freq 4.1 → rotation suggested · deterministic from platform facts (frequency / CTR / conv-rate) · hints: Meta ~3.0 imp/person/wk, YouTube ~2.0 — account-configurable operational hints, not hard gates (editable in Settings [DECIDE]).</div>
+              <div style="display:flex; gap:6px; margin-top:6px"><button class="btn-ink">Accept rotation → variant request (PropCast)</button><button class="btn-ghost">Dismiss</button></div>
+              <div class="anno" style="margin-top:4px">Never auto-pauses spend unless performance_pause_auto_allowed = true in the owner's spend envelope. Variant request → CONTENT_VARIANT_CREATED; performance signal → CAMPAIGN_PERFORMANCE_SIGNAL to Video Intelligence.</div>
+            </div>
+
+            <!-- ReleaseRecord gate -->
+            <div id="el-release-gate" class="cardbox" style="border-color:var(--crit)">
+              <b>⛔ ReleaseRecord gate — "Kim testimonial cut" (§9.6, §10.6)</b>
+              <div style="color:var(--mut); margin-top:3px; font-size:11.5px" class="num">Client face/voice/name/testimonial → <b style="color:var(--crit)">hard-blocked from ads: no ReleaseRecord on file.</b> Required: release_id · contact_id · clip_ids[] · release_scope (must allow advertising) · evidence_url · signed_at · expires_at. Example of a passing asset: rel_2201, scope=advertising, signed Jun 12, expires Jun 2027 → <a href="#" style="color:var(--brand)">view evidence_url</a>.</div>
+              <div style="display:flex; gap:6px; margin-top:6px"><button class="btn-ink">Request release from client</button></div>
+              <div class="anno" style="margin-top:4px">Absolute rule: no client appears in an ad without a signed release. GHL stores only release_record_ids — no competing release logic.</div>
+            </div>
+
+            <!-- Zestimate lock -->
+            <div id="el-zestimate-lock" class="cardbox" style="border-color:var(--crit)">
+              <b>⚖ Zestimate template lock (§11.4)</b>
+              <div style="color:var(--mut); margin-top:3px; font-size:11.5px"><span class="bdg crit">LEGAL_BLOCKED</span> until human legal/compliance approval is logged. Third-party attribution required — the value is never presented as the agent's valuation, no implied Zillow endorsement; must pass Fair Housing/FEHA + platform policy + trademark/comparative-advertising review. <b style="color:var(--ink)">Safe generic fallback offered:</b> "online estimates can miss local context" — area-level, no competitor branding.</div>
+              <div style="display:flex; gap:6px; margin-top:6px"><button class="btn-ghost">Request legal approval → Approvals</button><button class="btn-ghost">Use safe fallback concept</button></div>
+            </div>
+
+            <!-- ADU claim ladder -->
+            <div id="el-adu-ladder" class="cardbox">
+              <b>ADU claim-ladder chip — "ADU potential ad — EPA" (§11.5)</b>
+              <div style="display:grid; gap:5px; margin-top:6px; font-size:11.5px">
+                <div style="display:flex; gap:8px; align-items:center"><span class="bdg good">L-affirmative</span><span style="color:var(--mut)" class="num">confidence ≥ 0.80 + jurisdiction covered → affirmative claim allowed</span></div>
+                <div style="display:flex; gap:8px; align-items:center; background:var(--brand-soft); border-radius:7px; padding:4px 8px"><span class="bdg warn">L2 · cautious ← this asset</span><span style="color:var(--mut)" class="num">0.60–0.80 → disclaimered language ("permitted-use verified" per draft) · zoning_confidence 0.71 · zoning_source: Zoneomics · last_checked Jul 12</span></div>
+                <div style="display:flex; gap:8px; align-items:center"><span class="bdg crit">suppressed</span><span style="color:var(--mut)" class="num">&lt; 0.60 or jurisdiction uncovered → claim suppressed entirely</span></div>
+              </div>
+              <div class="anno" style="margin-top:4px">Zoneomics fields via PropSearch: zoning_confidence (0–1, 2dp), jurisdiction_covered, zoning_source, zoning_last_checked_at. Stale/missing fields → renders suppressed (fail-closed). Click chip → ladder rationale.</div>
+            </div>
+
+            <!-- personalized-creative gate banner -->
+            <div id="el-pii-gate" class="cardbox" style="border-color:var(--warn); background:#fdf6ee">
+              <b>Personalized-creative gate — "Hi {first}" equity video (§11.2, §11.7)</b>
+              <div style="color:var(--mut); margin-top:3px; font-size:11.5px">CONTACT_PII / OWNER_SPECIFIC assets require <b style="color:var(--ink)">marketing_personalized_consent_status = granted</b> per recipient. Gate result for segment "Past clients": 158 granted ✓ · 39 not granted → <b style="color:var(--ink)">area-level fallback automatically substituted</b> (no name, no address, no home-specific claim — e.g. "East Palo Alto homeowners are asking what local zoning and market shifts mean").</div>
+              <div class="anno" style="margin-top:4px">PII creative = name, address, home-specific estimate, owner-specific framing, "Hi Susan"-style (§11.2). Any failed personalized/legal/zoning/consent/imagery gate → area-level fallback (§11.7). AI flag on this asset → non-removable AI disclosure.</div>
+            </div>
+
+            <!-- Mapbox badge -->
+            <div id="el-mapbox-badge" class="cardbox">
+              <b>Licensed-imagery badge — "Farm aerial" (§11.6)</b>
+              <div style="color:var(--mut); margin-top:3px; font-size:11.5px">Non-removable attribution baked into every export: <span class="bdg">© Mapbox © OpenStreetMap</span> + logo + "Improve this map" where links are supported. <span class="bdg crit">Google Earth / Google Satellite: blocked v1</span> (licensing research — not approved for client-facing real-estate marketing). <b style="color:var(--ink)">No map tiles into AI render pipelines</b> — AI ADU/redesign visuals require client-owned or separately-licensed drone imagery.</div>
+              <div class="anno" style="margin-top:4px">Read-only license_flags display. Mapbox Commercial Application License evidence recorded per asset.</div>
+            </div>
+
+            <!-- ============ GENERATORS PANEL ============ -->
+            <div class="sechead" style="margin-top:6px">Generators</div>
+
+            <!-- listing-to-ads -->
+            <div id="el-listing-to-ads" class="cardbox">
+              <b>Listing → ads generator (§10.1–10.2)</b>
+              <div style="display:flex; gap:5px; flex-wrap:wrap; margin-top:6px">
+                <button class="chip on" style="font-size:10.5px">LISTING_SELLER_AD</button><button class="chip" style="font-size:10.5px">LISTING_BRAND_AD</button><button class="chip" style="font-size:10.5px">LISTING_POSTCARD</button><button class="chip" style="font-size:10.5px">CASE_STUDY_SELLER_AD</button><button class="chip" style="font-size:10.5px">CASE_STUDY_TESTIMONIAL_AD</button>
+              </div>
+              <div style="color:var(--mut); margin-top:6px; font-size:11.5px" class="num">Source: 2841 Beech St (LISTING_LIVE_FROM_IDX ✓, status current + sourced ✓) → generates draft assets → campaign wizard. Per-template rules enforced: GEOGRAPHIC_ONLY default · Meta special_ad_categories = ["HOUSING"] · Fair Housing/FEHA gate mandatory · no demographics, no protected-class proxies, no school-quality selling point.</div>
+              <div style="display:flex; gap:6px; margin-top:6px"><button class="btn-ink">Generate → 3 draft assets</button></div>
+              <div class="anno" style="margin-top:4px">Consumes: UPCOMING_OWN_LISTING_DETECTED, LISTING_LIVE_FROM_IDX, LISTING_PLAN_APPROVED, SHOOT_PACKET_READY, FOOTAGE_UPLOADED, ASSET_MATCHED. No PropCast content_id → approved_exception_type = ACTIVE_LISTING.</div>
+            </div>
+
+            <!-- QR pack builder -->
+            <div id="el-qr-pack" class="cardbox">
+              <b>QR pack builder (§10.3–10.4)</b>
+              <table class="dtable" style="font-size:11px; margin-top:6px">
+                <tr><th>Label</th><th>Destination (link.propertyiq.app)</th><th>Scans</th></tr>
+                <tr><td>🪧 sign</td><td class="num">liq.app/b3-sign</td><td class="num">0 <span class="bdg warn" style="font-size:9px">rotate?</span></td></tr>
+                <tr><td>📄 flyer</td><td class="num">liq.app/b3-flyr</td><td class="num">14</td></tr>
+                <tr><td>📮 postcard</td><td class="num">liq.app/b3-pc</td><td class="num">31</td></tr>
+                <tr><td>✉ mailer</td><td class="num">liq.app/b3-mail</td><td class="num">9</td></tr>
+              </table>
+              <div style="display:flex; gap:6px; margin-top:6px"><button class="btn-ghost">Create pack</button><button class="btn-ink">Export print files → Approvals <span class="bdg warn" style="font-size:9px">print QR = REVIEW_REQUIRED</span></button></div>
+              <div class="anno" style="margin-top:4px">Every destination minted via the Owned Link Shortener — scan emits LINK_SCANNED (scan_type=QR); per-label analytics flow to Attribution (Screen 31). Scans join retargeting only when GPC/DNT/opt-out pass. Room-level scans framed as a low-cost experiment, never a promise. QR pack also lives on listing detail — same component, library is the archive [DECIDE].</div>
+            </div>
+
+            <!-- case-study recycler -->
+            <div id="el-case-study" class="cardbox">
+              <b>Case-study recycler (§10.5–10.6)</b>
+              <div style="color:var(--mut); margin-top:3px; font-size:11.5px" class="num">DEAL_CLOSED: 1140 Runnymede (Jul 3) → case_study_facts: list $1.29M · close $1.41M · DOM 9 · offer_count <b style="color:var(--ink)">null → omitted, never fabricated</b> (R8). Every number backed by source_facts[]. Public sold content = aggregates only unless the viewer is authorized.</div>
+              <div style="display:flex; gap:6px; margin-top:6px"><button class="btn-ink">Generate case-study ad</button><button class="btn-ghost">Review facts + sources</button><button class="btn-ghost" style="color:var(--crit)">Testimonial variant — blocked (no release)</button></div>
+              <div class="anno" style="margin-top:4px">Consumes DEAL_CLOSED + CASE_STUDY_FACTS_AVAILABLE. Testimonial variant hard-blocked without ReleaseRecord scope=advertising (§10.6). Fact precedence: GHL closed-deal record (interim) → IDX sold record (validation, where authorized) → native PropClose after launch.</div>
+            </div>
+          </div>
+        </div>
+
+        <!-- ============ empty states row ============ -->
+        <div id="el-empty-states" style="padding:0 22px 14px">
+          <div style="display:grid; grid-template-columns:1fr 1fr; gap:10px">
+            <div class="cardbox" style="text-align:center; color:var(--mut); border-style:dashed"><b style="color:var(--ink)">Empty — Audiences:</b> "No segments — start from your farm geography or a PropSearch search." <button class="btn-ghost" style="margin-left:8px">+ Segment</button> <button class="btn-ghost">+ From PropSearch</button></div>
+            <div class="cardbox" style="text-align:center; color:var(--mut); border-style:dashed"><b style="color:var(--ink)">Empty — Creative:</b> "Approved content and generated ads land here." <button class="btn-ghost" style="margin-left:8px">Open a generator</button></div>
+          </div>
+          <div class="anno" style="margin-top:4px">Per-column empty states [BEST GUESS per spec].</div>
+        </div>
+
+        <!-- ============ states strip ============ -->
+        <div id="el-states" style="padding:0 22px 14px">
+          <div class="cardbox" style="font-size:11.5px">
+            <b>States (dev reference)</b>
+            <div style="color:var(--mut); margin-top:4px">
+              <b style="color:var(--ink)">Loading:</b> skeleton cards/tiles; counts render as "—" dashes.
+              <b style="color:var(--ink)">Degraded (all fail-closed):</b> AudienceListService unreachable → uploads disabled, LIST_TOO_SMALL-style flag pending check (no upload without preflight) · ComplianceProvider down → segment creation + asset release actions disabled, existing records read-only · Zoneomics stale/missing → ADU claims render suppressed · membership counts unknown → "counts pending", upload blocked.
+              <b style="color:var(--ink)">Permission-limited:</b> attestation signing + legal-approval requests = owner/admin only; team can build drafts.
+              <b style="color:var(--ink)">Empty:</b> per-column states above.
+            </div>
+          </div>
+        </div>
+
+        <!-- ============ mobile variant strip ============ -->
+        <div id="el-mobile" style="padding:0 22px 18px">
+          <div class="cardbox">
+            <b>Mobile variant (375px)</b>
+            <div style="display:flex; gap:10px; margin-top:8px; align-items:flex-start; flex-wrap:wrap">
+              <div style="width:150px; border:1px solid var(--line); border-radius:14px; overflow:hidden; background:var(--paper); flex-shrink:0">
+                <div style="padding:7px 9px; border-bottom:1px solid var(--line); font-size:9px"><b>Audiences &amp; creative</b><div style="display:flex; margin-top:4px; border:1px solid var(--line); border-radius:99px; overflow:hidden; font-size:8.5px"><span style="flex:1; text-align:center; padding:3px; background:var(--ink); color:#fff">Audiences</span><span style="flex:1; text-align:center; padding:3px; color:var(--mut)">Creative</span></div></div>
+                <div style="padding:7px 9px; display:grid; gap:5px; font-size:8px">
+                  <div style="border:1px solid var(--line); border-radius:7px; padding:5px 7px"><b>Farm owners</b><div style="color:var(--mut)" class="num">412 → 388 · ✓ · ≥100 ✓</div></div>
+                  <div style="border:1px solid var(--warn); border-radius:7px; padding:5px 7px; background:#fdf6ee"><b>⚠ Purchased list</b><div style="color:var(--mut)">consent wall · mail only</div></div>
+                  <div style="border:1px solid var(--line); border-radius:7px; padding:5px 7px"><b>Saved-search buyers</b><div style="color:var(--mut)" class="num">61 · nightly</div></div>
+                  <div style="border:1px solid var(--line); border-radius:7px; padding:5px 7px; text-align:center; color:var(--mut)">⚡ Generators ▾ (action list)</div>
+                </div>
+              </div>
+              <div style="flex:1; min-width:220px; font-size:11.5px; color:var(--mut)">Tabs "Audiences" / "Creative" replace the two-column split. Cards render full-width; segment/asset drawers become full-screen sheets; the Generators panel collapses to an action list. Attestation modal stays a blocking full-screen sheet — the hard block is identical on mobile.</div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ============ spec gaps found ============ -->
+  <div class="note" style="margin-top:26px; border-color:var(--warn)"><b>Spec gaps found — PropReach Master Brain details the spec inventory missed (all rendered above):</b>
+    (1) <b>§10.5 closed-deal fact precedence</b> — GHL closed-deal record (interim) → IDX sold record as validation where authorized → native PropClose after launch; rendered in the case-study recycler annotation.
+    (2) <b>§11.3 one-to-one personalized-video all-of gate</b> — ai_video_consent = granted AND channel_consent = granted AND lead_score ≥ 50 (from the Scoring Master Sheet via PROPFLOW_LEAD) AND explicit_high_intent_action = true; lead_score unavailable → fails closed to static/non-personalized fallback; referenced on the PII-gate banner (the spec's open decision only named the §11.3 chip, not the gate terms).
+    (3) <b>§10.4 scan-to-retarget privacy gate</b> — QR scans join retargeting audiences only when GPC/DNT/opt-out checks pass; rendered in the QR pack annotation and the OWNED_ENGAGEMENT segment's suppression breakdown.
+    (4) <b>§10.3 no-new-infrastructure rule</b> — no new QR or link infrastructure is built inside PropReach (Owned Link Shortener only); tour provider order TeliportMe = INTERIM, manual embed = MANUAL fallback.
+    (5) <b>§11.6 Mapbox print-export checkpoint</b> — high-resolution print exports via Mapbox Studio require the print-export checkpoint; license evidence recorded per asset.
+    (6) <b>§9.5 CAMPAIGN_PERFORMANCE_SIGNAL</b> — fatigue actions also emit the performance signal to Video Intelligence; §12.2 housing-ad validator is deny-by-default (a campaign passes only when every housing requirement is affirmatively satisfied) — reflected in the listing-to-ads rules line.
+  </div>
+
+  <!-- ============ (3) ELEMENT COVERAGE ============ -->
+  <h2 style="font-size:20px; margin:20px 0 10px">Element coverage — spec inventory → this page</h2>
+  <table class="dtable cov" style="font-size:12.5px">
+    <tr><th>Spec inventory element</th><th>Rendered at</th><th>Status</th></tr>
+    <tr><td>Segment card (source_type, targeting_method, platforms, geo, raw→after-compliance counts, attestation ✓, preflight)</td><td><a href="#el-segment-card">Audience segment cards</a></td><td class="ok">✓</td></tr>
+    <tr><td>Compliance trail (drawer: check ids, source_facts, purchased flags, DO_NOT_STORE retention)</td><td><a href="#el-compliance-trail">Segment drawer</a></td><td class="ok">✓</td></tr>
+    <tr><td>Attestation modal (Meta housing Customer List, hard block, logged)</td><td><a href="#el-attestation">Attestation modal</a></td><td class="ok">✓</td></tr>
+    <tr><td>Match-size preflight badge (100 block / 500 warn + fallback recommendations)</td><td><a href="#el-match-preflight">Match-size preflight</a></td><td class="ok">✓</td></tr>
+    <tr><td>Retargeting source builder (allowed sources, window, GPC/DNT/opt-out)</td><td><a href="#el-retargeting-builder">Retargeting source builder</a></td><td class="ok">✓</td></tr>
+    <tr><td>Purchased-list consent wall card (exact rule cited, mail-only, consent-capture route)</td><td><a href="#el-consent-wall">Purchased-list consent wall</a></td><td class="ok">✓</td></tr>
+    <tr><td>PropSearch segment picker (import, nightly refresh)</td><td><a href="#el-propsearch-picker">PropSearch segment</a></td><td class="ok">✓</td></tr>
+    <tr><td>Suppression settings (pre-upload filtering, no Meta housing platform exclusions)</td><td><a href="#el-suppression">Suppression settings</a></td><td class="ok">✓</td></tr>
+    <tr><td>Google competitor-intent segment builder (5–10 inputs, honesty label, forbidden-inputs list)</td><td><a href="#el-competitor-segment">Competitor-intent builder</a></td><td class="ok">✓</td></tr>
+    <tr><td>List Builder import (matching order, no auto-merge, /approved-leads)</td><td><a href="#el-list-builder">List Builder import</a></td><td class="ok">✓</td></tr>
+    <tr><td>Creative asset tile (7 asset types, 7 statuses, personalization chip, AI flag)</td><td><a href="#el-asset-tile">Creative grid</a></td><td class="ok">✓</td></tr>
+    <tr><td>Asset drawer (sha256, lineage, license_flags, compliance/legal, copy metadata, performance)</td><td><a href="#el-asset-drawer">Asset drawer</a></td><td class="ok">✓</td></tr>
+    <tr><td>Fatigue flag + rotation card (freq 4.1, hints, never auto-pauses)</td><td><a href="#el-fatigue">Fatigue card</a></td><td class="ok">✓</td></tr>
+    <tr><td>ReleaseRecord gate indicator (hard block, evidence_url, request release)</td><td><a href="#el-release-gate">ReleaseRecord gate</a></td><td class="ok">✓</td></tr>
+    <tr><td>Zestimate template lock (LEGAL_BLOCKED, attribution, safe fallback)</td><td><a href="#el-zestimate-lock">Zestimate lock</a></td><td class="ok">✓</td></tr>
+    <tr><td>ADU claim-ladder chip (affirmative / cautious / suppressed + Zoneomics fields)</td><td><a href="#el-adu-ladder">ADU claim ladder</a></td><td class="ok">✓</td></tr>
+    <tr><td>Listing-to-ads generator (5 templates, per-template rules)</td><td><a href="#el-listing-to-ads">Listing → ads generator</a></td><td class="ok">✓</td></tr>
+    <tr><td>QR pack builder (labeled codes, per-label scans, print = review-required)</td><td><a href="#el-qr-pack">QR pack builder</a></td><td class="ok">✓</td></tr>
+    <tr><td>Case-study recycler (nullable facts omitted, testimonial release block)</td><td><a href="#el-case-study">Case-study recycler</a></td><td class="ok">✓</td></tr>
+    <tr><td>Personalized-creative gate banner (consent gate → area-level fallback)</td><td><a href="#el-pii-gate">PII gate banner</a></td><td class="ok">✓</td></tr>
+    <tr><td>Mapbox imagery badge (non-removable attribution, Google Earth blocked, no AI-render tiles)</td><td><a href="#el-mapbox-badge">Mapbox badge</a></td><td class="ok">✓</td></tr>
+    <tr><td>Empty states (per column)</td><td><a href="#el-empty-states">Empty states row</a></td><td class="ok">✓</td></tr>
+  </table>
+  <div style="border:1.5px solid var(--good); background:#f2f8f4; border-radius:10px; padding:12px 16px; margin:12px 0 0; font-weight:700; color:var(--good)">22 of 22 spec elements rendered ✓ <span style="font-weight:400; color:var(--mut); font-size:12.5px">— plus the spec's required states strip (loading/empty/degraded fail-closed/permission-limited), the mobile-variant strip, and 6 Master-Brain additions listed in "Spec gaps found" above.</span></div>
+
+  <!-- ============ (4) FULL SPEC AS HTML ============ -->
+  <div class="specdoc">
+    <h1 style="font-size:24px; margin:40px 0 6px">Spec — 30 · Audience Builder + Creative Library (PropReach)</h1>
+    <p><b>Purpose</b> The two governed inventories every campaign draws from. Audiences: every segment carries its compliance evidence — raw vs after-compliance counts, attestation trail, match-size preflight — and nothing uploads without passing. Creatives: governed assets with release/legal/fatigue/compliance states, persuasion metadata, and the generators (listing-to-ads, QR packs, case-study recycling).</p>
+    <p><b>Primary users</b> Agent/owner; marketing/content team member for creative curation. Sharon-class list manager for farm lists [BEST GUESS on role].</p>
+    <p><b>Entry points</b> Left-nav "Audiences & creative"; campaign wizard step 4 (audience picker) and step 8 (creative picker) open focused pickers of this screen; PropSearch "save as segment" (+ From PropSearch); listing detail "Generate ads"; Creative Library links from Content Flow assets.</p>
+    <p><b>Exit points</b> "Use in campaign" → Campaign Manager wizard (18); attestation modal → Approvals record; blocked purchased list → consent-capture task (PropFlow review queue); LEGAL_BLOCKED template → request-legal-approval flow → Approvals; QR pack → print/export + scan analytics on Attribution (31); fatigue rotation → variant request to PropCast (CONTENT_VARIANT_CREATED).</p>
+
+    <h2>Layout</h2>
+    <p><b>Desktop.</b> Header: counts ("6 segments · 34 released assets"), actions + Segment, + From PropSearch. Two-column split (per draft): <b>left = Audiences</b> (segment cards stacked; blocked items warn-styled), <b>right = Creative</b> (governed asset grid with status badges + Generators panel). Asset click → right-side detail drawer (release status, license flags, personalization level, performance history, lock lineage). Segment click → detail drawer (membership counts, compliance trail, sources, suppressions).</p>
+    <p><b>Mobile (375px).</b> Tabs "Audiences" / "Creative" replace the split. Cards full-width; drawers become full-screen sheets; generators collapse to an action list.</p>
+
+    <h2>Element inventory</h2>
+    <div style="overflow-x:auto">
+    <table class="dtable">
+      <tr><th>Element</th><th>What it shows/does</th><th>Data source</th><th>Interactions</th><th>Spec source</th></tr>
+      <tr><td>Segment card</td><td>name, source_type (GEOGRAPHIC / FIRST_PARTY_CONTACTS / OWNED_ENGAGEMENT / WEBSITE_VISITORS / PROPCAST_ENGAGEMENT / GOOGLE_CUSTOM_SEGMENT / PURCHASED_LIST_SEED / PROPSEARCH_SEGMENT), targeting_method, platform_targets, geo codes + market level; counts line: "Raw 412 → after compliance 388 (24 suppressed: DNC/opt-out/in-escrow)"; attestation ✓; match preflight "388 ≥ 100 ✓"</td><td>AudienceSegment</td><td>open drawer; Use in campaign; refresh; archive</td><td>PropReach MB §8.2, §8.3; draft s30</td></tr>
+      <tr><td>Compliance trail (drawer)</td><td>compliance_check_id, audience_list_service_check_id, source_facts[], contains_imported_or_purchased_contacts, imported_contacts_defaulted_to_unknown_consent, raw_member_file_retention_policy (DO_NOT_STORE / TEMPORARY_SECURE_PROCESSING — raw member files are not kept)</td><td>AudienceSegment</td><td>read-only audit view</td><td>MB §8.3</td></tr>
+      <tr><td>Attestation modal</td><td>required for Meta housing Customer List uploads: attestation_text, protected_data_not_used checkbox, attested_by/at, platform; upload hard-blocks without it</td><td>CustomerListAttestation</td><td>sign → logged; visible on card as ✓</td><td>MB §8.4, §6.1</td></tr>
+      <tr><td>Match-size preflight badge</td><td>Google/YouTube Customer Match: &lt;100 matched = BLOCK upload; &lt;500 = WARN + fallback recommendations (owned engagement, website retargeting, compliant custom segment, owner-approved list growth)</td><td>AudienceListService (GOOGLE_CUSTOMER_MATCH_MIN=100, WARN_IF_UNDER=500)</td><td>view fallback options</td><td>MB §8.5</td></tr>
+      <tr><td>Retargeting source builder</td><td>allowed sources only: LINK_SCANNED, PAGE_VIEWED, CONTENT_VIEWED, ORGANIC_VIDEO_VIEWED, FORM_STARTED-without-LEAD_CAPTURED (windowed), owned landing pages, PropCast engagement — with GPC/DNT/opt-out respected note</td><td>event ledger sources</td><td>pick sources + window</td><td>MB §8.6</td></tr>
+      <tr><td>Purchased-list consent wall card</td><td>blocked state citing the exact rule: no documented opt-in → direct-mail only, never digital upload; consent defaults unknown; DNC/consent/opt-out/ComplianceProfile must pass before any outreach eligibility; first-party-origin platform rules</td><td>ComplianceProfile + list import</td><td>view rule; route to consent-capture tasks</td><td>MB §8.9, §2.5; draft s30</td></tr>
+      <tr><td>PropSearch segment picker</td><td>import saved-search/filter cohorts as segments; refresh cadence ("refreshes nightly")</td><td>PROPSEARCH_SEGMENT supply</td><td>import; schedule refresh</td><td>MB §8.2; draft s30</td></tr>
+      <tr><td>Suppression settings</td><td>pre-upload membership filtering (never platform exclusions for Meta housing); reporting-only "don't spend against" recommendations</td><td>suppression config</td><td>edit lists</td><td>MB §8.7</td></tr>
+      <tr><td>Google competitor-intent segment builder</td><td>Display/YouTube only; requires 5–10 related URLs/terms; "intent approximation — never claims a named person visited Zillow/Redfin/etc."; forbidden-inputs list enforced</td><td>segment config</td><td>build; honesty label non-removable</td><td>MB §8.8</td></tr>
+      <tr><td>List Builder import</td><td>matching order: exact address → exact phone → exact email → probabilistic = human review only; phone/email conflict → review task, never auto-merge; net-new contacts via /approved-leads</td><td>GHL-now contacts + imports</td><td>upload; review conflicts</td><td>MB §8.10</td></tr>
+      <tr><td>Creative asset tile</td><td>thumbnail, asset_type (VIDEO/IMAGE/CAROUSEL/COPY/PDF/LANDING_PAGE_VARIANT/AD_VARIANT), status badge: ACTIVE / TESTING / FATIGUE_FLAGGED / RETIRED / LEGAL_BLOCKED / COMPLIANCE_BLOCKED / DRAFT_ONLY; personalization chip (AREA_LEVEL / CONTACT_PII / PROPERTY_SPECIFIC / OWNER_SPECIFIC); AI-generated flag + disclosure-required</td><td>CreativeAsset</td><td>open drawer; use in campaign (RELEASED/ACTIVE only)</td><td>MB §9.2; draft s30</td></tr>
+      <tr><td>Asset drawer</td><td>asset_url/sha256, originating_content_id + variant_id lineage, allowed_platforms, campaign_objectives, release_record_ids, license_flags (provider MAPBOX/GOOGLE_EARTH/ZILLOW/IDX/MLS/CLIENT_OWNED/MANUAL_RELEASE; status APPROVED/BLOCKED/LEGAL_APPROVAL_REQUIRED/ATTRIBUTION_REQUIRED/RETENTION_LIMITED), compliance_check_id, legal approval status, copy metadata (awareness_stage, lever, framework, failure_audit_result)</td><td>CreativeAsset + copy_variant_metadata</td><td>request legal approval; request variant</td><td>MB §9.2, §9.3, §18.7</td></tr>
+      <tr><td>Fatigue flag + rotation card</td><td>"freq 4.1 → rotation suggested"; deterministic from frequency/CTR/conv-rate; alert hints Meta ~3.0 imp/person/wk, YouTube ~2.0 (account-configurable, not hard gates); never auto-pauses spend unless envelope allows</td><td>platform facts</td><td>accept rotation → variant request; dismiss</td><td>MB §9.5; draft s30</td></tr>
+      <tr><td>ReleaseRecord gate indicator</td><td>client face/voice/name/testimonial assets show release status (release_id, scope, signed_at, expires_at); missing → hard-blocked from ads</td><td>ReleaseRecord</td><td>view evidence_url; request release</td><td>MB §9.6, §10.6</td></tr>
+      <tr><td>Zestimate template lock</td><td>LEGAL_BLOCKED until human legal approval logged; third-party attribution required; safe generic fallback concept offered ("online estimates can miss local context")</td><td>template config</td><td>request legal approval</td><td>MB §11.4; draft s30</td></tr>
+      <tr><td>ADU claim-ladder chip</td><td>L-affirmative (confidence ≥0.80 + jurisdiction covered) / cautious (0.60–0.80) / suppressed (&lt;0.60 or uncovered); shows zoning_source + last_checked</td><td>Zoneomics fields via PropSearch</td><td>view ladder rationale</td><td>MB §11.5; draft "claim-ladder L2 (permitted-use verified)"</td></tr>
+      <tr><td>Listing-to-ads generator</td><td>template picker: LISTING_SELLER_AD / LISTING_BRAND_AD / LISTING_POSTCARD / CASE_STUDY_SELLER_AD / CASE_STUDY_TESTIMONIAL_AD; per-template rules enforced (GEOGRAPHIC_ONLY default, HOUSING category, current sourced listing status)</td><td>listing events + templates</td><td>generate → draft assets → campaign</td><td>MB §10.1, §10.2</td></tr>
+      <tr><td>QR pack builder</td><td>labeled codes (sign, flyer, postcard, mailer — per-label scan analytics); every destination minted via link.propertyiq.app; scan emits LINK_SCANNED (scan_type=QR); print QR use = REVIEW_REQUIRED; room-level scans framed as low-cost experiment</td><td>Owned Link Shortener</td><td>create pack; export print files → Approvals</td><td>MB §10.3, §10.4; matrix</td></tr>
+      <tr><td>Case-study recycler</td><td>post-close ad candidates from DEAL_CLOSED case_study_facts (list_price/close_price/dom/offer_count all nullable — omit missing, never fabricate); testimonial variant hard-blocked without ReleaseRecord scope=advertising</td><td>DEAL_CLOSED + CASE_STUDY_FACTS_AVAILABLE</td><td>generate; review facts + sources</td><td>MB §10.5, §10.6</td></tr>
+      <tr><td>Personalized-creative gate banner</td><td>CONTACT_PII/OWNER_SPECIFIC assets require marketing_personalized_consent_status=granted; failure → area-level fallback (no name/address/home-specific claim)</td><td>ComplianceProfile</td><td>view gate result</td><td>MB §11.2, §11.7</td></tr>
+      <tr><td>Mapbox imagery badge</td><td>licensed-imagery assets carry non-removable attribution ("© Mapbox © OpenStreetMap"); Google Earth blocked v1; no map tiles into AI render pipelines</td><td>license_flags</td><td>read-only</td><td>MB §11.6</td></tr>
+      <tr><td>Empty states</td><td>Audiences: "No segments — start from your farm geography or a PropSearch search." Creative: "Approved content and generated ads land here."</td><td>—</td><td>CTAs</td><td>[BEST GUESS]</td></tr>
+    </table>
+    </div>
+
+    <h2>States</h2>
+    <ul>
+      <li><b>Default / Loading:</b> skeleton cards/tiles; counts show dashes.</li>
+      <li><b>Empty:</b> per-column empty states above.</li>
+      <li><b>Error/degraded (fail-closed):</b> AudienceListService unreachable → uploads disabled with LIST_TOO_SMALL-style flag pending check (no upload without preflight); ComplianceProvider down → segment creation and asset release actions disabled, existing records read-only; Zoneomics fields stale/missing → ADU claims render suppressed; membership counts unknown → "counts pending", upload blocked.</li>
+      <li><b>Permission-limited:</b> attestation signing and legal-approval requests restricted to owner/admin; team can build drafts.</li>
+      <li><b>Mobile:</b> tabbed, per Layout.</li>
+    </ul>
+
+    <h2>Data fields</h2>
+    <p>AudienceSegment (full schema §8.3) incl. member_count_raw / member_count_after_compliance / estimated_matched_users (nullable → "pending"); CustomerListAttestation; CreativeAsset (full schema §9.2) incl. asset_sha256, ai_generated_or_ai_modified, ai_disclosure_required; LicenseFlag; ReleaseRecord (release_id, contact_id, clip_ids[], release_scope, evidence_url, signed_at, expires_at); Zoneomics: zoning_confidence (0–1, 2dp), jurisdiction_covered, zoning_source, zoning_last_checked_at; QR scan counts per label (int). Suppressed-count breakdown by reason (DNC / opt-out / in-escrow per draft).</p>
+
+    <h2>Rules & compliance</h2>
+    <ul>
+      <li><b>Attestation hard block</b> (§8.4); <b>match minimums</b> 100/500 (§8.5); <b>no platform exclusions for Meta housing</b> — filter membership pre-upload (§8.7).</li>
+      <li><b>Sensitive-topic firewall:</b> no divorce/probate/health/protected-class/etc. signals in any segment input or custom-segment term; forbidden-inputs list rendered in the competitor-segment builder (§8.8, §12.3).</li>
+      <li><b>School data never targets</b> — no school inputs to audiences (§12.1).</li>
+      <li><b>Copy Persuasion Standard</b> applies to every generated ad copy asset: one dominant lever, failure audit, hard line "persuasion never manipulation" (no fabricated urgency/scarcity, no "great schools", no family-status framing); override order Compliance &gt; brand voice &gt; copy diagnosis (§9.4).</li>
+      <li><b>ReleaseRecord absolute rule</b> (§9.6). <b>Zestimate legal lock</b> (§11.4). <b>ADU Zoneomics ladder</b> (§11.5). <b>Area-level fallback</b> on any failed gate (§11.7).</li>
+      <li><b>Raw member files never stored</b> beyond temporary secure processing (§8.3).</li>
+    </ul>
+
+    <h2>Cross-links</h2>
+    <p><b>In:</b> PropSearch (segment supply, zoning facts, generated assets), PropCast (variants, engagement audiences), listing records, PropFlow/GHL contacts (read-only via adapter — PropReach never becomes contact system of record, §2.1). <b>Out:</b> Campaign Manager (18) pickers; Approvals (attestations, legal approvals, print QR); Attribution (31) per-label scan analytics; PropFlow review queue (consent-capture, merge conflicts). <b>Ledger:</b> consumes LINK_SCANNED, PAGE_VIEWED, CONTENT_VIEWED, ORGANIC_VIDEO_VIEWED, FORM_STARTED, DEAL_CLOSED, CASE_STUDY_FACTS_AVAILABLE, RELEASE_RECORD_CREATED; causes CONTENT_VARIANT_CREATED (via PropCast on variant request); audience/creative records carry compliance_check_ids for audit.</p>
+
+    <h2>Open decisions</h2>
+    <ul>
+      <li>[DECIDE] Segment refresh cadence: interim = nightly for PROPSEARCH_SEGMENT (per draft), manual refresh elsewhere.</li>
+      <li>[DECIDE] Whether the QR pack builder also lives on listing detail: interim = yes, same component, library is the archive.</li>
+      <li>[DECIDE] Fatigue thresholds surfaced as editable account settings vs fixed hints: interim = editable in Settings, defaults Meta 3.0 / YT 2.0 per MB §9.5.</li>
+      <li>[DECIDE] Personalized-video creative rows (BHUMAN primary / LIPDUB backup, HeyGen for broadcast — MB §11.1): interim = they appear as VIDEO assets with personalization=CONTACT_PII and the §11.3 gate chip; vendor choice does not affect UI.</li>
+    </ul>
+  </div>
+</div>

@@ -1,0 +1,378 @@
+<title>PropertyIQ · Screen 04 — Compare</title>
+<link href="https://api.fontshare.com/v2/css?f[]=technor@500,600,700&display=swap" rel="stylesheet">
+<link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<style>
+  /* Type system — Technor for display (the squared machine look from the font exploration), Inter for UI. */
+  :root{ --font-display:'Technor', Inter, -apple-system, 'Segoe UI', sans-serif; --font-ui: Inter, -apple-system, 'Segoe UI', Roboto, sans-serif; }
+</style>
+<style>
+  /* Palette v4 — PropFlow design language: neutral ink UI, ink-as-accent, color reserved for data. (extracted verbatim from propsearch-design-draft.html) */
+  :root, :root[data-theme="dark"], :root[data-theme="light"]{
+    --ink:#23282f; --paper:#fbfaf8; --surface:#f1efe9; --line:#e2dfd6;
+    --mut:#6b7076; --soft:#9b9f9f;
+    --brand:#2e6b53; --brand-ink:#ffffff; --brand-soft:#eaf1ec; --brand-deep:#1e4c3a;
+    --signal:#b07a2e;
+    --good:#2e7d4f; --warn:#a8630a; --crit:#b3372f;
+    --r:10px;
+  }
+  .intel .score, .mintel{ color:var(--brand-deep) }
+  .intel{ border-left:3px solid var(--brand) }
+  h1{ letter-spacing:-.02em }
+  .stat b{ letter-spacing:-.01em }
+  body[data-agent="watts"]{ --brand:#2e6b53; --brand-soft:#eaf1ec; --brand-deep:#1e4c3a; }
+
+  *{box-sizing:border-box; margin:0}
+  body{font:15px/1.55 var(--font-ui); color:var(--ink); background:var(--paper); padding-bottom:80px}
+  h1,h2,h3{line-height:1.15; text-wrap:balance; font-family:var(--font-display); font-weight:600}
+  h1{letter-spacing:-.01em}
+  .site{box-shadow:0 1px 2px rgba(20,24,32,.04), 0 8px 32px rgba(20,24,32,.06)}
+  .stat{box-shadow:0 1px 2px rgba(20,24,32,.03); transition:box-shadow .15s, transform .15s}
+  .stat:hover{box-shadow:0 4px 14px rgba(20,24,32,.08)}
+  .chip{transition:all .12s}
+  button{font-family:var(--font-ui)}
+  .num{font-variant-numeric:tabular-nums}
+  .wrap{max-width:1180px; margin:0 auto; padding:0 20px}
+
+  .bar{position:sticky; top:0; z-index:50; background:var(--paper); border-bottom:1px solid var(--line); padding:10px 0; backdrop-filter:blur(8px)}
+  .bar .wrap{display:flex; flex-wrap:wrap; gap:10px; align-items:center}
+  .bar .ttl{font-weight:700; margin-right:auto}
+  .bar .ttl small{display:block; font-weight:400; color:var(--mut)}
+  .bar a{color:var(--brand); font-size:13px; text-decoration:none}
+
+  .note{background:var(--surface); border:1px solid var(--line); border-radius:var(--r); padding:14px 16px; margin:0 0 22px; font-size:13.5px; color:var(--mut)}
+  .note b{color:var(--ink)}
+
+  .site{border:1px solid var(--line); border-radius:14px; overflow:hidden; background:var(--paper)}
+  .sitehead{display:flex; align-items:center; gap:14px; padding:14px 22px; border-bottom:1px solid var(--line)}
+  .avatar{width:38px; height:38px; border-radius:50%; background:var(--brand); color:var(--brand-ink); display:grid; place-items:center; font-weight:700}
+  .sitehead .who b{display:block}
+  .sitehead .who small{color:var(--mut)}
+  .sitehead nav{margin-left:auto; display:flex; gap:18px; font-size:13.5px; color:var(--mut)}
+  .sitehead nav a{color:inherit; text-decoration:none}
+  .sitehead nav a:hover{color:var(--brand)}
+
+  .chip{display:inline-flex; align-items:center; gap:6px; font-size:12.5px; font-weight:500; border:1px solid var(--line); border-radius:99px; padding:6px 12px; background:var(--paper); cursor:pointer; color:var(--ink)}
+  .chip:hover{border-color:var(--brand)}
+  .chip.on{background:var(--brand); border-color:var(--brand); color:var(--brand-ink); font-weight:600; box-shadow:0 2px 8px color-mix(in srgb, var(--brand) 30%, transparent)}
+
+  .statrow{display:grid; grid-template-columns:repeat(4,1fr); gap:10px}
+  .stat{background:var(--surface); border:1px solid var(--line); border-radius:var(--r); padding:12px}
+  .stat small{display:block; color:var(--mut); font-size:11.5px; text-transform:uppercase; letter-spacing:.05em}
+  .stat b{font-size:18px}
+  .stat .up{color:var(--good); font-size:12px}
+
+  .bdg{font-size:11.5px; border-radius:6px; padding:3px 8px; background:var(--surface); border:1px solid var(--line); color:var(--mut)}
+  .bdg.good{color:var(--good); border-color:color-mix(in srgb,var(--good) 30%,var(--line))}
+  .bdg.warn{color:var(--warn); border-color:color-mix(in srgb,var(--warn) 30%,var(--line))}
+
+  .dtable{width:100%; border-collapse:collapse; font-size:13px}
+  .dtable td,.dtable th{border-bottom:1px solid var(--line); padding:8px 10px; text-align:left}
+  .dtable th{font-size:11px; text-transform:uppercase; letter-spacing:.05em; color:var(--soft)}
+
+  @media (max-width:860px){ .statrow{grid-template-columns:repeat(2,1fr)} .maingrid{grid-template-columns:1fr !important} }
+  @media (prefers-reduced-motion: reduce){ *{transition:none!important} }
+
+  /* ---- page-specific additions (kept in the same design language) ---- */
+  .anno{font-size:11px; color:var(--soft)}
+  .cardbox{border:1px solid var(--line); border-radius:10px; padding:11px 14px; font-size:12.5px; background:var(--paper)}
+  .btn-ink{background:var(--ink); color:#fff; border:0; border-radius:7px; padding:7px 12px; font-size:11.5px; cursor:pointer; font-weight:600}
+  .btn-ghost{background:var(--paper); border:1px solid var(--line); border-radius:7px; padding:7px 12px; font-size:11.5px; cursor:pointer}
+  .sechead{font-size:14px; font-weight:700; margin:0 0 8px; font-family:var(--font-display)}
+  .cov td.ok{color:var(--good); font-weight:700}
+  .specdoc h2{font-size:18px; margin:26px 0 8px}
+  .specdoc h3{font-size:15px; margin:18px 0 6px}
+  .specdoc p, .specdoc li{font-size:13.5px; color:var(--mut)}
+  .specdoc b{color:var(--ink)}
+  .specdoc table{margin:8px 0}
+
+  .tblwrap{overflow-x:auto; padding:0 22px 8px}
+  .cmp{border-collapse:collapse; font-size:12.5px; min-width:920px; width:100%}
+  .cmp th{position:sticky; left:0; background:var(--paper); text-align:left; font-size:11px; text-transform:uppercase; letter-spacing:.04em; color:var(--soft); padding:9px 12px 9px 0; border-bottom:1px solid var(--line); min-width:150px; z-index:2}
+  .cmp td{border-bottom:1px solid var(--line); padding:9px 12px; vertical-align:top; min-width:150px}
+  .cmp td.win{background:var(--brand-soft); font-weight:600}
+  .cmp .pos{color:var(--good)}
+  .cmp .neg{color:var(--crit)}
+  .tophoto{background:var(--surface); border:1px solid var(--line); border-radius:8px; height:64px; display:grid; place-items:center; color:var(--soft); font-size:11px; margin-bottom:6px}
+  .wslider{display:inline-flex; align-items:center; gap:6px; border:1px solid var(--line); border-radius:99px; padding:5px 11px; font-size:11.5px; background:var(--paper)}
+  .wslider b{font-weight:600}
+  .wslider .trk{letter-spacing:1px; color:var(--brand); font-size:12px}
+  .poweredby{font-size:11px; color:var(--soft)}
+  .statecard{border:1px dashed var(--line); border-radius:10px; padding:10px 12px; font-size:11.5px; background:var(--paper)}
+  .statecard b{display:block; font-size:11px; text-transform:uppercase; letter-spacing:.05em; color:var(--mut); margin-bottom:3px}
+  .skel{background:linear-gradient(90deg, var(--surface), var(--line), var(--surface)); border-radius:6px; height:10px; margin:4px 0}
+</style>
+
+<!-- ============ (1) slim header ============ -->
+<div class="bar">
+  <div class="wrap">
+    <div class="ttl">PropertyIQ · Screen 04 — Compare <small>Full-density per-screen mock · wireframe fidelity · dev-facing annotations in gray</small></div>
+    <a href="../wireframe.html">← All screens</a>
+  </div>
+</div>
+
+<!-- ============ (2) THE FULL MOCK ============ -->
+<div class="wrap" style="padding-top:24px">
+  <div class="note"><b>Screen 04 — Compare.</b> Side-by-side decision surface for 2–4 properties — the "open lane" no portal will copy (portals monetize search sessions, not decision quality). Pin a baseline, every other column renders as +/− deltas, a weighted-priority verdict recomputes live from the user's own stated priorities, and one click turns the comparison into an agent-branded client deliverable (review-first) logged to the CRM. Consumer chrome: agent-branded top nav + "Powered by PropertyIQ" footer — the agent-console left rail never appears on consumer screens.</div>
+
+  <div class="site" data-agent="watts">
+    <!-- header context line -->
+    <div class="sitehead" id="el-header">
+      <div class="avatar">GW</div>
+      <div class="who"><b>Compare · 3 properties</b><small class="num">From "3bd under $1.4M, quiet street, good schools, ≤30 min to Menlo Park" search</small></div>
+      <nav><a href="#">← Back to results</a><a href="#">Saved (5)</a><a href="#">Graeham Watts</a></nav>
+    </div>
+    <div class="anno" style="padding:6px 22px 0">Header context line = SearchRecord (Brain §10.5) via compare-set origin; "← Back to results" preserves the originating search. Compare sets are URL-addressable and persist per app_user (SavedPropertyRecord §10.7 pattern [BEST GUESS]); anonymous sessions get URL-state only [DECIDE]. Any fair_housing_flags raised during search parsing (§10.5) carry through — flagged criteria never become weights.</div>
+
+    <!-- verdict card -->
+    <div style="padding:14px 22px 0" id="el-verdict">
+      <div style="border:1.5px solid var(--line); border-left:4px solid var(--brand); border-radius:12px; padding:14px 16px; background:var(--surface)">
+        <b style="font-size:14px">Verdict for your priorities: 742 Hurlingame Ave</b>
+        <div style="font-size:13px; color:var(--mut); margin-top:4px">Beech costs $61K more and has the bigger lot, but its ADU headroom is already used up at Hurlingame's price point — and Hurlingame is the only one on a quiet street (your #1), feeds Roy Cloud (rated 9/10 by {Provider}), and is priced 4% under our model. Oak Ave is the cheapest all-in but has HOA drag and no upside. <b style="color:var(--ink)">If lot size mattered more than quiet, this flips to 118 Beech.</b></div>
+        <!-- weight sliders row -->
+        <div id="el-weights" style="display:flex; gap:8px; margin-top:10px; flex-wrap:wrap; align-items:center; font-size:11.5px; color:var(--mut)">
+          <span style="font-weight:600; color:var(--ink)">Your weights:</span>
+          <span class="wslider"><b>Quiet street</b> <span class="trk">▮▮▮▮▮</span></span>
+          <span class="wslider"><b>Schools</b> <span class="trk">▮▮▮▮▯</span></span>
+          <span class="wslider"><b>Price</b> <span class="trk">▮▮▮▯▯</span></span>
+          <span class="wslider"><b>Lot/upside</b> <span class="trk">▮▮▯▯▯</span></span>
+          <span style="color:var(--soft)">— drag to re-weight; verdict recomputes live; a winner flip is visibly animated</span>
+        </div>
+        <div class="anno" style="margin-top:6px">Verdict = weighted composition over the per-row facts; weights seeded from the user's parsed search priorities (SearchRecord), per-criterion 0–5, editable in session. Computation seam: ScoringService gains a <b style="color:var(--ink)">PROPSEARCH_COMPARE_VERDICT</b> context (deterministic row facts + user weights) — <b style="color:var(--ink)">no local ranking, ever</b> (Brain §14.2); until published the card runs degraded (see States). "Schools" appears as a weight ONLY because the user explicitly asked (§16.4 user-initiated path) — if the prompt never mentioned schools, no schools slider by default. Fair-housing wording (§16.1): facts with attribution ("feeds Roy Cloud, rated 9/10 by {Provider}"), never characterizations ("better schools", "safe", "family-friendly").</div>
+      </div>
+    </div>
+
+    <!-- controls row -->
+    <div style="display:flex; gap:10px; margin:12px 22px 0; align-items:center; flex-wrap:wrap" id="el-controls">
+      <span class="chip on" id="el-diff-toggle" style="font-size:11.5px">Differences only (12 same attributes hidden)</span>
+      <span class="chip" style="font-size:11.5px">All details</span>
+      <span style="margin-left:auto"></span>
+      <button class="btn-ink" id="el-send" style="padding:8px 16px; font-size:12.5px">Send comparison to client →</button>
+      <span class="anno">renders as your branded page + tradeoff narrative, logged to CRM</span>
+    </div>
+    <div class="anno" style="padding:4px 22px 0">Differences-only is default ON (NN/g pattern), computed client-side over row data. "Send" opens a client picker → HostedRenderProvider (§12.9) mints a GeneratedAssetRef hosted page → lands in the <b style="color:var(--ink)">Universal Review Queue / Outbox — never auto-sends</b> (client-facing = review-first, workspace standing rule); send requires the contact's channel consent via ComplianceProvider (no consent-model bypass) and is logged to the PropFlow contact timeline on approval. Consumer sessions see a "Share" button here instead — same hosted page, no CRM log, no client picker [DECIDE, BEST GUESS].</div>
+
+    <!-- comparison table -->
+    <div class="tblwrap" style="margin-top:12px" id="el-table">
+      <table class="cmp">
+        <tr>
+          <th style="z-index:3"></th>
+          <td id="el-pinned" style="border-top:3px solid var(--brand)"><div class="tophoto">Photo (IDX-licensed)</div><b>📌 742 Hurlingame Ave</b> <span class="bdg" style="font-size:10px; color:var(--brand); border-color:var(--brand)">Best fit · baseline</span><br><small style="color:var(--mut)">Redwood City · Active 6d</small><br><span class="anno">column ⋮</span></td>
+          <td><div class="tophoto">Photo</div><b>118 Beech St</b> <small style="color:var(--soft)">(deltas vs. pinned)</small><br><small style="color:var(--mut)">Redwood City · Active 4d</small><br><span class="anno">column ⋮</span></td>
+          <td><div class="tophoto">Photo</div><b>2044 Oak Ave #4</b> <small style="color:var(--soft)">(deltas vs. pinned)</small> <span class="bdg warn" style="font-size:10px">In contract · as of Jul 14</span><br><small style="color:var(--mut)">San Carlos · townhome</small><br><span class="anno">column ⋮</span></td>
+          <td id="el-add" style="text-align:center; vertical-align:middle; color:var(--soft)"><div style="border:1.5px dashed var(--line); border-radius:10px; padding:24px 10px; font-size:12px; cursor:pointer"><b style="font-size:16px">+</b><br>Add from saved (5),<br>results, or any address</div><div class="anno" style="margin-top:4px">address lookup → PropertyRecord; raw owner name / mailing address never surfaced (Brain PII boundary)</div></td>
+        </tr>
+        <tr id="el-row-price"><th>Price</th><td class="win num">$1,289,000</td><td class="num neg">+$61,000</td><td class="num pos">−$109,000</td><td></td></tr>
+        <tr id="el-row-match"><th>Match (your prompt)</th><td class="win num">5 of 5</td><td class="num">4 of 5 · <u style="text-decoration-style:dotted">miss: busier street</u></td><td class="num">4 of 5 · <u style="text-decoration-style:dotted">miss: HOA cost</u></td><td></td></tr>
+        <tr id="el-row-monthly"><th>All-in monthly (PITI+ins+HOA) <span class="anno">✎ assumptions</span></th><td class="num">$8,120</td><td class="num neg">+$390/mo</td><td class="win num pos">−$470/mo</td><td></td></tr>
+        <tr id="el-row-sqft"><th>Sqft / Lot / $-sqft</th><td class="num">1,480 / 5,800 / $871</td><td class="win num">+130 / +400 / $838</td><td class="num">−90 / n/a (condo) / $849</td><td></td></tr>
+        <tr id="el-row-commute"><th>Commute (Menlo Park, 8am)</th><td class="win num">22 min</td><td class="num neg">+4 min</td><td class="num neg">+7 min</td><td></td></tr>
+        <tr id="el-row-schools"><th>Schools (assigned) <span class="anno">ⓘ disclaimers</span></th><td class="win num">Roy Cloud · 9/10 by {Provider}</td><td class="num">Clifford · 8/10 by {Provider}</td><td class="num">Arundel · 8/10 by {Provider}</td><td></td></tr>
+        <tr id="el-row-rent"><th>Rent (yield offset)</th><td class="num">$4,850/mo · 4.5%</td><td class="win num pos">+$250/mo · 4.5%</td><td class="num neg">−$450/mo · 4.5%</td><td></td></tr>
+        <tr id="el-row-risk"><th>Risk (fire/flood/quake /10)</th><td class="num">2 / 1 / 6</td><td class="num">2 / 1 / 6</td><td class="win num">2 / 1 / 5</td><td></td></tr>
+        <tr id="el-row-zoning"><th>Zoning & upside</th><td class="win num">ADU by right · builds to 3 (1 built)</td><td class="num">ADU by right · at max units</td><td class="num">Condo — n/a</td><td></td></tr>
+        <tr id="el-row-dom"><th>DOM / negotiation read <span class="anno">ⓘ</span></th><td class="num">6d · 0 cuts · multiple offers likely</td><td class="num">4d · 0 cuts · hot</td><td class="win num">19d · 1 cut · seller leverage</td><td></td></tr>
+        <tr id="el-row-deal"><th>Deal rating (ScoringService)</th><td class="win num">Good — 4% under model</td><td class="num">At model</td><td class="num">At model · leverage</td><td></td></tr>
+        <tr id="el-row-proscons"><th>AI pros / cons</th>
+          <td style="font-size:12px">＋ quiet cul-de-sac (street-class fact) · feeds Roy Cloud 9/10 {Provider} · zoning allows up to 3 units<br>－ garage smaller than 78% of area</td>
+          <td style="font-size:12px">＋ bigger lot & house · higher rent estimate<br>－ busier street (street-class fact) · roof 2009 (disclosure)</td>
+          <td style="font-size:12px">＋ cheapest all-in · turnkey · seller leverage (19 DOM)<br>－ HOA $385/mo · no yard · no zoning upside</td><td></td></tr>
+        <tr id="el-footnote"><td colspan="5" style="font-size:10.5px; color:var(--soft)">Rows render only when data is confirmed for every column (or marked "not disclosed") — a row with a silent hole never renders. Deal rating comes only from ScoringService — fail closed if unavailable. Up to 4 properties; adding a 5th replaces the weakest match with an undo toast. Sticky first column on horizontal scroll.</td></tr>
+      </table>
+    </div>
+    <div class="anno" style="padding:0 22px">Row notes — <b style="color:var(--ink)">Delta cells</b>: computed client-side from deterministic per-property facts (§14.4 allowed list); hover/tap shows the absolute value; favorable deltas green, winner cell shaded. <b style="color:var(--ink)">Match</b>: SearchResultRecord per property (service-computed, never local); tap a miss → explanation. <b style="color:var(--ink)">All-in monthly</b>: CashflowPreviewMetrics (§24.4) with ONE shared editable assumption set across all columns (honest apples-to-apples [DECIDE]); ✎ opens the assumption popover — edits apply to every column. <b style="color:var(--ink)">Commute</b>: LocalDataProvider routing; destination + hour inherited from search context. <b style="color:var(--ink)">Schools</b>: LocalDataRecord (§16), same data for every user, ⓘ opens the mandatory boundary + rating disclaimers (§16.3 exact wording) + provider attribution; tap → detail schools section. <b style="color:var(--ink)">Zoning</b>: ZoningLookupRecord (§17); claims below the §17.2 gate render "unavailable"; tap → detail zoning panel. <b style="color:var(--ink)">DOM/negotiation</b>: DOM + price_cut_count are deterministic (§14.4); the negotiation-read label is an inference — v1 ships a deterministic DOM-banded label with ⓘ tooltip "19+ days on market in this area typically means seller leverage — based on DOM only" [BEST GUESS]; upgrade path = ScoringService. <b style="color:var(--ink)">Deal rating</b>: ScoringService + AVM model value, fail-closed (matrix correction #6). <b style="color:var(--ink)">AI pros/cons</b>: 2–3 per column, every claim traces to a SourceFact (as_of_date carried, R9); fair-housing wording §16.1 — no crime data anywhere in the product. <b style="color:var(--ink)">Column ⋮ menu</b>: Remove · Pin as baseline (re-anchors all deltas [BEST GUESS affordance]) · Open detail (Screen 3). Column name/photo → Property detail; investment rows deep-link to the Underwriting Workspace (S22).</div>
+
+    <!-- stale column + column-cap toast demos -->
+    <div style="display:grid; grid-template-columns:1fr 1fr; gap:10px; padding:10px 22px 0" id="el-stale">
+      <div class="cardbox"><b>Stale compare set</b><div style="color:var(--mut); font-size:11.5px; margin-top:3px">2044 Oak Ave #4 went <span class="bdg warn">In contract</span> after being added — the column stays with a status badge rather than vanishing; deltas still computed against last-known facts with an "as of Jul 14" note. Sold columns follow MLS sold-display rules (§26.5).</div></div>
+      <div class="cardbox"><b>Column cap (max 4)</b><div style="color:var(--mut); font-size:11.5px; margin-top:3px">Adding a 5th property replaces the weakest match: <span class="bdg">"Replaced 2044 Oak Ave #4 (lowest match) — <b style="color:var(--brand)">Undo</b>"</span> toast. If match scores are unavailable, oldest-added is replaced instead [DECIDE].</div></div>
+    </div>
+
+    <!-- read-only client view -->
+    <div style="padding:14px 22px 0" id="el-client-view">
+      <div class="sechead">Read-only client view — the sent deliverable (hosted page)</div>
+      <div style="border:1px solid var(--line); border-radius:12px; overflow:hidden">
+        <div style="padding:12px 16px; background:var(--surface); font-size:12.5px"><b>Your comparison from Graeham Watts</b> — verdict narrative + the full table above, rendered as a branded hosted page. <span class="anno">No sliders, no edit, no add-property, no send controls — read-only. Only license-permitted IDX fields/photos display (§26.5). Page opens tracked at asset level (PORTAL-view class event [BEST GUESS]); compare events carry search_id/property_id attribution keys; PropSearch emits no LEAD_* events (§25.3).</span></div>
+        <div style="padding:10px 16px; font-size:11px; color:var(--mut); border-top:1px solid var(--line)"><i>"Zoning and ADU information is sourced from third-party data and must be verified with the local jurisdiction before design, permitting, purchase, or construction decisions. This is not legal, architectural, or permitting advice."</i> (§17.3 — shown because the zoning row is included) · School boundary + rating disclaimers reachable (§16.3) · "The same school information is available to every user."</div>
+        <div style="display:flex; align-items:center; gap:12px; padding:12px 16px; border-top:1px solid var(--line)">
+          <div class="avatar" style="width:32px; height:32px; font-size:13px">GW</div>
+          <div style="font-size:12px"><b>Graeham Watts</b> · Intero Real Estate · DRE #01466876<br><span class="anno">footer from shared-references/identity.json — never hardcoded; identity.json blocklist enforced before publish</span></div>
+          <div class="poweredby" style="margin-left:auto">Powered by PropertyIQ</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- states strip -->
+    <div style="padding:14px 22px 0" id="el-states">
+      <div class="sechead">States (dev reference)</div>
+      <div style="display:grid; grid-template-columns:repeat(3,1fr); gap:8px">
+        <div class="statecard"><b>Loading</b>Table skeleton, header photos first; rows appear as each data domain confirms across ALL columns.<div class="skel" style="width:90%"></div><div class="skel" style="width:70%"></div><div class="skel" style="width:80%"></div></div>
+        <div class="statecard"><b>Empty (0–1 properties)</b>"Pick at least 2 homes to compare" + hints: checkboxes on results · multi-select map pins · <span style="color:var(--brand)">Add from saved (5)</span>.</div>
+        <div class="statecard"><b>Row fail-closed</b>A row renders ONLY when data is confirmed for every column or marked "not disclosed" — never a silent hole. Zoning below the §17.2 gate shows "unavailable" (row still renders only if every column has a value or an explicit marker).</div>
+        <div class="statecard"><b>Deal rating unavailable</b>ScoringService down/unpublished → Deal-rating row AND all buy/hold/pass framing disappear entirely; deterministic rows remain; manual_review_flag set (§12.10, matrix #6).</div>
+        <div class="statecard"><b>Verdict degraded</b>Scoring seam unavailable → verdict card collapses to <i>"Verdict unavailable — compare the facts below"</i>. No locally-computed winner, ever (§14.2 forbids local ranking).</div>
+        <div class="statecard"><b>Permission-limited</b>Client read-only view: no sliders/edit/add. Agent-only "Send to client" hidden from consumer sessions — consumers get "Share" (same hosted page, no CRM log) [BEST GUESS].</div>
+      </div>
+      <div class="anno" style="margin-top:5px">Default state: 2–4 properties, differences-only ON, baseline = best match from the originating search. Column cap + stale-column states demoed above the client view.</div>
+    </div>
+
+    <!-- mobile variant strip -->
+    <div style="padding:14px 22px 18px" id="el-mobile">
+      <div class="sechead">Mobile variant (375px)</div>
+      <div style="display:flex; gap:10px; overflow-x:auto">
+        <div style="min-width:180px; border:1px solid var(--line); border-radius:14px; padding:10px; font-size:10.5px">
+          <b>Verdict</b> <span class="anno">full-width</span>
+          <div style="background:var(--surface); border-radius:8px; padding:6px; margin-top:4px">Verdict: 742 Hurlingame — quiet street + schools + 4% under model</div>
+          <div style="display:flex; gap:4px; margin-top:5px; overflow:hidden"><span class="bdg" style="font-size:9px">Quiet ▮▮▮▮▮</span><span class="bdg" style="font-size:9px">Schools ▮▮▮▮▯</span></div>
+          <div class="anno" style="margin-top:3px">weights = tappable slider chips in a horizontal scroll row</div>
+        </div>
+        <div style="min-width:220px; border:1px solid var(--line); border-radius:14px; padding:10px; font-size:10.5px">
+          <b>2-col swipeable cards</b>
+          <div style="display:grid; grid-template-columns:1fr 1fr; gap:4px; margin-top:4px">
+            <div style="border:1px solid var(--brand); border-radius:8px; padding:5px"><b>📌 742 Hurlingame</b><div class="anno">pinned — fixed left</div><div class="num">$1,289,000</div><div class="num">$8,120/mo</div></div>
+            <div style="border:1px solid var(--line); border-radius:8px; padding:5px"><b>118 Beech ⟷</b><div class="anno">swipe through others</div><div class="num neg">+$61,000</div><div class="num neg">+$390/mo</div></div>
+          </div>
+          <div class="anno" style="margin-top:3px">row labels render as section headers inside each card pair; horizontal scroll confined to the table container</div>
+        </div>
+        <div style="min-width:150px; border:1px solid var(--line); border-radius:14px; padding:10px; font-size:10.5px; display:flex; flex-direction:column">
+          <b>Sticky send + add</b>
+          <div class="anno" style="flex:1; margin-top:4px">"+" chip opens a bottom sheet (saved / results / address)</div>
+          <button class="btn-ink" style="width:100%">Send to client →</button>
+          <div class="anno">sticky bottom button</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- consumer footer -->
+    <div style="border-top:1px solid var(--line); padding:12px 22px; display:flex; gap:12px; align-items:center; font-size:12px; color:var(--mut)">
+      <span><b style="color:var(--ink)">Graeham Watts</b> · Intero Real Estate · DRE #01466876</span>
+      <span class="poweredby" style="margin-left:auto">Powered by PropertyIQ</span>
+    </div>
+  </div>
+
+  <!-- ============ spec gaps found ============ -->
+  <div class="note" style="margin-top:26px"><b>Spec gaps found (Master Brain specifies, spec inventory missed — rendered above):</b>
+    (1) <b>§16.3 exact mandatory school disclaimer texts</b> + the equal-service note ("The same school information is available to every user") — spec only said "disclaimers reachable"; the client view renders the wording.
+    (2) <b>§17.3 exact zoning disclaimer wording</b> on the client deliverable — rendered verbatim in the client view.
+    (3) <b>Owner PII boundary</b>: the "any address" add-column path resolves to PropertyRecord but must never surface raw owner name / mailing address (Brain owner_details rule) — annotated on the add slot.
+    (4) <b>price_cut_count</b> is an explicitly-allowed deterministic local metric (§14.4) — added to the DOM/negotiation row ("6d · 0 cuts").
+    (5) <b>§16.4 firewall tension</b>: school data must never enter ScoringService input_facts — yet the verdict seam sends row facts including schools when user-weighted. Flag for the PROPSEARCH_COMPARE_VERDICT contract: the user-initiated schools weight needs a documented §16.4 allowed-path carve-out (like user-entered school filters) before the seam ships; annotated on the verdict card.
+  </div>
+
+  <!-- ============ (3) ELEMENT COVERAGE ============ -->
+  <h2 style="font-size:20px; margin:20px 0 10px">Element coverage — spec inventory → this page</h2>
+  <table class="dtable cov" style="font-size:12.5px">
+    <tr><th>Spec inventory element</th><th>Rendered at</th><th>Status</th></tr>
+    <tr><td>Header context line ("Compare · N · From '{search}'")</td><td><a href="#el-header">Site header</a></td><td class="ok">✓</td></tr>
+    <tr><td>Verdict card (winner + tradeoff narrative + flip condition)</td><td><a href="#el-verdict">Verdict card</a></td><td class="ok">✓</td></tr>
+    <tr><td>Weight sliders (prompt-derived criteria, live recompute)</td><td><a href="#el-weights">Weights row</a></td><td class="ok">✓</td></tr>
+    <tr><td>Differences-only toggle ("N same attributes hidden")</td><td><a href="#el-diff-toggle">Controls row</a></td><td class="ok">✓</td></tr>
+    <tr><td>Send comparison to client → (review-first, CRM-logged)</td><td><a href="#el-send">Controls row</a></td><td class="ok">✓</td></tr>
+    <tr><td>Pinned baseline column (📌, brand border, badge, re-pin via ⋮)</td><td><a href="#el-pinned">Table column 1</a></td><td class="ok">✓</td></tr>
+    <tr><td>Delta cells (+/− vs pinned, hover absolute, favorable green)</td><td><a href="#el-row-price">All delta rows</a></td><td class="ok">✓</td></tr>
+    <tr><td>Add-property slot (saved count / results / any address)</td><td><a href="#el-add">Dashed + column</a></td><td class="ok">✓</td></tr>
+    <tr><td>Price row</td><td><a href="#el-row-price">Price</a></td><td class="ok">✓</td></tr>
+    <tr><td>Match row ("N of 5" + tappable misses)</td><td><a href="#el-row-match">Match</a></td><td class="ok">✓</td></tr>
+    <tr><td>All-in monthly row (shared assumptions popover)</td><td><a href="#el-row-monthly">All-in monthly</a></td><td class="ok">✓</td></tr>
+    <tr><td>Sqft/Lot/$-sqft row (n/a for condos)</td><td><a href="#el-row-sqft">Sqft/Lot</a></td><td class="ok">✓</td></tr>
+    <tr><td>Commute row (destination + hour from search context)</td><td><a href="#el-row-commute">Commute</a></td><td class="ok">✓</td></tr>
+    <tr><td>Schools row (assigned + rating + attribution + disclaimers)</td><td><a href="#el-row-schools">Schools</a></td><td class="ok">✓</td></tr>
+    <tr><td>Rent row (estimate + yield)</td><td><a href="#el-row-rent">Rent</a></td><td class="ok">✓</td></tr>
+    <tr><td>Risk row (fire/flood/quake /10)</td><td><a href="#el-row-risk">Risk</a></td><td class="ok">✓</td></tr>
+    <tr><td>Zoning & upside row (§17 gates, "unavailable" on suppression)</td><td><a href="#el-row-zoning">Zoning</a></td><td class="ok">✓</td></tr>
+    <tr><td>DOM / negotiation read row (DOM-banded label + ⓘ tooltip)</td><td><a href="#el-row-dom">DOM</a></td><td class="ok">✓</td></tr>
+    <tr><td>Deal rating row (ScoringService-only, fail-closed)</td><td><a href="#el-row-deal">Deal rating</a></td><td class="ok">✓</td></tr>
+    <tr><td>AI pros/cons row (SourceFact-anchored, fair-housing wording)</td><td><a href="#el-row-proscons">Pros/cons</a></td><td class="ok">✓</td></tr>
+    <tr><td>Fail-closed footnote row</td><td><a href="#el-footnote">Table footnote</a></td><td class="ok">✓</td></tr>
+    <tr><td>Column ⋮ menu (remove / pin as baseline / open detail)</td><td><a href="#el-table">Column headers + row notes</a></td><td class="ok">✓</td></tr>
+    <tr><td>Read-only client view (branded page, agent footer, tracking)</td><td><a href="#el-client-view">Client view</a></td><td class="ok">✓</td></tr>
+  </table>
+  <div style="border:1.5px solid var(--good); background:#f2f8f4; border-radius:10px; padding:12px 16px; margin:12px 0 0; font-weight:700; color:var(--good)">23 of 23 spec elements rendered ✓ <span style="font-weight:400; color:var(--mut); font-size:12.5px">— plus spec-required regions beyond the inventory: full states strip (loading/empty/row-fail-closed/deal-rating-unavailable/verdict-degraded/permission-limited), stale-column + column-cap demos, mobile variant strip, consumer footer; plus 5 Master-Brain additions in the "Spec gaps found" note above.</span></div>
+
+  <!-- ============ (4) FULL SPEC AS HTML ============ -->
+  <div class="specdoc">
+    <h1 style="font-size:24px; margin:40px 0 6px">Spec — 04 · Compare</h1>
+    <p><b>Purpose</b> Side-by-side decision surface for 2–4 properties, built as an "open lane" no portal will copy (portals monetize search sessions, not decision quality). Pins a baseline property, renders every other column as +/− deltas against it, computes a weighted-priority verdict from the user's own stated priorities, and converts the comparison into an agent-branded client deliverable logged to the CRM.</p>
+    <p><b>Primary users</b> Consumers/investors mid-decision; the agent preparing or sending a comparison to a client.</p>
+    <p><b>Entry points</b> Card checkboxes on results (Screen 2) → compare tray → "Compare N →"; multi-select map pins (Screen 2 map mode); "Compare with 3 similar actives" auto-seed link on any property detail (Screen 3); direct URL (compare sets are URL-addressable and persist); Saved Properties ("Add from saved"); a client-received comparison link (read-only variant).</p>
+    <p><b>Exit points</b> "← Back to results" (originating search preserved); column property name/photo → Property detail (Screen 3); "Send comparison to client →" → Universal Review Queue / Outbox (review-first), logged to PropFlow contact timeline; add-column "+" → saved list / results / address lookup; row-level deep links (Zoning row → detail zoning section; underwriting metrics → Underwriting Workspace).</p>
+
+    <h2>Layout</h2>
+    <p><b>Desktop</b>: Site header (agent avatar, "Compare · N properties" + originating-search subtitle, back link). Verdict card (brand-left-bordered): headline + 2–3 sentence tradeoff narrative + flip condition; weight sliders row beneath (drag to re-weight, verdict recomputes live). Controls row: "Differences only (N hidden)" default ON / "All details"; right-aligned "Send comparison to client →" with caption. Comparison table in its own overflow-x:auto container with sticky first column: header row = photo + address per column, column 1 = 📌 pinned baseline ("Best fit · baseline" badge, 3px brand top border), others "(deltas vs. pinned)", last column = dashed add slot (only when &lt; 4 properties). Data rows: Price · Match · All-in monthly · Sqft/Lot/$-sqft · Commute · Schools · Rent · Risk · Zoning & upside · DOM/negotiation · Deal rating · AI pros/cons. Winner cell highlighted; favorable deltas green. Footnote row: fail-closed + column-cap rules.</p>
+    <p><b>Mobile (375px)</b>: Verdict full-width; weights = tappable slider chips in a horizontal scroll row. Table = 2-column swipeable cards — pinned baseline fixed left, others swiped on the right; row labels as section headers per card pair. Sticky bottom "Send to client"; "+" chip opens a bottom sheet.</p>
+
+    <h2>Element inventory</h2>
+    <div style="overflow-x:auto">
+    <table class="dtable">
+      <tr><th>Element</th><th>What it shows/does</th><th>Data source</th><th>Interactions</th><th>Spec source</th></tr>
+      <tr><td>Header context line</td><td>"Compare · N properties · From '{search}'"</td><td>SearchRecord (Brain §10.5) via compare-set origin</td><td>Back to results</td><td>Draft s4</td></tr>
+      <tr><td>Verdict card</td><td>Winner for weighted priorities + tradeoff narrative + flip condition</td><td>Weighted composition of per-row facts; weights from parsed search priorities</td><td>Recomputes live on slider drag</td><td>Draft s4; fail-closed — requires verdict service (see States)</td></tr>
+      <tr><td>Weight sliders</td><td>Priority weights derived from the user's prompt criteria (not a fixed list)</td><td>User session / SavedSearch</td><td>Drag; live recompute; winner flip visible</td><td>Draft s4</td></tr>
+      <tr><td>Differences-only toggle</td><td>Hides rows where all columns match ("N same attributes hidden")</td><td>Client-side over row data</td><td>Chip toggle; "All details"</td><td>Draft s4 (NN/g)</td></tr>
+      <tr><td>Send comparison to client →</td><td>Renders comparison as agent-branded hosted page + narrative; review-first send</td><td>HostedRenderProvider (§12.9) → GeneratedAssetRef; PropFlow timeline</td><td>Client picker → Outbox/Review Queue, never auto-sends</td><td>Draft s4; Universal Review Queue P0; client-facing review-first rule</td></tr>
+      <tr><td>Pinned baseline column</td><td>Column 1, brand border, 📌 + "Best fit · baseline" badge</td><td>Compare set state</td><td>⋮ → "Pin as baseline" re-anchors deltas [BEST GUESS affordance]</td><td>Draft s4</td></tr>
+      <tr><td>Delta cells</td><td>+/− vs pinned ("+$61,000", "−$470/mo", "+4 min")</td><td>Computed client-side from deterministic facts</td><td>Hover/tap shows absolute value</td><td>Draft s4</td></tr>
+      <tr><td>Add-property slot</td><td>Dashed "+": saved (count), results, or any address</td><td>SavedPropertyRecord; search; address → PropertyRecord</td><td>Picker; at 4 columns a 5th replaces weakest match with undo toast</td><td>Draft s4</td></tr>
+      <tr><td>Price row</td><td>List price / deltas</td><td>IDXListingRecord</td><td>Winner highlight</td><td>Draft s4</td></tr>
+      <tr><td>Match row</td><td>"5 of 5" vs "4 of 5 · miss: busier street"</td><td>SearchResultRecord (service-computed)</td><td>Tap miss → explanation</td><td>Draft s4</td></tr>
+      <tr><td>All-in monthly row</td><td>PITI+ins+HOA, deltas</td><td>CashflowPreviewMetrics (§24.4), same editable assumptions as detail</td><td>Tap → assumption popover [BEST GUESS: shared edit applies to all columns]</td><td>Draft s4</td></tr>
+      <tr><td>Sqft/Lot/$-sqft row</td><td>Absolute + deltas; n/a for condos</td><td>IDXListingRecord</td><td>—</td><td>Draft s4</td></tr>
+      <tr><td>Commute row</td><td>Minutes to user's destination at their hour, deltas</td><td>LocalDataProvider routing</td><td>Destination from search context</td><td>Draft s4</td></tr>
+      <tr><td>Schools row</td><td>Assigned school + third-party rating per column</td><td>LocalDataRecord (§16)</td><td>Tap → detail schools section</td><td>Draft s4; §16 display rules (attribution + disclaimers reachable)</td></tr>
+      <tr><td>Rent row</td><td>Rent estimate + yield, deltas</td><td>RentEstimateSnapshot + CashflowPreviewMetrics</td><td>—</td><td>Draft s4</td></tr>
+      <tr><td>Risk row</td><td>fire/flood/quake n/10 triplet</td><td>Risk feed (same as detail)</td><td>—</td><td>Draft s4</td></tr>
+      <tr><td>Zoning & upside row</td><td>"ADU by right · builds to 3 (1 built)" / "at max units" / "Condo — n/a"</td><td>ZoningLookupRecord (§17)</td><td>Tap → detail zoning panel</td><td>Draft s4; §17 gates: suppressed claims render "unavailable"</td></tr>
+      <tr><td>DOM / negotiation read row</td><td>"6d · multiple offers likely", "19d · seller leverage"</td><td>IDX DOM (deterministic) + negotiation-read label</td><td>—</td><td>Draft s4; label is an inference — ScoringService or rule-based-and-labeled; [BEST GUESS] v1 = deterministic DOM band + ⓘ tooltip</td></tr>
+      <tr><td>Deal rating row</td><td>"Good — 4% under model" / "At model"</td><td>ScoringService + AVM model value</td><td>—</td><td>Draft s4 + QA line 2056: ScoringService-only, fail-closed — row disappears when unavailable (matrix #6)</td></tr>
+      <tr><td>AI pros/cons row</td><td>2–3 pros/cons per column, fact-anchored ("roof 2009 (disclosure)")</td><td>Generated from listing facts + intelligence data only</td><td>—</td><td>Draft s4; every claim traces to a SourceFact; fair-housing wording §16.1</td></tr>
+      <tr><td>Fail-closed footnote</td><td>"Rows render only when data is confirmed for every column (or marked 'not disclosed')"</td><td>—</td><td>—</td><td>Draft s4 (NN/g consistency rule)</td></tr>
+      <tr><td>Column ⋮ menu</td><td>Remove, pin as baseline, open detail</td><td>—</td><td>—</td><td>[BEST GUESS] standard affordance</td></tr>
+      <tr><td>Read-only client view</td><td>Sent comparison as branded hosted page: verdict narrative + table, agent card footer, no edit controls</td><td>GeneratedAssetRef hosted URL</td><td>PORTAL-view tracking on open [BEST GUESS: asset-level view event]</td><td>Draft s4 "branded page"; identity.json footer</td></tr>
+    </table>
+    </div>
+
+    <h2>States</h2>
+    <ul>
+      <li><b>Default</b>: 2–4 properties, differences-only ON, baseline = best match from the originating search.</li>
+      <li><b>Loading</b>: table skeleton with header photos first; rows appear as each data domain confirms across all columns.</li>
+      <li><b>Empty</b>: 0–1 properties → "Pick at least 2 homes to compare" + entry-point hints + saved-properties shortcut.</li>
+      <li><b>Row fail-closed</b>: a row renders ONLY when data is confirmed for every column or explicitly marked "not disclosed"; zoning below the §17.2 gate shows "unavailable".</li>
+      <li><b>Deal rating unavailable</b>: ScoringService down/unpublished → Deal-rating row and any buy/hold/pass framing disappear; deterministic rows remain; manual_review_flag set (§12.10; matrix #6).</li>
+      <li><b>Verdict degraded</b>: scoring seam unavailable → card collapses to "Verdict unavailable — compare the facts below"; no locally-computed winner (§14.2 forbids local ranking).</li>
+      <li><b>Column cap</b>: max 4; a 5th replaces the weakest match with an undo toast.</li>
+      <li><b>Stale compare set</b>: property goes pending/sold → column stays with a status badge; deltas from last-known facts with as-of note.</li>
+      <li><b>Permission-limited</b>: client read-only view has no sliders/edit/add; agent-only send hidden from consumers [BEST GUESS: consumers get "Share" without CRM logging].</li>
+      <li><b>Mobile</b>: 2-col swipeable cards, pinned baseline fixed; horizontal scroll confined to the table container.</li>
+    </ul>
+
+    <h2>Data fields</h2>
+    <p>compare_set: property_ids[], pinned_property_id, source_search_id, weights{} (URL-addressable, persisted per app_user [BEST GUESS, §10.7 pattern]) · list_price + delta (IDXListingRecord) · match count + misses (SearchResultRecord) · all_in_monthly + delta (CashflowPreviewMetrics, shared assumptions) · sqft, lot_sqft, price_per_sqft (IDXListingRecord; $/sqft deterministic) · commute_minutes + delta (LocalDataProvider) · school assigned + rating + provider attribution (LocalDataRecord) · rent_estimate_monthly, yield (RentEstimateSnapshot / CashflowPreviewMetrics) · risk triplet (risk feed) · zoning summary: adu_allowed, max_units, units_built, claim_level (ZoningLookupRecord) · DOM + negotiation label (IDX; labeled rule-band interim) · deal_rating: label + % vs model (ScoringService + AVMSnapshot) · pros/cons: 2–3 SourceFact-anchored strings each · weights: per-criterion 0–5, seeded from parsed search priorities · sent deliverable: asset_id, hosted URL, recipient contact_id, sent_at (GeneratedAssetRef, Brain §10.16, §20; PropFlow timeline entry).</p>
+
+    <h2>Rules & compliance</h2>
+    <ul>
+      <li><b>No local scoring/ranking</b> (§14.2, §12.10): deal rating, match scores, investor-fit, and the weighted verdict come from ScoringService/search services. Deterministic metrics (price, $/sqft, deltas, cashflow math per §14.4) may compute locally.</li>
+      <li><b>Fail closed</b> on deal rating and verdict (matrix #6); on any row with unconfirmed data (NN/g rule); on zoning claims below gate (§17.2).</li>
+      <li><b>Schools</b>: same data for every user; attribution + disclaimers reachable from the row; school data never feeds the verdict weighting algorithm's defaults — the schools weight appears ONLY because the user explicitly asked (§16.4 user-initiated path). No mention of schools in the prompt → no schools slider by default.</li>
+      <li><b>Fair housing wording</b> (§16.1) in verdict narrative and pros/cons: facts, never characterizations — "feeds Roy Cloud, rated 9/10 by {Provider}", never "better schools" without attribution; never "safe/family-friendly". No crime data anywhere.</li>
+      <li><b>Client send is review-first</b>: "Send to client" creates a draft in the Universal Review Queue/Outbox; nothing client-facing auto-sends. Send requires the contact's channel consent via ComplianceProvider (no consent-model bypass).</li>
+      <li><b>MLS/IDX boundary</b> (§26.5): hosted client page shows only license-permitted fields/photos; sold columns follow sold-display rules.</li>
+      <li><b>Zoning disclaimer</b> (§17.3) appears on the client deliverable when the zoning row is included.</li>
+      <li><b>Brand</b>: hosted deliverable footer from identity.json (DRE 01466876 for Graeham's tenant); the identity.json blocklist enforced.</li>
+      <li><b>Attribution</b>: hosted-page opens tracked at asset level; compare events carry search_id/property_id keys; PropSearch does not emit LEAD_* events (§25.3).</li>
+    </ul>
+
+    <h2>Cross-links</h2>
+    <p><b>In</b>: Results (S2) checkboxes + map multi-select, Property detail (S3) auto-seed, Saved Properties, direct URLs, client link (read-only). <b>Out</b>: Property detail (S3) per column, Underwriting Workspace (S22) from investment rows, Outbox/Review Queue (send flow), PropFlow contact timeline. <b>Emits</b>: GENERATED_ASSET_CREATED (§25.1); compare-set analytics [BEST GUESS: COMPARE_VIEWED-class]; the send is logged by PropFlow on human approval. <b>Consumes</b>: SearchResultRecord match context, per-property snapshots (AVM, rent, zoning, local data, cashflow), ScoringService outputs.</p>
+
+    <h2>Open decisions</h2>
+    <ul>
+      <li><b>[DECIDE] Verdict computation seam</b>: ScoringService gains a PROPSEARCH_COMPARE_VERDICT context (deterministic row facts + user weights); until published, the verdict card runs degraded (facts only) — UI built for both states. This mock adds: the schools-weight input needs a documented §16.4 carve-out before the seam ships.</li>
+      <li><b>[DECIDE] Negotiation-read labels</b>: interim = deterministic DOM bands with ⓘ tooltip; upgrade path = ScoringService label.</li>
+      <li><b>[DECIDE] Compare-set persistence</b>: interim = per app_user record + shareable URL token; anonymous sessions get URL-state only.</li>
+      <li><b>[DECIDE] Weakest-match replacement</b> at the 4-column cap: lowest match score replaced (undo toast); if scores unavailable, oldest-added.</li>
+      <li><b>[DECIDE] Consumer "Share" variant</b>: consumers mint the same hosted page send-free (no CRM log, no client picker); agent send stays review-gated.</li>
+      <li><b>[DECIDE] Shared vs per-column financing assumptions</b>: ONE shared assumption set across columns, editable from the all-in-monthly row; per-column overrides deferred to the Underwriting Workspace.</li>
+    </ul>
+    <p class="anno" style="margin-top:20px">Wireframe fidelity — colors are placeholders from the locked PropFlow design language. All addresses/prices/ratings are realistic fake data. Agent identity: Graeham Watts, Intero Real Estate, DRE #01466876 (from shared-references/identity.json — never hardcode elsewhere; the identity.json blocklist enforced).</p>
+  </div>
+</div>

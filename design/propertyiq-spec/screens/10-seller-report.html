@@ -1,0 +1,480 @@
+<title>PropertyIQ · Screen 10 — Seller Report / Owner Page</title>
+<link href="https://api.fontshare.com/v2/css?f[]=technor@500,600,700&display=swap" rel="stylesheet">
+<link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<style>
+  /* Type system — Technor for display, Inter for UI. */
+  :root{ --font-display:'Technor', Inter, -apple-system, 'Segoe UI', sans-serif; --font-ui: Inter, -apple-system, 'Segoe UI', Roboto, sans-serif; }
+</style>
+<style>
+  /* Palette v4 — PropFlow design language: neutral ink UI, ink-as-accent, color reserved for data. (extracted verbatim from propsearch-design-draft.html) */
+  :root, :root[data-theme="dark"], :root[data-theme="light"]{
+    --ink:#23282f; --paper:#fbfaf8; --surface:#f1efe9; --line:#e2dfd6;
+    --mut:#6b7076; --soft:#9b9f9f;
+    --brand:#2e6b53; --brand-ink:#ffffff; --brand-soft:#eaf1ec; --brand-deep:#1e4c3a;
+    --signal:#b07a2e;
+    --good:#2e7d4f; --warn:#a8630a; --crit:#b3372f;
+    --r:10px;
+  }
+  .intel .score, .mintel{ color:var(--brand-deep) }
+  .intel{ border-left:3px solid var(--brand) }
+  h1{ letter-spacing:-.02em }
+  .stat b{ letter-spacing:-.01em }
+  body[data-agent="watts"]{ --brand:#2e6b53; --brand-soft:#eaf1ec; --brand-deep:#1e4c3a; }
+
+  *{box-sizing:border-box; margin:0}
+  body{font:15px/1.55 var(--font-ui); color:var(--ink); background:var(--paper); padding-bottom:80px}
+  h1,h2,h3{line-height:1.15; text-wrap:balance; font-family:var(--font-display); font-weight:600}
+  h1{letter-spacing:-.01em}
+  .site{box-shadow:0 1px 2px rgba(20,24,32,.04), 0 8px 32px rgba(20,24,32,.06)}
+  .stat{box-shadow:0 1px 2px rgba(20,24,32,.03); transition:box-shadow .15s, transform .15s}
+  .stat:hover{box-shadow:0 4px 14px rgba(20,24,32,.08)}
+  .chip{transition:all .12s}
+  button{font-family:var(--font-ui)}
+  .num{font-variant-numeric:tabular-nums}
+  .wrap{max-width:1180px; margin:0 auto; padding:0 20px}
+
+  .bar{position:sticky; top:0; z-index:50; background:var(--paper); border-bottom:1px solid var(--line); padding:10px 0; backdrop-filter:blur(8px)}
+  .bar .wrap{display:flex; flex-wrap:wrap; gap:10px; align-items:center}
+  .bar .ttl{font-weight:700; margin-right:auto}
+  .bar .ttl small{display:block; font-weight:400; color:var(--mut)}
+  .bar a{color:var(--brand); font-size:13px; text-decoration:none}
+
+  .note{background:var(--surface); border:1px solid var(--line); border-radius:var(--r); padding:14px 16px; margin:0 0 22px; font-size:13.5px; color:var(--mut)}
+  .note b{color:var(--ink)}
+
+  .site{border:1px solid var(--line); border-radius:14px; overflow:hidden; background:var(--paper)}
+  .sitehead{display:flex; align-items:center; gap:14px; padding:14px 22px; border-bottom:1px solid var(--line)}
+  .avatar{width:38px; height:38px; border-radius:50%; background:var(--brand); color:var(--brand-ink); display:grid; place-items:center; font-weight:700}
+  .sitehead .who b{display:block}
+  .sitehead .who small{color:var(--mut)}
+  .sitehead nav{margin-left:auto; display:flex; gap:18px; font-size:13.5px; color:var(--mut)}
+  .sitehead nav a{color:inherit; text-decoration:none}
+  .sitehead nav a:hover{color:var(--brand)}
+
+  .chip{display:inline-flex; align-items:center; gap:6px; font-size:12.5px; font-weight:500; border:1px solid var(--line); border-radius:99px; padding:6px 12px; background:var(--paper); cursor:pointer; color:var(--ink)}
+  .chip:hover{border-color:var(--brand)}
+  .chip.on{background:var(--brand); border-color:var(--brand); color:var(--brand-ink); font-weight:600; box-shadow:0 2px 8px color-mix(in srgb, var(--brand) 30%, transparent)}
+
+  .statrow{display:grid; grid-template-columns:repeat(4,1fr); gap:10px}
+  .stat{background:var(--surface); border:1px solid var(--line); border-radius:var(--r); padding:12px}
+  .stat small{display:block; color:var(--mut); font-size:11.5px; text-transform:uppercase; letter-spacing:.05em}
+  .stat b{font-size:18px}
+  .stat .up{color:var(--good); font-size:12px}
+
+  .bdg{font-size:11.5px; border-radius:6px; padding:3px 8px; background:var(--surface); border:1px solid var(--line); color:var(--mut)}
+  .bdg.good{color:var(--good); border-color:color-mix(in srgb,var(--good) 30%,var(--line))}
+  .bdg.warn{color:var(--warn); border-color:color-mix(in srgb,var(--warn) 30%,var(--line))}
+
+  .dtable{width:100%; border-collapse:collapse; font-size:13px}
+  .dtable td,.dtable th{border-bottom:1px solid var(--line); padding:8px 10px; text-align:left}
+  .dtable th{font-size:11px; text-transform:uppercase; letter-spacing:.05em; color:var(--soft)}
+
+  @media (max-width:860px){ .statrow{grid-template-columns:repeat(2,1fr)} .maingrid{grid-template-columns:1fr !important} .exgrid{grid-template-columns:1fr !important} }
+  @media (prefers-reduced-motion: reduce){ *{transition:none!important} }
+
+  /* ---- page-specific additions (same design language) ---- */
+  .anno{font-size:11px; color:var(--soft)}
+  .cardbox{border:1px solid var(--line); border-radius:10px; padding:11px 14px; font-size:12.5px; background:var(--paper)}
+  .btn-ink{background:var(--ink); color:#fff; border:0; border-radius:7px; padding:7px 12px; font-size:11.5px; cursor:pointer; font-weight:600}
+  .btn-ghost{background:var(--paper); border:1px solid var(--line); border-radius:7px; padding:7px 12px; font-size:11.5px; cursor:pointer}
+  .sechead{font-size:14px; font-weight:700; margin:0 0 8px; font-family:var(--font-display)}
+  .cov td.ok{color:var(--good); font-weight:700}
+  .specdoc h2{font-size:18px; margin:26px 0 8px}
+  .specdoc h3{font-size:15px; margin:18px 0 6px}
+  .specdoc p, .specdoc li{font-size:13.5px; color:var(--mut)}
+  .specdoc b{color:var(--ink)}
+  .specdoc table{margin:8px 0}
+  .rcard{border:1px solid var(--line); border-radius:14px; padding:16px}
+  .poweredby{font-size:12px; color:var(--soft)}
+  .mstrip{display:flex; gap:10px; overflow-x:auto; padding-bottom:6px}
+  .mframe{min-width:180px; max-width:180px; border:1px solid var(--line); border-radius:14px; background:var(--paper); font-size:9px; overflow:hidden}
+  .mframe .mh{padding:6px 8px; border-bottom:1px solid var(--line); font-weight:700; font-size:9.5px}
+  .mframe .mb{padding:7px 8px; color:var(--mut)}
+</style>
+
+<!-- ============ (1) slim header ============ -->
+<div class="bar">
+  <div class="wrap">
+    <div class="ttl">PropertyIQ · Screen 10 — Seller Report / Owner Page <small>Full-density per-screen mock · wireframe fidelity · dev-facing annotations in gray</small></div>
+    <a href="../wireframe.html">← All screens</a>
+  </div>
+</div>
+
+<!-- ============ (2) THE FULL MOCK ============ -->
+<div class="wrap" style="padding-top:24px">
+  <div class="note"><b>Screen 10 — Seller Report / Owner Page.</b> A <b>permanent, per-owner live web page</b> — not a report, not an attachment. The monthly email teases exactly ONE delta (W.I.N.) and links here; the page carries the full story; every interaction (scenario click, chip toggle, check-in tap) writes a ledger signal that feeds seller propensity in the agent's Command Center — <b>scoring itself happens only in ScoringService, never page-side</b>. Per matrix correction #8, this page and the PropClose Weekly Seller Dashboard are ONE artifact on ONE durable URL: homeowner mode → listing-performance mode when they list → in-contract portal (Screen 25) → back to Homeowner Hub at close. Consumer chrome: agent-branded header, no console rail, "Powered by PropertyIQ" footer.</div>
+
+  <div class="site" data-agent="watts">
+    <!-- consumer header: agent avatar + name + nav (spec Layout) -->
+    <div class="sitehead" id="el-header">
+      <div class="avatar">GW</div>
+      <div class="who"><b>Graeham Watts</b><small>Home value report · Intero Real Estate · DRE 01466876</small></div>
+      <nav>
+        <a href="#el-update-info" id="el-update-info-link">Update my info</a>
+        <a href="#" id="el-tracking-toggle">Monthly tracking: <b style="color:var(--good)">ON</b></a>
+      </nav>
+    </div>
+    <div class="anno" style="padding:6px 22px 0">Header identity is brand-locked from identity.json (DRE 01466876; the identity.json blocklist is enforced at render). "Monthly tracking" toggle = consent state for the teaser email (§11.2): OFF suppresses all sends — consent-gated, evidence-logged. "Update my info" opens the owner-facts form (below).</div>
+
+    <div style="padding:18px 22px">
+      <!-- title block + market temperature -->
+      <div id="el-title">
+        <h1 style="font-size:24px">318 Hurlingame Ave, Redwood City</h1>
+        <p style="color:var(--mut); margin-top:4px; font-size:13.5px">Your home's live page · updated <b class="num" style="color:var(--ink)">July 14, 2026</b> · permanent link, refreshed monthly · <b id="el-temp" style="color:var(--ink)">Market temperature: Seller's market 🔥</b></p>
+        <div class="anno">Market temperature gauge = 3-value enum (Buyer's / Neutral / Seller's), computed from inventory, DOM, sale-to-list (Homebot pattern) — MLS-derived <b>aggregates only</b> (whitelist-safe display; no raw MLS data on a public page). Non-interactive.</div>
+      </div>
+
+      <!-- buyer-demand hero + W.I.N. chip -->
+      <div id="el-hero" style="border:1.5px solid var(--brand); border-radius:12px; padding:12px 16px; margin-top:12px; background:var(--brand-soft); display:flex; gap:14px; align-items:center; flex-wrap:wrap">
+        <div style="font-size:26px; font-weight:800" class="num">14</div>
+        <div style="flex:1; min-width:220px; font-size:13px"><b>buyers in our network are looking for a home like yours</b><div style="color:var(--mut); font-size:12px">3bd · Friendly Acres · up to $1.5M — matched from active saved searches &amp; buyer criteria in Graeham's network</div></div>
+        <div id="el-win" style="font-size:12px; color:var(--mut)">✦ W.I.N. — what's important now: <b style="color:var(--ink)">you crossed 40% equity this month</b> <span style="font-size:10px; color:var(--soft)">(one insight per month — locked: never a list; this is also the ONLY thing the email teases)</span></div>
+      </div>
+      <div class="anno" style="margin-top:4px">Hero count = PropSearch saved searches (active last 90 days, recomputed monthly [BEST GUESS]) + PropFlow buyer criteria — <b>aggregate count only, no buyer identity</b> (privacy + fair housing: demand framed on property facts only, never demographics). Renders only when N≥1; N=0 hides the whole block (see States). W.I.N. chip = monthly delta engine over the page's own data.</div>
+
+      <!-- Equity Explorer -->
+      <div id="el-explorer" style="border:1px solid var(--line); border-radius:14px; padding:16px; margin-top:12px">
+        <b style="font-size:14px">Equity Explorer — what your ≈$658K could do <span style="font-size:10.5px; color:var(--soft); font-weight:400">(highest-engagement module; our zoning data makes it smarter)</span></b>
+        <div class="exgrid" style="display:grid; grid-template-columns:repeat(3,1fr); gap:10px; margin-top:10px; font-size:12px">
+          <div id="el-adu-scenario" style="border:1.5px solid var(--brand); background:var(--brand-soft); border-radius:10px; padding:11px"><b>🏗 Build the ADU <span class="bdg" style="font-size:9.5px">our unique</span></b><div style="color:var(--mut); margin-top:4px" class="num">Cash-out ≈$185K builds it · rents ≈$2,400/mo (est.) · adds ≈$210–280K to value (est.) — <b style="color:var(--good)">the only option that pays for itself</b>. Your lot qualifies <b>by right</b>.<div class="anno" style="margin-top:3px">Zoneomics fields + rent est. + AVM · zoning_confidence 0.86, jurisdiction_covered ✓ → affirmative claim allowed (claim ladder §13.9). Click → ADU concept view (ledger signal). Concept imagery: owned/licensed only — never provider map tiles (§13.8).</div></div></div>
+          <div id="el-moveup-scenario" style="border:1px solid var(--line); border-radius:10px; padding:11px"><b>🏡 Move up</b><div style="color:var(--mut); margin-top:4px" class="num">Equity = 25% down on up to $2.6M · payment gap to a Menlo Park 4bd: +$3,890/mo at today's rates (rate-lock math shown honestly)<div class="anno" style="margin-top:3px">AVM + mortgage balance + rate feed · click = ledger signal.</div></div></div>
+          <div id="el-invest-scenario" style="border:1px solid var(--line); border-radius:10px; padding:11px"><b>💼 Buy an investment</b><div style="color:var(--mut); margin-top:4px" class="num">Cash-out $150K = 25% down on a ≈$600K duplex in EPA · est. cash flow −$120/mo at 6.4% · <a href="#" style="color:var(--brand)">run it in the underwriter →</a><div class="anno" style="margin-top:3px">PropSearch quick calc · link exits to Underwriting Workspace (Screen 22), consumer-safe view.</div></div></div>
+        </div>
+        <div style="display:flex; gap:14px; margin-top:10px; font-size:11.5px; color:var(--mut); flex-wrap:wrap" class="num">
+          <span id="el-purchasing-power">💰 Purchasing power: ≈$2.6M max next-home price (equity + income est.) <button class="btn-ghost" style="padding:2px 8px; font-size:10px">edit income</button> <span class="anno">income user-editable → recompute</span></span>
+          <span id="el-str-stat">🛏 Short-term rental: your spare room ≈ $1,850/mo (12-comp est.) <span class="anno">rent-comp source · display only</span></span>
+          <span style="color:var(--soft)">every scenario click = a ledger signal → seller propensity (computed in ScoringService, never here)</span>
+        </div>
+      </div>
+
+      <!-- two-column grid -->
+      <div class="maingrid" style="display:grid; grid-template-columns:1.3fr 1fr; gap:16px; margin-top:16px">
+        <div>
+          <!-- valuation card -->
+          <div id="el-valuation" style="border:1px solid var(--line); border-radius:14px; padding:20px; text-align:center">
+            <div style="font-size:12px; text-transform:uppercase; letter-spacing:.06em; color:var(--soft)">Estimated range · confidence: HIGH · as of Jul 14, 2026</div>
+            <div class="num" style="font-size:34px; font-weight:800; margin:6px 0">$1.31M – $1.42M</div>
+            <div style="font-size:13px; color:var(--mut)">midpoint <b class="num" style="color:var(--ink)">$1,365,000</b> · <span class="up num" style="color:var(--good)">+$58K since last July</span> · all values are estimates</div>
+            <div id="el-avm-spread" style="font-size:11.5px; color:var(--mut); margin-top:6px" class="num">Three independent estimates disagree by <b style="color:var(--ink)">$110K</b> (ours $1.365M · Model A $1.41M · Model B $1.30M) — that spread is why an in-person pricing analysis matters.</div>
+            <div class="anno" style="margin-top:3px">AVM-spread framing = the CMA conversation starter. Generic "Model A/B" labels pending legal clearance on third-party brand naming — a certain Z-branded name is FORBIDDEN once this page runs inside PropClose portal chrome (§9.7: any future such template sets LEGAL_APPROVAL_REQUIRED=true). Matrix correction #7 (hard rule): every displayed estimate carries confidence + range + as-of date.</div>
+            <div style="margin-top:8px"><span id="el-besttime" class="bdg" style="font-size:11px">📅 Best time to list here: late March–May (seasonal premium ≈ 2.8%)</span> <span class="anno">historical sale seasonality for this neighborhood</span></div>
+            <div id="el-slider" style="height:10px; background:var(--surface); border-radius:99px; margin:16px 30px 4px; position:relative">
+              <div style="position:absolute; left:30%; right:25%; top:0; bottom:0; background:var(--brand); border-radius:99px; opacity:.7"></div>
+              <div style="position:absolute; left:52%; top:-4px; width:3px; height:18px; background:var(--ink); border-radius:2px"></div>
+            </div>
+            <div class="anno">Range slider graphic: band = AVM range, tick = midpoint. Display only.</div>
+          </div>
+
+          <!-- tune your value chips -->
+          <div id="el-tune" style="border:1px solid var(--line); border-radius:14px; padding:16px; margin-top:14px">
+            <b style="font-size:14px">Tune your value</b>
+            <div style="font-size:12.5px; color:var(--mut); margin:8px 0 10px">The model can't see inside. Tell it what you've done — every answer sharpens the estimate.</div>
+            <div style="display:flex; gap:8px; flex-wrap:wrap">
+              <button class="chip">Kitchen remodeled</button>
+              <button class="chip on">Bathrooms updated</button>
+              <button class="chip">New roof</button>
+              <button class="chip">ADU added</button>
+              <button class="chip">Needs work</button>
+            </div>
+            <div class="anno" style="margin-top:6px">Each toggle writes a SourceFact (HUMAN_CONFIRMED) → sharpens estimate + emits a ledger signal. Owner input is the source; never inferred.</div>
+          </div>
+
+          <!-- comps card -->
+          <div id="el-comps" style="border:1px solid var(--line); border-radius:14px; padding:16px; margin-top:14px">
+            <b style="font-size:14px">The 8 sales behind this number</b>
+            <table class="dtable" style="font-size:11.5px; margin-top:8px">
+              <tr><th>Sale</th><th>Sold (est. basis)</th><th>Distance</th><th>Recency</th></tr>
+              <tr class="num"><td>742 Hurlingame Ave</td><td>$1.415M</td><td>0.1 mi</td><td>8 days ago</td></tr>
+              <tr class="num"><td>118 Beech St</td><td>$1.35M</td><td>0.2 mi</td><td>3 wks ago</td></tr>
+              <tr class="num"><td>2004 Spring St</td><td>$1.29M</td><td>0.3 mi</td><td>5 wks ago</td></tr>
+              <tr><td colspan="4" style="color:var(--soft)">+ 5 more · <a href="#" style="color:var(--brand)">see all comps on map →</a></td></tr>
+            </table>
+            <div class="anno" style="margin-top:5px">MLS posture (§13.6): public view = aggregates; <b>detailed sold comps require an authenticated session</b> — the map link gates there. Whitelist fields only; no vector/AI-training use of MLS data. Map imagery: ImageryProvider/Mapbox with attribution — no Google satellite for client-facing marketing.</div>
+          </div>
+
+          <!-- listing-performance mode flip preview -->
+          <div id="el-listing-mode" style="border:1px dashed var(--line); border-radius:14px; padding:14px; margin-top:14px; background:var(--surface)">
+            <b style="font-size:13.5px">⇄ Same URL, next life: listing-performance mode (once they list)</b>
+            <div style="font-size:12px; color:var(--mut); margin-top:6px">The page flips into the <b style="color:var(--ink)">Weekly Seller Dashboard</b> (WeeklyListingUpdateEmbed, payload_schema <span class="num">weekly_listing_update.v1</span>, producer PROPCAST):</div>
+            <div style="display:flex; gap:8px; flex-wrap:wrap; margin-top:8px; font-size:11px">
+              <span class="bdg">‹ Week of Jul 7–13 ›  week navigator</span>
+              <span class="bdg">💬 verbatim showing feedback: "loved the light, unsure about the yard slope"</span>
+              <span class="bdg warn">📬 offer banner — three-state: none / received / multiple</span>
+              <span class="bdg">seller tasks[] · market activity summary</span>
+            </div>
+            <div class="anno" style="margin-top:6px">Matrix correction #8 + PropClose §9.6. Authenticated portal session only (magic_link + OTP/MFA two-tier), no_public_indexing=true, no raw MLS data in the embed, <b>no ad pixels</b> in authenticated sessions; engagement emits PORTAL_VIEWED {section, transaction_id, auth_level} only (§13.10). Monday "doorway" email is review-first. Embed unavailable → section hidden + staff task, never stale/fabricated (see States). At close: → in-contract portal (25) → Homeowner Hub via DEAL_CLOSED.</div>
+          </div>
+        </div>
+
+        <!-- right rail -->
+        <div style="display:grid; gap:14px; align-content:start">
+          <!-- CTA card -->
+          <div id="el-cta" style="border:2px solid var(--ink); border-radius:14px; padding:18px">
+            <b style="font-size:15px">Want the real number?</b>
+            <div style="font-size:13px; color:var(--mut); margin:8px 0 12px">An algorithm gets you close. Graeham has sold 14 homes in this neighborhood and will walk yours personally — pricing strategy, prep list, and what buyers here pay premiums for.</div>
+            <button style="width:100%; background:var(--ink); color:#fff; border:0; border-radius:9px; padding:12px; font-weight:600; cursor:pointer">Get my precise valuation (free)</button>
+            <div style="font-size:11.5px; color:var(--soft); margin-top:8px; text-align:center">No obligation · usually within 24 hours</div>
+            <div class="anno" style="margin-top:6px">Submit → CMA request task for the agent; the reply is review-first through the Outbox — never auto-outreach (matrix correction #2).</div>
+          </div>
+
+          <!-- 1-tap check-in -->
+          <div id="el-checkin" style="border:1px solid var(--line); border-radius:14px; padding:16px; background:var(--surface)">
+            <b style="font-size:13.5px">Quick check-in — one tap</b>
+            <div style="display:grid; gap:6px; margin-top:8px">
+              <button class="chip" style="justify-content:flex-start">Just tracking my value</button>
+              <button class="chip" style="justify-content:flex-start">Curious what I'd walk away with</button>
+              <button class="chip" style="justify-content:flex-start">Thinking about it in 6–12 months</button>
+            </div>
+            <div class="anno" style="margin-top:6px">3-value enum + timestamp. Tap writes a ledger signal → seller-signals tile / propensity via ScoringService (Homebot check-in pattern). Stays on page — the self-segmentation engine. Any agent outreach it triggers routes to review, never auto.</div>
+          </div>
+
+          <!-- move math -->
+          <div id="el-movemath" class="rcard">
+            <b style="font-size:13.5px">Move math — your golden handcuffs, measured</b>
+            <div style="font-size:12.5px; color:var(--mut); margin-top:8px; display:grid; gap:5px" class="num">
+              <div>Your payment now (3.1% rate) <b style="color:var(--ink)">$3,890/mo</b></div>
+              <div>Same-size move-up home today <b style="color:var(--ink)">$8,740/mo</b></div>
+              <div>Gap <b style="color:var(--warn)">$4,850/mo</b> · shrank <b style="color:var(--good)">$310/mo</b> since March — we'll flag the month it loosens</div>
+            </div>
+            <div class="anno" style="margin-top:5px">Mortgage terms + rate feed. Display only; gap trend is the retention hook.</div>
+          </div>
+
+          <!-- net sheet -->
+          <div id="el-netsheet" class="rcard">
+            <b style="font-size:13.5px">If you sold at $1.365M</b>
+            <div style="font-size:12.5px; color:var(--mut); margin-top:8px; display:grid; gap:5px" class="num">
+              <div>Mortgage payoff est. <b style="color:var(--ink)">−$612K</b></div>
+              <div>Selling costs est. <b style="color:var(--ink)">−$95K</b></div>
+              <div>Your equity walk-away <b style="color:var(--good)">≈ $658K (est.)</b></div>
+            </div>
+            <div class="anno" style="margin-top:5px">AVM midpoint + mortgage balance + cost model — all "est." labeled. Requires a known mortgage balance; missing → MISSING_MORTGAGE_BALANCE manual-entry prompt instead of numbers, never fabricated (matrix correction #7 — see States).</div>
+          </div>
+
+          <!-- ADU hidden value -->
+          <div id="el-adu-card" class="rcard" style="border-left:3px solid var(--good)">
+            <b style="font-size:13.5px">💡 Your lot has hidden value</b>
+            <div style="font-size:12.5px; color:var(--mut); margin-top:8px">Zoning allows an <b style="color:var(--ink)">ADU by right</b> on your parcel. Similar homes with ADUs here sold for <b class="num" style="color:var(--good)">$210–280K more (est.)</b> — or rent one for ≈$2,400/mo instead of selling. <a href="#" style="color:var(--brand)">See the concept on your lot →</a></div>
+            <div class="anno" style="margin-top:5px">Zoneomics fields (zoning_confidence 0.86 · jurisdiction_covered ✓ · zoning_source · zoning_last_checked_at Jul 12) + comps. Claim ladder per render: &lt;0.60 or uncovered → suppressed; 0.60–0.79 → cautious disclaimered language; ≥0.80 + covered → affirmative "by right". Concept renders from owned/licensed imagery only (§13.8).</div>
+          </div>
+
+          <!-- rate & PMI watch -->
+          <div id="el-ratewatch" class="rcard">
+            <b style="font-size:13.5px">Rate &amp; PMI watch</b>
+            <div style="font-size:12.5px; color:var(--mut); margin-top:8px; display:grid; gap:5px" class="num">
+              <div>PMI: <b style="color:var(--good)">eligible to cancel</b> (you passed 20% equity) — save ≈ $160/mo. <a href="#" style="color:var(--brand)">Wattson drafts the lender letter →</a></div>
+              <div>Refi check: current rate 3.1% — no move worth making; we'll alert if that changes.</div>
+              <div>Renovation ROI here: kitchens return ~68%, ADUs ~140% — <a href="#" style="color:var(--brand)">what's worth doing before selling →</a></div>
+            </div>
+            <div class="anno" style="margin-top:5px">Mortgage data + rate feed + ROI reference. The lender letter lands as an <b>agent review task + Outbox item — never sent client-direct</b> [DECIDE, review-first policy].</div>
+          </div>
+
+          <!-- neighborhood snapshot -->
+          <div id="el-neighborhood" class="rcard">
+            <b style="font-size:13.5px">Your neighborhood right now</b>
+            <div style="font-size:12.5px; color:var(--mut); margin-top:8px" class="num">31 active · 12 median DOM · 102% sale-to-list · <a href="#" style="color:var(--brand)">Friendly Acres market guide →</a></div>
+            <div class="anno" style="margin-top:5px">MLS aggregates (whitelist-safe). Link exits to the community/market-guide page. <b>No school data anywhere on this page</b> (steering firewall); no demographic language (fair housing).</div>
+          </div>
+
+          <!-- update my info form -->
+          <div id="el-update-info" class="rcard" style="background:var(--surface)">
+            <b style="font-size:13.5px">Update my info</b>
+            <div style="display:grid; gap:6px; margin-top:8px; font-size:12px">
+              <label style="display:flex; justify-content:space-between; gap:8px">Mortgage balance <input value="$612,000" style="border:1px solid var(--line); border-radius:6px; padding:3px 8px; width:110px; font:inherit" class="num"></label>
+              <label style="display:flex; justify-content:space-between; gap:8px">Household income (for purchasing power) <input value="$310,000" style="border:1px solid var(--line); border-radius:6px; padding:3px 8px; width:110px; font:inherit" class="num"></label>
+              <label style="display:flex; justify-content:space-between; gap:8px">Home facts (beds/baths/condition) <button class="btn-ghost" style="width:110px">edit facts</button></label>
+              <button class="btn-ink" style="justify-self:end">Save</button>
+            </div>
+            <div class="anno" style="margin-top:5px">Owner edits write SourceFacts. If the page ever exposes an exact owner-entered mortgage balance, OTP step-up is added to the unguessable URL [DECIDE, §9.4 sensitivity tiers].</div>
+          </div>
+
+          <!-- how this reaches the owner -->
+          <div id="el-explainer" style="border:1px dashed var(--line); border-radius:14px; padding:14px; font-size:11.5px; color:var(--mut)">
+            <b style="color:var(--ink); font-size:12px">How this reaches the owner</b><br>
+            This is a <b>permanent live page</b> (not an email or PDF): the monthly email teases the single biggest delta and links here · check-ins and scenario plays feed seller propensity (ScoringService) · printable branded CMA on request. <b>Spec merge (PropClose):</b> this page and the Weekly Seller Dashboard are ONE artifact on one durable URL — homeowner mode → listing-performance mode when they list → in-contract portal → back to Homeowner Hub at close. Equity math requires a known mortgage balance — missing → manual-entry prompt, never a fabricated number.
+          </div>
+        </div>
+      </div>
+
+      <!-- email teaser companion -->
+      <div id="el-teaser" style="border:1px solid var(--line); border-radius:14px; padding:14px 16px; margin-top:16px; display:flex; gap:14px; align-items:center; flex-wrap:wrap; background:var(--surface)">
+        <span style="font-size:20px">📧</span>
+        <div style="flex:1; min-width:260px; font-size:12.5px">
+          <b>Companion artifact — the monthly teaser email (never the full page in email)</b>
+          <div style="border:1px solid var(--line); border-radius:8px; background:var(--paper); padding:8px 12px; margin-top:6px; font-size:12px">
+            <b>Subject:</b> You crossed 40% equity, Maria<br>
+            <span style="color:var(--mut)">One thing changed on your home's page this month: your equity passed 40%. <a href="#" style="color:var(--brand)">See what that unlocks →</a> — Graeham</span>
+          </div>
+        </div>
+        <div class="anno" style="max-width:320px">W.I.N. engine picks the ONE delta. Consent-gated (marketing consent + evidence, §11.2) and <b>review-first per the send policy</b>. Toggle OFF in the header suppresses it. Entry links from postcards/farming QR use the marketing shortener (link.propertyiq.app) — allowed here because this homeowner page is not auth-sensitive; <b>sensitive portal auth links stay off the shortener</b> (portal lives at portal.propertyiq.app).</div>
+      </div>
+
+      <!-- states strip -->
+      <div id="el-states" style="margin-top:16px">
+        <div class="sechead">States (dev reference)</div>
+        <div style="display:grid; grid-template-columns:repeat(auto-fit,minmax(210px,1fr)); gap:8px; font-size:11px">
+          <div class="cardbox"><b>Loading</b><div style="color:var(--mut); margin-top:3px">Hero + valuation skeletons; page useful without JS beyond toggles. <span class="bdg" style="font-size:9.5px">▭▭▭ skeleton</span> [BEST GUESS]</div></div>
+          <div class="cardbox" style="border-left:3px solid var(--crit)"><b>AVM unavailable / low data</b><div style="color:var(--mut); margin-top:3px">Valuation card renders <b style="color:var(--ink)">"estimate unavailable"</b> — never a fabricated number; net sheet + purchasing power HIDE (fail-closed, correction #7).</div></div>
+          <div class="cardbox" style="border-left:3px solid var(--warn)"><b>Missing mortgage balance</b><div style="color:var(--mut); margin-top:3px">Equity/net-sheet cards show MISSING_MORTGAGE_BALANCE manual-entry prompt instead of numbers: <i>"Enter your balance to see your walk-away."</i></div></div>
+          <div class="cardbox"><b>Zoning below thresholds</b><div style="color:var(--mut); margin-top:3px">jurisdiction_covered=false OR conf&lt;0.60 → ADU claims suppressed entirely · 0.60–0.79 → cautious disclaimered copy · ≥0.80+covered → "by right" (claim ladder).</div></div>
+          <div class="cardbox"><b>Buyer-demand = 0</b><div style="color:var(--mut); margin-top:3px">Hero hidden. ScoringService down → signals still write to the ledger; no score is ever computed page-side.</div></div>
+          <div class="cardbox" style="border-left:3px solid var(--crit)"><b>Listing mode degraded</b><div style="color:var(--mut); margin-top:3px">Weekly embed unavailable → section hidden + staff task created — never stale or fabricated content (§9.6, fail-closed).</div></div>
+          <div class="cardbox"><b>Empty (new owner)</b><div style="color:var(--mut); margin-top:3px">Valuation + neighborhood only; explorer cards appear as data arrives. [BEST GUESS]</div></div>
+          <div class="cardbox"><b>Permission</b><div style="color:var(--mut); margin-top:3px">Homeowner mode = unguessable per-owner link, no login, no indexing [DECIDE]. Listing/in-contract modes = authenticated portal session (magic_link + OTP/MFA), no_public_indexing=true.</div></div>
+        </div>
+      </div>
+
+      <!-- mobile variant strip -->
+      <div id="el-mobile" style="margin-top:16px">
+        <div class="sechead">Mobile variant (375px) — single column, check-in high on page</div>
+        <div class="mstrip">
+          <div class="mframe"><div class="mh">1 · Title + hero</div><div class="mb">318 Hurlingame Ave<br>updated Jul 14 · Seller's 🔥<br><span style="color:var(--ink); font-weight:700">14 buyers match your home</span><br>✦ W.I.N.: crossed 40% equity</div></div>
+          <div class="mframe"><div class="mh">2 · Valuation</div><div class="mb" >$1.31M–$1.42M · HIGH · Jul 14<br>midpoint $1.365M · +$58K YoY<br>[range slider]</div></div>
+          <div class="mframe" style="border-color:var(--brand)"><div class="mh">3 · Check-in (moved UP)</div><div class="mb">◉ Just tracking<br>◉ Curious what I'd walk away with<br>◉ Thinking 6–12 mo<br><span class="anno">the self-segmentation engine — high on page by design [BEST GUESS]</span></div></div>
+          <div class="mframe"><div class="mh">4 · Equity Explorer</div><div class="mb">ADU card ▾<br>Move up ▾<br>Investment ▾ (cards stack)</div></div>
+          <div class="mframe"><div class="mh">5 · Net sheet → Move math → ADU → Rate watch</div><div class="mb">stacked cards, tap targets ≥44px</div></div>
+          <div class="mframe"><div class="mh">6 · Comps → Neighborhood → CTA</div><div class="mb">CTA card near bottom +<br><span style="display:block; background:var(--ink); color:#fff; border-radius:5px; padding:3px 6px; text-align:center; margin-top:4px">Get my precise valuation (free)</span><span class="anno">also renders as a sticky bottom bar</span></div></div>
+        </div>
+      </div>
+    </div>
+
+    <!-- consumer footer -->
+    <div id="el-footer" style="padding:12px 22px; border-top:1px solid var(--line); display:flex; gap:12px; flex-wrap:wrap; align-items:center">
+      <span class="poweredby">Powered by PropertyIQ</span>
+      <span style="font-size:11.5px; color:var(--mut)">Graeham Watts · REALTOR® · Intero Real Estate Services · DRE 01466876 · Redwood City, CA</span>
+      <span class="anno" style="margin-left:auto">Identity block brand-locked from identity.json; blocklist enforced. Analytics: owned-page, GPC/DNT/opt-out respected; PAGE_VIEWED privacy-checked; no ad pixels in portal modes (§13.10).</span>
+    </div>
+  </div>
+
+  <!-- ============ Spec gaps found (Master Brain) ============ -->
+  <div class="note" style="margin-top:22px; border-color:var(--warn)"><b>Spec gaps found — PropClose Master Brain details the spec missed (all rendered above):</b>
+    (1) <b>Two-tier portal auth</b> — listing/in-contract modes use magic_link + OTP/MFA (§9 anchors); spec said only "authenticated session" → rendered in the listing-mode card + Permission state.
+    (2) <b>Canonical portal domain</b> — portal.propertyiq.app, with the marketing-shortener exclusion for auth links → rendered in the teaser annotation.
+    (3) <b>PORTAL_VIEWED payload</b> — carries {section, transaction_id, auth_level} (§ event table / acceptance checklist) → rendered in the listing-mode annotation.
+    (4) <b>Embed rules</b> — the weekly embed must not expose raw MLS data and must not fire ad pixels in authenticated sessions (§9.6) → rendered in the listing-mode annotation.
+    (5) <b>LEGAL_APPROVAL_REQUIRED flag</b> — any future Zestimate-referencing template must set LEGAL_APPROVAL_REQUIRED=true (§ out-of-scope table), sharpening the spec's open decision → rendered in the AVM-spread annotation.
+    (6) <b>Homeowner Hub conversion surfaces</b> (§9.7) — at close the page's Hub mode adds close summary, home-anniversary date, referral CTA to PropFlow intake, and EQUITY_CARD_CREATED-driven refresh; noted in the mode-lifecycle annotations.</div>
+
+  <!-- ============ (3) ELEMENT COVERAGE ============ -->
+  <h2 style="font-size:20px; margin:30px 0 10px">Element coverage — spec inventory → this page</h2>
+  <table class="dtable cov" style="font-size:12.5px">
+    <tr><th>Spec inventory element</th><th>Rendered at</th><th>Status</th></tr>
+    <tr><td>Market temperature gauge (3-value enum, MLS aggregates)</td><td><a href="#el-title">Title block</a></td><td class="ok">✓</td></tr>
+    <tr><td>Buyer-demand hero (aggregate count, hide-if-zero)</td><td><a href="#el-hero">Buyer-demand hero</a></td><td class="ok">✓</td></tr>
+    <tr><td>W.I.N. insight chip (ONE per month, locked)</td><td><a href="#el-win">Hero → W.I.N. chip</a></td><td class="ok">✓</td></tr>
+    <tr><td>Equity Explorer — ADU card (zoning-powered, claim ladder)</td><td><a href="#el-adu-scenario">Explorer → ADU</a></td><td class="ok">✓</td></tr>
+    <tr><td>Equity Explorer — Move up</td><td><a href="#el-moveup-scenario">Explorer → Move up</a></td><td class="ok">✓</td></tr>
+    <tr><td>Equity Explorer — Investment (underwriter link)</td><td><a href="#el-invest-scenario">Explorer → Investment</a></td><td class="ok">✓</td></tr>
+    <tr><td>Purchasing power stat (income editable → recompute)</td><td><a href="#el-purchasing-power">Explorer micro-stats</a></td><td class="ok">✓</td></tr>
+    <tr><td>Short-term rental stat (12-comp est.)</td><td><a href="#el-str-stat">Explorer micro-stats</a></td><td class="ok">✓</td></tr>
+    <tr><td>Valuation card (range, midpoint, confidence, as-of, YoY delta)</td><td><a href="#el-valuation">Valuation card</a></td><td class="ok">✓</td></tr>
+    <tr><td>AVM-spread framing (generic model labels pending legal)</td><td><a href="#el-avm-spread">Valuation → spread line</a></td><td class="ok">✓</td></tr>
+    <tr><td>Best-time-to-list chip (seasonal window + premium %)</td><td><a href="#el-besttime">Valuation → chip</a></td><td class="ok">✓</td></tr>
+    <tr><td>Range slider graphic (band + midpoint marker)</td><td><a href="#el-slider">Valuation → slider</a></td><td class="ok">✓</td></tr>
+    <tr><td>"Tune your value" chips (→ SourceFact + ledger signal)</td><td><a href="#el-tune">Tune your value</a></td><td class="ok">✓</td></tr>
+    <tr><td>Comps card ("the 8 sales", authenticated detail gate)</td><td><a href="#el-comps">Comps card</a></td><td class="ok">✓</td></tr>
+    <tr><td>CTA card "Want the real number?" (→ CMA task, review-first reply)</td><td><a href="#el-cta">CTA card</a></td><td class="ok">✓</td></tr>
+    <tr><td>1-tap check-in (3 buttons → ledger → ScoringService)</td><td><a href="#el-checkin">Quick check-in</a></td><td class="ok">✓</td></tr>
+    <tr><td>Move math card (gap + gap trend + loosening flag)</td><td><a href="#el-movemath">Move math</a></td><td class="ok">✓</td></tr>
+    <tr><td>Net sheet "If you sold at $X" (balance-required, fail-closed)</td><td><a href="#el-netsheet">Net sheet</a></td><td class="ok">✓</td></tr>
+    <tr><td>ADU hidden-value card (claim ladder, licensed imagery)</td><td><a href="#el-adu-card">Hidden value card</a></td><td class="ok">✓</td></tr>
+    <tr><td>Rate &amp; PMI watch (lender letter → review task, never auto-sent)</td><td><a href="#el-ratewatch">Rate &amp; PMI watch</a></td><td class="ok">✓</td></tr>
+    <tr><td>Neighborhood snapshot (aggregates + market-guide link)</td><td><a href="#el-neighborhood">Neighborhood</a></td><td class="ok">✓</td></tr>
+    <tr><td>"How this reaches the owner" explainer</td><td><a href="#el-explainer">Explainer</a></td><td class="ok">✓</td></tr>
+    <tr><td>Monthly tracking toggle (consent-gated sends)</td><td><a href="#el-header">Header nav</a></td><td class="ok">✓</td></tr>
+    <tr><td>Update my info (owner edits → SourceFacts)</td><td><a href="#el-update-info">Update my info form</a></td><td class="ok">✓</td></tr>
+    <tr><td>Listing-performance mode flip (weekly embed, three-state offer banner)</td><td><a href="#el-listing-mode">Mode-flip preview</a></td><td class="ok">✓</td></tr>
+    <tr><td>Email teaser companion (one delta, review-first)</td><td><a href="#el-teaser">Teaser email</a></td><td class="ok">✓</td></tr>
+  </table>
+  <div style="border:1.5px solid var(--good); background:#f2f8f4; border-radius:10px; padding:12px 16px; margin:12px 0 0; font-weight:700; color:var(--good)">26 of 26 spec elements rendered ✓ <span style="font-weight:400; color:var(--mut); font-size:12.5px">— plus prompt-required regions beyond the inventory: full states strip (8 states), mobile-variant strip, consumer footer identity block, and the 6 Master-Brain additions in "Spec gaps found" above.</span></div>
+
+  <!-- ============ (4) FULL SPEC AS HTML ============ -->
+  <div class="specdoc">
+    <h1 style="font-size:24px; margin:40px 0 6px">Spec — 10 · Seller Report / Owner Page (permanent per-owner live page)</h1>
+    <p><b>Purpose</b> A permanent, per-owner live web page — not a report, not an email attachment. The monthly email teases exactly one delta ("W.I.N. — what's important now") and links here; the page carries the full story; every interaction (scenario click, check-in tap, chip toggle) writes a ledger signal that feeds the seller-propensity score shown in the agent's Command Center. Per the applied spec merge (matrix correction #8), this page and the PropClose Weekly Seller Dashboard are ONE artifact on ONE durable URL: homeowner mode (this spec) → listing-performance mode when they list → in-contract portal (Screen 25) → back to Homeowner Hub at close.</p>
+    <p><b>Primary users</b> Homeowner (past client, farm owner, sphere contact). Secondary: the agent (preview + propensity signals downstream).</p>
+    <p><b>Entry points</b> Monthly teaser email (one delta + link, review-first send policy) · postcard/farming QR (marketing short link, link.propertyiq.app — allowed here because this page is not auth-sensitive; sensitive portal auth links stay off the shortener) · Homeowner Hub equity card "see your full page" · agent-sent direct link · annual CMA follow-up.</p>
+    <p><b>Exit points</b> "Get my precise valuation (free)" → CMA request → agent task + Outbox-reviewed reply · "run it in the underwriter" → Underwriting Workspace (Screen 22) consumer-safe view · ADU concept link → zoning/ADU visual (licensing-safe imagery only) · comps map · Friendly Acres market guide (community page) · check-in taps (stay on page, self-segment).</p>
+
+    <h2>Layout</h2>
+    <p><b>Desktop:</b> Header — agent avatar + name + "Home value report" + nav: "Update my info", "Monthly tracking: ON". Title block — address H1; meta line: live page · updated {date} · permanent link · Market temperature {Buyer's/Neutral/Seller's} (gauge from inventory, DOM, sale-to-list — Homebot pattern). Buyer-demand hero (full width, brand border) — "14 buyers in our network are looking for a home like yours" + criteria line + the W.I.N. single monthly insight chip. Equity Explorer (full width) — 3 scenario cards (Build the ADU / Move up / Buy an investment) + purchasing-power and short-term-rental micro-stats. Two-column grid (1.3fr/1fr): left = valuation card (range, confidence, as-of, YoY delta, AVM-spread framing, best-time-to-list chip, range slider) · "Tune your value" chips · comps card; right rail = CTA card (ink border) · 1-tap check-in · move math · net sheet · ADU hidden-value · rate &amp; PMI watch · neighborhood snapshot · "How this reaches the owner" explainer. Footer — "Powered by PropertyIQ" + licensed identity block (agent name, DRE 01466876, brokerage — brand-locked).</p>
+    <p><b>Mobile (375px):</b> single column, order: title → buyer-demand hero → valuation card → check-in (high on page; it's the self-segmentation engine) → equity explorer (cards stack) → net sheet → move math → ADU → rate watch → comps → neighborhood → CTA card near bottom. Tap targets ≥44px; the CTA button also renders as a sticky bottom bar. [BEST GUESS on mobile order — optimized for the check-in signal]</p>
+
+    <h2>Element inventory</h2>
+    <div style="overflow-x:auto">
+    <table class="dtable">
+      <tr><th>Element</th><th>What it shows/does</th><th>Data source</th><th>Interactions</th><th>Spec source</th></tr>
+      <tr><td>Market temperature gauge</td><td>Buyer's/Neutral/Seller's from inventory, DOM, sale-to-list</td><td>MLS-derived aggregates (whitelist-safe, aggregate display)</td><td>none</td><td>draft Screen 10 (Homebot gauge)</td></tr>
+      <tr><td><b>Buyer-demand hero</b></td><td>"N buyers match your home" from active saved searches + buyer criteria in the agent network</td><td>PropSearch saved searches + PropFlow buyer criteria (aggregate count only, no buyer identity)</td><td>none; render only when N≥1, hide block if 0</td><td>draft Screen 10 (Percy pattern); [BEST GUESS] hide-if-zero</td></tr>
+      <tr><td>W.I.N. insight chip</td><td>ONE insight per month ("you crossed 40% equity") — also the only thing the email teases</td><td>monthly delta engine over the page's own data</td><td>none</td><td>draft Screen 10 (locked: one insight, never a list)</td></tr>
+      <tr><td>Equity Explorer — ADU card</td><td>cash-out builds it, rent estimate, value-add range, "lot qualifies by right"</td><td>PropSearch zoning (Zoneomics fields) + rent estimate + AVM</td><td>click → ADU concept view (ledger signal)</td><td>draft Screen 10; zoning claim ladder</td></tr>
+      <tr><td>Equity Explorer — Move up</td><td>equity as down payment, payment-gap math at today's rates</td><td>AVM + mortgage balance + rate feed</td><td>click (ledger signal)</td><td>draft Screen 10</td></tr>
+      <tr><td>Equity Explorer — Investment</td><td>cash-out down payment scenario + est. cash flow, link to underwriter</td><td>PropSearch underwriting quick calc</td><td>"run it in the underwriter →"</td><td>draft Screen 10</td></tr>
+      <tr><td>Purchasing power stat</td><td>max next-home price (equity + income est., editable)</td><td>derived; income user-editable</td><td>edit → recompute</td><td>draft Screen 10</td></tr>
+      <tr><td>Short-term rental stat</td><td>spare room monthly estimate (12-comp est.)</td><td>rent-comp source</td><td>none</td><td>draft Screen 10</td></tr>
+      <tr><td>Valuation card</td><td>range + midpoint, confidence label, as-of date, YoY delta</td><td>AVM ensemble</td><td>none</td><td>draft Screen 10; matrix correction #7 (confidence/range/as-of mandatory)</td></tr>
+      <tr><td>AVM-spread framing</td><td>"Three models disagree by $110K" — the CMA conversation starter</td><td>multiple AVM feeds</td><td>none</td><td>draft Screen 10. ⚠ Third-party AVM brand naming is fine on this PropSearch/PropCast-owned page but FORBIDDEN once the page runs inside PropClose v1 portal chrome (no Zestimate-referencing template, PropClose §9.7) — see Open decisions</td></tr>
+      <tr><td>Best-time-to-list chip</td><td>seasonal window + premium % for the neighborhood</td><td>historical sale seasonality</td><td>none</td><td>draft Screen 10</td></tr>
+      <tr><td>Range slider graphic</td><td>visual of range + midpoint marker</td><td>AVM</td><td>none</td><td>draft Screen 10</td></tr>
+      <tr><td>"Tune your value" chips</td><td>Kitchen remodeled / Bathrooms updated / New roof / ADU added / Needs work</td><td>owner input → SourceFact (HUMAN_CONFIRMED)</td><td>toggle → sharpen estimate + ledger signal</td><td>draft Screen 10</td></tr>
+      <tr><td>Comps card</td><td>"The 8 sales behind this number" — recent solds, distance, recency</td><td>MLS data</td><td>"see all comps on map →" — detailed sold comps require authenticated session; public view shows aggregates</td><td>draft Screen 10; PropClose §13.6 posture</td></tr>
+      <tr><td>CTA card "Want the real number?"</td><td>agent credibility line + free precise valuation button</td><td>identity config + agent stats</td><td>submit → CMA request task; reply is review-first</td><td>draft Screen 10</td></tr>
+      <tr><td><b>1-tap check-in</b></td><td>3 buttons: Just tracking / Curious what I'd walk away with / Thinking about it in 6–12 months</td><td>owner tap</td><td>writes ledger signal → seller-signals tile / propensity via ScoringService</td><td>draft Screen 10 (Homebot check-in)</td></tr>
+      <tr><td>Move math card</td><td>current payment vs move-up payment, gap, gap trend, "we'll flag the month it loosens"</td><td>mortgage terms + rate feed</td><td>none</td><td>draft Screen 10</td></tr>
+      <tr><td>Net sheet "If you sold at $X"</td><td>payoff est., selling costs est., equity walk-away</td><td>AVM midpoint + mortgage balance + cost model</td><td>none; requires known mortgage balance (else prompt — see States)</td><td>draft Screen 10; matrix correction #7</td></tr>
+      <tr><td>ADU hidden-value card</td><td>"ADU by right" + comp value-add range + rent alternative</td><td>Zoneomics fields + comps</td><td>"See the concept on your lot →"</td><td>draft Screen 10; claim ladder §13.9</td></tr>
+      <tr><td>Rate &amp; PMI watch</td><td>PMI cancel eligibility + monthly saving + "Wattson drafts the lender letter" · refi check · renovation ROI lines</td><td>mortgage data + rate feed + ROI reference</td><td>letter draft → agent review task (never auto-sent)</td><td>draft Screen 10</td></tr>
+      <tr><td>Neighborhood snapshot</td><td>actives, median DOM, sale-to-list + market-guide link</td><td>MLS aggregates</td><td>link to community page</td><td>draft Screen 10</td></tr>
+      <tr><td>"How this reaches the owner" explainer</td><td>permanent-page model, monthly email tease, propensity note, printable branded CMA on request, spec-merge note</td><td>static</td><td>none</td><td>draft Screen 10</td></tr>
+      <tr><td>Monthly tracking toggle</td><td>subscription state for the teaser email</td><td>consent/notification prefs</td><td>toggle OFF = suppress emails (consent-gated send)</td><td>draft header; §11.2 consent model</td></tr>
+      <tr><td>Update my info</td><td>owner edits mortgage balance, income, home facts</td><td>owner input → SourceFacts</td><td>form</td><td>draft header</td></tr>
+      <tr><td><b>Listing-performance mode flip</b> (once listed)</td><td>page becomes the Weekly Seller Dashboard: week navigator, verbatim showing feedback, three-state offer banner, PORTAL_VIEWED tracking, review-first Monday doorway email</td><td>WeeklyListingUpdateEmbed (weekly_listing_update.v1, PropCast-produced)</td><td>week nav; authenticated access only in portal context</td><td>matrix correction #8; PropClose §9.6</td></tr>
+      <tr><td>Email teaser (companion artifact)</td><td>one delta + link; never the full page in email</td><td>W.I.N. engine</td><td>review-first send</td><td>draft Screen 10</td></tr>
+    </table>
+    </div>
+
+    <h2>States</h2>
+    <ul>
+      <li><b>Default:</b> full page as above.</li>
+      <li><b>Loading:</b> hero + valuation skeletons; page useful without JS beyond toggles. [BEST GUESS]</li>
+      <li><b>AVM unavailable / low data:</b> valuation card renders "estimate unavailable" — never a fabricated number; dependent cards (net sheet, purchasing power) hide (matrix correction #7).</li>
+      <li><b>Missing mortgage balance:</b> equity/net-sheet cards show a MISSING_MORTGAGE_BALANCE manual-entry prompt instead of numbers (matrix correction #7).</li>
+      <li><b>Zoning below thresholds:</b> jurisdiction_covered=false OR confidence&lt;0.60 → ADU claims suppressed entirely; 0.60–0.79 → cautious disclaimered language; ≥0.80 + covered → affirmative "by right" claim (claim ladder).</li>
+      <li><b>Buyer-demand = 0:</b> hero hidden. ScoringService down: propensity signals still write to ledger; no score ever computed page-side.</li>
+      <li><b>Listing mode degraded:</b> if the weekly embed is unavailable → section hidden + staff task, never stale/fabricated content (§9.6).</li>
+      <li><b>Empty (new owner, no history):</b> valuation + neighborhood only; explorer cards appear as data arrives. [BEST GUESS]</li>
+      <li><b>Permission:</b> homeowner mode is link-addressable per owner; listing/in-contract modes require authenticated portal session (no public indexing, no_public_indexing=true on the embed).</li>
+      <li><b>Mobile:</b> per Layout.</li>
+    </ul>
+
+    <h2>Data fields</h2>
+    <p>Address; updated_at; market temperature (enum of 3); buyer-match count (int, aggregate); W.I.N. insight (string, 1/month); AVM range low/high, midpoint, confidence (label), as_of date, YoY delta; per-model AVM values (ours/others); best-list window + premium %; owner condition chips (bool each → SourceFact); comps (address, sold price, distance, recency); check-in selection (3-value enum + timestamp); current rate, payment, move-up payment, gap, gap delta; payoff est., selling-cost est., equity walk-away (all USD, all "est." labeled); zoning_confidence (0–1), jurisdiction_covered, zoning_source, zoning_last_checked_at; ADU value-add range, rent est.; PMI eligibility (bool), refi delta; actives, median DOM, sale-to-list; monthly-tracking consent state. Listing mode adds: reporting_period_start/end, showing_feedback_summary, seller_tasks[], market_activity_summary, offer-banner state (none/received/multiple — three-state per correction #8).</p>
+
+    <h2>Rules &amp; compliance</h2>
+    <ul>
+      <li><b>Never fabricate:</b> AVM/equity numbers require real inputs; unknown → "unavailable" + entry prompt. All values labeled estimates.</li>
+      <li><b>Every displayed estimate carries confidence + range + as-of date</b> (matrix correction #7 — hard rule).</li>
+      <li><b>Propensity is ScoringService's job:</b> this page only emits ledger signals; no page-side scoring, thresholds, or tiers (non-scoring rule).</li>
+      <li><b>Zoning/ADU claim ladder</b> enforced per render (§13.9 thresholds above).</li>
+      <li><b>Outbound gating:</b> monthly teaser email is consent-gated (marketing consent + evidence) and review-first per the send policy; any agent outreach triggered by check-ins routes to review — never auto-outreach (matrix correction #2).</li>
+      <li><b>Brand lock:</b> identity from identity.json (DRE 01466876); the identity.json blocklist enforced.</li>
+      <li><b>MLS posture:</b> aggregate comps public; detailed solds authenticated; whitelist fields only; no vector/AI-training use of MLS data.</li>
+      <li><b>Imagery:</b> ImageryProvider/Mapbox with attribution; no Google satellite for client-facing marketing; ADU concept renders only from owned/licensed imagery — never provider map tiles (§13.8).</li>
+      <li><b>Analytics:</b> owned-page analytics with GPC/DNT/opt-out respect; in listing/portal modes: no ad pixels, PORTAL_VIEWED canonical event only (§13.10).</li>
+      <li><b>No school data on this page</b> (steering firewall).</li>
+      <li>Fair-housing: value/demand framing is property-fact-based; no demographic language anywhere.</li>
+    </ul>
+
+    <h2>Cross-links</h2>
+    <p><b>In:</b> monthly teaser email, farming postcards/QR, Homeowner Hub equity card, agent share, annual CMA touch. <b>Out:</b> CMA request (→ agent task + Outbox), Underwriting Workspace (22), community/market guide page, comps map, ADU concept view, Client Portal (25) when in-contract. <b>Emits:</b> ledger signals per interaction (scenario clicks, chip toggles, check-in taps — feed seller-propensity via ScoringService), PAGE_VIEWED (privacy-checked), PORTAL_VIEWED (listing/portal modes), CMA-request task event. <b>Consumes:</b> AVM feeds, ScoringService outputs (Command-Center side), WeeklyListingUpdateEmbed (listing mode), DEAL_CLOSED (mode transitions via portal lifecycle).</p>
+
+    <h2>Open decisions</h2>
+    <ul>
+      <li>[DECIDE] Third-party AVM brand naming in the spread line: PropClose v1 forbids Zestimate-referencing templates in its portal (§9.7; future use requires LEGAL_APPROVAL_REQUIRED=true per the Brain). Interim design: homeowner mode shows "three independent estimates" with generic model labels ("Model A/B") unless legal clears third-party brand naming; the draft's explicit branded copy is treated as illustrative, not shipped copy.</li>
+      <li>[DECIDE] AVM vendor mix: assume our model + 2 licensed third-party AVMs — UI unaffected by vendor choice. [BEST GUESS]</li>
+      <li>[DECIDE] Buyer-match count threshold/staleness: interim = count from saved searches active in last 90 days, recomputed monthly with the page refresh. [BEST GUESS]</li>
+      <li>[DECIDE] Page auth in homeowner mode: interim = unguessable per-owner URL, no login, no indexing, with OTP step-up added only if the page ever exposes exact mortgage balance the owner entered. [BEST GUESS — aligns with §9.4 sensitivity tiers]</li>
+      <li>[DECIDE] "Wattson drafts the lender letter" (PMI): interim = draft lands as an agent review task + Outbox item; never sent client-direct. [BEST GUESS consistent with review-first policy]</li>
+    </ul>
+  </div>
+</div>

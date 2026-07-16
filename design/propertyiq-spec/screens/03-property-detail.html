@@ -1,0 +1,607 @@
+<title>PropertyIQ · Screen 03 — Property detail</title>
+<link href="https://api.fontshare.com/v2/css?f[]=technor@500,600,700&display=swap" rel="stylesheet">
+<link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<style>
+  /* Type system — Technor for display, Inter for UI. */
+  :root{ --font-display:'Technor', Inter, -apple-system, 'Segoe UI', sans-serif; --font-ui: Inter, -apple-system, 'Segoe UI', Roboto, sans-serif; }
+</style>
+<style>
+  /* Palette v4 — PropFlow design language: neutral ink UI, ink-as-accent, color reserved for data. (extracted verbatim from propsearch-design-draft.html) */
+  :root, :root[data-theme="dark"], :root[data-theme="light"]{
+    --ink:#23282f; --paper:#fbfaf8; --surface:#f1efe9; --line:#e2dfd6;
+    --mut:#6b7076; --soft:#9b9f9f;
+    --brand:#2e6b53; --brand-ink:#ffffff; --brand-soft:#eaf1ec; --brand-deep:#1e4c3a;
+    --signal:#b07a2e;
+    --good:#2e7d4f; --warn:#a8630a; --crit:#b3372f;
+    --r:10px;
+  }
+  h1{ letter-spacing:-.02em }
+  .stat b{ letter-spacing:-.01em }
+  body[data-agent="watts"]{ --brand:#2e6b53; --brand-soft:#eaf1ec; --brand-deep:#1e4c3a; }
+
+  *{box-sizing:border-box; margin:0}
+  body{font:15px/1.55 var(--font-ui); color:var(--ink); background:var(--paper); padding-bottom:80px}
+  h1,h2,h3{line-height:1.15; text-wrap:balance; font-family:var(--font-display); font-weight:600}
+  .site{box-shadow:0 1px 2px rgba(20,24,32,.04), 0 8px 32px rgba(20,24,32,.06)}
+  .stat{box-shadow:0 1px 2px rgba(20,24,32,.03); transition:box-shadow .15s, transform .15s}
+  .stat:hover{box-shadow:0 4px 14px rgba(20,24,32,.08)}
+  .chip{transition:all .12s}
+  button{font-family:var(--font-ui)}
+  .num{font-variant-numeric:tabular-nums}
+  .wrap{max-width:1180px; margin:0 auto; padding:0 20px}
+
+  .bar{position:sticky; top:0; z-index:50; background:var(--paper); border-bottom:1px solid var(--line); padding:10px 0; backdrop-filter:blur(8px)}
+  .bar .wrap{display:flex; flex-wrap:wrap; gap:10px; align-items:center}
+  .bar .ttl{font-weight:700; margin-right:auto}
+  .bar .ttl small{display:block; font-weight:400; color:var(--mut)}
+  .bar a{color:var(--brand); font-size:13px; text-decoration:none}
+
+  .note{background:var(--surface); border:1px solid var(--line); border-radius:var(--r); padding:14px 16px; margin:0 0 22px; font-size:13.5px; color:var(--mut)}
+  .note b{color:var(--ink)}
+
+  .site{border:1px solid var(--line); border-radius:14px; overflow:hidden; background:var(--paper)}
+  .sitehead{display:flex; align-items:center; gap:14px; padding:14px 22px; border-bottom:1px solid var(--line)}
+  .avatar{width:38px; height:38px; border-radius:50%; background:var(--brand); color:var(--brand-ink); display:grid; place-items:center; font-weight:700}
+  .sitehead .who b{display:block}
+  .sitehead .who small{color:var(--mut)}
+  .sitehead nav{margin-left:auto; display:flex; gap:18px; font-size:13.5px; color:var(--mut)}
+  .sitehead nav a{color:inherit; text-decoration:none}
+  .sitehead nav a:hover{color:var(--brand)}
+
+  .chip{display:inline-flex; align-items:center; gap:6px; font-size:12.5px; font-weight:500; border:1px solid var(--line); border-radius:99px; padding:6px 12px; background:var(--paper); cursor:pointer; color:var(--ink)}
+  .chip:hover{border-color:var(--brand)}
+  .chip.on{background:var(--brand); border-color:var(--brand); color:var(--brand-ink); font-weight:600}
+
+  .statrow{display:grid; grid-template-columns:repeat(4,1fr); gap:10px}
+  .stat{background:var(--surface); border:1px solid var(--line); border-radius:var(--r); padding:12px}
+  .stat small{display:block; color:var(--mut); font-size:11.5px; text-transform:uppercase; letter-spacing:.05em}
+  .stat b{font-size:18px}
+  .stat .up{color:var(--good); font-size:12px}
+
+  .bdg{font-size:11.5px; border-radius:6px; padding:3px 8px; background:var(--surface); border:1px solid var(--line); color:var(--mut)}
+  .bdg.good{color:var(--good); border-color:color-mix(in srgb,var(--good) 30%,var(--line))}
+  .bdg.warn{color:var(--warn); border-color:color-mix(in srgb,var(--warn) 30%,var(--line))}
+
+  .dtable{width:100%; border-collapse:collapse; font-size:13px}
+  .dtable td,.dtable th{border-bottom:1px solid var(--line); padding:8px 10px; text-align:left}
+  .dtable th{font-size:11px; text-transform:uppercase; letter-spacing:.05em; color:var(--soft)}
+
+  /* Screen-3 chrome from the draft (verbatim where possible) */
+  .ph{background:var(--surface); border:1px solid var(--line); border-radius:8px; min-height:104px; display:grid; place-items:center; color:var(--soft); font-size:11px}
+  .badges{display:flex; gap:6px; margin-top:8px; flex-wrap:wrap}
+  .gallery{display:grid; grid-template-columns:2fr 1fr 1fr; gap:8px; padding:18px 22px 0}
+  .gallery .ph{min-height:150px}
+  .gallery .ph.big{min-height:308px; grid-row:span 2}
+  .detailgrid{display:grid; grid-template-columns:1fr 320px; gap:26px; padding:22px}
+  .stickynav{display:flex; gap:16px; font-size:13px; border-bottom:1px solid var(--line); padding:12px 22px; color:var(--mut); background:var(--paper); overflow-x:auto}
+  .stickynav a{text-decoration:none; color:inherit; white-space:nowrap}
+  .stickynav a.on{color:var(--brand); font-weight:600; border-bottom:2px solid var(--brand); padding-bottom:10px; margin-bottom:-12px}
+  .sec{padding:20px 0; border-bottom:1px solid var(--line)}
+  .sec h2{font-size:18px; margin-bottom:10px}
+  .agentcard{border:1px solid var(--line); border-radius:14px; padding:18px; position:sticky; top:70px; height:max-content}
+  .agentcard .avatar{width:48px; height:48px; margin-bottom:10px}
+  .agentcard button{width:100%; background:var(--brand); color:var(--brand-ink); border:0; border-radius:9px; padding:11px; font-weight:600; cursor:pointer; margin-top:12px}
+  .agentcard .alt{background:var(--paper); color:var(--brand); border:1.5px solid var(--brand); margin-top:8px}
+  .whymatch{background:var(--brand-soft); border-radius:var(--r); padding:14px 16px; font-size:13.5px}
+  .whymatch b{color:var(--brand)}
+  .proselike{max-width:none; color:var(--mut); font-size:14px}
+  .proselike b{color:var(--ink)}
+  .crumbs{font-size:12px; color:var(--soft); padding:14px 22px 0}
+  .crumbs a{color:var(--brand); text-decoration:none}
+  .explore{display:grid; grid-template-columns:repeat(3,1fr); gap:10px; margin-top:16px}
+  .explore a{border:1.5px solid var(--line); border-radius:12px; padding:14px; text-decoration:none; color:var(--ink); display:block; transition:border-color .15s, background .15s; box-shadow:0 1px 2px rgba(20,24,32,.03)}
+  .explore a:hover,.explore a:focus{border-color:var(--brand); background:var(--brand-soft); box-shadow:0 6px 18px rgba(20,24,32,.10); transform:translateY(-1px)}
+  .explore .ico{width:34px; height:34px; border-radius:9px; background:var(--brand-soft); color:var(--brand); display:grid; place-items:center; font-size:16px; margin-bottom:8px}
+  .explore b{display:block; font-size:14px}
+  .explore small{color:var(--mut); font-size:12px; display:block; margin-top:2px}
+  .explore .go{color:var(--brand); font-size:12px; font-weight:600; margin-top:6px; display:block}
+  .prompt{display:flex; border:1.5px solid var(--line); border-radius:14px; background:var(--paper); padding:6px; box-shadow:0 2px 6px rgba(20,24,32,.05)}
+  .prompt input{flex:1; border:0; background:none; padding:12px 14px; font-size:14px; color:var(--ink); outline:none; min-width:0}
+  .prompt button{background:var(--ink); color:#fff; border:0; border-radius:10px; padding:0 22px; font-weight:600; cursor:pointer}
+  .poweredby{font-size:11px; color:var(--soft); letter-spacing:.04em; text-transform:uppercase}
+
+  @media (max-width:860px){ .statrow{grid-template-columns:repeat(2,1fr)} .detailgrid{grid-template-columns:1fr} .gallery{grid-template-columns:1fr 1fr} .gallery .ph.big{grid-column:span 2} .explore{grid-template-columns:repeat(2,1fr)} }
+  @media (prefers-reduced-motion: reduce){ *{transition:none!important} }
+
+  /* page-specific additions (same design language) */
+  .anno{font-size:11px; color:var(--soft)}
+  .cardbox{border:1px solid var(--line); border-radius:10px; padding:11px 14px; font-size:12.5px; background:var(--paper)}
+  .btn-ink{background:var(--ink); color:#fff; border:0; border-radius:7px; padding:7px 12px; font-size:11.5px; cursor:pointer; font-weight:600}
+  .btn-ghost{background:var(--paper); border:1px solid var(--line); border-radius:7px; padding:7px 12px; font-size:11.5px; cursor:pointer}
+  .cov td.ok{color:var(--good); font-weight:700}
+  .specdoc h2{font-size:18px; margin:26px 0 8px}
+  .specdoc h3{font-size:15px; margin:18px 0 6px}
+  .specdoc p, .specdoc li{font-size:13.5px; color:var(--mut)}
+  .specdoc b{color:var(--ink)}
+  .specdoc table{margin:8px 0}
+  .tblx{overflow-x:auto}
+</style>
+
+<!-- ============ (1) slim header ============ -->
+<div class="bar">
+  <div class="wrap">
+    <div class="ttl">PropertyIQ · Screen 03 — Property detail <small>Full-density per-screen mock · wireframe fidelity · dev-facing annotations in gray</small></div>
+    <a href="../wireframe.html">← All screens</a>
+  </div>
+</div>
+
+<!-- ============ (2) THE FULL MOCK ============ -->
+<div class="wrap" style="padding-top:24px">
+  <div class="note"><b>Screen 03 — Property detail.</b> The single-property decision surface and the platform's SEO workhorse: licensed IDX listing + PropertyIQ intelligence layers (match reasoning, monthly cost, investment, zoning/ADU, climate, price history, comps, neighborhood), launch point for underwriting/compare/save/contact. Consumer chrome: agent-branded top nav, sticky right-rail agent card, "Powered by PropertyIQ" credit — no agent-console rail. Anonymous visitors see the full page (no hard gate on organic; soft behavior-triggered prompts only). Sold listings never die — permanent sold page + home-value CTA. LCP budget: hero &lt; 2s.</div>
+
+  <div class="site" data-agent="watts">
+    <!-- site header: back-context + save/share -->
+    <div id="el-header" class="sitehead">
+      <div class="avatar">GW</div>
+      <div class="who"><b>Graeham Watts</b><small>← Back to 47 results <span class="anno">— preserved from Screen 2 card click; other entries (organic/QR/compare) show breadcrumb only</span></small></div>
+      <nav><a href="#" id="el-save">♡ Save</a><a href="#" id="el-share">↗ Share</a><a href="#" id="el-compare">⇄ Compare</a></nav>
+    </div>
+    <div class="anno" style="padding:6px 22px 0">Save (header + card heart) → SavedPropertyRecord §10.7 with optional notes / custom rent / assumption overrides / strategy tag sheet. Share → copies canonical URL; OG/Twitter card with hero photo; native share sheet on mobile. Compare → adds to compare tray (Screen 4); "Compare with 3 similar actives" auto-seed link lives in the Comparables section below.</div>
+
+    <!-- breadcrumbs -->
+    <div id="el-breadcrumbs" class="crumbs"><a href="#">California</a> › <a href="#">Redwood City</a> › <a href="#">Friendly Acres</a> › <b style="color:var(--ink)">742 Hurlingame Ave</b> <span class="anno">— BreadcrumbList schema; links pass authority up to community + city pages. Canonical /{city}/{address-slug}/{mls-id} survives relists (PropertyAliasRecord).</span></div>
+
+    <!-- gallery -->
+    <div id="el-gallery" class="gallery">
+      <div class="ph big">Hero photo — LCP element, renders &lt; 2s</div>
+      <div class="ph">Kitchen</div><div class="ph">Yard</div>
+      <div class="ph">Living</div><div class="ph">+ 24 photos → full carousel</div>
+    </div>
+    <div class="anno" style="padding:4px 22px 0">Licensed listing photos from IDXListingRecord / IDXDisplayCacheRecord (§10.3–10.4). Carousel + lightbox, arrows on hover, dots, lazy-load. Display license governs retention — license revoked → photos removed (§26.5). Photo-binge (10+ photos) is a soft-prompt trigger.</div>
+
+    <!-- sticky in-page nav -->
+    <div id="el-stickynav" class="stickynav" style="position:sticky; top:57px; z-index:5">
+      <a class="on" href="#el-statcard">Overview</a><a href="#el-whymatch">Why it matched</a><a href="#el-commute">Commute</a><a href="#el-schools">Schools</a><a href="#el-monthly">Investment</a><a href="#el-zoning">Zoning &amp; upside</a><a href="#el-climate">Climate &amp; risk</a><a href="#el-history">Price history</a><a href="#el-comps">Comparables</a><a href="#el-neighborhood">Neighborhood</a>
+      <span class="anno" style="white-space:nowrap">← highlights active section on scroll</span>
+    </div>
+
+    <div class="detailgrid">
+      <div>
+        <!-- 1. bold stat card -->
+        <div class="sec" style="padding-top:6px" id="el-statcard">
+          <div style="background:var(--surface); border:1px solid var(--line); border-radius:14px; padding:16px 18px; display:flex; gap:22px; align-items:center; flex-wrap:wrap">
+            <div><h2 class="num" style="font-size:30px; margin:0">$1,289,000</h2><div style="font-size:12.5px; color:var(--mut)" class="num">$8,120/mo all-in · est. <span class="anno">→ links to Monthly cost module</span></div></div>
+            <div id="el-facts" style="display:flex; gap:18px; font-size:14px" class="num">
+              <div style="text-align:center"><b style="font-size:18px">3</b><div style="font-size:11px; color:var(--mut)">beds</div></div>
+              <div style="text-align:center"><b style="font-size:18px">2</b><div style="font-size:11px; color:var(--mut)">baths</div></div>
+              <div style="text-align:center"><b style="font-size:18px">1,480</b><div style="font-size:11px; color:var(--mut)">sqft</div></div>
+              <div style="text-align:center"><b style="font-size:18px">5,800</b><div style="font-size:11px; color:var(--mut)">lot sqft</div></div>
+            </div>
+            <div id="el-badges" style="margin-left:auto; display:flex; gap:8px"><span class="bdg" style="font-size:11px" title="6 days on market — from IDX">New (2d)</span><span class="bdg good" style="font-size:11px" title="Delta vs AVM/comp model value">−4% vs comps</span><span class="bdg" style="font-size:11px" title="From SearchResultRecord — your 5 criteria">Matches 5 of 5</span></div>
+          </div>
+          <div class="anno" style="margin-top:4px">Price = IDXListingRecord.list_price; all-in monthly = CashflowPreviewMetrics (POST /cashflow/preview §24.4). Facts row = IDXListingRecord. Badge row: hover/tap explains each badge (DOM from IDX; comps delta from AVM/comp model; match count from SearchResultRecord).</div>
+          <!-- 2. address line -->
+          <div id="el-address" style="color:var(--mut); margin-top:8px">742 Hurlingame Ave, Redwood City, CA 94063</div>
+          <!-- 3. stat row -->
+          <div id="el-statrow" class="statrow" style="margin-top:14px">
+            <div class="stat"><small>Match score</small><b class="num">96</b> <span class="anno">service-computed §14.2 — never local; hidden w/o search context</span></div>
+            <div class="stat" id="el-rentstat"><small>Est. rent</small><b class="num">$4,850/mo</b> <span class="anno">Rentometer · High conf. → Investment ↓</span></div>
+            <div class="stat"><small>Days on market</small><b class="num">6</b></div>
+            <div class="stat"><small>vs. comps</small><b class="num">−4%</b> <span class="up">under</span></div>
+          </div>
+          <!-- 4. explore tile grid (9) -->
+          <div id="el-explore" class="explore">
+            <a href="#el-commute"><span class="ico">🚗</span><b>Commute</b><small class="num">22 min to Menlo Park at 8am</small><span class="go">See drive times →</span></a>
+            <a href="#el-schools"><span class="ico">🎓</span><b>Schools</b><small>Roy Cloud Elem 9/10 · 3 assigned</small><span class="go">See all schools →</span></a>
+            <a href="#el-invest"><span class="ico">📈</span><b>Investment</b><small class="num">$4,850/mo rent · 4.5% cap</small><span class="go">Run the numbers →</span></a>
+            <a href="#el-zoning"><span class="ico">🏗</span><b>Zoning &amp; upside</b><small class="num">3 units possible · ADU by right</small><span class="go">See what's buildable →</span></a>
+            <a href="#el-climate"><span class="ico">🔥</span><b>Climate &amp; risk</b><small>Fire low · Flood minimal</small><span class="go">See risk report →</span></a>
+            <a href="#el-history"><span class="ico">🕐</span><b>Price history</b><small class="num">Listed 6 days ago · no cuts</small><span class="go">Full history →</span></a>
+            <a href="#el-comps"><span class="ico">🏘</span><b>Comparables</b><small class="num">8 comps · model value $1.34M</small><span class="go">See comps →</span></a>
+            <a href="#el-neighborhood"><span class="ico">📍</span><b>Neighborhood</b><small>Friendly Acres, Redwood City</small><span class="go">Area guide →</span></a>
+            <a href="#el-whymatch"><span class="ico">⚡</span><b>Why it matched</b><small class="num">96/100 against your prompt</small><span class="go">See reasoning →</span></a>
+          </div>
+          <div class="anno" style="margin-top:4px">9 tiles: icon + bold label + one-line data teaser + "→" anchor link to its section. "Why it matched" tile absent entirely for visitors with no active search context (fail-quiet, not a locked teaser).</div>
+        </div>
+
+        <!-- 5. about this home -->
+        <div class="sec" id="el-about">
+          <h2>About this home</h2>
+          <div class="proselike" style="font-size:13.5px">
+            <p>Tucked at the end of a quiet cul-de-sac in Friendly Acres, this 3-bedroom ranch home pairs its original hardwood floors with an updated kitchen and a south-facing backyard on a 5,800 sqft lot — zoned for an ADU by right. Morning commutes run 22 minutes to Menlo Park. Listed at $1,289,000, about 4% under comparable recent sales.</p>
+          </div>
+          <div class="anno" style="margin-top:4px">MLS remarks render first when licensed for display (§26.5); where thin, an AI-drafted paragraph from listing facts + intelligence data, clearly agent-attributed. All copy passes the fair-housing wording filter (§16.1): facts, never characterizations — no "great schools" / "family-friendly" / "safe" / "best neighborhood." This is the crawlable body text; the neighborhood name links to the community page.</div>
+        </div>
+
+        <!-- 6. why this matched -->
+        <div class="sec" id="el-whymatch">
+          <h2>Why this matched your search</h2>
+          <div class="whymatch">
+            <b>96/100.</b> Commute to Menlo Park is <b>22 min</b> at 8am (you asked ≤30). Assigned to <b>Roy Cloud Elementary, rated 9/10 by GreatSchools</b> (you asked "highly-rated elementary"). Cul-de-sac position with no through-traffic matches "quiet street." Listed <b>4% under</b> the model's comp-based value of $1.34M. Trade-off to know: smaller garage than 78% of nearby listings.
+          </div>
+          <div class="anno" style="margin-top:4px">SearchResultRecord (§10.6) + parsed criteria from SearchRecord — every claim carries its fact. Score comes ONLY from ScoringService (§14.2 forbids local scoring); ScoringService down → score + section hidden, deterministic facts remain (§12.10). No active search context → whole section hidden.</div>
+        </div>
+
+        <!-- commute -->
+        <div class="sec" id="el-commute">
+          <h2>Commute</h2>
+          <div class="statrow" style="grid-template-columns:repeat(3,1fr)">
+            <div class="stat"><small>Menlo Park (work)</small><b class="num">22 min</b> <span class="anno">drive · 8:00 AM</span></div>
+            <div class="stat"><small>SFO</small><b class="num">31 min</b> <span class="anno">drive · 8:00 AM</span></div>
+            <div class="stat"><small>Add destination</small><b>＋</b> <span class="anno">edit place &amp; hour</span></div>
+          </div>
+          <div class="anno" style="margin-top:4px">Drive times to user-set destinations at a chosen hour — LocalDataProvider (§12.7); routing provider [BEST GUESS: Mapbox Directions, consistent with the §12.6 Mapbox imagery position — [DECIDE], UI unchanged either way]. Destinations + hour are editable inline.</div>
+        </div>
+
+        <!-- schools -->
+        <div class="sec" id="el-schools">
+          <h2>Schools <span class="anno" style="font-weight:400">— user-initiated expand; identical for every user on this property (§16.2)</span></h2>
+          <table class="dtable">
+            <tr><th>Assigned school ▲▼</th><th>Grades</th><th>Rating (GreatSchools)</th><th>Links</th></tr>
+            <tr><td>Roy Cloud Elementary</td><td>K–8</td><td class="num">9/10</td><td><a href="#" style="color:var(--brand)">Provider page</a> · <a href="#" style="color:var(--brand)">District</a> · <a href="#" style="color:var(--brand)">Methodology</a></td></tr>
+            <tr><td>Kennedy Middle</td><td>6–8</td><td class="num">7/10</td><td><a href="#" style="color:var(--brand)">Provider page</a> · <a href="#" style="color:var(--brand)">District</a></td></tr>
+            <tr><td>Sequoia High</td><td>9–12</td><td class="num">8/10</td><td><a href="#" style="color:var(--brand)">Provider page</a> · <a href="#" style="color:var(--brand)">District</a></td></tr>
+          </table>
+          <div class="cardbox" style="margin-top:8px; font-size:11px; color:var(--mut)">
+            <b style="color:var(--ink)">Disclaimers (all three verbatim, non-removable §16.3):</b><br>
+            "School attendance boundaries are provided by a third party and are subject to change. Proximity to a school does not guarantee enrollment. Verify attendance zones directly with the school district before relying on this information."<br>
+            "School ratings are provided by GreatSchools as a starting point and are not the only factor in choosing a school or home. PropSearch does not endorse or guarantee these ratings."<br>
+            "The same school information is available to every user."
+          </div>
+          <div class="anno" style="margin-top:4px">LocalDataRecord (§10.12). Sortable by the user only. Algorithmic firewall §16.4: school data never feeds ranking, alerts, ScoringService inputs, audiences, or lead capture. <b>No conversion CTA inside this block</b> (matrix correction #4 — the agent card sits outside it).</div>
+        </div>
+
+        <!-- 7. monthly cost -->
+        <div class="sec" id="el-monthly">
+          <h2 style="display:flex; align-items:center; gap:10px">Monthly cost
+            <span style="display:inline-flex; border:1px solid var(--line); border-radius:99px; overflow:hidden; font-size:11.5px; font-weight:600">
+              <span style="padding:4px 12px; background:var(--brand); color:var(--brand-ink)">Buyer</span>
+              <span style="padding:4px 12px; color:var(--mut); cursor:pointer">Investor</span>
+            </span>
+          </h2>
+          <div class="statrow">
+            <div class="stat"><small>All-in monthly</small><b class="num">$8,120/mo</b></div>
+            <div class="stat"><small>P&amp;I @ 6.4% ✎, 20% down ✎</small><b class="num">$6,450</b></div>
+            <div class="stat"><small>Taxes ✎ + insurance</small><b class="num">$1,460</b></div>
+            <div class="stat"><small>HOA</small><b class="num">$210</b></div>
+          </div>
+          <div class="anno" style="margin-top:6px">Rate, down payment, and taxes are editable (✎) — the number updates live via POST /cashflow/preview (§24.4); defaults from the §19.4 assumption pack. Investor toggle swaps this block to cash flow / cap rate / rent yield. Deterministic metrics only (§14.4) — no LLM in the math; every metric carries source_facts.</div>
+        </div>
+
+        <!-- 8. investment snapshot -->
+        <div class="sec" id="el-invest">
+          <h2 style="display:flex; align-items:center; gap:10px">Investment snapshot <button class="btn-ink" style="margin-left:auto">Run the numbers →</button></h2>
+          <div class="statrow">
+            <div class="stat"><small>Cap rate</small><b class="num">4.5%</b></div>
+            <div class="stat"><small>Cash flow @20% down</small><b class="num">−$820/mo</b></div>
+            <div class="stat"><small>5-yr appreciation (est.)</small><b class="num">+23% <span style="font-size:11px; color:var(--mut)">(ZIP)</span></b></div>
+            <div class="stat"><small>Rent confidence</small><b>High</b></div>
+          </div>
+          <div class="anno" style="margin-top:4px">CashflowPreviewMetrics (cap_rate, monthly_cash_flow, DSCR, GRM, NOI available on toggle); appreciation from MarketDataSnapshot (§10.8) — labeled "est." with as-of date; ZIP-level figure carries "(ZIP)" label, never a property-level claim [DECIDE]. "Run the numbers →" opens Underwriting Workspace (Screen 22) with property_id + saved assumption overrides. Rent estimate missing → rent-derived metrics hidden, "rent estimate unavailable" + manual_review_flag (fail-closed).</div>
+        </div>
+
+        <!-- 9. zoning & investment intelligence panel -->
+        <div class="sec" id="el-zoning">
+          <h2>Zoning &amp; Investment Intelligence <span class="anno" style="font-weight:400">— approved 2026-07-08 Zoneomics/Reventure panel; ordered by actionability (§17.6)</span></h2>
+          <!-- overlay warning: near top when it gates a claim -->
+          <div id="el-overlay" class="cardbox" style="border-color:var(--warn); background:#fdf6ee; margin-bottom:10px; font-size:12px">
+            ⚠️ <b>Overlay warning (conditional — shown only when applicable):</b> <span style="color:var(--mut)">this parcel sits in a historic/restrictive overlay district; overlay rules can override the by-right answers below. <span class="anno">Rendered near the top when is_applicable:true because it changes what to believe about upside + permitted uses (§17.6 item 7); otherwise absent.</span></span>
+          </div>
+          <div style="display:grid; grid-template-columns:1.4fr 1fr; gap:10px; margin-bottom:10px">
+            <div class="stat" style="border-left:3px solid var(--good)">
+              <small>Development upside</small>
+              <b class="num" style="font-size:20px">Builds up to 3 units · 1 built today</b>
+              <span style="font-size:12px; color:var(--good); font-weight:600">+2-unit capacity by right</span>
+              <div class="anno">capacity delta = maximum_possible_residential_units − current unit_mix (§17.5) · current use conforming ✓</div>
+            </div>
+            <div class="stat">
+              <small>Market forecast score (ZIP)</small>
+              <b class="num" style="font-size:20px">72<span style="font-size:13px; color:var(--mut)">/100</span></b>
+              <div style="height:6px; background:var(--surface); border-radius:99px; margin-top:6px; position:relative; border:1px solid var(--line)">
+                <div style="position:absolute; left:0; width:72%; top:0; bottom:0; background:var(--warn); border-radius:99px"></div>
+              </div>
+              <span style="font-size:11.5px; color:var(--warn)">Elevated correction risk</span>
+              <div class="anno">PROPSEARCH_MARKET_FORECAST (§12.13) — glanceable gauge, not a chart; null → tile absent, never guessed</div>
+            </div>
+          </div>
+          <div id="el-permitted" style="border:1px solid var(--line); border-radius:var(--r); padding:12px 14px; margin-bottom:10px">
+            <b style="font-size:13px">Permitted by right</b> <span class="anno">— structured plu answer (§17.5), icon rows not prose</span>
+            <div style="display:grid; grid-template-columns:repeat(3,1fr); gap:8px; margin-top:8px; font-size:12.5px">
+              <div>✅ ADU — as of right</div>
+              <div>✅ Garage conversion</div>
+              <div>⚠️ SB-9 lot split — needs permit</div>
+            </div>
+            <div style="font-size:11.5px; color:var(--soft); margin-top:8px">Source: Redwood City municipal code §34.2 · <a href="#" style="color:var(--brand)">read the actual ordinance →</a></div>
+          </div>
+          <!-- ask anything box -->
+          <div id="el-askbox" style="border:2px solid var(--ink); border-radius:var(--r); padding:14px; margin-bottom:10px; background:var(--surface)">
+            <b style="font-size:13.5px">Ask anything about this lot</b>
+            <div class="prompt" style="margin-top:8px; padding:4px; background:var(--paper)"><input placeholder="Can I convert the garage? What setbacks apply? Could I add a second story?" aria-label="Zoning question"><button>Ask</button></div>
+            <div style="display:flex; gap:6px; flex-wrap:wrap; margin-top:8px">
+              <button class="chip" style="font-size:11.5px">Can I convert the garage?</button>
+              <button class="chip" style="font-size:11.5px">Can I add an ADU?</button>
+              <button class="chip" style="font-size:11.5px">SB-9 lot split?</button>
+              <button class="chip" style="font-size:11.5px">Show ADU concept on my lot 🛰</button>
+            </div>
+            <div style="font-size:11.5px; color:var(--mut); margin-top:8px">Answers are sourced from municipal code with confidence + coverage; below-threshold answers are suppressed, never guessed (§17.2). "Show ADU concept" renders a plan-view parcel overlay (Mapbox + attribution; boundary geometry from Zoneomics geom); photorealistic concept only with client-owned/licensed aerial imagery — marketing use is REVIEW_REQUIRED (§17.4). Sensitive-topic questions set human_handoff_required and never feed scoring/routing (§26.6).</div>
+            <div id="el-zoningdisc" style="font-size:10.5px; color:var(--soft); margin-top:6px; border-top:1px solid var(--line); padding-top:6px"><b style="color:var(--mut)">Verbatim, non-removable (§17.3):</b> "Zoning and ADU information is sourced from third-party data and must be verified with the local jurisdiction before design, permitting, purchase, or construction decisions. This is not legal, architectural, or permitting advice."</div>
+          </div>
+          <div class="badges">
+            <span id="el-owner" class="bdg" title="Booleans only — never a name or mailing address (matrix correction #12)">Owner-occupied</span>
+            <span class="bdg num" title="Sparkline of list price with cut markers, from price_history §10.3">Price mini-timeline: no cuts · listed 6d <span style="letter-spacing:-1px">▁▁▁▂▂</span></span>
+            <span class="bdg" title="Reference tier — expandable accordion below the fold (§17.6 item 6)">Zoning detail: FAR 0.5 · height 28ft · setbacks 15/5/5 ▾</span>
+          </div>
+          <div class="anno" style="margin-top:8px">Whole panel renders from the single GET /properties/{id} response — zoning_summary + market_forecast + ownership_signal ride PropertyDetailApiResponse (§24.3); no separate endpoint. Zoning below confidence/coverage gate → claim suppressed entirely: "Zoning answer unavailable for this parcel."</div>
+        </div>
+
+        <!-- 10. climate & risk -->
+        <div class="sec" id="el-climate">
+          <h2>Climate &amp; risk</h2>
+          <div class="badges"><span class="bdg good">Fire: Low (2/10)</span><span class="bdg good">Flood: Minimal (1/10)</span><span class="bdg warn">Quake: Moderate (6/10)</span><span class="bdg num">Insurance est. $2,400/yr</span></div>
+          <div class="anno" style="margin-top:4px">LocalDataProvider risk feed [BEST GUESS: First Street–class vendor — [DECIDE]; badges + layout identical regardless of vendor]. Provider attribution required (facts-not-characterizations): "Risk scores provided by [Provider], as of Jun 2026." No crime data anywhere on the platform.</div>
+        </div>
+
+        <!-- 11. price & tax history -->
+        <div class="sec" id="el-history">
+          <h2>Price &amp; tax history</h2>
+          <div class="proselike" style="font-size:13px">
+            <p>742 Hurlingame Ave was listed on July 8, 2026 for $1,289,000. It last sold in March 2014 for $815,000 — a 58% gain over 12 years (~3.9%/yr). Assessed value is $912,400 with 2025 property taxes of $11,270.</p>
+          </div>
+          <table class="dtable" style="margin-top:8px; font-size:12px">
+            <tr><th>Date</th><th>Event</th><th>Price</th></tr>
+            <tr class="num"><td>Jul 8, 2026</td><td>Listed for sale</td><td>$1,289,000</td></tr>
+            <tr class="num"><td>Mar 14, 2014</td><td>Sold</td><td>$815,000</td></tr>
+            <tr class="num"><td>2025</td><td>Assessed / taxes</td><td>$912,400 · $11,270/yr</td></tr>
+          </table>
+          <div class="anno" style="margin-top:4px">Server-rendered prose + table, never JS-only — this block is what keeps sold pages ranking for address searches for years (Zillow's organic moat). PropertyRecord + county data via PropertyDataProvider.</div>
+        </div>
+
+        <!-- comparables -->
+        <div class="sec" id="el-comps">
+          <h2>Comparables <span class="anno" style="font-weight:400">— 8 comps · model value $1,340,000 · confidence ±4% · as of Jul 12, 2026 (AVM display rule, matrix correction #7)</span></h2>
+          <div class="tblx">
+          <table class="dtable" style="min-width:640px">
+            <tr><th>Address</th><th>Sold</th><th>Price</th><th>$/sqft</th><th>Beds/Ba</th><th>Dist.</th></tr>
+            <tr class="num"><td><a href="#" style="color:var(--brand)">655 Hurlingame Ave</a></td><td>Jun 2026</td><td>$1,342,000</td><td>$884</td><td>3/2</td><td>0.1 mi</td></tr>
+            <tr class="num"><td><a href="#" style="color:var(--brand)">118 Beech St</a></td><td>May 2026</td><td>$1,350,000</td><td>$838</td><td>3/2</td><td>0.3 mi</td></tr>
+            <tr class="num"><td><a href="#" style="color:var(--brand)">910 2nd Ave</a></td><td>May 2026</td><td>$1,295,000</td><td>$901</td><td>3/1</td><td>0.4 mi</td></tr>
+            <tr><td colspan="6" class="anno">+ 5 more comps · rows are real &lt;a href&gt; links to their listing pages (crawlable, internal-link mesh)</td></tr>
+          </table>
+          </div>
+          <div style="display:flex; gap:8px; margin-top:8px; align-items:center"><button class="btn-ghost">⇄ Compare with 3 similar actives →</button> <span class="anno">auto-seeds Compare (Screen 4)</span></div>
+          <div class="anno" style="margin-top:4px">AVMSnapshot (§10.10) + comp set. AVM missing → "estimate unavailable" — never a fabricated number.</div>
+        </div>
+
+        <!-- 12. neighborhood teaser -->
+        <div class="sec" id="el-neighborhood" style="border-bottom:0">
+          <h2>About Friendly Acres</h2>
+          <div class="proselike" style="font-size:13px">
+            <p>Friendly Acres is a mid-century ranch neighborhood east of El Camino — wide, low-traffic streets, 41% of lots ADU-eligible, median sale $1.42M (+3.1% YoY). <a href="#" style="color:var(--brand)">Read the full Friendly Acres guide →</a></p>
+          </div>
+          <div class="anno" style="margin-top:4px">2-sentence crawlable teaser from the community-page content store; the link passes listing-page authority up to the community page. Factual wording only (§16.1).</div>
+        </div>
+
+        <!-- soft lead prompt -->
+        <div id="el-softprompt" class="cardbox" style="border-color:var(--brand); background:var(--brand-soft); display:flex; gap:10px; align-items:center; flex-wrap:wrap; margin-top:6px">
+          <span>👋</span>
+          <div style="flex:1; min-width:240px"><b>You've viewed this home twice — want updates if the price changes?</b>
+            <div style="color:var(--mut); font-size:11.5px">Non-blocking, dismissible (×). Behavior-triggered: repeat visit / photo-binge (10+) / first save — interim thresholds [BEST GUESS], agent-configurable in Settings [DECIDE]. Hard gate is PPC-entry only, agent-configurable — never on organic.</div>
+          </div>
+          <button class="btn-ink">Get updates</button><button class="btn-ghost">✕</button>
+        </div>
+      </div>
+
+      <!-- sticky agent card (right rail) -->
+      <div class="agentcard" id="el-agentcard">
+        <div class="avatar">GW</div>
+        <b>Graeham Watts</b>
+        <div style="font-size:12.5px; color:var(--mut)">Intero Real Estate · DRE #01466876<br>Responds in ~12 min</div>
+        <button>Ask about this home</button>
+        <button class="alt">Book a tour</button>
+        <div class="poweredby" style="margin-top:14px; text-align:center">Powered by PropertyIQ</div>
+        <div class="anno" style="margin-top:10px">Identity fields render read-only from identity.json (locked; the legacy number on the identity.json blocklist is banned). Sticky — follows scroll (Redfin/Zillow convention); on mobile becomes the sticky bottom bar. Buttons open lead form / booking (pre-approved slots, Calendar screen) → form posts to the <b>PropFlow intake endpoint</b> — PropSearch itself never emits LEAD_CAPTURED (§25.3). Lead form fields: name, contact, message + source/UTM tags (§7.2–7.3). Outbound follow-up consent checks run in PropFlow (ComplianceProvider).</div>
+      </div>
+    </div>
+
+    <!-- sold-page variant -->
+    <div id="el-sold" style="padding:0 22px 14px">
+      <div style="border:1.5px solid var(--line); border-radius:12px; overflow:hidden">
+        <div style="background:var(--ink); color:#fff; padding:10px 16px; font-size:13px; display:flex; gap:10px; align-items:center; flex-wrap:wrap">
+          <b>SOLD variant (permanent page state)</b> <span class="num">Sold for $1,315,000 on Aug 22, 2026</span>
+          <span style="margin-left:auto; font-size:11px; opacity:.75">canonical URL unchanged — the page keeps ranking for the address forever</span>
+        </div>
+        <div style="padding:12px 16px; display:flex; gap:14px; align-items:center; flex-wrap:wrap; font-size:12.5px">
+          <span style="color:var(--mut)">Gallery retained per MLS display rules · price/tax history stays server-rendered · AVM shows current model value with confidence + range + as-of date.</span>
+          <button class="btn-ink">What's my home worth? →</button>
+          <span class="anno">CTA → home-value capture flow (homepage widget flow). Zillow's organic-moat pattern — sold listings never die.</span>
+        </div>
+      </div>
+    </div>
+
+    <!-- states strip -->
+    <div id="el-states" style="padding:0 22px 18px">
+      <div class="cardbox" style="font-size:11.5px">
+        <b>States (dev reference)</b>
+        <div style="color:var(--mut); margin-top:4px">
+          <b style="color:var(--ink)">Loading:</b> gallery + stat-card skeletons render immediately (LCP &lt; 2s); each intelligence section streams in with its own skeleton — a slow provider never blocks the page.
+          <b style="color:var(--ink)">Empty/partial (all fail-closed per section):</b> AVM missing → "estimate unavailable," never fabricated · rent missing → rent-derived metrics hidden + manual_review_flag · zoning below gate → "Zoning answer unavailable for this parcel," ADU visuals suppressed/internal-only · ScoringService down → match + investor-fit scores hidden, deterministic metrics remain · mortgage balance unknown → equity = null + MISSING_MORTGAGE_BALANCE prompt · no search context → "Why it matched" absent.
+          <b style="color:var(--ink)">Error/degraded:</b> IDX feed stale → banner "Listing data as of Jul 15, 7:42 AM" · display license revoked → licensed fields/photos removed (IDXDisplayCacheRecord governs), page falls back to public-record facts.
+          <b style="color:var(--ink)">Permission-limited:</b> restricted MLS fields never render beyond license (§26.5) · agent-only chrome ("Generate ads," PropReach P1) hidden from consumers · compliance_flags[] on the detail API gates what renders (§24.3).
+          <b style="color:var(--ink)">Sold/off-market:</b> permanent sold state above.
+        </div>
+      </div>
+    </div>
+
+    <!-- mobile variant strip -->
+    <div id="el-mobile" style="padding:0 22px 20px">
+      <div class="cardbox" style="font-size:11.5px">
+        <b>Mobile (375px) variant</b>
+        <div style="color:var(--mut); margin-top:4px; display:grid; gap:3px">
+          <div>· Single column, same section order · gallery = swipeable full-width carousel with photo counter ("7 / 28")</div>
+          <div>· Sticky agent card → <b style="color:var(--ink)">sticky bottom bar</b>: [Ask about this home] [Book a tour]</div>
+          <div>· Sticky section nav → horizontally scrollable chip row under the gallery</div>
+          <div>· Explore tiles stack 2-up · stat rows wrap 2×2 · comp tables scroll horizontally in their own container (page never scrolls sideways)</div>
+          <div>· Save/compare/hide = visible heart + long-press sheet — no hover states (Screen 2 rules) · Share uses the native share sheet</div>
+        </div>
+        <div style="display:flex; gap:8px; margin-top:8px; align-items:flex-end">
+          <div style="width:120px; border:1.5px solid var(--line); border-radius:14px; overflow:hidden; font-size:8px; background:var(--paper)">
+            <div class="ph" style="min-height:52px; border:0; border-radius:0">photo 7/28 ›</div>
+            <div style="display:flex; gap:3px; padding:3px 4px; overflow:hidden; color:var(--soft)"><span>Overview</span><span>Match</span><span>Commute</span><span>Sch…</span></div>
+            <div style="padding:3px 5px"><b class="num" style="font-size:10px">$1,289,000</b><div style="color:var(--mut)">$8,120/mo · 3bd 2ba</div>
+              <div style="display:grid; grid-template-columns:1fr 1fr; gap:2px; margin-top:2px"><span class="ph" style="min-height:16px; font-size:6px">🚗 Commute</span><span class="ph" style="min-height:16px; font-size:6px">🎓 Schools</span><span class="ph" style="min-height:16px; font-size:6px">📈 Invest</span><span class="ph" style="min-height:16px; font-size:6px">🏗 Zoning</span></div>
+            </div>
+            <div style="background:var(--ink); color:#fff; padding:3px; text-align:center; font-size:7px">Ask about this home · Book a tour</div>
+          </div>
+          <span class="anno">375px thumbnail — sticky bottom agent bar replaces the right rail</span>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ============ spec gaps found ============ -->
+  <div class="note" style="margin-top:26px"><b>Spec gaps found (Master Brain specifies, spec inventory missed — rendered above):</b>
+    (1) §17.5 item 3 — <b>is_current_use_conforming</b> flag surfaces alongside the Development Upside tile ("current use conforming ✓"); the spec's zoning panel row omits it.
+    (2) §17.6 item 5 — the <b>price-history mini-timeline sparkline with cut markers</b> is a required element of the Zoning &amp; Investment panel's stat-tile row (from price_history §10.3), distinct from the Price &amp; tax history section — rendered as the sparkline badge.
+    (3) §24.3 — the entire Zoning &amp; Investment panel (and map layers) must render from the <b>single PropertyDetailApiResponse</b> — no separate zoning endpoint; noted in the panel plumbing annotation.
+    (4) §17.5 item 5 — Zoneomics <b>geom</b> supplies the parcel-boundary geometry for the ADU plan-view overlay (closes the ParcelOverlayRequest geometry gap); noted in the Ask-anything box.
+    (5) §16.3 — the <b>equal-service note</b> ("The same school information is available to every user.") is a third verbatim disclaimer; the spec said "all three" without quoting it — rendered verbatim in the schools block.
+  </div>
+
+  <!-- ============ (3) ELEMENT COVERAGE ============ -->
+  <h2 style="font-size:20px; margin:24px 0 10px; font-family:var(--font-display)">Element coverage — spec inventory → this page</h2>
+  <table class="dtable cov" style="font-size:12.5px">
+    <tr><th>Spec inventory element</th><th>Rendered at</th><th>Status</th></tr>
+    <tr><td>Breadcrumbs (BreadcrumbList schema)</td><td><a href="#el-breadcrumbs">Breadcrumbs</a></td><td class="ok">✓</td></tr>
+    <tr><td>Photo gallery (licensed IDX photos, carousel)</td><td><a href="#el-gallery">Gallery</a></td><td class="ok">✓</td></tr>
+    <tr><td>Price + all-in $/mo stat card</td><td><a href="#el-statcard">Bold stat card</a></td><td class="ok">✓</td></tr>
+    <tr><td>Facts row (beds/baths/sqft/lot)</td><td><a href="#el-facts">Facts row</a></td><td class="ok">✓</td></tr>
+    <tr><td>Badge row (New · −X% vs comps · Matches N of N, hover explains)</td><td><a href="#el-badges">Badge row</a></td><td class="ok">✓</td></tr>
+    <tr><td>Match score stat + "Why it matched" card (service-computed, fail-quiet)</td><td><a href="#el-statrow">Stat row</a> + <a href="#el-whymatch">Why it matched</a></td><td class="ok">✓</td></tr>
+    <tr><td>Est. rent stat (+ confidence, Rentometer)</td><td><a href="#el-rentstat">Est. rent stat</a></td><td class="ok">✓</td></tr>
+    <tr><td>Explore tiles (9)</td><td><a href="#el-explore">Explore tile grid</a></td><td class="ok">✓</td></tr>
+    <tr><td>About this home (MLS remarks / AI-drafted, fair-housing filtered)</td><td><a href="#el-about">About this home</a></td><td class="ok">✓</td></tr>
+    <tr><td>Commute section (editable destinations + hour)</td><td><a href="#el-commute">Commute</a></td><td class="ok">✓</td></tr>
+    <tr><td>Schools section (attribution + 3 verbatim disclaimers + firewall, no CTA inside)</td><td><a href="#el-schools">Schools</a></td><td class="ok">✓</td></tr>
+    <tr><td>Monthly cost module (editable, Buyer/Investor toggle)</td><td><a href="#el-monthly">Monthly cost</a></td><td class="ok">✓</td></tr>
+    <tr><td>Investment snapshot (+ "Run the numbers →" → S22)</td><td><a href="#el-invest">Investment snapshot</a></td><td class="ok">✓</td></tr>
+    <tr><td>Zoning &amp; Investment Intelligence panel (upside · forecast meter · by-right grid · ordinance link · expandable detail)</td><td><a href="#el-zoning">Zoning panel</a></td><td class="ok">✓</td></tr>
+    <tr><td>"Ask anything about this lot" box (NL Q&amp;A + chips + ADU concept)</td><td><a href="#el-askbox">Ask-anything box</a></td><td class="ok">✓</td></tr>
+    <tr><td>Zoning disclaimer line (verbatim, non-removable)</td><td><a href="#el-zoningdisc">Disclaimer in box</a></td><td class="ok">✓</td></tr>
+    <tr><td>Owner-signal badge (booleans only, never names/addresses)</td><td><a href="#el-owner">Owner badge</a></td><td class="ok">✓</td></tr>
+    <tr><td>Overlay warning (conditional)</td><td><a href="#el-overlay">Overlay warning</a></td><td class="ok">✓</td></tr>
+    <tr><td>Climate &amp; risk badges (+ insurance est., provider attribution)</td><td><a href="#el-climate">Climate &amp; risk</a></td><td class="ok">✓</td></tr>
+    <tr><td>Price &amp; tax history (server-rendered prose + table)</td><td><a href="#el-history">Price &amp; tax history</a></td><td class="ok">✓</td></tr>
+    <tr><td>Comparables section (8 comps, model value + confidence + range + as-of)</td><td><a href="#el-comps">Comparables</a></td><td class="ok">✓</td></tr>
+    <tr><td>Neighborhood teaser (2 sentences + guide link)</td><td><a href="#el-neighborhood">Neighborhood</a></td><td class="ok">✓</td></tr>
+    <tr><td>Sticky agent card (identity.json, PropFlow intake, Powered by PropertyIQ)</td><td><a href="#el-agentcard">Agent card</a></td><td class="ok">✓</td></tr>
+    <tr><td>Save (header + heart → SavedPropertyRecord + notes/strategy sheet)</td><td><a href="#el-save">Header Save</a></td><td class="ok">✓</td></tr>
+    <tr><td>Share (canonical URL, OG card, native on mobile)</td><td><a href="#el-share">Header Share</a></td><td class="ok">✓</td></tr>
+    <tr><td>Compare affordance (tray + "3 similar actives" auto-seed)</td><td><a href="#el-compare">Header Compare</a> + <a href="#el-comps">Comps CTA</a></td><td class="ok">✓</td></tr>
+    <tr><td>Soft lead prompts (behavior-triggered, dismissible, PPC-only hard gate)</td><td><a href="#el-softprompt">Soft prompt</a></td><td class="ok">✓</td></tr>
+    <tr><td>Sold-page variant (sold banner + home-value CTA, permanent URL)</td><td><a href="#el-sold">SOLD variant</a></td><td class="ok">✓</td></tr>
+    <tr><td>Compliance flags (hidden plumbing, gates rendering)</td><td><a href="#el-states">States strip</a> (permission-limited)</td><td class="ok">✓</td></tr>
+  </table>
+  <div style="border:1.5px solid var(--good); background:#f2f8f4; border-radius:10px; padding:12px 16px; margin:12px 0 0; font-weight:700; color:var(--good)">29 of 29 spec elements rendered ✓ <span style="font-weight:400; color:var(--mut); font-size:12.5px">— plus prompt-required regions beyond the inventory: site header back-context, sticky in-page nav, address line, full stat row, states strip, mobile-variant strip; plus the 5 Master-Brain gap additions listed above.</span></div>
+
+  <!-- ============ (4) FULL SPEC AS HTML ============ -->
+  <div class="specdoc">
+    <h1 style="font-size:24px; margin:40px 0 6px; font-family:var(--font-display)">Spec — 03 · Property detail</h1>
+    <p><b>Purpose</b> The single-property page: the consumer/investor decision surface and the platform's SEO workhorse. Renders the licensed IDX listing plus PropertyIQ's intelligence layers (match reasoning, monthly cost, investment snapshot, zoning/ADU, climate, price history, comparables, neighborhood), and is the launch point for underwriting, compare, save, and agent contact. Sold listings never die — the page persists as a "sold" page with a home-value CTA (Zillow's organic moat pattern).</p>
+    <p><b>Primary users</b> Consumers (buyers/sellers on the agent's site), investors/serious buyers, the agent (reviewing intelligence before a client conversation). Anonymous visitors see the full page — no hard gate on organic traffic (Ylopo-data decision: soft behavior-triggered prompts only; hard gates reserved for PPC, agent-configurable).</p>
+    <p><b>Entry points</b> Results list/map card click (S2, "← Back to 47 results" preserved); Compare column header (S4); filter-URL landing pages and "homes like this" links (Brain §15); organic search (canonical /{city}/{address-slug}/{mls-id}), social OG cards, QR/short links; Saved Properties, alert emails; LISTING_LIVE_FROM_IDX-driven links from PropCast/PropReach.</p>
+    <p><b>Exit points</b> Explore tiles → in-page anchors; "Run the numbers →" → Underwriting Workspace (S22) with property_id + saved assumption overrides; neighborhood teaser → Community page; breadcrumbs → city/community pages; comp rows → other listing pages; Compare (S4) auto-seeded; agent card → lead capture → PropFlow intake (PropSearch never emits LEAD_CAPTURED §25.3); Save → SavedPropertyRecord; Share → OG-carded URL; sold CTA → home-value flow.</p>
+
+    <h2>Layout</h2>
+    <p><b>Desktop:</b> Site header (agent avatar + name, back-context, Save/Share) · breadcrumbs (BreadcrumbList schema) · gallery (hero + 4 tiles, "+ N photos" carousel, LCP &lt; 2s) · sticky in-page nav (Overview · Why it matched · Commute · Schools · Investment · Zoning &amp; upside · Climate &amp; risk · Price history · Comparables · Neighborhood, active-on-scroll) · two-column body: left = 12 sections in order (bold stat card → address → stat row → 9 explore tiles → About → Why matched → Monthly cost w/ Buyer-Investor toggle → Investment snapshot → Zoning &amp; Investment Intelligence panel → Climate badges → Price &amp; tax history → Neighborhood teaser); right = sticky agent contact card that follows scroll.</p>
+    <p><b>Mobile (375px):</b> single column, same order; gallery = swipeable full-width carousel + counter; agent card = sticky bottom bar (Ask · Book a tour); section nav = scrollable chip row; explore tiles 2-up; stat rows 2×2; comp tables scroll in-container; save/compare/hide = visible heart + long-press sheet.</p>
+
+    <h2>Element inventory</h2>
+    <div class="tblx">
+    <table class="dtable">
+      <tr><th>Element</th><th>What it shows/does</th><th>Data source</th><th>Interactions</th><th>Spec source</th></tr>
+      <tr><td>Breadcrumbs</td><td>State › City › Neighborhood › Address</td><td>PropertyRecord geo fields</td><td>Click → community/city pages</td><td>Per-page SEO spec; Brain §15</td></tr>
+      <tr><td>Photo gallery</td><td>Licensed listing photos</td><td>IDXListingRecord / IDXDisplayCacheRecord (§10.3–10.4)</td><td>Carousel, lightbox, lazy-load</td><td>Draft s3; §26.5 MLS/IDX boundary</td></tr>
+      <tr><td>Price + all-in $/mo stat card</td><td>List price, estimated all-in monthly</td><td>IDXListingRecord.list_price; CashflowPreviewMetrics (§24.4)</td><td>Monthly figure links to Monthly cost module</td><td>Draft s3</td></tr>
+      <tr><td>Facts row</td><td>Beds / baths / sqft / lot</td><td>IDXListingRecord</td><td>—</td><td>Draft s3</td></tr>
+      <tr><td>Badge row</td><td>New (Nd) · −X% vs comps · Matches N of N</td><td>DOM from IDX; comps delta from AVM/comp model; match count from SearchResultRecord</td><td>Hover/tap explains</td><td>Draft s3</td></tr>
+      <tr><td>Match score + "Why it matched" card</td><td>96/100 with factual reasoning tied to the user's own prompt criteria</td><td>SearchResultRecord (§10.6); parsed criteria from SearchRecord</td><td>Tile → section; each claim carries its fact</td><td>Draft s3. Score must NOT run locally (§14.2) — comes from ScoringService; hidden without active search context</td></tr>
+      <tr><td>Est. rent stat</td><td>Monthly rent estimate + confidence</td><td>RentEstimateSnapshot (Rentometer; §10.9)</td><td>Links to Investment section</td><td>Draft s3; build-state memory (Rentometer, not RentCast)</td></tr>
+      <tr><td>Explore tiles (9)</td><td>Teaser + deep link per intelligence domain</td><td>Per-section sources</td><td>Click → anchor scroll</td><td>Draft s3</td></tr>
+      <tr><td>About this home</td><td>MLS remarks first when licensed; where thin, AI-drafted paragraph, agent-attributed</td><td>IDXListingRecord.remarks; generated copy pipeline</td><td>Read only</td><td>Draft s3; §26.5; §16.1 fair-housing wording</td></tr>
+      <tr><td>Commute section</td><td>Drive times to user-set destinations at chosen hour</td><td>LocalDataProvider (§12.7); routing [BEST GUESS: Mapbox Directions]</td><td>Edit destination/time</td><td>Draft s3</td></tr>
+      <tr><td>Schools section</td><td>Assigned schools, third-party ratings, boundaries</td><td>LocalDataRecord (§10.12, §16)</td><td>User-initiated expand; sortable; provider/district links</td><td>§16.2–16.4</td></tr>
+      <tr><td>Monthly cost module</td><td>PITI + tax + insurance + HOA, all editable; Buyer/Investor toggle → cash flow / cap rate / rent yield</td><td>CashflowPreviewMetrics via POST /cashflow/preview (§24.4); §19.4 defaults</td><td>Live-updating inputs; toggle</td><td>Draft s3 (BuyAbility rationale); §14.4 deterministic metrics</td></tr>
+      <tr><td>Investment snapshot</td><td>Cap rate, cash flow @20% down, 5-yr appreciation est., rent confidence</td><td>CashflowPreviewMetrics; MarketDataSnapshot (§10.8) [BEST GUESS: "est." + as-of date]</td><td>"Run the numbers →" → Underwriting Workspace</td><td>Draft s3; §19</td></tr>
+      <tr><td>Zoning &amp; Investment Intelligence panel</td><td>Development-upside card, ZIP forecast score meter + risk label, permitted-by-right grid (ADU/garage/SB-9), ordinance source link</td><td>ZoningLookupRecord (Zoneomics §10.11, §17); forecast from the 2026-07-08 scoring build</td><td>Expand zoning details (FAR/height/setbacks)</td><td>Draft s3 (approved 2026-07-08 panel); §17</td></tr>
+      <tr><td>"Ask anything about this lot" box</td><td>NL zoning Q&amp;A with suggested chips + ADU concept</td><td>ZoningProvider Q&amp;A (§17.1); ADU visuals §17.4</td><td>Free-text ask; chips; ADU plan-view overlay</td><td>Draft s3; §17.2–17.4</td></tr>
+      <tr><td>Zoning disclaimer line</td><td>Verbatim third-party/verify-with-jurisdiction text</td><td>Static (§17.3)</td><td>—</td><td>§17.3 (verbatim, non-removable)</td></tr>
+      <tr><td>Owner-signal badge</td><td>Owner-occupied / Absentee / Corporate ONLY</td><td>PropertyDataProvider (§12.2)</td><td>—</td><td>Matrix correction #12: never raw owner names/addresses</td></tr>
+      <tr><td>Overlay warning</td><td>Historic/restrictive overlay note, only when applicable</td><td>ZoningLookupRecord</td><td>—</td><td>Draft s3</td></tr>
+      <tr><td>Climate &amp; risk badges</td><td>Fire/Flood/Quake scores + insurance est.</td><td>LocalDataProvider risk feed [BEST GUESS: First Street–class; attribution required]</td><td>Tile → section</td><td>Draft s3</td></tr>
+      <tr><td>Price &amp; tax history</td><td>Server-rendered prose + table: list date/price, last sale, assessed, taxes</td><td>PropertyRecord + county via PropertyDataProvider</td><td>Read only; never JS-only (SEO)</td><td>Draft s3</td></tr>
+      <tr><td>Comparables section</td><td>8 comps, model value</td><td>AVMSnapshot (§10.10) + comp set</td><td>Comp rows link to listing pages</td><td>Draft s3; AVM display rules (confidence, range, as-of — matrix #7)</td></tr>
+      <tr><td>Neighborhood teaser</td><td>2-sentence crawlable teaser + guide link</td><td>Community-page content store</td><td>Link to community page</td><td>Draft s3</td></tr>
+      <tr><td>Sticky agent card</td><td>Avatar, name, brokerage + DRE (identity.json), response-time, Ask/Book, Powered by PropertyIQ</td><td>Tenant identity config (locked)</td><td>Buttons → lead form / booking → PropFlow intake; booking uses pre-approved slots</td><td>Draft s3; Skills CLAUDE.md brand rule</td></tr>
+      <tr><td>Save</td><td>Creates/updates SavedPropertyRecord (notes, custom rent, assumption overrides, strategy tag)</td><td>SavedPropertyRecord (§10.7)</td><td>Save/unsave; optional notes/strategy sheet</td><td>Matrix gap "Saved searches/properties P0"</td></tr>
+      <tr><td>Share</td><td>Canonical URL; OG/Twitter card with hero photo</td><td>—</td><td>Native share on mobile</td><td>Draft SEO spec</td></tr>
+      <tr><td>Compare affordance</td><td>Adds to compare tray; "3 similar actives" auto-seed</td><td>Compare set (S4)</td><td>Checkbox/button; tray pill on mobile</td><td>Draft s4 note</td></tr>
+      <tr><td>Soft lead prompts</td><td>Behavior-triggered, non-blocking</td><td>Session behavior signals</td><td>Dismissible; agent-configurable; hard gate PPC-only</td><td>Draft s3 lead policy</td></tr>
+      <tr><td>Sold-page variant</td><td>"Sold for $X on {date}" banner, gallery per MLS rules, home-worth CTA</td><td>IDX sold record; AVM</td><td>CTA → home-value flow</td><td>Draft s3 + SEO canonical rule</td></tr>
+      <tr><td>Compliance flags (hidden plumbing)</td><td>compliance_flags array gates what renders</td><td>PropertyDetailApiResponse (§24.3)</td><td>—</td><td>§24.3</td></tr>
+    </table>
+    </div>
+
+    <h2>States</h2>
+    <ul>
+      <li><b>Default:</b> full page; anonymous OK.</li>
+      <li><b>Loading:</b> gallery + stat-card skeletons immediately (LCP &lt; 2s); intelligence sections stream independently, each with its own skeleton.</li>
+      <li><b>Empty/partial (fail-closed per section):</b> AVM missing → "estimate unavailable," never fabricated (confidence + range + as-of when present) · rent missing → rent-derived metrics hidden + manual_review_flag · zoning below gate → claim suppressed ("Zoning answer unavailable for this parcel"), ADU visuals suppressed/internal-only · ScoringService down → match/investor-fit hidden, deterministic metrics remain (§12.10) · mortgage balance unknown → equity = null + MISSING_MORTGAGE_BALANCE, never guessed (§18.2) · no search context → "Why it matched" hidden.</li>
+      <li><b>Error/degraded:</b> IDX stale → "Listing data as of {timestamp}" banner; display license revoked → licensed fields/photos removed (IDXDisplayCacheRecord), fall back to public-record facts.</li>
+      <li><b>Permission-limited:</b> restricted MLS fields never render beyond license (§26.5); agent-only chrome hidden from consumers.</li>
+      <li><b>Sold/off-market:</b> permanent sold page state.</li>
+      <li><b>Mobile:</b> per Layout; sticky bottom agent bar replaces right rail.</li>
+    </ul>
+
+    <h2>Data fields</h2>
+    <div class="tblx">
+    <table class="dtable">
+      <tr><th>Field</th><th>Format</th><th>Source of truth</th></tr>
+      <tr><td>list_price / close_price</td><td>USD int</td><td>IDXListingRecord</td></tr>
+      <tr><td>beds, baths, property_type, sqft, lot_sqft, year_built</td><td>int/float/enum</td><td>IDXListingRecord / PropertyRecord</td></tr>
+      <tr><td>address, city, zip, geo_code, neighborhood</td><td>strings</td><td>PropertyRecord (+ PropertyAliasRecord for canonical URL survival)</td></tr>
+      <tr><td>days_on_market, listing_status</td><td>int / enum</td><td>IDXListingRecord</td></tr>
+      <tr><td>all_in_monthly, P&amp;I, taxes+insurance, HOA</td><td>USD/mo, editable (rate %, down %, tax)</td><td>CashflowPreviewMetrics; §19.4 assumption pack defaults</td></tr>
+      <tr><td>rent_estimate_monthly + confidence</td><td>USD/mo + High/Med/Low</td><td>RentEstimateSnapshot</td></tr>
+      <tr><td>cap_rate, monthly_cash_flow, cash_on_cash, DSCR, GRM, expense_ratio, NOI</td><td>% / USD</td><td>CashflowPreviewMetrics (deterministic-only, §14.4)</td></tr>
+      <tr><td>match score + per-criterion pass/miss</td><td>0–100 + list</td><td>SearchResultRecord (service-computed, never local)</td></tr>
+      <tr><td>avm_value, confidence, range, as_of_date</td><td>USD, %, range, date</td><td>AVMSnapshot</td></tr>
+      <tr><td>zoning: max_units, units_built, by-right list, FAR, height, setbacks, claim_level, confidence, coverage, ordinance citation</td><td>typed</td><td>ZoningLookupRecord</td></tr>
+      <tr><td>market forecast score (ZIP)</td><td>0–100 + risk label</td><td>2026-07-08 scoring build [BEST GUESS: MarketDataSnapshot extension]</td></tr>
+      <tr><td>fire/flood/quake scores, insurance_est</td><td>n/10, USD/yr</td><td>LocalDataProvider risk feed</td></tr>
+      <tr><td>school: name, assigned boundary, rating, provider, methodology link</td><td>typed</td><td>LocalDataRecord</td></tr>
+      <tr><td>price/tax history rows</td><td>date + USD table</td><td>PropertyRecord/county</td></tr>
+      <tr><td>owner signal</td><td>enum: owner-occupied / absentee / corporate</td><td>PropertyDataProvider</td></tr>
+      <tr><td>saved: notes, custom_rent_estimate_monthly, assumption_overrides, investor_strategy</td><td>per §10.7</td><td>SavedPropertyRecord</td></tr>
+      <tr><td>lead form: name, contact, message, source/UTM tags</td><td>strings</td><td>Posts to PropFlow intake; capture fields §7.2–7.3</td></tr>
+    </table>
+    </div>
+
+    <h2>Rules &amp; compliance</h2>
+    <ul>
+      <li><b>Fair housing / facts-not-characterizations (§16.1):</b> allowed wording only; forbidden: "great schools," "family-friendly," "safe," "best/declining neighborhood." AI-drafted copy passes the same filter.</li>
+      <li><b>School module (§16.2–16.4):</b> user-initiated or neutrally placed; identical for every user on the same property; third-party attribution + methodology link; all three verbatim disclaimers; never feeds ranking, alerts, audiences, scoring, or lead capture; no conversion CTA inside the block (matrix #4).</li>
+      <li><b>Zoning (§17):</b> confidence/coverage gates suppress below-threshold claims; verbatim disclaimer always shown; ADU plan-view uses Mapbox with attribution; photorealistic ADU concept only with client-owned/licensed aerial imagery, marketing use REVIEW_REQUIRED.</li>
+      <li><b>Scoring:</b> no local formulas/weights/ranking (§12.10, §14.4); fail closed.</li>
+      <li><b>AVM/equity:</b> confidence + range + as-of always; "estimate unavailable" over fabrication; equity needs known mortgage balance (§18).</li>
+      <li><b>MLS/IDX boundary (§26.5):</b> display only what the license allows; retention expiry honored; only §14.6 whitelist fields flow to PropFlow/GHL.</li>
+      <li><b>Sensitive topics:</b> NL inputs hitting sensitive topics set human_handoff_required; never used for scoring/routing (§14.2, §26.6).</li>
+      <li><b>Owner privacy:</b> badges only, never names/mailing addresses (matrix #12).</li>
+      <li><b>Lead policy:</b> no hard gate on organic; soft prompts behavior-triggered; hard gate PPC-only and agent-configurable.</li>
+      <li><b>Consent:</b> outbound follow-up from captured leads runs ComplianceProvider checks in PropFlow — this page only captures with source attribution (§7.2–7.3).</li>
+      <li><b>Brand:</b> agent identity renders read-only from identity.json (DRE #01466876 for Graeham's tenant); the legacy number on the identity.json blocklist is banned everywhere.</li>
+    </ul>
+
+    <h2>Cross-links</h2>
+    <p><b>In:</b> Results (S2), Compare (S4), filter-URL pages, community/city pages, saved properties, external organic/social/QR. <b>Out:</b> Underwriting Workspace (S22), Compare (S4), Community page, Calendar/booking, PropFlow lead intake, CMA/home-value flow (sold pages). <b>Emits</b> (via services): PROPERTY_VIEWED-class analytics [BEST GUESS: attribution-level page views per impression-honesty rule], UNDERWRITE_RUN, GENERATED_ASSET_CREATED (ADU visuals), ZONING_LOOKUP. Must NOT emit LEAD_CAPTURED / AD_* (§25.3) — PropFlow emits lead events. <b>Consumes:</b> LISTING_LIVE_FROM_IDX freshness, AVM/rent/zoning snapshots, SearchResultRecord match context.</p>
+
+    <h2>Open decisions</h2>
+    <ul>
+      <li><b>[DECIDE] Risk-data vendor</b> — interim assumes First Street–class per-hazard 1–10 scores + insurance estimate; UI unaffected by vendor choice.</li>
+      <li><b>[DECIDE] Commute routing provider</b> — assume Mapbox Directions (aligned with §12.6); tile copy/UX unchanged either way.</li>
+      <li><b>[DECIDE] 5-yr appreciation figure</b> — "est." from MarketDataSnapshot; if ZIP-level only, show "(ZIP)" label rather than a property-level claim.</li>
+      <li><b>[DECIDE] Soft-prompt trigger thresholds</b> — agent-configurable; interim defaults [BEST GUESS] 2nd visit or 10+ photos or first save.</li>
+      <li><b>[DECIDE] Match-score availability for anonymous users</b> — interim: renders only with session search context; otherwise absent (fail-quiet, not a locked teaser).</li>
+    </ul>
+  </div>
+</div>

@@ -1,0 +1,457 @@
+<title>PropertyIQ · Screen 17 — Funnel Page & Lead-Magnet Builder</title>
+<link href="https://api.fontshare.com/v2/css?f[]=technor@500,600,700&display=swap" rel="stylesheet">
+<link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<style>
+  /* Type system — Technor for display, Inter for UI. */
+  :root{ --font-display:'Technor', Inter, -apple-system, 'Segoe UI', sans-serif; --font-ui: Inter, -apple-system, 'Segoe UI', Roboto, sans-serif; }
+</style>
+<style>
+  /* Palette v4 — PropFlow design language: neutral ink UI, ink-as-accent, color reserved for data. (extracted verbatim from propsearch-design-draft.html) */
+  :root, :root[data-theme="dark"], :root[data-theme="light"]{
+    --ink:#23282f; --paper:#fbfaf8; --surface:#f1efe9; --line:#e2dfd6;
+    --mut:#6b7076; --soft:#9b9f9f;
+    --brand:#2e6b53; --brand-ink:#ffffff; --brand-soft:#eaf1ec; --brand-deep:#1e4c3a;
+    --signal:#b07a2e;
+    --good:#2e7d4f; --warn:#a8630a; --crit:#b3372f;
+    --r:10px;
+  }
+  h1{ letter-spacing:-.02em }
+  .stat b{ letter-spacing:-.01em }
+  body[data-agent="watts"]{ --brand:#2e6b53; --brand-soft:#eaf1ec; --brand-deep:#1e4c3a; }
+
+  *{box-sizing:border-box; margin:0}
+  body{font:15px/1.55 var(--font-ui); color:var(--ink); background:var(--paper); padding-bottom:80px}
+  h1,h2,h3{line-height:1.15; text-wrap:balance; font-family:var(--font-display); font-weight:600}
+  h1{letter-spacing:-.01em}
+  .site{box-shadow:0 1px 2px rgba(20,24,32,.04), 0 8px 32px rgba(20,24,32,.06)}
+  .stat{box-shadow:0 1px 2px rgba(20,24,32,.03); transition:box-shadow .15s, transform .15s}
+  .stat:hover{box-shadow:0 4px 14px rgba(20,24,32,.08)}
+  .chip{transition:all .12s}
+  button{font-family:var(--font-ui)}
+  .num{font-variant-numeric:tabular-nums}
+  .wrap{max-width:1180px; margin:0 auto; padding:0 20px}
+
+  .bar{position:sticky; top:0; z-index:50; background:var(--paper); border-bottom:1px solid var(--line); padding:10px 0; backdrop-filter:blur(8px)}
+  .bar .wrap{display:flex; flex-wrap:wrap; gap:10px; align-items:center}
+  .bar .ttl{font-weight:700; margin-right:auto}
+  .bar .ttl small{display:block; font-weight:400; color:var(--mut)}
+  .bar a{color:var(--brand); font-size:13px; text-decoration:none}
+
+  .note{background:var(--surface); border:1px solid var(--line); border-radius:var(--r); padding:14px 16px; margin:0 0 22px; font-size:13.5px; color:var(--mut)}
+  .note b{color:var(--ink)}
+
+  .site{border:1px solid var(--line); border-radius:14px; overflow:hidden; background:var(--paper)}
+  .sitehead{display:flex; align-items:center; gap:14px; padding:14px 22px; border-bottom:1px solid var(--line)}
+  .avatar{width:38px; height:38px; border-radius:50%; background:var(--brand); color:var(--brand-ink); display:grid; place-items:center; font-weight:700}
+  .sitehead .who b{display:block}
+  .sitehead .who small{color:var(--mut)}
+  .sitehead nav{margin-left:auto; display:flex; gap:18px; font-size:13.5px; color:var(--mut)}
+  .sitehead nav a{color:inherit; text-decoration:none}
+  .sitehead nav a:hover{color:var(--brand)}
+
+  .chip{display:inline-flex; align-items:center; gap:6px; font-size:12.5px; font-weight:500; border:1px solid var(--line); border-radius:99px; padding:6px 12px; background:var(--paper); cursor:pointer; color:var(--ink)}
+  .chip:hover{border-color:var(--brand)}
+  .chip.on{background:var(--brand); border-color:var(--brand); color:var(--brand-ink); font-weight:600; box-shadow:0 2px 8px color-mix(in srgb, var(--brand) 30%, transparent)}
+
+  .statrow{display:grid; grid-template-columns:repeat(4,1fr); gap:10px}
+  .stat{background:var(--surface); border:1px solid var(--line); border-radius:var(--r); padding:12px}
+  .stat small{display:block; color:var(--mut); font-size:11.5px; text-transform:uppercase; letter-spacing:.05em}
+  .stat b{font-size:18px}
+  .stat .up{color:var(--good); font-size:12px}
+
+  .bdg{font-size:11.5px; border-radius:6px; padding:3px 8px; background:var(--surface); border:1px solid var(--line); color:var(--mut)}
+  .bdg.good{color:var(--good); border-color:color-mix(in srgb,var(--good) 30%,var(--line))}
+  .bdg.warn{color:var(--warn); border-color:color-mix(in srgb,var(--warn) 30%,var(--line))}
+
+  .dtable{width:100%; border-collapse:collapse; font-size:13px}
+  .dtable td,.dtable th{border-bottom:1px solid var(--line); padding:8px 10px; text-align:left}
+  .dtable th{font-size:11px; text-transform:uppercase; letter-spacing:.05em; color:var(--soft)}
+
+  .prompt{display:flex; gap:6px; border:1px solid var(--line); border-radius:9px; background:var(--paper)}
+  .prompt input{flex:1; border:0; background:transparent; font:12.5px var(--font-ui); padding:8px 10px; outline:none; color:var(--ink)}
+  .prompt button{background:var(--ink); color:#fff; border:0; border-radius:7px; padding:7px 12px; font-size:11.5px; cursor:pointer; font-weight:600}
+
+  @media (max-width:860px){ .statrow{grid-template-columns:repeat(2,1fr)} .maingrid{grid-template-columns:1fr !important} .console{grid-template-columns:1fr !important} .rail{display:none !important} }
+  @media (prefers-reduced-motion: reduce){ *{transition:none!important} }
+
+  /* ---- page-specific additions (kept in the same design language) ---- */
+  .anno{font-size:11px; color:var(--soft)}
+  .cardbox{border:1px solid var(--line); border-radius:10px; padding:11px 14px; font-size:12.5px; background:var(--paper)}
+  .btn-ink{background:var(--ink); color:#fff; border:0; border-radius:7px; padding:7px 12px; font-size:11.5px; cursor:pointer; font-weight:600}
+  .btn-ghost{background:var(--paper); border:1px solid var(--line); border-radius:7px; padding:7px 12px; font-size:11.5px; cursor:pointer}
+  .sechead{font-size:14px; font-weight:700; margin:0 0 8px; font-family:var(--font-display)}
+  .cov td.ok{color:var(--good); font-weight:700}
+  .specdoc h2{font-size:18px; margin:26px 0 8px}
+  .specdoc h3{font-size:15px; margin:18px 0 6px}
+  .specdoc p, .specdoc li{font-size:13.5px; color:var(--mut)}
+  .specdoc b{color:var(--ink)}
+  .specdoc table{margin:8px 0}
+  .mrow{border:1px solid var(--line); border-radius:8px; padding:7px 10px; font-size:11.5px; cursor:pointer; background:var(--paper)}
+  .mrow:hover{border-color:var(--brand)}
+  .mrow.sel{border:1.5px solid var(--brand); background:var(--brand-soft)}
+  .mrow small{display:block; color:var(--mut); font-size:10.5px}
+  .mrow .kw{float:right; font-size:9.5px; font-weight:700; color:var(--brand-deep); background:var(--brand-soft); border-radius:4px; padding:1px 6px}
+  .slot{border:1px dashed var(--brand); border-radius:8px; position:relative}
+  .slot .tag{position:absolute; top:-8px; right:8px; font-size:9px; color:var(--brand); background:var(--paper); padding:0 4px; font-weight:600}
+</style>
+
+<!-- ============ (1) slim header ============ -->
+<div class="bar">
+  <div class="wrap">
+    <div class="ttl">PropertyIQ · Screen 17 — Funnel Page & Lead-Magnet Builder <small>Full-density per-screen mock · wireframe fidelity · dev-facing annotations in gray</small></div>
+    <a href="../wireframe.html">← All screens</a>
+  </div>
+</div>
+
+<!-- ============ (2) THE FULL MOCK ============ -->
+<div class="wrap" style="padding-top:24px">
+  <div class="note"><b>Screen 17 — Funnel Page & Lead-Magnet Builder (PropCast/PropReach).</b> The owned capture layer behind every piece of content: pick a container from the 13-row matrix (keyword → landing page → lead-magnet PDF), the page + PDF + DM flow generate together from real Stage-2 data, the agent edits slots, and publishing routes through Approvals (Tab 13). Home of the system-wide "⚡ Create funnel" easy button and the UTM auto-scheme. Primary users: agent, marketing coordinator (edit), Wattson (proposes funnels via recommendations).</div>
+
+  <!-- hero panel — inherited from the draft (easy button + UTM + closed loop), deepened -->
+  <div id="el-easy-button" style="border:1.5px solid var(--brand); border-radius:12px; padding:14px 16px; margin-bottom:16px; background:var(--brand-soft)">
+    <b style="font-size:14px">⚡ The easy button — "Create funnel" lives on EVERY content object</b>
+    <div style="font-size:12.5px; color:var(--mut); margin-top:6px">Any video, script, listing, carousel, or news card — anywhere in the system — carries one button: <b style="color:var(--ink)">⚡ Create funnel</b>. One click: the engine picks the matching container (listing video → tour gate · market video → report capture · ADU script → checklist magnet), pre-fills headline/geo/CTA from the content's own facts, inherits its ContentLock lineage, and opens THIS builder with everything filled in for a 30-second edit-and-publish. <span id="el-reverse-button">The reverse button exists too: any funnel page offers <b style="color:var(--ink)">"⚡ Create content for this page"</b> → opens a content-engine brief seeded with the page's container type, geo, and performance history.</span></div>
+    <div class="anno" style="margin-top:4px">Entry points that land here pre-filled: ⚡ on any content object · Wattson rec one-click create · Content Review bundle build (Tab 16) when a container needs manual editing · Campaign Manager (Tab 18) "landing destination missing" fix path. Pre-filled arrivals skip to step 3 (see states strip).</div>
+    <div style="display:grid; grid-template-columns:1fr 1fr; gap:10px; margin-top:10px; font-size:11.5px">
+      <div id="el-utm" style="background:var(--paper); border:1px solid var(--line); border-radius:9px; padding:10px">
+        <b>UTM auto-scheme — nobody ever types a UTM by hand</b>
+        <div style="color:var(--mut); margin-top:4px"><code style="font-size:10.5px">utm_source={platform} · utm_medium={organic|paid|email|print|qr} · utm_campaign={contentlock-id} · utm_content={variant} · utm_term={audience-segment}</code><br>Generated at publish time per destination, enforced by the distribution layer (a link can't ship without them), resolved back to the content object in the ledger — every click, from a YouTube description to a postcard QR, lands as attributed evidence on the same ContentLock. Short-link mapping stores the full lock identity {content_id, content_lock_id, lock_hash, approved_version_id}.</div>
+      </div>
+      <div id="el-wattson-recs" style="background:var(--paper); border:1px solid var(--line); border-radius:9px; padding:10px">
+        <b>The loop this closes — Wattson recommendation surfaces (visible in Attribution, Tab 31)</b>
+        <div style="color:var(--mut); margin-top:4px">Content → platforms → clicks/leads per piece → recommendations queue:</div>
+        <div style="display:grid; gap:5px; margin-top:6px">
+          <div style="display:flex; gap:6px; align-items:center"><span style="color:var(--mut); flex:1">"<b style="color:var(--ink)">Push these 2 to PropReach ads</b>" — ADU video + Beech teaser are top-10% organic</span><button class="chip" style="font-size:10px; border-color:var(--brand); color:var(--brand); font-weight:700">Apply → Approvals (spends $)</button></div>
+          <div style="display:flex; gap:6px; align-items:center"><span style="color:var(--mut); flex:1">"<b style="color:var(--ink)">3 listings have no funnel yet</b>" — 742 Hurlingame, 118 Beech, 2369 Oakwood</span><button class="chip" style="font-size:10px">⚡ Create all 3</button></div>
+          <div style="display:flex; gap:6px; align-items:center"><span style="color:var(--mut); flex:1">"<b style="color:var(--ink)">Relocation kit gets clicks but no leads (214 → 0)</b> — swap the magnet"</span><button class="chip" style="font-size:10px">Swap magnet</button></div>
+        </div>
+        <div class="anno" style="margin-top:5px">Every recommendation is one click from done; anything that spends money routes through Approvals first — never auto-spends.</div>
+      </div>
+    </div>
+  </div>
+
+  <div class="site" data-agent="watts">
+    <!-- header: wizard position + My pages nav (spec Layout) -->
+    <div class="sitehead">
+      <div class="avatar">GW</div>
+      <div class="who"><b>New funnel page</b><small>Step 2 of 3 — container picked: "Home value — neighborhood" · arrived via ⚡ on "What's your Friendly Acres home worth?" video (CL-0412)</small></div>
+      <div style="display:inline-flex; border:1px solid var(--line); border-radius:99px; overflow:hidden; font-size:11px; font-weight:600; margin-left:10px">
+        <span style="padding:6px 12px; background:var(--brand); color:#fff">1 Container ✓</span>
+        <span style="padding:6px 12px; background:var(--ink); color:#fff">2 Mode</span>
+        <span style="padding:6px 12px; color:var(--mut)">3 Edit & publish</span>
+      </div>
+      <nav><a href="#el-my-pages">My pages (8)</a><a href="#">Search (⌘K)</a></nav>
+    </div>
+
+    <div class="console" style="display:grid; grid-template-columns:172px 1fr">
+      <!-- persistent agent-console left rail (same chrome as Screen 9) -->
+      <div class="rail" style="border-right:1px solid var(--line); padding:14px 10px; font-size:12.5px; display:flex; flex-direction:column; gap:2px; background:var(--surface)">
+        <a href="#" style="text-decoration:none; color:var(--ink); border-radius:8px; padding:8px 10px">☰ Today</a>
+        <a href="#" style="text-decoration:none; color:var(--ink); border-radius:8px; padding:8px 10px">🗺 Farm map</a>
+        <a href="#" style="text-decoration:none; color:var(--ink); border-radius:8px; padding:8px 10px">🤝 Past clients</a>
+        <a href="#" style="text-decoration:none; color:var(--ink); border-radius:8px; padding:8px 10px">👤 Leads & clients</a>
+        <a href="#" style="text-decoration:none; color:var(--ink); border-radius:8px; padding:8px 10px">💬 Comms <span class="bdg" style="font-size:9.5px">6</span></a>
+        <a href="#" style="text-decoration:none; color:var(--ink); border-radius:8px; padding:8px 10px">📋 Transactions <span class="bdg" style="font-size:9.5px">2</span></a>
+        <a href="#" style="text-decoration:none; color:var(--ink); border-radius:8px; padding:8px 10px">🎬 Content studio</a>
+        <a href="#" style="text-decoration:none; color:#fff; background:var(--ink); border-radius:8px; padding:8px 10px; font-weight:600">📣 Ads & funnels</a>
+        <a href="#" style="text-decoration:none; color:var(--ink); border-radius:8px; padding:8px 10px">⚙ Playbooks</a>
+        <a href="#" style="text-decoration:none; color:var(--ink); border-radius:8px; padding:8px 10px">📈 Reports</a>
+        <div style="margin-top:auto; padding-top:10px; border-top:1px solid var(--line)">
+          <a href="#" style="text-decoration:none; color:var(--ink); border-radius:8px; padding:8px 10px; display:block">⚙ Settings</a>
+          <div class="anno" style="padding:6px 10px">Global chrome: this rail is persistent across all agent-console screens (Screen 9 pattern). Consumer pages never show it — the published funnel page itself uses the light consumer chrome.</div>
+        </div>
+      </div>
+
+      <div>
+        <!-- builder: left rail (~40%) matrix + mode · main (~60%) preview -->
+        <div class="maingrid" style="padding:16px 22px; display:grid; grid-template-columns:1fr 1.5fr; gap:16px">
+          <div style="display:grid; gap:12px; align-content:start">
+
+            <!-- container matrix picker — canonical 13 rows from the Master Brain Part 9 matrix -->
+            <div id="el-matrix">
+              <div style="font-size:11px; font-weight:700; text-transform:uppercase; letter-spacing:.05em; color:var(--mut); margin-bottom:8px">Container matrix (13) — content type · keyword → page → lead magnet</div>
+              <div style="display:grid; gap:5px">
+                <div class="mrow"><span class="kw">REPORT</span><b>Market update</b> <span class="bdg" style="font-size:9px">TOFU/MOFU</span><small>Market Report page → PDF "[Market] Market Report — [Month]"</small></div>
+                <div class="mrow"><span class="kw">GUIDE</span><b>Neighborhood / lifestyle</b> <span class="bdg" style="font-size:9px">TOFU</span><small>City Guide page → PDF "[City] Living Guide" (restaurants, parks, hikes, coupons)</small></div>
+                <div class="mrow"><span class="kw">ALERTS</span><b>Listing video</b> <span class="bdg" style="font-size:9px">MOFU</span><small>Listing alert subscription page → Email "Alert me to homes like this"</small></div>
+                <div class="mrow sel"><span class="kw">VALUE</span><b>BOFU / seller-focused</b> <span class="bdg" style="font-size:9px; color:var(--brand-deep)">BOFU · SELECTED</span><small>Home value landing page → CMA request form into the CRM pipeline</small></div>
+                <div class="mrow"><span class="kw">BUYER</span><b>First-time buyer</b> <span class="bdg" style="font-size:9px">MOFU</span><small>Buyer guide page → PDF "First-Time Buyer Roadmap" (down-payment math, programs, 90-day timeline)</small></div>
+                <div class="mrow"><span class="kw">FIRST</span><b>IDX leverage / new listing</b> <span class="bdg" style="font-size:9px">MOFU</span><small>Property notification page → Email "Be first to see listings like this"</small></div>
+                <div class="mrow"><span class="kw">MOVE</span><b>Relocation / lifestyle</b> <span class="bdg" style="font-size:9px">TOFU</span><small>Relocation guide page → PDF "[City] Relocation Guide"</small></div>
+                <div class="mrow"><span class="kw">BRIDGE</span><b>Tech layoff / employment</b> <span class="bdg" style="font-size:9px">TOFU</span><small>Calculator page → Excel/web tool "401(k) to Real Estate Bridge Calculator" (magnet ≠ always a PDF)</small></div>
+                <div class="mrow"><span class="kw">DOWNSIZE</span><b>Senior / downsize</b> <span class="bdg" style="font-size:9px">MOFU</span><small>Downsize playbook page → PDF (property-tax transfer guide, capital-gains exclusion calculator)</small></div>
+                <div class="mrow"><span class="kw">ADU</span><b>Investor / ADU</b> <span class="bdg" style="font-size:9px">MOFU</span><small>ADU feasibility page → PDF "ADU Feasibility Checklist" or cashflow template</small></div>
+                <div class="mrow"><span class="kw">SCHOOLS</span><b>Schools / family</b> <span class="bdg" style="font-size:9px">TOFU</span><small>School district guide page → PDF "School Boundary + Test Score Map" — factual, source-attributed; Fair Housing gate applies (see AEO panel ↓)</small></div>
+                <div class="mrow"><span class="kw">MULTIGEM</span><b>Multi-generational</b> <span class="bdg" style="font-size:9px">MOFU</span><small>Multi-gen guide page → PDF "Multi-Generational Buyer Guide"</small></div>
+                <div class="mrow"><span class="kw">COSTS</span><b>Process / transaction education</b> <span class="bdg" style="font-size:9px">MOFU</span><small>Cost breakdown page → PDF "Buyer Cost Breakdown" / "Seller Net Sheet Template"</small></div>
+              </div>
+              <div class="anno" style="margin-top:5px">Canonical Container Type Matrix (Master Brain Part 9) — 13 rows, data-driven from the matrix table, never hardcoded [DECIDE resolved: the UPDATED converted Brain renders the full table — see spec-gaps note]. Selecting a row regenerates the preview + PDF + DM keyword together. Keyword auto-assigned per container type. Related containers not in the matrix rows: Listing Property Page + gated disclosure container and Open-house RSVP ride the listing lifecycle (ALERTS/FIRST family); lifestyle/authority (AEO) pages extend GUIDE/SCHOOLS.</div>
+            </div>
+
+            <!-- mode toggle -->
+            <div id="el-mode" style="border:1px solid var(--line); border-radius:10px; padding:10px 12px; font-size:12px">
+              <b>Mode</b>
+              <div style="display:flex; gap:6px; margin-top:6px"><button class="chip on">Branded</button><button class="chip">Unbranded (teaser ads)</button></div>
+              <div style="font-size:10.5px; color:var(--soft); margin-top:6px">Unbranded strips the agent hero for portal-style ad compliance — the DRE/brokerage footer stays on BOTH (non-removable). Toggle swaps the live preview instantly; mode is stored per page and carried on the campaign record.</div>
+            </div>
+
+            <!-- comment-DM flow summary -->
+            <div id="el-dm-flow" class="cardbox">
+              <b>Comment-DM flow — wired from the same container</b>
+              <table class="dtable" style="font-size:11.5px; margin-top:6px">
+                <tr><th>Field</th><th>Value</th></tr>
+                <tr><td>Keyword</td><td class="num"><b>VALUE</b> <span class="anno">auto-assigned per container type</span></td></tr>
+                <tr><td>DM copy</td><td>"Hey [first name]! Here's your Friendly Acres Pricing Guide → [short link]" <button class="btn-ghost" style="font-size:10px; padding:3px 8px">Edit</button></td></tr>
+                <tr><td>Follow-up</td><td>+1 DM 48h later if unopened</td></tr>
+                <tr><td>CRM tag</td><td class="num">propcast_home_value_friendly_acres</td></tr>
+                <tr><td>Source field</td><td class="num">propcast_organic_[platform]</td></tr>
+                <tr><td>Provider</td><td>CommentDmProvider <span class="bdg" style="font-size:9.5px">GHL messenger (interim)</span> → ManyChat (launch) → native (target)</td></tr>
+              </table>
+              <div class="anno" style="margin-top:5px">Routing rule (Part 9): landing page serves search/paid traffic → form submit → CRM; comment-DM serves organic social → DM → CRM — one container wires both. Editing DM copy is public-facing creative → re-gates (new approved_version_id + Gate 2 rerun + new ContentLock). The six PropCast attribution custom fields auto-populate on trigger (Part 14).</div>
+            </div>
+          </div>
+
+          <!-- main: live preview -->
+          <div style="display:grid; gap:12px; align-content:start">
+            <div style="border:1px solid var(--line); border-radius:12px; overflow:hidden">
+              <!-- URL + UTM strip -->
+              <div id="el-url-utm" style="padding:8px 12px; background:var(--surface); font-size:11px; color:var(--mut); display:flex; gap:8px; align-items:center; flex-wrap:wrap">Live preview — click any slot to edit<span style="margin-left:auto" class="num">propertyiq.app/f/friendly-acres-value</span><span class="bdg good" style="font-size:9.5px">UTM auto</span><button class="btn-ghost" style="font-size:10px; padding:3px 8px">Copy link</button></div>
+              <div class="anno" style="padding:4px 12px; background:var(--surface); border-bottom:1px solid var(--line)">Slug editable pre-publish only; post-publish the URL is durable [BEST GUESS, matches platform durable-URL pattern]. Host: agent subdomain via Cloudflare Pages / Vercel [DECIDE — UI shows host + deploy status generically]. Owned short link auto-generated and embedded in all social captions at publish.</div>
+
+              <!-- the page itself: consumer chrome inside the preview -->
+              <div style="padding:18px; text-align:center">
+                <div class="anno" style="text-align:left; margin-bottom:8px">↓ This preview IS the visitor's page (light consumer chrome — agent-branded top strip, no console rail). Branded mode: agent hero shown. Dashed = editable slot.</div>
+                <div style="display:flex; align-items:center; gap:8px; border:1px solid var(--line); border-radius:8px; padding:6px 10px; font-size:11px; color:var(--mut)"><span class="avatar" style="width:22px; height:22px; font-size:9px">GW</span> Graeham Watts · Intero Real Estate <span style="margin-left:auto" class="anno">agent hero — stripped in Unbranded mode</span></div>
+                <div id="el-headline" class="slot" style="padding:10px; font-size:17px; font-weight:800; margin-top:10px"><span class="tag">headline slot — auto from video title · one-click edit</span>What's your Friendly Acres home worth in 2026?</div>
+                <div id="el-subhead" class="slot" style="border-color:var(--line); padding:8px; margin-top:8px; font-size:12px; color:var(--mut)"><span class="tag" style="color:var(--mut)">subhead — auto-filled from live data</span>Median up 3.1% this year — and 41% of lots here qualify for an ADU. See what that means for yours. <span class="bdg" style="font-size:9px">src: MLS stats · as of Jul 2026</span></div>
+                <div id="el-hero-video" class="slot" style="border-color:var(--line); margin-top:8px; padding:22px; background:var(--surface); font-size:12px; color:var(--mut)"><span class="tag" style="color:var(--mut)">hero video embed</span>▶ "What's your Friendly Acres home worth?" — YouTube embed (CL-0412 render artifact) <button class="btn-ghost" style="font-size:10px; padding:3px 8px">Swap</button> <button class="btn-ghost" style="font-size:10px; padding:3px 8px">Remove</button></div>
+                <div id="el-form" class="slot" style="margin-top:10px; padding:10px"><span class="tag">lead capture — container-appropriate gate</span>
+                  <div class="prompt" style="padding:4px"><input placeholder="Street address" aria-label="Street address"><button>Get my value</button></div>
+                  <div class="anno" style="margin-top:4px">Valuation gate = address field. Disclosure gates use name + email + phone + buyer/buyer's-agent toggle instead. CTA copy editable. Honest gate copy — no dark patterns; pixel disclosure + DNT/Global Privacy Control respected (Part 5 hard rules).</div>
+                </div>
+                <div id="el-footer" style="margin-top:12px; border:1px solid var(--line); border-radius:8px; padding:8px; font-size:10.5px; color:var(--mut); background:var(--surface)">🔒 <b style="color:var(--ink)">Locked footer (read-only, on Branded AND Unbranded):</b> Graeham Watts · Intero Real Estate · DRE #01466876 · <span title="NAR Fair Housing logo">⌂ Equal Housing</span><div class="anno">Pulled from identity configuration (identity.json) — never hand-typed; the identity.json blocklist applies. Identity config missing → footer cannot render → nothing publishes (hard block).</div></div>
+                <div id="el-pixels" style="margin-top:8px; font-size:10.5px; color:var(--soft)">Tracking status: <span class="bdg good" style="font-size:9.5px">Meta Pixel ✓</span> <span class="bdg good" style="font-size:9.5px">GA4 ✓</span> <span class="bdg good" style="font-size:9.5px">TikTok pixel ✓</span> <span class="anno">auto-injected — status only, not configurable; hover shows pixel IDs; locked for every role</span></div>
+              </div>
+
+              <!-- footer action bar -->
+              <div id="el-publish" style="padding:10px 12px; border-top:1px solid var(--line); display:flex; gap:6px; flex-wrap:wrap; align-items:center">
+                <button class="btn-ink" style="padding:9px 16px; font-size:12px">Publish → Approvals</button>
+                <button id="el-attach" class="btn-ghost" style="padding:9px 12px; font-size:12px">Attach to campaign</button>
+                <span class="anno" style="flex:1; min-width:220px">Publish routes through the approval gate ONLY (Tab 13, one card); container copy is public-facing creative — drafted before Gate 2, frozen in ContentLock. Attach = picker over PropReach campaigns; satisfies the preflight "landing page live ✓" check (Tab 18). Publish button enabled only for approval-permitted roles.</span>
+              </div>
+            </div>
+
+            <!-- PDF preview + partner slot -->
+            <div style="display:grid; grid-template-columns:1fr 1fr; gap:10px">
+              <div id="el-pdf" class="cardbox">
+                <b>Lead magnet PDF — generated with the page</b>
+                <div style="border:1px solid var(--line); border-radius:8px; margin-top:8px; padding:12px; background:var(--surface); font-size:11px; text-align:center">
+                  <div style="font-weight:800; font-size:13px">Friendly Acres Pricing Guide</div>
+                  <div style="color:var(--mut)">July 2026 · 9 pages</div>
+                  <div style="margin-top:6px; color:var(--mut)">▦ first-page preview — comps table, price/sf trend, ADU note</div>
+                  <div style="margin-top:6px; font-size:9.5px; color:var(--soft)">Branding: headshot · Graeham Watts · DRE #01466876 · Intero</div>
+                </div>
+                <div style="display:flex; gap:6px; margin-top:6px"><button class="btn-ghost">Open PDF slot editor</button><span class="bdg good" style="font-size:9.5px">data: MLS stats · as-of Jul 8</span></div>
+                <div class="anno" style="margin-top:5px">Template per container matrix; auto-populated with real Stage-2 signal data (ReportLab/WeasyPrint per MVP1); approved in the same review queue as the page. Every data slot carries source + as-of date or renders "data unavailable" — never a fabricated number.</div>
+              </div>
+              <div id="el-partner-slot" class="cardbox">
+                <b>Local Business Partner slot <span class="bdg" style="font-size:9.5px">City Guide containers only</span></b>
+                <div style="color:var(--mut); margin-top:6px; font-size:11.5px">Not active for this container (Home value). On City Guide pages: one merchant deal/coupon per guide per city — e.g. <i>"Backhaus Bakery — 10% off with GUIDE"</i> — filled at onboarding, persists until the agent updates it. <button class="btn-ghost" style="font-size:10px; padding:3px 8px">Edit slot</button></div>
+                <div class="anno" style="margin-top:5px">Master Brain Part 9 City Guide rule. Shown greyed here so the slot's existence is discoverable from any container.</div>
+              </div>
+            </div>
+
+            <!-- lifestyle / AEO compliance panel -->
+            <div id="el-aeo" class="cardbox">
+              <b>Lifestyle & AEO container fields <span class="bdg" style="font-size:9.5px">read-only compliance panel — City Guide / Schools / lifestyle containers</span></b>
+              <table class="dtable" style="font-size:11.5px; margin-top:6px">
+                <tr><th>Field</th><th>Status</th></tr>
+                <tr><td>FAQPage + LocalBusiness JSON-LD</td><td><span class="bdg good" style="font-size:9.5px">auto-injected ✓</span> short, factual, source-attributed Q&A blocks</td></tr>
+                <tr><td>Visible last-updated timestamp</td><td class="num">rendered on page · "Updated July 2026"</td></tr>
+                <tr><td>Instant indexing on publish</td><td>submitted via SEO console handoff (Tab 20) — pages seen in hours, not days</td></tr>
+                <tr><td>Source attributions</td><td>every data point: "boundaries per [district]" · "per City of Redwood City" — PropSearch data floor supplies attributed, sourced, timestamped datasets; PropCast only renders</td></tr>
+                <tr><td>Fair Housing gate</td><td><span class="bdg good" style="font-size:9.5px">template-level ✓</span> facts not characterizations · no best/top/worst rankings · no school-quality/demographic proxies · uniform availability · "verify with the source" disclaimer · one-time broker/legal sign-off on the template library</td></tr>
+              </table>
+              <div class="anno" style="margin-top:5px">Schools blocks are user-initiated, identical for all users, disclaimed — and carry NO conversion CTA inside the block (matrix correction #4). Programmatic-page renderer treated as swappable [DECIDE: SearchAtlas evaluate-first — if it covers programmatic pages/schema/indexing, PropCast orchestrates on top].</div>
+            </div>
+          </div>
+        </div>
+
+        <!-- waitlist mode + post-lock sequence -->
+        <div style="padding:0 22px 14px; display:grid; grid-template-columns:1fr 1fr; gap:10px" class="maingrid">
+          <div id="el-waitlist" class="cardbox" style="border-color:var(--warn); background:#fdf6ee">
+            <b>⏳ Waitlist mode — gated-disclosure pages before docs land</b>
+            <div style="color:var(--mut); margin-top:4px; font-size:11.5px">Example from My pages: <b style="color:var(--ink)">118 Beech disclosure gate</b> — package not uploaded yet, page live and capturing requests anyway: <span class="num">7 waiting (5 buyers · 2 buyer's agents)</span>. When docs upload (from the listing file / PropClose), the system auto-delivers to everyone waiting + notifies you. Every delivery is logged — who received which documents, when — which matters again at offer review.</div>
+            <div class="anno" style="margin-top:4px">Read-only status on the page record. DOC_DOWNLOADED events {listing_id, contact_id, content_id, content_lock_id, lock_hash, approved_version_id, timestamp} → Event Ledger. Flyer/postcard/yard-sign QRs minted through the owned shortener, lock identity in the mapping — non-skippable.</div>
+          </div>
+          <div id="el-postlock" class="cardbox">
+            <b>What happens at publish — post-lock execution sequence (status per step)</b>
+            <div style="display:grid; gap:3px; margin-top:6px; font-size:11px" class="num">
+              <div>1 · Video to YT/IG/TikTok/FB/GBP <span class="bdg good" style="font-size:9px">n/a — page-only publish</span></div>
+              <div>2 · Landing page deploy (Cloudflare Pages/Vercel) <span class="bdg warn" style="font-size:9px">awaiting approval</span></div>
+              <div>3 · Comment-DM flow activated (CommentDmProvider) <span class="bdg warn" style="font-size:9px">queued</span></div>
+              <div>4 · Email nurture sequence loaded to CRM by intent segment <span class="bdg warn" style="font-size:9px">queued</span></div>
+              <div>5 · content_id + lock identity written to CRM <span class="bdg warn" style="font-size:9px">queued</span></div>
+              <div>6 · UTM-tagged short link embedded in social captions <span class="bdg warn" style="font-size:9px">queued</span></div>
+              <div>7 · Meta Pixel + GA4 + TikTok pixel fire on page load <span class="bdg good" style="font-size:9px">wired ✓</span></div>
+              <div>8 · Webhook → CRM event → attribution log <span class="bdg good" style="font-size:9px">wired ✓</span></div>
+            </div>
+            <div class="anno" style="margin-top:5px">Master Brain Part 9 §Post-Lock Execution Sequence — rendered as a status checklist so deploy failures are typed and visible (see states strip: DEPLOY_FAILED + retry).</div>
+          </div>
+        </div>
+
+        <!-- My pages list -->
+        <div id="el-my-pages" style="padding:0 22px 14px">
+          <div class="cardbox">
+            <div style="display:flex; gap:8px; align-items:center; flex-wrap:wrap"><b>My pages (8)</b><span class="anno">all funnel pages: status · container · leads · parent content · campaigns</span><div style="margin-left:auto; display:flex; gap:5px"><button class="chip on" style="font-size:10.5px">All</button><button class="chip" style="font-size:10.5px">Live</button><button class="chip" style="font-size:10.5px">Draft</button><button class="chip" style="font-size:10.5px">Pending approval</button></div></div>
+            <div style="overflow-x:auto; margin-top:8px">
+            <table class="dtable" style="font-size:11.5px; min-width:820px">
+              <tr><th>Page</th><th>Container</th><th>Status</th><th>Leads</th><th>Parent content</th><th>Campaigns</th><th></th></tr>
+              <tr><td class="num"><b>/f/friendly-acres-value</b></td><td>Home value</td><td><span class="bdg" style="font-size:9.5px">DRAFT — this builder</span></td><td class="num">—</td><td>CL-0412 home-worth video</td><td>—</td><td><button class="btn-ghost" style="font-size:10px">Open</button></td></tr>
+              <tr><td class="num">/f/adu-checklist-epa</td><td>Investor / ADU</td><td><span class="bdg good" style="font-size:9.5px">LIVE</span></td><td class="num">11 <span class="anno">6 this wk</span></td><td>CL-0398 "Garage = $250K"</td><td>ADU boost (Meta)</td><td><button class="btn-ghost" style="font-size:10px">Edit</button> <button class="btn-ghost" style="font-size:10px">Duplicate</button></td></tr>
+              <tr><td class="num">/f/118-beech-disclosures</td><td>Listing disclosure gate</td><td><span class="bdg warn" style="font-size:9.5px">LIVE · WAITLIST</span></td><td class="num">7 waiting</td><td>118 Beech listing</td><td>Beech launch</td><td><button class="btn-ghost" style="font-size:10px">Open</button></td></tr>
+              <tr><td class="num">/f/july-market-report</td><td>Market update</td><td><span class="bdg warn" style="font-size:9.5px">PENDING APPROVAL</span></td><td class="num">—</td><td>CL-0421 July update</td><td>—</td><td><button class="btn-ghost" style="font-size:10px">View card → Tab 13</button></td></tr>
+              <tr><td class="num">/f/rwc-relocation-kit</td><td>Relocation kit</td><td><span class="bdg good" style="font-size:9.5px">LIVE</span></td><td class="num">0 <span style="color:var(--crit)">⚠ 214 clicks</span></td><td>CL-0361 relocation video</td><td>—</td><td><button class="btn-ghost" style="font-size:10px">Swap magnet (Wattson rec)</button></td></tr>
+              <tr><td class="num">/f/rwc-city-guide</td><td>City Guide (AEO)</td><td><span class="bdg good" style="font-size:9.5px">LIVE · cited ×3</span></td><td class="num">9</td><td>evergreen</td><td>—</td><td><button class="btn-ghost" style="font-size:10px">Edit</button> <button class="btn-ghost" style="font-size:10px">Retire</button></td></tr>
+              <tr style="color:var(--soft)"><td class="num">+ 2 more…</td><td colspan="6">open-house RSVP (2369 Oakwood) · buyer-guide page — <button class="chip" style="font-size:10px">Show all</button></td></tr>
+            </table>
+            </div>
+            <div class="anno" style="margin-top:5px">Row actions: open / edit (re-gates if public copy changes) / duplicate / retire. Lead counts from the Event Ledger (LEAD_CAPTURED · LINK_SCANNED · DOC_DOWNLOADED with the full identity key set). Every page carries "⚡ Create content for this page." City Guide containers get a quarterly refresh scheduler (MVP1 — Brain addition).</div>
+          </div>
+        </div>
+
+        <!-- states strip -->
+        <div id="el-states" style="padding:0 22px 18px">
+          <div class="cardbox" style="font-size:11.5px">
+            <b>States (dev reference)</b>
+            <div style="display:grid; grid-template-columns:repeat(3,1fr); gap:8px; margin-top:8px" class="maingrid">
+              <div style="border:1px solid var(--line); border-radius:8px; padding:8px"><b style="font-size:11px">Default</b><div style="color:var(--mut); font-size:10.5px">3-step wizard: container → mode → edit/preview.</div></div>
+              <div style="border:1px solid var(--line); border-radius:8px; padding:8px"><b style="font-size:11px">Pre-filled (⚡)</b><div style="color:var(--mut); font-size:10.5px">All slots filled from the content's facts; user lands directly on step 3 for the 30-second edit-and-publish.</div></div>
+              <div style="border:1px solid var(--line); border-radius:8px; padding:8px"><b style="font-size:11px">Loading</b><div style="color:var(--mut); font-size:10.5px">Page + PDF generate together — skeleton preview: <i>"generating from CL-0412 facts…"</i></div></div>
+              <div style="border:1px solid var(--line); border-radius:8px; padding:8px"><b style="font-size:11px">Empty (My pages)</b><div style="color:var(--mut); font-size:10.5px">"No funnel pages yet — every video/listing carries ⚡ Create funnel."</div></div>
+              <div style="border:1px solid var(--crit); border-radius:8px; padding:8px"><b style="font-size:11px; color:var(--crit)">Degraded (all fail-closed)</b><div style="color:var(--mut); font-size:10.5px">No MLS stat for subhead → slot renders <b>"data unavailable"</b> + publish blocked until edited/removed — never a fabricated number · PDF generation failure → publish blocked with typed reason · deploy failure post-approval → <b>DEPLOY_FAILED</b> + retry · identity config missing → hard block (no footer → nothing publishes).</div></div>
+              <div style="border:1px solid var(--line); border-radius:8px; padding:8px"><b style="font-size:11px">Pending approval</b><div style="color:var(--mut); font-size:10.5px">Page read-only with "In Approvals" banner + link to the Tab 13 card.</div></div>
+              <div style="border:1px solid var(--line); border-radius:8px; padding:8px"><b style="font-size:11px">Permission-limited</b><div style="color:var(--mut); font-size:10.5px">Coordinator edits slots; Publish enabled only for approval-permitted roles; footer + pixels locked for everyone.</div></div>
+              <div id="el-mobile" style="border:1px solid var(--line); border-radius:8px; padding:8px; grid-column:span 2"><b style="font-size:11px">Mobile (375px) — vertical wizard</b><div style="color:var(--mut); font-size:10.5px">1) container list as full-width cards → 2) mode → 3) preview at true mobile width (<b>this IS the visitor's view</b>) → 4) sticky Publish bar. Slot editing via bottom-sheet forms.
+                <span style="display:inline-flex; gap:4px; margin-top:6px; vertical-align:top">
+                  <span style="width:58px; border:1px solid var(--line); border-radius:6px; padding:4px 3px; font-size:7px; text-align:center">▤ 13 container cards<br>↓ scroll</span>
+                  <span style="width:58px; border:1px solid var(--line); border-radius:6px; padding:4px 3px; font-size:7px; text-align:center">Branded / Unbranded</span>
+                  <span style="width:58px; border:1.5px solid var(--brand); border-radius:6px; padding:4px 3px; font-size:7px; text-align:center">true-width page preview<br>slots → bottom sheet</span>
+                  <span style="width:58px; border:1px solid var(--line); border-radius:6px; padding:4px 3px; font-size:7px; text-align:center">▬ sticky<br><b>Publish</b> bar</span>
+                </span></div></div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ============ spec gaps found ============ -->
+  <div class="note" style="margin-top:24px; border-color:var(--warn)"><b>Spec gaps found (Master Brain specifies, spec inventory missed — all rendered above):</b> (1) the canonical <b>13-row Container Type Matrix is NOT empty</b> in the UPDATED converted Brain — full table with keywords (REPORT/GUIDE/ALERTS/VALUE/BUYER/FIRST/MOVE/BRIDGE/DOWNSIZE/ADU/SCHOOLS/MULTIGEM/COSTS) rendered verbatim in the picker, resolving the spec's [DECIDE]; (2) <b>post-lock execution sequence</b> (8 ordered steps incl. email nurture loaded to CRM by intent segment) — rendered as a status checklist; (3) <b>owned short link auto-embedded in all social captions</b> at publish; (4) lead magnets are <b>not always PDFs</b> — email subscriptions (ALERTS/FIRST) and calculators/web tools (BRIDGE) per matrix; (5) listing-page <b>flyer/postcard/yard-sign QR packs</b> minted through the owned shortener with lock identity in the mapping, non-skippable; (6) <b>City Guide quarterly refresh scheduler</b> (MVP1); (7) waitlist deliveries are <b>logged per recipient</b> (who got which docs, when) for reuse at offer review.</div>
+
+  <!-- ============ (3) ELEMENT COVERAGE ============ -->
+  <h2 style="font-size:20px; margin:24px 0 10px">Element coverage — spec inventory → this page</h2>
+  <table class="dtable cov" style="font-size:12.5px">
+    <tr><th>Spec inventory element</th><th>Rendered at</th><th>Status</th></tr>
+    <tr><td>⚡ Create funnel (global button — engine picks container, pre-fills, inherits lock)</td><td><a href="#el-easy-button">Easy-button hero panel</a></td><td class="ok">✓</td></tr>
+    <tr><td>Reverse button ("⚡ Create content for this page")</td><td><a href="#el-reverse-button">Hero panel</a> + My pages note</td><td class="ok">✓</td></tr>
+    <tr><td>Container matrix picker (13 rows: keyword → gate → PDF, select regenerates)</td><td><a href="#el-matrix">Container matrix (13 canonical rows)</a></td><td class="ok">✓</td></tr>
+    <tr><td>Mode toggle (Branded/Unbranded, footer stays on both)</td><td><a href="#el-mode">Mode panel</a></td><td class="ok">✓</td></tr>
+    <tr><td>Headline slot (auto from video title, one-click edit)</td><td><a href="#el-headline">Preview — headline slot</a></td><td class="ok">✓</td></tr>
+    <tr><td>Subhead slot (topic + geo, auto from live data)</td><td><a href="#el-subhead">Preview — subhead slot</a></td><td class="ok">✓</td></tr>
+    <tr><td>Hero video embed (swap/remove)</td><td><a href="#el-hero-video">Preview — hero video</a></td><td class="ok">✓</td></tr>
+    <tr><td>Lead capture form / CTA section (container-appropriate gate)</td><td><a href="#el-form">Preview — capture gate</a></td><td class="ok">✓</td></tr>
+    <tr><td>Locked footer (name · license · brokerage · Fair Housing logo, read-only)</td><td><a href="#el-footer">Preview — locked footer</a></td><td class="ok">✓</td></tr>
+    <tr><td>Lead magnet PDF preview (first page, real data, agent branding)</td><td><a href="#el-pdf">PDF preview card</a></td><td class="ok">✓</td></tr>
+    <tr><td>Local Business Partner slot (City Guide only)</td><td><a href="#el-partner-slot">Partner slot card</a></td><td class="ok">✓</td></tr>
+    <tr><td>Comment-DM flow summary (keyword, DM copy, 48h follow-up, CRM tag, staged provider)</td><td><a href="#el-dm-flow">Comment-DM flow card</a></td><td class="ok">✓</td></tr>
+    <tr><td>Pixel/CAPI status line (Meta + GA4 + TikTok, status not config)</td><td><a href="#el-pixels">Preview — tracking status</a></td><td class="ok">✓</td></tr>
+    <tr><td>URL + UTM strip (slug, UTM auto badge, copy link, full scheme)</td><td><a href="#el-url-utm">URL strip</a> + <a href="#el-utm">UTM card</a></td><td class="ok">✓</td></tr>
+    <tr><td>Publish → Approvals (gate-only publishing, ContentLock freeze)</td><td><a href="#el-publish">Footer action bar</a></td><td class="ok">✓</td></tr>
+    <tr><td>Attach to campaign (landing destination picker)</td><td><a href="#el-attach">Footer action bar</a></td><td class="ok">✓</td></tr>
+    <tr><td>My pages list (status, container, leads, parent, campaigns; open/edit/duplicate/retire)</td><td><a href="#el-my-pages">My pages table</a></td><td class="ok">✓</td></tr>
+    <tr><td>Waitlist mode indicator (capture before docs, auto-deliver + notify)</td><td><a href="#el-waitlist">Waitlist mode card</a></td><td class="ok">✓</td></tr>
+    <tr><td>Wattson recommendation surfaces (push-to-ads · no-funnel gap · swap-the-magnet)</td><td><a href="#el-wattson-recs">Loop card (3 live recs)</a></td><td class="ok">✓</td></tr>
+    <tr><td>Lifestyle/AEO container fields (JSON-LD, timestamp, indexing, attributions, FH gate)</td><td><a href="#el-aeo">AEO compliance panel</a></td><td class="ok">✓</td></tr>
+  </table>
+  <div style="border:1.5px solid var(--good); background:#f2f8f4; border-radius:10px; padding:12px 16px; margin:12px 0 0; font-weight:700; color:var(--good)">20 of 20 spec elements rendered ✓ <span style="font-weight:400; color:var(--mut); font-size:12.5px">— plus prompt-required regions beyond the inventory: wizard step strip, post-lock execution checklist, waitlist example page, states strip (loading/empty/degraded/pending/permission), mobile-variant strip; plus the 7 Master-Brain additions in the spec-gaps note above.</span></div>
+
+  <!-- ============ (4) FULL SPEC AS HTML ============ -->
+  <div class="specdoc">
+    <h1 style="font-size:24px; margin:40px 0 6px">Spec — 17 · Funnel Page & Lead-Magnet Builder (PropCast/PropReach)</h1>
+    <p><b>Purpose</b> Builds the owned capture layer behind every piece of content: pick a container from the container-type matrix (13 rows in the current build: keyword → landing page → lead-magnet PDF), the page + PDF + DM flow generate together from real data, the agent edits slots, and publishing routes through Approvals. Also home of the system-wide "⚡ Create funnel" easy button and the UTM auto-scheme.</p>
+    <p><b>Primary users</b> Agent; marketing coordinator role (edit); Wattson (proposes funnels via recommendations — e.g. "3 listings have no funnel yet").</p>
+    <p><b>Entry points</b> "⚡ Create funnel" on ANY content object anywhere (video, script, listing, carousel, news card) — opens the builder pre-filled; "My pages" nav; Content Review bundle build (Tab 16) when a piece's container needs manual editing; Wattson recommendation card one-click create; Campaign Manager (Tab 18) "landing destination missing" fix path.</p>
+    <p><b>Exit points</b> Publish → Approvals (Tab 13) → hosted at agent subdomain (Cloudflare Pages/Vercel); Attach to campaign → Campaign Manager (Tab 18); "⚡ Create content for this page" (reverse button) → content engine; page's SEO handoff → SEO console; leads captured → PropFlow CRM contact records.</p>
+
+    <h2>Layout</h2>
+    <p><b>Desktop</b> — Header: "New funnel page · Step 2 of 3 — container picked: {name}"; nav: My pages (n). Optional hero panel (first-run / from easy-button): the ⚡ explainer + UTM auto-scheme + closed-loop cards (inherited from the draft — deepen, never remove). Left rail (≈40%): container matrix picker (13 rows, selected highlighted, each row shows keyword → gate → PDF), Mode panel (Branded/Unbranded toggle + footer note). Main (≈60%): live page preview with dashed editable slots (headline, subhead, form/CTA), URL + "UTM auto" strip, PDF cover preview + pixel/footer status line, footer action bar (Publish → Approvals · Attach to campaign).</p>
+    <p><b>Mobile (375px)</b> — Steps become a vertical wizard: 1) container list (full-width cards), 2) mode, 3) preview (page renders at true mobile width — this IS the visitor's view), 4) sticky Publish bar. Slot editing via bottom-sheet forms.</p>
+
+    <h2>Element inventory</h2>
+    <div style="overflow-x:auto">
+    <table class="dtable">
+      <tr><th>Element</th><th>What it shows/does</th><th>Data source</th><th>Interactions</th><th>Spec source</th></tr>
+      <tr><td>⚡ Create funnel (global)</td><td>On every content object; engine picks matching container, pre-fills headline/geo/CTA from the content's own facts, inherits ContentLock lineage, opens builder filled for 30-second edit-and-publish</td><td>ContentLock + content facts</td><td>One click → this screen pre-filled</td><td>draft s17 easy-button (inherited ~37-iteration decision)</td></tr>
+      <tr><td>Reverse button</td><td>"⚡ Create content for this page" on any funnel page</td><td>funnel page record</td><td>Click → content engine brief</td><td>draft s17</td></tr>
+      <tr><td>Container matrix picker</td><td>13 selectable container templates; each row: content type/keyword intent → landing page style → lead magnet template</td><td>Container Type Matrix (Master Brain Part 9) — canonical; 13-row count per matrix JSON gap item</td><td>Select row → regenerates preview + PDF + DM keyword</td><td>MB Part 9 §Container Type Matrix; matrix gap "13-row container matrix" P0</td></tr>
+      <tr><td>Mode toggle</td><td>Branded / Unbranded (teaser ads): unbranded strips the agent hero for portal-style ad compliance; DRE/brokerage footer stays on BOTH, non-removable</td><td>campaign context</td><td>Toggle → preview swaps</td><td>draft s17 (inherited)</td></tr>
+      <tr><td>Headline slot</td><td>Auto-derived from the video title; one-click edit</td><td>container generation</td><td>Click → inline edit</td><td>MB Part 9 §Landing Page (verbatim)</td></tr>
+      <tr><td>Subhead slot</td><td>References topic + geography, auto-filled from live data ("East Palo Alto market data — updated {Month}")</td><td>Stage-2 signal data (MLS stats, news pull) via PropSearch data floor</td><td>Click → edit</td><td>MB Part 9</td></tr>
+      <tr><td>Hero video embed</td><td>YouTube or hosted MP4 of the parent content</td><td>ContentLock render artifact</td><td>Swap/remove</td><td>MB Part 9</td></tr>
+      <tr><td>Lead capture form / CTA</td><td>Container-appropriate gate (address field for valuation; name+email+phone+buyer/agent toggle for disclosure gates)</td><td>container template</td><td>Edit CTA copy</td><td>MB Part 9 + Listing Property Page section</td></tr>
+      <tr><td>Locked footer</td><td>Agent name · license number · brokerage · NAR Fair Housing logo — pulled from identity configuration, read-only</td><td>identity.json / tenant identity config</td><td>None (locked)</td><td>MB Part 9 (verbatim); Skills CLAUDE.md brand rule</td></tr>
+      <tr><td>Lead magnet PDF preview</td><td>First-page preview; template per container matrix; auto-populated with real Stage-2 data; agent branding</td><td>PDF generator (ReportLab/WeasyPrint per MVP1)</td><td>Click → PDF slot editor</td><td>MB Part 9 §Lead Magnet PDF</td></tr>
+      <tr><td>Local Business Partner slot</td><td>City Guide containers only: one merchant deal/coupon per guide per city, filled at onboarding, persists until updated</td><td>agent config</td><td>Edit slot</td><td>MB Part 9 (City Guide rule)</td></tr>
+      <tr><td>Comment-DM flow summary</td><td>Keyword (auto per container type), DM copy + 48h follow-up if unopened, CRM tag propcast_[content_type]_[geo]</td><td>CommentDmProvider config (staged: GHL messenger interim → ManyChat → native)</td><td>Edit DM copy (re-gates)</td><td>MB Part 9 §Comment-DM Flow</td></tr>
+      <tr><td>Pixel/CAPI status line</td><td>Meta Pixel + GA4 (+ TikTok pixel) auto-injected — shown as status, not configurable</td><td>platform tracking config</td><td>Hover → pixel IDs</td><td>MB Part 9; draft s17</td></tr>
+      <tr><td>URL + UTM strip</td><td>propertyiq.app/f/{slug} (or agent subdomain) + "UTM auto" badge; full 5-field scheme; generated at publish per destination, enforced by distribution</td><td>owned link shortener + ledger mapping</td><td>Copy link</td><td>draft s17 UTM card (inherited); MB Part 14</td></tr>
+      <tr><td>Publish → Approvals</td><td>Publishes only through the approval gate; container copy is public-facing creative → drafted before Gate 2, frozen in ContentLock</td><td>ApprovalRecord + ContentLock</td><td>Click → Tab 13 card</td><td>MB Part 9 container logic</td></tr>
+      <tr><td>Attach to campaign</td><td>Links page as a campaign's landing destination</td><td>PropReach campaign record</td><td>Picker</td><td>draft s17; PropReach preflight (landing page live ✓)</td></tr>
+      <tr><td>My pages list</td><td>All funnel pages: status (draft/pending approval/live), container type, leads captured, parent content, campaign links</td><td>funnel page records + ledger</td><td>Open/edit/duplicate/retire</td><td>matrix new_screens</td></tr>
+      <tr><td>Waitlist mode indicator</td><td>Disclosure-gate pages before docs upload: page still captures requests; auto-delivers + notifies agent when docs land</td><td>listing page record</td><td>Read-only status</td><td>MB Part 9 §Listing Property Page</td></tr>
+      <tr><td>Wattson recommendation surfaces</td><td>"Push these 2 to PropReach ads" · "3 listings have no funnel yet" · "clicks but no leads — swap the magnet"</td><td>Wattson recommendations queue; ledger analytics</td><td>One-click apply (spend items route to Approvals)</td><td>draft s17 loop card (inherited)</td></tr>
+      <tr><td>Lifestyle/AEO container fields</td><td>City guides & lifestyle pages: FAQPage + LocalBusiness JSON-LD, visible last-updated timestamp, instant indexing on publish, source attributions</td><td>AEO schema section; PropSearch data floor</td><td>Read-only compliance panel</td><td>MB Part 9 §Lifestyle & Authority Containers / AEO Schema</td></tr>
+    </table>
+    </div>
+
+    <h2>States</h2>
+    <ul>
+      <li><b>Default</b>: 3-step wizard (container → mode → edit/preview).</li>
+      <li><b>Pre-filled (easy button)</b>: all slots filled; user lands directly on step 3.</li>
+      <li><b>Loading</b>: page + PDF generating together — skeleton preview with "generating from {content} facts".</li>
+      <li><b>Empty (My pages)</b>: "No funnel pages yet — every video/listing carries ⚡ Create funnel."</li>
+      <li><b>Error/degraded (fail-closed)</b>: data source missing (no MLS stat for subhead) → slot renders "data unavailable" and blocks publish until edited/removed — never a fabricated number; PDF generation failure → publish blocked with typed reason; hosting deploy failure post-approval → page status DEPLOY_FAILED with retry; identity config missing → hard block (footer cannot render → nothing publishes).</li>
+      <li><b>Pending approval</b>: page read-only with "In Approvals" banner + link.</li>
+      <li><b>Permission-limited</b>: coordinator can edit slots; only approval-permitted roles see Publish enabled; footer and pixels locked for everyone.</li>
+      <li><b>Mobile</b>: wizard variant per Layout.</li>
+    </ul>
+
+    <h2>Data fields</h2>
+    <p><b>container_type</b>: enum (13 values per matrix), assigned at Stage 2. <b>Page</b>: slug/URL, headline, subhead, hero video URL, CTA copy, mode (BRANDED/UNBRANDED) — container_copy frozen in ContentLock. <b>Footer identity</b>: name, DRE #, brokerage, Fair Housing logo — identity config, read-only. <b>Lead magnet</b>: template id, generated PDF URL, data snapshot + as-of date. <b>DM flow</b>: keyword, dm_copy, follow-up copy, crm_tag, source field propcast_organic_[platform]. <b>Tracking</b>: pixel ids, GA4 id, short link, UTM set — short-link mapping stores lock identity. <b>Lock identity</b>: content_id, content_lock_id, lock_hash, approved_version_id. <b>Lead events</b>: LEAD_CAPTURED / LINK_SCANNED / DOC_DOWNLOADED {content_id, content_lock_id, lock_hash, approved_version_id, contact_id, container_type, timestamp} → Event Ledger (PropFlow/Platform emitters).</p>
+
+    <h2>Rules & compliance</h2>
+    <ul>
+      <li>Container copy created after lock ⇒ new approved_version_id + Gate 2 rerun + new ContentLock; the container step may build from locked fields but may never invent new public-facing copy.</li>
+      <li>Footer (agent name, license, brokerage, NAR logo) is locked on branded AND unbranded pages; DRE always from identity config — never hand-typed (the identity.json DRE blocklist applies).</li>
+      <li>Fair Housing gate for lifestyle containers: facts not characterizations; no best/top/worst rankings; no school-quality/demographic proxies; source attribution on every data point; "verify with the source" disclaimer; uniform availability; one-time broker/legal sign-off on the template library.</li>
+      <li>Honest gate copy — no dark patterns; pixel disclosure + DNT/Global Privacy Control respected (Part 5 hard rules).</li>
+      <li>Routing rule: landing page serves search/paid traffic; comment-DM serves organic social — the builder wires both from one container.</li>
+      <li>School/boundary data (lifestyle pages) is user-initiated, identical for all users, disclaimed — no conversion CTA inside the schools block (matrix correction #4).</li>
+      <li>No fabricated stats: every data slot carries source + as-of date or renders unavailable.</li>
+    </ul>
+
+    <h2>Cross-links</h2>
+    <p><b>In</b>: every content object (⚡), Tab 16 bundle, Tab 18 campaigns, Wattson recs, My pages. <b>Out</b>: Approvals (13), Campaign Manager (18), Distribution (19), SEO console (submit page/instant indexing), Attribution (31), PropFlow (captured leads), Switchy-style owned short links + QR packs. <b>Ledger</b>: consumes content facts + lock identity; page traffic emits LEAD_CAPTURED, LINK_SCANNED, DOC_DOWNLOADED with the full identity key set.</p>
+
+    <h2>Open decisions</h2>
+    <ul>
+      <li><b>[DECIDE] Canonical 13-row list</b> — RESOLVED in this mock: the UPDATED converted Master Brain renders the full 13-row matrix (REPORT, GUIDE, ALERTS, VALUE, BUYER, FIRST, MOVE, BRIDGE, DOWNSIZE, ADU, SCHOOLS, MULTIGEM, COSTS); the picker above uses it verbatim. Build still data-driven from the matrix table, never hardcoded.</li>
+      <li><b>[DECIDE] Hosting</b>: Cloudflare Pages vs Vercel (spec allows either). UI unaffected — show host + deploy status generically.</li>
+      <li><b>[DECIDE] Programmatic-page vendor</b>: SearchAtlas evaluate-first rule — if it covers programmatic local pages/schema/indexing, PropCast orchestrates on top; builder UI must treat renderer as swappable.</li>
+      <li><b>[BEST GUESS] Slug editing</b>: allow slug edit pre-publish only; post-publish the URL is durable (matches durable-URL patterns elsewhere in the platform).</li>
+    </ul>
+    <p class="anno" style="margin-top:20px">Wireframe fidelity — colors are placeholders from the locked PropFlow design language. All page names/numbers are realistic fake data. Agent identity: Graeham Watts, Intero Real Estate, DRE# 01466876 (from shared-references/identity.json — never hardcode elsewhere). No crime data anywhere on this screen or its containers.</p>
+  </div>
+</div>

@@ -1,0 +1,567 @@
+<title>PropertyIQ · Screen 14 — CRM (Contacts + Pipelines)</title>
+<link href="https://api.fontshare.com/v2/css?f[]=technor@500,600,700&display=swap" rel="stylesheet">
+<link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<style>
+  /* Type system — Technor for display (the squared machine look from the font exploration), Inter for UI. */
+  :root{ --font-display:'Technor', Inter, -apple-system, 'Segoe UI', sans-serif; --font-ui: Inter, -apple-system, 'Segoe UI', Roboto, sans-serif; }
+</style>
+<style>
+  /* Palette v4 — PropFlow design language: neutral ink UI, ink-as-accent, color reserved for data. (extracted verbatim from propsearch-design-draft.html) */
+  :root, :root[data-theme="dark"], :root[data-theme="light"]{
+    --ink:#23282f; --paper:#fbfaf8; --surface:#f1efe9; --line:#e2dfd6;
+    --mut:#6b7076; --soft:#9b9f9f;
+    --brand:#2e6b53; --brand-ink:#ffffff; --brand-soft:#eaf1ec; --brand-deep:#1e4c3a;
+    --signal:#b07a2e;
+    --good:#2e7d4f; --warn:#a8630a; --crit:#b3372f;
+    --r:10px;
+  }
+  .intel .score, .mintel{ color:var(--brand-deep) }
+  .intel{ border-left:3px solid var(--brand) }
+  h1{ letter-spacing:-.02em }
+  .stat b{ letter-spacing:-.01em }
+  body[data-agent="watts"]{ --brand:#2e6b53; --brand-soft:#eaf1ec; --brand-deep:#1e4c3a; }
+
+  *{box-sizing:border-box; margin:0}
+  body{font:15px/1.55 var(--font-ui); color:var(--ink); background:var(--paper); padding-bottom:80px}
+  h1,h2,h3{line-height:1.15; text-wrap:balance; font-family:var(--font-display); font-weight:600}
+  h1{letter-spacing:-.01em}
+  .site{box-shadow:0 1px 2px rgba(20,24,32,.04), 0 8px 32px rgba(20,24,32,.06)}
+  .stat{box-shadow:0 1px 2px rgba(20,24,32,.03); transition:box-shadow .15s, transform .15s}
+  .stat:hover{box-shadow:0 4px 14px rgba(20,24,32,.08)}
+  .chip{transition:all .12s}
+  button{font-family:var(--font-ui)}
+  .num{font-variant-numeric:tabular-nums}
+  .wrap{max-width:1180px; margin:0 auto; padding:0 20px}
+
+  .bar{position:sticky; top:0; z-index:50; background:var(--paper); border-bottom:1px solid var(--line); padding:10px 0; backdrop-filter:blur(8px)}
+  .bar .wrap{display:flex; flex-wrap:wrap; gap:10px; align-items:center}
+  .bar .ttl{font-weight:700; margin-right:auto}
+  .bar .ttl small{display:block; font-weight:400; color:var(--mut)}
+  .bar a{color:var(--brand); font-size:13px; text-decoration:none}
+
+  .note{background:var(--surface); border:1px solid var(--line); border-radius:var(--r); padding:14px 16px; margin:0 0 22px; font-size:13.5px; color:var(--mut)}
+  .note b{color:var(--ink)}
+
+  .site{border:1px solid var(--line); border-radius:14px; overflow:hidden; background:var(--paper)}
+  .sitehead{display:flex; align-items:center; gap:14px; padding:14px 22px; border-bottom:1px solid var(--line)}
+  .avatar{width:38px; height:38px; border-radius:50%; background:var(--brand); color:var(--brand-ink); display:grid; place-items:center; font-weight:700}
+  .sitehead .who b{display:block}
+  .sitehead .who small{color:var(--mut)}
+  .sitehead nav{margin-left:auto; display:flex; gap:18px; font-size:13.5px; color:var(--mut)}
+  .sitehead nav a{color:inherit; text-decoration:none}
+  .sitehead nav a:hover{color:var(--brand)}
+
+  .chip{display:inline-flex; align-items:center; gap:6px; font-size:12.5px; font-weight:500; border:1px solid var(--line); border-radius:99px; padding:6px 12px; background:var(--paper); cursor:pointer; color:var(--ink)}
+  .chip:hover{border-color:var(--brand)}
+  .chip.on{background:var(--brand); border-color:var(--brand); color:var(--brand-ink); font-weight:600; box-shadow:0 2px 8px color-mix(in srgb, var(--brand) 30%, transparent)}
+
+  .statrow{display:grid; grid-template-columns:repeat(4,1fr); gap:10px}
+  .stat{background:var(--surface); border:1px solid var(--line); border-radius:var(--r); padding:12px}
+  .stat small{display:block; color:var(--mut); font-size:11.5px; text-transform:uppercase; letter-spacing:.05em}
+  .stat b{font-size:18px}
+  .stat .up{color:var(--good); font-size:12px}
+
+  .bdg{font-size:11.5px; border-radius:6px; padding:3px 8px; background:var(--surface); border:1px solid var(--line); color:var(--mut)}
+  .bdg.good{color:var(--good); border-color:color-mix(in srgb,var(--good) 30%,var(--line))}
+  .bdg.warn{color:var(--warn); border-color:color-mix(in srgb,var(--warn) 30%,var(--line))}
+
+  .dtable{width:100%; border-collapse:collapse; font-size:13px}
+  .dtable td,.dtable th{border-bottom:1px solid var(--line); padding:8px 10px; text-align:left}
+  .dtable th{font-size:11px; text-transform:uppercase; letter-spacing:.05em; color:var(--soft)}
+
+  @media (max-width:860px){ .statrow{grid-template-columns:repeat(2,1fr)} .maingrid{grid-template-columns:1fr !important} .console{grid-template-columns:1fr !important} .rail{display:none !important} }
+  @media (prefers-reduced-motion: reduce){ *{transition:none!important} }
+
+  /* ---- page-specific additions (kept in the same design language) ---- */
+  .anno{font-size:11px; color:var(--soft)}
+  .cardbox{border:1px solid var(--line); border-radius:10px; padding:11px 14px; font-size:12.5px; background:var(--paper)}
+  .btn-ink{background:var(--ink); color:#fff; border:0; border-radius:7px; padding:7px 12px; font-size:11.5px; cursor:pointer; font-weight:600}
+  .btn-ghost{background:var(--paper); border:1px solid var(--line); border-radius:7px; padding:7px 12px; font-size:11.5px; cursor:pointer}
+  .btn-dis{background:var(--surface); color:var(--soft); border:1px solid var(--line); border-radius:7px; padding:7px 12px; font-size:11.5px; cursor:not-allowed}
+  .sechead{font-size:14px; font-weight:700; margin:0 0 8px; font-family:var(--font-display)}
+  .cov td.ok{color:var(--good); font-weight:700}
+  .specdoc h2{font-size:18px; margin:26px 0 8px}
+  .specdoc h3{font-size:15px; margin:18px 0 6px}
+  .specdoc p, .specdoc li{font-size:13.5px; color:var(--mut)}
+  .specdoc b{color:var(--ink)}
+  .specdoc table{margin:8px 0}
+  .kcol{background:var(--surface); border-radius:10px; padding:10px}
+  .kcol .khead{font-size:11px; font-weight:700; text-transform:uppercase; letter-spacing:.05em; color:var(--mut); display:flex; gap:6px; align-items:baseline; flex-wrap:wrap}
+  .kcard{background:var(--paper); border:1px solid var(--line); border-radius:8px; padding:9px; margin-top:8px; font-size:12px}
+  .micro{display:flex; gap:8px; margin-top:6px; font-size:10px; color:var(--mut)}
+  .pathseg{flex:1; padding:8px 4px}
+  .evb{font-size:9px}
+  .subnav a{text-decoration:none; color:var(--ink); padding:6px 8px; border-radius:7px; display:block}
+  .subnav a.on{color:#fff; background:var(--ink); font-weight:600}
+</style>
+
+<!-- ============ (1) slim header ============ -->
+<div class="bar">
+  <div class="wrap">
+    <div class="ttl">PropertyIQ · Screen 14 — CRM (Contacts + Pipelines) <small>Full-density per-screen mock · wireframe fidelity · dev-facing annotations in gray</small></div>
+    <a href="../wireframe.html">← All screens</a>
+  </div>
+</div>
+
+<!-- ============ (2) THE FULL MOCK ============ -->
+<div class="wrap" style="padding-top:24px">
+  <div class="note"><b>Screen 14 — CRM (Contacts + Pipelines).</b> The working CRM: pipeline boards (New Leads 12-day sprint · Buyer · Seller · Past), the contact record with an evidence-labeled timeline and a consent panel, smart lists with a dialer work mode, and the four-panel conversation inbox. Every action is a ledger event; consent gates every outbound. Best-of-breed patterns adopted per the draft: Salesforce Path (Wattson-live guidance), FUB pinned action bar + inline composers + work mode, Attio three-zone record + collections, GHL four-panel inbox — all on our ledger. Performance is a product KPI: lists &lt;500ms, record &lt;1s, virtualized timelines, 36–40px rows with a density toggle (desktop-only). Primary users: agent (Graeham), team (ISA/coordinator role-routed task queues), Wattson only via governed WATTSON_REVIEWED_ACTION.</div>
+
+  <div class="site" data-agent="watts">
+    <!-- header -->
+    <div class="sitehead">
+      <div class="avatar">GW</div>
+      <div class="who"><b>CRM — Leads &amp; clients</b><small class="num">1,241 contacts · 46 active opportunities · 6 unread conversations</small></div>
+      <div style="display:inline-flex; border:1px solid var(--line); border-radius:99px; overflow:hidden; font-size:12px; font-weight:600; margin-left:10px">
+        <span style="padding:6px 14px; background:var(--ink); color:#fff">◫ Opportunities</span>
+        <span style="padding:6px 14px; color:var(--mut); cursor:pointer">💬 Inbox</span>
+        <span style="padding:6px 14px; color:var(--mut); cursor:pointer">👤 Contacts</span>
+      </div>
+      <nav><a href="#">+ Add contact</a><a href="#">Search (⌘K)</a><a href="#">🔔 3</a></nav>
+    </div>
+
+    <div class="console" style="display:grid; grid-template-columns:172px 150px 1fr">
+      <!-- persistent agent-console left rail (same chrome as Screen 9) -->
+      <div class="rail" style="border-right:1px solid var(--line); padding:14px 10px; font-size:12.5px; display:flex; flex-direction:column; gap:2px; background:var(--surface)">
+        <a href="#" style="text-decoration:none; color:var(--ink); border-radius:8px; padding:8px 10px">☰ Today</a>
+        <a href="#" style="text-decoration:none; color:var(--ink); border-radius:8px; padding:8px 10px">🗺 Farm map</a>
+        <a href="#" style="text-decoration:none; color:var(--ink); border-radius:8px; padding:8px 10px">🤝 Past clients</a>
+        <a href="#" style="text-decoration:none; color:#fff; background:var(--ink); border-radius:8px; padding:8px 10px; font-weight:600">👤 Leads &amp; clients</a>
+        <a href="#" style="text-decoration:none; color:var(--ink); border-radius:8px; padding:8px 10px">💬 Comms <span class="bdg" style="font-size:9.5px">6</span></a>
+        <a href="#" style="text-decoration:none; color:var(--ink); border-radius:8px; padding:8px 10px">📋 Transactions <span class="bdg" style="font-size:9.5px">2</span></a>
+        <a href="#" style="text-decoration:none; color:var(--ink); border-radius:8px; padding:8px 10px">🎬 Content studio</a>
+        <a href="#" style="text-decoration:none; color:var(--ink); border-radius:8px; padding:8px 10px">📣 Ads &amp; funnels</a>
+        <a href="#" style="text-decoration:none; color:var(--ink); border-radius:8px; padding:8px 10px">⚙ Playbooks</a>
+        <a href="#" style="text-decoration:none; color:var(--ink); border-radius:8px; padding:8px 10px">📈 Reports</a>
+        <div style="margin-top:auto; padding-top:10px; border-top:1px solid var(--line)">
+          <a href="#" style="text-decoration:none; color:var(--ink); border-radius:8px; padding:8px 10px; display:block">⚙ Settings</a>
+          <div class="anno" style="padding:6px 10px">Global chrome: this rail is persistent across all agent-console screens (Screen 9 pattern). Consumer pages never show it.</div>
+        </div>
+      </div>
+
+      <!-- CRM sub-nav rail (spec Layout: 150px) -->
+      <div id="el-subnav" class="rail subnav" style="border-right:1px solid var(--line); background:var(--surface); padding:12px 8px; font-size:11.5px; display:grid; gap:2px; align-content:start">
+        <a href="#el-inbox">💬 Conversations <span class="bdg" style="font-size:9px">6</span></a>
+        <a href="#">👤 Contacts <span style="color:var(--soft)" class="num">1,241</span></a>
+        <a href="#" class="on">◫ Opportunities <span class="num" style="opacity:.8">46</span></a>
+        <a href="#">📅 Calendar</a>
+        <a href="#el-cadences">🔁 Cadences</a>
+        <a href="#el-automations">⚙ Automations</a>
+        <a href="#">📈 Reporting</a>
+        <div class="anno" style="padding:6px 8px">CRM sub-nav (GHL depth, our naming) — badge = unread. Smart lists pin below with live counts.</div>
+        <div id="el-smartlists">
+          <div style="font-size:9.5px; font-weight:700; text-transform:uppercase; letter-spacing:.05em; color:var(--soft); padding:4px 8px 2px">Smart lists</div>
+          <a href="#el-workmode" style="color:var(--brand); font-size:10.5px; padding:4px 8px">No touch 30d + high engagement <b class="num">(7)</b></a>
+          <a href="#el-workmode" style="color:var(--brand); font-size:10.5px; padding:4px 8px">Valuation viewers, no convo <b class="num">(4)</b></a>
+          <a href="#el-workmode" style="color:var(--brand); font-size:10.5px; padding:4px 8px">Hot investors <b class="num">(3)</b></a>
+          <a href="#el-workmode" style="color:var(--brand); font-size:10.5px; padding:4px 8px">New Zillow-refugee leads <b class="num">(3)</b></a>
+          <button class="btn-ink" style="margin:6px 8px 0; width:calc(100% - 16px)">▶ Work mode</button>
+          <div class="anno" style="padding:4px 8px">Saved Event-Ledger queries, live counts (FUB pattern). "Work mode" = dialer session: contact 1 opens, log inline, one keystroke advances. The Today queue is just the master smart list.</div>
+        </div>
+      </div>
+
+      <div style="min-width:0">
+        <!-- top toolbar -->
+        <div id="el-toolbar" style="padding:14px 18px 0">
+          <div style="display:flex; gap:8px; align-items:center; flex-wrap:wrap; font-size:12px">
+            <select id="el-pipeline" style="border:1px solid var(--line); border-radius:8px; padding:7px 10px; background:var(--paper); color:var(--ink); font-size:12.5px; font-weight:600" aria-label="Pipeline selector">
+              <option>Seller Pipeline ▾</option><option>New Leads (12-day sprint)</option><option>Buyer</option><option>Past Buyers</option><option>Past Sellers</option><option>Lost</option>
+            </select>
+            <span class="bdg num">46 opportunities · $1.9M GCI potential</span>
+            <a href="#" class="chip" style="font-size:11.5px; text-decoration:none">Investor (GHL interim) ↗</a>
+            <button class="chip" style="font-size:11.5px">Advanced filters (1)</button>
+            <button class="chip" style="font-size:11.5px">Sort: heat ▾</button>
+            <button class="chip" style="font-size:11.5px">Bulk actions</button>
+            <span style="margin-left:auto"></span>
+            <span id="el-boardtoggle" style="display:inline-flex; border:1px solid var(--line); border-radius:8px; overflow:hidden"><button class="chip on" style="border:0; border-radius:0; font-size:11.5px">◫ Board</button><button class="chip" style="border:0; border-radius:0; font-size:11.5px">☰ List</button><button class="chip" style="border:0; border-radius:0; font-size:11.5px">▦ Grid</button></span>
+            <button class="chip" style="font-size:11.5px">Density: comfy ▾</button>
+            <button id="el-import" class="chip" style="font-size:11.5px">⬆ Import (dedupe-reviewed)</button>
+            <input placeholder="Search opportunities…" aria-label="search" style="border:1px solid var(--line); border-radius:8px; padding:7px 10px; font-size:12px; background:var(--paper); color:var(--ink)">
+          </div>
+          <div class="anno" style="margin-top:4px">Pipelines §11.1: NEW_LEADS · BUYER · SELLER · PAST_BUYERS · PAST_SELLERS · LOST. Native investor pipeline is DEFERRED_NOT_BUILT_THIS_PASS — the chip deep-links to the GHL interim pipeline; investor leads may also create a manual-review task [DECIDE]. Board/List/Grid = one "collections" primitive (Attio): same filter/sort/column model; a smart list is just a saved view; card fields are user-picked 3–5 (interim default: name, sprint-day/stage-age, source, est. GCI, last touch) [DECIDE]; layout persists per user. CSV import routes EVERY row through identity resolution §10.5; imported contacts default to <b style="color:var(--ink)">unknown consent on all four channels</b> — outreach blocked until consent is captured. Density toggle 36–40px rows, desktop-only. Perf KPI: list &lt;500ms.</div>
+        </div>
+
+        <!-- kanban board -->
+        <div id="el-board" style="padding:12px 18px 0">
+          <div style="display:grid; grid-template-columns:repeat(4,1fr); gap:10px">
+            <div class="kcol">
+              <div class="khead">New leads — 12-day sprint <span class="num" style="color:var(--soft)">4 · $86K</span></div>
+              <div class="kcard" id="el-sprintchip"><b>R. Patel</b> <span class="bdg" style="font-size:9.5px; color:var(--warn); border-color:var(--warn)">Day 9/12 ⚠</span>
+                <div style="color:var(--mut); font-size:11px">investor · source: ADU funnel · est. GCI $29K</div>
+                <div class="micro num" id="el-microstats"><span>📞 2</span><span>💬 11</span><span>✉ 4</span><span>👁 14</span><span>☑ 1</span><span>📅 —</span><span style="margin-left:auto; color:var(--soft)">last touch 2d</span></div>
+                <div class="anno" style="margin-top:3px">Card micro-stats (GHL pattern): every icon = live PropFlowActivity count; click an icon → timeline filtered to that channel. Sprint chip warns ≥ day 9, critical day 11+.</div>
+              </div>
+              <div class="kcard"><b>S. Okafor</b> <span class="bdg" style="font-size:9.5px; color:var(--crit); border-color:var(--crit)">Day 11/12 ⚠⚠</span>
+                <div style="color:var(--mut); font-size:11px">buyer · source: comment-to-DM "TOUR" · est. GCI $18K</div>
+                <div class="micro num"><span>📞 1</span><span>💬 6</span><span>✉ 2</span><span>👁 3</span><span>☑ 2</span><span>📅 —</span><span style="margin-left:auto; color:var(--soft)">last touch 4h</span></div>
+                <div class="anno" style="margin-top:3px">Day 12 unresolved → forced disposition dialog: qualify / long-nurture / archive → DAY_12_REVIEW task (§11.2). Every lead exits NEW_LEADS by Day 12.</div>
+              </div>
+            </div>
+            <div class="kcol">
+              <div class="khead">Active buyers <span class="num" style="color:var(--soft)">6 · $121K</span></div>
+              <div class="kcard"><b>J. &amp; A. Kim</b> <span class="bdg" style="font-size:9.5px">ACTIVE ≤3mo</span><div style="color:var(--mut); font-size:11px">touring Sat · pre-approved $1.4M · est. GCI $33K</div>
+                <div class="micro num"><span>📞 5</span><span>💬 22</span><span>✉ 9</span><span>👁 41</span><span>☑ —</span><span>📅 2</span><span style="margin-left:auto; color:var(--soft)">last touch 1d</span></div>
+              </div>
+              <div class="kcard"><b>D. Alvarez</b> <span class="bdg" style="font-size:9.5px">APPT SCHEDULED</span><div style="color:var(--mut); font-size:11px">buyer consult Mon 10am · est. GCI $21K</div></div>
+            </div>
+            <div class="kcol">
+              <div class="khead">Seller conversations <span class="num" style="color:var(--soft)">3 · $74K</span></div>
+              <div class="kcard" style="border:1.5px solid var(--brand)"><b>M. Torres ▼ (open below)</b><div style="color:var(--mut); font-size:11px">consult Wed 4pm · prep pack ready · est. GCI $27K</div>
+                <div class="micro num"><span>📞 3</span><span>💬 4</span><span>✉ 6</span><span>👁 18</span><span>☑ 1</span><span>📅 1</span><span style="margin-left:auto; color:var(--soft)">last touch 8h</span></div>
+              </div>
+              <div class="kcard"><b>The Beckers</b> <span class="bdg" style="font-size:9.5px">NURTURE &lt;9mo</span><div style="color:var(--mut); font-size:11px">"after school year" · est. GCI $25K</div></div>
+            </div>
+            <div class="kcol" id="el-watchdog">
+              <div class="khead">Neglect watchdog <span class="num" style="color:var(--soft)">2</span></div>
+              <div class="kcard" style="border-color:var(--warn)"><b>2 hot leads untouched 48h+</b><div style="color:var(--mut); font-size:11px">K. Liu (32h over) · B. Ford (5h over) — NEGLECT_FOLLOW_UP tasks auto-created → Today queue</div>
+                <button class="btn-ghost" style="margin-top:6px">Open in Today →</button>
+              </div>
+              <div class="anno" style="margin-top:6px">Temporal watchdog runs every 6h; checks now − last_activity_at vs stage-tuned thresholds (§11.5). Thresholds configurable per account — defaults [BEST GUESS: 48h hot / 7d warm / 30d nurture]; the converted doc's threshold table is blank [DECIDE]. Creates tasks via NotificationProvider only — never sends to a non-canonical channel.</div>
+            </div>
+          </div>
+          <div class="anno" style="margin-top:4px">Drag a card = PipelineMoveRequest → PIPELINE_MOVED event with mover identity (HUMAN_USER / TEMPORAL_WORKFLOW / GHL_WEBHOOK / WATTSON_REVIEWED_ACTION) + old/new pipeline &amp; stage — complete auditable move history (§11.4). Column headers aggregate count + $ volume. Buyer/Seller stage vocabulary §11.3; move to UNDER_CONTRACT → exit to Transaction Workspace (Screen 15). Fair Housing §22.5: no protected-class fields anywhere in this UI; the pricing-floor qualifier (§13.8, stored as a stated response only) is the ONLY price-qualification pattern.</div>
+        </div>
+
+        <!-- ============ expanded contact record (inline below the board, never a modal) ============ -->
+        <div id="el-record" style="padding:14px 18px 0">
+          <div style="border:1.5px solid var(--brand); border-radius:14px; overflow:hidden">
+            <!-- pinned header + action bar -->
+            <div id="el-header" style="padding:12px 16px; background:var(--brand-soft); display:flex; gap:12px; align-items:center; flex-wrap:wrap">
+              <div class="avatar">MT</div>
+              <div><b style="font-size:15px">Maria Torres</b><div style="font-size:11.5px; color:var(--mut)">318 Hurlingame Ave (owner) · in CRM since 2024 · source chain: farm postcard → valuation page (Attribution Mirror §5.5)</div></div>
+              <div id="el-actionbar" style="display:flex; gap:6px; margin-left:8px">
+                <button class="btn-ink" style="font-size:12px; padding:7px 14px">📞 Call</button>
+                <button class="btn-ghost" style="font-size:12px">💬 Text</button>
+                <button class="btn-ghost" style="font-size:12px">✉ Email</button>
+                <button class="btn-ghost" style="font-size:12px">📝 Note</button>
+                <button class="btn-ghost" style="font-size:12px">☑ Task</button>
+              </div>
+              <div id="el-scores" style="margin-left:auto; display:flex; gap:6px; flex-wrap:wrap">
+                <span class="bdg num" style="border-color:var(--crit); color:var(--crit)">Seller propensity 87 · <u style="cursor:pointer">why?</u></span>
+                <span class="bdg num">Lead score 64 · tier HIGH · window 0–6 mo</span>
+              </div>
+              <div class="anno" style="width:100%">Pinned action bar (FUB pattern) — every button opens an INLINE composer below it, never a modal. Call opens a live notepad + outcome picker (connected / vm / bad number); the outcome is a ledger event that feeds Today-queue ranking. Record-open perf KPI &lt;1s. Score badges = ScoringService mirror §5.6 (display only — PropFlow never computes; legacy score fields are read-only aliases).</div>
+              <!-- explainability card -->
+              <div id="el-explain" style="width:100%; background:var(--paper); border:1px solid var(--line); border-radius:9px; padding:9px 12px; font-size:11.5px">
+                <b>Why 87?</b> <span style="color:var(--mut)">contributing source_facts: ran valuation + tuned +$40K (Mon) · opened CMA email ×2 · owner 11 yrs · stated timeline "after June" (your call note 6/12) · sold-page view (anonymous-stitched, weighted low). score_version v3.2 · data_quality_confidence 0.81.</span>
+                <span class="anno">Explain-on-click renders contributing facts only — never protected-class or sensitive-topic inputs (firewall §14.3/§22.4).</span>
+              </div>
+            </div>
+
+            <!-- stage Path ribbon -->
+            <div id="el-path" style="display:flex; padding:0 16px; background:var(--paper); border-bottom:1px solid var(--line); font-size:11px; text-align:center">
+              <div class="pathseg" style="background:var(--surface); clip-path:polygon(0 0, calc(100% - 10px) 0, 100% 50%, calc(100% - 10px) 100%, 0 100%); color:var(--mut)">Lead ✓</div>
+              <div class="pathseg" style="background:var(--surface); clip-path:polygon(0 0, calc(100% - 10px) 0, 100% 50%, calc(100% - 10px) 100%, 0 100%, 10px 50%); color:var(--mut)">Nurture ✓</div>
+              <div class="pathseg" style="background:var(--brand); color:#fff; font-weight:700; clip-path:polygon(0 0, calc(100% - 10px) 0, 100% 50%, calc(100% - 10px) 100%, 0 100%, 10px 50%)">Seller convo ●</div>
+              <div class="pathseg" style="color:var(--soft); clip-path:polygon(0 0, calc(100% - 10px) 0, 100% 50%, calc(100% - 10px) 100%, 0 100%, 10px 50%)">Listing</div>
+              <div class="pathseg" style="color:var(--soft); clip-path:polygon(0 0, 100% 0, 100% 100%, 0 100%, 10px 50%)">Closed</div>
+            </div>
+            <div style="padding:8px 16px; font-size:11px; color:var(--mut); border-bottom:1px solid var(--line); background:var(--paper)">Stage guidance (Wattson, generated from THIS record — Salesforce Path made live): <b style="color:var(--ink)">"Consult is Wed. Key fields for this stage: timeline (has: 'after June'), motivation (downsize ✓), price expectation (unknown — ask), competing agents (unknown — ask)."</b> <span class="anno">Clicking a stage = PipelineMoveRequest (same audit path as a drag). Each stage swaps which context cards show below.</span></div>
+
+            <!-- three-zone body: timeline | context cards -->
+            <div class="maingrid" style="display:grid; grid-template-columns:1.5fr 1fr; gap:0">
+              <div style="padding:14px 16px; border-right:1px solid var(--line); min-width:0">
+                <div style="font-size:11px; font-weight:700; text-transform:uppercase; letter-spacing:.05em; color:var(--mut); margin-bottom:8px">Timeline — every entry labeled by how we know it <span style="font-weight:400; text-transform:none; letter-spacing:0">· filter: <button class="chip on" style="font-size:9.5px; padding:2px 8px">All</button> <button class="chip" style="font-size:9.5px; padding:2px 8px">📞</button> <button class="chip" style="font-size:9.5px; padding:2px 8px">💬</button> <button class="chip" style="font-size:9.5px; padding:2px 8px">✉</button> <button class="chip" style="font-size:9.5px; padding:2px 8px">👁</button></span></div>
+                <div id="el-timeline" style="display:grid; gap:7px; font-size:12px; color:var(--mut)">
+                  <div>📈 Ran valuation, tuned +$40K <span class="bdg evb">DETERMINISTIC</span> <span class="num">· Mon 8:04am</span></div>
+                  <div>📧 Opened CMA email ×2 <span class="bdg evb">DETERMINISTIC</span> <span class="num">· Mon 8:06</span></div>
+                  <div>👁 Likely viewed 742 Hurlingame sold page <span class="bdg evb" style="color:var(--warn)">ANONYMOUS_STITCHED</span> <span class="num">· Sun</span> <span class="anno">stitch-on-capture §10.7 backfill</span></div>
+                  <div>📬 In July postcard audience (412 homes) <span class="bdg evb" style="color:var(--warn)">CAMPAIGN-LEVEL</span> <span class="anno">impression honesty: ad/mail entries are audience-level only — we never claim "she saw it"</span></div>
+                  <div>📞 Your call note (voice memo, transcribed): "kids to college next June, wants to downsize after" <span class="bdg evb">HUMAN</span> <span class="num">· 6/12</span></div>
+                  <div>↔ Stage move Nurture → Seller convo <span class="bdg evb">HUMAN_USER</span> <span class="num">· 6/12</span> <span class="anno">PIPELINE_MOVED event</span></div>
+                  <div>⛔ SMS blocked — quiet hours (ComplianceProvider) <span class="bdg evb" style="color:var(--crit)">COMPLIANCE_BLOCK</span> <span class="num">· 6/10 9:02pm</span> <span class="anno">blocks are timeline entries too — auditable</span></div>
+                  <div>↩ Returned to site after 9d quiet → agent alert <span class="bdg evb">DETERMINISTIC</span> <span class="num">· 6/08</span> <span class="anno">return-visit re-engagement §13.6 (Brain addition)</span></div>
+                </div>
+                <div class="anno" style="margin-top:6px">PropFlowActivity §11.7 — append-only, virtualized; every entry carries activity_type, source (GHL/PROPFLOW/EVENT_LEDGER/WATTSON/MANUAL) and a retention_class. Evidence labels: DETERMINISTIC / INFERRED / ANONYMOUS_STITCHED / CAMPAIGN-LEVEL / HUMAN. Voice Ops call transcripts render as timeline entries with a player link (full inbox-thread merge later [DECIDE]).</div>
+
+                <!-- inline composer -->
+                <div id="el-composer" style="border:1px solid var(--line); border-radius:10px; margin-top:12px; overflow:hidden">
+                  <div style="display:flex; font-size:11px; border-bottom:1px solid var(--line); background:var(--surface)">
+                    <span style="padding:7px 14px; background:var(--paper); font-weight:700; border-right:1px solid var(--line)">💬 SMS</span><span style="padding:7px 14px; color:var(--mut)">✉ Email</span><span style="padding:7px 14px; color:var(--mut)">📞 Voice</span><span style="padding:7px 14px; color:var(--mut)">🎥 Video</span>
+                    <span style="margin-left:auto; padding:7px 14px; color:var(--brand); cursor:pointer">✨ Wattson draft</span><span style="padding:7px 14px; color:var(--mut); cursor:pointer">Templates ▾</span>
+                  </div>
+                  <div style="padding:10px 12px; font-size:12px; color:var(--mut)">Hi {{first_name}} — great talking Wed. Sending the prep pack for 318 Hurlingame before our consult… <span class="anno">merge fields resolve from the canonical contact record only</span></div>
+                  <div style="display:flex; gap:8px; align-items:center; padding:8px 12px; border-top:1px solid var(--line); font-size:11px; flex-wrap:wrap">
+                    <span class="bdg good" style="font-size:9.5px">SMS consent ✓ 2024-11</span><span class="bdg good" style="font-size:9.5px">DNC clear · Jul 14</span><span class="bdg good" style="font-size:9.5px">compliance ✓</span><span class="num" style="color:var(--soft)">142/160 · 1 segment</span>
+                    <span style="margin-left:auto"></span><span class="bdg warn" style="font-size:9.5px">Bucket 2 — Wattson-drafted → review queue</span><button class="btn-ink">Send for review</button>
+                  </div>
+                  <div class="anno" style="padding:0 12px 8px">One shared composer everywhere (record, inbox, work mode). <b>The consent gate IS the send-button state</b>: missing consent / DNC / compliance fail → button disabled with the reason shown (e.g. <span class="btn-dis" style="font-size:10px; padding:2px 8px">Send — blocked: voice consent unknown</span>). Two-bucket messaging §17.3: locked transactional templates may auto-send; anything discretionary/Wattson-written = REVIEW_REQUIRED → Approvals. A2P 10DLC not yet approved → SMS volume sends blocked, review tasks created instead (§12.4, Brain addition). Copy never invented — templates load from PipelineSequenceRegistry.</div>
+                </div>
+              </div>
+
+              <!-- right context cards (collapsible) -->
+              <div style="padding:14px 16px; display:grid; gap:10px; align-content:start; min-width:0">
+                <div id="el-consent" class="cardbox">
+                  <b>Consent — gates every outbound, everywhere <span style="float:right; color:var(--soft); cursor:pointer">▾</span></b>
+                  <div style="display:grid; gap:5px; font-size:12px; margin-top:6px" class="num">
+                    <div>SMS <span class="bdg good" style="font-size:9.5px">granted 2024-11 · web form · "Yes, text me updates" · proof ↗</span></div>
+                    <div>Voice <span class="bdg" style="font-size:9.5px">unknown → calls by you only; AI voice blocked</span></div>
+                    <div>AI video <span class="bdg warn" style="font-size:9.5px">not asked — Wattson plans to ask in next reply</span></div>
+                    <div>Marketing (personalized) <span class="bdg good" style="font-size:9.5px">granted 2025-03 · CMA form · proof ↗</span></div>
+                    <div>DNC <span class="bdg good" style="font-size:9.5px">clear · last scrub Jul 14</span></div>
+                  </div>
+                  <div class="anno" style="margin-top:5px">ContactConsentMirror §5.4: each channel = status + evidence {date, source, text, proof URL} — hover/expand shows the evidence. Mirror is display/sync only; ComplianceProfile is still checked before EVERY send (fail-closed).</div>
+                </div>
+                <div id="el-equity" class="cardbox">
+                  <b>Equity <span style="float:right; color:var(--soft); cursor:pointer">▾</span></b>
+                  <div style="font-size:12px; color:var(--mut); margin-top:4px" class="num">≈ 71% · est. value $1.62M − balance $468K <span class="bdg good" style="font-size:9.5px">balance from her statement, not guessed</span></div>
+                  <div class="anno" style="margin-top:4px">Financial Mirror §5.7. Missing mortgage balance → MISSING_MORTGAGE_BALANCE manual-entry prompt renders instead — the number is never fabricated (fail-closed). deal_value / commission_gross_estimate feed the column $ aggregates; gross commission entered manually at close until PropClose disbursement exists (Brain addition).</div>
+                </div>
+                <div id="el-mls" class="cardbox">
+                  <b>MLS whitelist (read-only) <span style="float:right; color:var(--soft); cursor:pointer">▾</span></b>
+                  <div style="font-size:11.5px; color:var(--mut); margin-top:4px" class="num">742 Hurlingame (her comp interest): SOLD · list $1.55M · close $1.61M · 4bd/2ba · SFR · Redwood City 94063 · retention expires 2026-10-02</div>
+                  <div class="anno" style="margin-top:4px">MLS Whitelist Mirror §5.8 — the ONLY MLS-derived fields PropFlow may store, deterministic matching only, with mls_retention_expires_at; never feeds embeddings, vector stores, AI training, or persistent AI memory (Brain addition).</div>
+                </div>
+                <div id="el-referral" class="cardbox">
+                  <b>Referrals <span style="float:right; color:var(--soft); cursor:pointer">▾</span></b>
+                  <div style="font-size:11.5px; color:var(--mut); margin-top:4px">In: referred by the Okafors (2024) · Out: none yet · Grade <span class="bdg">B</span> <button class="btn-ghost" style="margin-left:6px">↝ Refer</button> <a href="#" style="color:var(--brand); font-size:10.5px">Referrals dashboard →</a></div>
+                  <div class="anno" style="margin-top:4px">ReferralEdge §19.2 — directed edges, never tags or free text. Refer → link or create referee; emits REFERRAL_RECEIVED.</div>
+                </div>
+                <div id="el-tasks" class="cardbox">
+                  <b>Tasks (2 open) <span style="float:right; color:var(--soft); cursor:pointer">▾</span></b>
+                  <table class="dtable" style="font-size:11px; margin-top:4px">
+                    <tr><td>Prep consult pack</td><td><span class="bdg" style="font-size:9px">MANUAL_CALL</span></td><td><span class="bdg warn" style="font-size:9px">HIGH</span> due Wed</td><td><button class="btn-ghost" style="font-size:10px; padding:3px 8px">✓</button></td></tr>
+                    <tr><td>Ask price expectation</td><td><span class="bdg" style="font-size:9px">OTHER_APPROVED</span></td><td>NORMAL</td><td><button class="btn-ghost" style="font-size:10px; padding:3px 8px">✓</button></td></tr>
+                  </table>
+                  <div class="anno" style="margin-top:4px">PropFlowTask §11.6, typed by reason: NEGLECT_FOLLOW_UP · DAY_12_REVIEW · DUPLICATE_REVIEW · COMPLIANCE_REVIEW · SENSITIVE_TOPIC_HANDOFF · BOOKING_REQUEST_TASK · REFERRAL_THANK_YOU_REVIEW · PAST_CLIENT_TOUCH · TESTIMONIAL_RELEASE · MANUAL_CALL · OTHER_APPROVED. Complete/cancel; priority badges; team roles see role-routed queues.</div>
+                </div>
+                <div id="el-audit" class="cardbox">
+                  <b>Wattson audit on this contact <span style="float:right; color:var(--soft); cursor:pointer">▾</span></b>
+                  <div style="font-size:11.5px; color:var(--mut); margin-top:4px" class="num">4 governed actions · 3 approved · 1 edited-then-sent · 0 rejected <a href="#" style="color:var(--brand)">View records →</a> · filter by playbook / outcome</div>
+                  <div class="anno" style="margin-top:4px">WattsonActionAuditView §17.5 — every WATTSON_REVIEWED_ACTION on this record, with before/after.</div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- ============ four-panel inbox ============ -->
+        <div id="el-inbox" style="padding:14px 18px 0">
+          <div class="sechead">Conversations — four-panel inbox (GHL pattern)</div>
+          <div style="border:1px solid var(--line); border-radius:12px; overflow:hidden; display:grid; grid-template-columns:.9fr 1.4fr 1fr; font-size:11.5px">
+            <div style="border-right:1px solid var(--line); background:var(--surface)">
+              <div style="padding:8px 10px; border-bottom:1px solid var(--line); font-weight:700; font-size:11px">Unread (6) <span style="float:right; color:var(--soft)">All ▾</span></div>
+              <div style="padding:8px 10px; background:var(--paper); border-bottom:1px solid var(--line)"><b>M. Torres</b> 💬 <span style="color:var(--mut)">"does Wed still work?"</span> <span class="num" style="color:var(--soft)">· 8m</span></div>
+              <div style="padding:8px 10px; border-bottom:1px solid var(--line)"><b>S. Okafor</b> ✉ <span style="color:var(--mut)">"re: tour list"</span> <span class="num" style="color:var(--soft)">· 1h</span></div>
+              <div style="padding:8px 10px; border-bottom:1px solid var(--line)"><b>R. Patel</b> 💬 <span style="color:var(--mut)">"what's the ADU cap rate…"</span> <span class="num" style="color:var(--soft)">· 3h</span></div>
+            </div>
+            <div style="border-right:1px solid var(--line); display:flex; flex-direction:column">
+              <div style="padding:10px 12px; flex:1">
+                <div style="background:var(--surface); border-radius:8px 8px 8px 2px; padding:7px 10px; max-width:80%; color:var(--mut)">does Wed still work? Marco can join after 4 <span class="num" style="color:var(--soft)">· 8m</span></div>
+                <div style="background:var(--brand-soft); border-radius:8px 8px 2px 8px; padding:7px 10px; max-width:80%; margin:6px 0 0 auto; color:var(--mut)">Wed 4pm confirmed — calendar invite coming. <span class="anno">sent by you · ledger event</span></div>
+                <div class="anno" style="margin-top:6px">🎙 Voice Ops call (Jul 10) renders here as a timeline entry with transcript + player link — full thread merge is a later phase [DECIDE].</div>
+              </div>
+              <div style="border-top:1px solid var(--line); padding:8px 10px; display:flex; gap:8px; align-items:center; background:var(--paper)">
+                <span style="color:var(--mut); flex:1">Same shared composer as the record ↑ — channel tabs · templates · Wattson draft · segment counter · consent-gated send</span><button class="btn-ink">Send</button>
+              </div>
+            </div>
+            <div style="padding:10px 12px; background:var(--surface); color:var(--mut)">
+              <b style="color:var(--ink)">Contact context</b>
+              <div style="margin-top:4px" class="num">Maria Torres · Seller convo · propensity 87 · consult Wed 4pm · SMS ✓ · DNC clear</div>
+              <div class="anno" style="margin-top:4px">Mini record: scores, consent chips, next event, open tasks — click through to the full record. Sensitive-topic contacts show "no automation will touch this contact" here and hide automation controls.</div>
+            </div>
+          </div>
+          <div class="anno" style="margin-top:4px">Panels: conversation list | thread | contact context | composer (composer docked under the thread at this width). Unread badge feeds the sub-nav.</div>
+        </div>
+
+        <!-- lead intake + dupes + work mode row -->
+        <div class="maingrid" style="padding:14px 18px 0; display:grid; grid-template-columns:1fr 1fr 1fr; gap:10px">
+          <div id="el-leadinbox" class="cardbox">
+            <b>Lead inbox — intake outcomes</b>
+            <table class="dtable" style="font-size:11px; margin-top:4px">
+              <tr><th>Lead</th><th>Source</th><th>dedupe_result</th></tr>
+              <tr><td>T. Nakamura</td><td>IDX form</td><td><span class="bdg good" style="font-size:9px">NEW_CONTACT</span></td></tr>
+              <tr><td>"K. L."</td><td>comment-DM "DOCS"</td><td><span class="bdg" style="font-size:9px">MERGED_DETERMINISTIC</span></td></tr>
+              <tr><td>P. Reyes</td><td>CSV import</td><td><span class="bdg warn" style="font-size:9px">REVIEW_REQUIRED</span></td></tr>
+            </table>
+            <div class="anno" style="margin-top:4px">/approved-leads §10.3–10.4 → LEAD_CAPTURED event → enters the 12-day sprint (or review path). Stitch-on-capture §10.7 backfills anonymous history.</div>
+          </div>
+          <div id="el-dupes" class="cardbox" style="border-color:var(--warn)">
+            <b>Duplicate review (1)</b>
+            <div style="display:grid; grid-template-columns:1fr 1fr; gap:6px; font-size:11px; margin-top:6px">
+              <div style="border:1px solid var(--line); border-radius:7px; padding:6px 8px"><b>P. Reyes</b><div style="color:var(--mut)">p.reyes@gmail · (650) 555-0187 · created today</div></div>
+              <div style="border:1px solid var(--line); border-radius:7px; padding:6px 8px"><b>Paula Reyes-Ortiz</b><div style="color:var(--mut)">paula.ro@yahoo · (650) 555-0187 · since 2023</div></div>
+            </div>
+            <div style="display:flex; gap:6px; margin-top:6px"><button class="btn-ink">Merge</button><button class="btn-ghost">Keep separate</button></div>
+            <div class="anno" style="margin-top:4px">REVIEW_REQUIRED_PHONE_EMAIL_CONFLICT — same phone, different email (§10.5). Side-by-side candidates; <b>NEVER auto-merge in v1</b>.</div>
+          </div>
+          <div id="el-workmode" class="cardbox">
+            <b>Work mode — dialer session</b>
+            <div style="font-size:11.5px; color:var(--mut); margin-top:4px">Smart list "No touch 30d + high engagement (7)" → contact <b class="num" style="color:var(--ink)">1 of 7</b>: K. Liu opens full-record · live call notepad · outcome picker <span class="bdg" style="font-size:9px">connected</span> <span class="bdg" style="font-size:9px">vm</span> <span class="bdg" style="font-size:9px">bad #</span> · <b style="color:var(--ink)">↵ advances</b> to contact 2.</div>
+            <div class="anno" style="margin-top:4px">FUB's best idea, on our ledger: each outcome = ledger event feeding Today ranking. Mobile: this becomes the primary dialer flow — one contact per screen, swipe to advance.</div>
+          </div>
+        </div>
+
+        <!-- cadences + automations -->
+        <div class="maingrid" style="padding:14px 18px; display:grid; grid-template-columns:1fr 1fr; gap:10px">
+          <div id="el-cadences" class="cardbox">
+            <b>Cadences — sequence &amp; template registry</b>
+            <table class="dtable" style="font-size:11px; margin-top:4px">
+              <tr><th>Sequence</th><th>Templates</th><th>Status</th></tr>
+              <tr><td>New-lead sprint (buyer)</td><td class="num">12</td><td><span class="bdg good" style="font-size:9px">APPROVED</span></td></tr>
+              <tr><td>New-lead sprint (seller)</td><td class="num">12</td><td><span class="bdg good" style="font-size:9px">APPROVED</span></td></tr>
+              <tr><td>Long-horizon nurture (21-day calls, yr 1)</td><td class="num">6</td><td><span class="bdg warn" style="font-size:9px">3 rows MISSING → blocked</span></td></tr>
+              <tr><td>Warm sequence (valuation viewed)</td><td class="num">3</td><td><span class="bdg good" style="font-size:9px">APPROVED</span></td></tr>
+            </table>
+            <div class="anno" style="margin-top:4px">PipelineSequenceRegistry — copy is LOADED, never invented. Missing approved rows render as a blocking state: PropFlow may create tasks but must not write discretionary copy (§11.2, §13.5). Buyer/seller variants share cadence mechanics, separate templates.</div>
+          </div>
+          <div id="el-automations" class="cardbox">
+            <b>Automations — governance &amp; emergency stop</b>
+            <div style="font-size:11.5px; color:var(--mut); margin-top:4px">Touch governance §13.9: ONE contact-level layer across sprint · warm sequences · drips · return-visit alerts · Past Client OS · referral touches · video sequences · voice. Deferred steps show <span class="bdg" style="font-size:9px">held: touch lock</span> as the reason — never silent.</div>
+            <div style="display:flex; gap:8px; align-items:center; margin-top:8px; border:1px solid var(--crit); border-radius:8px; padding:8px 10px">
+              <span style="color:var(--crit); font-weight:700">⏻</span><div style="flex:1; font-size:11.5px"><b>Emergency stop — pause Wattson</b><div style="color:var(--mut); font-size:10.5px">Temporal cancel/pause + connector.stop (§17.4) · requires confirmation · also lives in Admin</div></div><button class="btn-ghost" style="border-color:var(--crit); color:var(--crit)">Pause…</button>
+            </div>
+          </div>
+        </div>
+
+        <!-- states strip -->
+        <div id="el-states" style="padding:0 18px 12px">
+          <div class="cardbox" style="font-size:11.5px">
+            <b>States (dev reference)</b>
+            <div style="color:var(--mut); margin-top:4px">
+              <b style="color:var(--ink)">Loading:</b> skeleton rows/cards; cached counts render instantly, then hydrate (perf KPI). ·
+              <b style="color:var(--ink)">Empty:</b> "No opportunities in this pipeline" + Add contact / Import; empty smart list = "0 match — criteria shown". ·
+              <b style="color:var(--ink)">Degraded (all fail-closed):</b> ScoringService down → score badges disappear ENTIRELY (never stale/fabricated), deterministic fields remain · ComplianceProvider unreachable → every send button disabled: "compliance check unavailable — sends blocked" (§22.1) · GHL sync degraded → banner "mirror stale as of 9:41 AM", writes queue · equity balance unknown → manual-entry prompt, never guessed. ·
+              <b style="color:var(--ink)">Permission-limited:</b> team roles see role-routed task queues; Bucket-2 approvals only with approval rights; sensitive-topic contacts show "no automation will touch this contact" + hidden automation controls (firewall §22.4 — detection produces ONLY human_handoff_required; no field writes, tags, scores, audience inclusion, or priority changes).
+            </div>
+            <div style="display:flex; gap:8px; margin-top:8px; flex-wrap:wrap">
+              <span class="bdg" style="font-size:10px">Loading: ▢▢▢ skeleton</span>
+              <span class="bdg" style="font-size:10px">Empty: "No opportunities" + Import</span>
+              <span class="bdg" style="font-size:10px; color:var(--crit); border-color:var(--crit)">Degraded: sends blocked (fail-closed)</span>
+              <span class="bdg warn" style="font-size:10px">Banner: mirror stale as of 9:41 — writes queued</span>
+              <span class="bdg" style="font-size:10px">Scores hidden: ScoringService down</span>
+            </div>
+          </div>
+        </div>
+
+        <!-- mobile variant strip -->
+        <div id="el-mobile" style="padding:0 18px 18px">
+          <div class="cardbox" style="font-size:11.5px">
+            <b>Mobile variant (375px)</b>
+            <div style="display:grid; grid-template-columns:repeat(4,minmax(120px,1fr)); gap:8px; margin-top:8px; overflow-x:auto">
+              <div style="border:1px solid var(--line); border-radius:10px; padding:8px; font-size:10.5px"><b>Bottom tabs</b><div style="color:var(--mut)">Conversations / Contacts / Boards / Calendar — sub-nav collapses</div></div>
+              <div style="border:1px solid var(--line); border-radius:10px; padding:8px; font-size:10.5px"><b>Boards</b><div style="color:var(--mut)">horizontally swipeable single columns; drag = long-press</div></div>
+              <div style="border:1px solid var(--line); border-radius:10px; padding:8px; font-size:10.5px"><b>Contact record</b><div style="color:var(--mut)">full-screen, sticky action bar at bottom; inline composers become bottom sheets</div></div>
+              <div style="border:1px solid var(--line); border-radius:10px; padding:8px; font-size:10.5px"><b>Work mode</b><div style="color:var(--mut)">the dialer flow: one contact per screen, swipe to advance, outcome picker thumb-reachable</div></div>
+            </div>
+            <div class="anno" style="margin-top:4px">Density toggle is desktop-only; mobile uses fixed comfortable rows.</div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ============ (3) ELEMENT COVERAGE ============ -->
+  <h2 style="font-size:20px; margin:34px 0 10px">Element coverage — spec inventory → this page</h2>
+
+  <div class="note" style="margin:0 0 12px"><b>Spec gaps found (PropFlow Master Brain specifies these; the spec's inventory missed them — all rendered above):</b> (1) <b>Pipeline-move mover identity vocabulary</b> — PIPELINE_MOVED carries moved_by ∈ HUMAN_USER / TEMPORAL_WORKFLOW / GHL_WEBHOOK / WATTSON_REVIEWED_ACTION (§11.4); rendered in the board annotation + a timeline stage-move entry. (2) <b>MLS retention expiry + AI prohibition</b> — mls_retention_expires_at plus "never feeds embeddings/vector stores/AI training/persistent AI memory" (§5.8); rendered in the MLS panel. (3) <b>A2P 10DLC fail-closed gate</b> — SMS/MMS volume sends blocked with review tasks until carrier registration completes (§12.4); rendered in the composer annotation. (4) <b>Return-visit re-engagement</b> — known contact back after 7+ days quiet → agent alert, consented touch only, deterministic-evidence-only listing references (§13.6); rendered as a timeline entry. (5) <b>Extra scoring-mirror display fields</b> — lead_temperature, estimated_list_window, data_quality_confidence, score_version (§5.6); rendered in the score badges + explainability card. (6) <b>COMPLIANCE_BLOCK as a timeline activity_type</b> (§11.7) — blocks are auditable entries, rendered in the timeline. (7) <b>Commission entered manually at close</b> until PropClose disbursement exists (§5.7); noted in the equity card.</div>
+
+  <table class="dtable cov" style="font-size:12.5px">
+    <tr><th>Spec inventory element</th><th>Rendered at</th><th>Status</th></tr>
+    <tr><td>Pipeline selector (6 pipelines + investor GHL-interim chip)</td><td><a href="#el-pipeline">Toolbar selector</a></td><td class="ok">✓</td></tr>
+    <tr><td>Kanban board / list toggle (collections primitive, drag = PIPELINE_MOVED, column aggregates)</td><td><a href="#el-board">Board</a> + <a href="#el-boardtoggle">toggle</a></td><td class="ok">✓</td></tr>
+    <tr><td>12-day sprint counter chip (warn d9, critical d11+, forced disposition d12)</td><td><a href="#el-sprintchip">Patel / Okafor cards</a></td><td class="ok">✓</td></tr>
+    <tr><td>Card micro-stats row (📞💬✉👁☑📅 + last-touch age, click filters timeline)</td><td><a href="#el-microstats">Card micro-stats</a></td><td class="ok">✓</td></tr>
+    <tr><td>Neglect watchdog column/widget (6h Temporal, stage-tuned thresholds)</td><td><a href="#el-watchdog">Watchdog column</a></td><td class="ok">✓</td></tr>
+    <tr><td>Smart lists (left rail, live counts, work mode)</td><td><a href="#el-smartlists">Sub-nav smart lists</a> + <a href="#el-workmode">work-mode card</a></td><td class="ok">✓</td></tr>
+    <tr><td>Contact header (name, property, in-CRM-since, source chain)</td><td><a href="#el-header">Record header</a></td><td class="ok">✓</td></tr>
+    <tr><td>Pinned action bar (inline composers, call notepad + outcome picker)</td><td><a href="#el-actionbar">Action bar</a></td><td class="ok">✓</td></tr>
+    <tr><td>Score badges + explain-on-click (contributing source_facts)</td><td><a href="#el-scores">Score badges</a> + <a href="#el-explain">explainability card</a></td><td class="ok">✓</td></tr>
+    <tr><td>Stage Path ribbon + Wattson stage guidance from THIS record</td><td><a href="#el-path">Path ribbon</a></td><td class="ok">✓</td></tr>
+    <tr><td>Timeline, evidence-labeled (DETERMINISTIC/INFERRED/ANONYMOUS_STITCHED/CAMPAIGN-LEVEL/HUMAN, impression honesty)</td><td><a href="#el-timeline">Timeline</a></td><td class="ok">✓</td></tr>
+    <tr><td>Consent panel (4 channels + evidence + DNC + "not asked" plan)</td><td><a href="#el-consent">Consent card</a></td><td class="ok">✓</td></tr>
+    <tr><td>Equity card (provenance; MISSING_MORTGAGE_BALANCE prompt, never fabricated)</td><td><a href="#el-equity">Equity card</a></td><td class="ok">✓</td></tr>
+    <tr><td>MLS whitelist panel (read-only)</td><td><a href="#el-mls">MLS card</a></td><td class="ok">✓</td></tr>
+    <tr><td>Referral section (edges in/out, grade, refer button)</td><td><a href="#el-referral">Referrals card</a></td><td class="ok">✓</td></tr>
+    <tr><td>Tasks tab (typed PropFlowTask, priority badges, complete/cancel)</td><td><a href="#el-tasks">Tasks card</a></td><td class="ok">✓</td></tr>
+    <tr><td>Composer (channel tabs, templates, Wattson draft, segment counter, consent gate = send state, Bucket 2)</td><td><a href="#el-composer">Inline composer</a> (+ inbox)</td><td class="ok">✓</td></tr>
+    <tr><td>Lead inbox + intake outcomes (dedupe_result)</td><td><a href="#el-leadinbox">Lead inbox</a></td><td class="ok">✓</td></tr>
+    <tr><td>Duplicate-review queue (side-by-side, merge/keep-separate, never auto-merge)</td><td><a href="#el-dupes">Duplicate review</a></td><td class="ok">✓</td></tr>
+    <tr><td>Import button (dedupe-reviewed, unknown consent default)</td><td><a href="#el-import">Toolbar import</a></td><td class="ok">✓</td></tr>
+    <tr><td>Cadences nav item (registry + approval status, missing rows = blocking)</td><td><a href="#el-cadences">Cadences card</a> + <a href="#el-subnav">sub-nav</a></td><td class="ok">✓</td></tr>
+    <tr><td>Emergency stop (Wattson pause, confirmation)</td><td><a href="#el-automations">Automations card</a></td><td class="ok">✓</td></tr>
+    <tr><td>Wattson audit link (per-action records, filter by playbook/outcome)</td><td><a href="#el-audit">Audit card</a></td><td class="ok">✓</td></tr>
+  </table>
+  <div style="border:1.5px solid var(--good); background:#f2f8f4; border-radius:10px; padding:12px 16px; margin:12px 0 0; font-weight:700; color:var(--good)">23 of 23 spec elements rendered ✓ <span style="font-weight:400; color:var(--mut); font-size:12.5px">— plus the four-panel inbox, work-mode dialer, states strip, mobile strip, and the 7 Master-Brain additions listed in "Spec gaps found" above.</span></div>
+
+  <!-- ============ (4) FULL SPEC AS HTML ============ -->
+  <div class="specdoc">
+    <h1 style="font-size:24px; margin:40px 0 6px">Spec — 14 · CRM (Contacts + Pipelines)</h1>
+    <p><b>Purpose</b> The working CRM: pipeline boards (New Leads 12-day sprint, Buyer, Seller, Past), the contact record with evidence-labeled timeline and consent panel, smart lists with a dialer work mode, and the four-panel conversation inbox. Every action is a ledger event; consent gates every outbound.</p>
+    <p><b>Primary users</b> Agent (Graeham), team members (ISA/coordinator roles via role-based task queues). Wattson writes here only via governed actions (WATTSON_REVIEWED_ACTION).</p>
+    <p><b>Entry points</b> Left app nav "CRM"; deep links from Today queue cards, Approvals items, Prospecting rows ("Open contact"), Past Client OS names, seller-report/valuation viewer alerts, lead-intake notifications, global search.</p>
+    <p><b>Exit points</b> Contact → Transaction Workspace (Screen 15) when moved to UNDER_CONTRACT; → Past Client OS (27) on close; → Prospecting (28) via "why this score" → candidate card; → Approvals inbox for any Bucket-2 message; → Calendar for bookings; composer send → contact timeline.</p>
+
+    <h2>Layout</h2>
+    <p>Desktop: <b>Left rail</b> (150px) — CRM sub-nav: Conversations (badge = unread), Contacts (count), Opportunities (active), Calendar, Cadences, Automations, Reporting; below it pinned <b>smart lists</b> with live counts ("No touch 30d (7)", "Valuation viewers (4)", "Hot investors (3)"). <b>Main</b> — top toolbar (pipeline selector, aggregate badge "46 opportunities · $1.9M GCI potential", advanced filters, sort, bulk actions, Board/List toggle, dedupe-reviewed Import, search); below it the kanban board (one column per stage) or virtualized list; an expanded contact record renders inline below the board when a card is opened (bordered panel, not a modal). <b>Contact record</b> is three-zone (Attio pattern): pinned header/action bar → stage Path ribbon → two columns (timeline left 1.5fr, context cards right 1fr, collapsible). <b>Inbox view</b> is four-panel (GHL pattern): conversation list | thread | contact context | composer.</p>
+    <p>Mobile (375px): sub-nav collapses to a bottom tab bar (Conversations / Contacts / Boards / Calendar); boards become horizontally swipeable single columns; contact record becomes full-screen with sticky action bar at bottom; work mode becomes the dialer flow (one contact per screen, swipe to advance). Density toggle (36–40px rows) desktop-only.</p>
+    <p>Performance is a product KPI (draft §14, inherited): lists &lt;500ms, record open &lt;1s, virtualized timelines.</p>
+
+    <h2>Element inventory</h2>
+    <div style="overflow-x:auto">
+    <table class="dtable">
+      <tr><th>Element</th><th>What it shows/does</th><th>Data source</th><th>Interactions</th><th>Spec source</th></tr>
+      <tr><td>Pipeline selector</td><td>NEW_LEADS / BUYER / SELLER / PAST_BUYERS / PAST_SELLERS / LOST (investor pipeline = GHL interim, shown as external link chip)</td><td>PropFlow §11.1 PipelineId</td><td>Switch board</td><td>PF MB 11.1</td></tr>
+      <tr><td>Kanban board / list toggle</td><td>Same collection rendered as board, list, or grid</td><td>PropFlowActivity + contact records ("collections" primitive)</td><td>Drag card = PipelineMoveRequest → PIPELINE_MOVED event; column headers aggregate count + $ volume</td><td>PF MB 11.4; draft §14 Attio card</td></tr>
+      <tr><td>12-day sprint counter chip</td><td>"Day 9/12" per New Leads card; warn ≥ day 9, critical day 11+</td><td>NewLeadStageId + lead created_at</td><td>Day 12 unresolved → forced disposition dialog (qualify / long-nurture / archive) creating DAY_12_REVIEW task</td><td>PF MB 11.2</td></tr>
+      <tr><td>Card micro-stats row</td><td>📞 💬 ✉ 👁 ☑ 📅 live counts + last-touch age</td><td>PropFlowActivity counts</td><td>Click an icon → timeline filtered to that channel</td><td>Draft §14 (GHL pattern)</td></tr>
+      <tr><td>Neglect watchdog column/widget</td><td>Leads past stage-tuned inactivity threshold</td><td>Temporal watchdog (runs every 6h) → NEGLECT_FOLLOW_UP tasks</td><td>Click → Today queue task</td><td>PF MB 11.5 (thresholds configurable per account; exact defaults [BEST GUESS: 48h hot / 7d warm / 30d nurture] — table blank in converted doc)</td></tr>
+      <tr><td>Smart lists (left rail)</td><td>Saved ledger queries with live counts</td><td>Event Ledger queries</td><td>Click → list; "Work mode" button starts dialer session (contact 1 opens, log inline, keystroke advances)</td><td>Draft §14 FUB card</td></tr>
+      <tr><td>Contact header</td><td>Name, property, in-CRM-since, source chain (e.g. "farm postcard → valuation page")</td><td>Contact record + Attribution Mirror §5.5</td><td>—</td><td>PF MB 5.3/5.5</td></tr>
+      <tr><td>Pinned action bar</td><td>Call / Text / Email / Note / Task buttons</td><td>—</td><td>Each opens an INLINE composer below it, never a modal; call opens live notepad + outcome picker (connected/vm/bad number); outcome = ledger event feeding Today ranking</td><td>Draft §14 (locked decision)</td></tr>
+      <tr><td>Score badges</td><td>Seller propensity (e.g. 87) + lead score, "why?" affordance</td><td>ScoringService mirror §5.6</td><td>Click → explainability card (contributing source_facts)</td><td>PF MB 5.6, 14.7; matrix gap "score badges with explain-on-click"</td></tr>
+      <tr><td>Stage Path ribbon</td><td>Chevron stages with current highlighted</td><td>BuyerSellerStageId §11.3</td><td>Click stage = PipelineMoveRequest; stage guidance line below is Wattson-generated from THIS record (key fields known/unknown)</td><td>Draft §14 (Salesforce Path, made live)</td></tr>
+      <tr><td>Timeline</td><td>Append-only activity, every entry labeled by evidence: DETERMINISTIC / INFERRED / ANONYMOUS_STITCHED / CAMPAIGN-LEVEL / HUMAN</td><td>PropFlowActivity §11.7 + stitch-on-capture §10.7</td><td>Filter by channel; ad entries only campaign/audience-level (impression honesty — never "she saw it")</td><td>PF MB 11.7, 10.7; matrix PropFlow gap #1</td></tr>
+      <tr><td>Consent panel</td><td>4 channels (SMS, voice, ai_video, marketing_personalized) each with status + evidence (date, source, text, proof URL); DNC badge + last scrub date</td><td>ContactConsentMirror §5.4</td><td>Hover/expand evidence; "not asked" states show Wattson's plan to ask</td><td>PF MB 5.4</td></tr>
+      <tr><td>Equity card</td><td>Equity % with provenance ("balance from her statement, not guessed")</td><td>Financial Mirror §5.7</td><td>Missing mortgage balance → MISSING_MORTGAGE_BALANCE manual-entry prompt, never fabricated</td><td>PF MB 5.7; matrix correction #7</td></tr>
+      <tr><td>MLS whitelist panel</td><td>Which MLS data this contact may be shown</td><td>MLS Whitelist Mirror §5.8</td><td>Read-only</td><td>PF MB 5.8</td></tr>
+      <tr><td>Referral section (skinny)</td><td>Edges in/out, grade</td><td>ReferralEdge §19.2</td><td>Refer button → link/create referee; link to Referrals dashboard</td><td>PF MB 19.3/19.4</td></tr>
+      <tr><td>Tasks tab</td><td>Open PropFlowTask items typed by reason (NEGLECT_FOLLOW_UP, DAY_12_REVIEW, DUPLICATE_REVIEW, SENSITIVE_TOPIC_HANDOFF, …)</td><td>PF MB 11.6</td><td>Complete/cancel; priority badges</td><td>PF MB 11.6</td></tr>
+      <tr><td>Composer (shared everywhere)</td><td>Channel tabs, merge-field templates, "Wattson draft", SMS segment counter</td><td>MessagingProvider §9.7 + PipelineSequenceRegistry</td><td><b>Consent gate IS the send-button state</b>: missing consent/DNC/compliance fail = disabled with reason shown; Bucket-2 messages route to review queue</td><td>PF MB 17.3, 22.2; draft §14</td></tr>
+      <tr><td>Lead inbox + intake outcomes</td><td>New accepted leads with dedupe_result</td><td>/approved-leads §10.3–10.4, LEAD_CAPTURED</td><td>—</td><td>PF MB 10</td></tr>
+      <tr><td>Duplicate-review queue</td><td>REVIEW_REQUIRED_PHONE_EMAIL_CONFLICT and probabilistic matches, side-by-side candidate contacts</td><td>Identity resolution §10.5</td><td>Merge / keep-separate buttons; NEVER auto-merge in v1</td><td>PF MB 10.5</td></tr>
+      <tr><td>Import button</td><td>"Import (dedupe-reviewed)"</td><td>—</td><td>CSV import → every row through identity resolution; imported contacts default unknown consent (blocks outreach)</td><td>PF MB 5.4, 10.5</td></tr>
+      <tr><td>Cadences nav item</td><td>Sequence/template registry with approval status</td><td>PipelineSequenceRegistry</td><td>Missing approved rows render as blocking state — copy is loaded, never invented</td><td>PF MB 11.2, 13.5</td></tr>
+      <tr><td>Emergency stop</td><td>Wattson pause control (surface in Automations)</td><td>§17.4 (Temporal cancel/pause + connector.stop)</td><td>Confirmation; also lives in Admin</td><td>PF MB 17.4</td></tr>
+      <tr><td>Wattson audit link</td><td>Per-action audit records on the contact</td><td>WattsonActionAuditView §17.5</td><td>Filter by playbook/outcome</td><td>PF MB 17.5</td></tr>
+    </table>
+    </div>
+
+    <h2>States</h2>
+    <ul>
+      <li><b>Default</b>: board with live counts; record collapsed.</li>
+      <li><b>Loading</b>: skeleton rows/cards; KPI budget — show cached counts instantly, hydrate.</li>
+      <li><b>Empty</b>: "No opportunities in this pipeline" + Add contact / Import; smart list empty = "0 match — criteria shown".</li>
+      <li><b>Error/degraded (fail-closed)</b>: ScoringService down → score badges disappear entirely (never stale/fabricated), deterministic fields remain; ComplianceProvider unreachable → all send buttons disabled with "compliance check unavailable — sends blocked" (fail-closed, PF MB 22.1); GHL sync degraded → banner "mirror stale as of {t}", writes queue.</li>
+      <li><b>Permission-limited</b>: team roles see role-routed task queues; Bucket-2 approvals only for users with approval rights; sensitive-topic contacts show "no automation will touch this contact" notice and hide automation controls.</li>
+      <li><b>Mobile</b>: dialer work mode; inline composers become bottom sheets.</li>
+    </ul>
+
+    <h2>Data fields</h2>
+    <p>Contact core (§5.3): name, phones/emails (normalized), address, geo_code, lead_source/capture_source/conversion_source/capture_provider, first/last/originating_content_id, campaign_id (Attribution Mirror §5.5 — six canonical attribution fields; legacy aliases import-only §6.3). Consent: 4 × {status, evidence_at/source/text/proof_url}, dnc_status, dnc_last_scrub_at. Scores: lead_score, likelihood_to_list_score, seller_likelihood_tier, data_quality_confidence (Scoring Mirror §5.6 — display only, formula in Scoring Master Sheet; Brain adds lead_temperature, estimated_list_window, score_version). Pipeline: pipeline_id, stage_id, move history (PIPELINE_MOVED events with mover identity). Task: PropFlowTask full schema §11.6. Activity: PropFlowActivity §11.7 incl. retention_class per entry. Money: est. GCI per opportunity (column aggregates).</p>
+
+    <h2>Rules &amp; compliance</h2>
+    <ul>
+      <li>Consent before every send (§22.2); DNC (§22.3); required compliance route through ComplianceProvider (§22.1) — all fail closed.</li>
+      <li>Two-bucket messaging (§17.3): locked transactional templates may auto-send; anything discretionary/Wattson-written = REVIEW_REQUIRED.</li>
+      <li>Sensitive-topic firewall (§22.4/§14.3): detection produces ONLY human_handoff_required; no field writes, tags, scores, audience inclusion, or outreach-priority changes.</li>
+      <li>Fair Housing/FEHA (§22.5): no protected-class fields anywhere in UI; pricing-floor qualifier (§13.8) is the only price-qualification pattern.</li>
+      <li>Copy never invented: all sequence/drip/warm-sequence copy loads from PipelineSequenceRegistry; missing rows → tasks, not messages.</li>
+      <li>Touch governance (§13.9): touch_ledger_lock prevents stacked touches across sprint/drips/PCOS/videos/voice — UI shows "held: touch lock" reason when a step is deferred.</li>
+      <li>No auto-merge; imported contacts = unknown consent.</li>
+    </ul>
+
+    <h2>Cross-links</h2>
+    <p>In: Today queue, Approvals, Prospecting, Voice Ops (call logs → timeline), Seller report PORTAL_VIEWED alerts. Out: Transaction Workspace (15), Past Client OS (27), Prospecting (28), Referrals, Calendar, Approvals inbox. <b>Emits</b>: LEAD_CAPTURED, PIPELINE_MOVED, task/activity events, COMPLIANCE_BLOCK, REFERRAL_RECEIVED. <b>Consumes</b>: scoring snapshots, PAGE_VIEWED/CONTENT_VIEWED/LINK_SCANNED (warm sequence §13.7), booking events, stitch backfills.</p>
+
+    <h2>Open decisions</h2>
+    <ul>
+      <li>[DECIDE] Neglect-threshold defaults: converted doc's table is blank. Interim: ship configurable per-account with [BEST GUESS] defaults 48h (New Leads/hot), 7d (active buyer/seller), 30d (nurture); watchdog cadence fixed at 6h per spec.</li>
+      <li>[DECIDE] Investor pipeline: spec defers native build — interim design shows an "Investor (GHL interim)" chip that deep-links to GHL, plus review-task routing.</li>
+      <li>[DECIDE] Board card fields: user-picked 3–5 fields per Attio pattern — interim default: name, sprint-day/stage-age, source, est. GCI, last touch.</li>
+      <li>[DECIDE] Conversations inbox unification with Voice Ops transcripts — interim: voice transcripts render as timeline entries with a player link; full thread merge later.</li>
+    </ul>
+    <p class="anno" style="margin-top:20px">Wireframe fidelity — colors are placeholders from the locked PropFlow design language. All contact names/numbers are realistic fake data. Agent identity: Graeham Watts, Intero Real Estate, DRE# 01466876 (from shared-references/identity.json — never hardcode elsewhere; the identity.json blocklist value must never appear). No crime data anywhere in this product.</p>
+  </div>
+</div>

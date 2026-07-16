@@ -1,0 +1,615 @@
+<title>PropertyIQ · Screen 15 — Transaction Workspace</title>
+<link href="https://api.fontshare.com/v2/css?f[]=technor@500,600,700&display=swap" rel="stylesheet">
+<link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<style>
+  /* Type system — Technor for display, Inter for UI. */
+  :root{ --font-display:'Technor', Inter, -apple-system, 'Segoe UI', sans-serif; --font-ui: Inter, -apple-system, 'Segoe UI', Roboto, sans-serif; }
+</style>
+<style>
+  /* Palette v4 — PropFlow design language: neutral ink UI, ink-as-accent, color reserved for data. (extracted verbatim from propsearch-design-draft.html) */
+  :root, :root[data-theme="dark"], :root[data-theme="light"]{
+    --ink:#23282f; --paper:#fbfaf8; --surface:#f1efe9; --line:#e2dfd6;
+    --mut:#6b7076; --soft:#9b9f9f;
+    --brand:#2e6b53; --brand-ink:#ffffff; --brand-soft:#eaf1ec; --brand-deep:#1e4c3a;
+    --signal:#b07a2e;
+    --good:#2e7d4f; --warn:#a8630a; --crit:#b3372f;
+    --r:10px;
+  }
+  .intel .score, .mintel{ color:var(--brand-deep) }
+  .intel{ border-left:3px solid var(--brand) }
+  h1{ letter-spacing:-.02em }
+  .stat b{ letter-spacing:-.01em }
+  body[data-agent="watts"]{ --brand:#2e6b53; --brand-soft:#eaf1ec; --brand-deep:#1e4c3a; }
+
+  *{box-sizing:border-box; margin:0}
+  body{font:15px/1.55 var(--font-ui); color:var(--ink); background:var(--paper); padding-bottom:80px}
+  h1,h2,h3{line-height:1.15; text-wrap:balance; font-family:var(--font-display); font-weight:600}
+  h1{letter-spacing:-.01em}
+  .site{box-shadow:0 1px 2px rgba(20,24,32,.04), 0 8px 32px rgba(20,24,32,.06)}
+  .stat{box-shadow:0 1px 2px rgba(20,24,32,.03); transition:box-shadow .15s, transform .15s}
+  .stat:hover{box-shadow:0 4px 14px rgba(20,24,32,.08)}
+  .chip{transition:all .12s}
+  button{font-family:var(--font-ui)}
+  .num{font-variant-numeric:tabular-nums}
+  .wrap{max-width:1180px; margin:0 auto; padding:0 20px}
+
+  .bar{position:sticky; top:0; z-index:50; background:var(--paper); border-bottom:1px solid var(--line); padding:10px 0; backdrop-filter:blur(8px)}
+  .bar .wrap{display:flex; flex-wrap:wrap; gap:10px; align-items:center}
+  .bar .ttl{font-weight:700; margin-right:auto}
+  .bar .ttl small{display:block; font-weight:400; color:var(--mut)}
+  .bar a{color:var(--brand); font-size:13px; text-decoration:none}
+
+  .note{background:var(--surface); border:1px solid var(--line); border-radius:var(--r); padding:14px 16px; margin:0 0 22px; font-size:13.5px; color:var(--mut)}
+  .note b{color:var(--ink)}
+
+  .site{border:1px solid var(--line); border-radius:14px; overflow:hidden; background:var(--paper)}
+  .sitehead{display:flex; align-items:center; gap:14px; padding:14px 22px; border-bottom:1px solid var(--line)}
+  .avatar{width:38px; height:38px; border-radius:50%; background:var(--brand); color:var(--brand-ink); display:grid; place-items:center; font-weight:700}
+  .sitehead .who b{display:block}
+  .sitehead .who small{color:var(--mut)}
+  .sitehead nav{margin-left:auto; display:flex; gap:18px; font-size:13.5px; color:var(--mut)}
+  .sitehead nav a{color:inherit; text-decoration:none}
+  .sitehead nav a:hover{color:var(--brand)}
+
+  .chip{display:inline-flex; align-items:center; gap:6px; font-size:12.5px; font-weight:500; border:1px solid var(--line); border-radius:99px; padding:6px 12px; background:var(--paper); cursor:pointer; color:var(--ink)}
+  .chip:hover{border-color:var(--brand)}
+  .chip.on{background:var(--brand); border-color:var(--brand); color:var(--brand-ink); font-weight:600; box-shadow:0 2px 8px color-mix(in srgb, var(--brand) 30%, transparent)}
+
+  .statrow{display:grid; grid-template-columns:repeat(4,1fr); gap:10px}
+  .stat{background:var(--surface); border:1px solid var(--line); border-radius:var(--r); padding:12px}
+  .stat small{display:block; color:var(--mut); font-size:11.5px; text-transform:uppercase; letter-spacing:.05em}
+  .stat b{font-size:18px}
+  .stat .up{color:var(--good); font-size:12px}
+
+  .bdg{font-size:11.5px; border-radius:6px; padding:3px 8px; background:var(--surface); border:1px solid var(--line); color:var(--mut)}
+  .bdg.good{color:var(--good); border-color:color-mix(in srgb,var(--good) 30%,var(--line))}
+  .bdg.warn{color:var(--warn); border-color:color-mix(in srgb,var(--warn) 30%,var(--line))}
+  .bdg.crit{color:var(--crit); border-color:color-mix(in srgb,var(--crit) 30%,var(--line))}
+
+  .dtable{width:100%; border-collapse:collapse; font-size:13px}
+  .dtable td,.dtable th{border-bottom:1px solid var(--line); padding:8px 10px; text-align:left}
+  .dtable th{font-size:11px; text-transform:uppercase; letter-spacing:.05em; color:var(--soft)}
+
+  @media (max-width:860px){ .statrow{grid-template-columns:repeat(2,1fr)} .maingrid{grid-template-columns:1fr !important} .console{grid-template-columns:1fr !important} .rail{display:none !important} }
+  @media (prefers-reduced-motion: reduce){ *{transition:none!important} }
+
+  /* ---- page-specific additions (same design language) ---- */
+  .anno{font-size:11px; color:var(--soft)}
+  .cardbox{border:1px solid var(--line); border-radius:10px; padding:11px 14px; font-size:12.5px; background:var(--paper)}
+  .btn-ink{background:var(--ink); color:#fff; border:0; border-radius:7px; padding:7px 12px; font-size:11.5px; cursor:pointer; font-weight:600}
+  .btn-ghost{background:var(--paper); border:1px solid var(--line); border-radius:7px; padding:7px 12px; font-size:11.5px; cursor:pointer}
+  .sechead{font-size:14px; font-weight:700; margin:0 0 8px; font-family:var(--font-display)}
+  .cov td.ok{color:var(--good); font-weight:700}
+  .specdoc h2{font-size:18px; margin:26px 0 8px}
+  .specdoc h3{font-size:15px; margin:18px 0 6px}
+  .specdoc p, .specdoc li{font-size:13.5px; color:var(--mut)}
+  .specdoc b{color:var(--ink)}
+  .specdoc table{margin:8px 0}
+  .lane{font-size:9.5px; font-weight:700; letter-spacing:.05em; border-radius:4px; padding:2px 6px; background:var(--surface); border:1px solid var(--line); color:var(--mut); text-transform:uppercase}
+  .stepper{display:flex; gap:4px; font-size:10.5px; text-align:center}
+  .stepper>div{flex:1; border-radius:5px; padding:5px 3px}
+  .step-done{background:var(--brand); color:#fff}
+  .step-risk{background:#fdecec; color:var(--crit); font-weight:700}
+  .step-future{background:var(--surface); color:var(--soft)}
+  .docstate{display:inline-flex; gap:3px; align-items:center; font-size:10px}
+  .docstate span{border:1px solid var(--line); border-radius:4px; padding:1px 5px; color:var(--soft); background:var(--paper)}
+  .docstate span.cur{background:var(--ink); color:#fff; border-color:var(--ink)}
+</style>
+
+<!-- ============ (1) slim header ============ -->
+<div class="bar">
+  <div class="wrap">
+    <div class="ttl">PropertyIQ · Screen 15 — Transaction Workspace <small>Full-density per-screen mock · wireframe fidelity · dev-facing annotations in gray</small></div>
+    <a href="../wireframe.html">← All screens</a>
+  </div>
+</div>
+
+<!-- ============ (2) THE FULL MOCK ============ -->
+<div class="wrap" style="padding-top:24px">
+  <div class="note"><b>Screen 15 — Transaction Workspace (PropClose staff).</b> The single staff-facing workspace for one live transaction — timeline-first, task-driven, document-safe. Kanban is the cross-deal index only (Dotloop/OpenToClose consensus); a card opens INTO this screen. Every automation terminates in a review card here or in the Global Approvals Inbox. Primary users: agent, TC, brokerage admin (read/compliance); TC Wattson operates behind it via redacted context only (§10.2). Patterns locked in the draft and deepened here: drop-the-contract intake, relative-date task chaining + re-cascade diff, document state machine, submission gates, deal-health chips (workflow flags, never a score — §14).</div>
+
+  <div class="site" data-agent="watts">
+    <!-- header bar: deal title + health chip + right nav (spec Layout) -->
+    <div class="sitehead" id="el-title">
+      <div class="avatar">GW</div>
+      <div class="who"><b>42 Cedar St — buyer side · <span class="num">$1,315,000</span></b><small class="num" id="el-daycount">the Kims · Day 11 of 21 · closes Jul 25 <span class="anno">(hover date → provenance popover: source doc "RPA p.3 §3D" pinned — draft intake-provenance rule)</span></small></div>
+      <span class="bdg warn" id="el-health" title="click: contributing facts popover">● Deal health: YELLOW</span>
+      <span class="bdg" style="background:repeating-linear-gradient(45deg,var(--surface),var(--surface) 3px,var(--line) 3px,var(--line) 5px)" title="stale-grey example">stale-grey if human update unconfirmed</span>
+      <nav><a href="#">Client portal ↗ <span class="anno">(opens Screen 25 as the client sees it)</span></a><a href="#el-close-wizard">Close wizard</a></nav>
+    </div>
+    <div class="anno" style="padding:4px 22px 0">Health chip = rule list (deadline states + doc gaps + unconfirmed human updates) rendered as workflow flags — NEVER presented as a score (§14, non-scoring rule §7.3-8). Click → contributing facts popover: "loan deadline T-2 · 1 doc gap · TC status update unconfirmed 3d". Side enum: BUY / SELL / DUAL (TransactionRecord §6.5). Sticky on scroll: header + stepper + tab row.</div>
+
+    <div class="console" style="display:grid; grid-template-columns:172px 1fr">
+      <!-- persistent agent-console left rail (Screen 9 chrome) -->
+      <div class="rail" style="border-right:1px solid var(--line); padding:14px 10px; font-size:12.5px; display:flex; flex-direction:column; gap:2px; background:var(--surface)">
+        <a href="#" style="text-decoration:none; color:var(--ink); border-radius:8px; padding:8px 10px">☰ Today</a>
+        <a href="#" style="text-decoration:none; color:var(--ink); border-radius:8px; padding:8px 10px">🗺 Farm map</a>
+        <a href="#" style="text-decoration:none; color:var(--ink); border-radius:8px; padding:8px 10px">🤝 Past clients</a>
+        <a href="#" style="text-decoration:none; color:var(--ink); border-radius:8px; padding:8px 10px">👤 Leads & clients</a>
+        <a href="#" style="text-decoration:none; color:var(--ink); border-radius:8px; padding:8px 10px">💬 Comms <span class="bdg" style="font-size:9.5px">6</span></a>
+        <a href="#" style="text-decoration:none; color:#fff; background:var(--ink); border-radius:8px; padding:8px 10px; font-weight:600">📋 Transactions <span class="bdg" style="font-size:9.5px; background:var(--paper)">2</span></a>
+        <a href="#" style="text-decoration:none; color:var(--ink); border-radius:8px; padding:8px 10px">🎬 Content studio</a>
+        <a href="#" style="text-decoration:none; color:var(--ink); border-radius:8px; padding:8px 10px">📣 Ads & funnels</a>
+        <a href="#" style="text-decoration:none; color:var(--ink); border-radius:8px; padding:8px 10px">⚙ Playbooks</a>
+        <a href="#" style="text-decoration:none; color:var(--ink); border-radius:8px; padding:8px 10px">📈 Reports</a>
+        <div style="margin-top:auto; padding-top:10px; border-top:1px solid var(--line)">
+          <a href="#" style="text-decoration:none; color:var(--ink); border-radius:8px; padding:8px 10px; display:block">⚙ Settings</a>
+          <div class="anno" style="padding:6px 10px">Global chrome: persistent agent-console rail (Screen 9 pattern). Entry here = Kanban index card → this deal. Consumer pages never show it.</div>
+        </div>
+      </div>
+
+      <div>
+        <!-- 7-stage stepper -->
+        <div id="el-stepper" style="padding:14px 22px 0">
+          <div class="stepper">
+            <div class="step-done" title="CONTRACT_PENDING">Open ✓</div>
+            <div class="step-done" title="INSPECTION_PERIOD">EMD / Inspection ✓</div>
+            <div class="step-done" title="APPRAISAL">Appraisal ✓</div>
+            <div class="step-risk" title="LOAN_COMMITMENT — current, at-risk">Contingencies — loan due Thu ⚠ T-2</div>
+            <div class="step-future" title="FINAL_WALKTHROUGH">Walkthrough</div>
+            <div class="step-future" title="CLEAR_TO_CLOSE">Docs & signing</div>
+            <div class="step-future" title="CLOSED">Close</div>
+          </div>
+          <div class="anno" style="margin-top:4px">Plain-English labels mapped 1:1 to TransactionStage enum (§6.2): CONTRACT_PENDING → INSPECTION_PERIOD → APPRAISAL → LOAN_COMMITMENT → FINAL_WALKTHROUGH → CLEAR_TO_CLOSE → CLOSED. Completed = filled brand; current-at-risk = red with deadline chip; future = muted. Click a stage → filters the Timeline tab (§7.2). Stage advance blocked by submission gates (see Documents rail →).</div>
+
+          <!-- deadline chips + at-risk + anomaly badges -->
+          <div id="el-deadline-chips" style="display:flex; gap:6px; flex-wrap:wrap; margin-top:8px; align-items:center">
+            <span class="bdg crit num" title="click: deadline detail — rule source, extension lineage">⏱ Loan contingency T-2 (Thu 9am)</span>
+            <span class="bdg warn num" title="alert_offsets_days [7,3,1] default §7.3-4">⏱ Walkthrough T-7 (Jul 22)</span>
+            <span class="bdg num" title="CLOSING deadline">⏱ Close T-10 (Jul 25)</span>
+            <span class="bdg crit" id="el-atrisk" title="click: evaluation facts + one-click remediation task">🔥 AT_RISK — loan: no progress after 70% of contingency window (§7.3-5)</span>
+            <span class="bdg warn" id="el-anomaly" title="operational review flag only — links to review task">📐 Timeline anomaly — appraisal stage ran 2.3σ over tenant median (buyer-side) · review task created (§7.3-6)</span>
+          </div>
+          <div class="anno" style="margin-top:3px">Deadline chip click → detail: rule source (DeadlineRuleProvider + RegionProfile CA), extension lineage. AT_RISK / anomaly are workflow flags only — never update scoring, outreach priority, sensitive CRM fields, or ad audiences (§7.3-8, §14). Every fired rule creates a Today card WITH a one-click remediation — no alarm without an action (draft locked decision).</div>
+
+          <!-- tab row -->
+          <div id="el-tabs" style="display:flex; gap:14px; font-size:12.5px; border-bottom:1px solid var(--line); padding:12px 0 10px; color:var(--mut); flex-wrap:wrap">
+            <a href="#el-tasks" style="color:var(--brand); font-weight:700; text-decoration:none">Tasks (6 open)</a>
+            <a href="#el-parties" style="color:inherit; text-decoration:none">Parties (7)</a>
+            <a href="#el-documents" style="color:inherit; text-decoration:none">Documents (23)</a>
+            <a href="#el-offers" style="color:inherit; text-decoration:none">Offers</a>
+            <a href="#el-disclosures" style="color:inherit; text-decoration:none">Disclosures ⚑2</a>
+            <a href="#el-timeline" style="color:inherit; text-decoration:none">Timeline</a>
+            <a href="#el-activity" style="color:inherit; text-decoration:none">Activity</a>
+            <span class="anno" style="margin-left:auto">Default tab = Tasks, priority-ordered. Tab counts live. Sticky with header + stepper.</span>
+          </div>
+        </div>
+
+        <!-- main grid: Tasks tab (left ~60%) + right rail (~40%) -->
+        <div class="maingrid" style="padding:14px 22px; display:grid; grid-template-columns:1.5fr 1fr; gap:16px">
+          <div style="display:grid; gap:8px; align-content:start">
+
+            <!-- re-cascade banner (always above the fold) -->
+            <div id="el-recascade" class="cardbox" style="border-color:var(--warn); background:#fdf6ee; font-size:12px">
+              ⚠ <b>Re-cascade pending your acknowledgment:</b> lender slipped funding 2 days → close moves Jul 25 → Jul 27. Diff: <span class="num">7 tasks re-derived, 2 now overdue</span> (final walkthrough, utility transfer), buyer notification drafted (review-first, Outbox).
+              <button class="chip" style="font-size:11px">Review diff & accept</button>
+              <div class="anno" style="margin-top:3px">Relative-date task chaining: NO task stores a hardcoded date; everything re-derives from the anchor. NOTHING moves until acknowledged (draft locked decision). Buyer notification never auto-sends — NotificationProvider + ComplianceProvider.check_outbound_contact() first (§11.1–11.2). Mobile: this banner always renders above the fold of Tasks.</div>
+            </div>
+
+            <!-- wire quarantine banner -->
+            <div id="el-wire" class="cardbox" style="background:var(--surface); color:var(--mut); font-size:12px">
+              🔒 <b style="color:var(--ink)">Wire instructions received from escrow — QUARANTINED</b> pending 6-gate security review. Gates: legal_review_approved ✓ · wire_protocol_approved ✓ · ComplianceProfile.allows_wire_instruction_portal ✗ · feature_flag ✓ · security_audit_logging ✓ · OTP/MFA ✓ — <b style="color:var(--crit)">1 gate false → full quarantine, never partial display</b>. SECURITY_REVIEW task auto-created · WIRE_INSTRUCTIONS_EVENT logged. <a href="#" style="color:var(--brand)">Security review →</a>
+              <div class="anno" style="margin-top:3px">§13.4: never exposed to the client portal; no wire details via email/SMS/Wattson EVER. Clients are warned in-app that wire details only come via verified callback. Doc class HIGH_SECURITY_WIRE. Mobile: never collapsed.</div>
+            </div>
+
+            <!-- Tasks tab: priority-ordered action cards -->
+            <div id="el-tasks">
+              <div class="sechead">Tasks — priority-ordered action cards</div>
+              <div style="display:grid; gap:8px">
+                <div class="cardbox" id="el-cr-form" style="border-color:var(--crit); display:flex; gap:10px; align-items:center; flex-wrap:wrap">
+                  <span style="color:var(--crit); font-weight:700" class="num">T-2</span>
+                  <div style="flex:1; min-width:240px"><b>Loan contingency removal — Thu 9am</b> <span class="lane">DEADLINE_RISK</span> <span class="bdg">status: IN_PROGRESS</span>
+                    <div style="color:var(--mut); font-size:11.5px" id="el-wattson-nudge">Lender ETA tomorrow · <b style="color:var(--ink)">Wattson nudged lender 8:10am, escalates to you 2pm</b> (escalation creates AGENT_ACTION task, §10.3–10.4) · CR-1 form pre-filled by Wattson — human sends</div>
+                  </div>
+                  <button class="btn-ink">Open CR-1</button>
+                  <div class="anno" style="width:100%">OfficialFormProvider §8.3 — fail-closed: provider unconfigured → button disabled with OFFICIAL_FORM_PROVIDER_NOT_CONFIGURED (see states strip). Wattson prepares; a human always sends legal documents (enforceWattsonBoundary §10.5, not disableable).</div>
+                </div>
+                <div class="cardbox" id="el-signatures" style="display:flex; gap:10px; align-items:center; flex-wrap:wrap">
+                  <span style="color:var(--warn); font-weight:700">✍ 2</span>
+                  <div style="flex:1; min-width:240px"><b>Your signatures — VP amendment, escrow instructions</b> <span class="lane">AGENT</span>
+                    <div style="color:var(--mut); font-size:11.5px">DocuSign envelopes ready · buyer already signed · statuses: PENDING / SIGNED / VOIDED / DECLINED</div>
+                  </div>
+                  <button class="btn-ink">Sign</button>
+                  <div class="anno" style="width:100%">DocumentVersion.docusign_envelope_id + SignatureStatus (§6.9). UI says generic "signature envelope" — vendor swappable behind ESignProvider [DECIDE]; DocuSign is the only direct v1 vendor (§16).</div>
+                </div>
+                <div class="cardbox" style="display:flex; gap:10px; align-items:center; flex-wrap:wrap; opacity:.65">
+                  <span class="lane">TC</span>
+                  <div style="flex:1; min-width:240px"><b>Home warranty order</b> <span class="bdg">WAITING_ON_EXTERNAL_PARTY</span>
+                    <div style="color:var(--mut); font-size:11.5px">assigned to TC · due before docs stage · <b style="color:var(--ink)">"not your court" grey state</b> for TC-owned tasks (draft)</div>
+                  </div>
+                  <button class="btn-ghost">Reassign</button>
+                </div>
+                <div class="cardbox" style="display:flex; gap:10px; align-items:center; flex-wrap:wrap">
+                  <span class="lane" style="color:var(--warn)">DOCUMENT_GAP</span>
+                  <div style="flex:1; min-width:240px"><b>Missing: Preliminary title report</b> <span class="bdg">OPEN</span>
+                    <div style="color:var(--mut); font-size:11.5px">auto-created from checklist gap · blocks "Docs & signing" submission gate · request sent to escrow (review-first)</div>
+                  </div>
+                  <button class="btn-ghost">Nudge escrow</button>
+                </div>
+                <div class="cardbox" style="display:flex; gap:10px; align-items:center; flex-wrap:wrap">
+                  <span class="lane">BOOKING_REQUEST</span>
+                  <div style="flex:1; min-width:240px"><b>Schedule final walkthrough — Jul 22–24 window</b> <span class="bdg">WAITING_ON_CLIENT</span>
+                    <div style="color:var(--mut); font-size:11.5px">Wattson proposed 3 slots to the Kims · <b style="color:var(--ink)">booking_request_task</b> — AI never commits a calendar slot unless the account explicitly allows automated booking into pre-approved slots (Brain §9.11 — spec gap, see note below)</div>
+                  </div>
+                  <button class="btn-ghost">Confirm slot</button>
+                </div>
+                <div class="cardbox" style="display:flex; gap:10px; align-items:center; flex-wrap:wrap">
+                  <span class="lane">CLIENT</span>
+                  <div style="flex:1; min-width:240px"><b>Kims: upload homeowner insurance binder</b> <span class="bdg">WAITING_ON_CLIENT</span>
+                    <div style="color:var(--mut); font-size:11.5px">visible in client portal (Screen 25) · reminder drafted for Outbox review</div>
+                  </div>
+                </div>
+              </div>
+              <div class="anno" style="margin-top:4px">TransactionTask §6.8. Owner lanes: CLIENT / TC / AGENT / EXTERNAL / APPROVAL / DOCUMENT_GAP / DEADLINE_RISK / BOOKING_REQUEST / SECURITY_REVIEW. TaskStatus (7, named per Brain §6.8): OPEN / IN_PROGRESS / WAITING_ON_CLIENT / WAITING_ON_EXTERNAL_PARTY / WAITING_ON_APPROVAL / COMPLETED / CANCELLED. Interactions: open, complete, reassign. Wattson gets one-approval batch cards, not per-micro-step popups (§10.3).</div>
+            </div>
+
+            <!-- 29-task checklist -->
+            <div id="el-checklist">
+              <div class="sechead">Checklist — 29 canonical tasks (buyer side), grouped by stage</div>
+              <div class="cardbox" style="font-size:11.5px">
+                <div style="display:grid; grid-template-columns:1fr 1fr; gap:2px 14px" class="num">
+                  <div>✅ Open (5/5) — EMD wired · escrow opened · disclosures ordered · parties confirmed · timeline generated</div>
+                  <div>✅ Inspection (6/6) — inspections booked · reports filed · request-for-repairs drafted…</div>
+                  <div>✅ Appraisal (3/3) — ordered · received · value confirmed</div>
+                  <div>⏳ Contingencies (3/6) — <b style="color:var(--crit)">loan CR due</b> · insurance binder · title review…</div>
+                  <div>◻ Docs & signing (0/6) — <span style="color:var(--warn)">1 gap → DOCUMENT_GAP task auto-created</span></div>
+                  <div>◻ Close (0/3) — walkthrough · funding · deed recorded</div>
+                </div>
+                <div class="anno" style="margin-top:5px">TransactionTask templates — full canonical 29-task checklist per side (matrix); grouping by stage is [BEST GUESS]. Checking off writes the ledger; gaps auto-create DOCUMENT_GAP tasks. Source template: CA buyer/seller pair in brokerage config, editable per deal [DECIDE].</div>
+              </div>
+            </div>
+
+            <!-- drop-the-contract intake -->
+            <div id="el-intake">
+              <div class="sechead">Drop-the-contract intake</div>
+              <div class="cardbox" style="border-style:dashed; text-align:center; padding:16px; background:var(--surface)">
+                <b>⤓ Drag a contract PDF here</b>
+                <div style="color:var(--mut); font-size:11.5px; margin-top:4px">Wattson extracts parties, financials, and every date — including relative ones ("5 business days after acceptance") computed against state rules + holidays (DeadlineRuleProvider, RegionProfile CA) — then a <b style="color:var(--ink)">mandatory human review of EVERY date</b>, source doc pinned as provenance, before anything becomes binding.</div>
+                <div style="display:inline-flex; gap:6px; margin-top:8px; font-size:11px" class="num">
+                  <span class="bdg good">Inspection contingency: Jul 8 ✓ confirmed</span>
+                  <span class="bdg warn">Loan contingency: Jul 17 — confirm/edit</span>
+                  <span class="bdg warn">Close: Jul 25 — confirm/edit</span>
+                </div>
+                <div class="anno" style="margin-top:5px">Draft locked decision. Extraction runs in the redacted Wattson layer (§10.2). Each extracted date shows its source snippet; confirm/edit each before binding.</div>
+              </div>
+            </div>
+          </div>
+
+          <!-- right rail: context cards, persist across tabs -->
+          <div style="display:grid; gap:10px; align-content:start">
+            <div id="el-doc-summary" class="cardbox">
+              <b style="font-size:12.5px">Documents — intake summary</b> <span class="anno">(persists across tabs)</span>
+              <div id="el-intake-paths" style="color:var(--mut); font-size:12px; margin-top:6px">
+                <b style="color:var(--ink)">6 intake pathways:</b> DocuSign webhook · manual upload · email forward <code style="font-size:11px">42cedar@docs.propertyiq.app</code> <button class="btn-ghost" style="padding:2px 7px; font-size:10px">copy</button> · client portal upload · GHL attachment · Drive link. <a href="#" style="color:var(--brand)">View intake log</a>
+              </div>
+              <div class="anno" style="margin-top:4px">DocumentSource enum §6.2, §8.2. Per-transaction address format {street-slug}@docs.propertyiq.app; collision appends 4-char hash [DECIDE/BEST GUESS]. Title/escrow/lender direct APIs are OUT of v1 — email/manual intake + human confirmation is the pathway (Brain §16 — spec gap note below).</div>
+              <div id="el-class-review" style="border-top:1px solid var(--line); margin-top:8px; padding-top:8px; font-size:12px">
+                <span class="bdg warn">1 in classification review</span> <span style="color:var(--mut)">— "Scan_0712.pdf": confidence 0.62, human_confirmed=false → confirm/re-classify. detected_sensitive_topic → human_handoff_required (§6.9).</span>
+              </div>
+              <div id="el-doc-states" style="border-top:1px solid var(--line); margin-top:8px; padding-top:8px; font-size:12px">
+                <b>Document state machine:</b>
+                <div class="docstate" style="margin-top:4px"><span>needed</span>→<span>uploaded</span>→<span class="cur">in-review</span>→<span>approved</span>/<span style="color:var(--crit)">returned</span></div>
+                <div class="anno" style="margin-top:3px">Returned docs jump to the top of Today (draft locked decision). Approve/return with threaded note on the doc.</div>
+              </div>
+              <div id="el-gates" style="border-top:1px solid var(--line); margin-top:8px; padding-top:8px; font-size:12px">
+                <b>Submission gate — "Docs & signing" blocked</b>
+                <div style="color:var(--mut); font-size:11.5px; margin-top:3px">Missing per brokerage config: Preliminary title · signed escrow instructions. <span class="anno">Blocked stage advance names the missing docs (SkySlope pattern, draft). Gate config lives in brokerage admin settings [BEST GUESS].</span></div>
+              </div>
+            </div>
+
+            <div id="el-disc-flags" class="cardbox">
+              <b style="font-size:12.5px">Disclosures ⚑2</b> <span class="anno">(rail summary — full tab below)</span>
+              <div style="color:var(--mut); font-size:12px; margin-top:6px">Analyzer cross-referenced disclosed-vs-found: <b style="color:var(--ink)">2 flags</b> (roof age vs inspection · unpermitted sub-panel) · credit-request draft ready → <b style="color:var(--ink)">your review — never auto-sent</b>.</div>
+            </div>
+
+            <div id="el-portal-card" class="cardbox">
+              <b style="font-size:12.5px">Client portal status</b>
+              <div style="color:var(--mut); font-size:12px; margin-top:6px" class="num">Kims viewed 3× this week (PORTAL_VIEWED events) · milestone video "EMD received" watched 2× · next weekly update drafts Fri — review-first (WeeklyListingUpdateEmbed) · at close: portal flips to <b style="color:var(--ink)">Homeowner Hub</b> (equity card, annual CMA, referral CTA). <a href="#" style="color:var(--brand)">Portal preview →</a></div>
+              <div class="anno" style="margin-top:4px">§9.6 + draft. Portal shows MILESTONES read-only; wire instructions NEVER appear there (§13.4). Staff access to portal data = STAFF_SESSION, logged.</div>
+            </div>
+
+            <div id="el-autopull" class="cardbox">
+              <b style="font-size:12.5px">Disclosure auto-pull report</b>
+              <div style="color:var(--mut); font-size:12px; margin-top:6px">On offer accepted, Wattson pulled the disclosure package + red-flag summary (MLS playbook) — <span class="bdg warn">attached · pending your review</span></div>
+              <div class="anno" style="margin-top:4px">MLS data: whitelist fields only, no embeddings/vector stores/AI training on MLS data (§13.6). No school data on this screen (§13.7 — fair-housing steering guardrail). No crime data anywhere in the product.</div>
+            </div>
+          </div>
+        </div>
+
+        <!-- ============ other tabs, rendered as full-width previews ============ -->
+
+        <!-- Parties tab -->
+        <div id="el-parties" style="padding:0 22px 14px">
+          <div class="cardbox">
+            <div class="sechead">Parties tab (7 of 12 roles filled)</div>
+            <div style="overflow-x:auto">
+            <table class="dtable" style="font-size:11.5px; min-width:760px">
+              <tr><th>Role</th><th>Contact / org</th><th>Email · phone</th><th>Portal access</th><th>Doc access scope</th><th></th></tr>
+              <tr><td><b>BUYER</b></td><td>Daniel & Mina Kim <span class="anno">contact_id → CRM (14)</span></td><td class="num">d.kim@…com · (650) 555-0134 <span class="anno">PII masked by default — reveal = explicit action + OTP/MFA + audit log §13.3</span></td><td><span class="bdg good">ON</span></td><td>PUBLIC_MARKETING · PARTY</td><td><button class="btn-ghost">Edit scope</button></td></tr>
+              <tr><td><b>AGENT</b></td><td>Graeham Watts · Intero</td><td class="num">masked · masked</td><td><span class="bdg">staff</span></td><td>all except HIGH_SECURITY_WIRE (gated)</td><td></td></tr>
+              <tr><td><b>TRANSACTION_COORDINATOR</b></td><td>A. Reyes</td><td class="num">masked</td><td><span class="bdg">staff</span></td><td>PARTY · SENSITIVE</td><td></td></tr>
+              <tr><td><b>COOPERATING_AGENT</b></td><td>L. Marsh · Ridgeline Realty</td><td class="num">masked</td><td><span class="bdg">OFF</span></td><td>PARTY</td><td><button class="btn-ghost">Invite</button></td></tr>
+              <tr><td><b>LENDER</b></td><td>R. Chao · Summit Home Loans</td><td class="num">masked</td><td><span class="bdg">OFF</span></td><td>PARTY (loan docs only)</td><td><button class="btn-ghost">Invite</button></td></tr>
+              <tr><td><b>ESCROW</b></td><td>Bayside Escrow #4482</td><td class="num">masked</td><td><span class="bdg">OFF</span></td><td>PARTY · SENSITIVE</td><td></td></tr>
+              <tr><td><b>INSPECTOR</b></td><td>ProCheck Inspections</td><td class="num">masked</td><td><span class="bdg">OFF</span></td><td>reports only</td><td></td></tr>
+              <tr><td style="color:var(--soft)" colspan="6">Unfilled roles: SELLER (other side) · TITLE · APPRAISER · BROKERAGE_ADMIN · OTHER — full 12-role enum, TransactionParty §6.6</td></tr>
+            </table>
+            </div>
+            <div class="anno" style="margin-top:4px">Scoped invite sends a magic link via NotificationProvider — REVIEW_REQUIRED (§11.1). document_access_scope is per security class; parties without scope for a class never even see those docs listed (permission-limited state). External parties get limited task/doc access only when explicitly invited (Brain role table). Any party with a contact_id links out to the CRM record (Screen 14).</div>
+          </div>
+        </div>
+
+        <!-- Documents tab -->
+        <div id="el-documents" style="padding:0 22px 14px">
+          <div class="cardbox">
+            <div class="sechead">Documents tab (23)</div>
+            <div style="overflow-x:auto">
+            <table class="dtable" style="font-size:11.5px; min-width:820px">
+              <tr><th>Document (type of 21)</th><th>Security class</th><th>Ver</th><th>State</th><th>Signature</th><th>Class. conf.</th><th></th></tr>
+              <tr><td>PURCHASE_AGREEMENT — RPA + counters</td><td><span class="bdg">PARTY</span></td><td class="num">v3</td><td><span class="bdg good">approved</span></td><td><span class="bdg good">SIGNED</span></td><td class="num">0.99 ✓human</td><td><button class="btn-ghost">Open</button></td></tr>
+              <tr><td>ADDENDUM — VP amendment</td><td><span class="bdg">PARTY</span></td><td class="num">v1</td><td><span class="bdg warn">in-review</span></td><td><span class="bdg warn">PENDING (you)</span></td><td class="num">0.97 ✓</td><td><button class="btn-ghost">Open</button></td></tr>
+              <tr><td>INSPECTION_REPORT — home + pest</td><td><span class="bdg">SENSITIVE</span></td><td class="num">v1</td><td><span class="bdg good">approved</span></td><td>—</td><td class="num">0.95 ✓</td><td><button class="btn-ghost">Open</button></td></tr>
+              <tr><td>ESCROW_INSTRUCTIONS</td><td><span class="bdg">SENSITIVE</span></td><td class="num">v2</td><td><span class="bdg crit">returned — note: "missing p.4 initials"</span></td><td><span class="bdg warn">PENDING</span></td><td class="num">0.98 ✓</td><td><button class="btn-ghost">Thread</button></td></tr>
+              <tr><td>WIRE_INSTRUCTIONS</td><td><span class="bdg crit">HIGH_SECURITY_WIRE</span></td><td class="num">v1</td><td><span class="bdg crit">🔒 quarantined</span></td><td>—</td><td>—</td><td><span class="anno">security review only</span></td></tr>
+              <tr><td>Scan_0712.pdf — unclassified</td><td><span class="bdg">pending</span></td><td class="num">v1</td><td><span class="bdg warn">classification review</span></td><td>—</td><td class="num" style="color:var(--warn)">0.62 ✗</td><td><button class="btn-ghost">Classify</button></td></tr>
+              <tr><td style="color:var(--soft)" colspan="7" class="num">+17 more · DocumentType enum (21): PURCHASE_AGREEMENT, COUNTER_OFFER, ADDENDUM, DISCLOSURE_TDS/SPQ/AVID, INSPECTION_REPORT, APPRAISAL_REPORT, LOAN_COMMITMENT, PRELIMINARY_TITLE, TITLE_COMMITMENT, ESCROW_INSTRUCTIONS, CONTINGENCY_REMOVAL, EXTENSION_REQUEST, CLOSING_DISCLOSURE, SETTLEMENT_STATEMENT, DEED, CLOSE_OUT_PACKAGE, WIRE_INSTRUCTIONS, CLIENT_PII_DOCUMENT, OTHER</td></tr>
+            </table>
+            </div>
+            <div class="anno" style="margin-top:4px">TransactionDocument §6.9, §8.5–8.6: sha256 per version, retention_class TRANSACTION_7Y (exceeds CA DRE 3-year minimum; crypto-shred + tombstone after expiry §13.2). Opening any doc writes DOCUMENT_ACCESS_EVENT to the security audit log. Security classes PUBLIC_MARKETING → PARTY → SENSITIVE → HIGH_SECURITY_WIRE control portal visibility. No raw doc bodies in app logs or Event Ledger.</div>
+          </div>
+        </div>
+
+        <!-- Offers tab -->
+        <div id="el-offers" style="padding:0 22px 14px">
+          <div class="cardbox">
+            <div class="sechead">Offers tab — multi-offer ranking matrix</div>
+            <div style="overflow-x:auto">
+            <table class="dtable" style="font-size:11.5px; min-width:760px" class="num">
+              <tr><th></th><th>Offer A ★ strongest</th><th>Offer B</th><th>Offer C</th></tr>
+              <tr><td>Price</td><td class="num" style="background:var(--brand-soft)"><b>$1,315,000</b></td><td class="num">$1,330,000</td><td class="num">$1,290,000</td></tr>
+              <tr><td>Financing</td><td style="background:var(--brand-soft)">20% down · fully underwritten</td><td>10% down · pre-qual only</td><td>cash</td></tr>
+              <tr><td>Contingencies</td><td style="background:var(--brand-soft)">appraisal waived</td><td>all standard</td><td>none</td></tr>
+              <tr><td>Close</td><td style="background:var(--brand-soft)" class="num">21 days</td><td class="num">30 days</td><td class="num">14 days</td></tr>
+              <tr><td>Est. seller net</td><td class="num" style="background:var(--brand-soft)">$1,228,400</td><td class="num">$1,236,900*</td><td class="num">$1,209,100</td></tr>
+            </table>
+            </div>
+            <div class="anno" style="margin-top:4px">Side-by-side compare with strongest-offer highlights + net sheet. *Higher net but weaker certainty — ranking math runs in the offer-analyzer service (skills library), NOT PropClose-local, to respect non-scoring (§14) [DECIDE/BEST GUESS]. Seller presentation export → client send is REVIEW_REQUIRED via Outbox (Screen 24). ScoringService down → any displayed score disappears entirely, no local computation (§14).</div>
+          </div>
+        </div>
+
+        <!-- Disclosures tab -->
+        <div id="el-disclosures" style="padding:0 22px 14px">
+          <div class="cardbox">
+            <div class="sechead">Disclosures tab ⚑2 — disclosed vs found</div>
+            <table class="dtable" style="font-size:11.5px">
+              <tr><th>Severity</th><th>Seller disclosed (TDS/SPQ/AVID)</th><th>Inspector found</th><th>Status</th></tr>
+              <tr><td><span class="bdg crit">HIGH</span></td><td>"Roof replaced 2019"</td><td>Composition roof ~15 yrs, 2 active lifts at ridge</td><td><span class="bdg warn">⚑ flagged — open detail</span></td></tr>
+              <tr><td><span class="bdg warn">MED</span></td><td>No electrical work disclosed</td><td>Unpermitted 100A sub-panel in garage</td><td><span class="bdg warn">⚑ flagged</span></td></tr>
+              <tr><td><span class="bdg">LOW</span></td><td>Water heater 2021 ✓</td><td>Consistent</td><td><span class="bdg good">match</span></td></tr>
+            </table>
+            <div class="cardbox" style="margin-top:8px; background:var(--surface); font-size:12px">📝 <b>Credit-request draft ready → your review</b> — analyzer drafted a $9,500 seller-credit request from the 2 flags. <b style="color:var(--crit)">Never auto-sent.</b> <button class="btn-ghost">Review draft</button></div>
+            <div class="anno" style="margin-top:4px">disclosure-analyzer output over DISCLOSURE_TDS / DISCLOSURE_SPQ / DISCLOSURE_AVID + INSPECTION_REPORT docs, grouped by severity; flag count ⚑2 mirrors the tab label. (Matrix gap: disclosure analyzer + credit-request drafting.)</div>
+          </div>
+        </div>
+
+        <!-- Timeline tab -->
+        <div id="el-timeline" style="padding:0 22px 14px">
+          <div class="cardbox">
+            <div class="sechead">Timeline tab — all deadlines</div>
+            <div class="cardbox" style="background:#fdf6ee; border-color:var(--warn); font-size:12px; margin-bottom:8px">✋ <b>Generated timeline awaiting human approval</b> — CA RPA-style defaults computed by DeadlineRuleProvider + RegionProfile(CA). <b style="color:var(--ink)">Mandatory before anything becomes client-facing (§7.3-3).</b> <button class="btn-ink">Approve timeline</button> <button class="btn-ghost">Edit dates</button></div>
+            <div style="overflow-x:auto">
+            <table class="dtable" style="font-size:11.5px; min-width:820px">
+              <tr><th>Deadline (type)</th><th>Due</th><th>Status (of 8)</th><th>Rule source</th><th>Extension lineage</th><th></th></tr>
+              <tr><td>EARNEST_MONEY_DUE</td><td class="num">Jul 7</td><td><span class="bdg good">COMPLETED</span></td><td>RPA §3B · 3 biz days</td><td>—</td><td></td></tr>
+              <tr><td>INSPECTION_CONTINGENCY</td><td class="num">Jul 12</td><td><span class="bdg good">COMPLETED</span></td><td>RPA §L(1) · 17 days default → 8 negotiated</td><td>—</td><td><button class="btn-ghost">Waive</button></td></tr>
+              <tr><td>APPRAISAL_CONTINGENCY</td><td class="num">Jul 14</td><td><span class="bdg good">WAIVED</span></td><td>RPA §L(2)</td><td>—</td><td></td></tr>
+              <tr><td><b>LOAN_CONTINGENCY</b></td><td class="num"><b>Jul 17 (T-2)</b></td><td><span class="bdg crit">AT_RISK</span></td><td>RPA §L(3) · 21 days</td><td class="anno">ext #1 requested Jul 15 — Wattson drafted, human approves (§7.3-7)</td><td><button class="btn-ghost">Request extension</button></td></tr>
+              <tr><td>FINAL_WALKTHROUGH</td><td class="num">Jul 22</td><td><span class="bdg">NOT_STARTED</span></td><td>RPA §14 · close −3</td><td>—</td><td><button class="btn-ghost">Mark complete</button></td></tr>
+              <tr><td>CLOSING</td><td class="num">Jul 25 → 27 (pending re-cascade ack)</td><td><span class="bdg warn">DUE_SOON</span></td><td>contract close date</td><td class="anno">candidate ext from lender slip</td><td></td></tr>
+              <tr><td style="color:var(--soft)" colspan="6">DeadlineStatus (8, named per Brain): NOT_STARTED · IN_PROGRESS · DUE_SOON · AT_RISK · COMPLETED · WAIVED · EXTENDED · MISSED. DeadlineType incl. DISCLOSURE_DELIVERY, CONTINGENCY_REMOVAL, CUSTOM.</td></tr>
+            </table>
+            </div>
+            <div class="anno" style="margin-top:4px">TransactionDeadline §6.7 · alert_offsets_days [7,3,1] default (§7.3-4). Clicking a stepper stage filters this tab. Extension flow: Wattson drafts the EXTENSION_REQUEST form, human approves + sends (§7.3-7).</div>
+          </div>
+        </div>
+
+        <!-- Activity tab -->
+        <div id="el-activity" style="padding:0 22px 14px">
+          <div class="cardbox">
+            <div class="sechead">Activity tab — append-only log</div>
+            <div style="display:flex; gap:5px; flex-wrap:wrap; margin-bottom:6px"><button class="chip on" style="font-size:10.5px">All</button><button class="chip" style="font-size:10.5px">Milestones</button><button class="chip" style="font-size:10.5px">Stage moves</button><button class="chip" style="font-size:10.5px">Tasks</button><button class="chip" style="font-size:10.5px">Approvals</button></div>
+            <table class="dtable" style="font-size:11.5px">
+              <tr><td class="num">Jul 15 · 8:10a</td><td>Wattson nudged lender re: loan commitment (one-approval batch, logged)</td></tr>
+              <tr><td class="num">Jul 14 · 4:22p</td><td>TRANSACTION_MILESTONE: APPRAISAL_RECEIVED · status COMPLETED</td></tr>
+              <tr><td class="num">Jul 14 · 4:25p</td><td>Stage advance: APPRAISAL → LOAN_COMMITMENT (gates passed)</td></tr>
+              <tr><td class="num">Jul 12 · 9:04a</td><td>Approval decision: buyer weekly update — approved by GW, sent via NotificationProvider</td></tr>
+              <tr><td class="num">Jul 11 · 2:41p</td><td>Task completed: inspection report filed (completed_by HUMAN_USER)</td></tr>
+            </table>
+            <div class="anno" style="margin-top:4px">Event Ledger (§15): TRANSACTION_MILESTONE with the 12 MilestoneTypes (Brain: CONTRACT_EXECUTED, PARTIES_CONFIRMED, DISCLOSURES_DELIVERED, INSPECTION_COMPLETE, APPRAISAL_RECEIVED, LOAN_COMMITTED, CONTINGENCIES_CLEARED, FINAL_WALKTHROUGH_COMPLETE, CLEAR_TO_CLOSE_RECEIVED, DEED_RECORDED, CLOSE_OF_ESCROW, TRANSACTION_CANCELLED). Sensitive/security events NOT shown here — separate security audit log (§13.5): WIRE_INSTRUCTIONS_EVENT, DOCUMENT_ACCESS_EVENT, SECURITY_ACCESS_EVENT. No raw PII in the ledger.</div>
+          </div>
+        </div>
+
+        <!-- Close wizard -->
+        <div id="el-close-wizard" style="padding:0 22px 14px">
+          <div style="border:1.5px solid var(--brand); border-radius:12px; padding:14px 16px; background:var(--brand-soft)">
+            <div style="display:flex; gap:10px; align-items:center; flex-wrap:wrap">
+              <b style="font-size:14px">Close wizard — 13-step flow</b>
+              <span class="anno">launches from the header; disabled until CLEAR_TO_CLOSE</span>
+              <button class="btn-ink" style="margin-left:auto" disabled style="opacity:.5">Start close wizard</button>
+            </div>
+            <div style="color:var(--mut); font-size:12px; margin-top:6px" class="num">Steps preview: 1 validate close_date · 2 validate deal_value · 3 <b style="color:var(--ink)">commission entry — manual, §12.4</b> (gross → actual, USD MoneyAmount) · 4 compile source_facts · 5 case-study facts (nullable — <b style="color:var(--ink)">never fabricated</b>) · 6–9 emit events (CLOSING_DETECTED → DEAL_CLOSED → CASE_STUDY_FACTS_AVAILABLE → REFERRAL_CLOSED if applicable) · 10 archive package (CLOSE_OUT_PACKAGE) · 11 <b style="color:var(--ink)">human confirmation before archive marked complete (§8.7)</b> · 12 portal → HOMEOWNER hub · 13 Past Client OS enrollment (Screen 27, idempotent).</div>
+            <div class="anno" style="margin-top:4px">§12.3 checklist. Attribution set on the record (originating_content_id, campaign_id, lead_source, capture/conversion_source) is display-only, nullable, never inferred.</div>
+          </div>
+        </div>
+
+        <!-- mobile variant strip -->
+        <div id="el-mobile" style="padding:0 22px 14px">
+          <div class="cardbox">
+            <div class="sechead">Mobile variant (375px)</div>
+            <div style="display:flex; gap:10px; overflow-x:auto">
+              <div style="min-width:190px; border:1px solid var(--line); border-radius:14px; padding:10px; font-size:9.5px; background:var(--surface)">
+                <b>42 Cedar St</b> <span class="bdg warn" style="font-size:8.5px">● YELLOW</span>
+                <div style="display:flex; gap:2px; margin:6px 0; overflow-x:auto"><span class="bdg good" style="font-size:8px">Open✓</span><span class="bdg good" style="font-size:8px">EMD✓</span><span class="bdg good" style="font-size:8px">Appr✓</span><span class="bdg crit" style="font-size:8px">Loan T-2</span><span class="bdg" style="font-size:8px">Walk</span></div>
+                <div style="background:#fdf6ee; border:1px solid var(--warn); border-radius:6px; padding:5px">⚠ Re-cascade: review diff & accept</div>
+                <div style="background:var(--surface); border:1px solid var(--line); border-radius:6px; padding:5px; margin-top:4px">🔒 Wire quarantined → review</div>
+                <div style="border:1px solid var(--crit); border-radius:6px; padding:5px; margin-top:4px">T-2 Loan CR — Open CR-1</div>
+                <div class="anno" style="margin-top:4px">header collapses to address + health chip; stepper = horizontal scroll strip; banners always above the fold</div>
+              </div>
+              <div style="min-width:190px; border:1px solid var(--line); border-radius:14px; padding:10px; font-size:9.5px; background:var(--surface)">
+                <div style="display:flex; gap:3px"><span class="bdg" style="font-size:8px; background:var(--ink); color:#fff">Tasks</span><span class="bdg" style="font-size:8px">Parties</span><span class="bdg" style="font-size:8px">Docs</span><span class="bdg" style="font-size:8px">…swipe</span></div>
+                <div style="border:1px solid var(--line); border-radius:6px; padding:5px; margin-top:6px">✍ 2 signatures — Sign</div>
+                <div style="border:1px solid var(--line); border-radius:6px; padding:5px; margin-top:4px; opacity:.6">TC · warranty — not your court</div>
+                <div style="border:1px solid var(--line); border-radius:6px; padding:5px; margin-top:4px"><b>Right-rail cards stack below</b>: docs intake · disclosures ⚑ · portal</div>
+                <button class="btn-ink" style="width:100%; margin-top:6px; font-size:9.5px">Open CR-1 (full-width primary)</button>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- states strip -->
+        <div id="el-states" style="padding:0 22px 18px">
+          <div class="cardbox" style="font-size:11.5px">
+            <b>States (dev reference)</b>
+            <div style="color:var(--mut); margin-top:4px">
+              <b style="color:var(--ink)">Default:</b> Tasks tab, priority-ordered. ·
+              <b style="color:var(--ink)">Loading:</b> skeleton stepper + card placeholders; target &lt;1s record load (Screen 14 KPI applied [BEST GUESS]). ·
+              <b style="color:var(--ink)">Empty (new transaction):</b> stepper at stage 1 · task list seeded from 29-task checklist template · docs empty with intake card "forward docs to 42cedar@docs.propertyiq.app". ·
+              <b style="color:var(--ink)">Creation failure (fail-closed):</b> missing contact_id/property_id → NO transaction; PropFlow human review task created instead (§7.1); duplicate → opens the existing transaction. ·
+              <b style="color:var(--ink)">Degraded (all fail-closed):</b> OfficialFormProvider unconfigured → form actions disabled, OFFICIAL_FORM_PROVIDER_NOT_CONFIGURED · e-sign provider down → signature cards show retry + manual-upload fallback · any wire gate false → full quarantine, never partial display · ScoringService down → displayed scores disappear entirely, no local computation (§14) · title/escrow/lender APIs absent in v1 → email/manual intake + human confirmation. ·
+              <b style="color:var(--ink)">Permission-limited:</b> brokerage admin = read-only + compliance surfaces · parties see only doc classes in their scope · staff portal access = STAFF_SESSION, logged. ·
+              <b style="color:var(--ink)">Mobile:</b> as above — re-cascade and wire banners never collapsed.
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ============ spec gaps found (Master Brain) ============ -->
+  <div class="note" style="margin-top:24px"><b>Spec gaps found (PropClose Master Brain — UPDATED; rendered in the mock above):</b> (1) <b>Booking rule:</b> AI voice / Wattson scheduling creates a booking_request_task unless the account explicitly allows automated booking into pre-approved slots — spec lists the BOOKING_REQUEST lane but not this rule (rendered on the walkthrough task card). (2) <b>Vendor APIs fail closed:</b> direct title/escrow (Qualia/SoftPro/RamQuest) and lender LOS (Encompass/LendingPad/Calyx) APIs are explicitly OUT of v1 — email/manual intake + human confirmation is the pathway (rendered in the Documents intake card + states strip). (3) <b>Named enums:</b> the Brain names all 12 MilestoneTypes, all 8 DeadlineStatus values, all 7 TaskStatus values, the 21 DocumentTypes, and the 12 party roles — the spec only counted them (rendered in Activity, Timeline, Tasks, Documents, Parties). (4) <b>Milestone idempotency:</b> advance_transaction_milestone carries an idempotency_key and dedupes duplicate milestones (noted in the close-wizard/activity annotations). (5) <b>Client portal MILESTONES are read-only</b> per the Brain's portal surface table (rendered in the portal status card).</div>
+
+  <!-- ============ (3) ELEMENT COVERAGE ============ -->
+  <h2 style="font-size:20px; margin:24px 0 10px">Element coverage — spec inventory → this page</h2>
+  <table class="dtable cov" style="font-size:12.5px">
+    <tr><th>Spec inventory element</th><th>Rendered at</th><th>Status</th></tr>
+    <tr><td>Deal title + side + value</td><td><a href="#el-title">Header bar</a></td><td class="ok">✓</td></tr>
+    <tr><td>Day counter "Day 11 of 21 · closes Jul 25" (hover provenance)</td><td><a href="#el-daycount">Header subtitle</a></td><td class="ok">✓</td></tr>
+    <tr><td>Deal health chip (green/yellow/red, stale-grey, facts popover)</td><td><a href="#el-health">Header health chip</a></td><td class="ok">✓</td></tr>
+    <tr><td>7-stage stepper (enum-mapped labels, at-risk state, stage→Timeline filter)</td><td><a href="#el-stepper">Stepper</a></td><td class="ok">✓</td></tr>
+    <tr><td>Deadline chips T-7/T-3/T-1 (rule source, extension lineage)</td><td><a href="#el-deadline-chips">Deadline chip row</a></td><td class="ok">✓</td></tr>
+    <tr><td>AT_RISK badge (70% window rule + one-click remediation)</td><td><a href="#el-atrisk">Chip row</a></td><td class="ok">✓</td></tr>
+    <tr><td>Timeline-anomaly badge (2σ over tenant median)</td><td><a href="#el-anomaly">Chip row</a></td><td class="ok">✓</td></tr>
+    <tr><td>Tasks tab — task cards (owner lanes, statuses, not-your-court)</td><td><a href="#el-tasks">Tasks section</a></td><td class="ok">✓</td></tr>
+    <tr><td>29-task checklist (grouped by stage, gaps → DOCUMENT_GAP)</td><td><a href="#el-checklist">Checklist card</a></td><td class="ok">✓</td></tr>
+    <tr><td>CR pre-filled form button (fail-closed provider state)</td><td><a href="#el-cr-form">Loan CR task card</a></td><td class="ok">✓</td></tr>
+    <tr><td>Signature cards ("Your signatures — 2", 4 statuses)</td><td><a href="#el-signatures">Signature card</a></td><td class="ok">✓</td></tr>
+    <tr><td>Re-cascade diff banner (nothing moves until acknowledged)</td><td><a href="#el-recascade">Re-cascade banner</a></td><td class="ok">✓</td></tr>
+    <tr><td>Wire quarantine banner (6 gates, never in portal)</td><td><a href="#el-wire">Wire banner</a></td><td class="ok">✓</td></tr>
+    <tr><td>Wattson nudge annotations (escalation → AGENT_ACTION)</td><td><a href="#el-wattson-nudge">Loan CR card</a></td><td class="ok">✓</td></tr>
+    <tr><td>Parties tab (12 roles, portal toggle, doc access scope, scoped invite)</td><td><a href="#el-parties">Parties tab</a></td><td class="ok">✓</td></tr>
+    <tr><td>Documents tab — doc list (21 types, security classes, versions, confidence)</td><td><a href="#el-documents">Documents tab</a></td><td class="ok">✓</td></tr>
+    <tr><td>6 intake pathways card (per-transaction email + copy)</td><td><a href="#el-intake-paths">Docs rail card</a></td><td class="ok">✓</td></tr>
+    <tr><td>Classification review queue chip (sensitive → human handoff)</td><td><a href="#el-class-review">Docs rail card</a></td><td class="ok">✓</td></tr>
+    <tr><td>Document state machine chips (returned → top of Today)</td><td><a href="#el-doc-states">Docs rail card</a></td><td class="ok">✓</td></tr>
+    <tr><td>Submission gates panel (blocked advance names missing docs)</td><td><a href="#el-gates">Docs rail card</a></td><td class="ok">✓</td></tr>
+    <tr><td>Offers tab (ranking matrix, net sheet, review-first export)</td><td><a href="#el-offers">Offers tab</a></td><td class="ok">✓</td></tr>
+    <tr><td>Disclosures tab (disclosed-vs-found by severity, credit-request draft)</td><td><a href="#el-disclosures">Disclosures tab</a> + <a href="#el-disc-flags">rail card</a></td><td class="ok">✓</td></tr>
+    <tr><td>Disclosure auto-pull report (Wattson MLS playbook)</td><td><a href="#el-autopull">Auto-pull rail card</a></td><td class="ok">✓</td></tr>
+    <tr><td>Timeline tab (8 statuses, rule source, approve-before-client-facing, extensions)</td><td><a href="#el-timeline">Timeline tab</a></td><td class="ok">✓</td></tr>
+    <tr><td>Drop-the-contract intake (extract → mandatory per-date human review)</td><td><a href="#el-intake">Intake dropzone</a></td><td class="ok">✓</td></tr>
+    <tr><td>Activity tab (append-only, security events excluded)</td><td><a href="#el-activity">Activity tab</a></td><td class="ok">✓</td></tr>
+    <tr><td>Right-rail: portal status card (views, video watches, Homeowner Hub)</td><td><a href="#el-portal-card">Portal rail card</a></td><td class="ok">✓</td></tr>
+    <tr><td>Close wizard button (13 steps, manual commission, human archive confirm)</td><td><a href="#el-close-wizard">Close wizard</a></td><td class="ok">✓</td></tr>
+    <tr><td>Empty states (seeded checklist + intake instructions)</td><td><a href="#el-states">States strip</a></td><td class="ok">✓</td></tr>
+  </table>
+  <div style="border:1.5px solid var(--good); background:#f2f8f4; border-radius:10px; padding:12px 16px; margin:12px 0 0; font-weight:700; color:var(--good)">29 of 29 spec elements rendered ✓ <span style="font-weight:400; color:var(--mut); font-size:12.5px">— plus prompt-required regions beyond the inventory: mobile variant strip, full states strip, loading/degraded/permission-limited states, and the 5 Master-Brain additions in the "Spec gaps found" note above.</span></div>
+
+  <!-- ============ (4) FULL SPEC AS HTML ============ -->
+  <div class="specdoc">
+    <h1 style="font-size:24px; margin:40px 0 6px">Spec — 15 · Transaction Workspace (PropClose staff)</h1>
+    <p><b>Purpose</b> The single staff-facing workspace for one live transaction — timeline-first, task-driven, document-safe. Everything a TC or agent needs to move a deal from contract to close lives here; every automation that touches the deal terminates in a review card here or in the Global Approvals Inbox. The cross-deal Kanban (TransactionBoardCard, PropClose §7.4) is the index; this screen is what a card opens into.</p>
+    <p><b>Primary users</b> Agent (Graeham-persona), Transaction Coordinator, brokerage admin (read/compliance). TC Wattson operates behind it via redacted context only.</p>
+    <p><b>Entry points</b> Command Center transaction card click-through · cross-deal Kanban board card · Global Approvals Inbox item ("open transaction") · Wattson chat deep link · PIPELINE_MOVED auto-creation toast ("New transaction created — open") · disclosure auto-pull report link (Wattson MLS playbook).</p>
+    <p><b>Exit points</b> Client portal ↗ (opens Screen 25 as the client sees it) · Close wizard (13-step flow, ends in DEAL_CLOSED + portal→HOMEOWNER) · Security review queue (wire quarantine) · Global Approvals Inbox (Screen 13) · CRM contact record (Screen 14) for any party with a contact_id · Offer Analyzer / Disclosure Analyzer sub-views (tabs on this screen) · back to Kanban index.</p>
+
+    <h2>Layout</h2>
+    <p><b>Desktop:</b> Header bar — avatar + deal title ("42 Cedar St — buyer side · $1,315,000"), subtitle (client name · Day N of M · closes {date}), right nav: "Client portal ↗", "Close wizard". Deal health chip (green/yellow/red, goes stale-grey if the underlying human update is unconfirmed — Sisu/Trackxi pattern per draft Screen 15 note). <b>Stage stepper (full width):</b> 7 canonical stages (CONTRACT_PENDING → INSPECTION_PERIOD → APPRAISAL → LOAN_COMMITMENT → FINAL_WALKTHROUGH → CLEAR_TO_CLOSE → CLOSED, PropClose §6.2 TransactionStage). Completed = filled brand; current-at-risk = red with deadline chip ("loan due Thu ⚠ T-2"); future = muted. Draft labels these in plain English (Open / EMD / Inspection / Appraisal / Contingencies / Docs & signing / Close) — plain-English labels mapped 1:1 to the enum. <b>Tab row under stepper:</b> Tasks (count) · Parties (count) · Documents (count) · Offers · Disclosures (⚑ flag count) · Timeline · Activity. <b>Main (left, ~60%):</b> the active tab's content; default = Tasks, priority-ordered action cards. <b>Right rail (~40%):</b> context cards — Documents intake summary, Disclosures flags, Client portal status; persist across tabs. No footer. Sticky: header + stepper + tab row.</p>
+    <p><b>Mobile (375px):</b> header collapses to address + health chip; stepper becomes a horizontal scroll strip; tabs become a swipeable segmented control; right-rail cards stack below the main list. Primary action buttons full-width. Re-cascade acknowledgment and wire banners always render above the fold of the Tasks tab.</p>
+
+    <h2>Element inventory</h2>
+    <div style="overflow-x:auto">
+    <table class="dtable">
+      <tr><th>Element</th><th>What it shows/does</th><th>Data source</th><th>Interactions</th><th>Spec source</th></tr>
+      <tr><td>Deal title + side + value</td><td>Address, BUY/SELL/DUAL, deal_value</td><td>TransactionRecord (§6.5)</td><td>none</td><td>§6.5</td></tr>
+      <tr><td>Day counter</td><td>"Day 11 of 21 · closes Jul 25" — contract_date → close_date_target elapsed</td><td>TransactionRecord</td><td>hover: date provenance (source doc pinned)</td><td>§6.5 + draft (intake provenance)</td></tr>
+      <tr><td>Deal health chip</td><td>green/yellow/red from ledger facts + structured human updates; stale-grey if unconfirmed</td><td>ledger events + human status updates</td><td>click: contributing facts popover</td><td>draft Screen 15; non-scoring rule §14 (workflow flag only, never a score)</td></tr>
+      <tr><td>7-stage stepper</td><td>current_stage with per-stage completion + at-risk state</td><td>TransactionRecord.current_stage; TransactionDeadline</td><td>click stage: filters Timeline tab</td><td>§6.2, §7.2</td></tr>
+      <tr><td>Deadline chips T-7/T-3/T-1</td><td>next deadline with alert offset state</td><td>TransactionDeadline.alert_offsets_days [7,3,1] default</td><td>click: deadline detail (rule source, extension lineage)</td><td>§7.3 rule 4</td></tr>
+      <tr><td>AT_RISK badge</td><td>fires when no progress after 70% of contingency window elapsed</td><td>TransactionDeadline.at_risk_evaluation</td><td>click: evaluation facts + one-click remediation task</td><td>§7.3 rule 5</td></tr>
+      <tr><td>Timeline-anomaly badge</td><td>stage duration &gt; 2σ above tenant historical median (same side+stage)</td><td>TransactionRecord.timeline_anomaly_flag</td><td>operational review flag only — links to review task</td><td>§7.3 rule 6</td></tr>
+      <tr><td>Tasks tab — task cards</td><td>title, description, due, owner lane (CLIENT/TC/AGENT/EXTERNAL/APPROVAL/DOCUMENT_GAP/DEADLINE_RISK/BOOKING_REQUEST/SECURITY_REVIEW), status</td><td>TransactionTask (§6.8)</td><td>open, complete, reassign; "not your court" grey state for TC-owned</td><td>§6.8; draft Screen 15</td></tr>
+      <tr><td>29-task checklist</td><td>full canonical checklist per side, grouped by stage</td><td>TransactionTask templates</td><td>check off; gaps auto-create DOCUMENT_GAP tasks</td><td>matrix per_page; [BEST GUESS] grouping by stage</td></tr>
+      <tr><td>CR pre-filled form button ("Open CR-1")</td><td>contingency-removal draft prepared by Wattson, human sends</td><td>OfficialFormProvider (§8.3)</td><td>opens form review; provider unconfigured → OFFICIAL_FORM_PROVIDER_NOT_CONFIGURED blocking state</td><td>§8.3 fail-closed</td></tr>
+      <tr><td>Signature cards ("Your signatures — 2")</td><td>DocuSign envelopes pending for the staff user</td><td>DocumentVersion.docusign_envelope_id, SignatureStatus</td><td>"Sign" → DocuSign; status PENDING/SIGNED/VOIDED/DECLINED</td><td>§6.9</td></tr>
+      <tr><td>Re-cascade diff banner</td><td>"lender slipped 2 days → close Jul 25→27. 7 tasks re-derived, 2 now overdue, buyer notification drafted"</td><td>relative-date task chaining engine</td><td>"Review diff & accept" — NOTHING moves until acknowledged</td><td>draft Screen 15 (locked decision)</td></tr>
+      <tr><td>Wire quarantine banner</td><td>wire doc received, quarantined pending 6-gate security review; never exposed to portal</td><td>HIGH_SECURITY_WIRE doc + §13.4 gates</td><td>"Security review →" opens the security review queue; SECURITY_REVIEW task auto-created</td><td>§13.4</td></tr>
+      <tr><td>Wattson nudge annotations</td><td>"Wattson nudged lender 8:10am, escalates to you 2pm"</td><td>Wattson task catalog via one-approval architecture</td><td>none (informational); escalation creates AGENT_ACTION task</td><td>§10.3–10.4</td></tr>
+      <tr><td>Parties tab</td><td>12 roles (BUYER…OTHER), contact/org/email/phone, portal_access_allowed toggle, document_access_scope per security class</td><td>TransactionParty (§6.6)</td><td>scoped invite (magic link via NotificationProvider — REVIEW_REQUIRED); edit scope</td><td>§6.6, §11.1</td></tr>
+      <tr><td>Documents tab — doc list</td><td>type (21 DocumentTypes), security class badge (PUBLIC_MARKETING…HIGH_SECURITY_WIRE), version count, signature status, classification confidence</td><td>TransactionDocument (§6.9)</td><td>open (access logged), upload version, review classification, thread notes on doc</td><td>§6.9, §8.5–8.6</td></tr>
+      <tr><td>6 intake pathways card</td><td>DocuSign webhook, manual upload, email forward (per-transaction address), client portal upload, GHL attachment, Drive link</td><td>DocumentSource enum</td><td>copy email address; view intake log</td><td>§6.2 DocumentSource, §8.2; draft</td></tr>
+      <tr><td>Classification review queue chip</td><td>"1 in classification review" — human_confirmed=false or low confidence</td><td>DocumentClassification</td><td>confirm/re-classify; detected_sensitive_topic → human_handoff_required</td><td>§6.9</td></tr>
+      <tr><td>Document state machine chips</td><td>needed → uploaded → in-review → approved/returned; returned jumps to top of Today</td><td>doc status + task linkage</td><td>approve/return with threaded note</td><td>draft Screen 15 (locked decision)</td></tr>
+      <tr><td>Submission gates panel</td><td>per-brokerage required-doc gate before stage advance</td><td>brokerage config</td><td>blocked stage advance names missing docs</td><td>draft (SkySlope pattern); [BEST GUESS] gate config in brokerage admin</td></tr>
+      <tr><td>Offers tab</td><td>multi-offer ranking matrix, net sheet, seller presentation export</td><td>offer records + offer-analyzer skill logic</td><td>side-by-side compare, strongest-offer highlights, export (client send = REVIEW_REQUIRED via Outbox)</td><td>matrix gap "Offer analysis tab"</td></tr>
+      <tr><td>Disclosures tab</td><td>disclosed-vs-found cross-reference grouped by severity; flag count in tab label</td><td>disclosure-analyzer output over DISCLOSURE_TDS/SPQ/AVID + INSPECTION_REPORT docs</td><td>open flag detail; "credit-request draft ready → your review" (never auto-sent)</td><td>matrix gap; draft Screen 15</td></tr>
+      <tr><td>Disclosure auto-pull report</td><td>on offer accepted, Wattson pulls disclosure package + red-flag summary</td><td>Wattson MLS playbook</td><td>attach to transaction; review</td><td>matrix (Wattson MLS playbook surfaces)</td></tr>
+      <tr><td>Timeline tab</td><td>all TransactionDeadlines: type, due date, status (8 DeadlineStatus values), rule source, extension lineage; human-approval state for the generated timeline</td><td>TransactionDeadline (§6.7); DeadlineRuleProvider + RegionProfile</td><td>approve generated timeline (mandatory before client-facing, §7.3-3); mark complete/waive; request extension (Wattson drafts, human approves — §7.3-7)</td><td>§7.3</td></tr>
+      <tr><td>Drop-the-contract intake</td><td>drag a contract PDF → Wattson extracts parties/financials/dates (incl. relative dates vs state rules + holidays) → mandatory human review of EVERY date, source doc pinned as provenance</td><td>Wattson extraction (redacted layer §10.2) + DeadlineRuleProvider</td><td>confirm/edit each extracted date before binding</td><td>draft Screen 15 (locked decision)</td></tr>
+      <tr><td>Activity tab</td><td>append-only activity log: milestones, stage moves, task events, approval decisions</td><td>Event Ledger (TRANSACTION_MILESTONE etc.)</td><td>filter by type; sensitive/security events NOT shown here (separate security audit log, §13.5)</td><td>§13.5, §15</td></tr>
+      <tr><td>Right-rail: portal status card</td><td>client views this week, milestone video watch counts, next weekly update draft date (review-first), Homeowner-Hub-at-close note</td><td>PORTAL_VIEWED events; WeeklyListingUpdateEmbed</td><td>link to portal preview</td><td>§9.6; draft Screen 15</td></tr>
+      <tr><td>Close wizard button</td><td>13-step close flow: validate close_date, deal_value, commission entry (manual, §12.4), compile source_facts, case-study facts (nullable, never fabricated), emit events, archive, portal→HOMEOWNER</td><td>§12.3 checklist</td><td>step-by-step wizard; human confirmation required before archive marked complete (§8.7)</td><td>§12.3, §12.4, §8.7</td></tr>
+      <tr><td>Empty states</td><td>new transaction: stepper at stage 1, task list seeded from checklist template, docs empty with intake instructions</td><td>—</td><td>—</td><td>[BEST GUESS]</td></tr>
+    </table>
+    </div>
+
+    <h2>States</h2>
+    <ul>
+      <li><b>Default:</b> Tasks tab, priority-ordered.</li>
+      <li><b>Loading:</b> skeleton stepper + card placeholders; target &lt;1s record load (draft Screen 14 KPI applied here too — [BEST GUESS]).</li>
+      <li><b>Empty:</b> freshly auto-created transaction shows seeded checklist + "forward docs to {address}@docs.propertyiq.app" card.</li>
+      <li><b>Creation failure (fail-closed):</b> missing contact_id/property_id → NO transaction; a PropFlow human review task is created instead (§7.1). Duplicate → opens existing transaction.</li>
+      <li><b>Error/degraded:</b> OfficialFormProvider unconfigured → form actions disabled with OFFICIAL_FORM_PROVIDER_NOT_CONFIGURED. ESign provider down → signature cards show retry + manual-upload fallback. Wire gates not all true → quarantine (never partial display). ScoringService down → any displayed score disappears entirely (no local computation, §14).</li>
+      <li><b>Permission-limited:</b> brokerage admin sees read-only + compliance surfaces; parties without document_access_scope for a class never see those docs listed; staff access to portal data is STAFF_SESSION.</li>
+      <li><b>Mobile:</b> as in Layout; re-cascade and wire banners never collapsed.</li>
+    </ul>
+
+    <h2>Data fields</h2>
+    <p>TransactionRecord: transaction_id, side, status (6 values), current_stage (7), contract_date, close_date_target, close_date, deal_value, commission_gross_estimate/actual (USD MoneyAmount), at_risk_flag, timeline_anomaly_flag, next_deadline_id, attribution set (originating_content_id, campaign_id, lead_source, capture/conversion_source — display-only, nullable, never inferred). PropertySnapshot: MLS whitelist fields only (mls_listing_id, listing_status, list/close price, beds, baths, property_type, city, zip, mls_retention_expires_at). Deadlines: type, label, due_date (ISO), region_code, status, alert_offsets_days, at_risk_evaluation. Tasks: type, title, due, status (7 values). Documents: type, security_class, version, sha256, signature_status, retention_class (TRANSACTION_7Y default). Every record carries tenant_id + source_facts[] with verification_status.</p>
+
+    <h2>Rules & compliance</h2>
+    <ul>
+      <li><b>Fail-closed everywhere:</b> no contact/property → no transaction; no form provider → no forms; wire gates (all 6: legal_review_approved, wire_protocol_approved, ComplianceProfile.allows_wire_instruction_portal, feature_flag, security_audit_logging, OTP/MFA) → quarantine + SECURITY_REVIEW task + WIRE_INSTRUCTIONS_EVENT; no wire details via email/SMS/Wattson ever (§13.4).</li>
+      <li><b>Non-scoring:</b> deadline/risk flags are workflow state only — never update scoring, outreach priority, sensitive CRM fields, or ad audiences (§7.3 rule 8, §14).</li>
+      <li><b>Wattson boundary:</b> enforceWattsonBoundary blocks send_legal_document, commit_to_deadline, wire actions, raw-sensitive views at the API layer; not disableable (§10.5). One-approval batch cards, not per-micro-step popups (§10.3).</li>
+      <li><b>Sends:</b> PropClose never sends directly — NotificationProvider only, ComplianceProvider.check_outbound_contact() first, four consent statuses + evidence fields (§11.1–11.2). Client-facing anything routes review-first (Outbox, Screen 24).</li>
+      <li><b>PII:</b> masked in UI by default; reveal requires explicit action + OTP/MFA + security-audit log entry (§13.3). No raw PII/wire/doc bodies in app logs or Event Ledger.</li>
+      <li><b>MLS:</b> whitelist fields only; no embeddings/vector stores/AI training on MLS data (§13.6). No school data on this screen (§13.7). Imagery via ImageryProvider/Mapbox with attribution (§13.8).</li>
+      <li><b>Retention:</b> TRANSACTION_7Y (exceeds CA DRE 3-year minimum); SECURITY_AUDIT_7Y for wire/access logs; crypto-shred + tombstone after expiry (§13.2, §8.5).</li>
+      <li>Timeline generated from CA RPA-style defaults must be human-approved before it becomes client-facing (§7.3 rule 3).</li>
+    </ul>
+
+    <h2>Cross-links</h2>
+    <p><b>In:</b> Command Center cards, Kanban index, Approvals Inbox, Wattson chat, PIPELINE_MOVED (consumed). <b>Out:</b> Client portal (25), CRM contact (14), Security review queue, Outbox (24), Approvals Inbox (13), Underwriter (22, from property context). <b>Emits:</b> TRANSACTION_MILESTONE (12 milestone types), CLOSING_DETECTED, DEAL_CLOSED (with case_study_facts), CASE_STUDY_FACTS_AVAILABLE, REFERRAL_CLOSED, PORTAL_VIEWED (portal side), DNC_BLOCK; security log: WIRE_INSTRUCTIONS_EVENT, DOCUMENT_ACCESS_EVENT, SECURITY_ACCESS_EVENT. <b>Consumes:</b> PIPELINE_MOVED, NOTIFICATION_QUEUED/SENT/FAILED, DEAL_CLOSED (portal conversion trigger).</p>
+
+    <h2>Open decisions</h2>
+    <ul>
+      <li>[DECIDE] E-sign vendor: assume DocuSign (only direct v1 vendor integration per §16); UI shows generic "signature envelope" so vendor is swappable behind ESignProvider.</li>
+      <li>[DECIDE] Per-transaction email address format: interim design {street-slug}@docs.propertyiq.app as shown in draft; collision handling appends a 4-char hash. [BEST GUESS]</li>
+      <li>[DECIDE] 29-task checklist source template: matrix cites 29; interim = CA buyer-side/seller-side template pair maintained in brokerage config, editable per deal. [BEST GUESS]</li>
+      <li>[DECIDE] Deal-health chip formula: interim = rule list (deadline states + doc gaps + unconfirmed human updates), rendered as workflow flags; must never be presented as a score (§14).</li>
+      <li>[DECIDE] Offer tab computation home: offer ranking math runs in the offer-analyzer service (skills library), not PropClose-local, to respect non-scoring; PropClose displays results. [BEST GUESS]</li>
+    </ul>
+    <p class="anno" style="margin-top:20px">Wireframe fidelity — colors are placeholders from the locked PropFlow design language. All party names/numbers are realistic fake data. Agent identity: Graeham Watts, Intero Real Estate, DRE# 01466876 (from shared-references/identity.json — never hardcode elsewhere; the identity.json blocklist value must never appear). No crime data anywhere; no school data on this screen (§13.7).</p>
+  </div>
+</div>

@@ -1,0 +1,549 @@
+<title>PropertyIQ · Screen 18 — Campaign Manager (PropReach)</title>
+<link href="https://api.fontshare.com/v2/css?f[]=technor@500,600,700&display=swap" rel="stylesheet">
+<link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<style>
+  /* Type system — Technor for display, Inter for UI. */
+  :root{ --font-display:'Technor', Inter, -apple-system, 'Segoe UI', sans-serif; --font-ui: Inter, -apple-system, 'Segoe UI', Roboto, sans-serif; }
+</style>
+<style>
+  /* Palette v4 — PropFlow design language: neutral ink UI, ink-as-accent, color reserved for data. (extracted verbatim from propsearch-design-draft.html) */
+  :root, :root[data-theme="dark"], :root[data-theme="light"]{
+    --ink:#23282f; --paper:#fbfaf8; --surface:#f1efe9; --line:#e2dfd6;
+    --mut:#6b7076; --soft:#9b9f9f;
+    --brand:#2e6b53; --brand-ink:#ffffff; --brand-soft:#eaf1ec; --brand-deep:#1e4c3a;
+    --signal:#b07a2e;
+    --good:#2e7d4f; --warn:#a8630a; --crit:#b3372f;
+    --r:10px;
+  }
+  .intel .score, .mintel{ color:var(--brand-deep) }
+  .intel{ border-left:3px solid var(--brand) }
+  h1{ letter-spacing:-.02em }
+  .stat b{ letter-spacing:-.01em }
+  body[data-agent="watts"]{ --brand:#2e6b53; --brand-soft:#eaf1ec; --brand-deep:#1e4c3a; }
+
+  *{box-sizing:border-box; margin:0}
+  body{font:15px/1.55 var(--font-ui); color:var(--ink); background:var(--paper); padding-bottom:80px}
+  h1,h2,h3{line-height:1.15; text-wrap:balance; font-family:var(--font-display); font-weight:600}
+  h1{letter-spacing:-.01em}
+  .site{box-shadow:0 1px 2px rgba(20,24,32,.04), 0 8px 32px rgba(20,24,32,.06)}
+  .stat{box-shadow:0 1px 2px rgba(20,24,32,.03); transition:box-shadow .15s, transform .15s}
+  .stat:hover{box-shadow:0 4px 14px rgba(20,24,32,.08)}
+  .chip{transition:all .12s}
+  button{font-family:var(--font-ui)}
+  .num{font-variant-numeric:tabular-nums}
+  .wrap{max-width:1180px; margin:0 auto; padding:0 20px}
+
+  .bar{position:sticky; top:0; z-index:50; background:var(--paper); border-bottom:1px solid var(--line); padding:10px 0; backdrop-filter:blur(8px)}
+  .bar .wrap{display:flex; flex-wrap:wrap; gap:10px; align-items:center}
+  .bar .ttl{font-weight:700; margin-right:auto}
+  .bar .ttl small{display:block; font-weight:400; color:var(--mut)}
+  .bar a{color:var(--brand); font-size:13px; text-decoration:none}
+
+  .note{background:var(--surface); border:1px solid var(--line); border-radius:var(--r); padding:14px 16px; margin:0 0 22px; font-size:13.5px; color:var(--mut)}
+  .note b{color:var(--ink)}
+
+  .site{border:1px solid var(--line); border-radius:14px; overflow:hidden; background:var(--paper)}
+  .sitehead{display:flex; align-items:center; gap:14px; padding:14px 22px; border-bottom:1px solid var(--line)}
+  .avatar{width:38px; height:38px; border-radius:50%; background:var(--brand); color:var(--brand-ink); display:grid; place-items:center; font-weight:700}
+  .sitehead .who b{display:block}
+  .sitehead .who small{color:var(--mut)}
+  .sitehead nav{margin-left:auto; display:flex; gap:18px; font-size:13.5px; color:var(--mut)}
+  .sitehead nav a{color:inherit; text-decoration:none}
+  .sitehead nav a:hover{color:var(--brand)}
+
+  .chip{display:inline-flex; align-items:center; gap:6px; font-size:12.5px; font-weight:500; border:1px solid var(--line); border-radius:99px; padding:6px 12px; background:var(--paper); cursor:pointer; color:var(--ink)}
+  .chip:hover{border-color:var(--brand)}
+  .chip.on{background:var(--brand); border-color:var(--brand); color:var(--brand-ink); font-weight:600; box-shadow:0 2px 8px color-mix(in srgb, var(--brand) 30%, transparent)}
+
+  .statrow{display:grid; grid-template-columns:repeat(4,1fr); gap:10px}
+  .stat{background:var(--surface); border:1px solid var(--line); border-radius:var(--r); padding:12px}
+  .stat small{display:block; color:var(--mut); font-size:11.5px; text-transform:uppercase; letter-spacing:.05em}
+  .stat b{font-size:18px}
+  .stat .up{color:var(--good); font-size:12px}
+
+  .bdg{font-size:11.5px; border-radius:6px; padding:3px 8px; background:var(--surface); border:1px solid var(--line); color:var(--mut)}
+  .bdg.good{color:var(--good); border-color:color-mix(in srgb,var(--good) 30%,var(--line))}
+  .bdg.warn{color:var(--warn); border-color:color-mix(in srgb,var(--warn) 30%,var(--line))}
+  .bdg.crit{color:var(--crit); border-color:color-mix(in srgb,var(--crit) 30%,var(--line))}
+
+  .dtable{width:100%; border-collapse:collapse; font-size:13px}
+  .dtable td,.dtable th{border-bottom:1px solid var(--line); padding:8px 10px; text-align:left}
+  .dtable th{font-size:11px; text-transform:uppercase; letter-spacing:.05em; color:var(--soft)}
+
+  @media (max-width:860px){ .statrow{grid-template-columns:repeat(2,1fr)} .maingrid{grid-template-columns:1fr !important} .console{grid-template-columns:1fr !important} .rail{display:none !important} .threeup{grid-template-columns:1fr !important} }
+  @media (prefers-reduced-motion: reduce){ *{transition:none!important} }
+
+  /* ---- page-specific additions (same design language) ---- */
+  .anno{font-size:11px; color:var(--soft)}
+  .cardbox{border:1px solid var(--line); border-radius:10px; padding:11px 14px; font-size:12.5px; background:var(--paper)}
+  .btn-ink{background:var(--ink); color:#fff; border:0; border-radius:7px; padding:7px 12px; font-size:11.5px; cursor:pointer; font-weight:600}
+  .btn-ghost{background:var(--paper); border:1px solid var(--line); border-radius:7px; padding:7px 12px; font-size:11.5px; cursor:pointer}
+  .sechead{font-size:14px; font-weight:700; margin:0 0 8px; font-family:var(--font-display)}
+  .cov td.ok{color:var(--good); font-weight:700}
+  .specdoc h2{font-size:18px; margin:26px 0 8px}
+  .specdoc h3{font-size:15px; margin:18px 0 6px}
+  .specdoc p, .specdoc li{font-size:13.5px; color:var(--mut)}
+  .specdoc b{color:var(--ink)}
+  .specdoc table{margin:8px 0}
+  .camp{border:1px solid var(--line); border-radius:12px; padding:12px 16px; display:flex; gap:12px; align-items:center; flex-wrap:wrap; background:var(--paper)}
+  .camp .meta{flex:1; min-width:300px; font-size:12.5px}
+  .camp .meta .row2{color:var(--mut); margin-top:3px}
+  .pfstep{display:flex; gap:8px; align-items:baseline; padding:4px 0; border-bottom:1px dashed var(--line); font-size:11.5px}
+  .pfstep:last-child{border-bottom:0}
+  .pfstep .st{width:18px; text-align:center; flex:none}
+  .wizstep{border:1px solid var(--line); border-radius:9px; padding:9px 10px; background:var(--paper); font-size:11px}
+  .wizstep b{display:block; font-size:11.5px}
+  .wizstep.on{border-color:var(--brand); background:var(--brand-soft)}
+  .wizstep.blk{border-color:var(--crit); background:#fbf1f0}
+</style>
+
+<!-- ============ (1) slim header ============ -->
+<div class="bar">
+  <div class="wrap">
+    <div class="ttl">PropertyIQ · Screen 18 — Campaign Manager (PropReach) <small>Full-density per-screen mock · wireframe fidelity · dev-facing annotations in gray</small></div>
+    <a href="../wireframe.html">← All screens</a>
+  </div>
+</div>
+
+<!-- ============ (2) THE FULL MOCK ============ -->
+<div class="wrap" style="padding-top:24px">
+  <div class="note"><b>Screen 18 — Campaign Manager (PropReach).</b> The owner-facing paid-media surface: every campaign walks a 10-state machine and a 12-step preflight, the owner approves plain-language bundles (never acts like a media buyer), and nothing spends autonomously outside an explicitly configured spend envelope. Blocked campaigns always name the exact rule violated and offer the compliant alternative. Primary users: agent/owner; team admin for spend settings; Wattson may draft campaigns conversationally but never bypasses gates (MB §7.7).</div>
+
+  <div class="site" data-agent="watts">
+    <!-- header: rollup strip + actions (spec Layout) -->
+    <div class="sitehead" id="el-rollup">
+      <div class="avatar">GW</div>
+      <div class="who"><b>Campaigns</b><small class="num">3 live · $412 spent this month · envelope $300/mo per campaign</small></div>
+      <div style="display:flex; gap:5px; margin-left:10px; flex-wrap:wrap" id="el-status-filter">
+        <button class="chip on" style="font-size:10.5px">All (9)</button>
+        <button class="chip" style="font-size:10.5px">ACTIVE 3</button>
+        <button class="chip" style="font-size:10.5px">PENDING_APPROVAL 1</button>
+        <button class="chip" style="font-size:10.5px">PREFLIGHT_BLOCKED 1</button>
+        <button class="chip" style="font-size:10.5px">SCHEDULED 1 · PAUSED 1 · DRAFT 1</button>
+        <button class="chip" style="font-size:10.5px; color:var(--soft)">COMPLETED/FAILED/ARCHIVED 1 ▾</button>
+      </div>
+      <nav><a href="#el-wizard"><b style="color:var(--brand)">+ New campaign</b></a><a href="#el-manual-chatgpt">Manual channels</a><a href="#el-envelope">Spend settings</a></nav>
+    </div>
+    <div class="anno" style="padding:6px 22px 0">Rollup = CampaignPerformanceSnapshot aggregate + SpendEnvelope. Status filter chips cover the full 10-state CampaignStatus enum [BEST GUESS: filter chips, per spec]. Sort: ACTIVE → PENDING_APPROVAL → PREFLIGHT_BLOCKED → SCHEDULED → PAUSED → DRAFT → COMPLETED/FAILED/ARCHIVED (archived collapsed). Header rollup shows dashes while loading, never zeros.</div>
+
+    <div class="console" style="display:grid; grid-template-columns:172px 1fr">
+      <!-- persistent agent-console left rail (Screen 9 chrome) -->
+      <div class="rail" style="border-right:1px solid var(--line); padding:14px 10px; font-size:12.5px; display:flex; flex-direction:column; gap:2px; background:var(--surface)">
+        <a href="#" style="text-decoration:none; color:var(--ink); border-radius:8px; padding:8px 10px">☰ Today</a>
+        <a href="#" style="text-decoration:none; color:var(--ink); border-radius:8px; padding:8px 10px">🗺 Farm map</a>
+        <a href="#" style="text-decoration:none; color:var(--ink); border-radius:8px; padding:8px 10px">🤝 Past clients</a>
+        <a href="#" style="text-decoration:none; color:var(--ink); border-radius:8px; padding:8px 10px">👤 Leads & clients</a>
+        <a href="#" style="text-decoration:none; color:var(--ink); border-radius:8px; padding:8px 10px">💬 Comms <span class="bdg" style="font-size:9.5px">6</span></a>
+        <a href="#" style="text-decoration:none; color:var(--ink); border-radius:8px; padding:8px 10px">📋 Transactions</a>
+        <a href="#" style="text-decoration:none; color:var(--ink); border-radius:8px; padding:8px 10px">🎬 Content studio</a>
+        <a href="#" style="text-decoration:none; color:#fff; background:var(--ink); border-radius:8px; padding:8px 10px; font-weight:600">📣 Ads & funnels</a>
+        <a href="#" style="text-decoration:none; color:var(--ink); border-radius:8px; padding:8px 10px">⚙ Playbooks</a>
+        <a href="#" style="text-decoration:none; color:var(--ink); border-radius:8px; padding:8px 10px">📈 Reports</a>
+        <div style="margin-top:auto; padding-top:10px; border-top:1px solid var(--line)">
+          <a href="#" style="text-decoration:none; color:var(--ink); border-radius:8px; padding:8px 10px; display:block">⚙ Settings</a>
+          <div class="anno" style="padding:6px 10px">Global chrome: persistent agent-console rail (Screen 9 pattern). Consumer pages never show it. Entry points into this screen: left-nav, Distribution board "Push to ad" (19), listing "Generate ads", Wattson intent, Approvals deep-links, weekly-report links.</div>
+        </div>
+      </div>
+
+      <div>
+        <!-- budget anomaly alert -->
+        <div id="el-anomaly" style="padding:14px 22px 0">
+          <div class="cardbox" style="border-color:var(--warn); background:#fdf6ee; display:flex; gap:10px; align-items:center; flex-wrap:wrap">
+            <span style="color:var(--warn)">📈</span>
+            <div style="flex:1; min-width:280px"><b>Budget anomaly — "742 Hurlingame launch"</b>
+              <div style="color:var(--mut); font-size:12px" class="num">Yesterday's spend $19.40 ran 29% above the $15/day cap trajectory (Meta pacing). No action taken automatically — spend changes stay REVIEW_REQUIRED.</div>
+            </div>
+            <button class="btn-ghost">Open report</button><button class="btn-ghost">Dismiss</button>
+            <div class="anno" style="width:100%">Threshold: deviation vs daily-cap trajectory, admin-configurable, default 20% [BEST GUESS — not fixed in MB]. Source: performance snapshots. This banner never moves money (MB §2.6, §21.2 — heuristics are recommendations only).</div>
+          </div>
+        </div>
+
+        <!-- recommendations queue chip -->
+        <div id="el-recs" style="padding:10px 22px 0">
+          <div class="cardbox" style="display:flex; gap:10px; align-items:center; flex-wrap:wrap; background:var(--surface)">
+            <span>💡</span>
+            <div style="flex:1; min-width:260px"><b>2 budget recommendations pending — in Approvals</b>
+              <div style="color:var(--mut); font-size:12px" class="num">"742 Hurlingame: +$10/day — CPL $40 is 35% under benchmark, frequency 1.8, no creative fatigue" · "Friendly Acres value: hold — 9 valuations, pipeline forming". Each carries rationale_source_facts; approval_required: true.</div>
+            </div>
+            <button class="btn-ink">Review in Approvals</button>
+            <div class="anno" style="width:100%">PropReachWeeklyReport.budget_recommendations (MB §21.5). Review-required by default — autonomy exists only inside the owner-set spend envelope (§21.6). Click → the Approvals card, which deep-links back to this campaign.</div>
+          </div>
+        </div>
+
+        <!-- ============ campaign card list ============ -->
+        <div style="padding:14px 22px 0">
+          <div class="sechead">Campaigns — sorted by state priority</div>
+          <div style="display:grid; gap:10px">
+
+            <!-- ACTIVE card 1 -->
+            <div class="camp" id="el-campaign-card">
+              <div class="meta">
+                <b>742 Hurlingame launch</b> <span class="bdg good" style="font-size:10px">ACTIVE</span> <span class="bdg" style="font-size:10px">Meta · Special Ad Category ✓</span> <span class="bdg" style="font-size:10px">ACTIVE_LISTING exception</span>
+                <div class="row2 num">$240 / $300 cap · 18K reach · 41 clicks → funnel → 6 leads @ $40 CPL <span class="bdg good" style="font-size:9.5px">benchmark $62</span> · recommendation pending: +$10/day (in Approvals) · utm_id CMP-2026-0412 · lock CL-0421</div>
+              </div>
+              <button class="btn-ghost" id="el-pause">Pause</button>
+              <button class="btn-ghost" id="el-report">Report</button>
+              <div class="anno" style="width:100%">Card = PropReachCampaign + CampaignPerformanceSnapshot. Click → detail drawer (below). Pause = CampaignPauseType.MANUAL with confirm dialog (MB §18.1). Report → campaign slice of Attribution (Screen 31) + weekly-report mirror. CPL benchmark = tenant account history first, market benchmark labeled as hint — never a promise [DECIDE, MB §7.7]. Nullable metrics render "unknown", never invented.</div>
+            </div>
+
+            <!-- ACTIVE card 2 -->
+            <div class="camp">
+              <div class="meta">
+                <b>"What's your home worth" — Friendly Acres</b> <span class="bdg good" style="font-size:10px">ACTIVE</span> <span class="bdg" style="font-size:10px">Google Search</span> <span class="bdg" style="font-size:10px">LEAD_GEN · PRIMARY_MARKET</span>
+                <div class="row2 num">$180 spent · 9 valuations → 2 hot sellers · conversion event QUALIFIED_FORM_SUBMIT (advisor-picked: qualified &gt; volume) · CPL — <span class="bdg" style="font-size:9.5px">no benchmark</span></div>
+              </div>
+              <button class="btn-ghost">Pause</button><button class="btn-ghost">Report</button>
+              <div class="anno" style="width:100%">Benchmarks unavailable for this geo × objective → raw CPL with "no benchmark" — a comparison is never invented (fail-closed).</div>
+            </div>
+
+            <!-- ACTIVE + safety-paused sibling / safety-pause banner -->
+            <div class="camp" id="el-safety-pause" style="border-color:var(--crit); background:#fbf1f0">
+              <div class="meta">
+                <b>ADU explainer boost — "Garage = $250K"</b> <span class="bdg crit" style="font-size:10px">PAUSED · SAFETY</span> <span class="bdg" style="font-size:10px">Meta + YouTube</span>
+                <div class="row2"><b style="color:var(--crit)">Auto-paused: BROKEN_LANDING_PAGE</b> — funnel page /f/adu-checklist returned 404 on the hourly tracking check at 6:12 AM. Spend stopped on both platforms. <span style="color:var(--mut)" class="num">$96 spent · 11 leads before pause.</span></div>
+              </div>
+              <button class="btn-ink">Fix &amp; resume</button>
+              <div class="anno" style="width:100%">CampaignSafetyPauseReason enum: DEAD_LINK · BROKEN_LANDING_PAGE · AD_POLICY_VIOLATION · COMPLIANCE_BLOCK · TRACKING_DESTINATION_FAILURE · MALWARE_SECURITY_RISK (MB §2.6, §18.1). Auto-pause exists ONLY for these safety reasons; performance pause requires performance_pause_auto_allowed=true in the envelope. "Fix &amp; resume" re-runs the 12-step preflight in place before spend restarts.</div>
+            </div>
+
+            <!-- PENDING_APPROVAL -->
+            <div class="camp" style="border-color:var(--signal)">
+              <div class="meta">
+                <b>July market update — authority push</b> <span class="bdg warn" style="font-size:10px">PENDING_APPROVAL</span> <span class="bdg" style="font-size:10px">Meta 70% · YouTube 30%</span> <span class="bdg" style="font-size:10px">requested by Wattson</span>
+                <div class="row2 num">Score 8.2 (PROPCAST_VIDEO_PERFORMANCE v3) · AUTHORITY · $150 total · awaiting your one approval — bundle preview below ↓</div>
+              </div>
+              <button class="btn-ghost">Open bundle</button>
+              <div class="anno" style="width:100%">Wattson-drafted campaigns carry "requested by Wattson" provenance on the card and the approval card (matrix Wattson item) — drafting never bypasses gates (MB §7.7).</div>
+            </div>
+
+            <!-- PREFLIGHT_BLOCKED -->
+            <div class="camp" id="el-blocked" style="border-color:var(--warn); background:#fdf6ee">
+              <div class="meta">
+                <b>⚠ Blocked: "EPA investor duplex" campaign</b> <span class="bdg warn" style="font-size:10px">PREFLIGHT_BLOCKED</span>
+                <div class="row2"><b style="color:var(--ink)">Hard block (named verbatim):</b> umbrella geo at LEAD_GEN objective violates the market-level rule — UMBRELLA_AWARENESS cannot launch LEAD_GEN (MB §5.3); and the draft's ZIP targeting violates Meta housing rules — no ZIP/postal-code targeting on a HOUSING campaign (MB §6.1). <b style="color:var(--ink)">Compliant alternative offered:</b> switch to city-level EPA (PRIMARY_MARKET) + broad geography, projected reach −22%.</div>
+              </div>
+              <button class="btn-ink">Apply fix</button>
+              <div class="anno" style="width:100%">CampaignPreflightResult.hard_blocks — every block names the exact rule + a compliant alternative with projected impact. "Apply fix" mutates the draft and re-runs preflight in place. Meta housing hard-block list (deny-by-default, rendered verbatim in block reasons): age/gender narrowing · ZIP targeting · detailed targeting · exclusions · Lookalikes · radius &lt;15mi US · protected-class or proxy targeting · school-rating/boundary/family-status proxy logic (MB §6.1, §12.2). Fair housing: special_ad_categories=["HOUSING"] always set on housing campaigns.</div>
+            </div>
+
+            <!-- SCHEDULED / PAUSED / DRAFT / archived collapsed -->
+            <div class="camp">
+              <div class="meta"><b>118 Beech teaser boost</b> <span class="bdg" style="font-size:10px">SCHEDULED</span> <span class="bdg" style="font-size:10px">Meta</span><div class="row2 num">Approved ✓ · launches Fri 9 AM with the listing's launch kit · $90 total</div></div>
+              <button class="btn-ghost">Edit</button>
+            </div>
+            <div class="camp" id="el-oauth">
+              <div class="meta"><b>Relocation guide — Peninsula</b> <span class="bdg" style="font-size:10px">PAUSED · MANUAL</span> <span class="bdg crit" style="font-size:10px">OAUTH_EXPIRED — Google Ads</span><div class="row2">Google Ads connection expired — launch and resume disabled until reconnected. <b style="color:var(--ink)">Repair:</b> reconnect in Settings → Integrations.</div></div>
+              <button class="btn-ink">Reconnect</button>
+              <div class="anno" style="width:100%">Degraded state (fail-closed): platform OAuth expired → OAUTH_EXPIRED flag on the card, launch disabled, repair CTA. No cached-credential retries.</div>
+            </div>
+            <div class="camp">
+              <div class="meta"><b>Spring open-house retargeting</b> <span class="bdg" style="font-size:10px">DRAFT</span><div class="row2 num">RETARGETING exception · audience: site visitors 30d (from Audience Builder, Screen 30) · preflight not yet run</div></div>
+              <button class="btn-ghost">Resume wizard</button>
+            </div>
+            <div class="cardbox" style="color:var(--soft); font-size:11.5px">▸ Completed / Failed / Archived (1) — collapsed. FAILED cards keep their last preflight/platform error verbatim for the audit trail.</div>
+          </div>
+
+          <!-- campaign detail drawer -->
+          <div id="el-drawer" style="margin-top:12px; border:1.5px solid var(--brand); border-radius:12px; background:var(--brand-soft); padding:14px 16px">
+            <div style="display:flex; gap:8px; align-items:center; flex-wrap:wrap"><b style="font-size:14px">Campaign detail — right slide-over drawer (shown inline here): 742 Hurlingame launch</b><span class="anno">drawer has a permalink route for deep-links from Approvals/reports [DECIDE]</span></div>
+            <div class="threeup" style="display:grid; grid-template-columns:repeat(3,1fr); gap:10px; margin-top:10px; font-size:11.5px">
+              <div style="background:var(--paper); border:1px solid var(--line); border-radius:9px; padding:10px">
+                <b>State timeline</b>
+                <div style="color:var(--mut); margin-top:4px" class="num">DRAFT Jul 2 → PREFLIGHT_BLOCKED Jul 2 (radius 8mi &lt; 15mi — fixed) → PENDING_APPROVAL Jul 3 → APPROVED Jul 3 (you) → SCHEDULED → ACTIVE Jul 5. Every transition ledger-stamped with actor + correlation_id.</div>
+              </div>
+              <div style="background:var(--paper); border:1px solid var(--line); border-radius:9px; padding:10px">
+                <b>UTM &amp; lock identity</b>
+                <div style="color:var(--mut); margin-top:4px" class="num">utm_campaign=CL-0421 (content_id) · utm_id=CMP-2026-0412 · source=meta · medium=paid · content=v2 · term=fa-farm · content_lock_id carried alongside content_id (MB §14.5) · links via link.propertyiq.app only (§2.9)</div>
+              </div>
+              <div style="background:var(--paper); border:1px solid var(--line); border-radius:9px; padding:10px">
+                <b>Performance snapshot + platform refs</b>
+                <div style="color:var(--mut); margin-top:4px" class="num">impressions 24.1K · reach 18K · clicks 41 · leads 6 · CPL $40 · freq 1.8 · view-through 3 · pipeline_contacts 4 · closed_deals — unknown · commission actual — unknown (nullable → "unknown", never fabricated) · platform_campaign_refs: meta:238…91</div>
+              </div>
+            </div>
+            <!-- lead feedback prompt -->
+            <div id="el-lead-feedback" style="background:var(--paper); border:1px solid var(--line); border-radius:9px; padding:10px; margin-top:10px; font-size:11.5px">
+              <b>Lead feedback — teach the platform (6 leads)</b>
+              <table class="dtable" style="font-size:11px; margin-top:5px">
+                <tr><th>Lead</th><th>Captured</th><th>Your verdict</th></tr>
+                <tr><td>M. Chen</td><td class="num">Jul 8 · funnel form</td><td><button class="chip on" style="font-size:10px">Converted ✓</button> <button class="chip" style="font-size:10px">Junk</button></td></tr>
+                <tr><td>(415) 555-0182</td><td class="num">Jul 9 · call</td><td><button class="chip" style="font-size:10px">Converted</button> <button class="chip on" style="font-size:10px; background:var(--crit); border-color:var(--crit)">Junk ✗</button></td></tr>
+                <tr><td>R. Osei</td><td class="num">Jul 11 · funnel form</td><td><button class="chip" style="font-size:10px">Converted</button> <button class="chip" style="font-size:10px">Junk</button> <span class="anno">unmarked</span></td></tr>
+              </table>
+              <div class="anno" style="margin-top:4px">Marking converted/junk feeds platform conversion corrections to improve optimization where APIs allow (MB §21.6). Never auto-marked.</div>
+            </div>
+          </div>
+        </div>
+
+        <!-- ============ new-campaign wizard ============ -->
+        <div id="el-wizard" style="padding:14px 22px 0">
+          <div style="border:1.5px solid var(--brand); border-radius:12px; padding:14px 16px; background:var(--brand-soft)">
+            <div style="display:flex; gap:8px; align-items:center; flex-wrap:wrap"><b style="font-size:14px">＋ New campaign — full-screen wizard (steps mirror the 12-step preflight order, MB §7.5)</b><span class="anno">shown inline; real UI is a full-screen modal stepper</span></div>
+            <div style="display:grid; grid-template-columns:repeat(4,1fr); gap:8px; margin-top:10px">
+              <div class="wizstep on"><b>1 · Objective</b><span style="color:var(--mut)">AUTHORITY · <u>LEAD_GEN</u> · RETARGETING · ACTIVE_LISTING · SERVICE_CAMPAIGN</span></div>
+              <div class="wizstep on"><b>2 · Promoted item</b><span style="color:var(--mut)">content_id CL-0421 (score 8.2 ≥ 7.0 ✓) — or asset_id / exception: GOOGLE_LSA · CHATGPT_ADS · RETARGETING · SERVICE_CAMPAIGN · ACTIVE_LISTING</span></div>
+              <div class="wizstep blk"><b>3 · Geo + market level</b><span style="color:var(--mut)">EPA <span class="bdg good" style="font-size:9px">PRIMARY_MARKET</span> · RWC <span class="bdg" style="font-size:9px">ADJACENT</span> · Bay Area <span class="bdg crit" style="font-size:9px">UMBRELLA — blocked at LEAD_GEN, in-step</span></span></div>
+              <div class="wizstep on"><b>4 · Targeting method</b><span style="color:var(--mut)">GEOGRAPHIC_ONLY ✓ · or CUSTOM_AUDIENCE (picker from Screen 30, attested lists only)</span></div>
+              <div class="wizstep on"><b>5 · Conversion Event Advisor</b><span style="color:var(--mut)">recommends deepest believable event (card below ↓)</span></div>
+              <div class="wizstep on"><b>6 · Goal preference</b><span style="color:var(--mut)">VOLUME · <u>QUALIFIED</u> · BALANCED · AWARENESS — trade-off made explicit (CampaignGoalPreference)</span></div>
+              <div class="wizstep on"><b>7 · Budget + envelope check</b><span style="color:var(--mut)" class="num">$150 total · $10/day — inside $300/campaign cap ✓ · ad_spend_change_mode=REVIEW_REQUIRED</span></div>
+              <div class="wizstep"><b>8 · Preflight → submit</b><span style="color:var(--mut)">runs the 12 checks live (panel below ↓) → Send to Approvals</span></div>
+            </div>
+            <div class="anno" style="margin-top:8px">CampaignPreflightRequest / CampaignIntakeAnswers (MB §7.3, §7.5–7.7). Hard blocks render inside the offending step, never at the end. 60/30/10 geo allocation appears only as a planning suggestion — the wizard never auto-shifts money into it (§5.4). No sensitive-topic signals anywhere in targeting steps; school data never in targeting (§12.1, §12.3 firewall).</div>
+
+            <div class="threeup" style="display:grid; grid-template-columns:1fr 1fr; gap:10px; margin-top:10px">
+              <!-- preflight checklist -->
+              <div id="el-preflight" style="background:var(--paper); border:1px solid var(--line); border-radius:9px; padding:10px">
+                <b style="font-size:12px">Preflight checklist — 12 live checks</b>
+                <div style="margin-top:5px">
+                  <div class="pfstep"><span class="st" style="color:var(--good)">✓</span><span>1 Naming &amp; ID validation <span class="anno">CMP-2026-0413</span></span></div>
+                  <div class="pfstep"><span class="st" style="color:var(--good)">✓</span><span>2 content_id / asset_id / exception validation</span></div>
+                  <div class="pfstep"><span class="st" style="color:var(--good)">✓</span><span>3 ScoringService — 8.2 ≥ 7.0 gate <span class="anno">PROPCAST_VIDEO_PERFORMANCE v3 · never computed locally</span></span></div>
+                  <div class="pfstep"><span class="st" style="color:var(--good)">✓</span><span>4 ComplianceProvider.check() <span class="anno">fair housing / FEHA pass</span></span></div>
+                  <div class="pfstep"><span class="st" style="color:var(--good)">✓</span><span>5 RegionProfile.get() <span class="anno">CA disclosure set</span></span></div>
+                  <div class="pfstep"><span class="st" style="color:var(--crit)">✗</span><span>6 ChannelPolicy validation — <b style="color:var(--crit)">radius 8mi &lt; 15mi US minimum (Meta housing)</b> <span class="anno">→ links to the geo step to fix</span></span></div>
+                  <div class="pfstep"><span class="st" style="color:var(--good)">✓</span><span>7 Audience/list preflight <span class="anno">geographic-only, no list</span></span></div>
+                  <div class="pfstep"><span class="st" style="color:var(--good)">✓</span><span>8 Creative/legal/release preflight <span class="anno">ReleaseRecord ✓</span></span></div>
+                  <div class="pfstep"><span class="st" style="color:var(--good)">✓</span><span>9 Link &amp; tracking preflight <span class="anno">landing 200 OK · pixel firing · UTMs minted</span></span></div>
+                  <div class="pfstep"><span class="st" style="color:var(--good)">✓</span><span>10 Spend approval / envelope validation</span></div>
+                  <div class="pfstep"><span class="st" style="color:var(--soft)">…</span><span>11 Owner approval <span class="anno">pending — after checks pass</span></span></div>
+                  <div class="pfstep"><span class="st" style="color:var(--soft)">…</span><span>12 Event Ledger write-readiness <span class="anno">blocks launch if it fails (fail-closed)</span></span></div>
+                </div>
+                <div class="anno" style="margin-top:5px">CampaignPreflightResult — each check expands for detail; a failed check links to its fix surface. Any hard-block → PREFLIGHT_BLOCKED.</div>
+              </div>
+              <!-- conversion event advisor -->
+              <div id="el-advisor" style="background:var(--paper); border:1px solid var(--line); border-radius:9px; padding:10px; font-size:11.5px">
+                <b style="font-size:12px">Conversion Event Advisor</b>
+                <div style="background:var(--surface); border-radius:8px; padding:8px 10px; margin-top:6px">
+                  <b>Recommended: QUALIFIED_FORM_SUBMIT</b> <span class="bdg good" style="font-size:9.5px">supported_by_funnel ✓</span>
+                  <div style="color:var(--mut); margin-top:3px"><b style="color:var(--ink)">owner_explanation:</b> "Your Friendly Acres funnel reliably captures qualified form submits — that's the deepest event it can support, so the platform optimizes toward real sellers instead of cheap clicks."</div>
+                </div>
+                <div style="color:var(--mut); margin-top:6px">Full menu: AD_CLICK · LEAD_FORM_SUBMIT · CMA_REQUEST · BOOKING_REQUEST · PHONE_CALL · QUALIFIED_FORM_SUBMIT</div>
+                <div style="border:1px solid var(--warn); border-radius:8px; padding:7px 9px; margin-top:6px; color:var(--warn); font-size:11px"><b>⚠ warning_messages</b> — if you override to PHONE_CALL: "spam calls may distort optimization on this number; consider LEAD_FORM_SUBMIT" (MB §6.2, §7.6)</div>
+                <div style="display:flex; gap:6px; margin-top:6px"><button class="btn-ink">Accept</button><button class="btn-ghost">Override (keeps warning)</button></div>
+                <div class="anno" style="margin-top:5px">ConversionEventRecommendation — deterministic logic, not a scoring model; carries source_facts. One primary conversion goal per Google campaign where possible (MB §6.2).</div>
+              </div>
+            </div>
+
+            <!-- approval bundle preview -->
+            <div id="el-bundle" style="background:var(--paper); border:1px solid var(--line); border-radius:9px; padding:12px; margin-top:10px; font-size:11.5px">
+              <b style="font-size:12px">Approval bundle preview — what the owner sees (one honest card, MB §7.1/§7.4)</b>
+              <div style="display:grid; grid-template-columns:110px 1fr; gap:10px; margin-top:8px">
+                <div style="background:var(--surface); border-radius:8px; display:grid; place-items:center; font-size:22px; min-height:78px">🎞<div class="anno" style="text-align:center">thumbnail<br>CL-0421 v2</div></div>
+                <div style="display:grid; gap:3px; color:var(--mut)" class="num">
+                  <div><b style="color:var(--ink)">Promoting:</b> "Garage = $250K" ADU video (PROPCAST) · <b style="color:var(--ink)">Eligibility:</b> score 8.2 ≥ 7.0 organic gate ✓ (no exception needed)</div>
+                  <div><b style="color:var(--ink)">Platform mix:</b> Meta 70% · YouTube 30% · <b style="color:var(--ink)">Market:</b> PRIMARY_MARKET · geo EPA, RWC · <b style="color:var(--ink)">Audience:</b> GEOGRAPHIC_ONLY · housing_campaign ✓ · special_ad_categories ["HOUSING"]</div>
+                  <div><b style="color:var(--ink)">Budget:</b> $150 total · $10/day · Jul 18–Aug 1 · REVIEW_REQUIRED · <b style="color:var(--ink)">Landing:</b> link.propertyiq.app/f/adu-checklist</div>
+                  <div><b style="color:var(--ink)">Compliance summary:</b> ComplianceProvider pass · CA RegionProfile · Meta housing rules validated · <b style="color:var(--ink)">Approvals required:</b> CAMPAIGN_LAUNCH (you)</div>
+                  <div><b style="color:var(--ink)">Expected outcome:</b> 9–15K impressions · 25–60 clicks · 3–8 leads · CPL est. $38–68 · estimate_basis: ACCOUNT_HISTORY <span class="bdg warn" style="font-size:9.5px">guarantee_disclaimer: "Estimates from your account history — results are not guaranteed."</span></div>
+                </div>
+              </div>
+              <div style="display:flex; gap:6px; margin-top:8px"><button class="btn-ink">Send to Approvals → PENDING_APPROVAL</button><button class="btn-ghost">Back to wizard</button></div>
+              <div class="anno" style="margin-top:5px">Mirrors CampaignApprovalBundle exactly: promoted_item_summary, eligibility (score/exception + reason), platform_mix %, market level + geo codes, audience type, budget, landing destination, compliance summary, approvals_required, expected_outcome with guarantee_disclaimer + estimate_basis (ACCOUNT_HISTORY / MARKET_BENCHMARK / UNKNOWN). The owner approves plain language — never raw platform settings.</div>
+            </div>
+          </div>
+        </div>
+
+        <!-- ============ search-term recommendations ============ -->
+        <div id="el-searchterms" style="padding:14px 22px 0">
+          <div class="cardbox">
+            <b>Google search-term recommendations — served terms you didn't target (MB §21.3)</b>
+            <table class="dtable" style="font-size:11.5px; margin-top:6px">
+              <tr><th>Served term</th><th>7-day</th><th>Recommendation</th><th>Action (approval-required)</th></tr>
+              <tr><td>"home value estimate friendly acres"</td><td class="num">31 impr · 4 clicks · 1 lead</td><td><span class="bdg good">Add as keyword</span></td><td><button class="btn-ghost">Approve</button> <button class="btn-ghost">Dismiss</button></td></tr>
+              <tr><td>"zillow zestimate wrong"</td><td class="num">18 impr · 3 clicks</td><td><span class="bdg good">Add keyword + revise copy (intent: estimate skepticism)</span></td><td><button class="btn-ghost">Approve</button> <button class="btn-ghost">Dismiss</button></td></tr>
+              <tr><td>"apartments for rent east palo alto"</td><td class="num">44 impr · 0 leads</td><td><span class="bdg warn">Add as negative — intent mismatch</span></td><td><button class="btn-ghost">Approve</button> <button class="btn-ghost">Dismiss</button></td></tr>
+            </table>
+            <div class="anno" style="margin-top:5px">AdPlatformProvider search-term reports. Every row is a recommendation requiring approval unless an explicit spend envelope + account setting allow execution (MB §21.3). Protected-class or proxy keywords never appear as recommendations — filtered upstream by the sensitive-topic firewall (§12.3).</div>
+          </div>
+        </div>
+
+        <!-- ============ manual channels tab ============ -->
+        <div style="padding:14px 22px 0">
+          <div style="display:flex; gap:6px; align-items:center"><div class="sechead" style="margin:0">Manual channels</div>
+            <div style="display:inline-flex; border:1px solid var(--line); border-radius:99px; overflow:hidden; font-size:11px; margin-left:8px"><span style="padding:5px 12px; background:var(--ink); color:#fff; font-weight:600">ChatGPT Ads</span><span style="padding:5px 12px; color:var(--mut); cursor:pointer">Google LSA</span></div>
+            <span class="anno">both tabs rendered below · human launches, PropReach prepares + tracks · spend changes REVIEW_REQUIRED</span>
+          </div>
+          <div class="threeup" style="display:grid; grid-template-columns:1fr 1fr; gap:10px; margin-top:8px">
+            <!-- ChatGPT Ads -->
+            <div id="el-manual-chatgpt" class="cardbox">
+              <b>ChatGPT Ads — plan builder (MB §15.2–15.5)</b>
+              <div style="color:var(--mut); font-size:11.5px; margin-top:5px" class="num">Campaign spec: objective <b style="color:var(--ink)">CONVERSIONS</b> · US · Jul 21–Aug 18 · 2 ad groups (moment_id "considering-selling", "home-value-curiosity") · context_hint housing-intent-only, Fair-Housing/FEHA-reviewed — never protected traits or household composition.</div>
+              <div style="background:var(--surface); border-radius:8px; padding:8px 10px; margin-top:6px; font-size:11.5px">
+                <b>Ad preview (limits enforced live):</b>
+                <div style="border:1px dashed var(--line); border-radius:7px; padding:7px 9px; margin-top:5px; background:var(--paper)">
+                  <b class="num">What's your EPA home worth? <span class="anno">21/24 chars ✓</span></b>
+                  <div style="color:var(--mut); font-size:11px" class="num">Free local valuation — no Zestimate guessing. <span class="anno">46/48 chars ✓</span></div>
+                  <div class="anno">🖼 hosted square image 1080×1080 (640–1200px ✓) · landing link.propertyiq.app/f/epa-value · <b>copy carries agent name, DRE 01466876, Intero Real Estate — read-only from identity.json (MB §15.3)</b></div>
+                </div>
+              </div>
+              <div style="display:flex; gap:6px; margin-top:8px; flex-wrap:wrap"><button class="btn-ghost">⬇ campaign_workbook.xlsx</button><button class="btn-ghost">⬇ context-hints-to-paste.docx</button><button class="btn-ghost">⬇ setup-checklist.docx</button><button class="btn-ink">I launched this ✓</button></div>
+              <div class="anno" style="margin-top:5px">"I launched this" records CAMPAIGN_LAUNCHED with metadata.manual_channel=true, platform=CHATGPT_ADS; leads enter via /approved-leads with lead_source=CHATGPT_ADS. Active-listing imagery blocked by default in v1 (misrepresentation risk) — exception needs approved_exception_type=ACTIVE_LISTING + status validation + compliance approval. UTM: content-backed utm_campaign=content_id; exception-with-no-content utm_campaign=NONE, utm_id=campaign_id.</div>
+            </div>
+            <!-- Google LSA -->
+            <div id="el-manual-lsa" class="cardbox">
+              <b>Google LSA — lead inbox (MB §16.3–16.4)</b>
+              <div style="display:flex; gap:6px; margin-top:5px; flex-wrap:wrap"><span class="bdg good">Google Guaranteed ✓</span><span class="bdg">Setup checklist 9/9</span><span class="bdg num">3 leads this week · 1 dispute drafted</span></div>
+              <table class="dtable" style="font-size:11px; margin-top:6px">
+                <tr><th>Lead</th><th>Capture</th><th>lead_status</th><th>Actions</th></tr>
+                <tr><td>(650) 555-0134</td><td>PHONE_CALL · <a href="#" style="color:var(--brand)">▶ recording</a></td><td><span class="bdg good">ACCEPTED</span></td><td><button class="btn-ghost">Mark converted</button></td></tr>
+                <tr><td>t.morales@…</td><td>FORM</td><td><span class="bdg">NEW</span></td><td><button class="btn-ghost">Accept</button> <button class="btn-ghost">Dispute</button></td></tr>
+                <tr><td>(408) 555-0197</td><td>PHONE_CALL · solicitor</td><td><span class="bdg warn">DISPUTED → credit pending</span></td><td><span class="anno">credited tracking in performance metadata</span></td></tr>
+              </table>
+              <div class="anno" style="margin-top:5px">GoogleLsaLeadRecord: lead_status NEW/ACCEPTED/DISPUTED/CREDITED/INVALID/CONVERTED · recordings retained per VOICE_TRANSCRIPT_24M class · all leads route through /approved-leads (front door) · raw sensitive call content never passed into Wattson context · if AI answers LSA calls, AI disclosure is mandatory, 24/7 answering allowed for lead-initiated inbound (MB §6.5, §16.4). Disputes/credits report via CAMPAIGN_PERFORMANCE_SIGNAL — no new event names.</div>
+            </div>
+          </div>
+        </div>
+
+        <!-- ============ 3-up info panels (per draft) ============ -->
+        <div style="padding:14px 22px 0">
+          <div class="threeup" style="display:grid; grid-template-columns:repeat(3,1fr); gap:10px; font-size:12px">
+            <div class="cardbox"><b>Preflight explainer</b><div style="color:var(--mut); margin-top:5px">12 checks mirror the wizard steps: naming → content/exception → score gate (≥7.0, never local) → compliance → region → channel policy → audience/list → creative/legal/release → link &amp; tracking → envelope → owner approval → ledger readiness. Any hard block = PREFLIGHT_BLOCKED with the rule named + the fix.</div></div>
+            <div id="el-envelope" class="cardbox"><b>Spend envelope</b><div style="color:var(--mut); margin-top:5px" class="num">spend_envelope_enabled ✓ · max_campaign_daily_budget $15 · max_account_monthly_spend $900 · daily increase cap $10 / 20% · decrease cap $10 / 30% · bid_floor — <b style="color:var(--ink)">null</b> · bid_ceiling — <b style="color:var(--ink)">null</b> · performance_pause_auto_allowed <b style="color:var(--ink)">false</b><div style="margin-top:4px"><b style="color:var(--ink)">Every field defaults null = NOTHING runs autonomously until you set it</b> (ad_spend_change_mode=REVIEW_REQUIRED). No default limit is ever invented.</div><button class="btn-ghost" style="margin-top:6px">Edit → Settings › Spend Envelope</button></div><div class="anno" style="margin-top:4px">SpendEnvelope, MB §2.6/§18.3. Admin-only edit; non-admins see read-only.</div></div>
+            <div class="cardbox"><b>Manual channels summary</b><div style="color:var(--mut); margin-top:5px">ChatGPT Ads: 1 plan ready to download, 0 launched this month · Google LSA: 3 leads, 1 dispute drafted, Google Guaranteed active · both count in the rollup with manual_channel=true.</div></div>
+          </div>
+        </div>
+
+        <!-- ============ states strip ============ -->
+        <div id="el-states" style="padding:14px 22px 18px">
+          <div class="cardbox" style="font-size:11.5px">
+            <b>States (dev reference)</b>
+            <div style="color:var(--mut); margin-top:4px">
+              <b style="color:var(--ink)">Empty:</b> <span id="el-empty">"No campaigns yet — winners on your Distribution board auto-nominate here" + <button class="btn-ink" style="font-size:10.5px">+ New campaign</button> (nomination loop from Screen 19)</span> ·
+              <b style="color:var(--ink)">Loading:</b> skeleton campaign cards; header rollup shows dashes ("— live · $— spent"), never zeros ·
+              <b style="color:var(--ink)">Degraded (all fail-closed):</b> ScoringService down → content-backed campaigns flag SCORE_UNAVAILABLE and cannot pass step 3 (exceptions still possible; a score is never computed locally) · platform OAuth expired → OAUTH_EXPIRED flag, launch disabled, repair CTA · Event Ledger write-readiness fails → step 12 blocks launch · benchmarks unavailable → raw CPL + "no benchmark", never invented ·
+              <b style="color:var(--ink)">Permission-limited:</b> non-admin = campaigns read-only, approve actions hidden (per ApprovalRequirement); spend settings admin-only.
+            </div>
+            <div id="el-mobile" style="border-top:1px solid var(--line); margin-top:8px; padding-top:8px">
+              <b style="color:var(--ink)">Mobile (375px) variant:</b> <span style="color:var(--mut)">header collapses to title + kebab (New / Manual / Spend) · campaign cards stack full-width, per-card metrics wrap to two lines · Pause/Report move into a card-tap detail sheet · wizard becomes full-screen sequential steps · 3-up panels stack vertically · LSA inbox rows become cards.</span>
+              <div style="display:flex; gap:8px; margin-top:8px; overflow-x:auto">
+                <div style="flex:none; width:150px; border:1px solid var(--line); border-radius:12px; padding:8px; font-size:9px; background:var(--surface)">
+                  <div style="display:flex"><b>Campaigns</b><span style="margin-left:auto">⋮</span></div>
+                  <div class="anno" style="font-size:8.5px">3 live · $412 · env $300</div>
+                  <div style="background:var(--paper); border:1px solid var(--line); border-radius:7px; padding:5px; margin-top:4px"><b>742 Hurlingame</b> <span style="color:var(--good)">ACTIVE</span><div class="anno" style="font-size:8px">$240/$300 · 18K reach<br>6 leads @ $40 CPL</div></div>
+                  <div style="background:#fdf6ee; border:1px solid var(--warn); border-radius:7px; padding:5px; margin-top:3px"><b>⚠ EPA duplex</b><div class="anno" style="font-size:8px">BLOCKED — umbrella at LEAD_GEN · Apply fix</div></div>
+                </div>
+                <div style="flex:none; width:150px; border:1px solid var(--line); border-radius:12px; padding:8px; font-size:9px; background:var(--surface)">
+                  <b>Wizard 3/8 · Geo</b>
+                  <div style="background:var(--paper); border:1px solid var(--line); border-radius:7px; padding:5px; margin-top:4px">EPA <span style="color:var(--good)">PRIMARY ✓</span></div>
+                  <div style="background:#fbf1f0; border:1px solid var(--crit); border-radius:7px; padding:5px; margin-top:3px">Bay Area <span style="color:var(--crit)">UMBRELLA — blocked at LEAD_GEN</span></div>
+                  <div class="anno" style="font-size:8px; margin-top:3px">full-screen sequential steps</div>
+                </div>
+                <div style="flex:none; width:150px; border:1px solid var(--line); border-radius:12px; padding:8px; font-size:9px; background:var(--surface)">
+                  <b>Card-tap sheet</b>
+                  <div style="background:var(--paper); border:1px solid var(--line); border-radius:7px; padding:5px; margin-top:4px">742 Hurlingame<div style="display:flex; gap:3px; margin-top:3px"><span class="bdg" style="font-size:8px">⏸ Pause</span><span class="bdg" style="font-size:8px">📈 Report</span></div></div>
+                  <div class="anno" style="font-size:8px; margin-top:3px">actions live here on mobile</div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ============ spec gaps found (Master Brain > spec) ============ -->
+  <div class="note" style="margin-top:26px; border-color:var(--signal)"><b>Spec gaps found — PropReach Master Brain details the spec inventory missed (rendered above):</b> (1) <b>ChatGPT Ads active-listing-imagery block</b> — blocked by default in v1 for misrepresentation risk; exception requires ACTIVE_LISTING type + current-status validation + compliance approval (MB §15.3) — rendered in the ChatGPT panel annotation. (2) <b>LSA front-door + Wattson firewall</b> — all LSA leads route through /approved-leads; raw sensitive call content never enters Wattson context; AI call answering requires mandatory AI disclosure (MB §16.4) — rendered in the LSA panel. (3) <b>Customer-Match minimums</b> — Google/YouTube Customer Match needs ≥100 matched users, warn under 500; Meta housing lists need a logged non-protected-class attestation (MB §6.1, §6.3) — noted on wizard step 4's attested-lists-only constraint. (4) <b>Competitor-segment honesty rule</b> — custom segments from competitor URLs are intent approximation only; the UI must never claim a named person visited Zillow/Redfin/etc., and they're ineligible for Search campaigns (MB §6.3). (5) <b>Single primary conversion goal</b> per Google campaign where possible (MB §6.2) — noted on the Advisor card. (6) <b>TikTok pixel ON_HOLD</b> — build-ready but must not activate without feature flag + ComplianceProfile approval + privacy checks (MB §6.6). (7) <b>Guarantee-disclaimer text is a typed field</b> (expected_outcome.guarantee_disclaimer) — always rendered, not optional copy (MB §7.4).</div>
+
+  <!-- ============ (3) ELEMENT COVERAGE ============ -->
+  <h2 style="font-size:20px; margin:18px 0 10px">Element coverage — spec inventory → this page</h2>
+  <table class="dtable cov" style="font-size:12.5px">
+    <tr><th>Spec inventory element</th><th>Rendered at</th><th>Status</th></tr>
+    <tr><td>Rollup strip (live count, month spend, envelope cap)</td><td><a href="#el-rollup">Header rollup</a></td><td class="ok">✓</td></tr>
+    <tr><td>Campaign card (name, status, platform chip, spend vs cap, metrics vs benchmark, pending rec)</td><td><a href="#el-campaign-card">Campaign list</a></td><td class="ok">✓</td></tr>
+    <tr><td>Status badge — all 10 CampaignStatus states + filter chips</td><td><a href="#el-status-filter">Header filter chips</a> + badges throughout the list</td><td class="ok">✓</td></tr>
+    <tr><td>Pause button (MANUAL pause, confirm dialog)</td><td><a href="#el-pause">Card actions</a></td><td class="ok">✓</td></tr>
+    <tr><td>Safety-pause banner (6 CampaignSafetyPauseReason values + Fix &amp; resume)</td><td><a href="#el-safety-pause">ADU boost card</a></td><td class="ok">✓</td></tr>
+    <tr><td>Blocked card (rule named verbatim + compliant alternative + Apply fix)</td><td><a href="#el-blocked">EPA investor duplex</a></td><td class="ok">✓</td></tr>
+    <tr><td>New-campaign wizard (8 steps mirroring preflight, in-step hard blocks)</td><td><a href="#el-wizard">Wizard stepper</a></td><td class="ok">✓</td></tr>
+    <tr><td>Preflight checklist panel (12 live checks, expand + fix links)</td><td><a href="#el-preflight">Preflight checklist</a></td><td class="ok">✓</td></tr>
+    <tr><td>Conversion Event Advisor card (recommendation + warnings + override)</td><td><a href="#el-advisor">Advisor card</a></td><td class="ok">✓</td></tr>
+    <tr><td>Approval bundle preview (full CampaignApprovalBundle mirror + disclaimer + estimate basis)</td><td><a href="#el-bundle">Bundle preview</a></td><td class="ok">✓</td></tr>
+    <tr><td>Spend envelope panel (all fields; empty = nothing autonomous)</td><td><a href="#el-envelope">Spend envelope panel</a></td><td class="ok">✓</td></tr>
+    <tr><td>Recommendations queue chip (pending budget recs → Approvals)</td><td><a href="#el-recs">Recommendations banner</a></td><td class="ok">✓</td></tr>
+    <tr><td>Search-term recommendations (add keyword / negative / revise copy)</td><td><a href="#el-searchterms">Search-term table</a></td><td class="ok">✓</td></tr>
+    <tr><td>Manual channels — ChatGPT Ads (spec + limits + downloads + "I launched this")</td><td><a href="#el-manual-chatgpt">ChatGPT Ads panel</a></td><td class="ok">✓</td></tr>
+    <tr><td>Manual channels — Google LSA (lead inbox, disputes, recordings, Guaranteed)</td><td><a href="#el-manual-lsa">LSA panel</a></td><td class="ok">✓</td></tr>
+    <tr><td>Budget anomaly alert (deviation banner, dismiss / open report)</td><td><a href="#el-anomaly">Anomaly banner</a></td><td class="ok">✓</td></tr>
+    <tr><td>Report button (→ Attribution slice + weekly report mirror)</td><td><a href="#el-report">Card actions</a></td><td class="ok">✓</td></tr>
+    <tr><td>Lead feedback prompt (converted/junk toggles)</td><td><a href="#el-lead-feedback">Detail drawer</a></td><td class="ok">✓</td></tr>
+    <tr><td>Empty state (Distribution-board nomination loop + CTA)</td><td><a href="#el-empty">States strip</a></td><td class="ok">✓</td></tr>
+  </table>
+  <div style="border:1.5px solid var(--good); background:#f2f8f4; border-radius:10px; padding:12px 16px; margin:12px 0 0; font-weight:700; color:var(--good)">19 of 19 spec elements rendered ✓ <span style="font-weight:400; color:var(--mut); font-size:12.5px">— plus prompt-required regions beyond the inventory: campaign detail drawer (state timeline, UTM/lock identity, performance snapshot, platform refs), OAuth-expired degraded card, 3-up info panels, all four degraded modes, mobile-variant strip, and the 7 Master-Brain additions in the "Spec gaps found" note above.</span></div>
+
+  <!-- ============ (4) FULL SPEC AS HTML ============ -->
+  <div class="specdoc">
+    <h1 style="font-size:24px; margin:40px 0 6px">Spec — 18 · Campaign Manager (PropReach)</h1>
+    <p><b>Purpose</b> The owner-facing paid-media surface: every campaign walks a 10-state machine and a 12-step preflight, the owner approves plain-language bundles (never acts like a media buyer), and nothing spends autonomously outside an explicitly configured spend envelope. Blocked campaigns always name the exact rule violated and offer the compliant alternative.</p>
+    <p><b>Primary users</b> Agent/owner (Graeham-class solo agent); team admin for spend settings. Wattson may draft campaigns conversationally but never bypasses gates (PropReach MB §7.7).</p>
+    <p><b>Entry points</b> Left-nav "Campaigns"; "Push to ad" buttons on Distribution board (Screen 19) and Content Flow winners; "Generate ads" panel on listing detail; Wattson intent ("boost the ADU video"); Approvals inbox card deep-links back here; weekly report "manage campaign" links.</p>
+    <p><b>Exit points</b> Approve → Global Approvals Inbox (approval card); campaign report → Attribution screen (31); audience chip → Audience Builder (30); creative chip → Creative Library (30); landing destination link → Funnel Page Builder; Spend settings → Settings &gt; Spend Envelope; Manual channels tab (in-screen); blocked-state "Apply fix" re-runs preflight in place.</p>
+
+    <h2>Layout</h2>
+    <p><b>Desktop.</b> Header: screen title + live rollup ("3 live · $412 spent this month · envelope $300/mo per campaign"), actions: + New campaign, Manual channels, Spend settings. Main (single column, card list): one row-card per campaign, sorted ACTIVE → PENDING_APPROVAL → PREFLIGHT_BLOCKED → SCHEDULED → PAUSED → DRAFT → COMPLETED/FAILED/ARCHIVED (archived collapsed). Blocked cards get warn styling with the named rule + alternative inline. Below the list, 3-up info panels: Preflight explainer, Spend envelope summary, Manual channels summary. Right drawer: campaign detail as a slide-over (state timeline, preflight result, performance snapshot, UTM/lock identity, platform refs). Wizard: full-screen modal stepper for + New campaign (steps mirror preflight order, MB §7.5).</p>
+    <p><b>Mobile (375px).</b> Header collapses to title + kebab (New / Manual / Spend). Campaign cards stack full-width; per-card metrics wrap to two lines; Pause/Report become a card-tap detail sheet. Wizard becomes full-screen sequential steps. 3-up panels stack vertically.</p>
+
+    <h2>Element inventory</h2>
+    <div style="overflow-x:auto">
+    <table class="dtable">
+      <tr><th>Element</th><th>What it shows/does</th><th>Data source</th><th>Interactions</th><th>Spec source</th></tr>
+      <tr><td>Rollup strip</td><td>live count, month spend, envelope cap</td><td>PropReach CampaignPerformanceSnapshot aggregate + SpendEnvelope</td><td>none</td><td>draft s18 header</td></tr>
+      <tr><td>Campaign card</td><td>name, status badge (10 states), platform chip ("Meta · Special Ad Category ✓"), spend vs cap, reach/clicks/leads/CPL vs benchmark, pending-recommendation note</td><td>PropReachCampaign + CampaignPerformanceSnapshot</td><td>click → detail drawer; Pause; Report</td><td>MB §7.2, §18.4, §18.6; draft s18</td></tr>
+      <tr><td>Status badge</td><td>one of DRAFT / PREFLIGHT_BLOCKED / PENDING_APPROVAL / APPROVED / SCHEDULED / ACTIVE / PAUSED / COMPLETED / ARCHIVED / FAILED</td><td>CampaignStatus enum</td><td>filter by status via header chips [BEST GUESS: filter chips]</td><td>MB §7.2</td></tr>
+      <tr><td>Pause button</td><td>manual pause (CampaignPauseType=MANUAL)</td><td>AdPlatformProvider</td><td>confirm dialog</td><td>MB §18.1</td></tr>
+      <tr><td>Safety-pause banner</td><td>when auto-paused: reason from CampaignSafetyPauseReason (DEAD_LINK, BROKEN_LANDING_PAGE, AD_POLICY_VIOLATION, COMPLIANCE_BLOCK, TRACKING_DESTINATION_FAILURE, MALWARE_SECURITY_RISK) + repair CTA</td><td>campaign record</td><td>"Fix &amp; resume" re-runs preflight</td><td>MB §2.6, §18.1; matrix "safety auto-pause reason banners"</td></tr>
+      <tr><td>Blocked card</td><td>names the hard block verbatim (e.g. "umbrella geo at LEAD_GEN violates market-level rule — Meta housing: no zip targeting") + compliant alternative with projected impact + Apply fix</td><td>CampaignPreflightResult.hard_blocks</td><td>Apply fix mutates draft + re-preflights</td><td>MB §5.3 hard block, §6.1; draft s18</td></tr>
+      <tr><td>New-campaign wizard</td><td>steps mirror 12-step preflight: (1) objective (AUTHORITY/LEAD_GEN/RETARGETING/ACTIVE_LISTING/SERVICE_CAMPAIGN) → (2) promoted item (content_id / asset_id / approved_exception_type: GOOGLE_LSA, CHATGPT_ADS, RETARGETING, SERVICE_CAMPAIGN, ACTIVE_LISTING) → (3) geo with market-level badges (PRIMARY_MARKET/ADJACENT_MARKET/UMBRELLA_AWARENESS; umbrella+LEAD_GEN hard-blocked in-step) → (4) targeting method (GEOGRAPHIC_ONLY / CUSTOM_AUDIENCE, picker from Screen 30) → (5) Conversion Event Advisor → (6) volume-vs-qualified intake (CampaignGoalPreference) → (7) budget + envelope check → (8) preflight run → submit for approval</td><td>CampaignPreflightRequest / CampaignIntakeAnswers</td><td>step navigation; inline blocks</td><td>MB §7.3, §7.5, §7.6, §7.7, §5.3</td></tr>
+      <tr><td>Preflight checklist panel</td><td>live 12 checks with pass/fail/pending: naming ✓, content/exception ✓, ScoringService (≥7.0 gate), ComplianceProvider.check(), RegionProfile, ChannelPolicy, audience/list preflight, creative/legal/release, link &amp; tracking, spend approval/envelope, owner approval, Event Ledger readiness</td><td>CampaignPreflightResult</td><td>expand each check for detail; failed check links to fix surface</td><td>MB §7.5, §2.2</td></tr>
+      <tr><td>Conversion Event Advisor card</td><td>recommended_event (AD_CLICK / LEAD_FORM_SUBMIT / CMA_REQUEST / BOOKING_REQUEST / PHONE_CALL / QUALIFIED_FORM_SUBMIT), supported_by_funnel, warning_messages (e.g. spam-call warning for PHONE_CALL), owner_explanation, source facts</td><td>ConversionEventRecommendation</td><td>accept / override with warning</td><td>MB §7.6, §6.2</td></tr>
+      <tr><td>Approval bundle preview</td><td>mirrors CampaignApprovalBundle: what's promoted (thumbnail), eligibility (score or exception + reason), platform mix %, market level + geo codes, audience type, budget request, landing destination, compliance summary, approvals required, expected-outcome range with guarantee_disclaimer and estimate_basis (ACCOUNT_HISTORY / MARKET_BENCHMARK / UNKNOWN)</td><td>CampaignApprovalBundle</td><td>"Send to Approvals" → PENDING_APPROVAL</td><td>MB §7.1, §7.4</td></tr>
+      <tr><td>Spend envelope panel</td><td>all SpendEnvelope fields; <b>empty = nothing autonomous</b> (fields default null, ad_spend_change_mode=REVIEW_REQUIRED)</td><td>SpendEnvelope on CampaignBudgetRequest / tenant settings</td><td>edit → Settings &gt; Spend Envelope</td><td>MB §2.6, §18.3; matrix "not set = nothing autonomous"</td></tr>
+      <tr><td>Recommendations queue chip</td><td>pending budget recommendations ("+$10/day — in Approvals") with rationale_source_facts</td><td>PropReachWeeklyReport.budget_recommendations</td><td>click → Approvals card</td><td>MB §21.5, §21.6</td></tr>
+      <tr><td>Search-term recommendations</td><td>Google served-terms → add keyword / add negative / revise copy, approval-required</td><td>AdPlatformProvider search-term reports</td><td>approve/dismiss per row</td><td>MB §21.3</td></tr>
+      <tr><td>Manual channels tab — ChatGPT Ads</td><td>plan builder: campaign spec (objective CLICKS/REACH/CONVERSIONS, ad groups with moment_id + context_hint ≤ housing-intent-only, ads: title ≤24 chars, copy ≤48 chars, hosted square image 640–1200px, landing via link.propertyiq.app), downloadable campaign_workbook.xlsx / context-hints-to-paste.docx / setup-checklist.docx, "I launched this" confirmation → CAMPAIGN_LAUNCHED with manual_channel=true</td><td>ChatGptAdsCampaignSpec</td><td>download pack; confirm launch; edit spec</td><td>MB §15.2–15.5</td></tr>
+      <tr><td>Manual channels tab — Google LSA</td><td>lead inbox: rows with lead_status (NEW/ACCEPTED/DISPUTED/CREDITED/INVALID/CONVERTED), caller/email, call recording link (retention VOICE_TRANSCRIPT_24M), dispute action + credited tracking; Google Guaranteed status; setup checklist</td><td>GoogleLsaLeadRecord</td><td>dispute / accept / mark converted; leads route to /approved-leads</td><td>MB §16.3, §16.4</td></tr>
+      <tr><td>Budget anomaly alert</td><td>banner when spend deviates [BEST GUESS: &gt;20% vs daily cap trajectory — threshold not in MB, admin-configurable]</td><td>performance snapshots</td><td>dismiss / open report</td><td>matrix "budget anomaly alerts"</td></tr>
+      <tr><td>Report button</td><td>opens campaign slice of Attribution screen (31) + weekly report mirror</td><td>PropReachWeeklyReport</td><td>navigate</td><td>MB §21.5</td></tr>
+      <tr><td>Lead feedback prompt</td><td>mark leads converted/junk so platform conversion corrections improve optimization</td><td>campaign leads</td><td>per-lead toggle</td><td>MB §21.6</td></tr>
+      <tr><td>Empty state</td><td>"No campaigns yet — winners on your Distribution board auto-nominate here" + New campaign CTA</td><td>—</td><td>CTA</td><td>draft s19 nomination loop</td></tr>
+    </table>
+    </div>
+
+    <h2>States</h2>
+    <ul>
+      <li><b>Default:</b> card list as above.</li>
+      <li><b>Loading:</b> skeleton cards; header rollup shows dashes, never zeros.</li>
+      <li><b>Empty:</b> empty-state card (above).</li>
+      <li><b>Error/degraded (fail-closed):</b> ScoringService down → content-backed campaigns show SCORE_UNAVAILABLE flag and cannot pass step 3 (scored path fails closed; exceptions still possible) — never a locally computed score. Platform OAuth expired → OAUTH_EXPIRED flag on card, launch disabled, repair CTA. Event Ledger write-readiness fails → step 12 blocks launch. Benchmarks unavailable → CPL shows raw value with "no benchmark", never invented.</li>
+      <li><b>Permission-limited:</b> non-admin sees campaigns read-only; approve actions hidden (approval authority per ApprovalRequirement); spend settings admin-only.</li>
+      <li><b>Mobile:</b> as Layout; wizard sequential; LSA inbox rows become cards.</li>
+    </ul>
+
+    <h2>Data fields</h2>
+    <p>PropReachCampaign: campaign_id, campaign_name, status, objective, platforms[], manual_channel, content_id / originating_content_id / asset_id / approved_exception_type (nullable), targeting_method, geo_codes[], geo_market_level, audience_ids[], housing_campaign, special_ad_categories[], budget (total_budget, daily_cap, dates, ad_spend_change_mode=REVIEW_REQUIRED, spend_envelope), approval_id, legal_approval_required/_id, compliance_check_id, utm {utm_campaign=content_id or NONE, utm_id=campaign_id, source, medium, content, term}, platform_campaign_refs[], source_facts[]. Performance: impressions, estimated_reach, clicks, spend, leads, cost_per_lead, conversion_rate, frequency, view_through_conversions, pipeline_contacts, closed_deals, deal_value, commission_gross_estimate/actual (all nullable — render "unknown" when null). Money as USD; dates ISO-8601 rendered locale-short.</p>
+
+    <h2>Rules &amp; compliance</h2>
+    <ul>
+      <li><b>Score gate:</b> content-backed campaigns require content_performance_score ≥ 7.0 (PROPCAST_VIDEO_PERFORMANCE, Scoring Master Sheet); no local scores ever (MB §2.2).</li>
+      <li><b>Five exceptions</b> skip only the organic gate; all 12 preflight steps except the score check still run (MB §2.3, §4.3).</li>
+      <li><b>Meta housing deny-by-default:</b> special_ad_categories=["HOUSING"]; hard-block list (age/gender narrowing, ZIP targeting, detailed targeting, exclusions, Lookalikes, radius &lt;15mi US, protected-class or proxy) rendered verbatim in block reasons (MB §6.1, §12.2).</li>
+      <li><b>Umbrella hard block:</b> UMBRELLA_AWARENESS cannot launch LEAD_GEN (MB §5.3). 60/30/10 allocation is a planning suggestion only — UI must never auto-shift money (MB §5.4).</li>
+      <li><b>Spend law:</b> ad_spend_change_mode defaults REVIEW_REQUIRED; autonomy only inside owner-set envelope; auto-pause for safety reasons only; performance pause requires performance_pause_auto_allowed=true (MB §2.6).</li>
+      <li><b>Sensitive-topic firewall:</b> no sensitive-topic signals in targeting/audience anywhere on this screen (MB §12.3). School data never in targeting (MB §12.1).</li>
+      <li><b>ChatGPT Ads copy</b> must carry agent name, DRE 01466876, Intero Real Estate from identity config (MB §15.3) — rendered read-only from identity.json.</li>
+      <li><b>Approval provenance:</b> Wattson-drafted campaigns show "requested by Wattson" on the approval card (matrix Wattson item).</li>
+    </ul>
+
+    <h2>Cross-links</h2>
+    <p>In: Distribution board (19) push-to-ad and launch-kit nominations; Creative Library (30) "use in campaign"; listing detail generate-ads; Wattson; Approvals inbox. Out: Approvals inbox (CAMPAIGN_LAUNCH, SPEND_CHANGE, LEGAL, MANUAL_CHANNEL_LAUNCH approvals), Audiences (30), Attribution (31), Funnel builder, Settings &gt; Spend Envelope. <b>Ledger:</b> emits CAMPAIGN_LAUNCHED (manual_channel flag for ChatGPT/LSA), CAMPAIGN_PERFORMANCE_SIGNAL, COMPETITOR_AD_ANALYZED; consumes CONTENT_PUBLISHED, CONTENT_VARIANT_CREATED, LEAD_CAPTURED, PIPELINE_MOVED, DEAL_CLOSED, COMPLIANCE_BLOCKED, DNC_BLOCK. Campaigns carry content_lock_id alongside content_id (MB §14.5).</p>
+
+    <h2>Open decisions</h2>
+    <ul>
+      <li>[DECIDE] Benchmark source for CPL comparison ("benchmark $62" in draft): interim design = tenant account history first, market benchmark labeled as hint, per MB §7.7 — never a promise. UI unaffected.</li>
+      <li>[DECIDE] Budget-anomaly threshold: interim = admin-configurable %, default 20% [BEST GUESS].</li>
+      <li>[DECIDE] Whether campaign detail is a drawer or its own route: interim = drawer with a permalink route for deep-links from Approvals/reports.</li>
+      <li>[DECIDE] LSA integration depth (manual vs limited API): interim UI is manual-first (checklist + inbox), which also covers the API case when it lands.</li>
+    </ul>
+    <p class="anno" style="margin-top:20px">Wireframe fidelity — colors are placeholders from the locked PropFlow design language. All campaign names/numbers are realistic fake data. Agent identity: Graeham Watts, Intero Real Estate, DRE# 01466876 (from shared-references/identity.json — never hardcode elsewhere; the identity.json blocklist is enforced by the brand tripwire). No crime data anywhere on this screen.</p>
+  </div>
+</div>

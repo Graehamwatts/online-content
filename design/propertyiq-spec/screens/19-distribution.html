@@ -1,0 +1,475 @@
+<title>PropertyIQ · Screen 19 — Distribution</title>
+<link href="https://api.fontshare.com/v2/css?f[]=technor@500,600,700&display=swap" rel="stylesheet">
+<link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<style>
+  /* Type system — Technor for display, Inter for UI. */
+  :root{ --font-display:'Technor', Inter, -apple-system, 'Segoe UI', sans-serif; --font-ui: Inter, -apple-system, 'Segoe UI', Roboto, sans-serif; }
+</style>
+<style>
+  /* Palette v4 — PropFlow design language: neutral ink UI, ink-as-accent, color reserved for data. (extracted verbatim from propsearch-design-draft.html) */
+  :root, :root[data-theme="dark"], :root[data-theme="light"]{
+    --ink:#23282f; --paper:#fbfaf8; --surface:#f1efe9; --line:#e2dfd6;
+    --mut:#6b7076; --soft:#9b9f9f;
+    --brand:#2e6b53; --brand-ink:#ffffff; --brand-soft:#eaf1ec; --brand-deep:#1e4c3a;
+    --signal:#b07a2e;
+    --good:#2e7d4f; --warn:#a8630a; --crit:#b3372f;
+    --r:10px;
+  }
+  .intel .score, .mintel{ color:var(--brand-deep) }
+  .intel{ border-left:3px solid var(--brand) }
+  h1{ letter-spacing:-.02em }
+  .stat b{ letter-spacing:-.01em }
+  body[data-agent="watts"]{ --brand:#2e6b53; --brand-soft:#eaf1ec; --brand-deep:#1e4c3a; }
+
+  *{box-sizing:border-box; margin:0}
+  body{font:15px/1.55 var(--font-ui); color:var(--ink); background:var(--paper); padding-bottom:80px}
+  h1,h2,h3{line-height:1.15; text-wrap:balance; font-family:var(--font-display); font-weight:600}
+  h1{letter-spacing:-.01em}
+  .site{box-shadow:0 1px 2px rgba(20,24,32,.04), 0 8px 32px rgba(20,24,32,.06)}
+  .stat{box-shadow:0 1px 2px rgba(20,24,32,.03); transition:box-shadow .15s, transform .15s}
+  .stat:hover{box-shadow:0 4px 14px rgba(20,24,32,.08)}
+  .chip{transition:all .12s}
+  button{font-family:var(--font-ui)}
+  .num{font-variant-numeric:tabular-nums}
+  .wrap{max-width:1180px; margin:0 auto; padding:0 20px}
+
+  .bar{position:sticky; top:0; z-index:50; background:var(--paper); border-bottom:1px solid var(--line); padding:10px 0; backdrop-filter:blur(8px)}
+  .bar .wrap{display:flex; flex-wrap:wrap; gap:10px; align-items:center}
+  .bar .ttl{font-weight:700; margin-right:auto}
+  .bar .ttl small{display:block; font-weight:400; color:var(--mut)}
+  .bar a{color:var(--brand); font-size:13px; text-decoration:none}
+
+  .note{background:var(--surface); border:1px solid var(--line); border-radius:var(--r); padding:14px 16px; margin:0 0 22px; font-size:13.5px; color:var(--mut)}
+  .note b{color:var(--ink)}
+
+  .site{border:1px solid var(--line); border-radius:14px; overflow:hidden; background:var(--paper)}
+  .sitehead{display:flex; align-items:center; gap:14px; padding:14px 22px; border-bottom:1px solid var(--line)}
+  .avatar{width:38px; height:38px; border-radius:50%; background:var(--brand); color:var(--brand-ink); display:grid; place-items:center; font-weight:700}
+  .sitehead .who b{display:block}
+  .sitehead .who small{color:var(--mut)}
+  .sitehead nav{margin-left:auto; display:flex; gap:18px; font-size:13.5px; color:var(--mut)}
+  .sitehead nav a{color:inherit; text-decoration:none}
+  .sitehead nav a:hover{color:var(--brand)}
+
+  .chip{display:inline-flex; align-items:center; gap:6px; font-size:12.5px; font-weight:500; border:1px solid var(--line); border-radius:99px; padding:6px 12px; background:var(--paper); cursor:pointer; color:var(--ink)}
+  .chip:hover{border-color:var(--brand)}
+  .chip.on{background:var(--brand); border-color:var(--brand); color:var(--brand-ink); font-weight:600; box-shadow:0 2px 8px color-mix(in srgb, var(--brand) 30%, transparent)}
+
+  .statrow{display:grid; grid-template-columns:repeat(4,1fr); gap:10px}
+  .stat{background:var(--surface); border:1px solid var(--line); border-radius:var(--r); padding:12px}
+  .stat small{display:block; color:var(--mut); font-size:11.5px; text-transform:uppercase; letter-spacing:.05em}
+  .stat b{font-size:18px}
+  .stat .up{color:var(--good); font-size:12px}
+
+  .bdg{font-size:11.5px; border-radius:6px; padding:3px 8px; background:var(--surface); border:1px solid var(--line); color:var(--mut)}
+  .bdg.good{color:var(--good); border-color:color-mix(in srgb,var(--good) 30%,var(--line))}
+  .bdg.warn{color:var(--warn); border-color:color-mix(in srgb,var(--warn) 30%,var(--line))}
+  .bdg.crit{color:var(--crit); border-color:color-mix(in srgb,var(--crit) 30%,var(--line))}
+
+  .dtable{width:100%; border-collapse:collapse; font-size:13px}
+  .dtable td,.dtable th{border-bottom:1px solid var(--line); padding:8px 10px; text-align:left}
+  .dtable th{font-size:11px; text-transform:uppercase; letter-spacing:.05em; color:var(--soft)}
+
+  @media (max-width:860px){ .statrow{grid-template-columns:repeat(2,1fr)} .maingrid{grid-template-columns:1fr !important} .console{grid-template-columns:1fr !important} .rail{display:none !important} }
+  @media (prefers-reduced-motion: reduce){ *{transition:none!important} }
+
+  /* ---- page-specific additions (same design language) ---- */
+  .anno{font-size:11px; color:var(--soft)}
+  .cardbox{border:1px solid var(--line); border-radius:10px; padding:11px 14px; font-size:12.5px; background:var(--paper)}
+  .btn-ink{background:var(--ink); color:#fff; border:0; border-radius:7px; padding:7px 12px; font-size:11.5px; cursor:pointer; font-weight:600}
+  .btn-ghost{background:var(--paper); border:1px solid var(--line); border-radius:7px; padding:7px 12px; font-size:11.5px; cursor:pointer}
+  .sechead{font-size:14px; font-weight:700; margin:0 0 8px; font-family:var(--font-display)}
+  .cov td.ok{color:var(--good); font-weight:700}
+  .specdoc h2{font-size:18px; margin:26px 0 8px}
+  .specdoc h3{font-size:15px; margin:18px 0 6px}
+  .specdoc p, .specdoc li{font-size:13.5px; color:var(--mut)}
+  .specdoc b{color:var(--ink)}
+  .specdoc table{margin:8px 0}
+  .cellchip{font-size:9.5px; border-radius:5px; padding:2px 6px; border:1px solid var(--line); background:var(--surface); color:var(--mut); white-space:nowrap; cursor:pointer}
+  .cellchip.pub{color:var(--good); border-color:color-mix(in srgb,var(--good) 35%,var(--line))}
+  .cellchip.sch{color:var(--ink)}
+  .cellchip.hold{color:var(--warn); border-color:color-mix(in srgb,var(--warn) 40%,var(--line)); background:#fdf6ee}
+  .cellchip.fail{color:var(--crit); border-color:color-mix(in srgb,var(--crit) 40%,var(--line)); background:#fdecec}
+  .derivrow td{background:var(--surface); font-size:10.5px; color:var(--mut)}
+  .seamlist{list-style:none; padding:0; margin:6px 0 0; font-size:11.5px; display:grid; gap:3px}
+  .seamlist li{display:flex; gap:7px; align-items:flex-start}
+  .seamlist .ok{color:var(--good); font-weight:700}
+  .seamlist .no{color:var(--crit); font-weight:700}
+  .mstrip{display:flex; gap:10px; overflow-x:auto; padding-bottom:6px}
+  .mcard{min-width:180px; max-width:200px; border:1px solid var(--line); border-radius:10px; padding:9px 10px; font-size:10.5px; background:var(--paper); flex-shrink:0}
+</style>
+
+<!-- ============ (1) slim header ============ -->
+<div class="bar">
+  <div class="wrap">
+    <div class="ttl">PropertyIQ · Screen 19 — Distribution <small>Full-density per-screen mock · wireframe fidelity · dev-facing annotations in gray</small></div>
+    <a href="../wireframe.html">← All screens</a>
+  </div>
+</div>
+
+<!-- ============ (2) THE FULL MOCK ============ -->
+<div class="wrap" style="padding-top:24px">
+  <div class="note"><b>Screen 19 — Distribution Board + Content Flow (PropReach/PropCast seam).</b> The channels × content publishing matrix and the closed-loop Content Flow board: where each locked asset came from, where it went, what it did, and the one-click next move. Auto-publish stays visibly OFF until the 7-item seam checklist (PropCast MB Part 16) is green; per-platform AI-disclosure holds are explicit; each parent long-form expands into its ~15-asset family. Primary users: agent/owner (daily glance + one-click actions), content team (Peter/John-class roles) for scheduling and manual pushes.</div>
+
+  <div class="site" data-agent="watts">
+    <!-- header: week label + scheduled count + nav (spec Layout) -->
+    <div class="sitehead">
+      <div class="avatar">GW</div>
+      <div class="who"><b>Distribution</b><small class="num">Week of Jul 13 · 11 assets scheduled · auto-publish OFF (5/7 seams)</small></div>
+      <nav><a href="#el-connections">Connections</a><a href="#el-expander">Asset families</a><a href="#">🔔 2</a></nav>
+    </div>
+
+    <div class="console" style="display:grid; grid-template-columns:172px 1fr">
+      <!-- persistent agent-console left rail (Screen 9 chrome) -->
+      <div class="rail" style="border-right:1px solid var(--line); padding:14px 10px; font-size:12.5px; display:flex; flex-direction:column; gap:2px; background:var(--surface)">
+        <a href="#" style="text-decoration:none; color:var(--ink); border-radius:8px; padding:8px 10px">☰ Today</a>
+        <a href="#" style="text-decoration:none; color:var(--ink); border-radius:8px; padding:8px 10px">🗺 Farm map</a>
+        <a href="#" style="text-decoration:none; color:var(--ink); border-radius:8px; padding:8px 10px">🤝 Past clients</a>
+        <a href="#" style="text-decoration:none; color:var(--ink); border-radius:8px; padding:8px 10px">👤 Leads & clients</a>
+        <a href="#" style="text-decoration:none; color:var(--ink); border-radius:8px; padding:8px 10px">💬 Comms <span class="bdg" style="font-size:9.5px">6</span></a>
+        <a href="#" style="text-decoration:none; color:var(--ink); border-radius:8px; padding:8px 10px">📋 Transactions <span class="bdg" style="font-size:9.5px">2</span></a>
+        <a href="#" style="text-decoration:none; color:var(--ink); border-radius:8px; padding:8px 10px">🎬 Content studio</a>
+        <a href="#" style="text-decoration:none; color:#fff; background:var(--ink); border-radius:8px; padding:8px 10px; font-weight:600">📣 Distribution</a>
+        <a href="#" style="text-decoration:none; color:var(--ink); border-radius:8px; padding:8px 10px">📣 Ads & funnels</a>
+        <a href="#" style="text-decoration:none; color:var(--ink); border-radius:8px; padding:8px 10px">⚙ Playbooks</a>
+        <a href="#" style="text-decoration:none; color:var(--ink); border-radius:8px; padding:8px 10px">📈 Reports</a>
+        <div style="margin-top:auto; padding-top:10px; border-top:1px solid var(--line)">
+          <a href="#" style="text-decoration:none; color:var(--ink); border-radius:8px; padding:8px 10px; display:block">⚙ Settings</a>
+          <div class="anno" style="padding:6px 10px">Global chrome: persistent agent-console rail (Screen 9 pattern). Consumer pages never show it.</div>
+        </div>
+      </div>
+
+      <div>
+        <!-- auto-publish OFF banner -->
+        <div id="el-off-banner" style="padding:14px 22px 0">
+          <div class="cardbox" style="border-color:var(--warn); background:#fdf6ee; display:flex; gap:12px; align-items:center; flex-wrap:wrap">
+            <span style="color:var(--warn)">⏸</span>
+            <div style="flex:1; min-width:280px"><b>Auto-publish OFF — everything queues for the manual push button</b>
+              <div style="color:var(--mut); font-size:12px">Seam checklist is 5/7 green. Auto-publish stays LOCKED-OFF until 7/7 (PropCast MB Part 16). Manual export is allowed only for lock-tied payloads — a payload without content_lock_id is rejected at handoff (Part 5 build rule).</div>
+            </div>
+            <button class="btn-ink">▶ Push now (4 queued)</button>
+            <button class="btn-ghost">Push day batch</button>
+            <div class="anno" style="width:100%">Fail-closed: if the seam-status service itself is unreachable, auto-publish renders OFF regardless of the last-known state — the gate never fails open.</div>
+          </div>
+        </div>
+
+        <!-- news-queue entry chip -->
+        <div id="el-news-chip" style="padding:10px 22px 0; display:flex; gap:8px; flex-wrap:wrap; align-items:center">
+          <button class="chip" style="font-size:11.5px">📰 News queue: <b>2 headline cards awaiting approval</b> · "rate dip" (geo: <u>local</u>/broad toggle) · escalation-ladder armed →</button>
+          <span class="anno">Entry point to the News-to-Post engine; P1 — dedicated screen later, board layout unaffected [DECIDE]. Broad-vs-local geo framing toggle per card.</span>
+        </div>
+
+        <!-- ============ ZONE 1: publish matrix ============ -->
+        <div id="el-matrix" style="padding:14px 22px 0">
+          <div class="sechead">Publish matrix — assets × channels</div>
+          <div style="overflow-x:auto">
+          <table class="dtable" style="font-size:11.5px; min-width:960px">
+            <tr><th style="min-width:200px">Asset · <span style="text-transform:none">lock</span></th><th>YouTube <span class="anno">✓</span></th><th>Instagram <span class="anno">✓</span></th><th>Facebook <span class="anno">✓</span></th><th>TikTok <span class="bdg crit" style="font-size:8.5px">API DEGRADED</span></th><th>GBP <span class="anno">✓</span></th><th>Email <span class="anno">✓</span></th></tr>
+            <tr id="el-expander">
+              <td><b>July market update</b> <span class="bdg" style="font-size:9px">CL-0410 v1</span><br><span style="color:var(--brand); cursor:pointer; font-size:10.5px">▾ 14 derivatives expanded</span></td>
+              <td><span class="cellchip pub">published</span></td>
+              <td><span class="cellchip pub">3 reels live</span></td>
+              <td><span class="cellchip pub">posted</span></td>
+              <td><span class="cellchip hold">HOLD: manual AI label</span></td>
+              <td><span class="cellchip pub">post live</span></td>
+              <td><span class="cellchip sch">in farm letter</span></td>
+            </tr>
+            <tr class="derivrow"><td style="padding-left:26px">↳ Shorts family: <b>22 auto-clipped candidates</b> scored — only the 4 highest-rated published</td><td><span class="cellchip pub">4 Shorts live</span></td><td colspan="2"><span class="cellchip sch">cross-posts sched</span></td><td><span class="cellchip hold">held w/ parent</span></td><td>—</td><td>—</td></tr>
+            <tr class="derivrow"><td style="padding-left:26px">↳ SEO blog post (video embedded) · GBP square cuts ×3 · X post ·  carousel — <b>~15 assets/parent target</b></td><td colspan="6"><span class="cellchip pub">blog live</span> <span class="cellchip pub">GBP ×3</span> <span class="cellchip sch">carousel Thu</span> <span class="anno">Omnipresence Distribution stage + Production Asset Registry; per-derivative status; FOOTAGE_UPLOADED / ASSET_MATCHED events drive readiness</span></td></tr>
+            <tr>
+              <td><b>Beech walkthrough</b> <span class="bdg" style="font-size:9px">CL-0421 v1</span> <span style="color:var(--soft)">(+12 derivatives ▸)</span><br><span class="anno">from Thu shoot</span></td>
+              <td><span class="cellchip sch">sched Fri</span></td>
+              <td><span class="cellchip sch">teaser Thu</span></td>
+              <td><span class="cellchip fail">FAILED — retry</span></td>
+              <td>—</td>
+              <td><span class="cellchip sch">sched Sat</span></td>
+              <td>— <span class="anno">not targeted</span></td>
+            </tr>
+            <tr>
+              <td><b>Just-sold card (Fair Oaks)</b> <span class="bdg" style="font-size:9px">CL-0405 v2</span><br><span class="anno">v2 = post-approval copy edit → new compliance pass + new lock (never edit in place)</span></td>
+              <td>—</td>
+              <td><span class="cellchip pub">posted</span></td>
+              <td><span class="cellchip pub">posted</span></td>
+              <td>—</td>
+              <td><span class="cellchip pub">posted</span></td>
+              <td>—</td>
+            </tr>
+          </table>
+          </div>
+          <div class="anno" style="margin-top:5px">Cells = DistributionPayload status per channel (channel enum: instagram, instagram_reels, facebook, youtube, youtube_shorts, tiktok, gbp, linkedin, email, web, print, paid). Chip click → payload detail below. Reschedule via drag or chip menu; FAILED chips offer retry + surface a failure alert. LinkedIn column appears only when connected (it isn't — see Connections). TikTok column header shows the degraded badge: scheduled cells HOLD, never silently skip (fail-closed). Email cells link to the agent's blog post embedding the video — never directly to YouTube (email routing rule, PropCast MB).</div>
+
+          <!-- payload detail (opened chip) -->
+          <div id="el-payload" class="cardbox" style="margin-top:10px; background:var(--surface)">
+            <b>Payload detail — July market update → Instagram</b> <span class="bdg" style="font-size:9px">payload_id DP-88231</span>
+            <div style="display:grid; grid-template-columns:repeat(2,1fr); gap:8px; margin-top:6px; font-size:11.5px; color:var(--mut)">
+              <div><b style="color:var(--ink)">Caption:</b> "July numbers are in: Redwood City median held at $1.71M while days-on-market crept up. What that means if you're waiting to list ↓" · <b style="color:var(--ink)">alt text:</b> "Agent presenting July market chart" · <b style="color:var(--ink)">ai_disclosure_flag:</b> true (always) · disclaimer_refs: [CA-AI-01, MKT-STD]</div>
+              <div class="num"><b style="color:var(--ink)">Short link:</b> link.propertyiq.app/j7mkt · <b style="color:var(--ink)">UTM:</b> source=instagram / medium=organic / campaign=jul-market · carries content_id C-2291 · content_lock_id CL-0410 · approved_version_id v1 · lock_hash 9f3a…e2 · asset_urls[2] · thumbnail ✓</div>
+            </div>
+            <div class="anno" style="margin-top:4px">Every payload requires content_lock_id — handoffs without it are rejected (Part 5). Short link joins to the lock id in the shortener map (seam item 3).</div>
+          </div>
+
+          <!-- metadata A/B tab -->
+          <div id="el-ab" class="cardbox" style="margin-top:10px">
+            <b>Per-platform metadata A/B — title / thumbnail variant pairs</b>
+            <div style="overflow-x:auto"><table class="dtable" style="font-size:11px; margin-top:6px; min-width:640px">
+              <tr><th>Platform</th><th>Field</th><th>Variant A</th><th>Variant B</th><th>Winner</th></tr>
+              <tr><td>YouTube</td><td>title</td><td>"July Bay Area Market Update"</td><td>"Why Redwood City Sellers Are Waiting (July Data)"</td><td><span class="bdg good" style="font-size:9px">B · +38% CTR</span></td></tr>
+              <tr><td>YouTube</td><td>thumbnail</td><td>chart close-up</td><td>agent + headline overlay</td><td><span class="bdg" style="font-size:9px">collecting — day 3</span></td></tr>
+            </table></div>
+            <div class="anno" style="margin-top:4px">Rows = A/B variant log {content_id, content_lock_id, lock_hash, approved_version_id, platform, variant_id, field, text} (PropCast MB Part 10 metadata automation). Winner is marked from ledger joins — never eyeballed.</div>
+          </div>
+
+          <!-- AI-disclosure HOLD -->
+          <div id="el-hold" class="cardbox" style="margin-top:10px; border-color:var(--warn); background:#fdf6ee">
+            <b style="color:var(--warn)">⚠ AI-disclosure HOLD — TikTok (2 items)</b>
+            <div style="color:var(--mut); font-size:11.5px; margin-top:4px">TikTok is published via the Buffer relay <span class="bdg" style="font-size:9px">RELAY</span>, which has <b style="color:var(--ink)">no programmatic AI-labeling support</b> — so "July market update" + its held Shorts sit in QC until a human applies the platform's AI label manually. Hard rule, no exceptions (PropCast MB Part 5): no programmatic disclosure → HELD.</div>
+            <div style="display:flex; gap:6px; margin-top:8px; align-items:center"><button class="btn-ink">Mark manually labeled → release</button><span class="anno">releases with an audit note stamped to the ledger [BEST GUESS on release mechanics — spec-flagged]</span></div>
+          </div>
+        </div>
+
+        <!-- ============ ZONE 2: 2-up panels ============ -->
+        <div style="padding:14px 22px 0; display:grid; grid-template-columns:1fr 1fr; gap:10px" class="maingrid">
+          <div id="el-connections" class="cardbox">
+            <b>Connection health</b>
+            <table class="dtable" style="font-size:11.5px; margin-top:6px">
+              <tr><th>Channel</th><th>Status</th><th></th></tr>
+              <tr><td>YouTube</td><td><span class="bdg good" style="font-size:9.5px">✓ connected</span></td><td></td></tr>
+              <tr><td>Instagram / Facebook</td><td><span class="bdg good" style="font-size:9.5px">✓ connected</span></td><td></td></tr>
+              <tr><td>TikTok</td><td><span class="bdg warn" style="font-size:9.5px">token expires in 6d</span> · <span class="bdg" style="font-size:9.5px">relay: Buffer armed</span></td><td><button class="btn-ghost">Renew</button></td></tr>
+              <tr><td>GBP</td><td><span class="bdg good" style="font-size:9.5px">✓ connected</span></td><td></td></tr>
+              <tr><td>Email (blog-embed route)</td><td><span class="bdg good" style="font-size:9.5px">✓ connected</span></td><td></td></tr>
+              <tr><td>LinkedIn</td><td><span class="bdg" style="font-size:9.5px">○ not connected</span> <span class="anno">column appears on connect</span></td><td><button class="btn-ghost">Connect</button></td></tr>
+            </table>
+            <div class="anno" style="margin-top:5px">OAuth token store + relay config. Renew → OAuth flow (Settings > Integrations). Buffer relay for TikTok is interim (~$6/mo/channel-set) until direct TikTok API approval — relay badge is vendor-agnostic [DECIDE]; relay items always HOLD for the AI label. Connections are admin-only.</div>
+          </div>
+          <div id="el-seams" class="cardbox">
+            <div style="display:flex; align-items:center; gap:8px"><b>Auto-publish seam checklist</b><span class="bdg warn" style="font-size:10px">5/7 green</span>
+              <span style="margin-left:auto; display:inline-flex; align-items:center; gap:6px; font-size:10.5px; color:var(--soft)">Auto-publish <span style="width:30px; height:16px; border-radius:99px; background:var(--line); position:relative; display:inline-block"><span style="width:12px; height:12px; border-radius:50%; background:var(--paper); position:absolute; top:2px; left:2px"></span></span> 🔒 LOCKED-OFF until 7/7</span>
+            </div>
+            <ul class="seamlist" style="color:var(--mut)">
+              <li><span class="ok">✓</span> 1 · PropReach stores content_lock_id / approved_version_id / lock_hash</li>
+              <li><span class="ok">✓</span> 2 · PropFlow stores the lock id on engagement / video / reply / lead events</li>
+              <li><span class="ok">✓</span> 3 · Shortener maps every short link to a lock id</li>
+              <li><span class="ok">✓</span> 4 · Attribution rows carry the lock id</li>
+              <li><span class="no">✗</span> 5 · Revocation finds every downstream object by lock id <a href="#" style="color:var(--brand); font-size:10.5px">seam-status →</a></li>
+              <li><span class="no">✗</span> 6 · Kill switches block by tenant / agent / channel / lock <a href="#" style="color:var(--brand); font-size:10.5px">seam-status →</a></li>
+              <li><span class="ok">✓</span> 7 · Programmatic AI disclosure per platform — or the item is held</li>
+            </ul>
+            <div class="anno" style="margin-top:5px">Canonical 7 items verbatim from PropCast MB Part 16 (the draft's "rollback / human-pause SLA" wording was its own naming — presentation kept, labels sourced from Part 16 [DECIDE resolved per spec]). Read-only here; each item links to the admin seam-status panel. Source: seam-status service.</div>
+          </div>
+        </div>
+
+        <!-- ============ ZONE 3: Content Flow board ============ -->
+        <div id="el-flow" style="padding:14px 22px 0">
+          <div style="border:1.5px solid var(--brand); border-radius:12px; padding:14px 16px; background:var(--brand-soft)">
+            <b style="font-size:14px">Content Flow — the whole loop on one board: where it came from → where it went → what it did → what to do next</b>
+            <div style="overflow-x:auto; margin-top:10px">
+            <table class="dtable" style="font-size:11px; min-width:940px; background:var(--paper); border-radius:8px">
+              <tr><th>Came from</th><th>Asset (lock)</th><th>Went to</th><th>7-day results <span class="anno">(checkpoints D1/2/3/5/7)</span></th><th>Verdict</th><th>Do next — one click</th></tr>
+              <tr id="el-flowrow">
+                <td>🏠 New listing<br>118 Beech</td>
+                <td>Teaser reel<br><span class="bdg" style="font-size:9px">CL-0421 v1</span> <span style="color:var(--soft)">Thu shoot</span></td>
+                <td>IG ✓ FB ✓ YT-short ✓</td>
+                <td class="num">6.2K views · 214 shares · 41 site clicks → 3 leads <span class="anno">D5 checkpoint</span></td>
+                <td id="el-verdict"><span class="bdg good" style="font-size:9.5px">WINNER (top 10%)</span></td>
+                <td><button class="chip" style="font-size:10.5px; border-color:var(--brand); color:var(--brand); font-weight:700" id="el-pushad">⚡ Push to ad ($15/day sugg.)</button> <button class="chip" style="font-size:10.5px">Create funnel ✓ exists</button></td>
+              </tr>
+              <tr>
+                <td>📰 News signal<br>rate dip</td>
+                <td>Rate headline card<br><span class="bdg" style="font-size:9px">CL-0418 v1</span></td>
+                <td>IG ✓ GBP ✓ email ✓</td>
+                <td class="num">1.1K views · 9 clicks · 0 leads <span class="anno">D7 final</span></td>
+                <td><span class="bdg warn" style="font-size:9.5px">UNDERPERFORMER</span></td>
+                <td><button class="chip" style="font-size:10.5px" id="el-autopsy">Autopsy hook</button> <button class="chip" style="font-size:10.5px" id="el-kill">Kill escalation</button></td>
+              </tr>
+              <tr>
+                <td>🔁 Evergreen<br>ADU series</td>
+                <td>"Garage = $250K" video<br><span class="bdg" style="font-size:9px">CL-0398 v2</span></td>
+                <td>IG ✓ YT ✓ TikTok HOLD · funnel ✓</td>
+                <td class="num">14K views · 96 funnel visits · 11 downloads · 6 leads · shares <b style="color:var(--ink)">unknown on GBP</b> <span class="anno">metrics unavailable on GBP — never fabricated</span></td>
+                <td><span class="bdg good" style="font-size:9.5px">WINNER · already ad-boosted</span></td>
+                <td><button class="chip" style="font-size:10.5px" id="el-sequel">Sequel from comments (31 Qs)</button> <button class="chip" style="font-size:10.5px; color:var(--crit); border-color:var(--crit)" id="el-revoke">⏹ Revoke…</button></td>
+              </tr>
+              <tr id="el-gap">
+                <td>🏠 Listing<br>742 Hurlingame</td>
+                <td colspan="2" style="color:var(--mut)">— no asset. <b style="color:var(--ink)">742 Hurlingame has NO funnel page yet</b> (launch-kit coverage check)</td>
+                <td class="num">—</td>
+                <td><span class="bdg crit" style="font-size:9.5px">GAP</span></td>
+                <td><button class="chip" style="font-size:10.5px; border-color:var(--brand); color:var(--brand); font-weight:700">⚡ Create funnel now</button></td>
+              </tr>
+            </table>
+            </div>
+            <div class="anno" style="margin-top:5px">Rows join the Event Ledger + platform-lane checkpoint metrics (CONTENT_VIEWED / ORGANIC_VIDEO_VIEWED consumed); row click → attribution drill (Screen 31). Verdict thresholds: WINNER = top-10% engagement, UNDERPERFORMER, GAP (QC monitoring, PropCast MB Part 16). ⚡ Push-to-ad never launches spend directly — the winner auto-nominates, the nomination lands in <b style="color:var(--ink)">Approvals with a budget suggestion</b>, and the button prefills the Screen 18 campaign wizard; the paid leg routes through PropReach preflight (escalation ladder: ~10+ shares auto-promotes card→video→ads). "Sequel from comments" builds a concept brief from the 31 unanswered comment questions [BEST GUESS: count from CommentDmProvider — feature hides when the provider is absent]. Kill escalation asks to confirm, then stops the ladder. <b style="color:var(--ink)">Fair housing:</b> no channel targeting exists on this board (organic); listing-kit ad legs inherit Screen 18's fair-housing rules (Meta special_ad_categories = HOUSING, geographic-only, no demographic proxies).</div>
+
+            <!-- weekly totals strip -->
+            <div id="el-totals" style="display:flex; gap:14px; margin-top:10px; font-size:11px; color:var(--mut); flex-wrap:wrap; border-top:1px solid var(--line); padding-top:10px" class="num">
+              <span><b style="color:var(--ink)">This week's totals:</b> 23 assets out → 31K views → 187 site sessions → 11 leads</span>
+              <span><b style="color:var(--ink)">Split:</b> organic $0 · paid $412 (USD)</span>
+              <span class="anno">ledger aggregates; unknowns render "—", never estimated</span>
+            </div>
+
+            <!-- 3-click path + launch-kit chips -->
+            <div id="el-kit" style="border-top:1px solid var(--line); margin-top:10px; padding-top:10px; font-size:11.5px">
+              <b>🏠 New listing → ad, the 3-click path (lives here AND on every listing record):</b> <span style="color:var(--mut)">listing goes live (LISTING_LIVE_FROM_IDX) → launch kit auto-generates (ad creative from listing photos + funnel page + suggested budget from farm CPL history + audience from the farm segment) → ONE approval card ships all of it.</span>
+              <div style="display:flex; gap:8px; margin-top:8px; flex-wrap:wrap">
+                <span class="bdg good" style="font-size:10.5px">118 Beech · Launch kit: <b>running</b></span>
+                <span class="bdg warn" style="font-size:10.5px">742 Hurlingame · Launch kit: <b>ready — 1 approval card</b></span>
+                <span class="bdg" style="font-size:10.5px">2369 Oakwood · Launch kit: <b>skipped</b> (agent choice, logged)</span>
+              </div>
+              <div class="anno" style="margin-top:4px">Chips driven by UPCOMING_OWN_LISTING_DETECTED / LISTING_LIVE_FROM_IDX events + the kit generator (PropReach MB §10.1 event chain: … LISTING_PLAN_APPROVED, SHOOT_PACKET_READY, FOOTAGE_UPLOADED, ASSET_MATCHED). Chip → kit detail / approval card. Nothing slips: every new listing shows a chip.</div>
+            </div>
+          </div>
+        </div>
+
+        <!-- revoke checklist -->
+        <div id="el-revoke-panel" style="padding:14px 22px 0">
+          <div class="cardbox" style="border-color:var(--crit)">
+            <b style="color:var(--crit)">⏹ Revoke — "Garage = $250K" (CL-0398)</b> <span class="anno">"stop that campaign": every downstream object found by content_lock_id (seam item 5)</span>
+            <table class="dtable" style="font-size:11px; margin-top:6px">
+              <tr><th>Downstream object</th><th>Where</th><th>Stop status</th></tr>
+              <tr><td>3 organic posts</td><td>IG, YT, GBP</td><td><span class="bdg good" style="font-size:9px">removed ✓</span></td></tr>
+              <tr><td>1 boosted ad</td><td>Meta (via Screen 18)</td><td><span class="bdg warn" style="font-size:9px">pausing…</span></td></tr>
+              <tr><td>2 short links + 1 QR</td><td>link.propertyiq.app</td><td><span class="bdg good" style="font-size:9px">deactivated ✓</span></td></tr>
+              <tr><td>1 DM keyword flow</td><td>GHL</td><td><span class="bdg good" style="font-size:9px">disarmed ✓</span></td></tr>
+              <tr><td>1 funnel page</td><td>Funnel builder</td><td><span class="bdg crit" style="font-size:9px">manual — page has form entries, needs owner confirm</span></td></tr>
+            </table>
+            <div class="anno" style="margin-top:4px">Confirm-gated; per-object progress shown live. Revoke + Push-to-ad (spend) are owner/approver-only; the content-team role can schedule and push organics but sees neither button (permission-limited state).</div>
+          </div>
+        </div>
+
+        <!-- states strip -->
+        <div id="el-states" style="padding:14px 22px 0">
+          <div class="cardbox" style="font-size:11.5px">
+            <b>States (dev reference)</b>
+            <div style="color:var(--mut); margin-top:4px">
+              <b style="color:var(--ink)">Loading:</b> matrix skeleton rows; chips grey until statuses resolve.
+              <b style="color:var(--ink)">Empty:</b> <span id="el-empty">"Nothing scheduled this week — approved content lands here automatically" + link to the content queue [BEST GUESS].</span>
+              <b style="color:var(--ink)">Degraded (all fail-closed):</b> channel API down → column header degraded badge (see TikTok above); scheduled cells HOLD, never silently skip · publish failure → FAILED chip + failure alert (see Beech/FB) · disclosure-unlabelable platform → HOLD, hard rule, no exception · seam-status service unreachable → auto-publish renders OFF · metrics missing on a platform → partial results with "metrics unavailable on &lt;platform&gt;", never fabricated · iPhone-safe-zone / paywalled-text violations enforced upstream surface here as compliance holds.
+              <b style="color:var(--ink)">Permission-limited:</b> content team schedules/pushes; only owner/approver sees ⚡ Push-to-ad and Revoke; Connections admin-only.
+            </div>
+          </div>
+        </div>
+
+        <!-- mobile variant strip -->
+        <div id="el-mobile" style="padding:14px 22px 18px">
+          <div class="cardbox">
+            <b>Mobile (375px) — variant strip</b> <span class="anno">matrix scrolls horizontally inside its own container (page never scrolls sideways); Content Flow rows become stacked cards; seam checklist + connection health stack.</span>
+            <div class="mstrip" style="margin-top:8px">
+              <div class="mcard"><b>⏸ Auto-publish OFF</b><div style="color:var(--mut)">5/7 seams · [▶ Push now (4)] full-width button</div></div>
+              <div class="mcard"><b>Matrix →</b><div style="color:var(--mut)">assets column pinned, channel columns scroll in-card; chips tap → payload sheet</div></div>
+              <div class="mcard"><b>🏠 118 Beech · CL-0421</b><div style="color:var(--mut)">IG ✓ FB ✓ YT ✓<br><span class="num">6.2K v · 214 sh · 3 leads</span><br><span class="bdg good" style="font-size:9px">WINNER</span><br>[⚡ Push to ad] full-width<br>[Create funnel ✓]</div></div>
+              <div class="mcard"><b>📰 Rate card · CL-0418</b><div style="color:var(--mut)">IG GBP email<br><span class="num">1.1K v · 0 leads</span> <span class="bdg warn" style="font-size:9px">UNDER</span><br>[Autopsy] [Kill] stacked full-width</div></div>
+              <div class="mcard"><b>Seam checklist</b><div style="color:var(--mut)">stacks under connection health; 5/7 badge; toggle stays locked</div></div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ============ spec gaps found ============ -->
+  <div class="note" style="margin-top:26px"><b>Spec gaps found (PropReach Master Brain — rendered in the mock, missing from the spec inventory):</b> (1) <b>Launch-kit event chain is longer than the two events the spec lists</b> — §10.1 consumes UPCOMING_OWN_LISTING_DETECTED, LISTING_LIVE_FROM_IDX, LISTING_PLAN_APPROVED, SHOOT_PACKET_READY, FOOTAGE_UPLOADED, ASSET_MATCHED (kit-chip annotation updated). (2) <b>Kit ad-leg fair-housing specifics</b> — LISTING_SELLER_AD requires Meta special_ad_categories = ["HOUSING"], targeting GEOGRAPHIC_ONLY by default, no demographics/proxies/school-quality selling points (§10.2) — named in the Content Flow annotation rather than just "inherits Screen 18 rules". (3) <b>Escalation-to-paid preflight needs a content identity</b> — a boosted post requires a PropCast content_id or approved_exception_type = ACTIVE_LISTING (§10.2), so the ⚡ nomination card carries the lock/content ids shown in the payload detail. (4) <b>Listing flow's fourth output</b> — post-close case-study ad candidates (§10.1/§10.5, sourced-facts-only, testimonials hard-blocked without a ReleaseRecord §10.6) will surface as a future "Came from: 🏁 closed deal" row class on this board.</div>
+
+  <!-- ============ (3) ELEMENT COVERAGE ============ -->
+  <h2 style="font-size:20px; margin:24px 0 10px">Element coverage — spec inventory → this page</h2>
+  <table class="dtable cov" style="font-size:12.5px">
+    <tr><th>Spec inventory element</th><th>Rendered at</th><th>Status</th></tr>
+    <tr><td>Publish matrix cell chip (published / posted / N reels / sched / HOLD / — / FAILED)</td><td><a href="#el-matrix">Publish matrix</a></td><td class="ok">✓</td></tr>
+    <tr><td>Parent-row expander "(+14 derivatives ▸)" — asset family, ~15/parent, highest-rated Shorts only</td><td><a href="#el-expander">July market update rows</a></td><td class="ok">✓</td></tr>
+    <tr><td>Per-platform metadata A/B tab (variant pairs, winner from ledger joins)</td><td><a href="#el-ab">Metadata A/B card</a></td><td class="ok">✓</td></tr>
+    <tr><td>AI-disclosure HOLD chip (platform named, held in QC, manual-label release)</td><td><a href="#el-hold">HOLD panel</a> + matrix chips</td><td class="ok">✓</td></tr>
+    <tr><td>Connection health panel (✓ / token-expiry / ○ not connected / relay armed)</td><td><a href="#el-connections">Connection health</a></td><td class="ok">✓</td></tr>
+    <tr><td>Seam checklist panel (canonical 7 verbatim, N/7, toggle LOCKED-OFF)</td><td><a href="#el-seams">Seam checklist</a></td><td class="ok">✓</td></tr>
+    <tr><td>Auto-publish OFF banner (+ manual push per item / day batch)</td><td><a href="#el-off-banner">OFF banner</a></td><td class="ok">✓</td></tr>
+    <tr><td>Content Flow row (came-from → lock → went-to → D1/2/3/5/7 results → verdict → do-next)</td><td><a href="#el-flowrow">Content Flow board</a></td><td class="ok">✓</td></tr>
+    <tr><td>Verdict badge (WINNER top-10% / UNDERPERFORMER / GAP)</td><td><a href="#el-verdict">Flow rows</a></td><td class="ok">✓</td></tr>
+    <tr><td>⚡ Push to ad (nomination → Approvals w/ budget suggestion → Screen 18 wizard prefill)</td><td><a href="#el-pushad">Flow row 1</a></td><td class="ok">✓</td></tr>
+    <tr><td>Autopsy hook button (→ Screen 31)</td><td><a href="#el-autopsy">Flow row 2</a></td><td class="ok">✓</td></tr>
+    <tr><td>Kill escalation button (confirm-gated)</td><td><a href="#el-kill">Flow row 2</a></td><td class="ok">✓</td></tr>
+    <tr><td>Sequel from comments (N unanswered Qs → concept brief)</td><td><a href="#el-sequel">Flow row 3</a></td><td class="ok">✓</td></tr>
+    <tr><td>GAP row ("742 Hurlingame has NO funnel page yet" + ⚡ Create funnel now)</td><td><a href="#el-gap">Flow row 4</a></td><td class="ok">✓</td></tr>
+    <tr><td>Launch-kit chip per new listing (ready / running / skipped + 3-click path)</td><td><a href="#el-kit">3-click path block</a></td><td class="ok">✓</td></tr>
+    <tr><td>Weekly totals strip (assets → views → sessions → leads, organic vs paid)</td><td><a href="#el-totals">Totals strip</a></td><td class="ok">✓</td></tr>
+    <tr><td>Revoke action (downstream-object checklist by content_lock_id, per-object status)</td><td><a href="#el-revoke-panel">Revoke checklist</a></td><td class="ok">✓</td></tr>
+    <tr><td>Lock badge (CL-id + version; post-approval edit = new version + new lock)</td><td><a href="#el-matrix">Matrix asset column</a> (CL-0405 v2 note)</td><td class="ok">✓</td></tr>
+    <tr><td>News-queue link chip (headline cards, geo toggle, escalation indicator)</td><td><a href="#el-news-chip">News chip</a></td><td class="ok">✓</td></tr>
+    <tr><td>Empty state ("Nothing scheduled this week…")</td><td><a href="#el-empty">States strip</a></td><td class="ok">✓</td></tr>
+  </table>
+  <div style="border:1.5px solid var(--good); background:#f2f8f4; border-radius:10px; padding:12px 16px; margin:12px 0 0; font-weight:700; color:var(--good)">20 of 20 spec elements rendered ✓ <span style="font-weight:400; color:var(--mut); font-size:12.5px">— plus regions beyond the inventory: payload detail card, degraded TikTok column, FAILED chip w/ retry, permission-limited notes, mobile variant strip, states strip; plus the 4 Master-Brain gap items above.</span></div>
+
+  <!-- ============ (4) FULL SPEC AS HTML ============ -->
+  <div class="specdoc">
+    <h1 style="font-size:24px; margin:40px 0 6px">Spec — 19 · Distribution Board + Content Flow</h1>
+    <p><b>Purpose</b> The channels × content publishing matrix and the closed-loop "Content Flow" board: where each locked asset came from, where it went, what it did, and the one-click next move. Auto-publish stays visibly OFF until the 7-item seam checklist is green; per-platform AI-disclosure holds are shown explicitly; each parent long-form expands into its ~15-asset family.</p>
+    <p><b>Primary users</b> Agent/owner (daily glance + one-click actions); content team (Peter/John-class roles) for scheduling and manual pushes.</p>
+    <p><b>Entry points</b> Left-nav "Distribution"; from Content Review &amp; Approve (approved lock lands here queued); from Command Center content queue; from Campaign Manager (asset "went to" links); from a listing record ("Launch kit" chip); Wattson ("what went out this week?").</p>
+    <p><b>Exit points</b> "Push to ad" → Campaign Manager wizard prefilled (Screen 18); "Create funnel" → Funnel Page Builder; "Autopsy hook" → Attribution hook-autopsy browser (31); asset name → Content Review/lock detail; Connections → Settings &gt; Integrations; derivative rows → Video Studio (32) render jobs; revoke → downstream-object revocation checklist.</p>
+
+    <h2>Layout</h2>
+    <p><b>Desktop.</b> Header: "Distribution" + week label + scheduled count; nav: Connections, Asset families. Zone 1 — publish matrix: rows = assets (parent + expandable derivatives), columns = channels (YouTube, Instagram, Facebook, TikTok, GBP, Email; LinkedIn appears when connected); cells = status chips. Zone 2 — 2-up panels: Connection health · Auto-publish seam checklist. Zone 3 — Content Flow board (brand-highlighted): Came from → Asset (lock) → Went to → 7-day results → Verdict → Do next; totals strip; listing→ad 3-click-path explainer with per-listing launch-kit chips. Sticky manual "Push now" bar when items are queued and auto-publish is OFF.</p>
+    <p><b>Mobile (375px).</b> Matrix scrolls horizontally inside its own container (never the page); Content Flow rows become stacked cards (source badge, lock id, channel chips, results line, verdict badge, full-width action buttons). Seam checklist and connection health stack.</p>
+
+    <h2>Element inventory</h2>
+    <div style="overflow-x:auto">
+    <table class="dtable">
+      <tr><th>Element</th><th>What it shows/does</th><th>Data source</th><th>Interactions</th><th>Spec source</th></tr>
+      <tr><td>Publish matrix cell chip</td><td>Per channel per asset: published / posted / N reels live / sched &lt;day&gt; / HOLD: manual AI label / — (not targeted) / FAILED</td><td>DistributionPayload per channel (channel enum: instagram, instagram_reels, facebook, youtube, youtube_shorts, tiktok, gbp, linkedin, email, web, print, paid) + publish job status</td><td>Click → payload detail (caption, alt text, disclosure flag, short link, UTM); reschedule; retry failed</td><td>PropCast MB Part 7 DistributionPayload; draft s19</td></tr>
+      <tr><td>Parent-row expander "(+14 derivatives ▸)"</td><td>Expands the asset family: 20–30 auto-clipped Shorts candidates (only highest-rated published), cross-posts, SEO blog post, GBP square cuts (~15 assets/parent target)</td><td>Omnipresence Distribution stage + Production Asset Registry</td><td>Expand/collapse; per-derivative status</td><td>PropCast MB "Omnipresence Distribution"</td></tr>
+      <tr><td>Per-platform metadata A/B tab</td><td>Title/thumbnail variant pairs {content_id, content_lock_id, lock_hash, approved_version_id, platform, variant_id, field, text}</td><td>A/B variant log</td><td>View pairing; winner marked from ledger joins</td><td>PropCast MB Part 10 metadata automation</td></tr>
+      <tr><td>AI-disclosure HOLD chip</td><td>Names the platform lacking programmatic labeling (e.g. TikTok via Buffer relay); item HELD in QC until manually labeled</td><td>AI Disclosure Per Platform map</td><td>"Mark manually labeled" → releases with audit note [BEST GUESS on release mechanics]</td><td>PropCast MB Part 5 hard rule + Part 10</td></tr>
+      <tr><td>Connection health panel</td><td>Per channel: ✓ connected / token-expiry warning / ○ not connected; relay fallback armed (Buffer for TikTok interim)</td><td>OAuth token store + relay config</td><td>Renew → OAuth flow; connect</td><td>Draft s19; PropCast MB Part 10 relay rule</td></tr>
+      <tr><td>Seam checklist panel</td><td>The 7 items verbatim: (1) PropReach stores content_lock_id/approved_version_id/lock_hash, (2) PropFlow stores lock id on engagement/video/reply/lead events, (3) shortener maps every short link to lock id, (4) attribution rows carry lock id, (5) revocation finds every downstream object by lock id, (6) kill switches block by tenant/agent/channel/lock, (7) programmatic AI disclosure or held. N/7 green; auto-publish toggle LOCKED-OFF until 7/7</td><td>Seam-status service</td><td>Read-only; items link to the admin seam-status panel</td><td>PropCast MB Part 16 seam checklist</td></tr>
+      <tr><td>Auto-publish OFF banner</td><td>"Auto-publish OFF — everything queues for the manual push button"; manual export only for lock-tied payloads</td><td>Seam status</td><td>Push now (per item / per day batch)</td><td>PropCast MB Part 16</td></tr>
+      <tr><td>Content Flow row</td><td>Came from (🏠 listing / 📰 news / 🔁 evergreen) → asset + lock id (CL-xxxx) + version → channels reached → 7-day results (views, shares, clicks, leads — Day 1/2/3/5/7 checkpoints) → verdict → next-action buttons</td><td>Event Ledger + platform-lane checkpoint metrics</td><td>Row click → attribution drill (31)</td><td>Draft s19 Content Flow; PropCast MB platform metrics schedule</td></tr>
+      <tr><td>Verdict badge</td><td>WINNER (top 10% engagement) / UNDERPERFORMER / GAP</td><td>QC monitoring thresholds</td><td>—</td><td>PropCast MB Part 16 QC dashboard; draft "top-10%"</td></tr>
+      <tr><td>⚡ Push to ad button</td><td>Winner auto-nominates for spend; nomination lands in Approvals with budget suggestion — button prefills the campaign wizard</td><td>Escalation logic</td><td>→ Screen 18 wizard</td><td>Draft s19; PropCast MB Escalation Ladder (~10+ shares auto-promotes card→video→ads)</td></tr>
+      <tr><td>Autopsy hook button</td><td>Opens the hook-autopsy log for the piece</td><td>Learning layer</td><td>→ Screen 31</td><td>Matrix "hook autopsy log"</td></tr>
+      <tr><td>Kill escalation button</td><td>Stops the escalation ladder for an underperformer</td><td>Escalation state</td><td>Confirm</td><td>PropCast MB Escalation Ladder</td></tr>
+      <tr><td>Sequel from comments</td><td>Creates a concept brief from N unanswered comment questions</td><td>Comment ingestion [BEST GUESS: count from CommentDmProvider]</td><td>→ concept flow; hides when provider absent</td><td>Draft s19</td></tr>
+      <tr><td>GAP row</td><td>Listing with no funnel/kit detected + ⚡ Create funnel now</td><td>Launch-kit coverage check</td><td>→ Funnel builder</td><td>Draft s19</td></tr>
+      <tr><td>Launch-kit chip per new listing</td><td>"Launch kit: ready / running / skipped"; 3-click path: listing live → kit auto-generates (creative from listing photos + funnel page + budget from farm CPL history + farm-segment audience) → ONE approval card ships all</td><td>UPCOMING_OWN_LISTING_DETECTED / LISTING_LIVE_FROM_IDX events + kit generator</td><td>Chip → kit detail / approval card</td><td>Draft s19; PropReach MB §10.1</td></tr>
+      <tr><td>Weekly totals strip</td><td>Assets out → views → site sessions → leads; organic vs paid split</td><td>Ledger aggregates</td><td>—</td><td>Draft s19</td></tr>
+      <tr><td>Revoke action</td><td>"Stop that campaign": downstream-object checklist (posts, ads, links, QRs, DM flows, pages) with per-object stop status, found by content_lock_id</td><td>Revocation service</td><td>Confirm → per-object progress</td><td>Matrix ContentLock/revocation; seam item 5</td></tr>
+      <tr><td>Lock badge</td><td>CL-id + version on every asset; post-approval edit = new version + new compliance pass + new lock (never edit in place)</td><td>ContentLock</td><td>Click → lock/version history</td><td>PropCast MB Part 5; matrix correction #9</td></tr>
+      <tr><td>News-queue link chip</td><td>Headline cards awaiting approval; broad-vs-local geo toggle; escalation-ladder indicator (P1; entry point here)</td><td>News-to-Post engine</td><td>→ news queue</td><td>Matrix News-to-Post item</td></tr>
+      <tr><td>Empty state</td><td>"Nothing scheduled this week — approved content lands here automatically"</td><td>—</td><td>Link to content queue</td><td>[BEST GUESS]</td></tr>
+    </table>
+    </div>
+
+    <h2>States</h2>
+    <ul>
+      <li><b>Default / Loading:</b> matrix skeleton rows; chips grey until statuses resolve.</li>
+      <li><b>Empty:</b> as above.</li>
+      <li><b>Error/degraded (fail-closed):</b> channel API down → column degraded badge; scheduled cells hold (never silently skip); publish failures → FAILED chip + failure alert; disclosure-unlabelable platforms HOLD (hard rule, no exception); seam-status service unreachable → auto-publish renders OFF; metrics missing on a platform → partial results with "metrics unavailable on &lt;platform&gt;", never fabricated.</li>
+      <li><b>Permission-limited:</b> content-team role can schedule/push; only owner/approver sees Push-to-ad (spend) and Revoke; connections admin-only.</li>
+      <li><b>Mobile:</b> stacked cards per Layout.</li>
+    </ul>
+
+    <h2>Data fields</h2>
+    <p>DistributionPayload: payload_id, tenant/agent ids, content_id, content_lock_id, approved_version_id, lock_hash, channel, asset_urls[], thumbnail_url, caption, alt_text, ai_disclosure_flag (always true), disclaimer_refs[], short_link (link.propertyiq.app), utm block. Flow metrics: views, shares, clicks→site sessions→leads per piece (nullable → "unknown"); verdict; checkpoint day. Connection: token expiry ISO date rendered as "in Nd". Totals: counts + $ paid spend (USD).</p>
+
+    <h2>Rules &amp; compliance</h2>
+    <ul>
+      <li><b>AI disclosure is mandatory</b> per platform via API parameter; no programmatic support → HELD (PropCast MB Part 5 — no exceptions).</li>
+      <li><b>Auto-publish gate:</b> OFF until the exact-identity chain (7 seams) is proven; manual export only with lock-tied payloads (Part 16).</li>
+      <li><b>Every payload requires content_lock_id</b> — reject handoffs without it (Part 5 build rule).</li>
+      <li><b>Email routing rule:</b> email column links to the agent's blog post embedding the video, never directly to YouTube (PropCast MB).</li>
+      <li><b>iPhone safe zones / no paywalled-text reproduction</b> enforced upstream; violations surface here as compliance holds.</li>
+      <li><b>Escalation to paid</b> routes through PropReach preflight — the ⚡ button never launches spend directly; nomination → Approvals. Brain addition: the boosted leg needs a PropCast content_id or approved_exception_type = ACTIVE_LISTING (§10.2).</li>
+      <li><b>Fair housing:</b> no channel targeting exists on this board (organic); listing-kit ad legs inherit Screen 18 rules — Meta special_ad_categories = ["HOUSING"], GEOGRAPHIC_ONLY targeting, no demographics, no protected-class proxies, no school-quality selling points (PropReach MB §10.2).</li>
+    </ul>
+
+    <h2>Cross-links</h2>
+    <p>In: Content Review &amp; Approve (approved locks), Command Center, listing records, News queue. Out: Campaign Manager (18), Funnel builder, Attribution (31), Video Studio (32), Settings &gt; Integrations, Approvals inbox (ad nominations, manual-label confirmations). <b>Ledger:</b> emits CONTENT_PUBLISHED (per channel publish); LINK_SCANNED consumed for QR/shortlink joins; consumes FOOTAGE_UPLOADED / ASSET_MATCHED (derivative readiness), LISTING_LIVE_FROM_IDX (launch-kit chips), CONTENT_VIEWED / ORGANIC_VIDEO_VIEWED (flow results). All rows carry content_lock_id.</p>
+
+    <h2>Open decisions</h2>
+    <ul>
+      <li>[DECIDE] Relay vendor: interim = Buffer for TikTok (~$6/mo/channel-set; no programmatic TikTok AI label → those items always HOLD) until direct TikTok API approval; UI shows a vendor-agnostic relay badge per channel.</li>
+      <li>[DECIDE] Draft's seam wording (rollback, human-pause SLA) vs canonical Part 16 seven: interim = render the canonical 7, keep the draft's "N/7 green" presentation.</li>
+      <li>[DECIDE] "Sequel from comments" question-count source: interim = comment-DM ingestion count [BEST GUESS]; feature hides when CommentDmProvider is absent.</li>
+      <li>[DECIDE] Whether the News queue is a lane on this board or its own screen (matrix says P2 separate): interim = entry chip here, dedicated screen later — board layout unaffected.</li>
+    </ul>
+    <p class="anno" style="margin-top:20px">Wireframe fidelity — colors are placeholders from the locked PropFlow design language. All asset names/numbers are realistic fake data. Agent identity: Graeham Watts, Intero Real Estate, DRE# 01466876 (from shared-references/identity.json — never hardcode elsewhere; the identity.json blocklist DRE must never appear).</p>
+  </div>
+</div>

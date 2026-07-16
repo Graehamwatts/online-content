@@ -1,0 +1,448 @@
+<title>PropertyIQ · Screen 22 — Underwriting Workspace</title>
+<link href="https://api.fontshare.com/v2/css?f[]=technor@500,600,700&display=swap" rel="stylesheet">
+<link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<style>
+  /* Type system — Technor for display, Inter for UI. */
+  :root{ --font-display:'Technor', Inter, -apple-system, 'Segoe UI', sans-serif; --font-ui: Inter, -apple-system, 'Segoe UI', Roboto, sans-serif; }
+</style>
+<style>
+  /* Palette v4 — PropFlow design language: neutral ink UI, ink-as-accent, color reserved for data. (extracted verbatim from propsearch-design-draft.html) */
+  :root, :root[data-theme="dark"], :root[data-theme="light"]{
+    --ink:#23282f; --paper:#fbfaf8; --surface:#f1efe9; --line:#e2dfd6;
+    --mut:#6b7076; --soft:#9b9f9f;
+    --brand:#2e6b53; --brand-ink:#ffffff; --brand-soft:#eaf1ec; --brand-deep:#1e4c3a;
+    --signal:#b07a2e;
+    --good:#2e7d4f; --warn:#a8630a; --crit:#b3372f;
+    --r:10px;
+  }
+  .intel .score, .mintel{ color:var(--brand-deep) }
+  .intel{ border-left:3px solid var(--brand) }
+  h1{ letter-spacing:-.02em }
+  .stat b{ letter-spacing:-.01em }
+  body[data-agent="watts"]{ --brand:#2e6b53; --brand-soft:#eaf1ec; --brand-deep:#1e4c3a; }
+
+  *{box-sizing:border-box; margin:0}
+  body{font:15px/1.55 var(--font-ui); color:var(--ink); background:var(--paper); padding-bottom:80px}
+  h1,h2,h3{line-height:1.15; text-wrap:balance; font-family:var(--font-display); font-weight:600}
+  h1{letter-spacing:-.01em}
+  .site{box-shadow:0 1px 2px rgba(20,24,32,.04), 0 8px 32px rgba(20,24,32,.06)}
+  .stat{box-shadow:0 1px 2px rgba(20,24,32,.03); transition:box-shadow .15s, transform .15s}
+  .stat:hover{box-shadow:0 4px 14px rgba(20,24,32,.08)}
+  .chip{transition:all .12s}
+  button{font-family:var(--font-ui)}
+  .num{font-variant-numeric:tabular-nums}
+  .wrap{max-width:1180px; margin:0 auto; padding:0 20px}
+
+  .bar{position:sticky; top:0; z-index:50; background:var(--paper); border-bottom:1px solid var(--line); padding:10px 0; backdrop-filter:blur(8px)}
+  .bar .wrap{display:flex; flex-wrap:wrap; gap:10px; align-items:center}
+  .bar .ttl{font-weight:700; margin-right:auto}
+  .bar .ttl small{display:block; font-weight:400; color:var(--mut)}
+  .bar a{color:var(--brand); font-size:13px; text-decoration:none}
+
+  .note{background:var(--surface); border:1px solid var(--line); border-radius:var(--r); padding:14px 16px; margin:0 0 22px; font-size:13.5px; color:var(--mut)}
+  .note b{color:var(--ink)}
+
+  .site{border:1px solid var(--line); border-radius:14px; overflow:hidden; background:var(--paper)}
+  .sitehead{display:flex; align-items:center; gap:14px; padding:14px 22px; border-bottom:1px solid var(--line); flex-wrap:wrap}
+  .avatar{width:38px; height:38px; border-radius:50%; background:var(--brand); color:var(--brand-ink); display:grid; place-items:center; font-weight:700}
+  .sitehead .who b{display:block}
+  .sitehead .who small{color:var(--mut)}
+  .sitehead nav{margin-left:auto; display:flex; gap:18px; font-size:13.5px; color:var(--mut)}
+  .sitehead nav a{color:inherit; text-decoration:none}
+  .sitehead nav a:hover{color:var(--brand)}
+
+  .chip{display:inline-flex; align-items:center; gap:6px; font-size:12.5px; font-weight:500; border:1px solid var(--line); border-radius:99px; padding:6px 12px; background:var(--paper); cursor:pointer; color:var(--ink)}
+  .chip:hover{border-color:var(--brand)}
+  .chip.on{background:var(--brand); border-color:var(--brand); color:var(--brand-ink); font-weight:600; box-shadow:0 2px 8px color-mix(in srgb, var(--brand) 30%, transparent)}
+  .chip[disabled]{opacity:.45; cursor:not-allowed; text-decoration:line-through}
+
+  .statrow{display:grid; grid-template-columns:repeat(4,1fr); gap:10px}
+  .stat{background:var(--surface); border:1px solid var(--line); border-radius:var(--r); padding:12px}
+  .stat small{display:block; color:var(--mut); font-size:11.5px; text-transform:uppercase; letter-spacing:.05em}
+  .stat b{font-size:18px}
+  .stat .up{color:var(--good); font-size:12px}
+
+  .bdg{font-size:11.5px; border-radius:6px; padding:3px 8px; background:var(--surface); border:1px solid var(--line); color:var(--mut)}
+  .bdg.good{color:var(--good); border-color:color-mix(in srgb,var(--good) 30%,var(--line))}
+  .bdg.warn{color:var(--warn); border-color:color-mix(in srgb,var(--warn) 30%,var(--line))}
+  .bdg.crit{color:var(--crit); border-color:color-mix(in srgb,var(--crit) 30%,var(--line))}
+
+  .dtable{width:100%; border-collapse:collapse; font-size:13px}
+  .dtable td,.dtable th{border-bottom:1px solid var(--line); padding:8px 10px; text-align:left}
+  .dtable th{font-size:11px; text-transform:uppercase; letter-spacing:.05em; color:var(--soft)}
+
+  @media (max-width:860px){ .statrow{grid-template-columns:repeat(2,1fr)} .maingrid{grid-template-columns:1fr !important} .console{grid-template-columns:1fr !important} .rail{display:none !important} }
+  @media (prefers-reduced-motion: reduce){ *{transition:none!important} }
+
+  /* ---- page-specific additions (kept in the same design language) ---- */
+  .anno{font-size:11px; color:var(--soft)}
+  .cardbox{border:1px solid var(--line); border-radius:10px; padding:11px 14px; font-size:12.5px; background:var(--paper)}
+  .btn-ink{background:var(--ink); color:#fff; border:0; border-radius:7px; padding:7px 12px; font-size:11.5px; cursor:pointer; font-weight:600}
+  .btn-ink[disabled]{opacity:.4; cursor:not-allowed}
+  .btn-ghost{background:var(--paper); border:1px solid var(--line); border-radius:7px; padding:7px 12px; font-size:11.5px; cursor:pointer}
+  .sechead{font-size:14px; font-weight:700; margin:0 0 8px; font-family:var(--font-display)}
+  .cov td.ok{color:var(--good); font-weight:700}
+  .specdoc h2{font-size:18px; margin:26px 0 8px}
+  .specdoc h3{font-size:15px; margin:18px 0 6px}
+  .specdoc p, .specdoc li{font-size:13.5px; color:var(--mut)}
+  .specdoc b{color:var(--ink)}
+  .specdoc table{margin:8px 0}
+  .grid5{display:grid; grid-template-columns:repeat(6,1fr); gap:2px; font-size:10px; text-align:center; min-width:420px}
+  .grid5 .c{padding:4px 2px; border-radius:3px}
+  .g1{background:#e3efe6}.g2{background:#eef2ee}.g3{background:#fdf6ee}.g4{background:#fdecec}
+  .asum{display:flex; justify-content:space-between; gap:8px; align-items:center; padding:5px 0; border-bottom:1px dashed var(--line); font-size:11.5px}
+  .asum:last-child{border-bottom:0}
+  .asum .val{font-weight:600; border:1px solid var(--line); border-radius:6px; padding:1px 7px; background:var(--surface); white-space:nowrap}
+  .asum .val.edited{border-color:var(--brand); color:var(--brand-deep)}
+  .prompt{display:flex; gap:6px; border:1px solid var(--line); border-radius:9px}
+  .prompt input{flex:1; border:0; background:transparent; font:12px var(--font-ui); padding:7px 10px; color:var(--ink); outline:none}
+  .prompt button{background:var(--ink); color:#fff; border:0; border-radius:7px; padding:6px 14px; font-size:11.5px; cursor:pointer; margin:3px}
+</style>
+
+<!-- ============ (1) slim header ============ -->
+<div class="bar">
+  <div class="wrap">
+    <div class="ttl">PropertyIQ · Screen 22 — Underwriting Workspace <small>Full-density per-screen mock · wireframe fidelity · dev-facing annotations in gray</small></div>
+    <a href="../wireframe.html">← All screens</a>
+  </div>
+</div>
+
+<!-- ============ (2) THE FULL MOCK ============ -->
+<div class="wrap" style="padding-top:24px">
+  <div class="note"><b>Screen 22 — Underwriting Workspace.</b> The "Underwrite this deal" surface for one selected property: a deterministic pro forma (income → NOI → debt → DSCR → CoC → IRR → equity multiple), an editable assumption pack with California verify-per-deal flags, ADU/BRRRR/Flip overlays, the three canonical 5×5 sensitivity grids with the mandatory 0%-appreciation bear row, Excel + review-gated memo exports, and immutable run history. <b>No LLM anywhere in the math</b> (§19.2, §12.8). Agent-console chrome (Screen 9 pattern) — clients only ever see the exported memo.</div>
+
+  <div class="site" data-agent="watts">
+    <!-- Address + run header · rent confidence chip · header nav (spec Layout) -->
+    <div class="sitehead" id="el-header">
+      <div class="avatar">GW</div>
+      <div class="who">
+        <b><a href="#" style="color:inherit; text-decoration:none">Underwrite: 742 Hurlingame Ave, Redwood City</a> <span class="bdg" style="margin-left:6px">Run 3 · assumptions edited</span></b>
+        <small class="num">3bd/2ba · 1,480 sqft · SFR · list $1.29M · <span id="el-rentchip" class="bdg good" title="Click → source facts popover">Rentometer rent $4,850/mo · HIGH confidence · as-of Jul 11</span> <span class="bdg" title="AVMSnapshot §10.10">AVM $1.31M · MED · Jul 9</span></small>
+      </div>
+      <nav><a href="#el-runhistory">Run history</a><a href="#el-export" title="disabled until acknowledgement">Export Excel</a><a href="#el-export">Client memo (review-gated)</a></nav>
+      <div class="anno" style="width:100%">Header = UnderwriteRunRecord §10.14. Address click → property detail. Rent chip click → RentEstimateSnapshot source-facts popover (§10.9, provider = Rentometer per RentEstimateProvider §12.3). Entry points: property detail "Underwrite this deal", zoning panel "add as scenario" (§17.6), Compare row action, Saved Properties row, run history reopen. underwriting_version stamped on every run (§19.8 — Brain addition, see gaps note).</div>
+    </div>
+
+    <div class="console" style="display:grid; grid-template-columns:172px 1fr">
+      <!-- persistent agent-console left rail (same chrome as Screen 9) -->
+      <div class="rail" style="border-right:1px solid var(--line); padding:14px 10px; font-size:12.5px; display:flex; flex-direction:column; gap:2px; background:var(--surface)">
+        <a href="#" style="text-decoration:none; color:var(--ink); border-radius:8px; padding:8px 10px">☰ Today</a>
+        <a href="#" style="text-decoration:none; color:var(--ink); border-radius:8px; padding:8px 10px">🗺 Farm map</a>
+        <a href="#" style="text-decoration:none; color:var(--ink); border-radius:8px; padding:8px 10px">🤝 Past clients</a>
+        <a href="#" style="text-decoration:none; color:var(--ink); border-radius:8px; padding:8px 10px">👤 Leads & clients</a>
+        <a href="#" style="text-decoration:none; color:#fff; background:var(--ink); border-radius:8px; padding:8px 10px; font-weight:600">🔍 PropSearch</a>
+        <a href="#" style="text-decoration:none; color:var(--ink); border-radius:8px; padding:8px 10px">💬 Comms <span class="bdg" style="font-size:9.5px">6</span></a>
+        <a href="#" style="text-decoration:none; color:var(--ink); border-radius:8px; padding:8px 10px">📋 Transactions</a>
+        <a href="#" style="text-decoration:none; color:var(--ink); border-radius:8px; padding:8px 10px">🎬 Content studio</a>
+        <a href="#" style="text-decoration:none; color:var(--ink); border-radius:8px; padding:8px 10px">📣 Ads & funnels</a>
+        <a href="#" style="text-decoration:none; color:var(--ink); border-radius:8px; padding:8px 10px">📈 Reports</a>
+        <div style="margin-top:auto; padding-top:10px; border-top:1px solid var(--line)">
+          <a href="#" style="text-decoration:none; color:var(--ink); border-radius:8px; padding:8px 10px; display:block">⚙ Settings</a>
+          <div class="anno" style="padding:6px 10px">Global chrome: persistent agent-console rail (Screen 9 pattern). Consumer pages never show it. Underwriting lives inside PropSearch.</div>
+        </div>
+      </div>
+
+      <div>
+        <!-- flag chips row: manual-review + investor-fit -->
+        <div id="el-flags" style="padding:14px 22px 0; display:flex; gap:6px; flex-wrap:wrap; align-items:center">
+          <span class="bdg warn" title="3 CA assumptions must be verified per deal — counted into the acknowledgement gate">⚑ ASSUMPTION_VERIFY_PER_DEAL (3)</span>
+          <span class="bdg" title="Zoning SB-9 answer is CAUTIOUS_DISCLAIMERED">⚑ ZONEOMICS_LOW_CONFIDENCE (SB-9 tile only)</span>
+          <span id="el-fitchip" class="bdg good" title="Click → decomposed contributing factors (explainability rule §12.10)">◆ Investor-fit 71/100 · ScoringService · view factors →</span>
+          <span class="anno">manual_review_flags §10.14/§30 — hover explains meaning + what's suppressed. Investor-fit chip appears ONLY when ScoringService returns output; never computed locally. When unavailable the chip is absent entirely (fail-closed) — no buy/hold/pass anywhere.</span>
+        </div>
+
+        <div class="maingrid" style="padding:14px 22px; display:grid; grid-template-columns:1.4fr 1fr; gap:14px">
+          <!-- ================= MAIN COLUMN ================= -->
+          <div style="display:grid; gap:10px; align-content:start">
+
+            <!-- 1 · headline stats -->
+            <div id="el-stats">
+              <div class="statrow">
+                <div class="stat" title="Click → income/expense breakdown drawer"><small>NOI (yr 1)</small><b class="num">$41,300</b> <span class="anno">→ breakdown drawer</span></div>
+                <div class="stat" title="Click → same drawer: implied value, GRM, expense ratio"><small>Cap rate</small><b class="num">3.2%</b> <span class="anno num">implied $1.18M · GRM 22.2</span></div>
+                <div class="stat" style="border-left:3px solid var(--crit)" title="Click → debt drawer incl. full amortization schedule"><small>DSCR</small><b class="num" style="color:var(--crit)">0.81</b> <span style="font-size:11px; color:var(--crit)">under 1.0 — debt service exceeds NOI</span></div>
+                <div class="stat" title="levered_irr over hold_years"><small>5-yr IRR</small><b class="num">9.4%</b> <span class="anno num">equity multiple 1.6×</span></div>
+              </div>
+              <div class="anno" style="margin-top:4px">Tiles read `deterministic_output` §19.8 only. NOI/Cap click → drawer with GPR $58.2K → EGI $55.9K → each OpEx line → NOI (§19.5). DSCR click → debt drawer with the full `AmortizationRow[]` schedule table. IRR non-computable → tile shows "—" + manual-review flag chip; a number is never faked (§19.5).</div>
+              <!-- income/expense breakdown drawer (rendered open for the mock) -->
+              <div class="cardbox" style="margin-top:8px; background:var(--surface)">
+                <b style="font-size:12px">Breakdown drawer (opened from NOI/Cap tile)</b>
+                <div style="display:grid; grid-template-columns:1fr 1fr; gap:10px; margin-top:6px">
+                  <table class="dtable num" style="font-size:11px"><tr><th>Income</th><th></th></tr><tr><td>GPR</td><td>$58,200</td></tr><tr><td>Vacancy (4%)</td><td>−$2,328</td></tr><tr><td>Other income</td><td>$0</td></tr><tr><td><b>EGI</b></td><td><b>$55,872</b></td></tr></table>
+                  <table class="dtable num" style="font-size:11px"><tr><th>OpEx</th><th></th></tr><tr><td>Property tax</td><td>$15,222</td></tr><tr><td>Insurance</td><td>$2,400</td></tr><tr><td>Mgmt 8% · Maint 6% of EGI</td><td>$7,822</td></tr><tr><td>Reserves · utilities · landscaping · trash · HOA</td><td>−$10,872 total w/ above → <b>OpEx $14,572</b> · exp ratio 26%</td></tr></table>
+                </div>
+                <div class="anno" style="margin-top:4px">Every line traces to `expenses` block §19.8; expense_ratio = OpEx/EGI. Debt drawer (from DSCR): loan $967,500 · monthly P&I $6,051 · ADS $72,616 · mortgage constant 7.5% · amortization table periods 1–360.</div>
+              </div>
+            </div>
+
+            <!-- 2 · strategy overlays -->
+            <div id="el-overlays" class="cardbox">
+              <b>Strategy overlays</b> <span class="anno">InvestorStrategy enum §8 · overlay math §19.6 — deterministic add-on calcs, never extra scoring</span>
+              <div style="display:flex; gap:6px; margin-top:8px; flex-wrap:wrap">
+                <button class="chip on">Buy & hold</button>
+                <button class="chip on">+ ADU ($185K build → rent $2,400)</button>
+                <button class="chip">BRRRR (ARV $1.52M · refi 70%)</button>
+                <button class="chip">Flip</button>
+              </div>
+              <div id="el-impact" style="color:var(--mut); margin-top:8px; font-size:12px" class="num"><b style="color:var(--ink)">Impact:</b> ADU overlay flips DSCR to <b style="color:var(--good)">1.14</b> and 5-yr IRR to <b style="color:var(--good)">14.2%</b> — incremental NOI $26.9K, value uplift ≈ $655K − $185K cost. The zoning panel's "by right" makes this a real option, not a maybe.</div>
+              <div class="anno" style="margin-top:5px">Toggle → live recalc. ADU chip renders <b>disabled + tooltip</b> when zoning_claim_level = SUPPRESS ("ADU overlay unavailable — zoning gate", §19.6). BRRRR: new_loan = ARV × refi_ltv; cash_out = new_loan − old_loan − refi_costs. Flip: profit = ARV − price − rehab − holding_costs − selling_costs (holding_costs input surfaced — Brain §19.8 FlipOverlayOutput, see gaps note). Overlay impact line is computed from overlay outputs, no interaction.</div>
+            </div>
+
+            <!-- 3 · sensitivity grids -->
+            <div id="el-sensitivity" class="cardbox">
+              <div style="display:flex; gap:6px; align-items:center; flex-wrap:wrap">
+                <b>Sensitivity grids</b>
+                <div style="display:inline-flex; border:1px solid var(--line); border-radius:99px; overflow:hidden; font-size:10.5px">
+                  <span style="padding:4px 10px; background:var(--ink); color:#fff; font-weight:600">appreciation × rent growth → IRR</span>
+                  <span style="padding:4px 10px; color:var(--mut); cursor:pointer">exit cap × hold yrs → IRR + EM</span>
+                  <span style="padding:4px 10px; color:var(--mut); cursor:pointer">rate × LTV → CoC + DSCR</span>
+                </div>
+              </div>
+              <div style="overflow-x:auto; margin-top:8px">
+                <div class="grid5 num">
+                  <div class="anno" style="text-align:left">appr ↓ / rent gr →</div><div>1%</div><div>2%</div><div>3%</div><div>4%</div><div>5%</div>
+                  <div>5%</div><div class="c g1">13.9</div><div class="c g1">14.6</div><div class="c g1">15.3</div><div class="c g1">16.0</div><div class="c g1">16.8</div>
+                  <div>4%</div><div class="c g2">11.8</div><div class="c g1">12.5</div><div class="c g1">13.2</div><div class="c g1">13.9</div><div class="c g1">14.7</div>
+                  <div>3%</div><div class="c g3">8.7</div><div class="c g2">9.4</div><div class="c g2">10.1</div><div class="c g1">10.9</div><div class="c g1">11.6</div>
+                  <div>2%</div><div class="c g3">6.2</div><div class="c g3">6.9</div><div class="c g3">7.6</div><div class="c g2">8.4</div><div class="c g2">9.1</div>
+                  <div id="el-bear" style="font-weight:700; border:1px solid var(--ink); border-radius:3px">0% ★</div><div class="c g4" style="outline:1.5px solid var(--ink)">2.1</div><div class="c g4" style="outline:1.5px solid var(--ink)">2.8</div><div class="c g4" style="outline:1.5px solid var(--ink)">3.4</div><div class="c g4" style="outline:1.5px solid var(--ink)">4.1</div><div class="c g4" style="outline:1.5px solid var(--ink)">4.9</div>
+                </div>
+              </div>
+              <div class="anno" style="margin-top:5px">The three canonical grids per §19.7 (draft's "rent × rate / price × rehab" labels were illustrative — corrected here per the spec's open decision). Live recalculation on any assumption edit; cell click pins that scenario; tab switch swaps grid. <b>Bear row (0% appreciation) is mandatory, visually pinned, and cannot be hidden</b> — the honesty rule. `SensitivityGrid` cells carry outputs Record&lt;string, number|null&gt;.</div>
+            </div>
+
+            <!-- 4 · Zoneomics lot panel -->
+            <div id="el-zoning" style="border:1.5px solid var(--brand); border-radius:10px; padding:11px 14px; font-size:12px; background:var(--brand-soft)">
+              <b>🏗 This lot, answered (Zoneomics) — the panel no other underwriter has</b>
+              <div style="display:grid; grid-template-columns:repeat(2,1fr); gap:6px; margin-top:8px; font-size:11.5px">
+                <div style="background:var(--paper); border:1px solid var(--line); border-radius:8px; padding:8px">✅ <b>ADU:</b> by right, up to 1,000 sqft detached · setbacks 4ft side/rear · no parking req. (near transit) · <span class="bdg good" style="font-size:9.5px">AFFIRMATIVE</span><br><a id="el-adurender" href="#" style="color:var(--brand)">render concept on parcel 🛰</a> <span class="anno">→ plan-view overlay (Mapbox, attribution required) or photoreal AERIAL_ADU — license-gated, marketing use REVIEW_REQUIRED (§17.4, §30); Mapbox/Google tiles never used as AI-render input</span> · <a href="#" style="color:var(--brand)">add to underwrite as scenario ↑</a></div>
+                <div style="background:var(--paper); border:1px solid var(--line); border-radius:8px; padding:8px">⚠ <b>SB-9 split:</b> eligible with permit · min lot 1,200 sqft each side · owner-occupancy affidavit 3 yrs · <span class="bdg warn" style="font-size:9.5px">CAUTIOUS_DISCLAIMERED</span> <span class="anno">low-confidence claim → disclaimered, no "add as scenario" offered</span></div>
+                <div style="background:var(--paper); border:1px solid var(--line); border-radius:8px; padding:8px">✅ <b>Garage conversion:</b> as-of-right · replacement parking not required · adds ≈380 sqft livable · <span class="bdg good" style="font-size:9.5px">AFFIRMATIVE</span> · <a href="#" style="color:var(--brand)">add to underwrite as scenario ↑</a></div>
+                <div style="background:var(--paper); border:1px solid var(--line); border-radius:8px; padding:8px"><b>Dims:</b> R-1 · FAR 0.5 (0.31 used) · height 28ft · coverage 40% (26% used) — <b style="color:var(--good)">room to build</b> <span class="anno">Zoneomics v3 controls/plu/capacity §17.5, used-vs-allowed</span></div>
+              </div>
+              <div id="el-lotq" class="prompt" style="margin-top:8px; background:var(--paper)"><input placeholder='Ask this lot anything: "can I add a second story?" "what about a JADU too?"' aria-label="lot question"><button>Ask</button></div>
+              <div class="anno" style="margin-top:4px">Free-text question → ZoningProvider (§12.5), NL parse only (LLM allowed for parsing, never math). Every answer is sourced + confidence-gated: claim level AFFIRMATIVE / CAUTIOUS_DISCLAIMERED / SUPPRESS (§8). Affirmative answers offer "add to underwrite as scenario" — zoning Q&A and deal math are ONE surface. Zoning cache TTL 30 days (§12.5); stale → silent refresh, spinner on this panel only.</div>
+              <div id="el-disclaimer" style="font-size:10.5px; color:var(--mut); margin-top:6px; border-top:1px solid var(--line); padding-top:6px"><b>Zoning information is provided for preliminary analysis only, is not a permit determination, and must be verified with the local jurisdiction before making decisions.</b> <span class="anno">(verbatim §17.3 disclaimer — always rendered under this panel, static, non-dismissable)</span></div>
+            </div>
+
+            <!-- 5 · pro forma + exits -->
+            <div id="el-proforma" class="cardbox">
+              <b>5-year pro forma & exits</b>
+              <div style="overflow-x:auto"><table class="dtable num" style="font-size:11px; margin-top:6px; min-width:520px">
+                <tr><th></th><th>Yr 1</th><th>Yr 2</th><th>Yr 3 <span class="bdg" style="font-size:9px">ADU on</span></th><th>Yr 4</th><th>Yr 5 (exit)</th></tr>
+                <tr title="Row hover → the assumptions driving it"><td>NOI</td><td>$41.3K</td><td>$42.9K</td><td>$69.8K</td><td>$72.1K</td><td>$74.4K</td></tr>
+                <tr><td>Cash flow (CFBT)</td><td style="color:var(--crit)">−$9.8K</td><td style="color:var(--crit)">−$8.1K</td><td style="color:var(--good)">+$8.2K</td><td style="color:var(--good)">+$10.4K</td><td style="color:var(--good)">+$12.6K</td></tr>
+                <tr><td>Equity</td><td>$362K</td><td>$401K</td><td>$486K</td><td>$531K</td><td>$579K</td></tr>
+              </table></div>
+              <div id="el-exits" style="color:var(--mut); margin-top:6px; font-size:12px" class="num"><b style="color:var(--ink)">Exits:</b> sell yr 5 → exit value $1.62M @ 4.6% exit cap · net proceeds $448K after 6% selling cost + payoff → <b style="color:var(--ink)">IRR 14.2% / EM 1.8×</b> · refi-and-hold yr 3 (BRRRR): pull <b style="color:var(--ink)">$128K cash-out</b>, keep +$4.1K/yr cash flow. <span class="anno">click → exit assumptions</span></div>
+              <div class="anno" style="margin-top:4px">Projection loop §19.5: grow rents by rent_growth, expenses by expense_growth, recompute NOI, subtract ADS; overlay-on year annotated. Row hover highlights the driving assumptions in the right rail — "every number traces to a clickable assumption."</div>
+            </div>
+
+            <!-- run history -->
+            <div id="el-runhistory" class="cardbox">
+              <b>Run history</b> <span class="anno">UnderwriteRunRecord §10.14 — immutable; "Save run" persists a new record with a new idempotency_key; live in-session edits don't (open decision, interim)</span>
+              <table class="dtable num" style="font-size:11.5px; margin-top:6px">
+                <tr><th>Run</th><th>Date</th><th>Strategy</th><th>IRR / DSCR</th><th>Assumption diff</th><th></th></tr>
+                <tr><td><b>3 (current)</b></td><td>Jul 15</td><td>Buy & hold + ADU</td><td>14.2% / 1.14</td><td>vacancy 5→4% · rate 6.5→6.4%</td><td><span class="bdg">open</span></td></tr>
+                <tr><td>2</td><td>Jul 14</td><td>Buy & hold</td><td>9.4% / 0.81</td><td>defaults + tax verified</td><td><a href="#" style="color:var(--brand); font-size:11px">open read-only · duplicate as new run</a></td></tr>
+                <tr><td>1</td><td>Jul 12</td><td>Buy & hold</td><td style="color:var(--mut)">— / 0.79</td><td>all defaults · IRR flagged non-computable</td><td><a href="#" style="color:var(--brand); font-size:11px">open read-only</a></td></tr>
+              </table>
+              <div class="anno" style="margin-top:4px">Each run stamps underwriting_version + memo_asset_id / spreadsheet_asset_id when exported (asset_id, never content_id §20.3). Ledger: UNDERWRITE_RUN event on save (module PROPSEARCH, property_id required — four-event rule §28); GENERATED_ASSET_CREATED on each export. A saved run can be an audience-segment basis (UNDERWRITE_RUN §22.2) — managed on the Audiences screen, linked only.</div>
+            </div>
+          </div>
+
+          <!-- ================= RIGHT RAIL: assumption pack (sticky) ================= -->
+          <div id="el-assumptions" style="border:1px solid var(--line); border-radius:12px; padding:12px 14px; font-size:12px; align-self:start; position:sticky; top:64px; background:var(--paper)">
+            <b>Assumption pack — edit anything, acknowledge the flagged ones</b>
+            <div class="anno" style="margin:2px 0 6px">UnderwritingAssumptions defaults §19.4 · inline edit → assumption_overrides §19.3 → live recalc · every value carries a source badge (assumption_source_facts) · edited fields marked</div>
+            <div class="asum"><span>Rent</span><span><span class="bdg good" style="font-size:9px">Rentometer HIGH</span> <span class="val num">$4,850/mo</span></span></div>
+            <div class="asum"><span>Vacancy</span><span><span class="bdg" style="font-size:9px">edited</span> <span class="val num edited">4% (default 5%)</span></span></div>
+            <div class="asum"><span>Management</span><span class="val num">8% of EGI</span></div>
+            <div class="asum"><span>Maintenance</span><span class="val num">6% of EGI</span></div>
+            <div class="asum"><span>Reserves</span><span class="val num">$275/unit/mo</span></div>
+            <div class="asum"><span>Property tax</span><span><span id="el-verify" class="bdg warn" style="font-size:9px" title="CA: Prop-13 reassessment to purchase price, local effective rate, Mello-Roos, special assessments, supplemental bill yr 1 — verify per deal (§19.4)">⚠ verify per deal</span> <span class="val num">1.18% → $15,222/yr</span></span></div>
+            <div class="asum"><span>Transfer tax</span><span><span class="bdg warn" style="font-size:9px" title="County base + city transfer tax vary by jurisdiction — verify (§19.4)">⚠ verify per deal</span> <span class="val num">county + city TBD</span></span></div>
+            <div class="asum"><span>Rent control</span><span><span class="bdg warn" style="font-size:9px" title="AB 1482 + stricter local rules (East Palo Alto, Mountain View) must be verified before relying on rent-growth (§19.4)">⚠ verify per deal</span> <span class="val">AB 1482 check</span></span></div>
+            <div class="asum"><span>Insurance</span><span class="val num">$2,400/yr</span></div>
+            <div class="asum"><span>HOA / utilities / landscaping / trash</span><span class="val num">$0 · $0 · $1.8K · $0.6K</span></div>
+            <div class="asum"><span>Other income</span><span class="val num">$0/yr</span></div>
+            <div class="asum"><span>Financing (required)</span><span><span class="bdg" style="font-size:9px">edited</span> <span class="val num edited">LTV 75% · 6.4% · 30yr</span></span></div>
+            <div class="asum"><span>Points · closing · rehab</span><span class="val num">0 · $14K · $25K</span></div>
+            <div class="asum"><span>Rent growth / expense growth</span><span class="val num">3% / 3%</span></div>
+            <div class="asum"><span>Appreciation</span><span><span id="el-forecast" class="bdg warn" style="font-size:9px" title="PROPSEARCH_MARKET_FORECAST §12.13 — badge hidden entirely when ScoringService/forecast unavailable (fail closed)">forecast 72/100 elevated risk</span> <span class="val num">3%/yr</span></span></div>
+            <div class="asum"><span>Market cap / exit cap</span><span class="val num">3.5% / 4.6%</span></div>
+            <div class="asum"><span>Hold · selling cost</span><span class="val num">5 yrs · 6%</span></div>
+            <div class="asum"><span>ADU cost / ADU rent</span><span class="val num">$185K / $2,400/mo</span></div>
+            <div class="asum"><span>ARV · refi LTV · refi costs</span><span class="val num">$1.52M · 70% · $9K</span></div>
+
+            <label id="el-ack" style="display:flex; gap:8px; margin-top:10px; font-size:11.5px; color:var(--mut); border:1px solid var(--warn); border-radius:8px; padding:8px 10px; background:#fdf6ee"><input type="checkbox"> <span><b style="color:var(--ink)">I've reviewed the 3 flagged assumptions</b> — required before Export Excel / client memo. <span class="anno">State persisted per run [BEST GUESS: run metadata]; re-acknowledge after any flagged-assumption edit (open decision, interim).</span></span></label>
+
+            <div id="el-export" style="display:flex; gap:6px; margin-top:10px; flex-wrap:wrap">
+              <button class="btn-ink" disabled title="Disabled until acknowledgement">⬇ Export Excel</button>
+              <button class="btn-ink" disabled title="Disabled until acknowledgement; routes to Outbox, never sends directly">✉ Client memo → Outbox</button>
+              <button id="el-save" class="btn-ghost" title="SavedPropertyRecord §10.7 — persists property + custom assumptions + strategy tag; feeds alerts + audience segments">☆ Save property</button>
+            </div>
+            <div class="anno" style="margin-top:6px">Export Excel → CreatePropSearchAssetRequest §20.3 → UNDERWRITING_XLSX, a <b>formula-driven</b> model (§20.1), use_case INTERNAL_ANALYSIS or CLIENT_FACING_REPORT → download + Asset Gallery. Client memo → UNDERWRITING_MEMO_PDF → <b>Universal Review Queue / Outbox (Screen 24), REVIEW_REQUIRED §30 — never sends directly</b>. Memo buy/hold/pass label ONLY from ScoringService or explicit human selection; otherwise it prints the fixed sentence: <i>"Manual review required before making an investment decision."</i> Memo drafting = LLM formatting of already-computed metrics only (§12.8); a fair-housing/compliance pass runs on memo text before send (no protected-class or family-status framing).</div>
+          </div>
+        </div>
+
+        <!-- states strip -->
+        <div id="el-states" style="padding:0 22px 12px">
+          <div class="cardbox" style="font-size:11.5px">
+            <b>States (dev reference)</b>
+            <div style="color:var(--mut); margin-top:4px">
+              <b style="color:var(--ink)">Default:</b> completed run, live recalc on edits (deterministic, local-fast); "Save run" → new immutable record.
+              <b style="color:var(--ink)">Loading:</b> skeleton stat tiles + "Running deterministic model…" (pipeline order §19.5); zoning panel loads independently (30-day cache, spinner on panel only when stale-refreshing).
+              <b style="color:var(--ink)">Empty (first run):</b> assumption pack pre-filled from §19.4 defaults + region context; user confirms financing (LTV/rate/term required) → "Run underwrite" primary button. <b style="color:var(--crit)">RentEstimateSnapshot missing → run blocked: "Rent estimate unavailable — cannot underwrite"</b> (guessing rent is forbidden, §19.2).
+              <b style="color:var(--ink)">Degraded (all fail-closed §30):</b> ScoringService down → investor-fit chip AND forecast-risk badge disappear (SCORING_SERVICE_UNAVAILABLE / PROPSEARCH_MARKET_FORECAST_NOT_DEFINED); deterministic metrics remain; no buy/hold/pass anywhere · Zoneomics low confidence / uncovered jurisdiction → tiles "Needs verification" or panel collapses to "Zoning data unavailable for this jurisdiction"; ADU chip disabled; AERIAL_ADU suppressed · IRR non-computable → null + flag, tile "—" · HOSTED_RENDER_FAILED on export → toast + retry, run data unaffected.
+              <b style="color:var(--ink)">Permission-limited:</b> viewer-role team members see the run read-only, exports hidden [BEST GUESS pending platform RBAC spec §11.3].
+            </div>
+          </div>
+        </div>
+
+        <!-- mobile variant strip -->
+        <div id="el-mobile" style="padding:0 22px 18px">
+          <div class="cardbox" style="font-size:11.5px">
+            <b>Mobile variant (375px)</b>
+            <div style="display:flex; gap:6px; overflow-x:auto; margin-top:8px; padding-bottom:4px">
+              <div style="min-width:120px; border:1px solid var(--line); border-radius:10px; padding:8px; font-size:10px"><b>1 · Header</b><div style="color:var(--mut)">address + run chip</div></div>
+              <div style="min-width:120px; border:1px solid var(--line); border-radius:10px; padding:8px; font-size:10px"><b>2 · Stats 2×2</b><div style="color:var(--mut)">NOI · Cap · DSCR · IRR</div></div>
+              <div style="min-width:120px; border:1px solid var(--line); border-radius:10px; padding:8px; font-size:10px"><b>3 · Assumptions</b><div style="color:var(--mut)">collapsed accordion "Edit assumptions (3 flagged)"</div></div>
+              <div style="min-width:120px; border:1px solid var(--line); border-radius:10px; padding:8px; font-size:10px"><b>4 · Strategy chips</b><div style="color:var(--mut)">horizontal scroll</div></div>
+              <div style="min-width:120px; border:1px solid var(--line); border-radius:10px; padding:8px; font-size:10px"><b>5 · Sensitivity</b><div style="color:var(--mut)">overflow-x container</div></div>
+              <div style="min-width:120px; border:1px solid var(--line); border-radius:10px; padding:8px; font-size:10px"><b>6 · Zoning tiles</b><div style="color:var(--mut)">stacked</div></div>
+              <div style="min-width:120px; border:1px solid var(--line); border-radius:10px; padding:8px; font-size:10px"><b>7 · Pro forma</b><div style="color:var(--mut)">horizontal scroll</div></div>
+              <div style="min-width:140px; border:1px solid var(--ink); border-radius:10px; padding:8px; font-size:10px"><b>8 · Sticky bottom bar</b><div style="color:var(--mut)">"Export" (disabled until ack — checkbox surfaces inside the export sheet) + "Recalculate"</div></div>
+            </div>
+            <div class="anno" style="margin-top:4px">Single column, order per spec Layout. Grids/tables never scroll the page body — each scrolls inside its own container.</div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ============ spec gaps found ============ -->
+  <div class="note" style="margin-top:24px"><b>Spec gaps found (Master Brain §19 items the spec missed — rendered above):</b>
+    (1) <b>underwriting_version</b> — §19.8 stamps an UnderwritingVersion on every deterministic output; the spec's element inventory and data-fields table omit it. Rendered in the header annotation + run-history card.
+    (2) <b>Flip overlay holding_costs input</b> — §19.8 FlipOverlayOutput carries holding_costs (and the flip formula in §19.6 subtracts it); the spec's override list (§19.3 mirror) and data fields stop at "flip profit/annualized_return". Surfaced in the overlay annotation.
+    (3) <b>§19.2 forbidden-source list is broader than the spec states</b> — the Brain also explicitly forbids "equity-market finance connectors" and "company-stock valuation model builders" as arithmetic sources, not just LLM numbers/guessed rent/guessed debt. Reflected in the spec-as-HTML data-boundary line below.
+  </div>
+
+  <!-- ============ (3) ELEMENT COVERAGE ============ -->
+  <h2 style="font-size:20px; margin:24px 0 10px">Element coverage — spec inventory → this page</h2>
+  <table class="dtable cov" style="font-size:12.5px">
+    <tr><th>Spec inventory element</th><th>Rendered at</th><th>Status</th></tr>
+    <tr><td>Address + run header</td><td><a href="#el-header">Site header</a></td><td class="ok">✓</td></tr>
+    <tr><td>Rent confidence chip (Rentometer, HIGH/MED/LOW)</td><td><a href="#el-rentchip">Header chip</a></td><td class="ok">✓</td></tr>
+    <tr><td>NOI stat tile (+ income/expense drawer)</td><td><a href="#el-stats">Headline stats + open drawer</a></td><td class="ok">✓</td></tr>
+    <tr><td>Cap rate tile (implied value, GRM, expense ratio)</td><td><a href="#el-stats">Headline stats</a></td><td class="ok">✓</td></tr>
+    <tr><td>DSCR tile (under-1.0 warning, amortization drawer)</td><td><a href="#el-stats">Headline stats</a></td><td class="ok">✓</td></tr>
+    <tr><td>IRR tile (equity multiple; "—" + flag when non-computable)</td><td><a href="#el-stats">Headline stats</a> + run 1 in history</td><td class="ok">✓</td></tr>
+    <tr><td>Strategy overlay chips (BUY_HOLD/ADU/BRRRR/FLIP, zoning-gated ADU)</td><td><a href="#el-overlays">Strategy overlays</a></td><td class="ok">✓</td></tr>
+    <tr><td>Overlay impact line (deterministic delta readout)</td><td><a href="#el-impact">Impact line</a></td><td class="ok">✓</td></tr>
+    <tr><td>Sensitivity grids — 3 canonical tabs, live recalc, cell pin</td><td><a href="#el-sensitivity">Sensitivity card</a></td><td class="ok">✓</td></tr>
+    <tr><td>Bear row (0% appreciation, pinned, cannot hide)</td><td><a href="#el-bear">Bear row ★</a></td><td class="ok">✓</td></tr>
+    <tr><td>Zoneomics lot panel (4 tiles, claim levels, add-as-scenario)</td><td><a href="#el-zoning">This lot, answered</a></td><td class="ok">✓</td></tr>
+    <tr><td>Lot question input (free-text, confidence-gated answers)</td><td><a href="#el-lotq">Ask input</a></td><td class="ok">✓</td></tr>
+    <tr><td>Zoning disclaimer line (verbatim §17.3, always shown)</td><td><a href="#el-disclaimer">Disclaimer</a></td><td class="ok">✓</td></tr>
+    <tr><td>ADU render link (Mapbox plan overlay / AERIAL_ADU gates)</td><td><a href="#el-adurender">Render concept on parcel</a></td><td class="ok">✓</td></tr>
+    <tr><td>5-yr pro forma table (overlay year annotated, traceable rows)</td><td><a href="#el-proforma">Pro forma</a></td><td class="ok">✓</td></tr>
+    <tr><td>Exit scenarios line (sell-at-exit + BRRRR refi)</td><td><a href="#el-exits">Exits line</a></td><td class="ok">✓</td></tr>
+    <tr><td>Assumption pack card (all fields, source badges, inline edit)</td><td><a href="#el-assumptions">Right rail</a></td><td class="ok">✓</td></tr>
+    <tr><td>Verify-per-deal ⚠ badges (Prop-13/Mello-Roos, transfer tax, rent control)</td><td><a href="#el-verify">Assumption rows</a></td><td class="ok">✓</td></tr>
+    <tr><td>Forecast-risk badge on appreciation (fail-closed hidden)</td><td><a href="#el-forecast">Appreciation row</a></td><td class="ok">✓</td></tr>
+    <tr><td>Acknowledgement checkbox (blocks exports)</td><td><a href="#el-ack">Acknowledgement</a></td><td class="ok">✓</td></tr>
+    <tr><td>Export Excel button (disabled pre-ack, asset_id)</td><td><a href="#el-export">Export row</a></td><td class="ok">✓</td></tr>
+    <tr><td>Client memo button (review-gated → Outbox, buy/hold/pass rule)</td><td><a href="#el-export">Export row</a></td><td class="ok">✓</td></tr>
+    <tr><td>Run history nav (immutable runs, diff, duplicate-as-new)</td><td><a href="#el-runhistory">Run history</a></td><td class="ok">✓</td></tr>
+    <tr><td>Investor-fit score chip (ScoringService only, explainable)</td><td><a href="#el-fitchip">Flags row</a></td><td class="ok">✓</td></tr>
+    <tr><td>Manual-review flag chips (hover → meaning + suppression)</td><td><a href="#el-flags">Flags row</a></td><td class="ok">✓</td></tr>
+    <tr><td>Save to Saved Properties (assumptions + strategy tag persist)</td><td><a href="#el-save">Save property</a></td><td class="ok">✓</td></tr>
+  </table>
+  <div style="border:1.5px solid var(--good); background:#f2f8f4; border-radius:10px; padding:12px 16px; margin:12px 0 0; font-weight:700; color:var(--good)">26 of 26 spec elements rendered ✓ <span style="font-weight:400; color:var(--mut); font-size:12.5px">— plus prompt-required regions beyond the inventory: breakdown/debt drawers rendered open, states strip (loading/empty/degraded/permission), mobile-variant strip, spec-gaps note (3 Master-Brain additions).</span></div>
+
+  <!-- ============ (4) FULL SPEC AS HTML ============ -->
+  <div class="specdoc">
+    <h1 style="font-size:24px; margin:40px 0 6px">Spec — 22 · Underwriting Workspace</h1>
+    <p><b>Purpose</b> The full "Underwrite this deal" surface for one selected property: a deterministic pro forma (income → expenses → NOI → debt → DSCR → cash-on-cash → IRR → equity multiple), an editable assumption pack with California verify-per-deal flags, ADU/BRRRR/Flip strategy overlays, three 5×5 sensitivity grids, Excel + memo exports, and run history. The heart of PropSearch (Master Brain §19) and the screen the investor persona pays for. No LLM anywhere in the math (§19.2, §12.8).</p>
+    <p><b>Primary users</b> Agent (Graeham), team analysts, investor clients working with the agent (agent-driven in v1; the workspace is agent-facing, outputs are what clients see).</p>
+    <p><b>Entry points</b> Property detail "Underwrite this deal" (§19.1: heavy model runs on one selected property, never inline on search rows); Zoning & Investment Intelligence panel "add to underwrite as scenario" (§17.6 — zoning Q&A and deal math are ONE surface); Compare screen per-property "underwrite" [BEST GUESS]; run history reopen (UnderwriteRunRecord); Saved Properties row → "Underwrite".</p>
+    <p><b>Exit points</b> Export Excel → UNDERWRITING_XLSX (formula-driven, §20.1) → download + Asset Gallery. Client memo → UNDERWRITING_MEMO_PDF → Universal Review Queue / Outbox (Screen 24), never sends directly (§30 REVIEW_REQUIRED). "Render concept on parcel 🛰" → ADU visual flow (§17.4): Mapbox plan overlay or license-gated AERIAL_ADU. Back to property detail; run history drawer; source-fact click-through. Segment supply: runs can back a PropReach audience segment (basis UNDERWRITE_RUN §22.2) via the Audiences screen — link only.</p>
+
+    <h2>Layout</h2>
+    <p><b>Desktop (two-column, 1.4fr/1fr):</b> Header — address, run badge, rent-confidence chip; nav Run history · Export Excel · Client memo (review-gated). Main column: (1) headline stat row NOI / Cap / DSCR (under-1.0 warning) / 5-yr IRR; (2) strategy overlay chips with one-line impact readout; (3) sensitivity grid card — one 5×5 heatmap visible, tabs for the other two, mandatory bear row pinned; (4) "This lot, answered (Zoneomics)" — 4 tiles + free-text lot question + disclaimer; (5) 5-year pro forma & exits table. Right rail: assumption pack, every editable assumption with source badge, verify-per-deal ⚠ badges, and the acknowledgement checkbox — sticky on scroll. No footer; exports in header.</p>
+    <p><b>Mobile (375px):</b> single column — header → 2×2 stats → assumption accordion ("Edit assumptions (3 flagged)") → strategy chips (h-scroll) → sensitivity grid (overflow-x) → zoning tiles stacked → pro forma (h-scroll) → sticky bottom bar "Export" (disabled until acknowledgement, checkbox inside the export sheet) + "Recalculate".</p>
+
+    <h2>Element inventory</h2>
+    <div style="overflow-x:auto">
+    <table class="dtable">
+      <tr><th>Element</th><th>What it shows/does</th><th>Data source</th><th>Interactions</th><th>Spec source</th></tr>
+      <tr><td>Address + run header</td><td>Property, run number, edit state</td><td>UnderwriteRunRecord §10.14</td><td>Click address → property detail</td><td>§10.14</td></tr>
+      <tr><td>Rent confidence chip</td><td>Rent estimate + confidence (HIGH/MED/LOW)</td><td>RentEstimateSnapshot §10.9 (Rentometer via RentEstimateProvider §12.3)</td><td>Click → source facts popover</td><td>§12.3</td></tr>
+      <tr><td>NOI stat tile</td><td>Year-1 NOI</td><td>deterministic_output.valuation.noi_year1</td><td>Click → income/expense breakdown drawer (GPR, EGI, per-OpEx line)</td><td>§19.5, §19.8</td></tr>
+      <tr><td>Cap rate tile</td><td>going_in_cap; implied value + GRM + expense ratio in drawer</td><td>valuation block</td><td>Same drawer</td><td>§19.5</td></tr>
+      <tr><td>DSCR tile</td><td>NOI / annual debt service; red warning when &lt;1.0</td><td>debt.dscr</td><td>Click → debt drawer incl. full amortization schedule (AmortizationRow[])</td><td>§19.5, §19.8</td></tr>
+      <tr><td>IRR tile</td><td>levered_irr over hold_years; equity multiple secondary</td><td>returns block</td><td>Non-computable → "—" + manual-review flag chip (return null + flag, never fake)</td><td>§19.5</td></tr>
+      <tr><td>Strategy overlay chips</td><td>BUY_HOLD / ADU_UPSIDE / BRRRR / FLIP (InvestorStrategy §8)</td><td>ADUOverlayOutput / BRRRROverlayOutput / FlipOverlayOutput §19.8</td><td>Toggle → live recalc; ADU chip disabled + tooltip when zoning gate = SUPPRESS</td><td>§19.6</td></tr>
+      <tr><td>Overlay impact line</td><td>Deterministic delta readout (DSCR/IRR shift)</td><td>computed from overlay outputs</td><td>none</td><td>§19.6, draft</td></tr>
+      <tr><td>Sensitivity grids (3 tabs)</td><td>5×5 heatmaps: appreciation×rent_growth→IRR; exit_cap×hold_years→IRR+EM; interest_rate×ltv→CoC+DSCR</td><td>sensitivity block §19.7/19.8</td><td>Live recalc on edit; cell click pins scenario; tab switch</td><td>§19.7</td></tr>
+      <tr><td>Bear row</td><td>0%-appreciation row always present, pinned/bold</td><td>grid 1</td><td>none — cannot be hidden</td><td>§19.7</td></tr>
+      <tr><td>Zoneomics lot panel</td><td>4 tiles: ADU, SB-9 split, garage conversion, dims (FAR/height/coverage used-vs-allowed)</td><td>ZoningLookupRecord §10.11 + Zoneomics v3 controls/plu/capacity §17.5</td><td>Tile → sourced answer detail; affirmatives offer "add to underwrite as scenario"</td><td>§17.1–17.5, draft</td></tr>
+      <tr><td>Lot question input</td><td>Free-text zoning question</td><td>ZoningProvider §12.5, NL parse</td><td>Submit → sourced, confidence-gated answer; claim AFFIRMATIVE / CAUTIOUS_DISCLAIMERED / SUPPRESS (§8)</td><td>§17.2, draft</td></tr>
+      <tr><td>Zoning disclaimer line</td><td>Verbatim §17.3 disclaimer, always under the panel</td><td>static</td><td>none</td><td>§17.3</td></tr>
+      <tr><td>ADU render link</td><td>Plan-view overlay (Mapbox attribution required) or photoreal AERIAL_ADU (license + review gates)</td><td>ImageryProvider §12.6, §17.4</td><td>Opens asset request flow; AERIAL_ADU marketing = REVIEW_REQUIRED</td><td>§17.4, §30</td></tr>
+      <tr><td>5-yr pro forma table</td><td>NOI / cash flow / equity per year; overlay-on year annotated</td><td>projection loop §19.5</td><td>Row hover → driving assumptions; every number traces to a clickable assumption</td><td>§19.5, draft</td></tr>
+      <tr><td>Exit scenarios line</td><td>Sell-at-exit IRR/EM; BRRRR refi cash-out + kept cash flow</td><td>§19.5 exit math + §19.6 BRRRR</td><td>Click → exit assumptions</td><td>§19.5–19.6</td></tr>
+      <tr><td>Assumption pack card</td><td>Every assumption w/ value + source badge; defaults: vacancy 5%, mgmt 8% EGI, maint 6% EGI, reserves $275/unit/mo, hold 5 yrs, selling 6%, + tax/insurance/HOA/utilities/landscaping/trash/other income + growth/cap set</td><td>UnderwritingAssumptions §19.4</td><td>Inline edit → assumption_overrides §19.3 → recalc; edited fields marked</td><td>§19.3–19.4</td></tr>
+      <tr><td>Verify-per-deal ⚠ badges</td><td>CA flags: Prop-13 reassessment / Mello-Roos / supplemental bill; transfer tax by jurisdiction; rent control (AB 1482 + EPA/Mountain View local)</td><td>verify_per_deal_flags §19.4</td><td>Hover → explanation; counted into acknowledgement</td><td>§19.4</td></tr>
+      <tr><td>Forecast-risk badge</td><td>"forecast 72/100 elevated risk" next to appreciation</td><td>PROPSEARCH_MARKET_FORECAST §12.13</td><td>Hidden entirely when forecast unavailable (fail closed)</td><td>§12.13, draft</td></tr>
+      <tr><td>Acknowledgement checkbox</td><td>"I've reviewed the N flagged assumptions" — blocks Export + memo</td><td>local run state; logged onto the run</td><td>Check → enables exports; persisted per run [BEST GUESS: run metadata]</td><td>draft; flags §19.4</td></tr>
+      <tr><td>Export Excel button</td><td>Creates UNDERWRITING_XLSX (formula-driven)</td><td>CreatePropSearchAssetRequest §20.3, use_case INTERNAL_ANALYSIS / CLIENT_FACING_REPORT</td><td>Disabled pre-ack; returns asset_id (never content_id)</td><td>§20, §4.1</td></tr>
+      <tr><td>Client memo button</td><td>Creates UNDERWRITING_MEMO_PDF; "review-gated"</td><td>§19.9, §20.1</td><td>Routes to Outbox (24); buy/hold/pass only from ScoringService or human selection, else fixed manual-review sentence</td><td>§19.9, §30</td></tr>
+      <tr><td>Run history nav</td><td>Runs: #, date, strategy, headline IRR/DSCR, assumption diff</td><td>UnderwriteRunRecord (immutable; new run per recalc-and-save)</td><td>Open read-only; duplicate as new run</td><td>§10.14, matrix</td></tr>
+      <tr><td>Investor-fit score chip</td><td>PROPSEARCH_INVESTOR_FIT when available</td><td>ScoringService §12.10, scoring_service_output</td><td>Click → decomposed factors (explainability); absent when unavailable — no local score ever</td><td>§12.10</td></tr>
+      <tr><td>Manual-review flag chips</td><td>ASSUMPTION_VERIFY_PER_DEAL, SCORING_SERVICE_UNAVAILABLE, ZONEOMICS_LOW_CONFIDENCE, …</td><td>manual_review_flags §10.14 / enum §30</td><td>Hover → meaning + what's suppressed</td><td>§30</td></tr>
+      <tr><td>Save to Saved Properties</td><td>Persist property + custom assumptions + strategy tag</td><td>SavedPropertyRecord §10.7</td><td>Save/unsave; feeds alerts + audience segments</td><td>§10.7, matrix</td></tr>
+    </table>
+    </div>
+
+    <h2>States</h2>
+    <ul>
+      <li><b>Default:</b> completed run displayed, live recalc on assumption edits; saved recalculation creates a new run record with new idempotency_key [BEST GUESS on save-vs-scratch].</li>
+      <li><b>Loading:</b> skeleton stat tiles + "Running deterministic model…"; zoning panel loads independently (30-day cache TTL §12.5); stale cache → silent refresh with panel-only spinner.</li>
+      <li><b>Empty (first run):</b> defaults pre-filled (§19.4) + region context; confirm financing (LTV/rate/term required, FinancingAssumptions §19.3) → "Run underwrite". Missing RentEstimateSnapshot → run blocked: "Rent estimate unavailable — cannot underwrite" (§19.2 forbids guessing rent).</li>
+      <li><b>Error/degraded (fail-closed §30):</b> ScoringService down → investor-fit chip + forecast badge disappear, deterministic metrics remain, no buy/hold/pass; Zoneomics low confidence / uncovered → "Needs verification" tiles or collapsed panel, ADU chip disabled, AERIAL_ADU suppressed; IRR non-computable → null + flag, tile "—"; HOSTED_RENDER_FAILED → toast + retry, run unaffected.</li>
+      <li><b>Permission-limited:</b> viewer-role team members read-only, exports hidden [BEST GUESS — §11.3 tenant/app-user security, no per-role UW spec].</li>
+      <li><b>Mobile:</b> per Layout; grids and tables scroll inside their own containers.</li>
+    </ul>
+
+    <h2>Data fields</h2>
+    <p>UnderwriteRequest ← PropertyRecord/IDXListingRecord: price, beds, baths, sqft, unit_mix (UnitMix[]), property_type. RentEstimateSnapshot §10.9 ($/mo + confidence enum + as-of). AVMSnapshot §10.10 (optional). FinancingAssumptions §19.3: ltv (0–1), rate (nominal annual), amort_term_years, points, closing_costs, rehab_budget. strategy (enum §8), hold_years (default 5). All 21 override fields (vacancy_pct … refi_costs) per §19.3 UnderwritingAssumptionOverrides. Outputs per UnderwriteDeterministicOutput §19.8: gpr, egi, per-line opex, total_opex, expense_ratio, noi_year1, going_in_cap, implied_value, GRM, loan_amount, monthly_pi, annual_debt_service, mortgage_constant, amortization rows, dscr, CFBT yr1, total_cash_in, CoC, levered_irr, equity_multiple, net_proceeds — <b>plus underwriting_version (Brain §19.8; missing from the spec table — gap #1)</b>. Overlay fields: adu_rent/cost/incremental_noi/value_uplift/zoning_claim_level; arv/refi_ltv/new_loan/cash_out; flip profit/annualized_return <b>+ holding_costs (gap #2)</b>. sensitivity: SensitivityGrid cells. assumption_warnings, verify_per_deal_flags, manual_review_flags, source_facts, compliance_flags. memo_asset_id, spreadsheet_asset_id (asset_id never content_id).</p>
+
+    <h2>Rules & compliance</h2>
+    <ul>
+      <li><b>LLM boundary (§12.8, §19.2):</b> LLM allowed only for NL input parsing, memo drafting from already-computed metrics, clarification, formatting. Forbidden for any arithmetic, amortization, NOI, cap rate, IRR, local scoring/ranking, MLS embeddings. Brain §19.2 additionally forbids equity-market finance connectors and company-stock valuation model builders as arithmetic sources (gap #3).</li>
+      <li><b>Buy/hold/pass rule (§19.9):</b> label only from ScoringService or explicit human selection; otherwise the fixed sentence "Manual review required before making an investment decision."</li>
+      <li><b>Bear-case rule (§19.7):</b> 0%-appreciation row always shown.</li>
+      <li><b>Acknowledgement gate:</b> exports + memo blocked until flagged assumptions acknowledged (flags per §19.4).</li>
+      <li><b>Client sends:</b> memo = REVIEW_REQUIRED via Outbox (§30). Equity-card use downstream requires consent gates (§18.3) — surfaced on consuming screens.</li>
+      <li><b>Zoning:</b> claim gate on every claim; verbatim §17.3 disclaimer; Mapbox attribution on plan overlays; no Mapbox/Google tiles as AI-render input; AERIAL_ADU marketing = REVIEW_REQUIRED.</li>
+      <li><b>No guessing:</b> rent, mortgage balance, forecast scores — missing data blocks or degrades, never fabricates.</li>
+      <li><b>Fair housing:</b> no protected-class or family-status framing in memo text; memo compliance pass before send (platform ComplianceProvider rule).</li>
+    </ul>
+
+    <h2>Cross-links</h2>
+    <p><b>In:</b> property detail, zoning panel (§17.6), compare screen, saved properties, run history. <b>Out:</b> Outbox/Review Queue (memo), Asset Gallery (XLSX/memo/proforma-card assets), ADU visual flow, Audiences (basis UNDERWRITE_RUN), property detail. <b>Ledger events:</b> UNDERWRITE_RUN (module PROPSEARCH, property_id required, contact_id/content_id/campaign_id nullable — §28) + GENERATED_ASSET_CREATED per export; nothing else (four-event rule). <b>Consumes:</b> PropertyRecord/IDX facts, RentEstimateSnapshot, AVMSnapshot, ZoningLookupRecord, RegionProfile, ScoringService outputs.</p>
+
+    <h2>Open decisions</h2>
+    <ul>
+      <li>[DECIDE] Recalc-vs-run granularity: interim — edits recalc live in-session; "Save run" persists an immutable UnderwriteRunRecord; history shows saved runs only.</li>
+      <li>[DECIDE] Acknowledgement persistence: interim — stored per run in run metadata; re-acknowledge after any flagged-assumption edit.</li>
+      <li>[DECIDE] Client-visible underwriting: PORTAL_EMBED use_case exists (§20.3) but no portal UW view specced; interim — memo PDF is the only client artifact.</li>
+      <li>[DECIDE] Grid labels: draft's "rent × rate / price × rehab" differ from §19.7's canonical three; interim — build the canonical grids (done in this mock), draft labels treated as illustrative.</li>
+      <li>[BEST GUESS] Team-role read-only behavior pending platform RBAC spec.</li>
+    </ul>
+    <p class="anno" style="margin-top:20px">Wireframe fidelity — colors are placeholders from the locked PropFlow design language. All property numbers are realistic fake data (the math shown is illustrative, not engine output). Agent identity: Graeham Watts, Intero Real Estate, DRE# 01466876 (from shared-references/identity.json — never hardcode elsewhere; anything on the identity.json blocklist is banned from every output). No crime data anywhere on this screen by design.</p>
+  </div>
+</div>

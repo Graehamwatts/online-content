@@ -1,0 +1,381 @@
+<title>PropertyIQ · Screen 08 — System Map / Brand-Vault Flow</title>
+<link href="https://api.fontshare.com/v2/css?f[]=technor@500,600,700&display=swap" rel="stylesheet">
+<link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<style>
+  /* Type system — Technor for display (the squared machine look from the font exploration), Inter for UI. */
+  :root{ --font-display:'Technor', Inter, -apple-system, 'Segoe UI', sans-serif; --font-ui: Inter, -apple-system, 'Segoe UI', Roboto, sans-serif; }
+</style>
+<style>
+  /* Palette v4 — PropFlow design language: neutral ink UI, ink-as-accent, color reserved for data. (extracted verbatim from propsearch-design-draft.html) */
+  :root, :root[data-theme="dark"], :root[data-theme="light"]{
+    --ink:#23282f; --paper:#fbfaf8; --surface:#f1efe9; --line:#e2dfd6;
+    --mut:#6b7076; --soft:#9b9f9f;
+    --brand:#2e6b53; --brand-ink:#ffffff; --brand-soft:#eaf1ec; --brand-deep:#1e4c3a;
+    --signal:#b07a2e;
+    --good:#2e7d4f; --warn:#a8630a; --crit:#b3372f;
+    --r:10px;
+  }
+  .intel .score, .mintel{ color:var(--brand-deep) }
+  .intel{ border-left:3px solid var(--brand) }
+  h1{ letter-spacing:-.02em }
+  .stat b{ letter-spacing:-.01em }
+  body[data-agent="watts"]{ --brand:#2e6b53; --brand-soft:#eaf1ec; --brand-deep:#1e4c3a; }
+
+  *{box-sizing:border-box; margin:0}
+  body{font:15px/1.55 var(--font-ui); color:var(--ink); background:var(--paper); padding-bottom:80px}
+  h1,h2,h3{line-height:1.15; text-wrap:balance; font-family:var(--font-display); font-weight:600}
+  h1{letter-spacing:-.01em}
+  .site{box-shadow:0 1px 2px rgba(20,24,32,.04), 0 8px 32px rgba(20,24,32,.06)}
+  .stat{box-shadow:0 1px 2px rgba(20,24,32,.03); transition:box-shadow .15s, transform .15s}
+  .stat:hover{box-shadow:0 4px 14px rgba(20,24,32,.08)}
+  .chip{transition:all .12s}
+  button{font-family:var(--font-ui)}
+  .num{font-variant-numeric:tabular-nums}
+  .wrap{max-width:1180px; margin:0 auto; padding:0 20px}
+
+  .bar{position:sticky; top:0; z-index:50; background:var(--paper); border-bottom:1px solid var(--line); padding:10px 0; backdrop-filter:blur(8px)}
+  .bar .wrap{display:flex; flex-wrap:wrap; gap:10px; align-items:center}
+  .bar .ttl{font-weight:700; margin-right:auto}
+  .bar .ttl small{display:block; font-weight:400; color:var(--mut)}
+  .bar a{color:var(--brand); font-size:13px; text-decoration:none}
+
+  .note{background:var(--surface); border:1px solid var(--line); border-radius:var(--r); padding:14px 16px; margin:0 0 22px; font-size:13.5px; color:var(--mut)}
+  .note b{color:var(--ink)}
+
+  .site{border:1px solid var(--line); border-radius:14px; overflow:hidden; background:var(--paper)}
+  .sitehead{display:flex; align-items:center; gap:14px; padding:14px 22px; border-bottom:1px solid var(--line)}
+  .avatar{width:38px; height:38px; border-radius:50%; background:var(--brand); color:var(--brand-ink); display:grid; place-items:center; font-weight:700}
+  .sitehead .who b{display:block}
+  .sitehead .who small{color:var(--mut)}
+  .sitehead nav{margin-left:auto; display:flex; gap:18px; font-size:13.5px; color:var(--mut)}
+  .sitehead nav a{color:inherit; text-decoration:none}
+  .sitehead nav a:hover{color:var(--brand)}
+
+  .chip{display:inline-flex; align-items:center; gap:6px; font-size:12.5px; font-weight:500; border:1px solid var(--line); border-radius:99px; padding:6px 12px; background:var(--paper); cursor:pointer; color:var(--ink)}
+  .chip:hover{border-color:var(--brand)}
+  .chip.on{background:var(--brand); border-color:var(--brand); color:var(--brand-ink); font-weight:600; box-shadow:0 2px 8px color-mix(in srgb, var(--brand) 30%, transparent)}
+
+  .statrow{display:grid; grid-template-columns:repeat(4,1fr); gap:10px}
+  .stat{background:var(--surface); border:1px solid var(--line); border-radius:var(--r); padding:12px}
+  .stat small{display:block; color:var(--mut); font-size:11.5px; text-transform:uppercase; letter-spacing:.05em}
+  .stat b{font-size:18px}
+  .stat .up{color:var(--good); font-size:12px}
+
+  .bdg{font-size:11.5px; border-radius:6px; padding:3px 8px; background:var(--surface); border:1px solid var(--line); color:var(--mut)}
+  .bdg.good{color:var(--good); border-color:color-mix(in srgb,var(--good) 30%,var(--line))}
+  .bdg.warn{color:var(--warn); border-color:color-mix(in srgb,var(--warn) 30%,var(--line))}
+
+  .dtable{width:100%; border-collapse:collapse; font-size:13px}
+  .dtable td,.dtable th{border-bottom:1px solid var(--line); padding:8px 10px; text-align:left}
+  .dtable th{font-size:11px; text-transform:uppercase; letter-spacing:.05em; color:var(--soft)}
+
+  @media (max-width:860px){ .statrow{grid-template-columns:repeat(2,1fr)} .maingrid{grid-template-columns:1fr !important} .console{grid-template-columns:1fr !important} .rail{display:none !important} }
+  @media (prefers-reduced-motion: reduce){ *{transition:none!important} }
+
+  /* ---- page-specific additions (kept in the same design language) ---- */
+  .anno{font-size:11px; color:var(--soft)}
+  .cardbox{border:1px solid var(--line); border-radius:10px; padding:11px 14px; font-size:12.5px; background:var(--paper)}
+  .btn-ink{background:var(--ink); color:#fff; border:0; border-radius:7px; padding:7px 12px; font-size:11.5px; cursor:pointer; font-weight:600}
+  .btn-ghost{background:var(--paper); border:1px solid var(--line); border-radius:7px; padding:7px 12px; font-size:11.5px; cursor:pointer}
+  .sechead{font-size:14px; font-weight:700; margin:0 0 8px; font-family:var(--font-display)}
+  .cov td.ok{color:var(--good); font-weight:700}
+  .specdoc h2{font-size:18px; margin:26px 0 8px}
+  .specdoc h3{font-size:15px; margin:18px 0 6px}
+  .specdoc p, .specdoc li{font-size:13.5px; color:var(--mut)}
+  .specdoc b{color:var(--ink)}
+  .specdoc table{margin:8px 0}
+  .meshnode{border:1.5px solid var(--line); background:var(--paper); border-radius:12px; padding:14px; display:block; text-decoration:none; color:var(--ink); transition:box-shadow .15s}
+  .meshnode:hover{box-shadow:0 4px 14px rgba(20,24,32,.10)}
+  .meshnode b{display:block}
+  .meshnode small{color:var(--mut); font-size:11.5px; line-height:1.4; display:block; margin-top:2px}
+  .meshnode .seo{margin-top:6px; display:inline-block}
+  .meshnode.hub{border:2px solid var(--brand); background:var(--brand-soft)}
+  .meshnode.capture{border:1.5px dashed var(--brand)}
+  .edge{color:var(--soft); margin:6px 0; font-size:12px; text-align:center}
+  .flowstep{flex:1; border:1.5px solid var(--line); background:var(--paper); border-radius:12px; padding:12px; text-align:center; font-size:12.5px; min-width:130px}
+  .flowstep small{color:var(--mut); display:block; margin-top:2px; line-height:1.4}
+  .flowstep .anno{display:block; margin-top:6px; text-align:left}
+  .swatch{width:14px; height:14px; border-radius:4px; display:inline-block; vertical-align:-2px; border:1px solid var(--line)}
+</style>
+
+<!-- ============ (1) slim header ============ -->
+<div class="bar">
+  <div class="wrap">
+    <div class="ttl">PropertyIQ · Screen 08 — System Map / Brand-Vault Flow <small>Full-density per-screen mock · wireframe fidelity · dev-facing annotations in gray</small></div>
+    <a href="../wireframe.html">← All screens</a>
+  </div>
+</div>
+
+<!-- ============ (2) THE FULL MOCK ============ -->
+<div class="wrap" style="padding-top:24px">
+  <div class="note"><b>Screen 08 — How the system fits together.</b> An internal/dev-and-sales artifact, not a consumer or daily-agent surface. Three sections: <b>(A)</b> the page mesh — every arrow is simultaneously a user path and an internal-link/SEO crawl path; <b>(B)</b> the brand-vault onboarding flow — one locked layout becomes each agent's branded instance in under 3 minutes; <b>(C)</b> the full page inventory with design status. Primary users: dev team (Ramsha's team), product owner (Graeham), sales/demo, designers picking the next screen. [BEST GUESS: ships in-product as an Admin-only <span class="num">/system</span> route, and in the design draft as Tab 8.] Not shown to agents or consumers in production.</div>
+
+  <div class="site" data-agent="watts">
+    <!-- doc-surface chrome: standard tab chrome, NO left rail (spec Layout: "single scrolling document page") -->
+    <div class="sitehead">
+      <div class="avatar">GW</div>
+      <div class="who"><b>System map</b><small>Internal architecture view · Admin/owner role only · Graeham Watts · Intero Real Estate · DRE# 01466876 (identity locked from the brand vault)</small></div>
+      <div style="display:inline-flex; gap:6px; margin-left:10px; align-items:center">
+        <span class="anno">Theme demo dots (flow B4 live):</span>
+        <span class="swatch" style="background:#2e6b53" title="Watts — deployed theme"></span>
+        <span class="swatch" style="background:#31456e" title="Demo agent 2 — same layout, different variables"></span>
+        <span class="swatch" style="background:#7a4a2e" title="Demo agent 3 — same layout, different variables"></span>
+      </div>
+      <nav><a href="#el-mesh">A · Mesh</a><a href="#el-flow">B · Brand vault</a><a href="#el-inventory">C · Inventory</a></nav>
+    </div>
+
+    <div style="padding:18px 22px">
+      <div class="anno" style="margin-bottom:12px">Chrome note: this is a draft/doc surface wrapped in the standard tab chrome — deliberately no agent-console left rail (Screen 9 pattern) and no consumer top-nav. Permission-limited: Admin/owner-only in product; absent from client and team-member navigation [BEST GUESS]. Nodes and status cells below are links into the designed tabs.</div>
+
+      <!-- ============ A · PAGE MESH ============ -->
+      <div id="el-mesh">
+        <h2 style="font-size:18px; margin:6px 0 14px">A · The page mesh — every arrow = user path + internal link</h2>
+        <div style="border:1px solid var(--line); border-radius:14px; padding:24px; background:var(--surface)">
+          <div style="display:grid; grid-template-columns:repeat(3,1fr); gap:36px 24px; text-align:center; font-size:13px">
+            <!-- row 1 -->
+            <div style="grid-column:2">
+              <a id="el-a1" class="meshnode hub" href="../propsearch-design-draft.html#s5"><b>Agent homepage</b><small>link-equity hub · embed widget · H1 auto-fills market name from brand vault</small><span class="bdg good seo">indexed</span> <span class="bdg seo">→ Tab 5</span></a>
+              <div id="el-a7" class="edge">↓ search prompt&nbsp;&nbsp;&nbsp;↓ footer links</div>
+            </div>
+            <!-- row 2 -->
+            <div>
+              <a id="el-a2" class="meshnode" href="../propsearch-design-draft.html#s6"><b>Curated search pages</b><small>/homes-under-1.4m · SEO slug pages</small><span class="bdg good seo">indexed</span> <span class="bdg seo">→ Tab 6</span></a>
+              <div class="edge">↓ listings&nbsp;&nbsp;↔ neighborhoods</div>
+            </div>
+            <div>
+              <a id="el-a4" class="meshnode hub" href="../propsearch-design-draft.html#s6"><b>Community pages</b><small>the ranking engine · FAQ schema</small><span class="bdg good seo">indexed</span> <span class="bdg seo">→ Tab 6</span></a>
+              <div class="edge">↕ siblings · ↓ listings · ↑ city rollup</div>
+            </div>
+            <div>
+              <a id="el-a3" class="meshnode" href="../propsearch-design-draft.html#s2"><b>Results (dynamic)</b><small>links out to everything — crawl budget concentrates on ranking pages</small><span class="bdg warn seo">noindex</span> <span class="bdg seo">→ Tab 2</span></a>
+              <div class="edge">↓ cards&nbsp;&nbsp;↓ neighborhood block</div>
+            </div>
+            <!-- row 3 -->
+            <div style="grid-column:2">
+              <a id="el-a5" class="meshnode" href="../propsearch-design-draft.html#s3"><b>Listing pages</b><small>breadcrumbs up · comps sideways · stays live when sold</small><span class="bdg good seo">indexed (detail + sold)</span> <span class="bdg seo">→ Tab 3</span></a>
+              <div class="edge">↓ CTA</div>
+            </div>
+            <div>
+              <a id="el-a6" class="meshnode capture" href="../propsearch-design-draft.html#s2"><b>Lead capture</b><small>Ask · Tour · Market report → PropFlow CRM</small><span class="bdg warn seo">noindex</span> <span class="bdg seo">conversion endpoint (Tab 2/3 CTAs)</span></a>
+            </div>
+          </div>
+          <p id="el-a8" style="font-size:12.5px; color:var(--mut); margin-top:16px; max-width:70ch">Every page links up (breadcrumbs), sideways (siblings, comps), and down (listings, guides). A crawler — or a buyer — can enter anywhere and reach everywhere. Community pages and the homepage carry the SEO weight; dynamic results stay noindexed so crawl budget concentrates on pages that rank.</p>
+          <div class="anno">A1–A6 are clickable nodes → designed tabs [BEST GUESS: nodes are links]. Arrow labels (A7) mark each edge's direction + meaning — user path AND internal link. Brand-highlighted nodes (homepage, community) = ranking surfaces; dashed border (lead capture) = conversion endpoint. SEO discipline is a rule, not a preference: lead-capture pages noindex; curated/listing/sold indexed. Brain: SEO pages publish only through SeoProvider (SearchAtlas/OTTO) — never a disconnected generator.</div>
+        </div>
+      </div>
+
+      <!-- ============ B · BRAND-VAULT FLOW ============ -->
+      <div id="el-flow" style="margin-top:26px">
+        <h2 style="font-size:18px; margin:0 0 14px">B · Brand vault — agent onboarding flow</h2>
+        <div style="border:1px solid var(--line); border-radius:14px; padding:24px; background:var(--surface); overflow-x:auto">
+          <div style="display:flex; gap:10px; align-items:stretch; min-width:760px">
+            <div id="el-b1" class="flowstep"><b>1 · Scan</b><small>Website + Google Business Profile → logo, colors, name, DRE, markets</small>
+              <span class="anno">BrandVault record. Scans the AGENT'S OWN site + GBP, authorized at onboarding — not third-party scraping [BEST GUESS framing]. Runs from Onboarding Wizard step 8 (Tab 23); re-runs from Settings→Brand on rebrand. DRE/brokerage ultimately from the licensed identity record (identity.json pattern — single source of truth).</span></div>
+            <div style="align-self:center; color:var(--soft)">→</div>
+            <div id="el-b2" class="flowstep"><b>2 · Sanity gate</b><small>Contrast check · mud detection · accessibility fix-ups</small>
+              <span class="anno">Auto-correction of extracted palettes; enforces contrast/accessibility before any palette can deploy. Failures fall back to house default [BEST GUESS]. Automatic — no agent action.</span></div>
+            <div style="align-self:center; color:var(--soft)">→</div>
+            <div id="el-b3" class="flowstep"><b>3 · Preview ×3</b><small>Extracted · cleaned · house default — agent taps one</small>
+              <span class="anno">Candidates rendered over the LOCKED layout. This IS the choice UI in onboarding; extracted name/DRE/markets get human confirm here (LLM extraction, human-confirmed).</span></div>
+            <div style="align-self:center; color:var(--soft)">→</div>
+            <div id="el-b4" class="flowstep" style="border:2px solid var(--brand); background:var(--brand-soft)"><b>4 · Deploy</b><small>CSS variables only — layout locked · all pages themed at once</small>
+              <span class="anno">One tap; every consumer + portal page rethemes. Same mechanism as the OTTO constraint: changes apply through variable/template slots, never raw HTML — branding can NEVER change structure. Emits THEME_DEPLOYED.</span></div>
+            <div style="align-self:center; color:var(--soft)">→</div>
+            <div id="el-b5" class="flowstep" style="border:1.5px dashed var(--line)"><b>5 · Evolve</b><small>Manual tweaks · premium templates (upsell) · re-scan on rebrand</small>
+              <span class="anno">Dashed = ongoing. → Settings→Brand (Tab 21); premium templates = paid <span class="bdg warn">Premium · pricing TBD — no invented prices [DECIDE]</span>. Re-scan is a manual button; deploy still requires the preview-and-tap step — never a silent retheme [DECIDE interim].</span></div>
+          </div>
+          <p id="el-b6" style="font-size:12.5px; color:var(--mut); margin-top:16px; max-width:70ch">The demo is the three theme dots in the top bar of this page: same locked layout, different agent variables. <b style="color:var(--ink)">Time-to-branded-instance target: under 3 minutes</b> (product KPI).</p>
+
+          <!-- BrandVault record preview (Data fields made visible) -->
+          <div class="cardbox" style="margin-top:8px; background:var(--paper)">
+            <b>BrandVault record — active theme (this agent)</b>
+            <table class="dtable" style="font-size:11.5px; margin-top:6px; min-width:680px">
+              <tr><th>Field</th><th>Value (scanned → confirmed)</th><th>Source</th></tr>
+              <tr><td>logo</td><td>watts-lockup.svg (from site header)</td><td>site scan</td></tr>
+              <tr><td>primary / secondary</td><td class="num"><span class="swatch" style="background:#2e6b53"></span> #2E6B53 · <span class="swatch" style="background:#b07a2e"></span> #B07A2E <span class="bdg good">sanity gate ✓ contrast 7.2:1</span></td><td>dominant-color extraction → step 2</td></tr>
+              <tr><td>agent_name / brokerage / DRE</td><td>Graeham Watts · Intero Real Estate · <span class="num">01466876</span> <span class="bdg">locked — not editable prose</span></td><td>licensed identity record (identity.json pattern)</td></tr>
+              <tr><td>markets[]</td><td>East Palo Alto · Menlo Park · Redwood City</td><td>GBP + site scan, human-confirmed</td></tr>
+              <tr><td>active theme</td><td class="num">theme v3 · label: cleaned · deployed_at 2026-07-12 09:41</td><td>BrandVault versions</td></tr>
+            </table>
+            <div class="anno" style="margin-top:4px">Theme candidate = {id, label: extracted/cleaned/house-default, css_vars{}}. Identity flows from the brand vault into every surface — homepage H1, SEO block, funnel footers, Settings identity panel (Tabs 5/21/23/25 reference "the same brand vault"). Compliance: the DRE/license footer persists on branded AND unbranded funnel pages — the unbranded toggle strips agent theming, never the license footer. The identity.json blocklist is enforced at scan-confirm time: a blocklisted DRE value can never be saved to the vault.</div>
+          </div>
+        </div>
+      </div>
+
+      <!-- ============ C · PAGE INVENTORY ============ -->
+      <div id="el-inventory" style="margin-top:26px">
+        <h2 style="font-size:18px; margin:0 0 14px">C · Full page inventory — everything the platform needs, with design status</h2>
+        <div style="overflow-x:auto; border:1px solid var(--line); border-radius:14px; padding:18px; background:var(--surface)">
+          <div class="cardbox" style="margin-bottom:10px; border-color:var(--warn)"><b style="color:var(--warn)">⚠ Statuses stale vs. Tab 12:</b> <span style="color:var(--mut)">the capability matrix banner says "✅ COMPLETE 2026-07-15: all P0/P1/P2 designed" — the amber rows below predate that pass and must be refreshed. [DECIDE] interim: bind these statuses live to the matrix JSON so "done is a checklist, not a claim" stays true automatically; if the matrix is unreachable, show last-cached statuses with an as-of date — never blank the table (fail-closed).</span> <span class="bdg num">statuses as-of 2026-07-08 (cached)</span></div>
+          <table id="el-c-rows" class="dtable" style="font-size:12px; background:var(--paper); border-radius:10px; min-width:820px">
+            <tr><th>Page / surface</th><th>Audience</th><th>SEO</th><th>Status</th></tr>
+            <tr><td>Search entry · Results (map+list) · Compare · Property detail · Sold-property page</td><td>Consumer</td><td>detail+sold+curated indexed</td><td style="color:var(--good)"><a href="../propsearch-design-draft.html#s1" style="color:inherit">designed (tabs 1–4)</a></td></tr>
+            <tr><td>Agent homepage · Community pages · Feature explainer pages (×5) · Curated slug pages</td><td>Consumer</td><td>all indexed — the ranking engine</td><td style="color:var(--good)"><a href="../propsearch-design-draft.html#s5" style="color:inherit">designed / specced (tabs 5–6)</a></td></tr>
+            <tr><td>Seller report (owner live page) · Funnel/landing pages (branded+unbranded) · Buyer portal (saved searches, match alerts, tour schedule)</td><td>Consumer</td><td>noindex</td><td><span style="color:var(--good)">seller done (tab 10)</span> · <b style="color:var(--warn)">funnels + buyer portal: next</b></td></tr>
+            <tr><td>Client escrow portal (the client-safe transaction timeline)</td><td>Client</td><td>noindex</td><td style="color:var(--warn)">specced in pipeline card — needs its own screen → now Tab 25</td></tr>
+            <tr><td>Command Center (Today + Map) · Competitor intel · Playbook library · Content studio (PropCast review UI)</td><td>Agent</td><td>—</td><td><span style="color:var(--good)">tabs 9+11</span> · <b style="color:var(--warn)">playbook library + content studio: next</b></td></tr>
+            <tr><td>CMA / listing-presentation page (what Torres sees at the 4pm consult)</td><td>Agent→client</td><td>noindex</td><td style="color:var(--warn)">exists in cma-generator — needs PropertyIQ skin</td></tr>
+            <tr><td>Onboarding wizard (brand vault scan → preview ×3 → MLS connect → farm draw) · Settings · Billing/metered-scan wallet · Team/brokerage view</td><td>Agent</td><td>—</td><td style="color:var(--warn)">flow specced (B above) — screens → Tabs 21/23</td></tr>
+            <tr><td>Agent profile/reviews page · Blog/content hub (PropCast posts land here) · Legal (privacy, fair housing, DMCA, accessibility)</td><td>Consumer</td><td>indexed</td><td style="color:var(--warn)">templated — not drawn</td></tr>
+          </table>
+          <p id="el-c-footer" style="font-size:11.5px; color:var(--mut); margin-top:10px"><span class="bdg good">green</span> = in this draft · <span class="bdg warn">amber</span> = named, scoped, not yet mocked — the honest remainder. Recommended order for the next design sessions: buyer portal → client escrow portal → CMA presentation → onboarding wizard. <span class="anno">(Superseded by Tab 12's 2026-07-15 completion banner — kept verbatim per spec; refresh on regeneration.)</span></p>
+          <div class="anno">Row/status cells link to their tabs; amber rows are the backlog. The Capability Matrix (Tab 12) is the deeper, capability-level version of this table. Legal row includes the fair-housing page — the fair-housing/consent gates themselves live on the screens the mesh points to, not on this doc surface (no consumer data is displayed here).</div>
+        </div>
+      </div>
+
+      <!-- ============ mobile variant strip ============ -->
+      <div id="el-mobile" style="margin-top:26px">
+        <div class="sechead">Mobile variant (375px)</div>
+        <div style="display:flex; gap:14px; overflow-x:auto; padding-bottom:6px">
+          <div class="cardbox" style="min-width:200px; max-width:220px">
+            <b style="font-size:11.5px">Mesh → single column</b>
+            <div style="display:grid; gap:4px; margin-top:6px; font-size:10px; text-align:center">
+              <div style="border:1.5px solid var(--brand); background:var(--brand-soft); border-radius:7px; padding:5px">Agent homepage</div><div class="edge" style="margin:0">↓</div>
+              <div style="border:1px solid var(--line); border-radius:7px; padding:5px">Curated / Results</div><div class="edge" style="margin:0">↓</div>
+              <div style="border:1.5px solid var(--brand); background:var(--brand-soft); border-radius:7px; padding:5px">Community</div><div class="edge" style="margin:0">↓</div>
+              <div style="border:1px solid var(--line); border-radius:7px; padding:5px">Listings</div><div class="edge" style="margin:0">↓</div>
+              <div style="border:1.5px dashed var(--brand); border-radius:7px; padding:5px">Lead capture</div>
+            </div>
+            <div class="anno" style="margin-top:5px">Flow order, down-arrows only [BEST GUESS].</div>
+          </div>
+          <div class="cardbox" style="min-width:200px; max-width:220px">
+            <b style="font-size:11.5px">Flow B → stacked steps</b>
+            <div style="display:grid; gap:4px; margin-top:6px; font-size:10px">
+              <div style="border:1px solid var(--line); border-radius:7px; padding:5px">1 · Scan</div>
+              <div style="border:1px solid var(--line); border-radius:7px; padding:5px">2 · Sanity gate</div>
+              <div style="border:1px solid var(--line); border-radius:7px; padding:5px">3 · Preview ×3</div>
+              <div style="border:1.5px solid var(--brand); background:var(--brand-soft); border-radius:7px; padding:5px">4 · Deploy</div>
+              <div style="border:1px dashed var(--line); border-radius:7px; padding:5px">5 · Evolve</div>
+            </div>
+            <div class="anno" style="margin-top:5px">Stack vertically with step numbers [BEST GUESS]; alternative: keep the desktop horizontal scroll (min-width 760px is already declared).</div>
+          </div>
+          <div class="cardbox" style="min-width:200px; max-width:220px">
+            <b style="font-size:11.5px">Inventory → h-scroll table</b>
+            <div style="border:1px solid var(--line); border-radius:7px; margin-top:6px; padding:5px; font-size:10px; overflow:hidden; white-space:nowrap; color:var(--mut)">Page / surface · Audience · SEO · Sta…</div>
+            <div class="anno" style="margin-top:5px">Table scrolls horizontally inside its own container; page body never scrolls sideways.</div>
+          </div>
+        </div>
+      </div>
+
+      <!-- ============ states strip ============ -->
+      <div id="el-states" style="margin-top:18px">
+        <div class="cardbox" style="font-size:11.5px">
+          <b>States (dev reference)</b>
+          <div style="color:var(--mut); margin-top:4px">
+            <b style="color:var(--ink)">Default:</b> static document; all three sections rendered.
+            <b style="color:var(--ink)">Loading:</b> n/a (static content); if node-status chips become live (pulling design-status from the matrix), per-chip skeletons [BEST GUESS] — e.g. <span class="bdg" style="background:repeating-linear-gradient(90deg,var(--surface),var(--line) 8px,var(--surface) 16px); color:transparent">▮▮▮▮</span>.
+            <b style="color:var(--ink)">Empty:</b> n/a.
+            <b style="color:var(--ink)">Error/degraded (fail-closed):</b> capability matrix unreachable → last-cached statuses shown with an as-of date (see amber banner in C) — never blank the table [BEST GUESS, mirrors platform fail-closed style].
+            <b style="color:var(--ink)">Permission-limited:</b> Admin/owner-only in product; not present in client or team-member navigation [BEST GUESS].
+            <b style="color:var(--ink)">Mobile:</b> vertical mesh · stacked flow · scrolling table (strip above).
+          </div>
+        </div>
+      </div>
+
+      <!-- ledger + cross-links footer -->
+      <div class="anno" style="margin-top:14px; padding:0 2px">Ledger: emits BRAND_VAULT_SCANNED, THEME_DEPLOYED, THEME_RESCANNED [BEST GUESS names — pattern-consistent with the platform event ledger; SEO_PAGE_PUBLISHED is the confirmed canonical event for mesh-page publishes]. Consumes design-status data only. Cross-links in: tab bar · Onboarding Wizard (23) step 8 executes flow B · Settings (21) brand panel → re-scan · Capability Matrix (12). Out: mesh nodes → Tabs 1–6 · inventory rows → Tabs 9/10/11/21/23/25 + P0/P1 screens (13–37) · flow B → Settings→Brand, Billing (premium templates). No crime data anywhere on the platform; fair-housing/consent gates attach on the destination screens.</div>
+    </div>
+  </div>
+
+  <!-- ============ Spec gaps found (Master Brain) ============ -->
+  <div class="note" style="margin-top:26px"><b>Spec gaps found (PropIQ Master Brain V0 — rendered above and noted here):</b> (1) <b>SEO live-site deployments are REVIEW_REQUIRED</b> — never autonomous (Brain §15 restricted-actions list); mesh/OTTO page changes always go through preview → human approval, matching flow B's "never silent retheme" rule. (2) <b>SeoProvider / SearchAtlasOttoAdapter is the ONLY publish path</b> for mesh pages (Brain §18.9, BUILD_NOW): connectSite (cloudflare/pixel/wordpress), previewDeployment before deployOnPageFixes/deploySchema, requestIndexing — PropCast must not build a disconnected SEO generator that bypasses OTTO (annotated in section A). (3) <b>SEO_PAGE_PUBLISHED is a confirmed canonical ledger event</b> (Brain event enum) — used alongside the spec's [BEST GUESS] BRAND_VAULT_* names in the ledger footer. (4) <b>Identity tokens are mandatory render tokens</b> (agent_name, brokerage_name, DRE_number) in every disclosure template and "Brand lock: Graeham Watts · DRE 01466876 · Intero Real Estate" is pinned at Brain line 9 — reinforcing the vault-as-single-source rule; the BrandVault record card renders the locked identity row accordingly.</div>
+
+  <!-- ============ (3) ELEMENT COVERAGE ============ -->
+  <h2 style="font-size:20px; margin:34px 0 10px">Element coverage — spec inventory → this page</h2>
+  <table class="dtable cov" style="font-size:12.5px">
+    <tr><th>Spec inventory element</th><th>Rendered at</th><th>Status</th></tr>
+    <tr><td>A1 Agent homepage node (link-equity hub, brand-highlighted, → Tab 5)</td><td><a href="#el-a1">Mesh row 1</a></td><td class="ok">✓</td></tr>
+    <tr><td>A2 Curated search pages node (/homes-under-1.4m · indexed, → Tab 6)</td><td><a href="#el-a2">Mesh row 2</a></td><td class="ok">✓</td></tr>
+    <tr><td>A3 Results (dynamic) node (noindex · links out to everything, → Tab 2)</td><td><a href="#el-a3">Mesh row 2</a></td><td class="ok">✓</td></tr>
+    <tr><td>A4 Community pages node (ranking engine · FAQ schema · siblings/listings/rollup edges)</td><td><a href="#el-a4">Mesh row 2</a></td><td class="ok">✓</td></tr>
+    <tr><td>A5 Listing pages node (breadcrumbs up · comps sideways · live when sold)</td><td><a href="#el-a5">Mesh row 3</a></td><td class="ok">✓</td></tr>
+    <tr><td>A6 Lead capture node (Ask · Tour · Market report → PropFlow, dashed)</td><td><a href="#el-a6">Mesh row 3</a></td><td class="ok">✓</td></tr>
+    <tr><td>A7 Arrow labels (direction + meaning of each edge)</td><td><a href="#el-a7">Between mesh rows</a></td><td class="ok">✓</td></tr>
+    <tr><td>A8 Mesh caption (links up/sideways/down · noindex rule)</td><td><a href="#el-a8">Under the grid</a></td><td class="ok">✓</td></tr>
+    <tr><td>B1 Step 1 · Scan (site + GBP → logo/colors/name/DRE/markets, consented)</td><td><a href="#el-b1">Flow step 1</a></td><td class="ok">✓</td></tr>
+    <tr><td>B2 Step 2 · Sanity gate (contrast · mud detection · accessibility)</td><td><a href="#el-b2">Flow step 2</a></td><td class="ok">✓</td></tr>
+    <tr><td>B3 Step 3 · Preview ×3 (extracted · cleaned · house default — tap one)</td><td><a href="#el-b3">Flow step 3</a></td><td class="ok">✓</td></tr>
+    <tr><td>B4 Step 4 · Deploy (CSS variables only — layout locked)</td><td><a href="#el-b4">Flow step 4</a></td><td class="ok">✓</td></tr>
+    <tr><td>B5 Step 5 · Evolve (tweaks · premium upsell · re-scan)</td><td><a href="#el-b5">Flow step 5</a></td><td class="ok">✓</td></tr>
+    <tr><td>B6 Flow caption (three theme dots demo · &lt;3 min target)</td><td><a href="#el-b6">Flow caption</a> + live dots in header</td><td class="ok">✓</td></tr>
+    <tr><td>C Page-inventory table (4 columns: page/audience/SEO/status)</td><td><a href="#el-inventory">Section C table</a></td><td class="ok">✓</td></tr>
+    <tr><td>C rows (all 8 verbatim content rows)</td><td><a href="#el-c-rows">Inventory rows 1–8</a></td><td class="ok">✓</td></tr>
+    <tr><td>C footer (legend + recommended design order + stale-vs-Tab-12 note)</td><td><a href="#el-c-footer">Inventory footer</a> + amber banner</td><td class="ok">✓</td></tr>
+  </table>
+  <div style="border:1.5px solid var(--good); background:#f2f8f4; border-radius:10px; padding:12px 16px; margin:12px 0 0; font-weight:700; color:var(--good)">17 of 17 spec elements rendered ✓ <span style="font-weight:400; color:var(--mut); font-size:12.5px">— plus prompt-required regions beyond the inventory: BrandVault record card (Data fields made visible), theme-demo dots in the header, mobile-variant strip, states strip, ledger/cross-links footer; plus 4 Master-Brain additions in the gaps note above.</span></div>
+
+  <!-- ============ (4) FULL SPEC AS HTML ============ -->
+  <div class="specdoc">
+    <h1 style="font-size:24px; margin:40px 0 6px">Spec — 08 · System Map / Brand-Vault Flow</h1>
+    <p><b>Purpose</b> The "how it all fits together" screen — an internal/dev-and-sales artifact, not a consumer or daily-agent surface. Three sections: (A) the page mesh — every arrow is simultaneously a user path and an internal-link/SEO crawl path; (B) the brand-vault onboarding flow — how one locked layout becomes each agent's branded instance in under 3 minutes; (C) the full page inventory with design status — the honest checklist of what exists vs. what's next.</p>
+    <p><b>Primary users</b> Dev team (Ramsha's team building from specs) · product owner (Graeham) · sales/demo use (explaining the product architecture) · designers picking the next screen. Not shown to agents or consumers in production — this is a documentation/architecture view. [BEST GUESS: ships in the product as an internal "/system" route behind Admin role, and in the design draft as Tab 8.]</p>
+    <p><b>Entry points</b> Draft tab bar "8 · System map" · Onboarding Wizard step 8 links INTO flow B (the brand-vault scan is executed there; Tab 8 documents it) · Screen 23 (Onboarding wizard) references "brand vault (Tab 8 flow)" · Screen 21 Settings ("identity locked from the brand vault") references it · demo script.</p>
+    <p><b>Exit points</b> Mesh nodes link to their designed tabs (1–6, 9–11) · inventory Status column links to each tab or flags "next" · flow B step 5 "Evolve" → Settings→Brand (re-scan) and premium-template upsell · matrix tab (12) for the capability-level version of section C.</p>
+
+    <h2>Layout</h2>
+    <p><b>Desktop.</b> Single scrolling document page (no left rail — this is a draft/doc surface, wrapped in the standard tab chrome): note banner ("Screen 8 — How the system fits together. Two diagrams…"); <b>A · Page mesh:</b> 3-column × 3-row node grid — row 1 = Agent homepage (center, brand-highlighted); row 2 = Curated search pages · Community pages (brand-highlighted) · Results (dynamic); row 3 = Listing pages (center) · Lead capture (dashed brand border). Arrow labels between rows (↓ search prompt, ↓ footer links, ↔ neighborhoods, ↕ siblings, ↓ CTA). Caption paragraph under the grid. <b>B · Brand-vault flow:</b> horizontal 5-step pipeline (min-width 760px, overflow-x scroll): 1 Scan → 2 Sanity gate → 3 Preview ×3 → 4 Deploy (brand-highlighted) → 5 Evolve (dashed = ongoing). Caption: "the demo is the three dots in the top bar… Time-to-branded-instance target: under 3 minutes." <b>C · Page inventory:</b> 4-column table (Page/surface · Audience · SEO · Status) with green = designed, amber = named/scoped/not mocked; footer line with the recommended design order.</p>
+    <p><b>Mobile (375px).</b> Mesh grid collapses to a single vertical column in flow order (homepage → curated/results → community → listings → lead capture) with down-arrows only [BEST GUESS]. Flow B keeps horizontal scroll (it already declares min-width 760px + overflow-x) or stacks vertically with step numbers [BEST GUESS: stack vertically]. Inventory table scrolls horizontally inside its own container.</p>
+
+    <h2>Element inventory</h2>
+    <div style="overflow-x:auto">
+    <table class="dtable">
+      <tr><th>Element</th><th>What it shows/does</th><th>Data source</th><th>Interactions</th><th>Spec source</th></tr>
+      <tr><td>A1 Agent homepage node</td><td>"link-equity hub · embed widget"; center of mesh; brand-highlighted</td><td>Static diagram; refers to Tab 5 homepage (H1 auto-fills market name from brand vault)</td><td>Click → Tab 5 [BEST GUESS: nodes are links]</td><td>Draft ~1935; Tab 5 line ~314</td></tr>
+      <tr><td>A2 Curated search pages node</td><td>"/homes-under-1.4m · indexed" — SEO slug pages</td><td>Tab 6 curated pages</td><td>Click → Tab 6</td><td>Draft ~1939</td></tr>
+      <tr><td>A3 Results (dynamic) node</td><td>"noindex · links out to everything" — crawl budget concentrates on ranking pages</td><td>Tab 2 results</td><td>Click → Tab 2</td><td>Draft ~1943</td></tr>
+      <tr><td>A4 Community pages node</td><td>"the ranking engine · FAQ schema"; brand-highlighted; ↕ siblings, ↓ listings, ↑ city rollup</td><td>Tab 6 community pages</td><td>Click → Tab 6</td><td>Draft ~1947</td></tr>
+      <tr><td>A5 Listing pages node</td><td>"breadcrumbs up · comps sideways · stays live when sold"</td><td>Tab 3 property detail + sold pages</td><td>Click → Tab 3</td><td>Draft ~1951</td></tr>
+      <tr><td>A6 Lead capture node</td><td>"Ask · Tour · Market report → PropFlow CRM" (dashed border = conversion endpoint)</td><td>PropFlow lead intake</td><td>Click → lead-capture flows (Tab 2/3 CTAs)</td><td>Draft ~1955</td></tr>
+      <tr><td>A7 Arrow labels</td><td>Direction + meaning of each edge (user path AND internal link)</td><td>—</td><td>—</td><td>Draft ~1936–1952</td></tr>
+      <tr><td>A8 Mesh caption</td><td>"Every page links up (breadcrumbs), sideways (siblings, comps), and down… A crawler — or a buyer — can enter anywhere and reach everywhere." Noindex rule for dynamic results</td><td>—</td><td>—</td><td>Draft ~1958</td></tr>
+      <tr><td>B1 Step 1 · Scan</td><td>"Website + Google Business Profile → logo, colors, name, DRE, markets" — automated brand extraction</td><td>BrandVault record (scanned fields); GBP + site scrape of the AGENT'S OWN properties (agent authorizes at onboarding)</td><td>Runs from Onboarding Wizard step 8; re-runs from Settings on rebrand</td><td>Draft ~1964</td></tr>
+      <tr><td>B2 Step 2 · Sanity gate</td><td>"Contrast check · mud detection · accessibility fix-ups" — auto-correction of extracted palettes</td><td>BrandVault candidate themes</td><td>Automatic; failures fall back to house default [BEST GUESS]</td><td>Draft ~1966</td></tr>
+      <tr><td>B3 Step 3 · Preview ×3</td><td>Three candidate themes: extracted · cleaned · house default — agent taps one</td><td>BrandVault candidates rendered over the locked layout</td><td>Tap to select; this IS the choice UI in onboarding</td><td>Draft ~1968</td></tr>
+      <tr><td>B4 Step 4 · Deploy</td><td>"CSS variables only — layout locked · all pages themed at once" (brand-highlighted step)</td><td>BrandVault active theme → CSS variable set</td><td>One tap; every consumer + portal page rethemes</td><td>Draft ~1970. Same mechanism as OTTO constraint: changes apply through variable slots, never raw HTML (line ~1098)</td></tr>
+      <tr><td>B5 Step 5 · Evolve</td><td>"Manual tweaks · premium templates (upsell) · re-scan on rebrand" (dashed = ongoing)</td><td>BrandVault versions</td><td>→ Settings→Brand; premium templates = paid</td><td>Draft ~1972</td></tr>
+      <tr><td>B6 Flow caption</td><td>Demo = the three theme dots in the draft's top bar (same locked layout, different agent variables). Target: branded instance &lt; 3 minutes</td><td>—</td><td>—</td><td>Draft ~1974</td></tr>
+      <tr><td>C Page-inventory table</td><td>Full platform surface list w/ audience, SEO disposition, status</td><td>Design-draft status tracking (manually maintained)</td><td>Row/status links to tabs; amber rows are the backlog</td><td>Draft ~1977–1991</td></tr>
+      <tr><td>C rows (verbatim content)</td><td>1 Search entry/Results/Compare/Property detail/Sold · 2 Agent homepage/Community/Feature explainers ×5/Curated slugs · 3 Seller report/Funnels branded+unbranded/Buyer portal · 4 Client escrow portal (→ Tab 25) · 5 Command Center/Competitor intel/Playbook library/Content studio · 6 CMA/listing-presentation page · 7 Onboarding wizard/Settings/Billing wallet/Team view (→ Tabs 21/23) · 8 Agent profile/Blog hub/Legal pages</td><td>—</td><td>—</td><td>Draft ~1981–1988</td></tr>
+      <tr><td>C footer</td><td>Legend (green/amber) + recommended next-design order: buyer portal → client escrow portal → CMA presentation → onboarding wizard</td><td>—</td><td>—</td><td>Draft ~1990. NOTE: superseded by Tab 12's "✅ COMPLETE 2026-07-15: all P0/P1/P2 designed" — update statuses when regenerating this tab</td></tr>
+    </table>
+    </div>
+
+    <h2>States</h2>
+    <ul>
+      <li><b>Default:</b> static document; all three sections rendered.</li>
+      <li><b>Loading:</b> n/a (static content); if node-status chips become live (pulling design-status from the matrix), show per-chip skeletons [BEST GUESS].</li>
+      <li><b>Empty:</b> n/a.</li>
+      <li><b>Error/degraded:</b> if inventory statuses are wired to the capability matrix and it's unreachable, show last-cached statuses with an as-of date — never blank the table [BEST GUESS, mirrors platform fail-closed style].</li>
+      <li><b>Permission-limited:</b> Admin/owner-only in product; not present in client or team-member navigation [BEST GUESS].</li>
+      <li><b>Mobile:</b> vertical mesh; stacked flow; scrolling table (see Layout).</li>
+    </ul>
+
+    <h2>Data fields</h2>
+    <p><b>BrandVault scanned fields:</b> logo (img), primary/secondary colors (hex), agent name, DRE number, brokerage, markets[] — brand-vault scan of agent's site + GBP; DRE/brokerage ultimately from the licensed identity record (identity.json pattern — single source of truth, locked in Settings). <b>Theme candidate:</b> {id, label: extracted/cleaned/house-default, css_vars{}}. <b>Active theme:</b> css variable set + version + deployed_at. <b>Time-to-branded-instance:</b> target &lt; 3 min (product KPI). <b>Mesh node:</b> {page, seo: indexed/noindex, tab_ref, status}. <b>Inventory row:</b> page/surface · audience (Consumer/Client/Agent/Agent→client) · SEO · status (designed/specced/next).</p>
+
+    <h2>Rules & compliance</h2>
+    <ul>
+      <li><b>Layout locked; variables only.</b> Agent branding can NEVER change structure — deploy step and OTTO SEO changes both apply exclusively through CSS-variable/template slots so the compliant locked layout can't be broken (draft ~1970, ~1098).</li>
+      <li><b>Identity is locked, not editable prose:</b> name/DRE/brokerage flow from the brand vault into every surface (homepage H1, SEO block, funnel footers, Settings identity panel — Tabs 5/21/23/25 all reference "the same brand vault"). Matrix P0 "Settings Suite: Identity/brand (locked)."</li>
+      <li><b>DRE footer persists on branded AND unbranded funnel pages</b> (Tab 9 funnels block) — the unbranded toggle strips agent theming, never the license/compliance footer.</li>
+      <li><b>SEO discipline:</b> dynamic results stay noindexed; community pages + homepage carry ranking weight; curated slugs, listing, sold pages indexed (mesh + inventory columns). Lead-capture pages noindex.</li>
+      <li><b>Scan consent:</b> brand scan reads the agent's own website + GBP, authorized during onboarding — not third-party scraping [BEST GUESS framing; consistent with competitor-intel official-API/public-data rule].</li>
+      <li><b>Accessibility:</b> sanity gate enforces contrast/accessibility before any extracted palette can deploy (step 2).</li>
+      <li>Fair-housing/consent gates don't attach to this screen directly (no consumer data displayed) — they live on the screens the mesh points to.</li>
+    </ul>
+
+    <h2>Cross-links</h2>
+    <p><b>In:</b> tab bar · Onboarding Wizard (23) step 8 executes flow B · Settings (21) brand panel → "re-scan" (flow B step 5) · Capability Matrix (12) is the deeper version of section C. <b>Out:</b> every mesh node → Tabs 1–6 · inventory rows → Tabs 9, 10, 11, 21, 23, 25 and the P0/P1 screens (13–37) · flow B → Settings→Brand, Billing (premium templates). <b>Ledger events:</b> emits BRAND_VAULT_SCANNED, THEME_DEPLOYED, THEME_RESCANNED [BEST GUESS names — pattern-consistent with the platform event ledger]; consumes design-status data only.</p>
+
+    <h2>Open decisions</h2>
+    <ul>
+      <li>[DECIDE] Does Tab 8 ship in-product or remain a design-doc artifact? Interim: ships as Admin-only "/system" architecture page; the brand-vault FLOW ships for real inside Onboarding step 8 and Settings→Brand.</li>
+      <li>[DECIDE] Brand-scan engine (own scraper vs third-party brand-extraction API). Interim: in-house scan of site + GBP (logo, palette via dominant-color extraction, name/DRE/markets via LLM extraction with human confirm on the preview step) — UI unaffected by choice.</li>
+      <li>[DECIDE] Premium template pricing/tiering (step 5 upsell). Interim: design 2–3 premium templates behind a paywall chip; numbers TBD by product owner — no invented prices.</li>
+      <li>[DECIDE] Whether section C statuses stay hand-maintained or bind live to the capability matrix JSON. Interim: bind to the matrix (Tab 12) so "done is a checklist, not a claim" stays true automatically; note that C's current amber statuses are stale vs. Tab 12's 2026-07-15 "all designed" banner and must be refreshed.</li>
+      <li>[DECIDE] Re-scan on rebrand: auto-detect (periodic diff of agent site) vs manual button. Interim: manual "Re-scan my brand" in Settings; deploy still requires the preview-and-tap step (never silent retheme).</li>
+    </ul>
+    <p class="anno" style="margin-top:20px">Wireframe fidelity — colors are placeholders from the locked PropFlow design language. All values are realistic fake data. Agent identity: Graeham Watts, Intero Real Estate, DRE# 01466876 (from shared-references/identity.json — never hardcode elsewhere; the identity.json blocklist is enforced at brand-vault scan-confirm).</p>
+  </div>
+</div>

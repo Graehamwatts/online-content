@@ -1,0 +1,561 @@
+<title>PropertyIQ · Screen 35 — Management</title>
+<link href="https://api.fontshare.com/v2/css?f[]=technor@500,600,700&display=swap" rel="stylesheet">
+<link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<style>
+  /* Type system — Technor for display, Inter for UI. */
+  :root{ --font-display:'Technor', Inter, -apple-system, 'Segoe UI', sans-serif; --font-ui: Inter, -apple-system, 'Segoe UI', Roboto, sans-serif; }
+</style>
+<style>
+  /* Palette v4 — PropFlow design language: neutral ink UI, ink-as-accent, color reserved for data. (extracted verbatim from propsearch-design-draft.html) */
+  :root, :root[data-theme="dark"], :root[data-theme="light"]{
+    --ink:#23282f; --paper:#fbfaf8; --surface:#f1efe9; --line:#e2dfd6;
+    --mut:#6b7076; --soft:#9b9f9f;
+    --brand:#2e6b53; --brand-ink:#ffffff; --brand-soft:#eaf1ec; --brand-deep:#1e4c3a;
+    --signal:#b07a2e;
+    --good:#2e7d4f; --warn:#a8630a; --crit:#b3372f;
+    --r:10px;
+  }
+  .intel .score, .mintel{ color:var(--brand-deep) }
+  .intel{ border-left:3px solid var(--brand) }
+  h1{ letter-spacing:-.02em }
+  .stat b{ letter-spacing:-.01em }
+  body[data-agent="watts"]{ --brand:#2e6b53; --brand-soft:#eaf1ec; --brand-deep:#1e4c3a; }
+
+  *{box-sizing:border-box; margin:0}
+  body{font:15px/1.55 var(--font-ui); color:var(--ink); background:var(--paper); padding-bottom:80px}
+  h1,h2,h3{line-height:1.15; text-wrap:balance; font-family:var(--font-display); font-weight:600}
+  h1{letter-spacing:-.01em}
+  .site{box-shadow:0 1px 2px rgba(20,24,32,.04), 0 8px 32px rgba(20,24,32,.06)}
+  .stat{box-shadow:0 1px 2px rgba(20,24,32,.03); transition:box-shadow .15s, transform .15s}
+  .stat:hover{box-shadow:0 4px 14px rgba(20,24,32,.08)}
+  .chip{transition:all .12s}
+  button{font-family:var(--font-ui)}
+  .num{font-variant-numeric:tabular-nums}
+  .wrap{max-width:1180px; margin:0 auto; padding:0 20px}
+
+  .bar{position:sticky; top:0; z-index:50; background:var(--paper); border-bottom:1px solid var(--line); padding:10px 0; backdrop-filter:blur(8px)}
+  .bar .wrap{display:flex; flex-wrap:wrap; gap:10px; align-items:center}
+  .bar .ttl{font-weight:700; margin-right:auto}
+  .bar .ttl small{display:block; font-weight:400; color:var(--mut)}
+  .bar a{color:var(--brand); font-size:13px; text-decoration:none}
+
+  .note{background:var(--surface); border:1px solid var(--line); border-radius:var(--r); padding:14px 16px; margin:0 0 22px; font-size:13.5px; color:var(--mut)}
+  .note b{color:var(--ink)}
+
+  .site{border:1px solid var(--line); border-radius:14px; overflow:hidden; background:var(--paper)}
+  .sitehead{display:flex; align-items:center; gap:14px; padding:14px 22px; border-bottom:1px solid var(--line)}
+  .avatar{width:38px; height:38px; border-radius:50%; background:var(--brand); color:var(--brand-ink); display:grid; place-items:center; font-weight:700}
+  .sitehead .who b{display:block}
+  .sitehead .who small{color:var(--mut)}
+  .sitehead nav{margin-left:auto; display:flex; gap:18px; font-size:13.5px; color:var(--mut)}
+  .sitehead nav a{color:inherit; text-decoration:none}
+  .sitehead nav a:hover{color:var(--brand)}
+
+  .chip{display:inline-flex; align-items:center; gap:6px; font-size:12.5px; font-weight:500; border:1px solid var(--line); border-radius:99px; padding:6px 12px; background:var(--paper); cursor:pointer; color:var(--ink)}
+  .chip:hover{border-color:var(--brand)}
+  .chip.on{background:var(--brand); border-color:var(--brand); color:var(--brand-ink); font-weight:600; box-shadow:0 2px 8px color-mix(in srgb, var(--brand) 30%, transparent)}
+
+  .statrow{display:grid; grid-template-columns:repeat(4,1fr); gap:10px}
+  .stat{background:var(--surface); border:1px solid var(--line); border-radius:var(--r); padding:12px}
+  .stat small{display:block; color:var(--mut); font-size:11.5px; text-transform:uppercase; letter-spacing:.05em}
+  .stat b{font-size:18px}
+  .stat .up{color:var(--good); font-size:12px}
+
+  .bdg{font-size:11.5px; border-radius:6px; padding:3px 8px; background:var(--surface); border:1px solid var(--line); color:var(--mut)}
+  .bdg.good{color:var(--good); border-color:color-mix(in srgb,var(--good) 30%,var(--line))}
+  .bdg.warn{color:var(--warn); border-color:color-mix(in srgb,var(--warn) 30%,var(--line))}
+
+  .dtable{width:100%; border-collapse:collapse; font-size:13px}
+  .dtable td,.dtable th{border-bottom:1px solid var(--line); padding:8px 10px; text-align:left}
+  .dtable th{font-size:11px; text-transform:uppercase; letter-spacing:.05em; color:var(--soft)}
+
+  @media (max-width:860px){ .statrow{grid-template-columns:repeat(2,1fr)} .maingrid{grid-template-columns:1fr !important} .console{grid-template-columns:1fr !important} .rail{display:none !important} }
+  @media (prefers-reduced-motion: reduce){ *{transition:none!important} }
+
+  /* ---- page-specific additions (kept in the same design language) ---- */
+  .anno{font-size:11px; color:var(--soft)}
+  .cardbox{border:1px solid var(--line); border-radius:10px; padding:11px 14px; font-size:12.5px; background:var(--paper)}
+  .btn-ink{background:var(--ink); color:#fff; border:0; border-radius:7px; padding:7px 12px; font-size:11.5px; cursor:pointer; font-weight:600}
+  .btn-ghost{background:var(--paper); border:1px solid var(--line); border-radius:7px; padding:7px 12px; font-size:11.5px; cursor:pointer}
+  .sechead{font-size:14px; font-weight:700; margin:0 0 8px; font-family:var(--font-display)}
+  .cov td.ok{color:var(--good); font-weight:700}
+  .specdoc h2{font-size:18px; margin:26px 0 8px}
+  .specdoc h3{font-size:15px; margin:18px 0 6px}
+  .specdoc p, .specdoc li{font-size:13.5px; color:var(--mut)}
+  .specdoc b{color:var(--ink)}
+  .specdoc table{margin:8px 0}
+  .tree{font-size:11.5px; line-height:1.7}
+  .tree .lvl{border-left:2px solid var(--line); margin-left:8px; padding-left:12px}
+  .dial{display:flex; gap:0; border:1px solid var(--line); border-radius:99px; overflow:hidden; font-size:10.5px}
+  .dial span{padding:5px 10px; color:var(--mut)}
+  .dial span.on{background:var(--ink); color:#fff; font-weight:600}
+  .jline td{font-size:11px; padding:4px 8px}
+</style>
+
+<!-- ============ (1) slim header ============ -->
+<div class="bar">
+  <div class="wrap">
+    <div class="ttl">PropertyIQ · Screen 35 — Management <small>Full-density per-screen mock · wireframe fidelity · dev-facing annotations in gray</small></div>
+    <a href="../wireframe.html">← All screens</a>
+  </div>
+</div>
+
+<!-- ============ (2) THE FULL MOCK ============ -->
+<div class="wrap" style="padding-top:24px">
+  <div class="note"><b>Screen 35 — Management module (its own app shell; this is the concept overview).</b> Per the spec this is a SEPARATE product, not a tab of the agent platform: a staff console plus three scoped portals (owner / tenant / vendor), home hero = the Daily Review Card ("N decisions, then you're done"). Enterprise-grade multi-entity management on a native double-entry GL (system of record), dial-governed Wattson autonomy, and "sell a building, the books do themselves" disposition. Sequenced after the agent platform; MVP = the owner's 47-property CSV-import portfolio (Phase 2). Primary users: staff console = owner/PM staff (12 canonical RBAC roles); each portal sees ONLY its scope.</div>
+
+  <div class="site" data-agent="watts">
+    <!-- staff console header (spec Layout): M avatar, portals as LINKS to scoped apps, not tabs -->
+    <div class="sitehead">
+      <div class="avatar">M</div>
+      <div class="who"><b>PropertyIQ Management</b><small class="num">37 units · Daily Review · Tuesday, Jul 15</small></div>
+      <span class="bdg" id="el-pricing" style="margin-left:8px">Professional · $199/mo · 37 of 150 units <a href="#" style="color:var(--brand); text-decoration:none">Upgrade</a></span>
+      <nav><a href="#">Owner portal ↗</a><a href="#">Tenant portal ↗</a><a href="#">Vendor portal ↗</a></nav>
+    </div>
+    <div class="anno" style="padding:6px 22px; border-bottom:1px solid var(--line)">Separate app URL/login (own shell; SSO from PropertyIQ for the owner [BEST GUESS]). Portal links open the scoped apps — never tabs of this console. Tier badge: Core $99/50 units ($1.50 overage) · Professional $199/150 (launch default) · Portfolio $499/400 · Enterprise $1,499/1,000 ($1.25) — tier maps Wattson features (Core=Draft, Professional=One-Approval, Portfolio/Enterprise=policy-bounded autonomy; basis/tax/distributions ALWAYS require approval).</div>
+
+    <div class="console" style="display:grid; grid-template-columns:186px 1fr">
+      <!-- management's OWN left nav (separate shell — NOT the agent-console rail from Screen 9) -->
+      <div class="rail" style="border-right:1px solid var(--line); padding:14px 10px; font-size:12.5px; display:flex; flex-direction:column; gap:2px; background:var(--surface)">
+        <a href="#" style="text-decoration:none; color:#fff; background:var(--ink); border-radius:8px; padding:7px 10px; font-weight:600">☀ Daily Review <span class="bdg" style="font-size:9.5px; background:var(--paper)">4</span></a>
+        <a href="#el-entity-map" style="text-decoration:none; color:var(--ink); border-radius:8px; padding:7px 10px">🏘 Properties / Units</a>
+        <a href="#el-entity-map" style="text-decoration:none; color:var(--ink); border-radius:8px; padding:7px 10px">🧬 Entity map</a>
+        <a href="#el-leasing" style="text-decoration:none; color:var(--ink); border-radius:8px; padding:7px 10px">🔑 Leasing</a>
+        <a href="#el-renewals" style="text-decoration:none; color:var(--ink); border-radius:8px; padding:7px 10px">📄 Renewals <span class="bdg" style="font-size:9.5px">3</span></a>
+        <a href="#el-maintenance" style="text-decoration:none; color:var(--ink); border-radius:8px; padding:7px 10px">🔧 Maintenance <span class="bdg" style="font-size:9.5px">3</span></a>
+        <a href="#el-accounting" style="text-decoration:none; color:var(--ink); border-radius:8px; padding:7px 10px">📒 Accounting</a>
+        <a href="#el-bankfeeds" style="text-decoration:none; color:var(--ink); border-radius:8px; padding:7px 10px; padding-left:22px; font-size:11.5px; color:var(--mut)">Bank feeds & rec.</a>
+        <a href="#el-owner-portal" style="text-decoration:none; color:var(--ink); border-radius:8px; padding:7px 10px">👤 Owners & statements</a>
+        <a href="#el-compliance" style="text-decoration:none; color:var(--ink); border-radius:8px; padding:7px 10px">⚖ Compliance / Notices</a>
+        <a href="#el-disposition" style="text-decoration:none; color:var(--ink); border-radius:8px; padding:7px 10px">🏦 Fixed assets & dispositions</a>
+        <a href="#" style="text-decoration:none; color:var(--ink); border-radius:8px; padding:7px 10px">📈 Reports</a>
+        <div style="margin-top:auto; padding-top:10px; border-top:1px solid var(--line)">
+          <a href="#el-dial" style="text-decoration:none; color:var(--ink); border-radius:8px; padding:7px 10px; display:block">⚙ Settings & autonomy</a>
+          <div class="anno" style="padding:6px 10px">Left-nav grouping is [BEST GUESS] from the Brain's surface list. This shell is the STAFF console only — RLS + RBAC scope every row (org_id on every tenant-owned table, no cross-org joins).</div>
+        </div>
+      </div>
+
+      <div>
+        <!-- ===== Daily Review Card — home hero ===== -->
+        <div id="el-daily-review" style="padding:16px 22px 0">
+          <div style="border:1.5px solid var(--brand); border-radius:12px; padding:14px 16px; background:var(--brand-soft)">
+            <div style="display:flex; align-items:center; gap:10px; flex-wrap:wrap">
+              <b style="font-size:15px">Daily Review Card — 4 decisions, then you're done</b>
+              <span class="bdg">severity order: money-risk → legal-clock → tenant experience · max ~7/day [BEST GUESS, DECIDE]</span>
+            </div>
+            <div style="display:grid; gap:8px; margin-top:10px">
+              <div class="cardbox" style="display:flex; gap:10px; align-items:center; flex-wrap:wrap; border-left:3px solid var(--warn)">
+                <span>💧</span>
+                <div style="flex:1; min-width:260px"><b>Maintenance — Unit 12 water heater</b>
+                  <div style="color:var(--mut); font-size:11.5px; margin-top:2px" class="num">2 vendor bids in (autopilot-solicited): <b style="color:var(--ink)">$1,450</b> (AquaFlow, Thu) vs <b style="color:var(--ink)">$1,720 with 3-yr warranty</b> (Bay Plumbing Pros, Fri). Tenant notified of ETA either way.</div>
+                </div>
+                <button class="btn-ink">Pick $1,450</button><button class="btn-ghost">Pick warranty</button><button class="btn-ghost">Edit</button><button class="btn-ghost">Defer</button>
+              </div>
+              <div class="cardbox" style="display:flex; gap:10px; align-items:center; flex-wrap:wrap">
+                <span>📄</span>
+                <div style="flex:1; min-width:260px"><b>Renewal — Unit 4, lease expires Sep 30</b>
+                  <div style="color:var(--mut); font-size:11.5px; margin-top:2px" class="num">Proposed <b style="color:var(--ink)">+4% → $2,392/mo</b> · comps attached (3 nearby 2BRs $2,350–$2,480) · within CA rent-cap check ✓ (compliance engine)</div>
+                </div>
+                <button class="btn-ink">Approve & send</button><button class="btn-ghost">Edit terms</button><button class="btn-ghost">Defer</button>
+              </div>
+              <div class="cardbox" style="display:flex; gap:10px; align-items:center; flex-wrap:wrap">
+                <span>💵</span>
+                <div style="flex:1; min-width:260px"><b>AR — Unit 22 rent 6 days late</b>
+                  <div style="color:var(--mut); font-size:11.5px; margin-top:2px">History: never late before → <b style="color:var(--ink)">soft reminder drafted</b>. Notice ladder shown: friendly reminder → formal reminder → 3-day notice (human-approved, jurisdiction-aware) — you are at step 1 of 3.</div>
+                </div>
+                <button class="btn-ink">Approve reminder</button><button class="btn-ghost">Edit</button><button class="btn-ghost">Defer</button>
+              </div>
+              <div class="cardbox" style="display:flex; gap:10px; align-items:center; flex-wrap:wrap">
+                <span>🏦</span>
+                <div style="flex:1; min-width:260px"><b>Reconciliation — 2 unmatched bank-feed items</b>
+                  <div style="color:var(--mut); font-size:11.5px; margin-top:2px" class="num">$1,850.00 deposit Jul 12 → suggested: Unit 9 rent + $50 late fee (2 AR items) · $312.40 debit Jul 13 → suggested: AP bill #A-2214 (GreenScape). Accept, split, or send to suspense.</div>
+                </div>
+                <button class="btn-ink">Accept both</button><button class="btn-ghost">Review each</button>
+              </div>
+            </div>
+            <div class="anno" style="margin-top:6px">Wattson draft/triage layer over work orders, renewals, AR, and reconciliation. Solo mode consolidates ALL queues into this one daily session (Wattson Brain solo_mode). Done state: "0 decisions — you're done" with the stat strip. Every decision routes to its underlying record (exit points). Rental decisions, legal filings, and tax treatment ALWAYS stay with a human.</div>
+          </div>
+        </div>
+
+        <!-- ===== stat strip ===== -->
+        <div id="el-stats" style="padding:12px 22px 0">
+          <div class="statrow">
+            <div class="stat"><small>Occupancy</small><b class="num">97%</b> <span class="anno">36 of 37 units</span></div>
+            <div class="stat"><small>Rent collected (Jul)</small><b class="num">94% · $58.1K</b> <span class="anno">of $61.8K billed</span></div>
+            <div class="stat"><small>Open work orders</small><b class="num">3</b> <span class="anno">1 awaiting your pick</span></div>
+            <div class="stat"><small>Owner statements</small><b>due Aug 1 · auto</b> <span class="anno">generated from GL</span></div>
+          </div>
+          <div class="anno" style="margin-top:4px">All four tiles are GL/rent-roll/WO-store derived — generated, never hand-maintained. Tiles link to their module screens. Loading: ledger stats compute server-side; each tile carries an as-of timestamp (e.g. "as of 7:02 AM").</div>
+        </div>
+
+        <!-- ===== main two-column ===== -->
+        <div class="maingrid" style="padding:14px 22px; display:grid; grid-template-columns:1.15fr 1fr; gap:14px">
+          <div style="display:grid; gap:10px; align-content:start">
+
+            <!-- entity map -->
+            <div id="el-entity-map" class="cardbox">
+              <div style="display:flex; align-items:center; gap:8px; flex-wrap:wrap">
+                <b>Entity map</b>
+                <div class="dial"><span>SIMPLE</span><span class="on">ADVANCED</span></div>
+                <span class="anno">click any entity → its books</span>
+              </div>
+              <div class="tree" style="margin-top:8px">
+                <div><b>Watts Holdings (organization)</b></div>
+                <div class="lvl">🏛 <b>Endeavour Chase LLC</b> (legal_entity · EIN on file) — title holder
+                  <div class="lvl">📁 Portfolio: Midland 37-unit → 🏢 18420 Corridor (building) → 37 units</div>
+                </div>
+                <div class="lvl">🏛 <b>Cedar Land Trust</b> (land trust) — nominee trustee: <b>Watts Trustee Services LLC</b> · beneficial owner tracked via entity_ownerships (dated roles)</div>
+                <div class="lvl">🏛 <b>Ops-Hub LLC</b> (cash-hub / operations entity — holds NO title) — receives rents, pays expenses, handles PM remittances, keeps its own book · intercompany due-to/due-from with Endeavour Chase</div>
+              </div>
+              <div class="anno" style="margin-top:6px">Core hierarchy schema (Module 1): organizations → legal_entities → entity_ownerships → portfolios → properties → buildings → units. SIMPLE projection hides all of this for a solo owner ("invisibly simple"); ADVANCED exposes the graph, title structures, trustee relationships, W-9/1099 routing, entity-scoped access. Books are decoupled from bank accounts (Brain Module 1 §10). Lease landlord name is derived from THIS model and snapshotted at signing — never guessed.</div>
+            </div>
+
+            <!-- accounting / GL -->
+            <div id="el-accounting" class="cardbox">
+              <b>Accounting — native double-entry GL (system of record)</b>
+              <table class="dtable" style="font-size:11.5px; margin-top:6px">
+                <tr><th>Statement line (Jul, Endeavour Chase book)</th><th>Amount</th><th></th></tr>
+                <tr><td>4000 · Rental income</td><td class="num">$58,100.00</td><td><a href="#" style="color:var(--brand); font-size:10.5px">drill → journal</a></td></tr>
+                <tr><td>6200 · Repairs & maintenance</td><td class="num">($4,212.40)</td><td><a href="#" style="color:var(--brand); font-size:10.5px">drill → journal</a></td></tr>
+                <tr><td>3200 · Owner distributions (equity)</td><td class="num">($18,000.00)</td><td><a href="#" style="color:var(--brand); font-size:10.5px">drill → journal</a></td></tr>
+              </table>
+              <div style="background:var(--surface); border-radius:8px; padding:8px 10px; margin-top:8px; font-size:11px" class="num">
+                <b>Drill-through: JE-2026-04412</b> (source: AR receipt, Unit 9) — Dr 1010 Operating cash $1,850.00 · Cr 1200 AR-rent $1,800.00 · Cr 4100 Late fees $50.00 <span class="bdg good">balanced ✓</span>
+                <div class="anno" style="margin-top:3px">sum(debit)=sum(credit) enforced by the posting engine — an unbalanced entry is a HARD BLOCK (fail-closed), never auto-corrected. Statement line → journal → source event, every time.</div>
+              </div>
+              <div class="anno" style="margin-top:6px">Schedule-E-aligned chart of accounts · cash vs accrual per accounting book · AR/AP sub-ledgers · owner distributions post as equity movements, not expenses · intercompany due-to/due-from between entities · JournalEntry idempotency unique(org_id, source_type, source_id, source_event_key) · <button class="btn-ghost" style="font-size:10.5px">QuickBooks export</button></div>
+            </div>
+
+            <!-- bank feeds & reconciliation -->
+            <div id="el-bankfeeds" class="cardbox">
+              <b>Bank feeds & reconciliation</b>
+              <table class="dtable" style="font-size:11.5px; margin-top:6px">
+                <tr><th>Feed item (Plaid)</th><th>Suggested match</th><th>Action</th></tr>
+                <tr><td class="num">Jul 12 · deposit $1,850.00</td><td>Unit 9 rent + late fee (2 AR items)</td><td><button class="btn-ghost" style="font-size:10px">Accept</button> <button class="btn-ghost" style="font-size:10px">Split</button> <button class="btn-ghost" style="font-size:10px">Suspense</button></td></tr>
+                <tr><td class="num">Jul 13 · debit $312.40</td><td>AP bill #A-2214 (GreenScape)</td><td><button class="btn-ghost" style="font-size:10px">Accept</button> <button class="btn-ghost" style="font-size:10px">Split</button> <button class="btn-ghost" style="font-size:10px">Suspense</button></td></tr>
+                <tr><td class="num">Jul 14 · Stripe payout $6,204.11</td><td>Stripe clearing account postings (auto)</td><td><span class="bdg good">matched ✓</span></td></tr>
+              </table>
+              <div style="border-top:1px solid var(--line); margin-top:8px; padding-top:8px; font-size:11.5px"><b>Trust accounting (architecture-ready, Phase 5+):</b> <span style="color:var(--mut)">three-way reconciliation — bank balance = trust ledger = Σ trust_beneficiaries — required BEFORE live trust activation. Panel renders "not activated" until then.</span></div>
+              <div class="anno" style="margin-top:4px">Ordered matching rules end in suspense — nothing is force-matched. <b>Fail-closed:</b> Plaid feed down → panel shows "feed disconnected since 6:40 AM" + NO fabricated matches; reconciliation waits. BankReconciliation records per account per period.</div>
+            </div>
+
+            <!-- fixed assets + disposition -->
+            <div id="el-disposition" class="cardbox" style="border-left:3px solid var(--signal)">
+              <b>Fixed assets & disposition — "sell a building, the books do themselves"</b>
+              <div style="font-size:11.5px; color:var(--mut); margin-top:4px" class="num">Register: 18420 Corridor — cost basis $4.21M · accum. depreciation $612K · NBV $3.60M · straight-line 27.5-yr schedule current ✓</div>
+              <div style="background:#fdf6ee; border:1px solid var(--signal); border-radius:8px; padding:10px 12px; margin-top:8px; font-size:12px">
+                <b>⚡ Wattson approval card — "Building sold: disposition packet ready" (triggered by PropClose DEAL_CLOSED)</b>
+                <div style="color:var(--mut); font-size:11.5px; margin-top:4px" class="num">Gross $5.40M · selling costs $162K · basis $4.21M · accum. depr. $612K · book gain $1.64M · loan payoff $2.87M (mapping shown) · net cash $2.31M · deposits $18.4K to settle + notices · 37 leases affected · tax flags for CPA: §1231 ✓ · §1250 recapture ✓ · 1031 candidate ? · installment n/a · related-party n/a</div>
+                <div style="display:flex; gap:6px; margin-top:8px; flex-wrap:wrap"><button class="btn-ink">Approve & Post</button><button class="btn-ghost">Edit Closing Statement Mapping</button><button class="btn-ghost">Send to CPA</button><button class="btn-ghost">Simulate Only</button><button class="btn-ghost">Reject / Hold</button></div>
+              </div>
+              <div class="anno" style="margin-top:6px">The 18 ordered disposition actions run ONLY after approval: validate sale packet → freeze cutoff → prorate → final depreciation → proceeds → selling costs → debt payoff → remove asset → clear accum. depreciation → book gain/loss → tax flags for CPA → deposit settlement + notices → lease termination → close AR/AP → final statement → balance-sheet/consolidation update → audit-ready packet → archive SOLD. <b>Fail-closed:</b> exceptions (partial sale, seller financing, casualty proceeds, unreconciled bank/trust, locked period) route to a human — NEVER autopost. Human confirms closing date, mapping, basis/allocation, deposit treatment, distributions, and CPA review at every tier.</div>
+            </div>
+
+            <!-- lifecycle wedge -->
+            <div id="el-wedge" class="cardbox" style="border:1.5px solid var(--brand); background:var(--brand-soft)">
+              <b>💡 Predictive Lifecycle Asset Manager — the wedge</b>
+              <div style="font-size:12px; color:var(--mut); margin-top:4px" class="num">Unit 4 HVAC replacement quoted at <b style="color:var(--ink)">$6,000</b> — against current market: selling now models a <b style="color:var(--ink)">22% IRR</b> via PropClose (PropSearch comps + underwriting attached). <b style="color:var(--ink)">Draft the disposition listing?</b></div>
+              <div style="display:flex; gap:6px; margin-top:8px"><button class="btn-ink">Draft in PropClose →</button><button class="btn-ghost">Keep & repair</button></div>
+              <div class="anno" style="margin-top:4px">Hold-vs-sell / repair-vs-dispose recommendations contextualized against live market data (PropSearch comps + PropClose + Mgmt data). Accept → PropClose draft; decline is logged. A recommendation is never an action — the dial cannot automate this.</div>
+            </div>
+          </div>
+
+          <!-- right column -->
+          <div style="display:grid; gap:10px; align-content:start">
+
+            <!-- leasing funnel + screening -->
+            <div id="el-leasing" class="cardbox">
+              <b>Leasing funnel — tour → application → screening → lease → move-in</b>
+              <div style="display:grid; grid-template-columns:repeat(5,1fr); gap:4px; margin-top:8px; font-size:10.5px; text-align:center" class="num">
+                <div style="background:var(--surface); border-radius:7px; padding:6px 4px"><b>Tours</b><div style="color:var(--mut)">4 this wk</div></div>
+                <div style="background:var(--surface); border-radius:7px; padding:6px 4px"><b>Applications</b><div style="color:var(--mut)">3 open</div></div>
+                <div style="background:#fdf6ee; border-radius:7px; padding:6px 4px"><b>Screening</b><div style="color:var(--warn)">1 for decision</div></div>
+                <div style="background:var(--surface); border-radius:7px; padding:6px 4px"><b>Lease</b><div style="color:var(--mut)">1 out for e-sign</div></div>
+                <div style="background:var(--surface); border-radius:7px; padding:6px 4px"><b>Move-in</b><div style="color:var(--mut)">1 Sat</div></div>
+              </div>
+              <div style="background:var(--surface); border-radius:8px; padding:8px 10px; margin-top:8px; font-size:11.5px">
+                <b>Showing scheduler (Wattson cadence):</b> <span style="color:var(--mut)">Unit 7 tour Thu 5:30 — scheduled ✓ · 24-hr reminder queued (both sides) · several-hours reminder queued · post-showing follow-up + host action prompt auto-queued. Autonomy hook fires before EVERY send.</span>
+              </div>
+              <div style="background:var(--surface); border-radius:8px; padding:8px 10px; margin-top:6px; font-size:11.5px">
+                <b>Screening — Unit 7 applicant (M. Torres):</b> <span style="color:var(--mut)" class="num">portable ApplicationProfile reused from prior application · applicant-paid $42 via Stripe · TransUnion SmartMove report in (ScreeningAdapter) · Plaid income verification ✓ 3.4× rent · 2 paystubs ingested (GPT-4o Vision, allowed categories only)</span>
+                <div style="display:flex; gap:6px; margin-top:6px"><button class="btn-ink">Approve (human decision)</button><button class="btn-ghost">Conditional</button><button class="btn-ghost">Decline</button></div>
+              </div>
+              <div class="anno" style="margin-top:6px"><b>Fair housing + FCRA:</b> screening is AI-assisted but HUMAN-DECIDED — no AI-only decisions ever. Wattson screening prompts are hard-constrained: summarize only allowed financial/rental/screening criteria; never infer, mention, or recommend on protected class; protected-class content in documents is ignored (Brain Module 2A §12 Fair-Housing Prompt Guardrail). Consent + permissible purpose + audit events required. Disallowed extraction categories are hard blocks. <b>Fail-closed:</b> screening provider down → applications HOLD.</div>
+            </div>
+
+            <!-- adverse action -->
+            <div id="el-adverse-action" class="cardbox">
+              <b>Adverse-action workflow (FCRA)</b>
+              <div style="font-size:11.5px; color:var(--mut); margin-top:4px">Yesterday: J. Whitfield application <b style="color:var(--ink)">declined by you</b> (income ratio) → adverse-action letter auto-generated AFTER the human decision: includes CRA/provider contact info (TransUnion SmartMove) + dispute rights + 60-day free-report notice. <span class="bdg good">Sent ✓ · audit-logged</span></div>
+              <div class="anno" style="margin-top:4px">Triggered ONLY by a human decline or conditional approval — never by Wattson. Letter content is templated, jurisdiction-aware, and stored on the audit trail.</div>
+            </div>
+
+            <!-- lease gen + e-sign + move-in -->
+            <div id="el-lease" class="cardbox">
+              <b>Lease generation · e-sign · move-in</b>
+              <div style="font-size:11.5px; color:var(--mut); margin-top:4px">Unit 7 draft: <b style="color:var(--ink)">CA-compliant template</b> (or upload counsel-approved) · landlord = <b style="color:var(--ink)">Endeavour Chase LLC</b> — derived from the Module-1 title/entity model and <b style="color:var(--ink)">snapshotted at signing, never guessed</b> · deposit $2,400 → trust-ready ledger account · e-sign out via DocuSign adapter <span class="bdg warn">awaiting tenant signature</span></div>
+              <div style="font-size:11.5px; color:var(--mut); margin-top:6px">Move-in Sat: inspection checklist scheduled → activation creates the AR rent schedule + tenant-portal invite automatically.</div>
+              <div class="anno" style="margin-top:4px">Vendor adapter-wrapped (DocuSign named pick; UI unaffected by final vendor [DECIDE]). All money (deposit, first month) posts through the ledger.</div>
+            </div>
+
+            <!-- renewals -->
+            <div id="el-renewals" class="cardbox">
+              <b>Renewals pipeline — 120 / 90 / 60-day calendar</b>
+              <table class="dtable" style="font-size:11.5px; margin-top:6px">
+                <tr><th>Unit</th><th>Lease ends</th><th>Window</th><th>Status</th></tr>
+                <tr><td>Unit 4</td><td class="num">Sep 30</td><td><span class="bdg warn">90-day</span></td><td>+4% proposed, comps attached → in Daily Review</td></tr>
+                <tr><td>Unit 18</td><td class="num">Oct 31</td><td><span class="bdg">120-day</span></td><td>Wattson drafting offer (within dial)</td></tr>
+                <tr><td>Unit 2</td><td class="num">Aug 31</td><td><span class="bdg" style="color:var(--crit); border-color:var(--crit)">60-day</span></td><td>Non-renewal path — notice requirements surfaced (human-approved)</td></tr>
+              </table>
+              <div class="anno" style="margin-top:4px">Every active lease with a known end date sits on this calendar. Wattson runs it within the autonomy dial; offers with comps attached; non-renewal handling routes through Compliance/Notices.</div>
+            </div>
+
+            <!-- maintenance autopilot + vendor portal -->
+            <div id="el-maintenance" class="cardbox">
+              <b>Maintenance autopilot + vendor portal</b>
+              <div style="font-size:11px; color:var(--mut); margin-top:4px; display:flex; gap:4px; flex-wrap:wrap" class="num">
+                <span class="bdg good">report ✓</span>→<span class="bdg good">triage ✓</span>→<span class="bdg good">bids solicited ✓ (autopilot)</span>→<span class="bdg warn">HUMAN PICK ← you are here</span>→<span class="bdg">dispatch</span>→<span class="bdg">invoice</span>→<span class="bdg">AP posting</span>
+              </div>
+              <table class="dtable" style="font-size:11.5px; margin-top:6px">
+                <tr><th>WO</th><th>Status</th><th></th></tr>
+                <tr><td>WO-118 · Unit 12 water heater</td><td>2 bids in → pick in Daily Review</td><td><a href="#el-daily-review" style="color:var(--brand); font-size:10.5px">↑ review</a></td></tr>
+                <tr><td>WO-121 · Unit 30 disposal</td><td>Dispatched · GreenFix arriving Wed</td><td><span class="bdg">tenant notified</span></td></tr>
+                <tr><td>WO-116 · Common area light</td><td class="num">Invoice $180 → approve → AP posts</td><td><button class="btn-ghost" style="font-size:10px">Approve invoice</button></td></tr>
+              </table>
+              <div class="anno" style="margin-top:4px"><b>Vendor portal (scoped):</b> AquaFlow logs in via the work-order dispatch link and sees ONLY its assigned WOs — submit bid, confirm schedule, upload invoice. No properties, tenants, or financials beyond its own jobs (RLS).</div>
+            </div>
+
+            <!-- compliance rules engine -->
+            <div id="el-compliance" class="cardbox">
+              <b>Compliance rules engine — jurisdiction-aware, seeded with California</b>
+              <table class="dtable" style="font-size:11.5px; margin-top:6px">
+                <tr><th>Rule (18420 Corridor)</th><th>Check</th></tr>
+                <tr><td>CA rent-cap (AB 1482 class)</td><td><span class="bdg good">renewal +4% within cap ✓</span></td></tr>
+                <tr><td>Notice ladder — Unit 22 AR</td><td>step 1 of 3 (friendly) · 3-day notice requires your approval</td></tr>
+                <tr><td>Security-deposit rules</td><td><span class="bdg good">Unit 7 deposit within limit ✓</span></td></tr>
+              </table>
+              <div class="anno" style="margin-top:4px">Parameterized rules per property/jurisdiction; notices/eviction tracking. Every generated notice is HUMAN-APPROVED — the engine drafts and tracks clocks, it never files. Legal filings always stay with a human (module invariant).</div>
+            </div>
+          </div>
+        </div>
+
+        <!-- ===== portals + copilots (full width) ===== -->
+        <div id="el-portals" style="padding:0 22px 14px">
+          <div class="sechead">The three scoped portals + four copilots — each sees ONLY its scope</div>
+          <div style="display:grid; grid-template-columns:repeat(3,1fr); gap:10px">
+            <div id="el-owner-portal" class="cardbox">
+              <b>👤 Owner portal</b> <span class="anno">(entry: owner invite)</span>
+              <div style="font-size:11.5px; color:var(--mut); margin-top:4px" class="num">Jul statement <span class="bdg good">ready · generated from GL</span> → view / PDF · distribution $18,000 posted Jul 5 (equity movement) · <b style="color:var(--ink)">Approval inbox (1):</b> "Unit 12 water heater exceeds your $1,500 threshold — approve $1,720 warranty option?" <button class="btn-ghost" style="font-size:10px">Approve</button> <button class="btn-ghost" style="font-size:10px">Decline</button> · Documents (12)</div>
+              <div class="anno" style="margin-top:4px">Owner-scoped RLS: only their entities/properties. Statements are generated artifacts — never editable state.</div>
+            </div>
+            <div id="el-tenant-portal" class="cardbox">
+              <b>🏠 Tenant portal</b> <span class="anno">(entry: invite at lease activation · mobile-first)</span>
+              <div style="font-size:11.5px; color:var(--mut); margin-top:4px" class="num">Balance $0 ✓ (paid Jul 1, autopay) · ledger view · <button class="btn-ghost" style="font-size:10px">Pay</button> <button class="btn-ghost" style="font-size:10px">Report an issue</button> · WO-121 status: "GreenFix arriving Wed 10–12" · renewal offer for Unit 4 renders here when sent · documents + lease e-sign</div>
+              <div class="anno" style="margin-top:4px">Tenant sees only their unit/lease/ledger. Payments post through Stripe → clearing → GL.</div>
+            </div>
+            <div id="el-vendor-portal" class="cardbox">
+              <b>🔧 Vendor portal</b> <span class="anno">(entry: work-order dispatch link)</span>
+              <div style="font-size:11.5px; color:var(--mut); margin-top:4px" class="num">AquaFlow view: WO-118 "submit bid" ✓ submitted $1,450 · WO-097 invoice $340 <span class="bdg warn">awaiting approval</span> · schedule confirmations · insurance/W-9 on file ✓</div>
+              <div class="anno" style="margin-top:4px">Scoped to assigned WOs only. Invoice approval → AP posting → 1099 accumulation.</div>
+            </div>
+          </div>
+          <div id="el-copilots" class="cardbox" style="margin-top:10px; display:grid; grid-template-columns:repeat(4,1fr); gap:8px; font-size:11px">
+            <div><b>💬 PM copilot (staff)</b><div style="color:var(--mut)">"Which units renew in Q4?" → answers from org-scoped data</div></div>
+            <div><b>💬 Owner copilot</b><div style="color:var(--mut)">"Why is July NOI lower?" → answers from THEIR statements only</div></div>
+            <div><b>💬 Tenant copilot</b><div style="color:var(--mut)">"When is my lease up?" → their lease only</div></div>
+            <div><b>💬 Vendor copilot</b><div style="color:var(--mut)">"What's my open invoice status?" → their WOs only</div></div>
+            <div class="anno" style="grid-column:1/-1">Four Wattson instances, each scoped to its portal's data (RLS-inherited). Persistent panel per portal [BEST GUESS — mirrors the platform-wide Wattson surface rule].</div>
+          </div>
+        </div>
+
+        <!-- ===== autonomy dial + CSV import row ===== -->
+        <div style="padding:0 22px 14px; display:grid; grid-template-columns:1fr 1fr; gap:10px" class="maingrid">
+          <div id="el-dial" class="cardbox">
+            <b>Wattson autonomy dial — owner-set, per capability</b>
+            <table class="dtable" style="font-size:11px; margin-top:6px">
+              <tr><th>Capability</th><th>Dial</th></tr>
+              <tr><td>Showing reminders</td><td><div class="dial"><span>Draft</span><span>Notify</span><span class="on">Auto-within-limits</span><span>Full-auto</span></div></td></tr>
+              <tr><td>Renewal offers</td><td><div class="dial"><span>Draft</span><span class="on">Notify</span><span>Auto-within-limits</span><span>Full-auto</span></div></td></tr>
+              <tr><td>Vendor bid solicitation</td><td><div class="dial"><span>Draft</span><span>Notify</span><span class="on">Auto-within-limits</span><span>Full-auto</span></div></td></tr>
+              <tr><td>Basis / tax / distributions</td><td><span class="bdg" style="color:var(--crit); border-color:var(--crit)">🔒 ALWAYS requires approval — every tier</span></td></tr>
+            </table>
+            <div class="anno" style="margin-top:4px">agent_capabilities + autonomy_policies. Hard compliance gates sit above the dial (legal filings, rental decisions, tax treatment stay human). Tier caps the ceiling: Core=Draft · Professional=One-Approval · Portfolio/Enterprise=policy-bounded autonomy. Autonomy hook runs before every send.</div>
+          </div>
+          <div id="el-csv" class="cardbox">
+            <b>CSV import — MVP onboarding (Phase 2)</b>
+            <div style="font-size:11.5px; color:var(--mut); margin-top:4px" class="num">Guided import: <b style="color:var(--ink)">1</b> upload CSV → <b style="color:var(--ink)">2</b> map columns (unit, tenant, rent, lease dates, balances) → <b style="color:var(--ink)">3</b> dry-run preview: "37 units, 36 leases, 4 warnings (2 missing lease-end dates, 2 rent mismatches)" → <b style="color:var(--ink)">4</b> commit</div>
+              <div style="display:flex; gap:6px; margin-top:8px"><button class="btn-ink">Upload CSV</button><button class="btn-ghost">Concierge migration</button></div>
+            <div class="anno" style="margin-top:4px">Guided CSV + concierge first; AppFolio/Buildium/Yardi importers by demand. The 47-property pilot portfolio runs on real data BEFORE live payments/trust go on. Empty state (new tenant): this hero replaces the Daily Review until first properties exist.</div>
+          </div>
+        </div>
+
+        <!-- ===== Brain additions row (spec gaps rendered) ===== -->
+        <div id="el-pm-remit" style="padding:0 22px 14px">
+          <div class="cardbox" style="border-left:3px solid var(--brand)">
+            <b>PM remittance · W-9 / 1099 routing (Brain Module 1 §11 — rendered from the Master Brain)</b>
+            <div style="font-size:11.5px; color:var(--mut); margin-top:4px" class="num">PMRemittance Jul: Ops-Hub LLC → Endeavour Chase $34,180 net (per-property lines attached) · PropertyManagementAgreement on file · PM license tracked (PropertyManagerLicense) · 1099 accumulation: GreenScape $4,120 YTD → <span class="bdg">1099 e-file $4/form at year end</span> · W-9 routing resolves per the entity graph ("which EIN gets the W-9" is answered by entity_ownerships, never asked twice)</div>
+            <div style="border-top:1px solid var(--line); margin-top:8px; padding-top:8px; font-size:11.5px; color:var(--mut)"><b style="color:var(--ink)">Pass-through / fee lines (Brain pricing):</b> tenant screening $35–45/applicant (tenant-paid) · ACH ~$1.50 (cost-recovery) · card 2.95% + $0.30 (pass-through) · e-sign bundles then $2/envelope · Wattson Premium Automation Pack $99/mo (2,000 actions, $0.05/action over) — all billed transparently on the plan record.</div>
+            <div class="anno" style="margin-top:4px">Also from the Brain: the 12 canonical roles (platform admin, org owner/admin, portfolio exec, property manager, leasing agent, accountant, maintenance coordinator, auditor/read-only, owner/investor, tenant/applicant, vendor, broker/transaction collaborator) drive the RBAC scope hierarchy; a $0 internal dogfood tenant exists for the pilot.</div>
+          </div>
+        </div>
+
+        <!-- ===== states strip ===== -->
+        <div id="el-states" style="padding:0 22px 14px">
+          <div class="cardbox" style="font-size:11.5px">
+            <b>States (dev reference)</b>
+            <div style="color:var(--mut); margin-top:4px">
+              <b style="color:var(--ink)">Default:</b> Daily Review with today's decisions · done = "0 decisions — you're done" + stat strip.
+              <b style="color:var(--ink)">Loading:</b> ledger-derived stats compute server-side; every tile/statement shows an as-of timestamp; skeletons for the review card.
+              <b style="color:var(--ink)">Empty (new tenant):</b> CSV-import onboarding hero replaces the Daily Review until first properties exist.
+              <b style="color:var(--ink)">Degraded (all fail-closed):</b> Plaid down → "feed disconnected" + no fabricated matches · unbalanced journal entry → HARD BLOCK at the posting engine · disposition exceptions (partial sale, seller financing, casualty proceeds, unreconciled bank/trust, locked period) → route to human, never autopost · screening provider down → applications hold, no AI-only decision ever.
+              <b style="color:var(--ink)">Permission-limited:</b> RLS + RBAC everywhere — org_id on every tenant-owned table, no cross-org joins; each portal sees only its scope; gift of data across portals is impossible by construction.
+            </div>
+          </div>
+        </div>
+
+        <!-- ===== mobile variant strip ===== -->
+        <div id="el-mobile" style="padding:0 22px 18px">
+          <div class="cardbox">
+            <b>Mobile variant (375px)</b>
+            <div style="display:flex; gap:10px; margin-top:8px; overflow-x:auto">
+              <div style="min-width:150px; border:1px solid var(--line); border-radius:12px; padding:8px; font-size:9.5px; background:var(--surface)">
+                <b style="font-size:10px">Staff · Daily Review</b>
+                <div style="background:var(--paper); border:1.5px solid var(--brand); border-radius:8px; padding:6px; margin-top:4px">💧 Unit 12 bids<br><span style="color:var(--soft)">swipe → pick / defer</span></div>
+                <div style="background:var(--paper); border:1px solid var(--line); border-radius:8px; padding:6px; margin-top:4px">📄 Renewal +4%<br><span style="color:var(--soft)">approve / edit</span></div>
+                <div style="color:var(--soft); margin-top:4px">stat strip beneath ↓</div>
+              </div>
+              <div style="min-width:150px; border:1px solid var(--line); border-radius:12px; padding:8px; font-size:9.5px; background:var(--surface)">
+                <b style="font-size:10px">Tenant portal</b>
+                <div style="background:var(--paper); border:1px solid var(--line); border-radius:8px; padding:6px; margin-top:4px" class="num">Balance $0 ✓<br><b>[ Pay ]</b></div>
+                <div style="background:var(--paper); border:1px solid var(--line); border-radius:8px; padding:6px; margin-top:4px">📷 Report issue<br><span style="color:var(--soft)">photo + voice</span></div>
+              </div>
+              <div style="min-width:150px; border:1px solid var(--line); border-radius:12px; padding:8px; font-size:9.5px; background:var(--surface)">
+                <b style="font-size:10px">Vendor portal</b>
+                <div style="background:var(--paper); border:1px solid var(--line); border-radius:8px; padding:6px; margin-top:4px" class="num">WO-118 bid $1,450<br><span style="color:var(--soft)">confirm schedule</span></div>
+                <div style="background:var(--paper); border:1px solid var(--line); border-radius:8px; padding:6px; margin-top:4px">📎 Upload invoice</div>
+              </div>
+            </div>
+            <div class="anno" style="margin-top:6px">Daily Review Card IS the above-fold mobile experience for staff — one swipeable card per decision (approve / pick / defer). Tenant + vendor portals are mobile-first by design (tenants pay and report from phones). Stat strip stacks 2×2 beneath.</div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ============ spec gaps found ============ -->
+  <div class="note" style="margin-top:22px"><b>Spec gaps found (Management Master Brain — UPDATED specifies these; the spec's inventory missed or under-specified them; all RENDERED above):</b>
+    (1) <b>Fair-Housing Prompt Guardrail</b> (Module 2A §12): explicit hard constraints on every Wattson screening prompt — never infer/mention/recommend on protected class; protected-class content ignored — rendered in the leasing panel (spec cited FCRA blocks but not this prompt-level guardrail).
+    (2) <b>PM remittance + W-9/1099 routing</b> (Module 1 §11): PropertyManager / PMRemittance / per-property lines / license tracking / 1099 e-file — own panel.
+    (3) <b>Pass-through fee lines</b> (Part 1 pricing): screening $35–45 tenant-paid, ACH ~$1.50, card 2.95%+$0.30, e-sign $2/envelope, Wattson Premium Automation Pack $99/mo — spec only listed the four tier prices.
+    (4) <b>Books decoupled from bank accounts + cash-hub worked example</b> (Module 1 §10): Ops-Hub LLC holds no title yet keeps its own book — rendered in the entity map.
+    (5) <b>The 12 canonical RBAC roles enumerated</b> (Part 1 locked decisions) — spec said "12 canonical roles" without listing them; list rendered in the PM-remittance panel annotation.
+    (6) <b>$0 internal dogfood tenant</b> (Part 1 canonical anchors) — noted in the same annotation.
+  </div>
+
+  <!-- ============ (3) ELEMENT COVERAGE ============ -->
+  <h2 style="font-size:20px; margin:26px 0 10px">Element coverage — spec inventory → this page</h2>
+  <table class="dtable cov" style="font-size:12.5px">
+    <tr><th>Spec inventory element</th><th>Rendered at</th><th>Status</th></tr>
+    <tr><td>Daily Review Card (4 decisions: vendor-bid pick, renewal, AR ladder, reconciliation; approve/pick/edit/defer; solo-mode consolidation)</td><td><a href="#el-daily-review">Daily Review hero</a></td><td class="ok">✓</td></tr>
+    <tr><td>Stat strip (occupancy · rent collected · open WOs · statements due)</td><td><a href="#el-stats">Stat strip</a></td><td class="ok">✓</td></tr>
+    <tr><td>Entity map (SIMPLE/ADVANCED, land trust, nominee trustee, cash hub)</td><td><a href="#el-entity-map">Entity map</a></td><td class="ok">✓</td></tr>
+    <tr><td>Accounting area (double-entry GL, drill statement→journal→source, QuickBooks export)</td><td><a href="#el-accounting">Accounting panel</a></td><td class="ok">✓</td></tr>
+    <tr><td>Bank feeds & reconciliation (Plaid matching, suspense, Stripe clearing, trust three-way)</td><td><a href="#el-bankfeeds">Bank feeds panel</a></td><td class="ok">✓</td></tr>
+    <tr><td>Leasing funnel (showing cadence, portable application, screening, Plaid income, doc ingestion)</td><td><a href="#el-leasing">Leasing funnel</a></td><td class="ok">✓</td></tr>
+    <tr><td>Adverse-action workflow (FCRA, human-decision-triggered only)</td><td><a href="#el-adverse-action">Adverse-action card</a></td><td class="ok">✓</td></tr>
+    <tr><td>Lease gen + e-sign + move-in (landlord name snapshotted, trust-ready deposit, AR schedule + invite on activation)</td><td><a href="#el-lease">Lease panel</a></td><td class="ok">✓</td></tr>
+    <tr><td>Renewals pipeline (120/90/60 calendar, comps attached, dial-governed)</td><td><a href="#el-renewals">Renewals table</a></td><td class="ok">✓</td></tr>
+    <tr><td>Maintenance autopilot + vendor portal (report→…→AP posting, human pick)</td><td><a href="#el-maintenance">Maintenance panel</a> + <a href="#el-vendor-portal">vendor portal</a></td><td class="ok">✓</td></tr>
+    <tr><td>Owner portal + statements + approval inbox</td><td><a href="#el-owner-portal">Owner portal card</a></td><td class="ok">✓</td></tr>
+    <tr><td>Tenant portal (ledger, pay, WO, documents, renewal offers)</td><td><a href="#el-tenant-portal">Tenant portal card</a></td><td class="ok">✓</td></tr>
+    <tr><td>Compliance rules engine (jurisdiction-aware, CA-seeded, notice ladder, human-approved notices)</td><td><a href="#el-compliance">Compliance panel</a></td><td class="ok">✓</td></tr>
+    <tr><td>Fixed assets + disposition tracker (18 ordered actions, 5-action approval card, tax flags)</td><td><a href="#el-disposition">Disposition panel</a></td><td class="ok">✓</td></tr>
+    <tr><td>Wattson autonomy dial (Draft→Notify→Auto-within-limits→Full-auto, tier-mapped, hard gates)</td><td><a href="#el-dial">Autonomy dial</a></td><td class="ok">✓</td></tr>
+    <tr><td>Copilots ×4 (owner/PM/tenant/vendor, portal-scoped)</td><td><a href="#el-copilots">Copilots row</a></td><td class="ok">✓</td></tr>
+    <tr><td>CSV import MVP (guided upload → map → dry-run → commit; concierge)</td><td><a href="#el-csv">CSV import card</a></td><td class="ok">✓</td></tr>
+    <tr><td>Lifecycle wedge prompt (hold-vs-sell, "draft the disposition listing?")</td><td><a href="#el-wedge">Wedge card</a></td><td class="ok">✓</td></tr>
+    <tr><td>Pricing/tier badge (Core/Professional/Portfolio/Enterprise → Wattson tier)</td><td><a href="#el-pricing">Header tier badge</a></td><td class="ok">✓</td></tr>
+  </table>
+  <div style="border:1.5px solid var(--good); background:#f2f8f4; border-radius:10px; padding:12px 16px; margin:12px 0 0; font-weight:700; color:var(--good)">19 of 19 spec elements rendered ✓ <span style="font-weight:400; color:var(--mut); font-size:12.5px">— plus 6 Master-Brain additions beyond the inventory (see "Spec gaps found" above), the states strip, and the mobile-variant strip.</span></div>
+
+  <!-- ============ (4) FULL SPEC AS HTML ============ -->
+  <div class="specdoc">
+    <h1 style="font-size:24px; margin:40px 0 6px">Spec — 35 · Management Module — Concept Overview (its own app shell)</h1>
+    <p><b>Purpose</b> Concept overview of PropertyIQ Management — per the spec a <b>separate product/app shell</b>, not a tab of the agent platform: a staff console plus three scoped portals (owner / tenant / vendor), with the Daily Review Card as the home hero. Enterprise-grade multi-entity management on a native double-entry GL (system of record), dial-governed Wattson autonomy, and "sell a building, the books do themselves" disposition. Sequenced after the agent platform; MVP = the owner's 47-property CSV-import portfolio (Phase 2). (PropIQ Management Master Brain — UPDATED, Part 1 locked 2026-06-23.)</p>
+    <p><b>Primary users</b> Staff console: owner/PM staff (12 canonical RBAC roles per the Brain's RLS+RBAC model). Owner portal: property owners/investors. Tenant portal: tenants. Vendor portal: maintenance vendors. Each portal sees ONLY its scope.</p>
+    <p><b>Entry points</b> Separate app URL/login (own shell; SSO from PropertyIQ for the owner) [BEST GUESS on SSO]; tenant portal via invite at lease activation; vendor portal via work-order dispatch link; owner portal via owner invite; PropClose DEAL_CLOSED event auto-triggers the disposition flow (system entry).</p>
+    <p><b>Exit points</b> Daily Review decisions → their underlying records (work order, renewal, AR ladder, reconciliation); "Draft the disposition listing?" wedge prompt → PropClose; owner statement → owner portal + PDF; Wattson approval cards → the module's own approval inbox. Cross-app: hold-vs-sell recommendations link to PropSearch comps/underwriting (the Predictive Lifecycle Asset Manager wedge).</p>
+
+    <h2>Layout</h2>
+    <ul>
+      <li><b>Staff console header:</b> "M" avatar, "PropertyIQ Management", subtitle "37 units · Daily Review · [date]", nav: Owner portal / Tenant portal / Vendor portal (per draft — these are links to the scoped apps, not tabs).</li>
+      <li><b>Home hero:</b> the Daily Review Card (brand-bordered) — "N decisions, then you're done."</li>
+      <li><b>Stat strip below hero:</b> Occupancy · Rent collected (month) · Open work orders · Owner statements due.</li>
+      <li><b>Left nav (full app) [BEST GUESS from Brain surface list]:</b> Daily Review · Properties/Units · Entity map · Leasing · Renewals · Maintenance · Accounting (GL, AR/AP, bank feeds, reconciliation) · Owners & statements · Compliance/Notices · Fixed assets & dispositions · Reports · Settings.</li>
+      <li><b>Mobile (375px):</b> Daily Review Card is the entire above-fold experience; each decision is a swipeable card with approve/pick actions; stat strip beneath; portals are mobile-first by design (tenants pay/report from phones).</li>
+    </ul>
+
+    <h2>Element inventory</h2>
+    <div style="overflow-x:auto">
+    <table class="dtable">
+      <tr><th>Element</th><th>What it shows/does</th><th>Data source</th><th>Interactions</th><th>Spec source</th></tr>
+      <tr><td>Daily Review Card</td><td>The day's queued decisions (draft: 4). Examples: maintenance vendor-bid pick ($1,450 vs $1,720-with-warranty, autopilot-solicited); renewal approval (+4% with comps attached); AR late-tenant soft reminder with notice ladder shown; 2 unmatched bank-feed items with suggested matches</td><td>Wattson draft/triage layer over work orders, renewals, AR, reconciliation</td><td>per-row approve / pick / edit / defer; solo-mode consolidates all queues into this one daily session (Wattson Brain solo_mode)</td><td>draft s35; matrix "Daily Review Card as home hero"</td></tr>
+      <tr><td>Stat strip</td><td>Occupancy 97% · rent collected 94% $58.1K · open WOs 3 · statements due Aug 1 auto</td><td>GL + rent roll + WO store (generated, never hand-maintained)</td><td>tiles → module screens</td><td>draft s35</td></tr>
+      <tr><td>Entity map</td><td>SIMPLE/ADVANCED projection of organizations → legal_entities → entity_ownerships → portfolios → properties → buildings → units; models land trusts, nominee trustee, cash-hub account; "invisibly simple for a solo owner"</td><td>core hierarchy schema (Module 1)</td><td>toggle SIMPLE/ADVANCED; click entity → its books</td><td>Mgmt Brain Part 1/Module 1</td></tr>
+      <tr><td>Accounting area</td><td>Native double-entry GL as system of record: journal entries (sum(debit)=sum(credit) enforced), Schedule-E-aligned chart, cash vs accrual per accounting book, AR/AP sub-ledgers, owner distributions as equity movements, intercompany due-to/due-from</td><td>gl_accounts, journal_entries/lines, ar_charges, ap_bills</td><td>drill any statement line → journal → source event; QuickBooks export</td><td>Mgmt Brain Module 1 GL</td></tr>
+      <tr><td>Bank feeds & reconciliation</td><td>Plaid feed matching (ordered matching ending in suspense), Stripe clearing postings, BankReconciliation records; trust: three-way reconciliation (trust_beneficiaries, trust_reconciliations)</td><td>bank_transactions, bank_reconciliations</td><td>accept suggested match, split, send to suspense</td><td>Mgmt Brain Module 1</td></tr>
+      <tr><td>Leasing funnel</td><td>Tour → application → screening → lease → move-in → renewals, entity-scoped, posting through the ledger; showing scheduler with the required Wattson cadence (schedule, 24-hr and several-hours reminders both sides, post-showing follow-up, host action prompt); portable ApplicationProfile + entity-scoped ListingApplication; applicant-paid screening (Stripe) via ScreeningAdapter (TransUnion SmartMove first); Plaid income verification + GPT-4o Vision doc ingestion with allowed/disallowed extraction categories</td><td>leasing module</td><td>manage showings, review applications; screening AI-assisted but <b>human-decided</b></td><td>Mgmt Brain Module 2A</td></tr>
+      <tr><td>Adverse-action workflow</td><td>Automated FCRA adverse-action letters AFTER a human decline/conditional approval; includes CRA/provider info + dispute rights</td><td>screening module</td><td>triggered by human decision only</td><td>Mgmt Brain Module 2A (FCRA hard blocks)</td></tr>
+      <tr><td>Lease gen + e-sign + move-in</td><td>CA-compliant templates or uploaded counsel-approved lease; landlord name never guessed — derived from Module 1 title/entity model and snapshotted at signing; e-sign via adapter (DocuSign); deposit into trust-ready ledger; move-in inspection; activation creates AR rent schedule + tenant portal invite</td><td>Module 2B</td><td>generate/upload, send for signature, record inspection</td><td>Mgmt Brain Module 2B</td></tr>
+      <tr><td>Renewals pipeline</td><td>120/90/60-day renewal calendar for every active lease with known end date; proposed terms with comps attached; Wattson runs it within the autonomy dial</td><td>renewal automation</td><td>approve/edit offers; non-renewal handling</td><td>Mgmt Brain Module 2B; draft Daily Review row</td></tr>
+      <tr><td>Maintenance autopilot + vendor portal</td><td>Report → triage → vendor bid solicitation (autopilot) → human pick → dispatch → invoice → AP posting; vendor portal scoped to assigned WOs</td><td>WO store + vendor portal</td><td>pick bid, approve invoice</td><td>draft s35; matrix Management row</td></tr>
+      <tr><td>Owner portal + statements + approval inbox</td><td>Owner-scoped: statements (generated artifacts from GL), distributions, approval inbox (e.g. repair over threshold), documents</td><td>owner portal (scoped RLS)</td><td>owner approves/declines</td><td>matrix Management row</td></tr>
+      <tr><td>Tenant portal</td><td>Ledger/balance, payments, maintenance requests, documents, renewal offers</td><td>tenant portal</td><td>pay, submit WO, sign</td><td>Mgmt Brain Module 2B §6</td></tr>
+      <tr><td>Compliance rules engine surfaces</td><td>Parameterized, jurisdiction-aware rules seeded with California; notices/eviction tracking with the notice ladder</td><td>compliance engine</td><td>view applicable rules per property; generate notices (human-approved)</td><td>Mgmt Brain Part 1; draft AR row ("notice ladder shown")</td></tr>
+      <tr><td>Fixed assets + disposition tracker</td><td>Fixed-asset register, depreciation schedules; the 18 ordered disposition actions (validate sale packet → freeze cutoff → prorate → final depreciation → proceeds → selling costs → debt payoff → remove asset → clear accum. depreciation → book gain/loss → tax flags (§1231/§1250/§1245/1031/installment/related-party) for CPA → deposit settlement + notices → lease termination → close AR/AP → final statement → balance-sheet/consolidation update → audit-ready packet → archive SOLD)</td><td>disposition engine, triggered by PropClose DEAL_CLOSED</td><td>single Wattson approval card "Building sold — disposition packet ready" with Approve & Post / Edit Closing Statement Mapping / Send to CPA / Simulate Only / Reject-Hold</td><td>Mgmt Brain Part 1 Disposition spec</td></tr>
+      <tr><td>Wattson autonomy dial</td><td>Draft → Notify → Auto-within-limits → Full-auto, owner-set, with hard compliance gates; tier-mapped (Core=Draft, Professional=One-Approval, Portfolio/Enterprise=policy-bounded autonomy; basis/tax/distributions ALWAYS require approval)</td><td>agent_capabilities, autonomy_policies</td><td>set dial per capability</td><td>Mgmt Brain Part 1</td></tr>
+      <tr><td>Copilots (4)</td><td>Owner / PM / tenant / vendor conversational copilots, each scoped to its portal's data</td><td>Wattson instances (scoped)</td><td>chat</td><td>matrix Management row; Mgmt Brain</td></tr>
+      <tr><td>CSV import (MVP)</td><td>Guided CSV + concierge migration first (AppFolio/Buildium/Yardi importers by demand); the 47-property pilot portfolio runs real data before live payments/trust</td><td>import pipeline</td><td>upload, map columns, dry-run preview</td><td>Mgmt Brain Part 1 Migration; Phase 2</td></tr>
+      <tr><td>Lifecycle wedge prompt</td><td>Predictive Lifecycle Asset Manager: hold-vs-sell / repair-vs-dispose recommendations contextualized against live market data (e.g. "Unit 4 HVAC $6k vs sell at 22% IRR via PropClose — draft the disposition listing?")</td><td>PropSearch comps + PropClose + Mgmt data</td><td>accept → PropClose draft; decline logged</td><td>Mgmt Brain Part 1 "The wedge"</td></tr>
+      <tr><td>Pricing/tier badge</td><td>Core $99/mo (50 units, $1.50 overage) · Professional $199/150 (launch default) · Portfolio $499/400 · Enterprise $1,499/1,000 ($1.25) — determines Wattson tier features</td><td>plan record</td><td>upgrade flow</td><td>Mgmt Brain Part 1 Tiers</td></tr>
+    </table>
+    </div>
+
+    <h2>States</h2>
+    <ul>
+      <li><b>Default:</b> Daily Review with today's decisions; done state = "0 decisions — you're done" with the stat strip.</li>
+      <li><b>Loading:</b> ledger-derived stats compute server-side; show as-of timestamps.</li>
+      <li><b>Empty (new tenant):</b> CSV-import onboarding hero replaces the Daily Review until first properties exist.</li>
+      <li><b>Error/degraded (fail-closed):</b> Plaid feed down → reconciliation panel shows disconnected + no fabricated matches; posting engine rejects unbalanced entries (sum(debit)≠sum(credit) is a hard block); disposition exceptions (partial sale, seller financing, casualty proceeds, unreconciled bank/trust, locked period) route to human — never autopost; screening provider down → applications hold, no AI-only decisions ever.</li>
+      <li><b>Permission-limited:</b> RLS + RBAC everywhere; every tenant-owned table carries org_id; no cross-org joins; portals see only their scope ("Each portal sees only its scope" — draft footer).</li>
+      <li><b>Mobile:</b> Daily Review card-per-decision swipe flow; tenant/vendor portals mobile-first.</li>
+    </ul>
+
+    <h2>Data fields</h2>
+    <p>Org/entity/portfolio/property/building/unit hierarchy ids; lease {parties, term, rent schedule}; journal entries/lines with dimensions {entity, property, unit, lease, bank, owner}; AR charges/AP bills; bank transactions + reconciliation state; trust beneficiary balances (three-way); screening results (allowed categories only); renewal calendar dates (120/90/60); WO {status, bids, invoice}; fixed asset {cost basis, accumulated depreciation, NBV}; disposition packet {gross price, selling costs, basis, accum. depr., NBV, book gain, loan payoff, net cash, deposits, leases affected, tax flags, exceptions}; occupancy/collection rates (derived); plan tier + unit counts.</p>
+
+    <h2>Rules & compliance</h2>
+    <ul>
+      <li>Native GL is the system of record; statements are generated artifacts, never hand-maintained state; JournalEntry idempotency unique(org_id, source_type, source_id, source_event_key).</li>
+      <li>Rental decisions, legal filings, and tax treatment ALWAYS stay with a human (module-level invariant).</li>
+      <li>FCRA: consent, permissible purpose, adverse action, and audit required; screening AI-assisted, human-decided; hard blocks on disallowed extraction categories.</li>
+      <li>Disposition: human confirms closing date, statement mapping, basis/allocation, ambiguous classifications, loan-payoff mapping, deposit treatment, distributions, CPA tax review, and all exceptions; automation only after approval; basis/tax/distributions require approval at every tier.</li>
+      <li>Lease landlord name derived from the entity/title model and snapshotted — never guessed.</li>
+      <li>Wattson autonomy hook before every send (showing reminders etc.); all money posts through the ledger.</li>
+      <li>Trust accounting architecture-ready with three-way reconciliation before live trust activation (Phase 5+).</li>
+    </ul>
+
+    <h2>Cross-links</h2>
+    <p>In: PropClose DEAL_CLOSED (disposition trigger); PropSearch market data (wedge); PropertyIQ SSO for the owner. Out: PropClose (disposition listing drafts), QuickBooks export, owner statements to owner portal, CPA packet export. Ledger events: this module IS a ledger — emits posting events per money event; consumes DEAL_CLOSED, Plaid/Stripe transaction feeds; Wattson approval cards flow through the module's approval inbox (kept separate from the agent platform's Approvals Inbox per the separate-shell decision).</p>
+
+    <h2>Open decisions</h2>
+    <ul>
+      <li>[DECIDE] Whether this overview screen stays in the agent-platform design doc or moves wholly to its own design track — interim per matrix: "design as its own app," this tab remains the concept overview + hand-off pointer.</li>
+      <li>[DECIDE] Daily Review decision-count cap per day and ordering logic — interim: severity order (money-risk → legal-clock → tenant experience), max ~7 [BEST GUESS].</li>
+      <li>[DECIDE] Payments/screening vendor contracts (Stripe Connect, TransUnion SmartMove, DocuSign named as adapter-wrapped picks; the ~40% non-autonomous build is gated on vendor contracts, payments underwriting, FCRA/legal, CPA review) — UI unaffected by final vendor via adapters.</li>
+      <li>[BEST GUESS] Left-nav grouping; SSO entry; copilot placement as a persistent panel per portal (mirrors the platform-wide Wattson surface rule).</li>
+    </ul>
+    <p class="anno" style="margin-top:20px">Wireframe fidelity — colors are placeholders from the locked PropFlow design language. All names, entities, and numbers are realistic fake data. No crime data appears anywhere on this screen by policy. Agent identity where shown platform-wide: Graeham Watts, Intero Real Estate, DRE# 01466876 (from shared-references/identity.json — never hardcode elsewhere; the identity.json blocklist is enforced by the repo tripwire).</p>
+  </div>
+</div>

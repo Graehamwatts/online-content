@@ -1,0 +1,522 @@
+<title>PropertyIQ · Screen 25 — Client Portal / Homeowner Hub</title>
+<link href="https://api.fontshare.com/v2/css?f[]=technor@500,600,700&display=swap" rel="stylesheet">
+<link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<style>
+  /* Type system — Technor for display (the squared machine look from the font exploration), Inter for UI. */
+  :root{ --font-display:'Technor', Inter, -apple-system, 'Segoe UI', sans-serif; --font-ui: Inter, -apple-system, 'Segoe UI', Roboto, sans-serif; }
+</style>
+<style>
+  /* Palette v4 — PropFlow design language: neutral ink UI, ink-as-accent, color reserved for data. (extracted verbatim from propsearch-design-draft.html) */
+  :root, :root[data-theme="dark"], :root[data-theme="light"]{
+    --ink:#23282f; --paper:#fbfaf8; --surface:#f1efe9; --line:#e2dfd6;
+    --mut:#6b7076; --soft:#9b9f9f;
+    --brand:#2e6b53; --brand-ink:#ffffff; --brand-soft:#eaf1ec; --brand-deep:#1e4c3a;
+    --signal:#b07a2e;
+    --good:#2e7d4f; --warn:#a8630a; --crit:#b3372f;
+    --r:10px;
+  }
+  .intel .score, .mintel{ color:var(--brand-deep) }
+  .intel{ border-left:3px solid var(--brand) }
+  h1{ letter-spacing:-.02em }
+  .stat b{ letter-spacing:-.01em }
+  body[data-agent="watts"]{ --brand:#2e6b53; --brand-soft:#eaf1ec; --brand-deep:#1e4c3a; }
+
+  *{box-sizing:border-box; margin:0}
+  body{font:15px/1.55 var(--font-ui); color:var(--ink); background:var(--paper); padding-bottom:80px}
+  h1,h2,h3{line-height:1.15; text-wrap:balance; font-family:var(--font-display); font-weight:600}
+  h1{letter-spacing:-.01em}
+  .site{box-shadow:0 1px 2px rgba(20,24,32,.04), 0 8px 32px rgba(20,24,32,.06)}
+  .stat{box-shadow:0 1px 2px rgba(20,24,32,.03); transition:box-shadow .15s, transform .15s}
+  .stat:hover{box-shadow:0 4px 14px rgba(20,24,32,.08)}
+  .chip{transition:all .12s}
+  button{font-family:var(--font-ui)}
+  .num{font-variant-numeric:tabular-nums}
+  .wrap{max-width:1180px; margin:0 auto; padding:0 20px}
+
+  .bar{position:sticky; top:0; z-index:50; background:var(--paper); border-bottom:1px solid var(--line); padding:10px 0; backdrop-filter:blur(8px)}
+  .bar .wrap{display:flex; flex-wrap:wrap; gap:10px; align-items:center}
+  .bar .ttl{font-weight:700; margin-right:auto}
+  .bar .ttl small{display:block; font-weight:400; color:var(--mut)}
+  .bar a{color:var(--brand); font-size:13px; text-decoration:none}
+
+  .note{background:var(--surface); border:1px solid var(--line); border-radius:var(--r); padding:14px 16px; margin:0 0 22px; font-size:13.5px; color:var(--mut)}
+  .note b{color:var(--ink)}
+
+  .site{border:1px solid var(--line); border-radius:14px; overflow:hidden; background:var(--paper)}
+  .sitehead{display:flex; align-items:center; gap:14px; padding:14px 22px; border-bottom:1px solid var(--line)}
+  .avatar{width:38px; height:38px; border-radius:50%; background:var(--brand); color:var(--brand-ink); display:grid; place-items:center; font-weight:700}
+  .sitehead .who b{display:block}
+  .sitehead .who small{color:var(--mut)}
+  .sitehead nav{margin-left:auto; display:flex; gap:18px; font-size:13.5px; color:var(--mut)}
+  .sitehead nav a{color:inherit; text-decoration:none}
+  .sitehead nav a:hover{color:var(--brand)}
+
+  .chip{display:inline-flex; align-items:center; gap:6px; font-size:12.5px; font-weight:500; border:1px solid var(--line); border-radius:99px; padding:6px 12px; background:var(--paper); cursor:pointer; color:var(--ink)}
+  .chip:hover{border-color:var(--brand)}
+  .chip.on{background:var(--brand); border-color:var(--brand); color:var(--brand-ink); font-weight:600; box-shadow:0 2px 8px color-mix(in srgb, var(--brand) 30%, transparent)}
+
+  .statrow{display:grid; grid-template-columns:repeat(4,1fr); gap:10px}
+  .stat{background:var(--surface); border:1px solid var(--line); border-radius:var(--r); padding:12px}
+  .stat small{display:block; color:var(--mut); font-size:11.5px; text-transform:uppercase; letter-spacing:.05em}
+  .stat b{font-size:18px}
+  .stat .up{color:var(--good); font-size:12px}
+
+  .bdg{font-size:11.5px; border-radius:6px; padding:3px 8px; background:var(--surface); border:1px solid var(--line); color:var(--mut)}
+  .bdg.good{color:var(--good); border-color:color-mix(in srgb,var(--good) 30%,var(--line))}
+  .bdg.warn{color:var(--warn); border-color:color-mix(in srgb,var(--warn) 30%,var(--line))}
+
+  .dtable{width:100%; border-collapse:collapse; font-size:13px}
+  .dtable td,.dtable th{border-bottom:1px solid var(--line); padding:8px 10px; text-align:left}
+  .dtable th{font-size:11px; text-transform:uppercase; letter-spacing:.05em; color:var(--soft)}
+
+  @media (max-width:860px){ .statrow{grid-template-columns:repeat(2,1fr)} .maingrid{grid-template-columns:1fr !important} .threecard{grid-template-columns:1fr !important} }
+  @media (prefers-reduced-motion: reduce){ *{transition:none!important} }
+
+  /* ---- page-specific additions (kept in the same design language) ---- */
+  .anno{font-size:11px; color:var(--soft)}
+  .cardbox{border:1px solid var(--line); border-radius:10px; padding:11px 14px; font-size:12.5px; background:var(--paper)}
+  .btn-ink{background:var(--ink); color:#fff; border:0; border-radius:7px; padding:7px 12px; font-size:11.5px; cursor:pointer; font-weight:600}
+  .btn-brand{background:var(--brand); color:#fff; border:0; border-radius:7px; padding:7px 12px; font-size:11.5px; cursor:pointer; font-weight:600}
+  .btn-ghost{background:var(--paper); border:1px solid var(--line); border-radius:7px; padding:7px 12px; font-size:11.5px; cursor:pointer}
+  .sechead{font-size:14px; font-weight:700; margin:0 0 8px; font-family:var(--font-display)}
+  .cov td.ok{color:var(--good); font-weight:700}
+  .specdoc h2{font-size:18px; margin:26px 0 8px}
+  .specdoc h3{font-size:15px; margin:18px 0 6px}
+  .specdoc p, .specdoc li{font-size:13.5px; color:var(--mut)}
+  .specdoc b{color:var(--ink)}
+  .specdoc table{margin:8px 0}
+  .stageseg{flex:1; border-radius:5px; padding:5px 4px; font-size:10px; text-align:center}
+  .footlic{border-top:1px solid var(--line); padding:14px 22px; font-size:11.5px; color:var(--mut); display:flex; gap:12px; flex-wrap:wrap; align-items:center}
+  .modal{border:1.5px solid var(--ink); border-radius:12px; background:var(--paper); box-shadow:0 12px 40px rgba(20,24,32,.18); padding:14px 16px; font-size:12.5px; max-width:340px}
+  .phone{width:270px; border:1.5px solid var(--ink); border-radius:20px; background:var(--paper); overflow:hidden; box-shadow:0 8px 24px rgba(20,24,32,.12); flex:none}
+  .wirebox{border:1.5px solid var(--crit); background:#fdecec; border-radius:9px; padding:9px 11px; font-size:11.5px}
+</style>
+
+<!-- ============ (1) slim header ============ -->
+<div class="bar">
+  <div class="wrap">
+    <div class="ttl">PropertyIQ · Screen 25 — Client Portal / Homeowner Hub <small>Full-density per-screen mock · wireframe fidelity · dev-facing annotations in gray</small></div>
+    <a href="../wireframe.html">← All screens</a>
+  </div>
+</div>
+
+<!-- ============ (2) THE FULL MOCK ============ -->
+<div class="wrap" style="padding-top:24px">
+  <div class="note"><b>Screen 25 — Client Portal / Homeowner Hub.</b> The one durable, agent-branded URL a client keeps for the whole relationship: LISTING (Screen 10 owner page) → TRANSACTION mode (primary view below) → HOMEOWNER HUB at close. Hosted at portal.propertyiq.app (§9.2). Simple enough for a stressed buyer or seller to use with zero instructions (§9.1). This is a CONSUMER surface: light agent-branded chrome, no agent-console rail, "Powered by PropertyIQ" footer. Staff see the same data inside the PropClose admin app (STAFF_SESSION) — never through client links.</div>
+
+  <!-- ---------- auth flow strip (before the portal itself) ---------- -->
+  <div id="el-auth" style="margin-bottom:16px">
+    <div class="sechead">Entry — magic-link auth flow (before anything renders)</div>
+    <div style="display:flex; gap:12px; flex-wrap:wrap; align-items:stretch">
+      <div class="modal" style="border-color:var(--line)">
+        <b>✉️ Your secure link is here</b>
+        <div style="color:var(--mut); margin-top:4px">Invite email/SMS (consent-checked via NotificationProvider): "Tap to open your home purchase page — no password needed." One-time token · <b class="num" style="color:var(--ink)">30-minute default expiry</b> · reissue flow available.</div>
+        <button class="btn-brand" style="margin-top:8px">Open my page →</button>
+        <div class="anno" style="margin-top:6px">PortalAccessGrant: auth_method MAGIC_LINK, issued/expires/consumed_at, ip_hash, ua_hash, risk_flags. Link consumed once. risk_flags may force step-up on entry. Sensitive portal links NEVER use link.propertyiq.app (marketing shortener) and QR/short links are forbidden for auth (§9.2). Every auth attempt — success or fail — writes SECURITY_ACCESS_EVENT (security log, §13.5).</div>
+      </div>
+      <div class="modal" style="border-color:var(--line)">
+        <b>⏳ That link has expired</b>
+        <div style="color:var(--mut); margin-top:4px">"For your security, links only work once. We'll send you a fresh one."</div>
+        <button class="btn-ink" style="margin-top:8px">Send me a new link</button>
+        <div class="anno" style="margin-top:6px">Auth-expired state: consumed_at set or expires_at passed → re-issue screen. Returning direct URL hits this same flow. Portal session idle timeout: 30 min (Brain §21 auth table).</div>
+      </div>
+      <div class="modal">
+        <b>🔐 Quick check — it's really you?</b>
+        <div style="color:var(--mut); margin-top:4px">"Before you sign, enter the 6-digit code we texted to •••-••41."</div>
+        <div style="display:flex; gap:5px; margin-top:8px" class="num"><span class="bdg" style="padding:6px 10px">4</span><span class="bdg" style="padding:6px 10px">8</span><span class="bdg" style="padding:6px 10px">2</span><span class="bdg" style="padding:6px 10px">·</span><span class="bdg" style="padding:6px 10px">·</span><span class="bdg" style="padding:6px 10px">·</span></div>
+        <div class="anno" style="margin-top:6px">OTP/MFA step-up modal — required immediately before ANY sensitive action: signing, downloading sensitive docs, wire-related info, security/personal settings (§9.4). Auth level MAGIC_LINK → OTP_VERIFIED/MFA_VERIFIED; 10-min freshness window. SMS OTP only if ComplianceProvider permits SMS, else email [DECIDE, per security policy]. <b>Failure locks the action — never degrades to no-auth.</b></div>
+      </div>
+      <div class="modal" style="border-color:var(--line)">
+        <b>🚪 This page is closed right now</b>
+        <div style="color:var(--mut); margin-top:4px">"Your portal access is paused. Questions? Call or text Graeham directly — (650) 555-0142."</div>
+        <div class="anno" style="margin-top:6px">Access-status handling: PortalRecord.access_status INVITED / ACTIVE / SUSPENDED / ARCHIVED — SUSPENDED and ARCHIVED render this polite closed-door page with agent contact, nothing else (§6.11).</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ================= PRIMARY: TRANSACTION MODE ================= -->
+  <div class="site" data-agent="watts">
+    <!-- agent-branded consumer header -->
+    <div class="sitehead" id="el-branding">
+      <div class="avatar">GW</div>
+      <div class="who"><b>Graeham Watts <span class="bdg" style="font-weight:400">Intero Real Estate</span></b><small>Your home purchase · 42 Cedar St, Menlo Park</small></div>
+      <nav><a href="#">Messages <span class="bdg" style="font-size:9.5px">1</span></a><a href="#">Docs</a></nav>
+    </div>
+    <div class="anno" style="padding:6px 22px 0">Header + footer resolve from branding_ref → identity configuration (pilot: Graeham Watts, DRE 01466876, Intero Real Estate — §9.3). Read-only, brand-locked: rendered exactly as resolved, never editable, never hardcoded. The identity.json-blocklisted legacy DRE must never appear on any portal surface.</div>
+
+    <div style="padding:14px 22px 0">
+      <!-- hero: day counter + stage strip -->
+      <div id="el-hero" style="border:1px solid var(--line); border-radius:12px; padding:14px 16px; background:var(--brand-soft)">
+        <b style="font-size:15px" id="el-daycounter">You're on day 11 of 21 — on track for keys July 25 🔑</b>
+        <div style="display:flex; gap:4px; margin-top:9px">
+          <div class="stageseg" style="background:var(--brand); color:#fff">Offer accepted ✓</div>
+          <div class="stageseg" style="background:var(--brand); color:#fff">Deposit in ✓</div>
+          <div class="stageseg" style="background:var(--brand); color:#fff">Inspection ✓</div>
+          <div class="stageseg" style="background:#fff; color:var(--ink); border:1.5px solid var(--brand); font-weight:700">Loan — this week</div>
+          <div class="stageseg" style="background:var(--surface); color:var(--soft)">Signing</div>
+          <div class="stageseg" style="background:var(--surface); color:var(--soft)">Keys!</div>
+        </div>
+        <div class="anno" style="margin-top:6px">Stage strip = TRANSACTION_STATUS view (read-only). 6 client-language segments map to the 7 canonical stages (§9.5); current outlined, complete filled. Day/close counter from contract_date + close_date_target (§6.5) — a close-date re-cascade updates here only AFTER staff acknowledgment on Screen 15, so the client never sees an unconfirmed date.</div>
+      </div>
+
+      <!-- three-card row -->
+      <div class="threecard" style="display:grid; grid-template-columns:repeat(3,1fr); gap:10px; margin-top:12px; font-size:12.5px">
+        <!-- MY_TASKS -->
+        <div class="cardbox" id="el-tasks">
+          <b>Your 2 to-dos</b>
+          <div style="margin-top:7px; display:grid; gap:6px">
+            <label style="display:flex; gap:8px; align-items:flex-start"><input type="checkbox"> <span>Upload your homeowner's insurance quote <span class="bdg" style="font-size:9.5px">due Thu</span></span></label>
+            <label style="display:flex; gap:8px; align-items:flex-start"><input type="checkbox" checked> <span style="color:var(--soft); text-decoration:line-through">Wire deposit confirmation received ✓</span></label>
+            <div style="background:var(--surface); border-radius:7px; padding:7px 9px">Confirm final walkthrough: <b>Thu Jul 24, 5:00 PM?</b>
+              <div style="display:flex; gap:6px; margin-top:5px"><button class="btn-brand">✓ Works for me</button><button class="btn-ghost">Suggest another time</button></div>
+            </div>
+            <a href="#" style="color:var(--brand); font-size:11.5px">Need help with a task? Ask Graeham →</a>
+          </div>
+          <div class="anno" style="margin-top:6px">MY_TASKS view: TransactionTask where assigned_to_contact_id = me, type CLIENT_ACTION (§6.8). Complete inline / upload / request help. Booking confirm = the 2-tap BOOKING_REQUEST_TASK pattern — the client confirms; there is NO AI auto-booking (§11.6).</div>
+        </div>
+        <!-- FROM AGENT / milestones teaser -->
+        <div class="cardbox" id="el-fromagent">
+          <b>From Graeham</b>
+          <div style="margin-top:7px; background:var(--surface); border-radius:8px; padding:8px 10px">
+            <div style="display:flex; gap:8px; align-items:center"><span style="font-size:18px">🎥</span><div><b>"Your deposit is in — here's what happens next"</b><div style="color:var(--mut); font-size:11px" class="num">0:48 · watched ✓</div></div></div>
+            <div style="border:1px solid var(--line); border-radius:6px; margin-top:6px; padding:4px 8px; font-size:10px; color:var(--mut)">▶ AI-assisted video — disclosure shown on frame one (non-removable)</div>
+          </div>
+          <div class="anno" style="margin-top:6px">Milestone video from the PropFlow personalized-video system. Play → watch tracked. AI video is gated on ai_video consent + REVIEW_REQUIRED default; the CA AI disclosure frame cannot be removed (§15.5; matrix correction #3). No consent → text milestone message instead, never a silent fallback.</div>
+        </div>
+        <!-- DOCUMENTS summary + wire warning -->
+        <div class="cardbox" id="el-doccard">
+          <b>Documents</b>
+          <div style="color:var(--mut); margin-top:7px" class="num">7 shared with you · <span class="bdg warn">2 need signatures</span></div>
+          <button class="btn-ink" style="margin-top:7px" id="el-docusign">Review & sign (DocuSign) →</button>
+          <div class="wirebox" style="margin-top:8px" id="el-wire">🔒 <b>Wire details are NEVER posted here.</b> We confirm wiring info by a verified phone call only — beware lookalike emails "from" us with account numbers.</div>
+          <div class="anno" style="margin-top:6px">Signing entry: SignatureStatus PENDING → OTP step-up → DocuSign ceremony (§6.9, §9.4). Wire-safety notice is static and always-on (§13.4): wire content is HIGH_SECURITY_WIRE, quarantined + hidden from the portal unless ALL six gates pass (legal_review + wire_protocol + ComplianceProfile flag + feature flag + audit logging + OTP/MFA) — under any failure, wire info is simply never rendered.</div>
+        </div>
+      </div>
+
+      <!-- DOCUMENTS full section -->
+      <div id="el-documents" style="margin-top:14px">
+        <div class="sechead">Documents shared with you</div>
+        <table class="dtable" style="font-size:12px">
+          <tr><th>Document</th><th>Status</th><th>Actions</th></tr>
+          <tr><td>Purchase agreement (fully executed)</td><td><span class="bdg good">Signed ✓</span></td><td><button class="btn-ghost">View</button> <button class="btn-ghost">Download</button></td></tr>
+          <tr><td>Loan contingency removal — CR-1</td><td><span class="bdg warn">Needs your signature</span></td><td><button class="btn-ink">Sign (code check first) →</button></td></tr>
+          <tr><td>Walkthrough verification — VP</td><td><span class="bdg warn">Needs your signature</span></td><td><button class="btn-ink">Sign (code check first) →</button></td></tr>
+          <tr><td>Home inspection report</td><td><span class="bdg">Shared Jul 9</span></td><td><button class="btn-ghost">View</button> <span class="anno">watermarked copy</span></td></tr>
+          <tr><td>Closing disclosure (sensitive)</td><td><span class="bdg">Shared Jul 14</span></td><td><button class="btn-ghost">🔐 View — code check first</button> <span class="anno">download off for this doc</span></td></tr>
+        </table>
+        <div class="anno" style="margin-top:5px">DOCUMENTS view: TransactionDocument filtered by DocumentAccessPolicy — allowed_contact_ids + security-class scope; each of multiple contacts on one portal sees only their own doc scope (per_document_permissions). Every view logs DOCUMENT_ACCESS_EVENT for sensitive docs (security audit log SECURITY_AUDIT_7Y, §13.5); non-sensitive downloads log DOC_DOWNLOADED to the Event Ledger. download_allowed and watermark_required honored per doc (§6.9, §8.6, §13.3). Sensitive open/download = OTP step-up first. No raw MLS data, no other parties' PII — ever.</div>
+      </div>
+
+      <!-- UPLOAD -->
+      <div id="el-upload" style="margin-top:14px">
+        <div class="sechead">Send us a document</div>
+        <div class="cardbox" style="border-style:dashed; text-align:center; padding:18px; color:var(--mut)">
+          ⬆ Drag a file here or <b style="color:var(--brand)">tap to upload</b> — e.g. your insurance quote
+          <div class="anno" style="margin-top:5px">UPLOAD view: DocumentSource = CLIENT_PORTAL_UPLOAD intake pathway (§8.2). Upload → staff-side classification queue → filed to the transaction. Client sees "Got it — Graeham's team will file this," never the classification machinery.</div>
+        </div>
+      </div>
+
+      <!-- MESSAGES -->
+      <div id="el-messages" style="margin-top:14px">
+        <div class="sechead">Messages with Graeham</div>
+        <div class="cardbox">
+          <div style="display:grid; gap:7px; font-size:12.5px">
+            <div style="justify-self:start; background:var(--surface); border-radius:10px 10px 10px 3px; padding:7px 11px; max-width:75%"><b style="font-size:11px; color:var(--mut)">Graeham · Mon 9:12 AM</b><div>Appraisal came back at value — one more box checked. Loan docs expected Thursday.</div></div>
+            <div style="justify-self:end; background:var(--brand-soft); border-radius:10px 10px 3px 10px; padding:7px 11px; max-width:75%"><b style="font-size:11px; color:var(--mut)">You · Mon 9:40 AM</b><div>Great news! Should we start scheduling movers for the 26th?</div></div>
+          </div>
+          <div style="display:flex; gap:6px; margin-top:9px"><input placeholder="Write a message…" style="flex:1; border:1px solid var(--line); border-radius:8px; padding:8px 10px; font:12.5px var(--font-ui); background:var(--paper)"><button class="btn-ghost">📎 Attach</button><button class="btn-brand">Send</button></div>
+          <div class="anno" style="margin-top:6px">MESSAGES view routes to PropFlow's conversation/inbox layer — PortalMessageToPropFlow (capture_source PORTAL, capture_provider PROPERTYIQ_FORM, §11.5). Attach limited to docs already shared with this contact. <b>Sensitive-topic firewall:</b> if a message mentions divorce, estate, illness, or financial distress → human_handoff_required=true, ALL automation stops on this thread; only Graeham replies. Nothing here exits to staff surfaces.</div>
+        </div>
+      </div>
+
+      <!-- MILESTONES -->
+      <div id="el-milestones" style="margin-top:14px">
+        <div class="sechead">Milestones & key dates</div>
+        <div class="cardbox">
+          <table class="dtable" style="font-size:12px">
+            <tr><th>Milestone</th><th>Date</th><th></th></tr>
+            <tr><td>🤝 Offer accepted</td><td class="num">Jul 4</td><td><span class="bdg good">Done ✓</span></td></tr>
+            <tr><td>💰 Deposit is in</td><td class="num">Jul 7</td><td><span class="bdg good">Done ✓ · 🎥 video message</span></td></tr>
+            <tr><td>🔍 Inspection complete</td><td class="num">Jul 9</td><td><span class="bdg good">Done ✓</span></td></tr>
+            <tr><td>🏦 Loan approval</td><td class="num">due Jul 17</td><td><span class="bdg warn">This week</span></td></tr>
+            <tr><td>🚶 Final walkthrough</td><td class="num">Jul 24</td><td><span class="bdg">Confirm time above</span></td></tr>
+            <tr><td>🔑 Keys / close of escrow</td><td class="num">target Jul 25</td><td><span class="bdg">On track</span></td></tr>
+          </table>
+          <div class="anno" style="margin-top:5px">MILESTONES view (read-only): TRANSACTION_MILESTONE events — inspection deadline, close target, walkthrough (§9.5). Milestone notifications deep-link back to this section. Dates shown only after staff acknowledgment; nothing speculative.</div>
+        </div>
+      </div>
+
+      <!-- SELL-SIDE: showing feedback + weekly embed -->
+      <div id="el-sellside" style="margin-top:14px">
+        <div class="sechead">Sell-side sections (render only on listing-side portals)</div>
+        <div style="display:grid; grid-template-columns:1fr 1.2fr; gap:10px" class="maingrid">
+          <div class="cardbox" id="el-feedback">
+            <b>What buyers said after showings</b> <span class="bdg" style="font-size:9.5px">SHOWING_FEEDBACK</span>
+            <div style="color:var(--mut); margin-top:6px; display:grid; gap:6px; font-size:12px">
+              <div style="border-left:3px solid var(--line); padding-left:9px">"Loved the light in the kitchen — buyers are comparing against a home on Poplar." <span class="anno">Sat 2:15 PM</span></div>
+              <div style="border-left:3px solid var(--line); padding-left:9px">"Great layout; some concern about street parking." <span class="anno">Sun 11:30 AM</span></div>
+            </div>
+            <div class="anno" style="margin-top:6px">Verbatim showing feedback, read-only, from the WeeklyListingUpdateEmbed payload — shown only where available AND approved (§9.5, §9.6).</div>
+          </div>
+          <div class="cardbox" id="el-weekly">
+            <b>Your weekly listing report</b> <span class="bdg" style="font-size:9.5px">WEEKLY_LISTING_UPDATE</span>
+            <div style="border:1px solid var(--line); border-radius:8px; margin-top:6px; padding:9px 11px; background:var(--surface)">
+              <div style="font-size:12px" class="num"><b>Week of Jul 7–13:</b> 214 views · 11 saves · 4 showings · 2 feedback entries · market: 3 new comps nearby</div>
+              <div class="anno" style="margin-top:4px">— PropCast-produced embed (payload_schema weekly_listing_update.v1); PropCast owns the contract (R12), PropClose embeds it.</div>
+            </div>
+            <div class="anno" style="margin-top:6px">Authenticated view only (requires_authenticated_portal_session:true, no_public_indexing:true). Viewing emits PORTAL_VIEWED; hosted renderer may emit PAGE_VIEWED (privacy-checked). No raw MLS data, no ad pixels inside the authenticated portal (§13.10). <b>Fail-closed:</b> embed unavailable → this whole section is hidden + a staff task is created; a stale or fabricated seller report is never shown (§9.6).</div>
+          </div>
+        </div>
+      </div>
+
+      <!-- SETTINGS -->
+      <div id="el-settings" style="margin-top:14px">
+        <div class="sechead">Settings</div>
+        <div class="cardbox" style="display:grid; grid-template-columns:1fr 1fr; gap:10px" >
+          <div>
+            <b>How should we reach you?</b>
+            <div style="margin-top:6px; display:grid; gap:5px; font-size:12px; color:var(--mut)">
+              <label><input type="checkbox" checked> Email me milestone updates</label>
+              <label><input type="checkbox" checked> Text me when something needs my signature</label>
+              <label><input type="checkbox"> Weekly summary email</label>
+            </div>
+          </div>
+          <div>
+            <b>Security</b>
+            <div style="margin-top:6px; font-size:12px; color:var(--mut)">Phone for codes: •••-••41 <button class="btn-ghost" style="margin-left:6px">🔐 Change — code check first</button></div>
+            <div class="anno" style="margin-top:6px">SETTINGS view: contact prefs + notification channels from PortalRecord/consent fields. Any security/personal-data change = OTP step-up (§9.4, §9.5); the change itself writes SECURITY_ACCESS_EVENT.</div>
+          </div>
+        </div>
+      </div>
+
+      <!-- same link forever note -->
+      <div id="el-samelink" style="font-size:11.5px; color:var(--soft); margin-top:12px">💡 At closing this page becomes your <b style="color:var(--ink)">Homeowner Hub</b> — home value tracker, equity card, your home anniversary, and an annual home review with Graeham. <b style="color:var(--ink)">Same link, forever.</b> <span class="anno">(static note; mode flips automatically on DEAL_CLOSED §9.7 — see hub mock below)</span></div>
+    </div>
+
+    <!-- licensed footer -->
+    <div class="footlic" id="el-footer" style="margin-top:16px">
+      <span><b style="color:var(--ink)">Graeham Watts</b> · REALTOR® · DRE# 01466876 · Intero Real Estate Services</span>
+      <span style="margin-left:auto">Powered by <b style="color:var(--ink)">PropertyIQ</b></span>
+    </div>
+  </div>
+  <div class="anno" style="margin:6px 0 0">Footer = compliance-required licensed identity block, exact brand-lock match from identity configuration (§9.3) + the consumer "Powered by PropertyIQ" mark. Attribution/analytics on this page: canonical PORTAL_VIEWED events only — no ad pixels, GPC/DNT/opt-out respected (§13.10).</div>
+
+  <!-- ================= HOMEOWNER HUB MODE ================= -->
+  <div id="el-homeowner" style="margin-top:22px">
+    <div class="sechead">Same URL, after close — HOMEOWNER HUB mode (flips automatically on DEAL_CLOSED, §9.7)</div>
+    <div class="site" data-agent="watts">
+      <div class="sitehead">
+        <div class="avatar">GW</div>
+        <div class="who"><b>Graeham Watts <span class="bdg" style="font-weight:400">Intero Real Estate</span></b><small>Your home · 42 Cedar St, Menlo Park</small></div>
+        <nav><a href="#">Messages</a><a href="#">Docs archive</a></nav>
+      </div>
+      <div style="padding:14px 22px; display:grid; grid-template-columns:1fr 1fr; gap:10px" class="maingrid">
+        <div class="cardbox" id="el-closesummary">
+          <b>🔑 You closed on July 25, 2026</b>
+          <div style="color:var(--mut); margin-top:5px; font-size:12px" class="num">42 Cedar St · closed at $1,485,000 · 21-day escrow · your closing docs live in the archive above</div>
+          <div class="anno" style="margin-top:5px">Close summary from TransactionRecord post-DEAL_CLOSED (§9.7). Facts only, every number sourced; unknown stats are omitted, never fabricated (R8).</div>
+        </div>
+        <div class="cardbox" id="el-anniversary">
+          <b>🏠 Home anniversary — July 25</b>
+          <div style="color:var(--mut); margin-top:5px; font-size:12px">One year in your home this July. Graeham will check in around then.</div>
+          <div class="anno" style="margin-top:5px">From close_date / home_anniversary_date, synced to PropFlow at close (§12.3 step 13). Reminder cadence is owned by PropFlow/Wattson (Past Client OS) — PropClose never runs cadence (§9.7).</div>
+        </div>
+        <div class="cardbox" id="el-equity">
+          <b>📈 Your equity snapshot</b> <span class="bdg warn" style="font-size:9.5px">ESTIMATE</span>
+          <div style="color:var(--mut); margin-top:5px; font-size:12px" class="num">Estimated value range: $1.51M–$1.61M · your mortgage balance: <b style="color:var(--ink)">not on file</b> → equity shown as <b style="color:var(--ink)">"estimate unavailable"</b> until you add it.</div>
+          <button class="btn-ghost" style="margin-top:6px">Update my mortgage info</button>
+          <div class="anno" style="margin-top:5px">EQUITY_SNAPSHOT view (read-only): PropSearch EQUITY_CARD — PropClose computes NO AVM/equity/scores locally (§9.7). Always labeled ESTIMATE with a range. Unknown balance = MISSING_MORTGAGE_BALANCE → manual-entry prompt, never a fabricated number (matrix correction #7). No Zillow/Zestimate-branded or -referencing template anywhere (§9.7).</div>
+        </div>
+        <div class="cardbox" id="el-cma">
+          <b>📊 Your annual home value report</b>
+          <div style="color:var(--mut); margin-top:5px; font-size:12px">2027 report arrives next July — or ask for one any time.</div>
+          <div style="display:flex; gap:6px; margin-top:6px"><button class="btn-ghost">View last report</button><button class="btn-brand">Request an update</button></div>
+          <div class="anno" style="margin-top:5px">ANNUAL_CMA view (read-only in PropClose): delivery surface only, shown when PropFlow/PropSearch exposes the CMA (§9.7). CMA sends remain review-first per the workspace send policy.</div>
+        </div>
+        <div class="cardbox" id="el-referral" style="border-color:var(--brand); background:var(--brand-soft)">
+          <b>💛 Know someone thinking about a move?</b>
+          <div style="color:var(--mut); margin-top:5px; font-size:12px">Introductions are the nicest compliment. Two fields, ten seconds.</div>
+          <button class="btn-brand" style="margin-top:6px">Introduce a friend →</button>
+          <div class="anno" style="margin-top:5px">REFERRAL view: CTA routes to PropFlow referral intake (§9.7) — the only "marketing" element in the hub, and it's client-initiated.</div>
+        </div>
+        <div class="cardbox" id="el-touchlog">
+          <b>🗒 Recent check-ins</b>
+          <div style="color:var(--mut); margin-top:5px; font-size:12px" class="num">Jul 2 — market update email · May 1 — call with Graeham ✓ · Mar 12 — home value report (you opened it)</div>
+          <div class="anno" style="margin-top:5px">Past-client touch log: display-only, rendered if PropFlow exposes it; cadence is owned by PropFlow/Wattson, never PropClose (§9.7). homeowner_sections_enabled controls which of these six cards render at all.</div>
+        </div>
+      </div>
+      <div class="footlic"><span><b style="color:var(--ink)">Graeham Watts</b> · REALTOR® · DRE# 01466876 · Intero Real Estate Services</span><span style="margin-left:auto">Powered by <b style="color:var(--ink)">PropertyIQ</b></span></div>
+    </div>
+  </div>
+
+  <!-- listing mode strip -->
+  <div id="el-listingmode" style="margin-top:18px">
+    <div class="cardbox" style="background:var(--surface)">
+      <b>Third face of the same URL — LISTING mode (pre-contract, sell side)</b>
+      <div style="color:var(--mut); font-size:12px; margin-top:4px">Before a contract exists, the portal surface IS the Screen 10 weekly seller dashboard / owner page — one artifact, one URL (matrix correction #8). The Monday doorway email deep-links here. When the listing goes into contract, the same URL becomes the TRANSACTION view above; at close, the Homeowner Hub. See Screen 10 for the full listing-mode mock.</div>
+    </div>
+  </div>
+
+  <!-- states strip -->
+  <div id="el-states" style="margin-top:14px">
+    <div class="cardbox" style="font-size:11.5px">
+      <b>States (dev reference)</b>
+      <div style="color:var(--mut); margin-top:4px">
+        <b style="color:var(--ink)">Loading:</b> branded skeleton, hero renders first — the client always sees the agent's name and the progress statement before anything else.
+        <b style="color:var(--ink)">Empty (newly invited):</b> hero + "Nothing needed from you right now — Graeham's team is on it." No blank panels.
+        <b style="color:var(--ink)">Degraded (all fail-closed):</b> weekly embed unavailable → section hidden + staff task, never stale · equity without mortgage balance → "estimate unavailable" + manual-entry prompt, never guessed · document service down → list renders without download actions · wire info → NEVER rendered under any failure combination · OTP failure → the sensitive action stays locked.
+        <b style="color:var(--ink)">Permission-limited:</b> every doc filtered by per_document_permissions; sections absent from transaction_sections_enabled / homeowner_sections_enabled don't render at all (§6.11 PortalSection enum, 12 views); multiple contacts on one portal each see only their own task/doc scope.
+        <b style="color:var(--ink)">Auth-expired:</b> consumed/expired link → "send me a new link" screen (mocked in the auth strip above).
+        <b style="color:var(--ink)">Suspended/Archived:</b> polite closed-door page with agent contact (mocked above).
+      </div>
+    </div>
+  </div>
+
+  <!-- mobile variant strip -->
+  <div id="el-mobile" style="margin-top:14px">
+    <div class="sechead">Mobile (375px) — single column, action bias, zero instructions</div>
+    <div style="display:flex; gap:14px; flex-wrap:wrap; align-items:flex-start">
+      <div class="phone">
+        <div style="padding:10px 12px; border-bottom:1px solid var(--line); display:flex; gap:8px; align-items:center"><div class="avatar" style="width:26px; height:26px; font-size:11px">GW</div><div style="font-size:11.5px"><b>Graeham Watts</b><div style="color:var(--mut); font-size:10px">42 Cedar St</div></div></div>
+        <div style="padding:10px 12px">
+          <div style="background:var(--brand-soft); border-radius:9px; padding:9px 10px; font-size:11px"><b>Day 11 of 21 — keys Jul 25 🔑</b>
+            <div style="display:flex; gap:3px; margin-top:6px; overflow-x:auto; padding-bottom:2px">
+              <span class="stageseg" style="background:var(--brand); color:#fff; flex:none; padding:3px 8px; font-size:9px">Offer ✓</span><span class="stageseg" style="background:var(--brand); color:#fff; flex:none; padding:3px 8px; font-size:9px">Deposit ✓</span><span class="stageseg" style="background:var(--brand); color:#fff; flex:none; padding:3px 8px; font-size:9px">Inspection ✓</span><span class="stageseg" style="background:#fff; border:1px solid var(--brand); flex:none; padding:3px 8px; font-size:9px; font-weight:700">Loan</span><span class="stageseg" style="background:var(--surface); color:var(--soft); flex:none; padding:3px 8px; font-size:9px">Signing</span><span class="stageseg" style="background:var(--surface); color:var(--soft); flex:none; padding:3px 8px; font-size:9px">Keys!</span>
+            </div>
+          </div>
+          <div style="border:1px solid var(--line); border-radius:9px; padding:8px 10px; margin-top:8px; font-size:11px"><b>Your to-dos (first — action bias)</b><div style="color:var(--mut); margin-top:3px">⬆ Insurance quote · 🕔 Confirm walkthrough <b>(2 taps)</b></div></div>
+          <div style="border:1px solid var(--line); border-radius:9px; padding:8px 10px; margin-top:6px; font-size:11px"><b>Documents</b> <span class="bdg warn" style="font-size:9px">2 to sign</span><div class="anno" style="margin-top:2px">🔒 wire details never posted here</div></div>
+        </div>
+        <div style="border-top:1px solid var(--line); display:flex; text-align:center; font-size:10.5px; position:sticky; bottom:0; background:var(--paper)">
+          <div style="flex:1; padding:10px 4px">💬 Messages</div><div style="flex:1; padding:10px 4px; border-left:1px solid var(--line); border-right:1px solid var(--line)">📄 Docs</div><div style="flex:1; padding:10px 4px; font-weight:700">✅ To-dos</div>
+        </div>
+      </div>
+      <div class="anno" style="max-width:420px">Single column; hero stage strip horizontally scrollable; to-dos render first (action bias); sticky bottom bar Messages · Docs · To-dos; every tap target ≥44px. Magic-link entry means no password on a phone, ever; OTP step-up modal is full-screen on mobile. Zero-instruction rule (§9.1): a stressed client must be able to use this with no onboarding.</div>
+    </div>
+  </div>
+
+  <!-- ============ Spec gaps found (Master Brain vs spec) ============ -->
+  <div class="note" style="margin-top:26px"><b>Spec gaps found — PropClose Master Brain details the spec missed (all rendered above):</b>
+    (1) <b>Auth launch defaults are specified, not open:</b> the Brain's auth table fixes magic-link tokens at one-time / 30-minute default expiry with a reissue flow, portal session idle timeout 30 min, and OTP/MFA freshness 10 min — the spec's open decision guessed "7 days / 15 minutes" [BEST GUESS]; the Brain's defaults are rendered in the auth strip.
+    (2) <b>MY_TASKS includes a "request help" interaction</b> in the Brain's 12-views table (mark complete / upload file / request help) — rendered as the "Need help with a task?" link.
+    (3) <b>EQUITY_SNAPSHOT and ANNUAL_CMA are explicitly read-only in PropClose</b> per the views table — annotated on both hub cards.
+    (4) <b>Every auth attempt (including failures) writes SECURITY_ACCESS_EVENT</b>, and security-settings changes do too — annotated in the auth strip and Settings.
+    (5) <b>Wire display is gated on six simultaneous flags</b> (legal_review_approved, wire_protocol_approved, ComplianceProfile.allows_wire_instruction_portal, feature flag, audit logging, OTP/MFA) with quarantine as the v1 default — annotated on the Documents card; the spec only carried the always-on warning.
+    (6) <b>Non-sensitive downloads log DOC_DOWNLOADED (Event Ledger) vs sensitive DOCUMENT_ACCESS_EVENT (security log)</b> — the two-log split is annotated in the Documents section.
+  </div>
+
+  <!-- ============ (3) ELEMENT COVERAGE ============ -->
+  <h2 style="font-size:20px; margin:30px 0 10px">Element coverage — spec inventory → this page</h2>
+  <table class="dtable cov" style="font-size:12.5px">
+    <tr><th>Spec inventory element</th><th>Rendered at</th><th>Status</th></tr>
+    <tr><td>Magic-link login (one-time, expiring, risk_flags)</td><td><a href="#el-auth">Auth flow strip</a></td><td class="ok">✓</td></tr>
+    <tr><td>OTP/MFA step-up modal (before any sensitive action, fail-locked)</td><td><a href="#el-auth">Auth flow strip</a></td><td class="ok">✓</td></tr>
+    <tr><td>Agent-branded header/footer (brand-locked identity)</td><td><a href="#el-branding">Header</a> + <a href="#el-footer">footer</a></td><td class="ok">✓</td></tr>
+    <tr><td>Stage strip (TRANSACTION_STATUS, 6 client-language segments)</td><td><a href="#el-hero">Hero card</a></td><td class="ok">✓</td></tr>
+    <tr><td>Day/close counter (re-cascade only after staff ack)</td><td><a href="#el-daycounter">Hero card</a></td><td class="ok">✓</td></tr>
+    <tr><td>MY_TASKS card (inline complete, 2-tap booking confirm)</td><td><a href="#el-tasks">Your to-dos</a></td><td class="ok">✓</td></tr>
+    <tr><td>DOCUMENTS section (access policy, watermarks, access events)</td><td><a href="#el-documents">Documents table</a> + <a href="#el-doccard">card</a></td><td class="ok">✓</td></tr>
+    <tr><td>UPLOAD section (CLIENT_PORTAL_UPLOAD intake)</td><td><a href="#el-upload">Send us a document</a></td><td class="ok">✓</td></tr>
+    <tr><td>MESSAGES section (PropFlow routing, sensitive handoff)</td><td><a href="#el-messages">Messages</a></td><td class="ok">✓</td></tr>
+    <tr><td>MILESTONES section (feed + personalized video, AI-disclosure gated)</td><td><a href="#el-milestones">Milestones</a> + <a href="#el-fromagent">From Graeham</a></td><td class="ok">✓</td></tr>
+    <tr><td>Wire-safety warning (permanent, always-on)</td><td><a href="#el-wire">Documents card</a></td><td class="ok">✓</td></tr>
+    <tr><td>SHOWING_FEEDBACK section (sell side, verbatim)</td><td><a href="#el-feedback">Sell-side sections</a></td><td class="ok">✓</td></tr>
+    <tr><td>WEEKLY_LISTING_UPDATE embed (authenticated, fail-closed hidden)</td><td><a href="#el-weekly">Sell-side sections</a></td><td class="ok">✓</td></tr>
+    <tr><td>SETTINGS section (prefs; security = step-up)</td><td><a href="#el-settings">Settings</a></td><td class="ok">✓</td></tr>
+    <tr><td>DocuSign signing entry ("2 need signatures" → step-up → ceremony)</td><td><a href="#el-docusign">Documents card</a> + table rows</td><td class="ok">✓</td></tr>
+    <tr><td>Homeowner Hub: close summary</td><td><a href="#el-closesummary">Hub mock</a></td><td class="ok">✓</td></tr>
+    <tr><td>Home anniversary card</td><td><a href="#el-anniversary">Hub mock</a></td><td class="ok">✓</td></tr>
+    <tr><td>Equity card (labeled ESTIMATE, missing-balance prompt)</td><td><a href="#el-equity">Hub mock</a></td><td class="ok">✓</td></tr>
+    <tr><td>Annual CMA surface</td><td><a href="#el-cma">Hub mock</a></td><td class="ok">✓</td></tr>
+    <tr><td>Referral CTA (→ PropFlow referral intake)</td><td><a href="#el-referral">Hub mock</a></td><td class="ok">✓</td></tr>
+    <tr><td>Past-client touch log (display-only, PropFlow-owned cadence)</td><td><a href="#el-touchlog">Hub mock</a></td><td class="ok">✓</td></tr>
+    <tr><td>"Same link forever" note</td><td><a href="#el-samelink">Below Settings</a></td><td class="ok">✓</td></tr>
+    <tr><td>Access status handling (INVITED/ACTIVE/SUSPENDED/ARCHIVED closed-door)</td><td><a href="#el-auth">Auth flow strip</a></td><td class="ok">✓</td></tr>
+  </table>
+  <div style="border:1.5px solid var(--good); background:#f2f8f4; border-radius:10px; padding:12px 16px; margin:12px 0 0; font-weight:700; color:var(--good)">23 of 23 spec elements rendered ✓ <span style="font-weight:400; color:var(--mut); font-size:12.5px">— plus prompt-required regions beyond the inventory: listing-mode strip, homeowner-hub full mock, auth flow strip (4 screens), states strip, mobile variant; plus the 6 Master-Brain additions in the "Spec gaps found" note above.</span></div>
+
+  <!-- ============ (4) FULL SPEC AS HTML ============ -->
+  <div class="specdoc">
+    <h1 style="font-size:24px; margin:40px 0 6px">Spec — 25 · Client Portal / Homeowner Hub</h1>
+    <p><b>Purpose</b> The one durable, agent-branded URL a client keeps for the whole relationship: LISTING (weekly seller dashboard / owner page, Screen 10) → TRANSACTION mode (this screen's primary view) → HOMEOWNER HUB at close. It exists to reduce client anxiety and "where are we?" calls — simple enough for a stressed buyer or seller to use without instructions (PropClose §9.1). Hosted at portal.propertyiq.app (§9.2).</p>
+    <p><b>Primary users</b> Buyer/seller clients (contact_ids on the PortalRecord). Staff view the same data inside the PropClose admin app (STAFF_SESSION), never through client links.</p>
+    <p><b>Entry points</b> Magic-link email/SMS invite (sent via NotificationProvider, consent-checked) · returning direct URL (re-issues magic link) · milestone notification links · Monday doorway email (listing mode) · QR/short links are FORBIDDEN for auth — sensitive portal links never use link.propertyiq.app (§9.2).</p>
+    <p><b>Exit points</b> DocuSign signing ceremony (after OTP step-up) · document download (step-up if sensitive) · message thread (routes to PropFlow inbox) · referral CTA → PropFlow referral intake (homeowner mode) · underwriter/equity deep links (homeowner mode) · nothing exits to staff surfaces.</p>
+
+    <h2>Layout</h2>
+    <p><b>Desktop:</b> Header — agent avatar + agent name (branding_ref resolved from identity config — pilot: Graeham Watts, DRE 01466876, Intero Real Estate, §9.3), context subtitle ("Your home purchase · 42 Cedar St"), nav: Messages (badge), Docs. Hero card — progress statement ("You're on day 11 of 21 — on track for keys July 25 🔑") + a 6-segment client-language stage strip (Offer accepted / Deposit in / Inspection / Loan — this week / Signing / Keys!). Client-friendly labels map to the 7 canonical stages; current stage outlined, complete filled. Three-card row — "Your to-dos" (client tasks) · "From {agent}" (milestone video/messages) · "Documents" (shared count, signature needs, wire warning). Below (12 sections as enabled): status, tasks, docs, upload, messages, milestones, showing feedback, weekly update embed, settings — per transaction_sections_enabled (§6.11 PortalSection enum). Footer — licensed identity block (agent name, DRE, brokerage — exact brand-lock match) + "Powered by PropertyIQ".</p>
+    <p><b>Mobile (375px):</b> single column; hero stage strip horizontally scrollable; to-dos first (action bias); sticky bottom bar: Messages · Docs · To-dos. Everything tap-target ≥44px; zero instructions needed.</p>
+
+    <h2>Element inventory</h2>
+    <div style="overflow-x:auto">
+    <table class="dtable">
+      <tr><th>Element</th><th>What it shows/does</th><th>Data source</th><th>Interactions</th><th>Spec source</th></tr>
+      <tr><td>Magic-link login</td><td>passwordless entry; link consumed once, expiring</td><td>PortalAccessGrant (auth_method MAGIC_LINK, issued/expires/consumed_at, ip_hash, ua_hash, risk_flags)</td><td>request new link; risk_flags may force step-up</td><td>§6.11, §9.4</td></tr>
+      <tr><td>OTP/MFA step-up modal</td><td>re-verifies before ANY sensitive action: signing, downloading sensitive docs, wire-related info, security/personal settings changes</td><td>PortalAuthLevel MAGIC_LINK→OTP_VERIFIED/MFA_VERIFIED</td><td>enter code; failure locks action, never degrades</td><td>§9.4</td></tr>
+      <tr><td>Agent-branded header/footer</td><td>name, photo, DRE, brokerage exactly from identity configuration</td><td>branding_ref → identity.json (pilot DRE 01466876)</td><td>none — read-only, brand-locked</td><td>§9.3</td></tr>
+      <tr><td>Stage strip (TRANSACTION_STATUS)</td><td>client-language progress: 6 segments incl. "Keys!"</td><td>TransactionRecord.current_stage mapped</td><td>none</td><td>§9.5; draft Screen 25</td></tr>
+      <tr><td>Day/close counter</td><td>"day 11 of 21 — keys July 25"</td><td>contract_date, close_date_target</td><td>none; re-cascade updates only after staff acknowledgment (Screen 15)</td><td>§6.5</td></tr>
+      <tr><td>MY_TASKS card</td><td>client to-dos ("upload insurance quote", "confirm walkthrough time — 2 taps")</td><td>TransactionTask where assigned_to_contact_id, type CLIENT_ACTION</td><td>complete inline; booking confirm = 2-tap (BOOKING_REQUEST_TASK, no AI auto-booking §11.6)</td><td>§6.8, §11.6</td></tr>
+      <tr><td>DOCUMENTS section</td><td>docs shared with this contact per DocumentAccessPolicy; signature-needed badges</td><td>TransactionDocument filtered by allowed_contact_ids + security class scope</td><td>view (DOCUMENT_ACCESS_EVENT logged), download if download_allowed, watermark if watermark_required; sensitive = OTP step-up first</td><td>§6.9, §8.6, §13.3</td></tr>
+      <tr><td>UPLOAD section</td><td>client uploads docs into intake pathway CLIENT_PORTAL_UPLOAD</td><td>DocumentSource</td><td>drag/tap upload → classification queue on staff side</td><td>§8.2</td></tr>
+      <tr><td>MESSAGES section</td><td>thread with the agent; routes to PropFlow conversation layer</td><td>PortalMessageToPropFlow (capture_source PORTAL, capture_provider PROPERTYIQ_FORM)</td><td>send text + attach shared docs; sensitive-topic content → human_handoff_required only, no automation</td><td>§11.5</td></tr>
+      <tr><td>MILESTONES section</td><td>milestone feed ("Deposit is in") + personalized video ("From Graeham" 0:48, watched ✓)</td><td>TRANSACTION_MILESTONE events; PropFlow personalized-video system</td><td>play (watch tracked); AI video gated on ai_video consent + REVIEW_REQUIRED default + non-removable CA AI disclosure frame one</td><td>§15.5; matrix correction #3</td></tr>
+      <tr><td><b>Wire-safety warning</b></td><td>permanent notice: "wire details are NEVER posted here — verified callback only, beware lookalike emails"</td><td>static, always-on in Documents card</td><td>none</td><td>§13.4; draft Screen 25</td></tr>
+      <tr><td>SHOWING_FEEDBACK section (sell side)</td><td>verbatim showing feedback</td><td>WeeklyListingUpdateEmbed payload</td><td>none</td><td>§9.5, §9.6</td></tr>
+      <tr><td>WEEKLY_LISTING_UPDATE embed (sell side / listing mode)</td><td>PropCast-produced weekly seller dashboard (Screen 10 in listing-performance mode)</td><td>WeeklyListingUpdateEmbed (weekly_listing_update.v1)</td><td>authenticated view only; emits PORTAL_VIEWED; if unavailable → section hidden + staff task, never stale/fabricated</td><td>§9.6</td></tr>
+      <tr><td>SETTINGS section</td><td>contact prefs, notification channels; security changes = step-up</td><td>PortalRecord, consent fields</td><td>edit (OTP for security items)</td><td>§9.4, §9.5</td></tr>
+      <tr><td>DocuSign signing entry</td><td>"2 need signatures"</td><td>SignatureStatus PENDING</td><td>step-up → signing ceremony</td><td>§6.9, §9.4</td></tr>
+      <tr><td><b>Homeowner Hub:</b> close summary</td><td>what closed, when</td><td>TransactionRecord post-DEAL_CLOSED</td><td>none</td><td>§9.7</td></tr>
+      <tr><td>Home anniversary card</td><td>anniversary from close_date/home_anniversary_date</td><td>close fields (synced to PropFlow §12.3 step 13)</td><td>none</td><td>§9.7</td></tr>
+      <tr><td>Equity card</td><td>PropSearch EQUITY_CARD, labeled ESTIMATE; requires known mortgage balance else manual-entry prompt (MISSING_MORTGAGE_BALANCE) — never fabricated</td><td>PropSearch (PropClose computes nothing locally)</td><td>update-my-info</td><td>§9.7; matrix correction #7</td></tr>
+      <tr><td>Annual CMA surface</td><td>CMA delivery when PropFlow/PropSearch exposes it</td><td>PropFlow/PropSearch</td><td>view/request</td><td>§9.7</td></tr>
+      <tr><td>Referral CTA</td><td>routes to PropFlow referral intake</td><td>PropFlow</td><td>tap → referral form</td><td>§9.7</td></tr>
+      <tr><td>Past-client touch log</td><td>display if PropFlow exposes it (cadence owned by PropFlow/Wattson, never PropClose)</td><td>PropFlow</td><td>none</td><td>§9.7</td></tr>
+      <tr><td>"Same link forever" note</td><td>tells client this page becomes the Homeowner Hub at close</td><td>static</td><td>none</td><td>draft Screen 25</td></tr>
+      <tr><td>Access status handling</td><td>INVITED/ACTIVE/SUSPENDED/ARCHIVED</td><td>PortalRecord.access_status</td><td>SUSPENDED/ARCHIVED → polite closed-door page with agent contact</td><td>§6.11</td></tr>
+    </table>
+    </div>
+
+    <h2>States</h2>
+    <ul>
+      <li><b>Default (TRANSACTION mode):</b> hero + three cards + enabled sections.</li>
+      <li><b>Listing mode (pre-contract, sell side):</b> the portal surface IS the Screen 10 owner/seller page — one artifact, one URL (matrix correction #8).</li>
+      <li><b>Homeowner mode (post-close):</b> flips automatically on DEAL_CLOSED (§9.7); homeowner_sections_enabled control visibility.</li>
+      <li><b>Loading:</b> branded skeleton; hero renders first.</li>
+      <li><b>Empty:</b> newly invited client sees hero + "nothing needed from you right now."</li>
+      <li><b>Error/degraded (fail-closed):</b> weekly-update embed unavailable → section hidden + staff task; equity without mortgage balance → "estimate unavailable" + manual-entry prompt; document service down → list without download; wire info → never rendered under any failure.</li>
+      <li><b>Permission-limited:</b> every doc filtered by per_document_permissions; sections not in *_sections_enabled don't render at all; multiple contacts on one portal each see their own task/doc scope.</li>
+      <li><b>Auth-expired:</b> consumed/expired magic link → "send me a new link" screen.</li>
+      <li><b>Mobile:</b> per Layout.</li>
+    </ul>
+
+    <h2>Data fields</h2>
+    <p>PortalRecord: portal_id, mode (TRANSACTION|HOMEOWNER), branding_ref, portal_url, access_status, magic_link_enabled=true, sensitive_actions_require_otp_mfa=true, sections enabled arrays, per_document_permissions. PortalAccessGrant: auth_method, auth_level, issued/expires/consumed_at, ip_hash, user_agent_hash, risk_flags. Client-visible transaction fields: stage (mapped label), dates, client tasks, shared docs (title, type label, signature state), milestones, messages. Homeowner: close summary, anniversary date, equity estimate (labeled, ranged), CMA link, referral link. No raw MLS data, no scores, no wire data, no other parties' PII — ever.</p>
+
+    <h2>Rules &amp; compliance</h2>
+    <ul>
+      <li>Two-tier auth invariant: magic_link_enabled=true and sensitive_actions_require_otp_mfa=true are hard-coded true on the record (§6.11).</li>
+      <li><b>No ad pixels</b> in authenticated transaction portal v1; owned-page analytics only with ComplianceProvider pass + GPC/DNT/opt-out respected (§13.10). Attribution via canonical PORTAL_VIEWED only.</li>
+      <li>Brand lock: footer/emails/invites/doc notices show licensed identity exactly (pilot DRE 01466876, Intero) (§9.3). The identity.json-blocklisted legacy DRE must never appear.</li>
+      <li>No Zillow/Zestimate-branded or -referencing template anywhere in PropClose v1 (§9.7).</li>
+      <li>No school data in v1; future embed must follow the PropSearch factual-display model with no steering/CTA inside the block (§13.7; matrix correction #4).</li>
+      <li>Sold comps: public = aggregates only; detail requires authenticated session (§13.6).</li>
+      <li>All portal messages with sensitive topics: human_handoff_required=true, no automation (§11.5).</li>
+      <li>Every sensitive view/download/sign → security audit log (SECURITY_AUDIT_7Y), not the marketing ledger (§13.5).</li>
+      <li>Client-facing sends (invites, weekly updates) are review-first per the workspace-wide send policy; PropClose sends only via NotificationProvider after ComplianceProvider.check_outbound_contact() (§11.1–11.2).</li>
+    </ul>
+
+    <h2>Cross-links</h2>
+    <p><b>In:</b> invites from Transaction Workspace (15) Parties tab; Monday doorway email (listing mode); milestone notifications. <b>Out:</b> PropFlow inbox (messages), PropFlow referral intake, PropSearch equity/CMA surfaces, DocuSign. <b>Emits:</b> PORTAL_VIEWED, PAGE_VIEWED (embed renderer, privacy-checked), DOCUMENT_ACCESS_EVENT + SECURITY_ACCESS_EVENT (security log), PortalMessageToPropFlow. <b>Consumes:</b> DEAL_CLOSED (mode flip), TRANSACTION_MILESTONE, WeeklyListingUpdateEmbed.</p>
+
+    <h2>Open decisions</h2>
+    <ul>
+      <li>[DECIDE] OTP delivery channel: interim = SMS if sms_consent granted, else email; configurable via ComplianceProfile security policy (§9.4 says defaults are configurable). [BEST GUESS] — note the Brain fixes SMS-OTP as consent-gated with email fallback (rendered above).</li>
+      <li>[DECIDE] Magic-link TTL: launch default 7 days for invites / 15 minutes for re-auth links. [BEST GUESS — §9.4 defers to security policy] — <b>superseded by the Brain's auth table:</b> one-time token, 30-minute default expiry, reissue flow; 30-min session idle timeout; 10-min OTP freshness (see "Spec gaps found").</li>
+      <li>[DECIDE] Milestone video vendor: assume HeyGen-class avatar API (LipDub/BeHuman candidates) — UI unaffected by vendor choice; consent + disclosure gating fixed regardless.</li>
+      <li>[DECIDE] Multiple-transaction clients: interim = one portal per transaction, with the homeowner hub of the primary residence as the durable long-term URL. [BEST GUESS]</li>
+    </ul>
+    <p class="anno" style="margin-top:20px">Wireframe fidelity — colors are placeholders from the locked PropFlow design language. All client names/numbers are realistic fake data. Agent identity: Graeham Watts, Intero Real Estate, DRE# 01466876 (from shared-references/identity.json — never hardcode elsewhere). No crime data, no school data, no steering language anywhere on this surface.</p>
+  </div>
+</div>

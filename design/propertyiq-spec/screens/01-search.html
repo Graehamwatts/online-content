@@ -1,0 +1,518 @@
+<title>PropertyIQ · Screen 01 — Search entry page</title>
+<link href="https://api.fontshare.com/v2/css?f[]=technor@500,600,700&display=swap" rel="stylesheet">
+<link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<style>
+  /* Type system — Technor for display, Inter for UI. */
+  :root{ --font-display:'Technor', Inter, -apple-system, 'Segoe UI', sans-serif; --font-ui: Inter, -apple-system, 'Segoe UI', Roboto, sans-serif; }
+</style>
+<style>
+  /* Palette v4 — PropFlow design language: neutral ink UI, ink-as-accent, color reserved for data. (extracted verbatim from propsearch-design-draft.html) */
+  :root, :root[data-theme="dark"], :root[data-theme="light"]{
+    --ink:#23282f; --paper:#fbfaf8; --surface:#f1efe9; --line:#e2dfd6;
+    --mut:#6b7076; --soft:#9b9f9f;
+    --brand:#2e6b53; --brand-ink:#ffffff; --brand-soft:#eaf1ec; --brand-deep:#1e4c3a;
+    --signal:#b07a2e;
+    --good:#2e7d4f; --warn:#a8630a; --crit:#b3372f;
+    --r:10px;
+  }
+  .intel .score, .mintel{ color:var(--brand-deep) }
+  .intel{ border-left:3px solid var(--brand) }
+  h1{ letter-spacing:-.02em }
+  .stat b{ letter-spacing:-.01em }
+  body[data-agent="watts"]{ --brand:#2e6b53; --brand-soft:#eaf1ec; --brand-deep:#1e4c3a; }
+
+  *{box-sizing:border-box; margin:0}
+  body{font:15px/1.55 var(--font-ui); color:var(--ink); background:var(--paper); padding-bottom:80px}
+  h1,h2,h3{line-height:1.15; text-wrap:balance; font-family:var(--font-display); font-weight:600}
+  h1{letter-spacing:-.01em}
+  .site{box-shadow:0 1px 2px rgba(20,24,32,.04), 0 8px 32px rgba(20,24,32,.06)}
+  .stat{box-shadow:0 1px 2px rgba(20,24,32,.03); transition:box-shadow .15s, transform .15s}
+  .stat:hover{box-shadow:0 4px 14px rgba(20,24,32,.08)}
+  .chip{transition:all .12s}
+  button{font-family:var(--font-ui)}
+  .num{font-variant-numeric:tabular-nums}
+  .wrap{max-width:1180px; margin:0 auto; padding:0 20px}
+
+  .bar{position:sticky; top:0; z-index:50; background:var(--paper); border-bottom:1px solid var(--line); padding:10px 0; backdrop-filter:blur(8px)}
+  .bar .wrap{display:flex; flex-wrap:wrap; gap:10px; align-items:center}
+  .bar .ttl{font-weight:700; margin-right:auto}
+  .bar .ttl small{display:block; font-weight:400; color:var(--mut)}
+  .bar a{color:var(--brand); font-size:13px; text-decoration:none}
+
+  .note{background:var(--surface); border:1px solid var(--line); border-radius:var(--r); padding:14px 16px; margin:0 0 22px; font-size:13.5px; color:var(--mut)}
+  .note b{color:var(--ink)}
+
+  .site{border:1px solid var(--line); border-radius:14px; overflow:hidden; background:var(--paper)}
+  .sitehead{display:flex; align-items:center; gap:14px; padding:14px 22px; border-bottom:1px solid var(--line)}
+  .avatar{width:38px; height:38px; border-radius:50%; background:var(--brand); color:var(--brand-ink); display:grid; place-items:center; font-weight:700}
+  .sitehead .who b{display:block}
+  .sitehead .who small{color:var(--mut)}
+  .sitehead nav{margin-left:auto; display:flex; gap:18px; font-size:13.5px; color:var(--mut)}
+  .sitehead nav a{color:inherit; text-decoration:none}
+  .sitehead nav a:hover{color:var(--brand)}
+
+  .chip{display:inline-flex; align-items:center; gap:6px; font-size:12.5px; font-weight:500; border:1px solid var(--line); border-radius:99px; padding:6px 12px; background:var(--paper); cursor:pointer; color:var(--ink)}
+  .chip:hover{border-color:var(--brand)}
+  .chip.on{background:var(--brand); border-color:var(--brand); color:var(--brand-ink); font-weight:600; box-shadow:0 2px 8px color-mix(in srgb, var(--brand) 30%, transparent)}
+
+  .statrow{display:grid; grid-template-columns:repeat(4,1fr); gap:10px}
+  .stat{background:var(--surface); border:1px solid var(--line); border-radius:var(--r); padding:12px}
+  .stat small{display:block; color:var(--mut); font-size:11.5px; text-transform:uppercase; letter-spacing:.05em}
+  .stat b{font-size:18px}
+  .stat .up{color:var(--good); font-size:12px}
+
+  .bdg{font-size:11.5px; border-radius:6px; padding:3px 8px; background:var(--surface); border:1px solid var(--line); color:var(--mut)}
+  .bdg.good{color:var(--good); border-color:color-mix(in srgb,var(--good) 30%,var(--line))}
+  .bdg.warn{color:var(--warn); border-color:color-mix(in srgb,var(--warn) 30%,var(--line))}
+
+  .dtable{width:100%; border-collapse:collapse; font-size:13px}
+  .dtable td,.dtable th{border-bottom:1px solid var(--line); padding:8px 10px; text-align:left}
+  .dtable th{font-size:11px; text-transform:uppercase; letter-spacing:.05em; color:var(--soft)}
+
+  /* search hero (verbatim from the draft) */
+  .hero{padding:64px 24px 56px; text-align:center; background:linear-gradient(var(--surface),var(--paper))}
+  .hero h1{font-size:clamp(26px,4vw,40px); font-weight:800; margin-bottom:10px}
+  .hero p{color:var(--mut); margin-bottom:26px}
+  .prompt{max-width:680px; margin:0 auto; display:flex; border:1.5px solid var(--line); border-radius:14px; background:var(--paper); padding:6px; box-shadow:0 2px 6px rgba(20,24,32,.05), 0 12px 36px rgba(20,24,32,.07)}
+  .prompt input{flex:1; border:0; background:none; padding:12px 14px; font-size:16px; color:var(--ink); outline:none}
+  .prompt button{background:var(--ink); color:#fff; border:0; border-radius:10px; padding:0 22px; font-weight:600; cursor:pointer}
+  .try{margin-top:14px; display:flex; gap:8px; justify-content:center; flex-wrap:wrap}
+  .try button{font-size:12.5px; border:1px solid var(--line); background:var(--paper); color:var(--mut); border-radius:99px; padding:6px 12px; cursor:pointer}
+  .orclassic{margin-top:22px; font-size:13px; color:var(--soft)}
+  .orclassic a{color:var(--brand)}
+  .proselike{max-width:none; color:var(--mut); font-size:14px}
+  .proselike p{max-width:none}
+  .poweredby{font-size:11px; color:var(--soft); letter-spacing:.04em; text-transform:uppercase}
+
+  @media (max-width:860px){ .statrow{grid-template-columns:repeat(2,1fr)} .twoup{grid-template-columns:1fr !important} .stategrid{grid-template-columns:1fr !important} }
+  @media (prefers-reduced-motion: reduce){ *{transition:none!important} }
+
+  /* ---- page-specific additions (same design language) ---- */
+  .anno{font-size:11px; color:var(--soft)}
+  .cardbox{border:1px solid var(--line); border-radius:10px; padding:11px 14px; font-size:12.5px; background:var(--paper)}
+  .btn-ink{background:var(--ink); color:#fff; border:0; border-radius:7px; padding:7px 12px; font-size:11.5px; cursor:pointer; font-weight:600}
+  .btn-ghost{background:var(--paper); border:1px solid var(--line); border-radius:7px; padding:7px 12px; font-size:11.5px; cursor:pointer}
+  .sechead{font-size:14px; font-weight:700; margin:0 0 8px; font-family:var(--font-display)}
+  .cov td.ok{color:var(--good); font-weight:700}
+  .specdoc h2{font-size:18px; margin:26px 0 8px}
+  .specdoc h3{font-size:15px; margin:18px 0 6px}
+  .specdoc p, .specdoc li{font-size:13.5px; color:var(--mut)}
+  .specdoc b{color:var(--ink)}
+  .specdoc table{margin:8px 0}
+  .ticker{display:flex; gap:18px; padding:7px 22px; border-bottom:1px solid var(--line); background:var(--surface); font-size:12px; color:var(--mut); flex-wrap:wrap}
+  .ticker a{color:var(--brand); text-decoration:none}
+  .lensflow{border:1px solid var(--line); border-radius:10px; padding:10px 12px; background:var(--paper); font-size:11.5px}
+  .lensflow b{font-size:12px}
+  .mock-map{position:relative; height:120px; border-radius:8px; overflow:hidden; background:linear-gradient(135deg,#1c2530,#26313d); margin-top:8px}
+  .mock-map .iso{position:absolute; inset:14% 20% 18% 24%; border:2px solid #4dd0b0; border-radius:45% 55% 50% 48%; background:rgba(77,208,176,.12)}
+  .mock-map .lbl{position:absolute; bottom:6px; left:8px; font-size:9.5px; color:#9fb3c0}
+  .mock-map .amber{position:absolute; width:9px; height:9px; border-radius:2px; background:#e0a34c}
+</style>
+
+<!-- ============ (1) slim header ============ -->
+<div class="bar">
+  <div class="wrap">
+    <div class="ttl">PropertyIQ · Screen 01 — Search entry page <small>Full-density per-screen mock · wireframe fidelity · dev-facing annotations in gray</small></div>
+    <a href="../wireframe.html">← All screens</a>
+  </div>
+</div>
+
+<!-- ============ (2) THE FULL MOCK ============ -->
+<div class="wrap" style="padding-top:24px">
+  <div class="note"><b>Screen 01 — Search entry page.</b> The public, agent-branded front door of PropSearch: ONE natural-language input that also handles addresses, filters, and research questions, wrapped in a page that teaches the six differentiating lenses and converts anonymous visitors into saved searches and homeowner signals. Simultaneously the SEO homepage for the agent's market and the top of the lead funnel. Primary users: anonymous consumers (buyers, homeowners, investors) from Google/ads/postcards/QRs/social; returning signed-in consumers; the agent when demoing. Consumer chrome — agent-branded top nav, "Powered by PropertyIQ" footer; no agent-console rail ever appears here.</div>
+
+  <div class="site" data-agent="watts">
+    <!-- consumer site header: agent brand + nav + ES/EN toggle -->
+    <div id="el-header" class="sitehead">
+      <div class="avatar">GW</div>
+      <div class="who"><b>Graeham Watts</b><small>Intero Real Estate · Bay Area</small></div>
+      <nav><a href="#">Search</a><a href="#">Communities</a><a href="#">Sell</a><a href="#">About</a></nav>
+      <span id="el-lang" style="display:inline-flex; border:1px solid var(--line); border-radius:99px; overflow:hidden; font-size:11px; font-weight:600; margin-left:14px"><span style="padding:4px 10px; background:var(--ink); color:#fff">EN</span><span style="padding:4px 10px; color:var(--mut); cursor:pointer">ES</span></span>
+    </div>
+    <div class="anno" style="padding:6px 22px; border-bottom:1px solid var(--line)">Header is sticky. Brand fields (name, brokerage, avatar, markets) are read-only from the identity.json brand vault — never hardcoded. Quiet ES/EN toggle switches the FULL UI, not just prompts (localStorage anonymous / profile signed-in — EPA farm requirement, draft guardrail 2). DRE appears once, in the footer strip below.</div>
+
+    <!-- market ticker -->
+    <div id="el-ticker" class="ticker num">
+      <span>📊 Redwood City: median <b style="color:var(--ink)">$1.62M</b> · <a href="#">actives 141</a> · DOM 18</span>
+      <span>East Palo Alto: median <b style="color:var(--ink)">$1.08M</b> · <a href="#">actives 37</a> · DOM 24</span>
+      <span>Menlo Park: median <b style="color:var(--ink)">$2.41M</b> · <a href="#">actives 58</a> · DOM 15</span>
+      <span class="anno" style="align-self:center">MarketDataSnapshot, daily refresh top markets · each row links to its community page (MB 10.8; freshness per MB 14.3)</span>
+    </div>
+
+    <!-- hero -->
+    <div class="hero" style="position:relative">
+      <!-- ambient hero demo -->
+      <div id="el-hero-demo" style="border:1px dashed var(--line); border-radius:12px; padding:8px 12px; margin:-20px auto 18px; max-width:760px; font-size:11px; color:var(--soft); background:var(--surface); text-align:left">
+        🎬 <b style="color:var(--mut)">Ambient hero demo (renders BEHIND this headline):</b> dark 3D farm map quietly cycles one lens every 4s — commute isochrone glows in → school boundaries trace themselves → ADU-eligible parcels light up amber. Pauses on any interaction; respects <code>prefers-reduced-motion</code> (static composite). <b style="color:var(--mut)">Performance guardrail:</b> paints as a static composite first, hydrates after idle; if the live map misses 1.5s the static frame stays — the wow never costs the LCP budget. Imagery: Mapbox primary (Google Earth blocked for marketing — MB 12.6 MAPBOX_LICENSE flag).
+        <div class="mock-map"><div class="iso"></div><span class="amber" style="top:30%; left:64%"></span><span class="amber" style="top:44%; left:70%"></span><span class="amber" style="top:58%; left:61%"></span><div class="lbl">frame 1 of 3 — commute isochrone (≤30 min, teal) · ADU parcels amber · next: school boundaries</div></div>
+      </div>
+
+      <!-- H1 + sub -->
+      <div id="el-h1">
+        <h1>Redwood City, already mapped.</h1>
+        <p>This search knows things Zillow doesn't — ask about commutes, school boundaries, ADU rules, rent math, and risk. In plain English. <span style="font-size:11px; color:var(--soft)">(H1 market name auto-fills from the brand vault per agent — one H1 only; it's the brand headline AND the keyword.)</span></p>
+      </div>
+
+      <!-- THE one primary input + voice mic -->
+      <div id="el-prompt" class="prompt">
+        <input value="3bd under $1.4M, quiet street, ≤30 min to Menlo Park, good elementary" aria-label="Search prompt">
+        <button id="el-mic">🎙 · Search</button>
+      </div>
+      <div class="anno" style="margin-top:6px; max-width:680px; margin-left:auto; margin-right:auto">ONE primary input on the page — address mode / prompt mode / question mode are detections, not separate boxes. Empty state cycles a typed-out placeholder: 4 full example prompts, each demoing one differentiator, types out → holds 2.5s → cycles; rotation is instrumented (prompts that convert stay) [DECIDE: simple weighted rotation logged to analytics; formal A/B later]. Mic = voice input via native Web Speech API with server fallback; mic hidden where unsupported [DECIDE]. Enter/Search → <code>POST /api/propsearch/search</code> with <code>progressive_loading: true</code> (MB 24.1). Input font ≥16px (prevents iOS zoom). Parser is deterministic-filter extraction only — no MLS embeddings/vector search, no local scoring, no persistent AI memory of MLS content (MB 14.2).</div>
+
+      <!-- trust line + homeowner hook -->
+      <div id="el-trustline" style="font-size:11.5px; color:var(--mut); margin-top:10px">Live MLS data · no sign-up to search · <b><a href="#" style="color:inherit">your info is never sold to other agents</a></b> <span class="anno">(links to the one-paragraph privacy-promise page; claim must be contractually true platform-wide before ship — draft guardrail 3)</span></div>
+      <div style="font-size:12px; color:var(--mut); margin-top:4px">Own a home here? <a href="#" style="color:var(--brand); font-weight:600">See what it's worth →</a> <span class="anno">(homeowner hook → owner/equity capture flow)</span></div>
+
+      <!-- lens chip row -->
+      <div id="el-lenses" style="display:flex; gap:8px; justify-content:center; flex-wrap:wrap; margin-top:14px">
+        <button class="chip" style="font-weight:600">🚗 Commute Lens</button>
+        <button class="chip" style="font-weight:600">🎓 School Boundaries</button>
+        <button class="chip" style="font-weight:600">🏗 ADU Check <span class="num" style="color:var(--brand)">· 214</span></button>
+        <button class="chip" style="font-weight:600">📈 Yield Engine <span class="num" style="color:var(--brand)">· 31</span></button>
+        <button class="chip" style="font-weight:600">🔥 Risk Lens</button>
+        <button class="chip" style="font-weight:600">⚡ Market Signals <span class="num" style="color:var(--brand)">· 14 cuts</span></button>
+        <button class="chip">🗺 Explore map</button>
+      </div>
+      <div class="anno" style="margin-top:6px">Exactly six named lenses + "Explore map." Each tap opens a one-question guided flow (cards below), swaps the example pills to that domain, and shows a live per-market count. Counts under 10 hide, chips never disappear (thin-market rule). Commute & Risk show no count here because their counts depend on a user input. 44px touch targets on mobile.</div>
+
+      <!-- parsed-as chips + clarifying question -->
+      <div id="el-parsed" style="max-width:680px; margin:14px auto 0; text-align:left; font-size:12px; color:var(--mut); display:flex; gap:6px; flex-wrap:wrap; align-items:center">
+        <span style="font-weight:600">Parsed as:</span>
+        <span class="chip on" style="font-size:11.5px; padding:3px 9px">≤ $1.4M ✕</span>
+        <span class="chip on" style="font-size:11.5px; padding:3px 9px">3+ bd ✕</span>
+        <span class="chip on" style="font-size:11.5px; padding:3px 9px">≤30 min · Menlo Park ✕</span>
+        <span class="chip on" style="font-size:11.5px; padding:3px 9px">Elem rated 8+ ✕ <span class="anno" style="color:inherit">(user_entered: true)</span></span>
+        <span class="chip on" style="font-size:11.5px; padding:3px 9px">Low-traffic street ✕</span>
+        <span style="color:var(--soft)">— every chip is editable (tap) / removable (✕); edits re-run the search. The parse is never a black box.</span>
+      </div>
+      <div class="anno" style="max-width:680px; margin:4px auto 0; text-align:left">Deterministic parse echo of SearchRecord.parsed_filters (ParsedSearchFilters — MB 10.5/14.2). School filter carries §16.3 disclaimers in its flow; <code>exclude_protected_class_inputs: true</code> always. Sensitive-topic text in a query → <code>HUMAN_HANDOFF_REQUIRED</code>: topic excluded from parse/scoring/routing/audiences, gentle generic response shown, agent notified — fail closed.</div>
+
+      <div id="el-clarify" style="max-width:680px; margin:10px auto 0; text-align:left">
+        <div style="border:1.5px solid var(--brand); background:var(--brand-soft); border-radius:8px; padding:9px 11px; font-size:12px"><b>One question:</b> is the 30-minute commute for a typical 8am drive, or off-peak?
+          <div style="display:flex; gap:5px; margin-top:6px"><button class="chip" style="font-size:11px">8am rush</button><button class="chip" style="font-size:11px">Off-peak</button><button class="chip" style="font-size:11px">Transit, not driving</button></div>
+        </div>
+        <div class="anno" style="margin-top:4px">Max ONE structured tap-question before results — never open chat (MB 14.2: parser asks only when required facts are missing). The answer becomes another visible chip.</div>
+      </div>
+
+      <!-- example pills -->
+      <div id="el-pills" class="try">
+        <button>Duplex with ADU potential in Redwood City <span style="color:var(--soft)">· investor</span></button>
+        <button>3bd zoned to Roy Cloud, under $1.4M <span style="color:var(--soft)">· buyer</span></button>
+        <button>Low fire risk, outside flood zones <span style="color:var(--soft)">· cautious</span></button>
+        <button>14 price cuts this week — see them <span style="color:var(--soft)">· market</span></button>
+      </div>
+      <div class="anno" style="margin-top:6px">Pill rules: four personas, never two from the same lens, rotated per visit, localized with live data (the "14" is real), every one fires a real search instantly — no wall before first results. Research questions ("can I convert my garage?") and multilingual prompts work too.</div>
+
+      <!-- two-up card row -->
+      <div class="twoup" style="display:grid; grid-template-columns:1fr 1fr; gap:12px; max-width:820px; margin:18px auto 0; text-align:left">
+        <div id="el-address-card" style="border:1.5px solid var(--line); border-radius:12px; padding:14px; background:var(--paper)">
+          <b style="font-size:13px">🔎 Any address is a query — one box does everything</b>
+          <div style="font-size:12px; color:var(--mut); margin-top:8px">No separate address field: paste <b>318 Hurlingame Ave</b> into the main bar and it auto-detects → "Get the report card for this address?" (ADU eligibility · zoning · fire/flood · rent estimate from 9 comps · works even off-market). <b>"Save this address"</b> is the homeowner capture hook.</div>
+          <div class="anno" style="margin-top:6px">PropertyRecord + AVM/rent/zoning/risk → Screen 03 property detail / owner report. May trigger EQUITY_CARD_CREATED downstream — PropSearch itself emits no canonical ledger event here (MB 25.3: LEAD_CAPTURED belongs to PropFlow, never PropSearch).</div>
+        </div>
+        <div id="el-signals-card" style="border:1.5px solid var(--line); border-radius:12px; padding:14px; background:var(--paper)">
+          <b style="font-size:13px">⚡ This week in Redwood City</b>
+          <div style="font-size:12px; color:var(--mut); margin-top:8px; display:grid; gap:5px" class="num">
+            <div>📉 <a href="#" style="color:var(--brand)">14 price cuts</a> — median cut $38K</div>
+            <div>🏗 <a href="#" style="color:var(--brand)">8 new ADU-eligible listings</a></div>
+            <div>🌊 <a href="#" style="color:var(--brand)">Flood-map update in EPA</a> — 41 parcels remapped</div>
+          </div>
+          <div class="anno" style="margin-top:6px">Auto-generated weekly by the signals engine (IDX change detection + MarketDataSnapshot); 2–4 rows, every row deep-links to a pre-filled search. The return-visit hook. Thin-market mode leans these rows on solds + market stats.</div>
+        </div>
+      </div>
+
+      <!-- classic search link -->
+      <div id="el-classic" class="orclassic">Prefer filters? <a href="#">Use classic search</a> — price, beds, baths, city. Same engine either way. <span class="anno">(opens the filter-panel variant of Screen 02)</span></div>
+    </div>
+
+    <!-- below-the-fold SEO block + trust row + footer -->
+    <div style="padding:16px 22px; border-top:1px solid var(--line)">
+      <div id="el-seo" class="proselike" style="font-size:12.5px">
+        <p><b>Search homes for sale in Redwood City, East Palo Alto, and the mid-Peninsula.</b> Every listing here comes direct from the MLS and refreshes every few minutes — with commute times, school assignments, fire and flood risk, rent estimates, and zoning answers built into every result. Start with a plain-English search above, or browse by neighborhood: <a href="#" style="color:var(--brand)">Friendly Acres</a>, <a href="#" style="color:var(--brand)">Redwood Oaks</a>, <a href="#" style="color:var(--brand)">Centennial</a>, <a href="#" style="color:var(--brand)">Emerald Hills</a>. <span class="anno">(One prose paragraph, auto-written from live data: city + "homes for sale" keywords, feature vocabulary, neighborhood internal links — never a keyword wall. Fact-with-attribution wording only; characterizations like "great schools" / "family-friendly" are forbidden — MB 16.1.)</span></p>
+      </div>
+      <div id="el-popular" style="margin-top:12px">
+        <div style="font-size:11px; text-transform:uppercase; letter-spacing:.06em; color:var(--soft); font-weight:600; margin-bottom:6px">Popular searches — each a curated, indexed slug page with its own intro copy</div>
+        <div style="display:flex; gap:6px; flex-wrap:wrap; font-size:12px">
+          <a href="#" class="chip" style="text-decoration:none">Homes under $1.4M in Redwood City</a>
+          <a href="#" class="chip" style="text-decoration:none">Homes with ADU potential</a>
+          <a href="#" class="chip" style="text-decoration:none">New listings this week</a>
+          <a href="#" class="chip" style="text-decoration:none">Homes near Roy Cloud Elementary</a>
+          <a href="#" class="chip" style="text-decoration:none">Duplexes & multi-family</a>
+          <a href="#" class="chip" style="text-decoration:none">Recently sold in Friendly Acres</a>
+        </div>
+        <div class="anno" style="margin-top:5px">IDXFilterUrlRecord with INDEX_ALLOWED (MB 15): server-rendered, canonicalized, sitemap-included only when approved, compliance-checked, source-attributed. Dynamic result pages are noindex; index caps 250/market, 5,000 global. These same filter URLs double as ad/QR/SMS destinations (MB 14.5 #4 — one library, every channel).</div>
+      </div>
+      <div id="el-trustrow" style="display:flex; gap:14px; align-items:center; margin-top:14px; flex-wrap:wrap; font-size:12px">
+        <span class="bdg good">✓ MLS-direct data</span>
+        <span class="bdg">No sign-up to search</span>
+        <span class="bdg num">★ 4.9 · 87 Google reviews</span>
+        <span class="anno">Review stars from Google Business Profile rating, cached daily [DECIDE — provider slot; UI unaffected].</span>
+      </div>
+      <div style="display:flex; justify-content:space-between; margin-top:12px; flex-wrap:wrap; gap:8px">
+        <span class="poweredby">Powered by PropertyIQ</span>
+        <span id="el-freshness" style="font-size:12px; color:var(--soft)" class="num">MLS data updated 6 min ago <span class="anno">(IDX refresh timestamp, MB 14.3 — degraded state below)</span></span>
+      </div>
+      <div style="border-top:1px solid var(--line); margin-top:12px; padding-top:10px; font-size:11px; color:var(--soft)">
+        Graeham Watts · REALTOR® · Intero Real Estate Services · DRE #01466876 · <a href="#" style="color:var(--soft)">Privacy promise</a> · Footer links: <a href="#" style="color:var(--soft)">Friendly Acres</a> · <a href="#" style="color:var(--soft)">Redwood Oaks</a> · <a href="#" style="color:var(--soft)">Centennial</a> · <a href="#" style="color:var(--soft)">Emerald Hills</a> · <a href="#" style="color:var(--soft)">East Palo Alto</a> · <a href="#" style="color:var(--soft)">Sell your home</a>
+        <div class="anno" style="margin-top:3px">Footer links to every community page + sell page = the crawl path into the mesh. Schema: WebSite + SearchAction (sitelinks search box) + RealEstateAgent (NAP, DRE, sameAs). DRE and all brand fields read-only from identity.json; the identity.json blocklist value must never appear anywhere on this surface.</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ============ input states (dev handoff) ============ -->
+  <h2 style="font-size:16px; margin:22px 0 10px">The search field's five states (dev handoff)</h2>
+  <div class="stategrid" style="display:grid; grid-template-columns:repeat(2,1fr); gap:12px">
+    <div id="el-placeholder" style="border:1px solid var(--line); border-radius:12px; padding:14px">
+      <b style="font-size:12.5px">State 1 · Default — cycling typed-out placeholder</b>
+      <div class="prompt" style="margin-top:8px; padding:4px"><input placeholder="Fixer with a big lot in East Palo Alto|" disabled aria-label="demo"><button>🎙 · Search</button></div>
+      <div class="anno" style="margin-top:6px">Types out a full example prompt, holds 2.5s, cycles (4 prompts, each demoing one differentiator — one multilingual). Static placeholders don't break the "type a city" habit; full prompts teach the vocabulary. Rotation instrumented.</div>
+    </div>
+    <div id="el-suggest" style="border:1px solid var(--line); border-radius:12px; padding:14px">
+      <b style="font-size:12.5px">State 2 · Typing — prompt completions, not just places</b>
+      <div class="prompt" style="margin-top:8px; padding:4px"><input value="3bd near good sch" disabled aria-label="demo"><button>Search</button></div>
+      <div style="border:1px solid var(--line); border-radius:8px; margin-top:4px; font-size:11.5px; overflow:hidden">
+        <div style="padding:6px 10px; background:var(--surface)"><b>3bd near good sch</b>ools under $1.4M in Redwood City</div>
+        <div style="padding:6px 10px">…ools with a ≤30 min commute to <span style="color:var(--brand)">your saved work address</span></div>
+        <div style="padding:6px 10px">…ools — rated 8+ only (Roy Cloud, Clifford, Orion)</div>
+        <div style="padding:6px 10px; color:var(--soft); border-top:1px solid var(--line)">📍 Places: Schoolhouse Rd, Redwood City · School St, San Carlos</div>
+      </div>
+      <div class="anno" style="margin-top:6px">Full-prompt completions ranked first (prompt-completion service); places demoted below the divider but present (geocoder) — the Zillow habit still works. Tap fills & fires.</div>
+    </div>
+    <div style="border:1px solid var(--line); border-radius:12px; padding:14px">
+      <b style="font-size:12.5px">State 3 · Parsed — chips + one clarifying question max</b>
+      <div style="font-size:12px; margin-top:8px; display:flex; gap:5px; flex-wrap:wrap"><span class="chip on" style="font-size:11px">≤$1.4M ✕</span><span class="chip on" style="font-size:11px">3+ bd ✕</span><span class="chip on" style="font-size:11px">Elem 8+ ✕</span><span class="chip on" style="font-size:11px">≤30 min Menlo Park ✕</span></div>
+      <div class="anno" style="margin-top:6px">Rendered live in the hero above (<a href="#el-parsed" style="color:var(--brand)">parsed-as chips</a> + <a href="#el-clarify" style="color:var(--brand)">clarifying card</a>). Structured tap-options, never open chat; hard rule: max ONE question before results.</div>
+    </div>
+    <div id="el-zero" style="border:1px solid var(--line); border-radius:12px; padding:14px">
+      <b style="font-size:12.5px">State 4 · Zero results — never a dead end</b>
+      <div style="border:1px solid var(--warn); background:#fdf6ee; border-radius:8px; padding:9px 11px; margin-top:8px; font-size:12px">Nothing matches all 5 criteria right now. <b>The weakest constraint is price</b> — at $1.45M there are 4 quiet-street matches; or relax "elementary 8+" to 7+ for 6 more.<div style="display:flex; gap:5px; margin-top:6px"><button class="chip" style="font-size:11px">Show the $1.45M four</button><button class="chip" style="font-size:11px">Relax schools to 7+</button><button class="chip" style="font-size:11px">🔔 Alert me when one appears</button></div></div>
+      <div class="anno" style="margin-top:6px">Engine names WHICH constraint it relaxes and why; "Alert me" converts a dead search into a saved search (capture without a wall) → Screen 26 after capture.</div>
+    </div>
+    <div id="el-returning" style="border:1.5px solid var(--brand); border-radius:12px; padding:14px; grid-column:span 2; background:var(--brand-soft)">
+      <b style="font-size:12.5px">State 5 · Returning visitor — the tutorial never shows twice (40%+ of traffic)</b>
+      <div class="twoup" style="display:grid; grid-template-columns:1fr 1fr; gap:10px; margin-top:8px">
+        <div style="background:var(--paper); border:1px solid var(--line); border-radius:8px; padding:10px; font-size:12px">
+          <b>Welcome back 👋 Since Tuesday:</b>
+          <div style="color:var(--mut); margin-top:4px" class="num">· 2 new matches in "3bd, quiet street, ≤30 min…" · 118 Beech cut $25K (you saved it) · 1 open house Sat on your list</div>
+          <div style="display:flex; gap:5px; margin-top:6px"><button class="chip on" style="font-size:11px">See the 2 new</button><button class="chip" style="font-size:11px">Resume last search</button></div>
+        </div>
+        <div class="anno" style="font-size:11.5px">Hero demo + lens education suppressed (localStorage anonymous / profile signed-in) · last search pre-loaded in the bar · signals strip filtered to THEIR saved areas · lens chips shrink to one quiet row · recent searches shown for returning anonymous visitors. One tap into Screen 02/26. The page's job flips from "teach" to "resume."</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ============ six lens guided flows ============ -->
+  <h2 style="font-size:16px; margin:22px 0 10px">The six lens guided flows — one question each, always skippable</h2>
+  <div class="twoup" style="display:grid; grid-template-columns:1fr 1fr 1fr; gap:10px">
+    <div id="el-lens-commute" class="lensflow">
+      <b>🚗 Commute lens</b>
+      <div style="color:var(--mut); margin-top:5px">"Where do you work?" <span class="bdg" style="font-size:10px">address/employer autocomplete</span><br>Mode: <span class="chip on" style="font-size:10px; padding:2px 8px">Drive</span> <span class="chip" style="font-size:10px; padding:2px 8px">Transit</span> <span class="chip" style="font-size:10px; padding:2px 8px">Bike</span><br>Max minutes: <b class="num">30</b> ▬▬▬●▬▬ <span class="anno">(default 30 @ 8am)</span> → isochrone renders, matches inside → <b>"Save this commute"</b> persists to profile; every future card badges "14 min to your office".</div>
+      <div class="anno" style="margin-top:5px">Routing/isochrone vendor [DECIDE — interim Mapbox routing; UI unaffected].</div>
+    </div>
+    <div id="el-lens-schools" class="lensflow">
+      <b>🎓 School Boundaries</b>
+      <div style="color:var(--mut); margin-top:5px">Type a school name (boundary-scoped suggestions: "Homes zoned to Roy Cloud") or tap a boundary outline on the map, colored by rating → results limited to the attendance boundary → stacking chip: "Add a price cap or commute?"</div>
+      <div class="anno" style="margin-top:5px"><b style="color:var(--warn)">Fair-housing gates:</b> user-entered only (<code>school_boundary_user_filter.user_entered: true</code>); §16.3 boundary + rating disclaimers + equal-service note shown IN the flow; school data never in default ranking, alerts, or audiences (§16.4 firewall). Data: LocalDataRecord (third-party school provider).</div>
+    </div>
+    <div id="el-lens-adu" class="lensflow">
+      <b>🏗 ADU Check</b>
+      <div style="color:var(--mut); margin-top:5px">Two paths, one card: check a specific address (eligibility verdict + max size + zoning cite) OR browse the <b class="num">214</b> ADU-eligible listings, each badged with the one-line why ("R-1, 6,200 sqft, SB-9") → <b>"Email me new ADU-eligible listings"</b> = saved-search capture.</div>
+      <div class="anno" style="margin-top:5px">ZoningLookupRecord (Zoneomics), confidence-gated per §17.2: ≥0.80 affirmative / 0.60–0.80 cautious wording / else suppressed entirely + zoning disclaimer. Provider down → "temporarily unavailable," never fake data.</div>
+    </div>
+    <div id="el-lens-yield" class="lensflow">
+      <b>📈 Yield Engine</b>
+      <div style="color:var(--mut); margin-top:5px">"Budget + target: cash flow or appreciation?" → grid flips to investor mode — rent estimate with comp-count provenance, gross yield, cap rate on every card → yield heat layer offered → <b>"Watch this strategy"</b> alert closes the flow.</div>
+      <div class="anno" style="margin-top:5px">CashflowEstimateSnapshot deterministic preview metrics (MB 14.4: NOI, cap_rate, CoC, DSCR etc. computed locally; fit/opportunity/lead SCORES never computed locally — ScoringService only).</div>
+    </div>
+    <div id="el-lens-risk" class="lensflow">
+      <b>🔥 Risk Lens</b>
+      <div style="color:var(--mut); margin-top:5px">Toggle row: <span class="chip on" style="font-size:10px; padding:2px 8px">Low fire</span> <span class="chip" style="font-size:10px; padding:2px 8px">Outside flood</span> <span class="chip" style="font-size:10px; padding:2px 8px">Both</span> — applied to the current or last search → risk overlay + 1–10 scores on cards with <b>"how we compute this"</b> provenance. Portals hide this; we don't.</div>
+      <div class="anno" style="margin-top:5px">Risk vendor [DECIDE — First Street-class API; attribution slot in the card either way]. <b style="color:var(--warn)">No crime layer anywhere — fair housing.</b> Provider down → lens opens with "temporarily unavailable."</div>
+    </div>
+    <div id="el-lens-signals" class="lensflow">
+      <b>⚡ Market Signals</b>
+      <div style="color:var(--mut); margin-top:5px">Straight to the signals feed pre-filtered to the farm: price cuts, back-on-market, DOM outliers, new ADU-eligible → each row = a pre-filled search + one-tap watch.</div>
+      <div class="anno" style="margin-top:5px">IDX change detection + MarketDataSnapshot. Counts as integers; money as $X.XXM/$XXXK; no fabricated counts ever (fail-closed: unavailable → hidden).</div>
+    </div>
+  </div>
+  <div class="anno" style="margin-top:8px">Cross-system capability-discovery rule (every consumer screen): the entry page never carries the whole burden — result-card badges are tappable filters, 2–3 adjacent-capability follow-up chips after every search, parsed chips teach the vocabulary, every search offers one-tap "Watch this," per-user exposure tracking nudges ONE unused lens after N basic searches (never more), tabs = intent modes only.</div>
+
+  <!-- ============ attribution + analytics ============ -->
+  <div id="el-attribution" class="cardbox" style="margin-top:14px">
+    <b>Silent attribution capture (every entry, before any interaction)</b>
+    <div style="color:var(--mut); font-size:12px; margin-top:4px" class="num">content_id (only if a real PropCast piece) · originating_content_id · campaign_id · asset_id · anonymous_visitor_id · session_id · lead_source · capture_source · conversion_source · capture_provider — per MB 7.2/24.1 UTM rules. Entry surfaces: Switchy short links/QRs from postcards & signs (UTM-carrying), PropReach ad destinations, organic, community pages, curated slugs.</div>
+    <div class="anno" style="margin-top:4px">Analytics events on every state transition; <b>parse-abandon rate is the north-star input metric</b>. Search creates a SearchRecord, not a canonical ledger event; IDX form leads submit via PropFlow <code>/approved-leads</code> (PropFlow emits LEAD_CAPTURED — PropSearch never does, MB 25.3).</div>
+  </div>
+
+  <!-- ============ states strip ============ -->
+  <div id="el-states" style="margin-top:14px">
+    <div class="cardbox" style="font-size:11.5px">
+      <b>States (dev reference)</b>
+      <div style="color:var(--mut); margin-top:4px">
+        <b style="color:var(--ink)">Default (first visit):</b> full teaching layout, ambient demo, cycling placeholder — as mocked above.
+        <b style="color:var(--ink)">Loading:</b> skeleton ≤400ms then progressive card fill; search fires with <code>progressive_loading: true</code> (MB 24.1) and transitions to Screen 02.
+        <b style="color:var(--ink)">Returning visitor:</b> State 5 card above — demo + education suppressed, resume-first.
+        <b style="color:var(--ink)">Zero results:</b> State 4 relaxer — names the weakest constraint, never a dead end.
+        <b style="color:var(--ink)">Degraded (all fail-closed):</b> IDX stale &gt;24h → freshness stamp turns warning <span class="bdg warn">⚠ data as of Jul 14, 9:12 PM</span>, no fabricated counts · lens count unavailable → count hidden, chip stays · ambient map failure → static composite stays · risk/zoning provider down → lens opens with "temporarily unavailable," never fake data · sensitive-topic query → HUMAN_HANDOFF_REQUIRED, topic never used downstream, agent notified.
+        <b style="color:var(--ink)">Permission-limited:</b> anonymous users get everything (no sign-up to search); detailed sold comps require an authenticated + MLS-authorized session (MB freshness table).
+        <b style="color:var(--ink)">Thin-market mode:</b> signals strip leans on solds + market stats, lens counts under 10 hidden, pills avoid volume promises.
+      </div>
+    </div>
+  </div>
+
+  <!-- ============ mobile variant strip ============ -->
+  <div id="el-mobile" class="cardbox" style="margin-top:14px">
+    <b>Mobile variant (375px)</b>
+    <div style="display:flex; gap:10px; margin-top:8px; flex-wrap:wrap">
+      <div style="width:180px; border:1px solid var(--line); border-radius:14px; overflow:hidden; font-size:8.5px; background:var(--paper)">
+        <div style="display:flex; align-items:center; gap:5px; padding:6px 8px; border-bottom:1px solid var(--line)"><span class="avatar" style="width:16px; height:16px; font-size:7px">GW</span><b>Graeham Watts</b><span style="margin-left:auto">☰</span></div>
+        <div style="padding:10px 8px; text-align:center; background:linear-gradient(var(--surface),var(--paper))">
+          <div style="height:26px; border-radius:6px; background:linear-gradient(135deg,#1c2530,#26313d); margin-bottom:6px; color:#9fb3c0; font-size:7px; display:grid; place-items:center">static hero composite (no live demo)</div>
+          <b style="font-size:10px; font-family:var(--font-display)">Redwood City, already mapped.</b>
+          <div style="display:flex; border:1px solid var(--line); border-radius:8px; padding:3px; margin-top:5px; background:var(--paper)"><span style="flex:1; text-align:left; padding:3px 4px; color:var(--soft)">Ask anything…</span><span style="background:var(--ink); color:#fff; border-radius:5px; padding:3px 6px">🎙</span></div>
+          <div style="display:flex; gap:3px; margin-top:5px; overflow:hidden">
+            <span class="chip" style="font-size:7px; padding:2px 6px; flex-shrink:0">🚗 Commute</span><span class="chip" style="font-size:7px; padding:2px 6px; flex-shrink:0">🎓 Schools</span><span class="chip" style="font-size:7px; padding:2px 6px; flex-shrink:0">🏗 ADU ·214</span><span class="chip" style="font-size:7px; padding:2px 6px; flex-shrink:0; margin-right:-24px">📈 Yie…</span>
+          </div>
+        </div>
+      </div>
+      <div style="flex:1; min-width:240px; font-size:12px; color:var(--mut)">Header collapses to avatar + hamburger · hero demo replaced by the static composite · input full-width with <b>16px+ font</b> (prevents iOS zoom) · mic prominent · lens chip row = horizontal scroll with the last chip half-cut (the "there's more →" affordance) · two-up cards stack full-width · all chips 44px touch targets · the one-question lens flows render as bottom sheets [BEST GUESS] · visible focus states throughout.</div>
+    </div>
+  </div>
+
+  <!-- ============ spec gaps found ============ -->
+  <div class="note" style="margin-top:24px"><b>Spec gaps found (Master Brain specifies, spec inventory missed — rendered above):</b> (1) <b>MB 14.4 scoring split</b> — PropSearch computes only deterministic factual metrics locally (NOI, cap rate, CoC, DSCR…) and must never compute fit/opportunity/lead scores locally (ScoringService only) — annotated on the Yield Engine flow. (2) <b>MB 14.5 #4 / 15.1</b> — the popular-search filter URLs are the SAME library that supplies ad, QR, SMS, and GBP destination URLs platform-wide — annotated on the popular-search chips. (3) <b>MB 15.2 build rule</b> — every filter URL server-rendered, canonicalized, sitemap-included only when approved, compliance-checked, source-attributed — annotated on the popular-search chips (spec only carried the index caps). (4) <b>MB §12 (line 1243)</b> — LLM usage on this surface is limited to NL parsing / messy-input clarification; everything else is deterministic — annotated on the prompt bar.</div>
+
+  <!-- ============ (3) ELEMENT COVERAGE ============ -->
+  <h2 style="font-size:20px; margin:24px 0 10px">Element coverage — spec inventory → this page</h2>
+  <table class="dtable cov" style="font-size:12.5px">
+    <tr><th>Spec inventory element</th><th>Rendered at</th><th>Status</th></tr>
+    <tr><td>Agent header/brand (identity.json, DRE-bearing footer)</td><td><a href="#el-header">Site header</a> + footer strip</td><td class="ok">✓</td></tr>
+    <tr><td>ES/EN toggle (full-UI language switch)</td><td><a href="#el-lang">Header toggle</a></td><td class="ok">✓</td></tr>
+    <tr><td>Market ticker (median · actives · DOM)</td><td><a href="#el-ticker">Ticker strip</a></td><td class="ok">✓</td></tr>
+    <tr><td>Ambient hero demo (3-lens cycle, reduced-motion, static-first)</td><td><a href="#el-hero-demo">Hero demo card</a></td><td class="ok">✓</td></tr>
+    <tr><td>H1 + sub (market-specific brand headline)</td><td><a href="#el-h1">Hero H1</a></td><td class="ok">✓</td></tr>
+    <tr><td>Primary prompt input (cycling placeholder, POST /api/propsearch/search)</td><td><a href="#el-prompt">Prompt bar</a> + <a href="#el-placeholder">State 1</a></td><td class="ok">✓</td></tr>
+    <tr><td>Typing suggestions (prompt completions first, places demoted)</td><td><a href="#el-suggest">State 2</a></td><td class="ok">✓</td></tr>
+    <tr><td>Parsed-as chips (editable/removable, re-runs search)</td><td><a href="#el-parsed">Parsed-as row</a></td><td class="ok">✓</td></tr>
+    <tr><td>One clarifying question card (max ONE, structured taps)</td><td><a href="#el-clarify">Clarifying card</a></td><td class="ok">✓</td></tr>
+    <tr><td>Zero-results relaxer (names weakest constraint + Alert me)</td><td><a href="#el-zero">State 4</a></td><td class="ok">✓</td></tr>
+    <tr><td>Lens chips ×6 (+ Explore map, live counts, under-10 hide)</td><td><a href="#el-lenses">Lens chip row</a></td><td class="ok">✓</td></tr>
+    <tr><td>Commute lens flow (address + mode + minutes → isochrone, save)</td><td><a href="#el-lens-commute">Commute flow</a></td><td class="ok">✓</td></tr>
+    <tr><td>Schools lens flow (boundary-scoped, §16.3/§16.4 gates)</td><td><a href="#el-lens-schools">Schools flow</a></td><td class="ok">✓</td></tr>
+    <tr><td>ADU Check flow (verdict + cite OR browse; confidence-gated)</td><td><a href="#el-lens-adu">ADU flow</a></td><td class="ok">✓</td></tr>
+    <tr><td>Yield Engine flow (budget + strategy → investor grid)</td><td><a href="#el-lens-yield">Yield flow</a></td><td class="ok">✓</td></tr>
+    <tr><td>Risk Lens flow (fire/flood toggles, provenance, scores)</td><td><a href="#el-lens-risk">Risk flow</a></td><td class="ok">✓</td></tr>
+    <tr><td>Market Signals flow (farm-filtered feed, one-tap watch)</td><td><a href="#el-lens-signals">Signals flow</a></td><td class="ok">✓</td></tr>
+    <tr><td>Address-as-query card (report card + Save this address hook)</td><td><a href="#el-address-card">Any-address card</a></td><td class="ok">✓</td></tr>
+    <tr><td>This-week signals card (2–4 live rows, deep-links)</td><td><a href="#el-signals-card">This-week card</a></td><td class="ok">✓</td></tr>
+    <tr><td>Example pills ×4 (personas, live data, instant fire)</td><td><a href="#el-pills">Pill row</a></td><td class="ok">✓</td></tr>
+    <tr><td>Classic search link (filter-first fallback)</td><td><a href="#el-classic">Classic link</a></td><td class="ok">✓</td></tr>
+    <tr><td>Popular-search chips (curated indexed slugs, INDEX_ALLOWED)</td><td><a href="#el-popular">Popular searches</a></td><td class="ok">✓</td></tr>
+    <tr><td>SEO prose block (one paragraph, internal links, no keyword wall)</td><td><a href="#el-seo">SEO prose</a></td><td class="ok">✓</td></tr>
+    <tr><td>Trust row (MLS-direct badge, no-signup, review stars)</td><td><a href="#el-trustrow">Trust row</a></td><td class="ok">✓</td></tr>
+    <tr><td>Freshness stamp ("MLS data updated N min ago" + stale warning)</td><td><a href="#el-freshness">Footer stamp</a> + <a href="#el-states">degraded state</a></td><td class="ok">✓</td></tr>
+    <tr><td>Returning-visitor hero swap (welcome-back deltas, resume)</td><td><a href="#el-returning">State 5</a></td><td class="ok">✓</td></tr>
+    <tr><td>Voice mic (Web Speech API, hidden where unsupported)</td><td><a href="#el-mic">Prompt bar mic</a></td><td class="ok">✓</td></tr>
+  </table>
+  <div style="border:1.5px solid var(--good); background:#f2f8f4; border-radius:10px; padding:12px 16px; margin:12px 0 0; font-weight:700; color:var(--good)">27 of 27 spec elements rendered ✓ <span style="font-weight:400; color:var(--mut); font-size:12.5px">— plus prompt-required regions beyond the inventory: trust line + homeowner hook, silent attribution capture card, capability-discovery rule, full states strip (loading/empty/degraded/permission-limited/thin-market), mobile-variant strip; plus the 4 Master-Brain gap additions noted above.</span></div>
+
+  <!-- ============ (4) FULL SPEC AS HTML ============ -->
+  <div class="specdoc">
+    <h1 style="font-size:24px; margin:40px 0 6px">Spec — 01 · Search entry page</h1>
+    <p><b>Purpose</b> The public, agent-branded front door of PropSearch: one natural-language input that also handles addresses, filters, and research questions, wrapped in a page that teaches the six differentiating "lenses" and captures anonymous visitors into saved searches and homeowner signals. It is simultaneously the SEO homepage for the agent's market and the top of the lead funnel.</p>
+    <p><b>Primary users</b> Anonymous consumers (buyers, homeowners, investors) arriving from Google, ads, postcards/QRs, and social; returning signed-in consumers; the agent when demoing.</p>
+    <p><b>Entry points</b> Direct domain (<code>https://{agentdomain}/search</code>, canonical), organic Google (WebSite+SearchAction schema), community-page links, curated "popular search" slug pages, Switchy short links/QRs from postcards &amp; signs (UTM-carrying), PropReach ad destinations, nav "Search" from every consumer screen.</p>
+    <p><b>Exit points</b> Every search/pill/lens/signal-row/address → Screen 02 Results (POST /api/propsearch/search); address detection → property report card → Screen 03 property detail / owner report; "See what it's worth" → owner/equity capture flow; classic-search link → filter-panel variant of Screen 02; community-page links → community screens; "Alert me" / save actions → Screen 26 Saved (after capture); footer links → sell page, about, every community page.</p>
+
+    <h2>Layout</h2>
+    <p><b>Desktop (top → bottom):</b> Site header (sticky) — agent avatar + name + brokerage (identity.json brand vault), nav Search · Communities · Sell · About, quiet ES/EN toggle; market ticker strip beneath (median · actives · DOM, links to community pages). Hero — ambient 3D farm-map demo behind the H1 (cycles one lens every 4s: commute isochrone → school boundaries → ADU parcels amber; pauses on interaction; respects <code>prefers-reduced-motion</code>; paints as static composite first, hydrates after idle; if live map misses 1.5s the static frame stays). H1 <code>"{Market}, already mapped."</code> (auto-fills per agent) + plain-English sub-line. The ONE primary input (prompt bar) with mic + Search — address/prompt/question modes are detections, not separate boxes. Trust line ("Live MLS data · no sign-up to search · your info is never sold to other agents", links to privacy-promise page); homeowner hook "Own a home here? See what it's worth →". Lens chip row: exactly six named lenses (Commute, School Boundaries, ADU Check, Yield Engine, Risk Lens, Market Signals) + "Explore map"; live counts per market; counts under 10 hide, chips never disappear. Parsed-as chip row (post-parse): each parsed filter as an editable/removable chip. Example pill row: four persona pills (investor/buyer/cautious/market), never two from the same lens, rotated per visit, localized with live data; each fires a real search instantly. Two-up card row: "Any address is a query" explainer · "This week in {market}" signals card (auto-generated weekly; rows deep-link to pre-filled searches). "Prefer filters? Use classic search" link. Below-the-fold SEO block: one prose paragraph (city + homes-for-sale keywords + neighborhood internal links, never a keyword wall); "Popular searches" curated indexed slug chips; trust row (MLS-direct badge, review stars); footer "Powered by PropertyIQ" + "MLS data updated N min ago" freshness stamp; footer links to every community page + sell page.</p>
+    <p><b>Mobile (375px):</b> header collapses to avatar + hamburger; hero demo replaced by static composite; input full-width, 16px+ font (prevents iOS zoom); mic prominent; lens chip row becomes horizontal scroll with the last chip half-cut ("there's more →" affordance); two-up cards stack full-width; chips 44px touch targets.</p>
+
+    <h2>Element inventory</h2>
+    <div style="overflow-x:auto">
+    <table class="dtable">
+      <tr><th>Element</th><th>What it shows/does</th><th>Data source</th><th>Interactions</th><th>Spec source</th></tr>
+      <tr><td>Agent header/brand</td><td>Name, brokerage, DRE-bearing footer</td><td>identity.json brand vault (read-only)</td><td>nav links</td><td>Draft S1; CLAUDE.md brand rule</td></tr>
+      <tr><td>ES/EN toggle</td><td>Full-UI language switch (not just prompts)</td><td>user pref (localStorage/profile)</td><td>tap toggles</td><td>Draft S1 guardrail 2 (EPA farm requirement)</td></tr>
+      <tr><td>Market ticker</td><td>median · actives · DOM</td><td>MarketDataSnapshot (daily refresh top markets)</td><td>rows link to community pages</td><td>Draft S1 inventory; MB 10.8, freshness table</td></tr>
+      <tr><td>Ambient hero demo</td><td>Cycles 3 lens visualizations</td><td>Mapbox imagery (primary; Google Earth blocked for marketing) + zoning/school/commute layers</td><td>pauses on interaction; reduced-motion static</td><td>Draft S1; MB 12.6, MAPBOX_LICENSE flag</td></tr>
+      <tr><td>H1 + sub</td><td>Market-specific brand headline</td><td>brand vault market name</td><td>—</td><td>Draft S1 SEO spec</td></tr>
+      <tr><td>Primary prompt input</td><td>NL query / address / question, cycling typed-out placeholder (4 prompts, 2.5s hold, instrumented rotation)</td><td>—</td><td>type, voice mic, Enter/Search → POST /api/propsearch/search</td><td>Draft S1 State 1; MB 24.1</td></tr>
+      <tr><td>Typing suggestions</td><td>Full-prompt completions ranked first, places demoted below divider</td><td>prompt-completion service + geocoder</td><td>tap fills &amp; fires</td><td>Draft S1 State 2</td></tr>
+      <tr><td>Parsed-as chips</td><td>Deterministic parse echo, each editable/removable</td><td>SearchRecord.parsed_filters (ParsedSearchFilters)</td><td>✕ removes filter, tap edits; re-runs search</td><td>Draft S1 State 3; MB 10.5/14.2</td></tr>
+      <tr><td>One clarifying question card</td><td>Max ONE structured tap-question before results</td><td>parser (asks when required facts missing)</td><td>tap answer → becomes chip</td><td>Draft S1 State 3; MB 14.2</td></tr>
+      <tr><td>Zero-results relaxer</td><td>Names the weakest constraint + relax options + "Alert me"</td><td>search engine relaxation logic</td><td>tap option re-runs; alert = saved-search capture</td><td>Draft S1 State 4</td></tr>
+      <tr><td>Lens chips ×6</td><td>Each opens a one-question guided flow, swaps example pills, shows live count</td><td>per-lens counts from IDX/zoning/market data</td><td>tap → guided flow</td><td>Draft S1 lens table</td></tr>
+      <tr><td>Commute lens flow</td><td>Work address + mode + minutes slider (default 30 @ 8am) → isochrone</td><td>routing/isochrone provider [BEST GUESS: Mapbox routing]</td><td>"Save this commute" persists to profile</td><td>Draft S1 lens table</td></tr>
+      <tr><td>Schools lens flow</td><td>Boundary-scoped school search or map boundary tap, colored by rating</td><td>LocalDataRecord (third-party school provider)</td><td>results limited to attendance boundary</td><td>Draft S1; MB 16.2–16.4</td></tr>
+      <tr><td>ADU Check flow</td><td>Address eligibility verdict (max size + zoning cite) OR browse ADU-eligible listings</td><td>ZoningLookupRecord (Zoneomics, confidence-gated)</td><td>"Email me new ADU-eligible" = saved search</td><td>Draft S1; MB 17.2 gates</td></tr>
+      <tr><td>Yield Engine flow</td><td>Budget + cash-flow-vs-appreciation → investor mode grid</td><td>CashflowEstimateSnapshot deterministic preview metrics</td><td>"Watch this strategy" alert</td><td>Draft S1; MB 14.4</td></tr>
+      <tr><td>Risk Lens flow</td><td>fire/flood toggles applied to current/last search</td><td>risk data provider with "how we compute this" provenance [BEST GUESS: First Street-class provider — UI unaffected by vendor]</td><td>overlay + 1–10 scores on cards</td><td>Draft S1</td></tr>
+      <tr><td>Market Signals flow</td><td>Signals feed pre-filtered to the farm (price cuts, back-on-market, DOM outliers, new ADU-eligible)</td><td>IDX change detection + MarketDataSnapshot</td><td>each row = pre-filled search + one-tap watch</td><td>Draft S1</td></tr>
+      <tr><td>Address-as-query card</td><td>Explains the report-card flow; "Save this address" homeowner hook</td><td>PropertyRecord + AVM/rent/zoning/risk</td><td>paste address → "Get the report card?"</td><td>Draft S1</td></tr>
+      <tr><td>This-week signals card</td><td>2–4 live signal rows with counts</td><td>signals engine, weekly auto-gen</td><td>deep-link to pre-filled searches</td><td>Draft S1</td></tr>
+      <tr><td>Example pills ×4</td><td>Persona-localized live-data prompts</td><td>pill ruleset + live counts</td><td>fire real search instantly, no wall</td><td>Draft S1 pill rules</td></tr>
+      <tr><td>Classic search link</td><td>Filter-first fallback (price/beds/baths/city — same engine)</td><td>—</td><td>opens filter panel</td><td>Draft S1</td></tr>
+      <tr><td>Popular-search chips</td><td>Curated indexed slug pages</td><td>IDXFilterUrlRecord (INDEX_ALLOWED)</td><td>navigate to curated results page</td><td>Draft S1/S2; MB 15</td></tr>
+      <tr><td>SEO prose block</td><td>One paragraph, neighborhood internal links</td><td>auto-written from live data</td><td>—</td><td>Draft S1 SEO</td></tr>
+      <tr><td>Trust row</td><td>MLS-direct badge, no-signup claim, Google review stars</td><td>review source [BEST GUESS: GBP API]</td><td>—</td><td>Draft S1 inventory</td></tr>
+      <tr><td>Freshness stamp</td><td>"MLS data updated N min ago"</td><td>IDX refresh timestamp</td><td>—</td><td>Draft S1; MB 14.3</td></tr>
+      <tr><td>Returning-visitor hero swap</td><td>"Welcome back — since Tuesday: N new matches / price cut / open house" + See-the-new / Resume buttons</td><td>saved searches + saved properties deltas</td><td>one tap into Screen 02/26</td><td>Draft S1 State 5</td></tr>
+      <tr><td>Voice mic</td><td>Voice input to the prompt</td><td>device speech API</td><td>—</td><td>Draft S1</td></tr>
+    </table>
+    </div>
+
+    <h2>States</h2>
+    <ul style="padding-left:20px">
+      <li><b>Default (first visit):</b> full teaching layout, ambient demo, cycling placeholder.</li>
+      <li><b>Loading:</b> skeleton ≤400ms then progressive card fill; search fires with <code>progressive_loading: true</code> (MB 24.1) and transitions to Screen 02.</li>
+      <li><b>Returning visitor (40%+ of traffic):</b> hero demo + lens education suppressed (localStorage anonymous / profile signed-in); last search pre-loaded in the bar; signals strip filtered to their saved areas; lens chips shrink to one quiet row; welcome-back delta card. Tutorial never shows twice.</li>
+      <li><b>Empty/zero-results:</b> never a dead end — relaxation card names WHICH constraint and why + "Alert me" saved-search conversion (State 4).</li>
+      <li><b>Error/degraded (fail closed):</b> IDX feed stale &gt;24h → freshness stamp turns warning ("data as of …"), no fabricated counts; lens counts unavailable → count hidden, chip stays; ambient map failure → static composite; risk/zoning provider down → those lenses open with "temporarily unavailable" note, never fake data. Sensitive-topic text in a query → <code>HUMAN_HANDOFF_REQUIRED</code>: topic excluded from parse/scoring/routing, gentle generic response, agent notified.</li>
+      <li><b>Permission-limited:</b> anonymous users get everything (no sign-up to search); detailed sold comps require authenticated + MLS-authorized session (MB freshness table).</li>
+      <li><b>Thin-market mode:</b> signals strip leans on solds + market stats, lens counts under 10 hidden, pills avoid volume promises.</li>
+      <li><b>Mobile:</b> per Layout; the one-question flows render as bottom sheets [BEST GUESS].</li>
+    </ul>
+
+    <h2>Data fields</h2>
+    <p>Query: <code>query_text</code>, ParsedSearchFilters (city/state/zip/geo_code, min/max_price, min_beds/baths, property_types, listing_statuses, investor_strategy, min_rent_estimate_monthly, min_cap_rate, min_cash_on_cash_return, max_monthly_cash_needed, min_dscr, adu_interest, zoning_required, school_boundary_user_filter {user_entered: true}, exclude_protected_class_inputs: true). Source of truth: SearchRecord (MB 10.5).</p>
+    <p>Attribution captured silently on every entry: content_id (only if real PropCast piece), originating_content_id, campaign_id, asset_id, anonymous_visitor_id, session_id, lead_source, capture_source, conversion_source, capture_provider (MB 7.2/24.1 UTM rules).</p>
+    <p>Ticker/signal numbers: MarketDataSnapshot fields; counts formatted as integers; money as $X.XXM/$XXXK. Freshness timestamps per data type per MB 14.3 table.</p>
+
+    <h2>Rules &amp; compliance</h2>
+    <ul style="padding-left:20px">
+      <li>Parser forbidden behaviors (MB 14.2): never infer protected class, family status, or sensitive life events; no MLS embeddings/vector search; no persistent AI memory of MLS content; no local scoring. Sensitive topic → human_handoff_required, topic never used downstream.</li>
+      <li>School lens: user-entered only; §16.3 boundary + rating disclaimers + equal-service note shown in the flow; school data never in default ranking, alerts, audiences (§16.4 firewall).</li>
+      <li>Zoning claims obey 17.2 gates (≥0.80 affirmative / 0.60–0.80 cautious / else suppress) + zoning disclaimer.</li>
+      <li>No crime layer anywhere (fair housing). Wording rules: facts with attribution, never characterizations ("great schools", "family-friendly" forbidden — MB 16.1).</li>
+      <li>"Never sold to other agents" claim must be contractually true platform-wide before ship (draft guardrail 3).</li>
+      <li>Brand identity fields read-only from identity.json; DRE 01466876 only; the identity.json blocklist value must never appear.</li>
+      <li>Dynamic results noindex; only curated filter-URL pages indexed (caps: 250/market, 5000 global).</li>
+    </ul>
+
+    <h2>Cross-links</h2>
+    <p><b>In:</b> ads/postcards/QRs (Switchy, UTM), community pages, curated slugs, PropReach destinations. <b>Out:</b> Screen 02 Results, Screen 03 property detail/report card, owner-value flow, community pages, Screen 26 Saved (via alert/save capture).</p>
+    <p><b>Ledger:</b> emits nothing directly (search itself creates SearchRecord, not a canonical event); address report card may trigger EQUITY_CARD_CREATED downstream; IDX form leads submit via PropFlow <code>/approved-leads</code> (PropFlow emits LEAD_CAPTURED — PropSearch must never emit it, MB 25.3). Analytics events on every state transition; parse-abandon rate = north-star input metric.</p>
+
+    <h2>Open decisions</h2>
+    <ul style="padding-left:20px">
+      <li>[DECIDE] Isochrone/routing vendor — interim: Mapbox routing (already primary imagery vendor); UI unaffected.</li>
+      <li>[DECIDE] Risk-data vendor — interim: First Street-class API; card copy shows provider attribution slot either way.</li>
+      <li>[DECIDE] Review-stars source — interim: Google Business Profile rating, cached daily.</li>
+      <li>[DECIDE] Voice input implementation — interim: native Web Speech API with server fallback; mic hidden where unsupported.</li>
+      <li>[DECIDE] Placeholder-rotation experiment plumbing — interim: simple weighted rotation logged to analytics; formal A/B later.</li>
+    </ul>
+
+    <h2>Per-page SEO spec (auto-generated per agent)</h2>
+    <table class="dtable">
+      <tr><td>Title tag</td><td><code>Search Homes in {market} | {Agent Name}, {Brokerage}</code></td></tr>
+      <tr><td>Meta description</td><td><code>Search {market} homes by commute, schools &amp; investment return. Live MLS data from {Agent Name}.</code></td></tr>
+      <tr><td>H1</td><td><code>{Market}, already mapped.</code> (one H1 only; brand headline)</td></tr>
+      <tr><td>Canonical</td><td><code>https://{agentdomain}/search</code></td></tr>
+      <tr><td>Schema</td><td><code>WebSite + SearchAction</code> (sitelinks search box) · <code>RealEstateAgent</code> (NAP, DRE, sameAs socials)</td></tr>
+      <tr><td>Internal links</td><td>Footer links to every community page + sell page (crawl path into the mesh)</td></tr>
+    </table>
+  </div>
+</div>

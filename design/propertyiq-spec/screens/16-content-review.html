@@ -1,0 +1,458 @@
+<title>PropertyIQ · Screen 16 — Content Review & Approve</title>
+<link href="https://api.fontshare.com/v2/css?f[]=technor@500,600,700&display=swap" rel="stylesheet">
+<link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<style>
+  /* Type system — Technor for display (the squared machine look from the font exploration), Inter for UI. */
+  :root{ --font-display:'Technor', Inter, -apple-system, 'Segoe UI', sans-serif; --font-ui: Inter, -apple-system, 'Segoe UI', Roboto, sans-serif; }
+</style>
+<style>
+  /* Palette v4 — PropFlow design language: neutral ink UI, ink-as-accent, color reserved for data. (extracted verbatim from propsearch-design-draft.html) */
+  :root, :root[data-theme="dark"], :root[data-theme="light"]{
+    --ink:#23282f; --paper:#fbfaf8; --surface:#f1efe9; --line:#e2dfd6;
+    --mut:#6b7076; --soft:#9b9f9f;
+    --brand:#2e6b53; --brand-ink:#ffffff; --brand-soft:#eaf1ec; --brand-deep:#1e4c3a;
+    --signal:#b07a2e;
+    --good:#2e7d4f; --warn:#a8630a; --crit:#b3372f;
+    --r:10px;
+  }
+  .intel .score, .mintel{ color:var(--brand-deep) }
+  .intel{ border-left:3px solid var(--brand) }
+  h1{ letter-spacing:-.02em }
+  .stat b{ letter-spacing:-.01em }
+  body[data-agent="watts"]{ --brand:#2e6b53; --brand-soft:#eaf1ec; --brand-deep:#1e4c3a; }
+
+  *{box-sizing:border-box; margin:0}
+  body{font:15px/1.55 var(--font-ui); color:var(--ink); background:var(--paper); padding-bottom:80px}
+  h1,h2,h3{line-height:1.15; text-wrap:balance; font-family:var(--font-display); font-weight:600}
+  h1{letter-spacing:-.01em}
+  .site{box-shadow:0 1px 2px rgba(20,24,32,.04), 0 8px 32px rgba(20,24,32,.06)}
+  .stat{box-shadow:0 1px 2px rgba(20,24,32,.03); transition:box-shadow .15s, transform .15s}
+  .stat:hover{box-shadow:0 4px 14px rgba(20,24,32,.08)}
+  .chip{transition:all .12s}
+  button{font-family:var(--font-ui)}
+  .num{font-variant-numeric:tabular-nums}
+  .wrap{max-width:1180px; margin:0 auto; padding:0 20px}
+
+  .bar{position:sticky; top:0; z-index:50; background:var(--paper); border-bottom:1px solid var(--line); padding:10px 0; backdrop-filter:blur(8px)}
+  .bar .wrap{display:flex; flex-wrap:wrap; gap:10px; align-items:center}
+  .bar .ttl{font-weight:700; margin-right:auto}
+  .bar .ttl small{display:block; font-weight:400; color:var(--mut)}
+  .bar a{color:var(--brand); font-size:13px; text-decoration:none}
+
+  .note{background:var(--surface); border:1px solid var(--line); border-radius:var(--r); padding:14px 16px; margin:0 0 22px; font-size:13.5px; color:var(--mut)}
+  .note b{color:var(--ink)}
+
+  .site{border:1px solid var(--line); border-radius:14px; overflow:hidden; background:var(--paper)}
+  .sitehead{display:flex; align-items:center; gap:14px; padding:14px 22px; border-bottom:1px solid var(--line)}
+  .avatar{width:38px; height:38px; border-radius:50%; background:var(--brand); color:var(--brand-ink); display:grid; place-items:center; font-weight:700}
+  .sitehead .who b{display:block}
+  .sitehead .who small{color:var(--mut)}
+  .sitehead nav{margin-left:auto; display:flex; gap:18px; font-size:13.5px; color:var(--mut)}
+  .sitehead nav a{color:inherit; text-decoration:none}
+  .sitehead nav a:hover{color:var(--brand)}
+
+  .chip{display:inline-flex; align-items:center; gap:6px; font-size:12.5px; font-weight:500; border:1px solid var(--line); border-radius:99px; padding:6px 12px; background:var(--paper); cursor:pointer; color:var(--ink)}
+  .chip:hover{border-color:var(--brand)}
+  .chip.on{background:var(--brand); border-color:var(--brand); color:var(--brand-ink); font-weight:600; box-shadow:0 2px 8px color-mix(in srgb, var(--brand) 30%, transparent)}
+
+  .statrow{display:grid; grid-template-columns:repeat(4,1fr); gap:10px}
+  .stat{background:var(--surface); border:1px solid var(--line); border-radius:var(--r); padding:12px}
+  .stat small{display:block; color:var(--mut); font-size:11.5px; text-transform:uppercase; letter-spacing:.05em}
+  .stat b{font-size:18px}
+  .stat .up{color:var(--good); font-size:12px}
+
+  .bdg{font-size:11.5px; border-radius:6px; padding:3px 8px; background:var(--surface); border:1px solid var(--line); color:var(--mut)}
+  .bdg.good{color:var(--good); border-color:color-mix(in srgb,var(--good) 30%,var(--line))}
+  .bdg.warn{color:var(--warn); border-color:color-mix(in srgb,var(--warn) 30%,var(--line))}
+
+  .dtable{width:100%; border-collapse:collapse; font-size:13px}
+  .dtable td,.dtable th{border-bottom:1px solid var(--line); padding:8px 10px; text-align:left}
+  .dtable th{font-size:11px; text-transform:uppercase; letter-spacing:.05em; color:var(--soft)}
+
+  @media (max-width:860px){ .statrow{grid-template-columns:repeat(2,1fr)} .maingrid{grid-template-columns:1fr !important} .console{grid-template-columns:1fr !important} .rail{display:none !important} }
+  @media (prefers-reduced-motion: reduce){ *{transition:none!important} }
+
+  /* ---- page-specific additions (kept in the same design language) ---- */
+  .anno{font-size:11px; color:var(--soft)}
+  .cardbox{border:1px solid var(--line); border-radius:10px; padding:11px 14px; font-size:12.5px; background:var(--paper)}
+  .btn-ink{background:var(--ink); color:#fff; border:0; border-radius:7px; padding:7px 12px; font-size:11.5px; cursor:pointer; font-weight:600}
+  .btn-ghost{background:var(--paper); border:1px solid var(--line); border-radius:7px; padding:7px 12px; font-size:11.5px; cursor:pointer}
+  .sechead{font-size:14px; font-weight:700; margin:0 0 8px; font-family:var(--font-display)}
+  .cov td.ok{color:var(--good); font-weight:700}
+  .specdoc h2{font-size:18px; margin:26px 0 8px}
+  .specdoc h3{font-size:15px; margin:18px 0 6px}
+  .specdoc p, .specdoc li{font-size:13.5px; color:var(--mut)}
+  .specdoc b{color:var(--ink)}
+  .specdoc table{margin:8px 0}
+  .ph{background:repeating-linear-gradient(45deg, var(--surface), var(--surface) 6px, var(--line) 6px, var(--line) 8px); border:1px solid var(--line); border-radius:8px; display:grid; place-items:center; color:var(--mut); font-size:11px}
+  .prompt{display:flex; gap:6px; border:1px solid var(--line); border-radius:10px; background:var(--paper)}
+  .prompt input{flex:1; border:0; background:transparent; padding:8px 10px; font:12.5px var(--font-ui); color:var(--ink); outline:none}
+  .prompt button{background:var(--ink); color:#fff; border:0; border-radius:7px; padding:7px 14px; font-size:11.5px; font-weight:600; cursor:pointer}
+  .quad{border:1px solid var(--line); border-radius:10px; padding:10px; background:var(--paper); font-size:11.5px; cursor:pointer}
+  .quad:hover{border-color:var(--brand)}
+  .score5{display:inline-flex; gap:2px; vertical-align:middle}
+  .score5 i{width:9px; height:9px; border-radius:2px; background:var(--surface); border:1px solid var(--line); display:inline-block}
+  .score5 i.f{background:var(--brand); border-color:var(--brand)}
+</style>
+
+<!-- ============ (1) slim header ============ -->
+<div class="bar">
+  <div class="wrap">
+    <div class="ttl">PropertyIQ · Screen 16 — Content Review &amp; Approve <small>Full-density per-screen mock · wireframe fidelity · dev-facing annotations in gray</small></div>
+    <a href="../wireframe.html">← All screens</a>
+  </div>
+</div>
+
+<!-- ============ (2) THE FULL MOCK ============ -->
+<div class="wrap" style="padding-top:24px">
+  <div class="note"><b>Screen 16 — Content Review &amp; Approve (PropCast).</b> The single creative decision surface: finalists from the Showrunner Gauntlet arrive here, the agent picks a direction, optionally steers conversationally, and the chosen concept builds the full container bundle (video + landing page + lead-magnet PDF + comment-DM flow) shipped as ONE approval card. Per the Master Brain there are exactly two governed decisions in the whole pipeline — backlog approval (Monday briefing, Tab 12) and exact-version approval (here → ContentLock). Wattson can steer via governed intents (ASK_WHY / APPROVE / REJECT / REQUEST_HUMAN_REVIEW) but approval itself is always human.</div>
+
+  <div class="site" data-agent="watts">
+    <!-- header: run title, gauntlet summary, nav, brief context pin (spec Layout zone: Header) -->
+    <div class="sitehead" id="el-header">
+      <div class="avatar">GW</div>
+      <div class="who"><b>Review: "ADU rules changed" — pick a direction</b><small class="num">3 finalists survived · 12 generated, 9 culled (gauntlet stats from CreativeProductionRun.spark_usage)</small></div>
+      <div id="el-brief-pin" class="cardbox" style="margin-left:auto; max-width:330px; font-size:11px; background:var(--surface); padding:8px 12px">
+        <b>Brief context</b> · triggered by <a href="#" style="color:var(--brand)">signal: EPA ADU ordinance update (Jul 9)</a> · fills backlog slot <a href="#" style="color:var(--brand)">Mon wk29 · education #2</a>
+        <div class="anno">Pinned top-right per ~37-iteration draft decision. Click → source signal / canvas brief (Tab 36). brief.sources[] carries canvas node ids.</div>
+      </div>
+      <nav><a href="#">Backlog</a><a href="#" id="el-history-link">History</a></nav>
+    </div>
+
+    <div class="console" style="display:grid; grid-template-columns:172px 1fr">
+      <!-- persistent agent-console left rail (same chrome as Screen 9) -->
+      <div class="rail" style="border-right:1px solid var(--line); padding:14px 10px; font-size:12.5px; display:flex; flex-direction:column; gap:2px; background:var(--surface)">
+        <a href="#" style="text-decoration:none; color:var(--ink); border-radius:8px; padding:8px 10px">☰ Today</a>
+        <a href="#" style="text-decoration:none; color:var(--ink); border-radius:8px; padding:8px 10px">🗺 Farm map</a>
+        <a href="#" style="text-decoration:none; color:var(--ink); border-radius:8px; padding:8px 10px">🤝 Past clients</a>
+        <a href="#" style="text-decoration:none; color:var(--ink); border-radius:8px; padding:8px 10px">👤 Leads &amp; clients</a>
+        <a href="#" style="text-decoration:none; color:var(--ink); border-radius:8px; padding:8px 10px">💬 Comms <span class="bdg" style="font-size:9.5px">6</span></a>
+        <a href="#" style="text-decoration:none; color:var(--ink); border-radius:8px; padding:8px 10px">📋 Transactions <span class="bdg" style="font-size:9.5px">2</span></a>
+        <a href="#" style="text-decoration:none; color:#fff; background:var(--ink); border-radius:8px; padding:8px 10px; font-weight:600">🎬 Content studio <span class="bdg" style="font-size:9.5px; background:var(--paper)">3</span></a>
+        <a href="#" style="text-decoration:none; color:var(--ink); border-radius:8px; padding:8px 10px">📣 Ads &amp; funnels</a>
+        <a href="#" style="text-decoration:none; color:var(--ink); border-radius:8px; padding:8px 10px">⚙ Playbooks</a>
+        <a href="#" style="text-decoration:none; color:var(--ink); border-radius:8px; padding:8px 10px">📈 Reports</a>
+        <div style="margin-top:auto; padding-top:10px; border-top:1px solid var(--line)">
+          <a href="#" style="text-decoration:none; color:var(--ink); border-radius:8px; padding:8px 10px; display:block">⚙ Settings</a>
+          <div class="anno" style="padding:6px 10px">Global chrome: agent-console left rail persistent across all agent screens (Screen 9 pattern). Consumer pages never show it. "3" badge = runs awaiting review.</div>
+        </div>
+      </div>
+
+      <div style="padding:16px 22px">
+        <!-- ===== ZONE 1 — finalist cards ===== -->
+        <div id="el-finalist-cards">
+          <div class="sechead">Finalists — pick a direction <span class="anno" style="font-weight:400">(3–5 cards, never padded; selected card gets brand border + soft fill)</span></div>
+          <div style="display:grid; grid-template-columns:repeat(3,1fr); gap:10px">
+            <!-- Card A — selected -->
+            <div style="border:1.5px solid var(--brand); border-radius:12px; padding:12px; background:var(--brand-soft)">
+              <div style="display:flex; align-items:center; gap:6px"><b style="font-size:13px">A · "Your garage is worth $250K"</b>
+                <span id="el-craft-badge" class="bdg" style="margin-left:auto; font-size:10px; background:var(--paper)" title="Craft rubric: 3 = publishable, 4 = strong, 5 = excellent. Finalists below 3 never reach this screen.">craft <b class="num">5</b>/5 <span class="score5"><i class="f"></i><i class="f"></i><i class="f"></i><i class="f"></i><i class="f"></i></span></span>
+              </div>
+              <div style="display:flex; gap:6px; margin-top:4px; flex-wrap:wrap">
+                <span class="bdg" style="font-size:10px" title="Comedic finalists carry a joke score; below 3 → rejected or rewritten non-comedic ('a weak joke is worse than no joke').">joke <b class="num">4</b>/5</span>
+                <span id="el-hook-score" class="bdg" style="font-size:10px" title="Legacy composite from the draft — internal ranking only [DECIDE]">rank 8.7 <span class="anno">internal</span></span>
+                <span id="el-tone-chip" class="chip" style="font-size:10.5px; padding:3px 9px">tone: dry, no hype · <u>why this tone?</u></span>
+              </div>
+              <!-- tone popover (shown expanded for the mock) -->
+              <div class="cardbox" style="margin-top:6px; font-size:11px; background:var(--paper)">
+                <b>FLOAT tone rationale</b> — matches your Personality Dial: humor 6/10, edge 3/10. Deadpan money-first open scores highest against your taste profile for education pieces.
+                <div style="display:flex; gap:5px; margin-top:5px"><button class="btn-ink" style="padding:4px 9px; font-size:10.5px">Accept</button><button class="btn-ghost" style="padding:4px 9px; font-size:10.5px">Adjust</button><button class="btn-ghost" style="padding:4px 9px; font-size:10.5px">Lock tone</button></div>
+                <div class="anno" style="margin-top:4px">AgentTasteProfile + per-piece tone rec (runs pre-gauntlet when tone_mode=FLOAT). Hard-ceiling violations are rejected regardless of score — "funny is not a defense."</div>
+              </div>
+              <div class="ph" style="min-height:70px; margin:8px 0">▶ 15s preview (MP4/WebM — vendor-agnostic player [DECIDE])</div>
+              <div style="font-size:11.5px; color:var(--mut)">Money-first angle · deadpan open on your driveway · point: new state ADU rules just raised what an EPA garage lot can hold · CTA: comment "ADU" for the checklist · <a href="#" style="color:var(--brand)">expand full script ▾</a></div>
+              <div style="display:flex; gap:5px; margin-top:4px; flex-wrap:wrap"><span class="bdg" style="font-size:9.5px">AI-disclosure: labeled ✓ (IG/YT native)</span><span class="bdg warn" style="font-size:9.5px" title="Platforms with no disclosure field produce a QC hold downstream (Tab 32/19)">Nextdoor: no label field → QC hold downstream</span></div>
+              <button id="el-choose" style="width:100%; margin-top:8px; background:var(--ink); color:#fff; border:0; border-radius:8px; padding:8px; font-size:12px; font-weight:700; cursor:pointer">Choose A</button>
+              <div class="anno" style="margin-top:3px">Choose → run FORGED → DESIGN_QA; zone 4 below populates with the container bundle. Choice logged as TasteFeedbackEvent.</div>
+            </div>
+            <!-- Card B -->
+            <div style="border:1px solid var(--line); border-radius:12px; padding:12px">
+              <div style="display:flex; align-items:center; gap:6px"><b style="font-size:13px">B · "The rule nobody read"</b><span class="bdg" style="margin-left:auto; font-size:10px">craft <b class="num">4</b>/5 <span class="score5"><i class="f"></i><i class="f"></i><i class="f"></i><i class="f"></i><i></i></span></span></div>
+              <div style="display:flex; gap:6px; margin-top:4px"><span class="bdg" style="font-size:10px">non-comedic (no joke score)</span><span class="bdg" style="font-size:10px">rank 8.1</span><span class="chip" style="font-size:10.5px; padding:3px 9px">tone: educational · <u>why?</u></span></div>
+              <div class="ph" style="min-height:70px; margin:8px 0">▶ 15s preview</div>
+              <div style="font-size:11.5px; color:var(--mut)">News-hook angle · ordinance page close-up · point: the July deadline clause · CTA: DM keyword "RULES" · <a href="#" style="color:var(--brand)">expand full script ▾</a></div>
+              <button style="width:100%; margin-top:8px; background:var(--paper); border:1px solid var(--line); border-radius:8px; padding:8px; font-size:12px; cursor:pointer">Choose B</button>
+            </div>
+            <!-- Card C -->
+            <div style="border:1px solid var(--line); border-radius:12px; padding:12px">
+              <div style="display:flex; align-items:center; gap:6px"><b style="font-size:13px">C · "I walked 3 lots today"</b><span class="bdg" style="margin-left:auto; font-size:10px">craft <b class="num">3</b>/5 <span class="score5"><i class="f"></i><i class="f"></i><i class="f"></i><i></i><i></i></span></span></div>
+              <div style="display:flex; gap:6px; margin-top:4px"><span class="bdg" style="font-size:10px">joke <b class="num">3</b>/5</span><span class="bdg" style="font-size:10px">rank 7.9</span><span class="chip" style="font-size:10.5px; padding:3px 9px">tone: proof-of-work · <u>why?</u></span></div>
+              <div class="ph" style="min-height:70px; margin:8px 0; position:relative">▶ 15s preview <span class="bdg" style="position:absolute; top:6px; right:6px; font-size:9.5px">REGEN_DRAFTING ⟳</span></div>
+              <div style="font-size:11.5px; color:var(--mut)">Proof-of-work angle · uses Thursday's NBHD shots · regenerating from your last steer ("less salesy") — spinner on this card only · <a href="#" style="color:var(--brand)">expand full script ▾</a></div>
+              <button style="width:100%; margin-top:8px; background:var(--paper); border:1px solid var(--line); border-radius:8px; padding:8px; font-size:12px; cursor:pointer" disabled>Choose C (regenerating…)</button>
+            </div>
+          </div>
+          <div class="anno" style="margin-top:4px">Card = CreativeFinalist record on CreativeProductionRun (hook, point, structure, format plan, CTA, tone). Canonical badge = 0–5 craft + 0–5 joke; the 8.7-style number renders as internal ranking only [DECIDE hook-score scale]. Raw sparks are NEVER shown to the agent — only finalists (Gauntlet build contract). Each finalist is format-native: a carousel is not a chopped-up script.</div>
+        </div>
+
+        <!-- compliance chip (expandable, shown expanded) -->
+        <div id="el-compliance" style="margin-top:12px">
+          <div class="cardbox">
+            <div style="display:flex; gap:8px; align-items:center; flex-wrap:wrap"><b>🛡 Compliance — which rules ran on finalist A</b><span class="bdg good">Gate 1 precheck: PASS</span><span class="anno">chip collapses to a single badge; click to expand per-rule</span></div>
+            <table class="dtable" style="font-size:11.5px; margin-top:6px">
+              <tr><th>Rule</th><th>Result</th><th>Detail</th></tr>
+              <tr><td>Fair Housing (protected-class language / steering)</td><td><span class="bdg good">pass</span></td><td>No protected-class references; geo language is market-level</td></tr>
+              <tr><td>DRE line present &amp; correct</td><td><span class="bdg good">pass</span></td><td class="num">Graeham Watts · Intero · DRE #01466876 — locked footer, non-removable (identity.json blocklist enforced: any blocklisted DRE value hard-fails)</td></tr>
+              <tr><td>No fabricated stats / unsupported claims</td><td><span class="bdg good">pass</span></td><td>"$250K" traces to source fact: EPA ADU value study, brief.sources[2]</td></tr>
+              <tr><td>AI-disclosure platform map</td><td><span class="bdg warn">needs_review</span></td><td>IG/YT/TikTok native labels ✓ · Nextdoor unlabelable → QC hold created downstream (Tab 32/19), noted on card</td></tr>
+            </table>
+            <div class="anno" style="margin-top:4px">ComplianceResult on run: per-rule pass/fail/needs_review. Gate 2 (deterministic, exact approved version) re-runs before ContentLock — this chip is Gate-1 status. <b>Fail-closed:</b> if ComplianceResult is unavailable, Approve is disabled: "compliance check unavailable — cannot ship." COMPLIANCE_FAILED runs cannot be approved, and the steering layer can never unlock blocked content.</div>
+          </div>
+        </div>
+
+        <!-- ===== ZONE 2 — steering panel ===== -->
+        <div id="el-steering" style="border:1px solid var(--line); border-radius:12px; padding:12px 14px; margin-top:12px">
+          <b style="font-size:12.5px">Steer it — facts &amp; compliance are preserved, only the creative moves</b>
+          <div class="prompt" style="margin-top:8px; padding:4px"><input placeholder='"Make A less salesy" · "open on the dollar number" · "mention the July deadline"' aria-label="Steer"><button>Regenerate</button></div>
+          <div style="display:flex; gap:8px; margin-top:6px; align-items:center; flex-wrap:wrap">
+            <span class="bdg" style="font-size:10px">last steer: "less salesy" → card C regenerating</span>
+            <span class="bdg warn" style="font-size:10px" title="Shown only when the token-budget circuit breaker is near [BEST GUESS]">⚠ regen budget: ~2 turns left this run</span>
+          </div>
+          <div id="el-insufficient" class="anno" style="margin-top:6px">RegenerationSteeringTurn records (idempotency-keyed) → REGEN_REQUESTED → new drafts. <b style="color:var(--ink)">insufficient_finalists footnote:</b> if fewer than 3 survive the gauntlet, the screen shows fewer + insufficient_finalists_reason (which gates culled what) instead of padding with weak options — see states strip below. Steering turns are unbounded in spec but budget-capped; the remaining-budget chip appears only near the breaker.</div>
+        </div>
+
+        <!-- ===== ZONE 3 — pipeline strip ===== -->
+        <div id="el-pipeline" style="border:1px solid var(--line); border-radius:12px; padding:12px 14px; margin-top:12px; font-size:11.5px">
+          <b style="font-size:12.5px">Where you are in the pipeline — always visible</b>
+          <div style="display:flex; gap:4px; margin-top:8px; font-size:10.5px; text-align:center">
+            <div style="flex:1; background:var(--brand); color:#fff; border-radius:5px; padding:5px" title="hover → status detail: KERNEL_BUILT ✓ Jul 12">Signal/brief ✓</div>
+            <div style="flex:1; background:var(--brand); color:#fff; border-radius:5px; padding:5px" title="SPARKS_GENERATED → CULLED → FINALISTS_BUILT ✓">Gauntlet 12→3 ✓</div>
+            <div style="flex:1; background:var(--brand-soft); border:1.5px solid var(--brand); border-radius:5px; padding:4px; font-weight:700">Pick &amp; steer (you are here)</div>
+            <div style="flex:1; background:var(--surface); color:var(--soft); border-radius:5px; padding:5px">Bundle build</div>
+            <div style="flex:1; background:var(--surface); color:var(--soft); border-radius:5px; padding:5px">One-approval → Lock</div>
+            <div style="flex:1; background:var(--surface); color:var(--soft); border-radius:5px; padding:5px">Distribute (~15 assets)</div>
+            <div style="flex:1; background:var(--surface); color:var(--soft); border-radius:5px; padding:5px">Measure → autopsy</div>
+          </div>
+          <div style="color:var(--mut); margin-top:8px">At "Distribute," the chosen concept explodes into per-platform variants — pre-formatted (9:16/1:1/16:9, captions, per-platform hooks &amp; metadata) and previewable per platform before lock. At "Measure," A/B variants are logged as pairs {content_id, content_lock_id, lock_hash, approved_version_id, platform, variant_id} joined via the Event Ledger — the hook-autopsy pattern extends to titles and thumbnails (Brain addition). Hover any stage → run-status detail from the 24-state machine (CREATED…READY_FOR_PROPREACH).</div>
+        </div>
+
+        <!-- ===== ZONE 4 — container bundle preview (post-choice) ===== -->
+        <div id="el-quad" style="border:1.5px solid var(--brand); border-radius:12px; padding:14px 16px; margin-top:12px; background:var(--brand-soft)">
+          <div style="display:flex; gap:8px; align-items:center; flex-wrap:wrap">
+            <b style="font-size:14px">Container bundle — concept A built · one approval ships all four</b>
+            <span class="bdg" style="font-size:10px; background:var(--paper)">run: DESIGN_QA → AGENT_REVIEW</span>
+            <span class="anno" style="margin-left:auto">Master Brain Part 9 One-Approval UX (verbatim): agent never touches the DM tool, page host, PDF generator, or CRM fields</span>
+          </div>
+          <div style="display:grid; grid-template-columns:repeat(4,1fr); gap:8px; margin-top:10px">
+            <div class="quad" id="el-quad-video">
+              <b>🎥 Video</b> <span class="anno">click → video edit modal</span>
+              <div class="ph" style="min-height:64px; margin:6px 0">thumb + first 15s</div>
+              <div style="color:var(--mut)">60s vertical · avatar + driveway plates · AI-disclosure label baked in (non-removable)</div>
+            </div>
+            <div class="quad" id="el-quad-page">
+              <b>🖥 Landing page</b> <span class="anno">click → page edit modal</span>
+              <div class="ph" style="min-height:64px; margin:6px 0">page preview</div>
+              <div style="color:var(--mut)" class="num">propertyiq.app/f/epa-adu-checklist · UTM auto-scheme · pixel/CAPI injected · locked DRE footer</div>
+            </div>
+            <div class="quad" id="el-quad-pdf">
+              <b>📄 Lead magnet</b> <span class="anno">click → PDF edit modal</span>
+              <div class="ph" style="min-height:64px; margin:6px 0">PDF page 1</div>
+              <div style="color:var(--mut)">"EPA ADU Checklist" · 6pp · claims mirror the locked script (no new copy without a new lock)</div>
+            </div>
+            <div class="quad" id="el-quad-dm">
+              <b>💬 DM flow</b> <span class="anno">click → DM edit modal</span>
+              <div style="background:var(--surface); border-radius:7px; padding:7px 9px; margin:6px 0; font-size:11px">keyword: <b>"ADU"</b> → DM copy: "Here's the checklist 👇 + quick q: own or thinking of buying here?" → CRM tag: <span class="num">adu-checklist-jul26</span></div>
+              <div style="color:var(--mut)">Max 2 qualifying questions · auto-text ≤60s of trigger · CommentDmProvider staged: GHL interim → ManyChat → native (Brain additions)</div>
+            </div>
+          </div>
+          <div style="display:flex; gap:8px; margin-top:10px; align-items:center; flex-wrap:wrap">
+            <button id="el-approve" class="btn-ink" style="padding:9px 16px; font-size:12.5px">Approve all → Approvals (Tab 13)</button>
+            <button id="el-funnel" class="btn-ghost" style="padding:9px 12px; font-size:12px">⚡ Create funnel</button>
+            <button id="el-reject" class="btn-ghost" style="padding:9px 12px; font-size:12px">Reject → backlog</button>
+            <button id="el-defer" class="btn-ghost" style="padding:9px 12px; font-size:12px">Defer</button>
+            <span class="anno" style="flex:1; min-width:240px">Approve routes as ONE card to Approvals; APPROVAL_DECIDED there mints ContentLock v1 (content_id + content_lock_id + lock_hash sha256 + approved_version_id) → render → Distribution Board (Tab 19). ⚡ Create funnel lives on every content object system-wide → Tab 17 pre-filled, inherits ContentLock lineage. Reject/Defer return to backlog with optional reason, logged as TasteFeedbackEvent.</span>
+          </div>
+          <div id="el-lock-note" class="anno" style="margin-top:6px; border-top:1px solid var(--line); padding-top:6px"><b style="color:var(--ink)">ContentLock note:</b> any post-approval edit of ANYTHING (element copy, container copy, metadata, captions) = new approved_version_id → Gate 2 rerun → new ContentLock. Locked content is never mutated in place. Container copy must be drafted &amp; compliance-checked before Gate 2 — the container step may not invent new public copy (Brain addition). Short links are auto-generated per locked creative per channel; pre-lock planning links are marked non-public (Brain addition). <a href="#el-history">History → version list with lock_hash + diff ↓</a></div>
+        </div>
+
+        <!-- element edit modal (rendered inline for the mock) -->
+        <div id="el-edit-modal" style="margin-top:12px">
+          <div class="cardbox" style="border-style:dashed">
+            <b>Element edit modal (shown inline — opens over the quad)</b> — editing: <b>DM copy</b>
+            <div style="display:grid; grid-template-columns:1fr 1fr; gap:8px; margin-top:6px; font-size:11.5px">
+              <div style="background:var(--surface); border-radius:7px; padding:8px 10px"><b>Current (locked draft)</b><div style="color:var(--mut)">"Here's the checklist 👇 + quick q: own or thinking of buying here?"</div></div>
+              <div style="background:var(--paper); border:1px solid var(--brand); border-radius:7px; padding:8px 10px"><b>Your edit</b><div style="color:var(--mut)">"Checklist inside 👇 — are you an owner here, or shopping the area?"</div></div>
+            </div>
+            <div style="display:flex; gap:6px; margin-top:6px"><button class="btn-ink">Save → re-run Gate 2</button><button class="btn-ghost">Cancel</button></div>
+            <div class="anno" style="margin-top:4px">Edits ONE element without touching the underlying tool. Save creates a new draft → Gate 2 reruns before lock. Edit logged as TasteFeedbackEvent.</div>
+          </div>
+        </div>
+
+        <!-- history / revoke view -->
+        <div id="el-history" style="margin-top:12px">
+          <div class="cardbox">
+            <b>History — ContentLock versions (this content_id)</b>
+            <table class="dtable" style="font-size:11.5px; margin-top:6px">
+              <tr><th>Version</th><th>lock_hash</th><th>Status</th><th>Diff</th><th>Action</th></tr>
+              <tr><td class="num">v2 · approved_version 8f21</td><td class="num">sha256:a91c…e4</td><td><span class="bdg good">LOCKED · live</span></td><td>caption + DM copy changed → Gate 2 rerun ✓</td><td><button class="btn-ghost" style="font-size:10.5px">View</button></td></tr>
+              <tr><td class="num">v1 · approved_version 6b07</td><td class="num">sha256:77d0…19</td><td><span class="bdg">superseded</span></td><td>—</td><td><button id="el-revoke" class="btn-ghost" style="font-size:10.5px; color:var(--crit); border-color:var(--crit)">Revoke — stop that campaign</button></td></tr>
+            </table>
+            <div style="background:#fdf3f2; border:1px solid var(--crit); border-radius:8px; padding:8px 10px; margin-top:8px; font-size:11.5px">
+              <b style="color:var(--crit)">Revoke confirm — downstream stop checklist (per-object statuses):</b>
+              <div style="color:var(--mut); margin-top:3px" class="num">3 posts (IG ✓ stopped, YT ✓, FB ⟳ stopping) · 1 ad set (paused ✓) · 2 short links (disabled ✓) · 1 QR (redirect killed ✓) · 1 DM flow (keyword off ✓) · 1 page (unpublished ✓)</div>
+              <div class="anno" style="margin-top:3px">"Stop that campaign" finds every downstream object by content_lock_id (ContentLock + DistributionPayload graph) — impossible if downstream only knew content_id. Lock status → revoked.</div>
+            </div>
+          </div>
+        </div>
+
+        <!-- states strip -->
+        <div id="el-states" style="margin-top:12px">
+          <div class="cardbox" style="font-size:11.5px">
+            <b>States (dev reference)</b>
+            <div style="display:grid; grid-template-columns:repeat(3,1fr); gap:8px; margin-top:6px">
+              <div style="background:var(--surface); border-radius:7px; padding:8px 10px"><b>Loading</b><div style="color:var(--mut)">Run in SPARKS_GENERATED/CULLED → skeleton cards + "gauntlet running: 25-spark batches, culling" progress line. Regen: REGEN_DRAFTING spinner on affected cards only (see card C).</div></div>
+              <div style="background:var(--surface); border-radius:7px; padding:8px 10px"><b>Empty</b><div style="color:var(--mut)">No runs awaiting review → "Nothing to review — next briefing Monday" + link to backlog (Tab 12).</div></div>
+              <div style="background:var(--surface); border-radius:7px; padding:8px 10px" id="el-fewer"><b>Fewer-than-3</b><div style="color:var(--mut)">insufficient_finalists_reason panel replaces missing cards: "Only 2 cleared the bar — 7 culled at compliance precheck, 3 for weak format fit, dedup killed 2." Never padded.</div></div>
+              <div style="background:var(--surface); border-radius:7px; padding:8px 10px" id="el-zero"><b>Zero</b><div style="color:var(--mut)">ZERO_FINALISTS / MANUAL_REVIEW_REQUIRED → explanation + <b style="color:var(--ink)">"Send to manual creative review"</b> task routing.</div></div>
+              <div style="background:#fdf3f2; border-radius:7px; padding:8px 10px" id="el-degraded"><b>Error/degraded — fail-closed</b><div style="color:var(--mut)">BLOCKED/TIMED_OUT show the typed reason (LLM timeout · token-budget circuit breaker · kill switch) — no silent retry. COMPLIANCE_FAILED names the failing rule(s); run cannot be approved. ComplianceResult unavailable → Approve disabled: "compliance check unavailable — cannot ship." Nothing public ships unlocked.</div></div>
+              <div style="background:var(--surface); border-radius:7px; padding:8px 10px" id="el-permission"><b>Permission-limited</b><div style="color:var(--mut)">Editor/coordinator roles: view + comment + steer if granted; only the agent (or a role with approval permission per StepPermissionMode) sees an enabled Approve. Wattson: governed intents only — never approval.</div></div>
+            </div>
+          </div>
+        </div>
+
+        <!-- mobile variant strip -->
+        <div id="el-mobile" style="margin-top:12px">
+          <div class="cardbox" style="font-size:11.5px">
+            <b>Mobile (375px) variant</b>
+            <div style="display:flex; gap:8px; margin-top:8px; overflow-x:auto">
+              <div style="min-width:120px; border:1px solid var(--line); border-radius:12px; padding:8px; font-size:9.5px">
+                <div style="border:1px solid var(--brand); border-radius:8px; padding:6px; background:var(--brand-soft)"><b>A · garage $250K</b><div><span class="bdg" style="font-size:8.5px">craft 5/5</span></div><div class="ph" style="min-height:34px; margin-top:4px">▶</div></div>
+                <div style="color:var(--soft); text-align:center; margin-top:3px">⇠ swipe ⇢ card stack, score badge always visible</div>
+              </div>
+              <div style="min-width:120px; border:1px solid var(--line); border-radius:12px; padding:8px; font-size:9.5px">
+                <span class="bdg" style="font-size:9px">step 3 of 7 ▸</span>
+                <div style="color:var(--soft); margin-top:3px">pipeline strip collapses to a chip; expands on tap</div>
+                <div style="border:1px solid var(--line); border-radius:6px; padding:4px; margin-top:6px; color:var(--mut)">steer… <span style="float:right">↑</span></div>
+                <div style="color:var(--soft); margin-top:2px">steering input docks above the keyboard</div>
+              </div>
+              <div style="min-width:120px; border:1px solid var(--line); border-radius:12px; padding:8px; font-size:9.5px">
+                <div style="display:grid; gap:3px"><div class="ph" style="min-height:16px">🎥</div><div class="ph" style="min-height:16px">🖥</div><div class="ph" style="min-height:16px">📄</div><div class="ph" style="min-height:16px">💬</div></div>
+                <div style="background:var(--ink); color:#fff; border-radius:6px; text-align:center; padding:3px; margin-top:4px; font-weight:700">Approve all</div>
+                <div style="color:var(--soft); margin-top:2px">quad → vertical 4-card scroll + sticky Approve bar</div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- spec gaps found -->
+  <div class="note" style="margin-top:14px"><b>Spec gaps found — Master Brain details missed by the spec (rendered in the mock above):</b> (1) <b>Raw sparks are never shown to the agent</b> — only finalists reach this screen (Gauntlet build contract) → annotated on zone 1; (2) <b>DM flow limits</b>: at most 2 qualifying questions, and auto-text within 60 seconds of the keyword trigger → DM quadrant; (3) <b>CommentDmProvider staged path</b>: GHL built-in messenger (interim) → ManyChat (launch) → native engine (target) → DM quadrant; (4) <b>Container copy must be drafted &amp; compliance-checked before Gate 2</b> — the container step may not invent new public-facing copy without a new lock → ContentLock note; (5) <b>Short-link identity</b>: auto-generated per locked creative per channel; pre-lock planning links marked non-public → ContentLock note; (6) <b>A/B variant logging + hook-autopsy extends to titles/thumbnails</b> ({…, variant_id, field, text} pairs joined via the Event Ledger) → pipeline-strip "Measure" annotation.</div>
+
+  <!-- ============ (3) ELEMENT COVERAGE ============ -->
+  <h2 style="font-size:20px; margin:34px 0 10px">Element coverage — spec inventory → this page</h2>
+  <table class="dtable cov" style="font-size:12.5px">
+    <tr><th>Spec inventory element</th><th>Rendered at</th><th>Status</th></tr>
+    <tr><td>Finalist card ×3–5 (hook line, score badge, 15s preview, angle+tone, Choose, expand script)</td><td><a href="#el-finalist-cards">Zone 1 — finalist cards</a></td><td class="ok">✓</td></tr>
+    <tr><td>Craft score badge (0–5, hover rubric; joke score ≥3 on comedic pieces)</td><td><a href="#el-craft-badge">Card A badge row</a></td><td class="ok">✓</td></tr>
+    <tr><td>Hook score (8.7-style → rendered as internal ranking per [DECIDE])</td><td><a href="#el-hook-score">Card A "rank" badge</a></td><td class="ok">✓</td></tr>
+    <tr><td>Tone chip + "why this tone?" popover (FLOAT rationale, Accept/Adjust/Lock)</td><td><a href="#el-tone-chip">Card A tone popover</a></td><td class="ok">✓</td></tr>
+    <tr><td>Choose button (FORGED → DESIGN_QA, populates zone 4)</td><td><a href="#el-choose">Choose A</a></td><td class="ok">✓</td></tr>
+    <tr><td>Steering input (facts &amp; compliance preserved; REGEN_REQUESTED)</td><td><a href="#el-steering">Zone 2 — steering panel</a></td><td class="ok">✓</td></tr>
+    <tr><td>insufficient_finalists state (fewer shown + reason, never padded)</td><td><a href="#el-insufficient">Steering footnote</a> + <a href="#el-fewer">states strip</a></td><td class="ok">✓</td></tr>
+    <tr><td>ZERO_FINALISTS state (manual creative review routing)</td><td><a href="#el-zero">States strip — Zero</a></td><td class="ok">✓</td></tr>
+    <tr><td>Pipeline strip (7 stages, distribute variant-explosion note, hover detail)</td><td><a href="#el-pipeline">Zone 3 — pipeline strip</a></td><td class="ok">✓</td></tr>
+    <tr><td>Brief context pin (signal/listing trigger + backlog slot, → Tab 36)</td><td><a href="#el-brief-pin">Header pin</a></td><td class="ok">✓</td></tr>
+    <tr><td>Quad container preview (video / page / PDF / DM, click-to-edit)</td><td><a href="#el-quad">Zone 4 — container bundle</a></td><td class="ok">✓</td></tr>
+    <tr><td>Element edit modals (one element, never the underlying tool; Gate 2 rerun)</td><td><a href="#el-edit-modal">Edit modal (inline)</a></td><td class="ok">✓</td></tr>
+    <tr><td>Compliance chip expandable (Fair Housing / DRE / claims / AI-disclosure map)</td><td><a href="#el-compliance">Compliance panel</a></td><td class="ok">✓</td></tr>
+    <tr><td>ContentLock note / History link (new version on any edit, lock_hash + diff)</td><td><a href="#el-lock-note">Lock note</a> + <a href="#el-history">History</a></td><td class="ok">✓</td></tr>
+    <tr><td>Approve all → Approvals (one card, Tab 13)</td><td><a href="#el-approve">Approve all button</a></td><td class="ok">✓</td></tr>
+    <tr><td>⚡ Create funnel button (on the content object → Tab 17 pre-filled)</td><td><a href="#el-funnel">Bundle footer</a></td><td class="ok">✓</td></tr>
+    <tr><td>Reject / Defer actions (→ backlog with reason, TasteFeedbackEvent)</td><td><a href="#el-reject">Bundle footer</a></td><td class="ok">✓</td></tr>
+    <tr><td>Revoke (History view — per-object downstream stop checklist)</td><td><a href="#el-revoke">History — revoke row + checklist</a></td><td class="ok">✓</td></tr>
+  </table>
+  <div style="border:1.5px solid var(--good); background:#f2f8f4; border-radius:10px; padding:12px 16px; margin:12px 0 0; font-weight:700; color:var(--good)">18 of 18 spec elements rendered ✓ <span style="font-weight:400; color:var(--mut); font-size:12.5px">— plus spec-required regions beyond the inventory: all six states (loading/empty/fewer/zero/degraded/permission-limited) as a labeled strip, mobile 375px variant strip, agent-console rail chrome, AI-disclosure QC-hold badge, regen-budget chip; plus the 6 Master-Brain additions in the "Spec gaps found" note above.</span></div>
+
+  <!-- ============ (4) FULL SPEC AS HTML ============ -->
+  <div class="specdoc">
+    <h1 style="font-size:24px; margin:40px 0 6px">Spec — 16 · Content Review &amp; Approve (PropCast)</h1>
+    <p><b>Purpose</b> The single creative decision surface for PropCast. Finalists from the Showrunner Gauntlet arrive here; the agent picks a direction, optionally steers conversationally, and the chosen concept builds the full container bundle (video + landing page + lead magnet PDF + comment-DM flow) which ships as ONE approval card. Per the Master Brain there are exactly two governed decisions in the whole pipeline: backlog approval (Monday briefing, Tab 12) and exact-version approval (here → ContentLock).</p>
+    <p><b>Primary users</b> Agent (Graeham); Wattson can steer on the agent's behalf via governed intents (ASK_WHY / APPROVE / REJECT / REQUEST_HUMAN_REVIEW), but approval itself is always human.</p>
+    <p><b>Entry points</b> Content queue item in Command Center; Monday briefing backlog item reaching AGENT_REVIEW; Wattson deep-link ("review the ADU piece"); notification ("3 finalists ready"); pipeline strip on any run in FINALISTS_BUILT/AGENT_REVIEW state; Approvals inbox (Tab 13) back-link.</p>
+    <p><b>Exit points</b> Choose + Approve → Approvals inbox (Tab 13) one-approval card → ContentLock mint → render → Distribution Board (Tab 19). "⚡ Create funnel" → Funnel Builder (Tab 17). Reject/defer → backlog. Element edit → element edit modal (stays on screen). History → ContentLock version history. ZERO_FINALISTS → manual creative review task.</p>
+
+    <h2>Layout</h2>
+    <p><b>Desktop</b> — Header: run title ("Review: {topic} — pick a direction"), gauntlet summary line ("3 finalists survived · 12 generated, 9 culled"), nav: Backlog / History; brief context pinned top-right (which signal/listing triggered this run and which backlog slot it fills, per ~37-iteration draft decision). Zone 1: finalist cards, 3-up grid (3–5; fewer allowed, never padded); selected card gets brand border + soft fill. Zone 2: steering panel — full-width chat input + Regenerate + insufficient_finalists footnote. Zone 3: always-visible 7-step pipeline strip (Signal/brief → Gauntlet → Pick &amp; steer → Bundle build → One-approval/Lock → Distribute ~15 assets → Measure/autopsy). Zone 4 (post-choice): four-quadrant container bundle preview (video thumb + first 15s / landing page / PDF page 1 / DM flow summary), each quadrant click-to-edit; single "Approve all → Lock" routes through Approvals.</p>
+    <p><b>Mobile (375px)</b> — Finalist cards become a horizontally swipeable card stack with the score badge always visible; pipeline strip collapses to a "step 3 of 7" chip that expands on tap; steering input docks above the keyboard; quad preview becomes a vertical 4-card scroll with a sticky Approve bar.</p>
+
+    <h2>Element inventory</h2>
+    <div style="overflow-x:auto">
+    <table class="dtable">
+      <tr><th>Element</th><th>What it shows/does</th><th>Data source</th><th>Interactions</th><th>Spec source</th></tr>
+      <tr><td>Finalist card (×3–5)</td><td>Hook line, hook/craft score badge, 15s video preview, angle + tone description, Choose button</td><td>Intelligence Engine: CreativeFinalist records on CreativeProductionRun</td><td>Play preview; Choose; expand full script</td><td>IE Part 17 §Finalists; matrix gap "Finalist review (3-5 concept cards)" P0</td></tr>
+      <tr><td>Craft score badge</td><td>0–5 craft score (finalists below 3 never appear); comedic pieces also carry joke score ≥3</td><td>Finalist scoring rubric</td><td>Hover → rubric meaning (3 publishable, 4 strong, 5 excellent)</td><td>IE §Finalists and the 0-5 Scorer</td></tr>
+      <tr><td>Hook score</td><td>Numeric hook score on card header (draft shows e.g. 8.7)</td><td>Gauntlet scoring [BEST GUESS: canonical rubric is 0-5 craft/joke — render canonical scores; treat 8.7-style as legacy draft artifact / 0-10 composite]</td><td>—</td><td>draft s16 + Intelligence Engine</td></tr>
+      <tr><td>Tone chip + "why this tone?" popover</td><td>FLOAT tone rationale referencing the Personality Dial ("matches your dial 6/10 humor, 3/10 edge") with Accept / Adjust / Lock</td><td>AgentTasteProfile + per-piece tone rec (pre-gauntlet when tone_mode=FLOAT)</td><td>Open popover; Accept/Adjust/Lock tone</td><td>IE §tone_mode FLOAT; matrix design_note</td></tr>
+      <tr><td>Choose button</td><td>Selects the concept; triggers bundle build (FORGED → DESIGN_QA)</td><td>Run state machine</td><td>Click → zone 4 populates</td><td>Run state machine, IE</td></tr>
+      <tr><td>Steering input</td><td>Free-text conversational regeneration ("make A less salesy") — facts &amp; compliance preserved, only creative moves</td><td>RegenerationSteeringTurn records</td><td>Type + Regenerate → REGEN_REQUESTED → new drafts</td><td>IE §conversational regeneration</td></tr>
+      <tr><td>insufficient_finalists state</td><td>If &lt;3 qualify: fewer cards + insufficient_finalists_reason (which gates culled what); never pads</td><td>Gauntlet stage_6_finalist_selection</td><td>Read-only explanation</td><td>IE stage 6 (verbatim rule)</td></tr>
+      <tr><td>ZERO_FINALISTS state</td><td>Zero qualify → ZERO_FINALISTS or MANUAL_REVIEW_REQUIRED; offers "send to manual creative review"</td><td>Run state machine</td><td>Route to review task</td><td>IE state machine</td></tr>
+      <tr><td>Pipeline strip</td><td>7 stages with current position; "Distribute" note explains per-platform variant explosion (9:16/1:1/16:9, captions, per-platform hooks/metadata, previewable per platform before lock)</td><td>CreativeProductionRun.status</td><td>Hover stage → status detail</td><td>draft s16 (inherited); MB Part 10 metadata automation</td></tr>
+      <tr><td>Brief context pin</td><td>Which signal/listing triggered this and which backlog slot it fills</td><td>SynthesisBacklogItem + CreativeKernelBrief</td><td>Click → source signal / canvas brief (Tab 36)</td><td>draft s16</td></tr>
+      <tr><td>Quad container preview (post-choice)</td><td>Video thumb + first 15s / landing page preview / PDF first page / DM flow summary (keyword, DM copy, CRM tag)</td><td>Container step outputs; DM flow per container-type matrix</td><td>Click any quadrant → element-specific edit modal</td><td>MB Part 9 §One-Approval UX (verbatim)</td></tr>
+      <tr><td>Element edit modals</td><td>Edit ONE element without touching the underlying tool (agent never touches DM tool, page host, PDF generator, CRM fields)</td><td>Locked-draft fields</td><td>Edit → new draft → re-runs Gate 2 before lock</td><td>MB Part 9</td></tr>
+      <tr><td>Compliance chip (expandable)</td><td>Which rules ran: Fair Housing, DRE line, no-fabricated-stats/claims check, AI-disclosure platform map</td><td>ComplianceResult on run</td><td>Expand → per-rule pass/fail</td><td>draft s16 (inherited); MB Part 5 gates</td></tr>
+      <tr><td>ContentLock note / History link</td><td>Approve mints ContentLock v1; any post-approval edit = new approved_version_id + new compliance pass + new lock (never mutate)</td><td>ContentLock records</td><td>History → version list with lock_hash, diff</td><td>MB Part 5; matrix correction #10</td></tr>
+      <tr><td>Approve all → Approvals</td><td>Single button; the bundle lands in Approvals (Tab 13) as one card</td><td>ApprovalRecord</td><td>Click → route to Tab 13</td><td>matrix gap "one-approval content review" P0; draft s16 footer</td></tr>
+      <tr><td>⚡ Create funnel button</td><td>Lives on the content object (as on every content object system-wide)</td><td>ContentLock lineage</td><td>Click → Tab 17 pre-filled</td><td>draft s17 easy-button decision (inherited)</td></tr>
+      <tr><td>Reject / Defer actions</td><td>Return item to backlog with reason (logged as TasteFeedbackEvent)</td><td>TasteFeedbackEvent</td><td>Click + optional reason</td><td>IE feedback loops</td></tr>
+      <tr><td>Revoke (History view)</td><td>On any published version: "stop that campaign" finds and stops every downstream object with per-object checklist (posts, ads, links, QRs, DM flows, pages)</td><td>ContentLock + DistributionPayload graph</td><td>Confirm → downstream stop statuses</td><td>matrix gap "ContentLock/version history, revocation" P1</td></tr>
+    </table>
+    </div>
+
+    <h2>States</h2>
+    <ul>
+      <li><b>Default</b>: 3–5 finalist cards, steering panel, pipeline strip.</li>
+      <li><b>Loading</b>: run in SPARKS_GENERATED/CULLED → skeleton cards + "gauntlet running: 25-spark batches, culling" progress line; regen shows REGEN_DRAFTING spinner on affected cards only.</li>
+      <li><b>Empty</b>: no runs awaiting review → "Nothing to review — next briefing Monday" + link to backlog.</li>
+      <li><b>Fewer-than-3</b>: insufficient_finalists_reason panel replaces missing cards (never padded).</li>
+      <li><b>Zero</b>: ZERO_FINALISTS explanation + manual-review routing.</li>
+      <li><b>Error/degraded (fail-closed)</b>: BLOCKED/TIMED_OUT runs show the typed reason (LLM timeout, budget cap, kill switch) — no silent retry; COMPLIANCE_FAILED shows failing rule(s) and cannot be approved; ComplianceResult unavailable → Approve disabled ("compliance check unavailable — cannot ship"); nothing public ships unlocked.</li>
+      <li><b>Permission-limited</b>: editor/coordinator roles can view + comment + steer if granted; only the agent (or a role with approval permission per StepPermissionMode) sees an enabled Approve.</li>
+      <li><b>Mobile</b>: swipe stack per Layout.</li>
+    </ul>
+
+    <h2>Data fields</h2>
+    <div style="overflow-x:auto">
+    <table class="dtable">
+      <tr><th>Field</th><th>Format</th><th>Source of truth</th></tr>
+      <tr><td>run_id, status</td><td>uuid, enum (24-state machine CREATED…READY_FOR_PROPREACH)</td><td>CreativeProductionRun</td></tr>
+      <tr><td>finalist: hook, point, structure, format plan, CTA, tone</td><td>text/struct</td><td>CreativeFinalist</td></tr>
+      <tr><td>craft_score, joke_score</td><td>int 0–5</td><td>Finalist scoring</td></tr>
+      <tr><td>tone recommendation + rationale</td><td>struct (FLOAT output)</td><td>Per-piece tone rec / AgentTasteProfile</td></tr>
+      <tr><td>gauntlet stats</td><td>ints (generated, culled, survivors) + cull reasons enum</td><td>Gauntlet run record</td></tr>
+      <tr><td>steering turns</td><td>RegenerationSteeringTurn[] (idempotency-keyed)</td><td>Intelligence Engine</td></tr>
+      <tr><td>container previews</td><td>video URL/thumb, page preview URL, PDF page-1 image, DM {keyword, dm_copy, crm_tag}</td><td>Container step outputs</td></tr>
+      <tr><td>compliance result</td><td>per-rule pass/fail/needs_review</td><td>ComplianceResult</td></tr>
+      <tr><td>lock identity</td><td>content_id, content_lock_id, lock_hash (sha256), approved_version_id</td><td>ContentLock</td></tr>
+      <tr><td>brief lineage</td><td>brief.sources[] (canvas node ids where applicable)</td><td>CreativeKernelBrief</td></tr>
+    </table>
+    </div>
+
+    <h2>Rules &amp; compliance</h2>
+    <ul>
+      <li>Two-decision law: backlog approval + exact-version approval only; nothing public renders/distributes until the approved version passed deterministic compliance AND locked.</li>
+      <li>Post-approval edit of anything (incl. container copy, metadata, captions) = new approved_version_id → Gate 2 rerun → new ContentLock. No exceptions.</li>
+      <li>Steering preserves facts and compliance context — the regen layer can never unlock blocked content.</li>
+      <li>Hard-ceiling (Personality Dial) violations are rejected regardless of score ("funny is not a defense").</li>
+      <li>No-pad rule: never fabricate finalists to reach a count.</li>
+      <li>Fair Housing + no-fabricated-stats + DRE line + AI-disclosure map all surfaced in the compliance chip; AI-disclosure-unlabelable platforms produce QC holds downstream (Tab 32/19), noted on the card.</li>
+      <li>Kill switches and token-budget circuit breakers can BLOCK a run mid-review; UI shows the typed reason.</li>
+    </ul>
+
+    <h2>Cross-links</h2>
+    <p><b>In:</b> Command Center content queue, Monday briefing (Tab 12), Ideation Canvas brief (Tab 36), Wattson, notifications. <b>Out:</b> Approvals (Tab 13), Funnel Builder (Tab 17), Distribution Board (Tab 19), Video Studio render queue (Tab 32), Attribution (Tab 31).</p>
+    <p><b>Ledger events:</b> consumes ComplianceResult, run states; emits TasteFeedbackEvent (approve/reject/edit/steer/finalist choice), APPROVAL_DECIDED (via Tab 13), ContentLock creation; downstream LEAD_CAPTURED/LINK_SCANNED carry this lock identity.</p>
+
+    <h2>Open decisions</h2>
+    <ul>
+      <li><b>[DECIDE] Hook-score display scale</b>: draft shows 8.7-style numbers; canonical rubric is 0–5 craft + 0–5 joke. Interim: render craft/joke 0–5 as the badge; treat any 0–10 composite as internal ranking only.</li>
+      <li><b>[DECIDE] Where the quad preview lives</b>: same screen zone 4 (interim, as specced) vs. only inside the Approvals card. Interim: both — zone 4 is the working preview, Tab 13 card is the governed decision record.</li>
+      <li><b>[DECIDE] Preview render vendor for the 15s clip</b> (HeyGen-class avatar + Remotion overlays per Part 11): UI is vendor-agnostic; player consumes an MP4/WebM URL either way.</li>
+      <li><b>[BEST GUESS] Steering-turn limit per run</b>: unbounded in spec but budget-capped; UI shows remaining budget only when the circuit breaker is near.</li>
+    </ul>
+  </div>
+</div>

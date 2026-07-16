@@ -1,0 +1,470 @@
+<title>PropertyIQ · Screen 07 — Mobile Patterns</title>
+<link href="https://api.fontshare.com/v2/css?f[]=technor@500,600,700&display=swap" rel="stylesheet">
+<link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<style>
+  /* Type system — Technor for display, Inter for UI. */
+  :root{ --font-display:'Technor', Inter, -apple-system, 'Segoe UI', sans-serif; --font-ui: Inter, -apple-system, 'Segoe UI', Roboto, sans-serif; }
+</style>
+<style>
+  /* Palette v4 — PropFlow design language: neutral ink UI, ink-as-accent, color reserved for data. (extracted verbatim from propsearch-design-draft.html) */
+  :root, :root[data-theme="dark"], :root[data-theme="light"]{
+    --ink:#23282f; --paper:#fbfaf8; --surface:#f1efe9; --line:#e2dfd6;
+    --mut:#6b7076; --soft:#9b9f9f;
+    --brand:#2e6b53; --brand-ink:#ffffff; --brand-soft:#eaf1ec; --brand-deep:#1e4c3a;
+    --signal:#b07a2e;
+    --good:#2e7d4f; --warn:#a8630a; --crit:#b3372f;
+    --r:10px;
+  }
+  .intel .score, .mintel{ color:var(--brand-deep) }
+  .intel{ border-left:3px solid var(--brand) }
+  h1{ letter-spacing:-.02em }
+  .stat b{ letter-spacing:-.01em }
+  body[data-agent="watts"]{ --brand:#2e6b53; --brand-soft:#eaf1ec; --brand-deep:#1e4c3a; }
+
+  *{box-sizing:border-box; margin:0}
+  body{font:15px/1.55 var(--font-ui); color:var(--ink); background:var(--paper); padding-bottom:80px}
+  h1,h2,h3{line-height:1.15; text-wrap:balance; font-family:var(--font-display); font-weight:600}
+  h1{letter-spacing:-.01em}
+  .site{box-shadow:0 1px 2px rgba(20,24,32,.04), 0 8px 32px rgba(20,24,32,.06)}
+  .stat{box-shadow:0 1px 2px rgba(20,24,32,.03); transition:box-shadow .15s, transform .15s}
+  .stat:hover{box-shadow:0 4px 14px rgba(20,24,32,.08)}
+  .chip{transition:all .12s}
+  button{font-family:var(--font-ui)}
+  .num{font-variant-numeric:tabular-nums}
+  .wrap{max-width:1180px; margin:0 auto; padding:0 20px}
+
+  .bar{position:sticky; top:0; z-index:50; background:var(--paper); border-bottom:1px solid var(--line); padding:10px 0; backdrop-filter:blur(8px)}
+  .bar .wrap{display:flex; flex-wrap:wrap; gap:10px; align-items:center}
+  .bar .ttl{font-weight:700; margin-right:auto}
+  .bar .ttl small{display:block; font-weight:400; color:var(--mut)}
+  .bar a{color:var(--brand); font-size:13px; text-decoration:none}
+
+  .note{background:var(--surface); border:1px solid var(--line); border-radius:var(--r); padding:14px 16px; margin:0 0 22px; font-size:13.5px; color:var(--mut)}
+  .note b{color:var(--ink)}
+
+  .site{border:1px solid var(--line); border-radius:14px; overflow:hidden; background:var(--paper)}
+  .sitehead{display:flex; align-items:center; gap:14px; padding:14px 22px; border-bottom:1px solid var(--line)}
+  .avatar{width:38px; height:38px; border-radius:50%; background:var(--brand); color:var(--brand-ink); display:grid; place-items:center; font-weight:700}
+  .sitehead .who b{display:block}
+  .sitehead .who small{color:var(--mut)}
+  .sitehead nav{margin-left:auto; display:flex; gap:18px; font-size:13.5px; color:var(--mut)}
+  .sitehead nav a{color:inherit; text-decoration:none}
+  .sitehead nav a:hover{color:var(--brand)}
+
+  .chip{display:inline-flex; align-items:center; gap:6px; font-size:12.5px; font-weight:500; border:1px solid var(--line); border-radius:99px; padding:6px 12px; background:var(--paper); cursor:pointer; color:var(--ink)}
+  .chip:hover{border-color:var(--brand)}
+  .chip.on{background:var(--brand); border-color:var(--brand); color:var(--brand-ink); font-weight:600; box-shadow:0 2px 8px color-mix(in srgb, var(--brand) 30%, transparent)}
+
+  .statrow{display:grid; grid-template-columns:repeat(4,1fr); gap:10px}
+  .stat{background:var(--surface); border:1px solid var(--line); border-radius:var(--r); padding:12px}
+  .stat small{display:block; color:var(--mut); font-size:11.5px; text-transform:uppercase; letter-spacing:.05em}
+  .stat b{font-size:18px}
+  .stat .up{color:var(--good); font-size:12px}
+
+  .bdg{font-size:11.5px; border-radius:6px; padding:3px 8px; background:var(--surface); border:1px solid var(--line); color:var(--mut)}
+  .bdg.good{color:var(--good); border-color:color-mix(in srgb,var(--good) 30%,var(--line))}
+  .bdg.warn{color:var(--warn); border-color:color-mix(in srgb,var(--warn) 30%,var(--line))}
+
+  .dtable{width:100%; border-collapse:collapse; font-size:13px}
+  .dtable td,.dtable th{border-bottom:1px solid var(--line); padding:8px 10px; text-align:left}
+  .dtable th{font-size:11px; text-transform:uppercase; letter-spacing:.05em; color:var(--soft)}
+
+  @media (max-width:860px){ .statrow{grid-template-columns:repeat(2,1fr)} .phonegrid{grid-template-columns:1fr !important} }
+  @media (prefers-reduced-motion: reduce){ *{transition:none!important} }
+
+  /* ---- page-specific additions (kept in the same design language) ---- */
+  .anno{font-size:11px; color:var(--soft)}
+  .cardbox{border:1px solid var(--line); border-radius:10px; padding:11px 14px; font-size:12.5px; background:var(--paper)}
+  .btn-ink{background:var(--ink); color:#fff; border:0; border-radius:7px; padding:7px 12px; font-size:11.5px; cursor:pointer; font-weight:600}
+  .btn-ghost{background:var(--paper); border:1px solid var(--line); border-radius:7px; padding:7px 12px; font-size:11.5px; cursor:pointer}
+  .sechead{font-size:14px; font-weight:700; margin:0 0 8px; font-family:var(--font-display)}
+  .cov td.ok{color:var(--good); font-weight:700}
+  .specdoc h2{font-size:18px; margin:26px 0 8px}
+  .specdoc h3{font-size:15px; margin:18px 0 6px}
+  .specdoc p, .specdoc li{font-size:13.5px; color:var(--mut)}
+  .specdoc b{color:var(--ink)}
+  .specdoc table{margin:8px 0}
+
+  /* phone frames — 375px canonical viewport */
+  .phonegrid{display:grid; grid-template-columns:repeat(auto-fit, minmax(300px,1fr)); gap:18px; align-items:start}
+  .phone{width:100%; max-width:295px; margin:0 auto; border:1.5px solid var(--line); border-radius:22px; overflow:hidden; background:var(--paper); box-shadow:0 2px 10px rgba(20,24,32,.07); position:relative}
+  .phone .ph-head{display:flex; align-items:center; gap:8px; padding:9px 12px; border-bottom:1px solid var(--line); font-size:12px}
+  .phone .ph-head .avatar{width:26px; height:26px; font-size:11px}
+  .poweredby{font-size:10px; color:var(--soft)}
+  .phone .body{padding:10px; display:grid; gap:8px; position:relative}
+  .phcap{text-align:center; font-size:11.5px; color:var(--mut); margin-top:8px; max-width:295px; margin-left:auto; margin-right:auto}
+  .prompt{display:flex; gap:6px; border:1.5px solid var(--brand); border-radius:12px; padding:4px; background:var(--paper)}
+  .prompt input{flex:1; border:0; background:transparent; font:12px var(--font-ui); padding:6px 8px; min-width:0; color:var(--ink)}
+  .prompt button{background:var(--brand); color:var(--brand-ink); border:0; border-radius:8px; padding:6px 12px; font-size:11.5px; font-weight:600; cursor:pointer}
+  .mchips{display:flex; gap:6px; overflow-x:auto; padding-bottom:2px; scrollbar-width:none}
+  .mchips .chip{flex:0 0 auto; font-size:11px; padding:5px 10px}
+  .mcard{border:1px solid var(--line); border-radius:10px; overflow:hidden; background:var(--paper); position:relative}
+  .mcard .ph{background:var(--surface); color:var(--soft); display:grid; place-items:center; font-size:11px; min-height:84px}
+  .mcard .inner{padding:8px 10px}
+  .mcard .addr{font-size:11px; color:var(--mut)}
+  .mintel{font-size:10.5px; background:var(--brand-soft); padding:5px 10px; border-top:1px solid var(--line)}
+  .maptoggle{position:absolute; bottom:10px; left:50%; transform:translateX(-50%); background:var(--ink); color:#fff; border:0; border-radius:99px; padding:8px 20px; font-size:11.5px; font-weight:600; cursor:pointer; box-shadow:0 4px 14px rgba(20,24,32,.25)}
+  .heart{position:absolute; top:6px; right:8px; background:rgba(251,250,248,.9); border-radius:99px; width:24px; height:24px; display:grid; place-items:center; font-size:12px}
+  .sheet{border:1px solid var(--line); border-radius:14px 14px 0 0; background:var(--paper); box-shadow:0 -4px 18px rgba(20,24,32,.12); padding:8px 10px 10px}
+  .sheet .grab{width:36px; height:4px; border-radius:2px; background:var(--line); margin:0 auto 8px}
+  .stickybar{display:flex; gap:8px; padding:9px 10px; border-top:1px solid var(--line); background:var(--paper)}
+  .stickybar .primary{flex:1; background:var(--brand); color:var(--brand-ink); border:0; border-radius:8px; padding:10px; font-weight:600; font-size:11.5px; min-height:44px; cursor:pointer}
+  .stickybar .outline{flex:1; background:var(--paper); color:var(--brand); border:1.5px solid var(--brand); border-radius:8px; padding:10px; font-weight:600; font-size:11.5px; min-height:44px; cursor:pointer}
+  .skel{background:linear-gradient(90deg, var(--surface), #eceae2, var(--surface)); border-radius:8px}
+  .toast{background:var(--ink); color:#fff; border-radius:9px; padding:8px 12px; font-size:10.5px}
+</style>
+
+<!-- ============ (1) slim header ============ -->
+<div class="bar">
+  <div class="wrap">
+    <div class="ttl">PropertyIQ · Screen 07 — Mobile Patterns <small>Full-density per-screen mock · 375px system-wide adaptation spec · dev-facing annotations in gray</small></div>
+    <a href="../wireframe.html">← All screens</a>
+  </div>
+</div>
+
+<!-- ============ (2) THE FULL MOCK ============ -->
+<div class="wrap" style="padding-top:24px">
+  <div class="note"><b>Screen 07 — Mobile Patterns.</b> Not a separate product: the canonical 375px adaptation rules for the consumer surfaces (search/results, property detail, homepage, community) plus the shared mobile primitives every other screen's "mobile variations" section inherits. Proven anchors from the draft: <b>list-first results with a floating Map toggle</b> (split view fails on small screens — Zillow's pattern), <b>one-line intelligence strip compression</b>, and the <b>sticky agent contact bar</b> on detail pages. Consumer chrome throughout — agent-branded top strip, Powered by PropertyIQ, never the agent-console sidebar. Desktop page layout below shows the phone frames side-by-side; this page IS the mobile spec, so the frames are the mock.</div>
+
+  <div class="site" data-agent="watts">
+    <!-- consumer chrome header (desktop rendering of this spec page) -->
+    <div class="sitehead">
+      <div class="avatar">GW</div>
+      <div class="who"><b>Graeham Watts</b><small>Intero Real Estate · DRE 01466876 · <span class="poweredby">Powered by PropertyIQ</span></small></div>
+      <nav><a href="#">Search</a><a href="#">Communities</a><a href="#">Home value</a><a href="#">Saved</a><a href="#">Contact</a></nav>
+    </div>
+    <div class="anno" style="padding:8px 22px 0">Global mobile chrome rule: compact header — agent avatar + name + "PropertyIQ" powered-by; no persistent nav bar (hamburger) [BEST GUESS]. One primary ask per viewport; sticky bottom bars replace section CTAs, never stack. Brand vault supplies avatar/name/DRE — tripwire enforced from identity.json; the identity.json blocklist value never renders.</div>
+
+    <!-- ===== row 1: results + map mode + pin sheet ===== -->
+    <div style="padding:18px 22px 0">
+      <div class="sechead">Consumer results — list-first, floating Map toggle, pin bottom sheet</div>
+      <div class="phonegrid">
+
+        <!-- PHONE A: results list -->
+        <div id="el-results">
+          <div class="phone">
+            <div class="ph-head"><div class="avatar" id="el-header">GW</div><b style="font-size:12px">Graeham Watts</b><span class="poweredby" style="margin-left:auto">PropertyIQ</span></div>
+            <div class="body" style="padding-bottom:52px">
+              <div class="prompt" id="el-search"><input value="3bd under $1.4M, good schools" aria-label="Search"><button title="voice dictation">🎙</button><button>Go</button></div>
+              <div class="anno">NL prompt → same parser as Screen 1; 🎙 = tap-to-talk voice dictation (WebSpeech, server ASR fallback — parser gets plain text either way). "Parsed as" chips echo the interpretation, editable ↓</div>
+              <div class="mchips"><span class="bdg num" style="flex:0 0 auto">Parsed: 3+ bd · ≤$1.4M · schools lens</span></div>
+              <div class="mchips" id="el-chips">
+                <button class="chip on">Commute</button><button class="chip on">Schools</button><button class="chip">Fire</button><button class="chip">Yield</button><button class="chip">+More</button>
+              </div>
+              <div class="anno">Chip row scrolls horizontally; tap toggles; "+More" opens the full filter bottom sheet [BEST GUESS]. Active chips = current lenses.</div>
+              <div class="mcard" id="el-mcard">
+                <div class="ph">Photo<span class="heart">♡</span></div>
+                <div class="inner"><b class="num">$1,289,000</b><div class="addr">742 Hurlingame Ave · 3bd 2ba</div></div>
+                <div class="mintel num" id="el-strip">⚡ 96 match · 22 min commute · Elem 9/10</div>
+              </div>
+              <div class="mcard">
+                <div class="ph">Photo<span class="heart">♡</span></div>
+                <div class="inner"><b class="num">$1,350,000</b><div class="addr">118 Beech St · 3bd 2ba</div></div>
+                <div class="mintel num">⚡ 91 match · larger lot · ADU potential</div>
+              </div>
+              <div class="mcard">
+                <div class="ph">Photo<span class="heart">♡</span></div>
+                <div class="inner"><b class="num">$1,178,000</b><div class="addr">2214 Oak Knoll Dr · 3bd 1.5ba</div></div>
+                <div class="mintel num">⚡ Matches 4 of 5 — misses: 2nd bath (honest-miss framing)</div>
+              </div>
+              <div class="anno">Card = IDXDisplayCache (MLS whitelist fields) + intelligence engines. Desktop strip compresses to ONE line: match framing + top honest highlight; tap expands the full strip [BEST GUESS]. ♡ save (long-press also saves [BEST GUESS]). School rating shows only with provider attribution — never in ranking (§16 firewall). No crime data anywhere (out of scope v1, no approved source).</div>
+              <button class="maptoggle" id="el-maptoggle">🗺 Map</button>
+            </div>
+          </div>
+          <div class="phcap">Results: list-first · floating bottom-center Map pill · tap card → detail. Map toggle disabled until first page loads. Ledger: MAP_TOGGLED, VOICE_SEARCH_USED.</div>
+        </div>
+
+        <!-- PHONE B: map mode + pin bottom sheet -->
+        <div id="el-mapmode">
+          <div class="phone">
+            <div class="ph-head"><div class="avatar">GW</div><b style="font-size:12px">Graeham Watts</b><span class="poweredby" style="margin-left:auto">PropertyIQ</span></div>
+            <div class="body" style="padding:0">
+              <div style="background:var(--surface); min-height:180px; position:relative; display:grid; place-items:center; color:var(--soft); font-size:11px">
+                Full-screen map (replaces list)
+                <span style="position:absolute; top:14px; left:18px; width:12px; height:12px; border-radius:50%; background:var(--brand); border:2px solid #fff; box-shadow:0 1px 4px rgba(0,0,0,.3)"></span>
+                <span style="position:absolute; top:52px; right:44px; width:12px; height:12px; border-radius:50%; background:var(--brand); border:2px solid #fff"></span>
+                <span style="position:absolute; bottom:36px; left:60px; background:var(--ink); color:#fff; font-size:9.5px; border-radius:99px; padding:2px 8px" class="num">14 ⊕ cluster</span>
+                <span class="bdg" style="position:absolute; top:10px; right:10px; background:var(--paper); font-size:9.5px">Layer: Schools lens · legend ▾</span>
+                <span class="bdg" style="position:absolute; top:34px; right:10px; background:var(--paper); font-size:9.5px; color:var(--mut)">🏠 owner-occ · 🏢 corporate · ✉ absentee</span>
+              </div>
+              <div class="sheet" id="el-pinsheet">
+                <div class="grab"></div>
+                <div style="display:flex; gap:8px">
+                  <div style="width:64px; height:48px; background:var(--surface); border-radius:8px; display:grid; place-items:center; font-size:9px; color:var(--soft)">Photo</div>
+                  <div style="flex:1"><b class="num" style="font-size:13px">$1,289,000</b><div class="addr" style="font-size:10.5px; color:var(--mut)">742 Hurlingame Ave · 3bd 2ba</div>
+                    <div class="mintel num" style="border-radius:6px; margin-top:4px; border:0">⚡ 96 match · 22 min commute</div>
+                  </div>
+                </div>
+                <div class="anno" style="margin-top:6px">Pin tap → card peek bottom sheet; swipe up → detail. Pin explainability: tap the score → contributing facts (ScoringService), "never trust a color alone". Ownership signals = badges only, never raw owner names/addresses (matrix #12).</div>
+              </div>
+              <button class="maptoggle" style="position:static; transform:none; margin:8px auto; display:block">☰ List</button>
+            </div>
+          </div>
+          <div class="phcap">Map mode: full-screen, one heatmap at a time + always-visible legend; cluster above 50 pins in viewport [BEST GUESS]. Toggle returns to list.</div>
+        </div>
+
+        <!-- PHONE C: detail page -->
+        <div id="el-detail">
+          <div class="phone">
+            <div class="ph-head"><b style="font-size:12px">← 742 Hurlingame Ave</b><span class="poweredby" style="margin-left:auto" id="el-saveshare">♡ Save · ⇪ Share</span></div>
+            <div class="body" style="padding:0">
+              <div style="background:var(--surface); min-height:130px; display:grid; place-items:center; color:var(--soft); font-size:11px; position:relative" id="el-gallery">Photo gallery (edge-to-edge swipe · tap → full-screen)<span class="num" style="position:absolute; bottom:6px; right:10px; background:rgba(35,40,47,.75); color:#fff; font-size:9px; border-radius:6px; padding:1px 6px">3 / 24</span></div>
+              <div style="padding:10px 12px; display:grid; gap:7px">
+                <div><b class="num" style="font-size:17px">$1,289,000</b><div class="addr" style="font-size:11.5px; color:var(--mut)">3 bd · 2 ba · 1,480 sqft · Redwood City</div></div>
+                <div class="mintel num" style="border-radius:8px; border:0">⚡ 96 match — 22 min commute · Roy Cloud 9/10* · −4% vs comps</div>
+                <div class="anno">*School rating provided by [Provider] — attribution + methodology link + boundary/rating disclaimers required (§16.3); same module for every user; never a ranking input. Unavailable metric drops from the strip — never fabricated.</div>
+                <div class="mchips" id="el-sectionchips"><button class="chip on">Overview</button><button class="chip">Commute</button><button class="chip">Schools</button><button class="chip">Investment</button></div>
+                <div class="stat" style="padding:8px 10px"><small>Est. rent (RentEstimateSnapshot)</small><b class="num" style="font-size:13px">$4,850/mo · 4.5% yield</b></div>
+                <div class="stat" style="padding:8px 10px"><small>AVM range · as-of Jul 12</small><b class="num" style="font-size:13px">$1.24M – $1.33M</b> <span class="anno">confidence 0.82 — honesty rules: range + as-of always shown</span></div>
+                <div class="anno">Section chips jump-scroll/switch panels. Monthly-cost editor + ask-a-question open as bottom sheets, never new pages.</div>
+              </div>
+              <div class="stickybar" id="el-stickybar">
+                <button class="primary">Ask Graeham</button>
+                <button class="outline">Book tour</button>
+              </div>
+            </div>
+          </div>
+          <div class="phcap">Detail: sticky agent bar always visible (safe-area aware, ≥44px targets). Ask → in-page chat, consent-gated before any outbound follow-up; Book → pre-approved slot picker + confirm queue (name+phone+consent line). Ledger: STICKY_CTA_TAPPED, TOUR_REQUESTED. PropSearch never sends outbound itself — PropFlow runs consent/compliance and sends (Brain seam).</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- ===== row 2: shared primitives ===== -->
+    <div style="padding:18px 22px 0">
+      <div class="sechead">Shared mobile primitives — inherited by every screen's mobile section</div>
+      <div class="phonegrid">
+
+        <!-- PHONE D: homepage sticky CTA + soft prompt -->
+        <div id="el-homebar">
+          <div class="phone">
+            <div class="ph-head"><div class="avatar">GW</div><b style="font-size:12px">Graeham Watts</b><span class="poweredby" style="margin-left:auto">PropertyIQ</span></div>
+            <div class="body" style="padding-bottom:0">
+              <div class="skel" style="height:64px; display:grid; place-items:center; font-size:10.5px; color:var(--soft)">Homepage hero (Screen 5 mobile)</div>
+              <div class="cardbox" id="el-softprompt" style="font-size:11px; background:var(--surface)">
+                <b>👋 Back for a third look at Hurlingame?</b>
+                <div style="color:var(--mut); margin-top:2px">Save it and I'll watch the price for you.</div>
+                <div style="display:flex; gap:6px; margin-top:6px"><button class="btn-ink">Save it</button><button class="btn-ghost">✕ Not now</button></div>
+                <div class="anno" style="margin-top:4px">Behavior-triggered soft prompt (repeat visit / photo-binge / save event) — dismissible, no hard gate on organic (draft s3 lead policy). Soft save-gate: skippable once, required on second save [BEST GUESS].</div>
+              </div>
+              <div class="stickybar" style="margin:8px -10px 0">
+                <button class="outline" style="border-color:var(--line); color:var(--ink)">Home value</button>
+                <button class="primary">Search</button>
+                <button class="outline" id="el-tel">📞 Call</button>
+              </div>
+            </div>
+          </div>
+          <div class="phcap">Homepage sticky CTA bar: Value · Search · Call — replaces section CTAs on mobile, never stacks with another bar. 📞 = tel: deep link (identity.json phone); sms: handoff on text CTAs.</div>
+        </div>
+
+        <!-- PHONE E: bottom-sheet primitive + filter sheet -->
+        <div id="el-sheet">
+          <div class="phone">
+            <div class="ph-head"><b style="font-size:12px">← Results</b><span class="poweredby" style="margin-left:auto">PropertyIQ</span></div>
+            <div class="body" style="padding:0">
+              <div style="background:var(--surface); min-height:70px; display:grid; place-items:center; color:var(--soft); font-size:10.5px; opacity:.55">Page dims behind sheet</div>
+              <div class="sheet">
+                <div class="grab"></div>
+                <b style="font-size:12px">Filters (+More)</b>
+                <div class="mchips" style="margin-top:6px"><button class="chip on">3+ bd</button><button class="chip on">≤ $1.4M</button><button class="chip">Single-family</button><button class="chip">ADU potential</button><button class="chip">Big lot</button></div>
+                <div style="display:grid; gap:6px; margin-top:8px; font-size:11px">
+                  <div style="display:flex; justify-content:space-between; border:1px solid var(--line); border-radius:8px; padding:7px 10px"><span>Monthly all-in budget</span><b class="num">$8,200 ▾</b></div>
+                  <div style="display:flex; justify-content:space-between; border:1px solid var(--line); border-radius:8px; padding:7px 10px"><span>Commute origin</span><b>Work — 20 min ▾</b></div>
+                </div>
+                <button class="btn-ink" style="width:100%; margin-top:8px; min-height:40px">Show 23 homes</button>
+                <div class="anno" style="margin-top:6px">Shared primitive: ALL secondary panels (filters, pin peek, monthly-cost editor, ask-a-question) render as bottom sheets — never new pages. Drag-to-dismiss. Geolocation for "near me"/commute origin is opt-in per browser prompt, session-only, never stored to the contact without explicit save [BEST GUESS].</div>
+              </div>
+            </div>
+          </div>
+          <div class="phcap">Bottom-sheet primitive [BEST GUESS — consistent primitive]. One sheet at a time; sheet + sticky bar never stack.</div>
+        </div>
+
+        <!-- PHONE F: compare + community tables + toasts -->
+        <div id="el-compare">
+          <div class="phone">
+            <div class="ph-head"><b style="font-size:12px">← Compare (3)</b><span class="poweredby" style="margin-left:auto">PropertyIQ</span></div>
+            <div class="body">
+              <div style="display:flex; gap:6px; overflow-x:auto">
+                <div class="mcard" style="flex:0 0 46%; border-color:var(--brand)"><div class="ph" style="min-height:44px">📌 Baseline</div><div class="inner"><b class="num" style="font-size:11px">$1,289,000</b><div class="addr" style="font-size:9.5px">742 Hurlingame</div></div></div>
+                <div class="mcard" style="flex:0 0 46%"><div class="ph" style="min-height:44px">Photo</div><div class="inner"><b class="num" style="font-size:11px">$1,350,000</b><div class="addr" style="font-size:9.5px">118 Beech St</div></div></div>
+                <div class="mcard" style="flex:0 0 46%"><div class="ph" style="min-height:44px">Photo</div><div class="inner"><b class="num" style="font-size:11px">$1,178,000</b><div class="addr" style="font-size:9.5px">2214 Oak Knoll</div></div></div>
+              </div>
+              <div class="anno">Compare mobile: 2-col swipeable cards, pinned baseline fixed left (draft s4). Compare sets are URL-addressable + persistent.</div>
+              <div id="el-community" style="overflow-x:auto; border:1px solid var(--line); border-radius:8px">
+                <table class="dtable num" style="font-size:9.5px; min-width:340px">
+                  <tr><th>Redwood City trend</th><th>2024</th><th>2025</th><th>2026 YTD</th></tr>
+                  <tr><td>Median sale</td><td>$1.61M</td><td>$1.68M</td><td>$1.72M</td></tr>
+                  <tr><td>Days on market</td><td>14</td><td>12</td><td>11</td></tr>
+                </table>
+              </div>
+              <div class="anno">Community tables (Screen 6 data) scroll inside overflow-x containers — the page body never scrolls horizontally, ever.</div>
+              <div class="toast" id="el-toast">⚠ Text not sent — SMS consent for this contact is unknown. Consent is captured before the first outbound message.</div>
+              <div class="anno">Toast/inline notices (matrix #11): blocked-send, consent, and fail-closed messages always surface visibly — never silent. ComplianceProvider is the gate; PropFlow owns the send.</div>
+            </div>
+          </div>
+          <div class="phcap">Compare · in-container tables · consent toast. Brain: sms_consent_status / voice_consent_status ∈ granted | denied | unknown — unknown blocks with a visible reason.</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- ===== states strip ===== -->
+    <div id="el-states" style="padding:18px 22px 4px">
+      <div class="sechead">States strip — loading / empty(relaxed) / degraded / offline / permission-limited</div>
+      <div class="phonegrid" style="grid-template-columns:repeat(auto-fit, minmax(220px,1fr))">
+        <div>
+          <div class="phone"><div class="ph-head"><div class="avatar">GW</div><b style="font-size:12px">Loading</b></div>
+            <div class="body">
+              <div class="skel" style="height:80px"></div>
+              <div class="skel" style="height:12px; width:70%"></div>
+              <div class="skel" style="height:12px; width:50%"></div>
+              <div class="skel" style="height:80px"></div>
+              <button class="maptoggle" style="position:static; transform:none; opacity:.4; margin:0 auto" disabled>🗺 Map</button>
+            </div>
+          </div>
+          <div class="phcap">Skeleton cards (photo + 2 lines); Map toggle disabled until first page. Budgets: detail LCP &lt;2s, homepage &lt;2.5s, warm lists &lt;500ms.</div>
+        </div>
+        <div>
+          <div class="phone"><div class="ph-head"><div class="avatar">GW</div><b style="font-size:12px">"Empty" (never zero)</b></div>
+            <div class="body">
+              <div class="cardbox" style="font-size:10.5px; background:var(--brand-soft); border-color:var(--brand)"><b>Showing 2.9+ baths</b> — 3+ baths returned nothing, so we relaxed your weakest constraint and are telling you which one.</div>
+              <div class="mcard"><div class="ph" style="min-height:52px">Photo</div><div class="inner"><b class="num" style="font-size:11px">$1,395,000</b><div class="addr" style="font-size:9.5px">31 Iris Ln · 3bd 2.5ba</div></div></div>
+              <div class="cardbox" style="font-size:10.5px"><b>Saved is empty</b> — homes you ♡ live here and get price-watch alerts. <button class="btn-ink" style="margin-top:4px">Start a search</button></div>
+            </div>
+          </div>
+          <div class="phcap">Zero-results never happens: engine relaxes the weakest constraint and says which one (draft s1). Saved/compare empties = one-line explainer + primary action.</div>
+        </div>
+        <div>
+          <div class="phone"><div class="ph-head"><div class="avatar">GW</div><b style="font-size:12px">Degraded (fail-closed)</b></div>
+            <div class="body">
+              <div class="cardbox" style="font-size:10.5px; border-color:var(--warn)"><b style="color:var(--warn)">Score unavailable</b> — map intelligence layers hidden while ScoringService is down; deal-rating labels removed. Deterministic metrics (price, beds, commute) remain.</div>
+              <div class="mcard"><div class="ph" style="min-height:44px">Photo</div><div class="inner"><b class="num" style="font-size:11px">$1,289,000</b><div class="addr" style="font-size:9.5px">742 Hurlingame</div></div><div class="mintel num" style="background:var(--surface); color:var(--mut)">22 min commute · (match score unavailable)</div></div>
+            </div>
+          </div>
+          <div class="phcap">Strip drops any unavailable metric rather than fabricating (matrix #6). Nothing is guessed.</div>
+        </div>
+        <div>
+          <div class="phone"><div class="ph-head"><div class="avatar">GW</div><b style="font-size:12px">Offline / permission</b></div>
+            <div class="body">
+              <div class="toast" style="background:var(--warn)">📶 You're offline — showing your last results from 2:14 PM.</div>
+              <div class="mcard" style="opacity:.75"><div class="ph" style="min-height:44px">Cached photo</div><div class="inner"><b class="num" style="font-size:11px">$1,350,000</b><div class="addr" style="font-size:9.5px">118 Beech St</div></div></div>
+              <div class="cardbox" style="font-size:10.5px"><b>Book a tour</b><div style="color:var(--mut)">Name + phone + consent line required. Anonymous browsing stays free — saves/alerts need contact capture; no hard gate on organic.</div></div>
+            </div>
+          </div>
+          <div class="phcap">Offline → cached last results + stale banner [BEST GUESS]. Permission-limited tiers rendered inline.</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- ===== mobile-variant strip (meta) ===== -->
+    <div id="el-variant" style="padding:14px 22px 18px">
+      <div class="cardbox" style="font-size:11.5px">
+        <b>Mobile variations (of this spec page itself) + sizing rules</b>
+        <div style="color:var(--mut); margin-top:4px">Everything above is specified at <b style="color:var(--ink)">375px</b>; wider phones keep the same layout with taller card images; no horizontal page scroll ever — wide content scrolls inside its own container. Tap targets ≥44px; sticky bars respect safe-area insets. v1 = responsive web + PWA install prompt; native app deferred [DECIDE/BEST GUESS]. Voice transcript is transient — not stored beyond the SearchRecord parse. Consumer footer on every page: <span class="poweredby">Powered by PropertyIQ · Graeham Watts, Intero Real Estate · DRE 01466876 · Equal Housing Opportunity</span>.</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ============ spec gaps found (Master Brain) ============ -->
+  <div class="note" style="margin-top:22px"><b>Spec gaps found — Master Brain requirements the spec missed (rendered above):</b> (1) <b>School display checklist (§16.2–16.3)</b> — ratings render only with provider attribution, methodology link, boundary + rating disclaimers, and the equal-service note ("same school module to every user"); spec said "attributed + disclaimed" but not the full checklist — added to the detail phone. (2) <b>Forbidden-wording list (§16.1)</b> — "great schools / family-friendly / safe" never appear in strips or copy; the parsed-search chips echo neutral filters only. (3) <b>Consent enums (Brain records)</b> — sms_consent_status / voice_consent_status ∈ granted|denied|unknown; unknown blocks with a visible reason — rendered as the consent toast. (4) <b>Outbound boundary (acceptance criteria)</b> — PropSearch never sends SMS/email/voice/AI-video directly; "Ask agent" hands to PropFlow which runs consent/compliance — annotated on the sticky bar. (5) <b>Crime data</b> — explicitly out of scope v1 in the Brain (no approved source/copy/legal sign-off), reinforcing the no-crime rule. (6) <b>Filter-URL rules</b> — QR/SMS deep links land on server-rendered, canonicalized, compliance-checked IDX filter URLs (Brain §on filter-URL library) — governs the postcard/sign entry points.</div>
+
+  <!-- ============ (3) ELEMENT COVERAGE ============ -->
+  <h2 style="font-size:20px; margin:14px 0 10px">Element coverage — spec inventory → this page</h2>
+  <table class="dtable cov" style="font-size:12.5px">
+    <tr><th>Spec inventory element</th><th>Rendered at</th><th>Status</th></tr>
+    <tr><td>Compact branded header (avatar, name, powered-by)</td><td><a href="#el-header">Results phone header</a></td><td class="ok">✓</td></tr>
+    <tr><td>NL search prompt (mobile) + parsed-as chips</td><td><a href="#el-search">Results phone prompt</a></td><td class="ok">✓</td></tr>
+    <tr><td>Horizontal chip row (+More → filter sheet)</td><td><a href="#el-chips">Chip row</a> + <a href="#el-sheet">filter sheet</a></td><td class="ok">✓</td></tr>
+    <tr><td>Result card (mcard) with ♡ save</td><td><a href="#el-mcard">Result cards</a></td><td class="ok">✓</td></tr>
+    <tr><td>Intelligence strip (compressed one-line, honest-miss)</td><td><a href="#el-strip">Strip on cards</a></td><td class="ok">✓</td></tr>
+    <tr><td>Floating Map toggle (bottom-center pill)</td><td><a href="#el-maptoggle">Map pill</a></td><td class="ok">✓</td></tr>
+    <tr><td>Map pin bottom sheet (peek + explainable layers)</td><td><a href="#el-pinsheet">Map mode phone</a></td><td class="ok">✓</td></tr>
+    <tr><td>Detail gallery (edge-to-edge swipe)</td><td><a href="#el-gallery">Detail phone gallery</a></td><td class="ok">✓</td></tr>
+    <tr><td>Save · Share (soft capture on first save)</td><td><a href="#el-saveshare">Detail header</a> + <a href="#el-softprompt">soft prompt</a></td><td class="ok">✓</td></tr>
+    <tr><td>Section chips (detail in-page nav)</td><td><a href="#el-sectionchips">Detail section chips</a></td><td class="ok">✓</td></tr>
+    <tr><td>Sticky agent bar (Ask + Book tour)</td><td><a href="#el-stickybar">Detail sticky bar</a></td><td class="ok">✓</td></tr>
+    <tr><td>Sticky homepage CTA bar (Value · Search · Call)</td><td><a href="#el-homebar">Homepage phone</a></td><td class="ok">✓</td></tr>
+    <tr><td>Behavior-triggered soft prompt (dismissible)</td><td><a href="#el-softprompt">Soft prompt card</a></td><td class="ok">✓</td></tr>
+    <tr><td>Bottom-sheet pattern (shared primitive)</td><td><a href="#el-sheet">Bottom-sheet phone</a></td><td class="ok">✓</td></tr>
+    <tr><td>Compare (mobile, pinned baseline)</td><td><a href="#el-compare">Compare phone</a></td><td class="ok">✓</td></tr>
+    <tr><td>Community tables (in-container overflow-x)</td><td><a href="#el-community">Community table</a></td><td class="ok">✓</td></tr>
+    <tr><td>Voice input (mic, tap-to-talk)</td><td><a href="#el-search">🎙 in prompt</a></td><td class="ok">✓</td></tr>
+    <tr><td>Call/text deep links (tel:/sms:)</td><td><a href="#el-tel">📞 Call CTA</a></td><td class="ok">✓</td></tr>
+    <tr><td>Toast/inline notices (blocked-send / consent / fail-closed)</td><td><a href="#el-toast">Consent toast</a> + <a href="#el-states">states strip</a></td><td class="ok">✓</td></tr>
+  </table>
+  <div style="border:1.5px solid var(--good); background:#f2f8f4; border-radius:10px; padding:12px 16px; margin:12px 0 0; font-weight:700; color:var(--good)">19 of 19 spec elements rendered ✓ <span style="font-weight:400; color:var(--mut); font-size:12.5px">— plus prompt-required regions beyond the inventory: full states strip (loading / relaxed-empty / degraded fail-closed / offline / permission-limited), map-mode phone with cluster + ownership badges + legend, AVM honesty row, mobile-variant sizing strip, and the 6 Master-Brain additions above.</span></div>
+
+  <!-- ============ (4) FULL SPEC AS HTML ============ -->
+  <div class="specdoc">
+    <h1 style="font-size:24px; margin:40px 0 6px">Spec — 07 · Mobile Patterns (375px system-wide adaptation spec)</h1>
+    <p><b>Purpose</b> Not a separate product: the canonical 375px adaptation rules for the consumer surfaces (search/results, property detail, homepage, community pages) plus the shared mobile primitives every other screen's "mobile variations" section inherits. Draft's proven anchors: list-first results with a floating Map toggle (split view fails on small screens — Zillow's pattern), one-line intelligence strip compression, and the sticky agent contact bar on detail pages.</p>
+    <p><b>Primary users</b> Consumers on phones (majority of portal traffic); secondarily agents on the go (the agent-side mobile flows — Past Client call assistant, approvals — are specified on their own screens; this spec defines the shared primitives they reuse).</p>
+    <p><b>Entry points</b> Any mobile visit to the instance (responsive web, not a native app for v1 [BEST GUESS]); QR codes on postcards/signs deep-link to listing/community/value pages; SMS links from alerts and AI text-backs; GBP mobile taps.</p>
+    <p><b>Exit points</b> Same destinations as desktop counterparts; plus native handoffs: tel: call, SMS, calendar add on tour booking, share sheet on Save·Share.</p>
+
+    <h2>Layout</h2>
+    <p><b>Global chrome (consumer)</b>: compact header — agent avatar + name + "PropertyIQ" powered-by; no persistent nav bar (hamburger) [BEST GUESS]. One primary ask per viewport; sticky bottom bars replace section CTAs, never stack.</p>
+    <p><b>Results (phone 1 in draft)</b>: search prompt input + Go → horizontally scrolling chip row (Commute · Schools · Fire · Yield · +More; active chips highlighted) → vertical card list (photo, price, address/bd-ba, one-line ⚡ intelligence strip: "96 match · 22 min commute · Elem 9/10") → floating "Map" pill toggle bottom-center. Map mode replaces the list full-screen with a bottom-sheet card peek on pin tap [BEST GUESS on sheet]; toggle returns to list.</p>
+    <p><b>Property detail (phone 2 in draft)</b>: back header ("← {address}" + Save · Share) → edge-to-edge swipe gallery (~130px+ hero) → price + fact line → one-line intelligence strip → horizontally scrolling section chips (Overview · Commute · Schools · Investment) that jump-scroll/switch panels → key stat rows (e.g. Est. rent + yield) → <b>sticky bottom agent bar</b>: "Ask {agent}" (primary, brand) + "Book tour" (outline), always visible.</p>
+    <p><b>Homepage & community</b>: per their own specs' mobile sections — this spec is their authority for the shared primitives.</p>
+
+    <h2>Element inventory</h2>
+    <div style="overflow-x:auto">
+    <table class="dtable">
+      <tr><th>Element</th><th>What it shows/does</th><th>Data source</th><th>Interactions</th><th>Spec source</th></tr>
+      <tr><td>Compact branded header</td><td>Avatar, agent name, powered-by</td><td>Brand vault</td><td>Tap avatar → homepage</td><td>Draft s7</td></tr>
+      <tr><td>NL search prompt (mobile)</td><td>Same parser as Screen 1; voice mic button for dictation</td><td>SearchRecord/parser</td><td>Type/voice → results; "Parsed as" chips echo the interpretation, editable</td><td>Draft s1 note (voice mic for mobile)</td></tr>
+      <tr><td>Horizontal chip row</td><td>Filter/lens chips, scrollable, on/off state, "+More" opens full filter sheet</td><td>Active filters</td><td>Tap toggles; +More → bottom-sheet filter panel [BEST GUESS]</td><td>Draft s7</td></tr>
+      <tr><td>Result card (mcard)</td><td>Photo, price, address · bd/ba, one-line ⚡ intelligence strip</td><td>IDXDisplayCache + intelligence engines</td><td>Tap → detail; long-press/heart save [BEST GUESS: heart icon]</td><td>Draft s7</td></tr>
+      <tr><td>Intelligence strip (compressed)</td><td>Desktop strip compresses to ONE line: match count/criteria, top honest highlight</td><td>Match engine ("Matches 5 of 5" framing from s2)</td><td>Tap expands full strip [BEST GUESS]</td><td>Draft s7 + s2</td></tr>
+      <tr><td>Floating Map toggle</td><td>Bottom-center pill; switches list ↔ full-screen map</td><td>—</td><td>Tap; map obeys one-heatmap-at-a-time + legend rule</td><td>Draft s7 + s2 layer rule</td></tr>
+      <tr><td>Map pin bottom sheet</td><td>Pin tap → card peek with photo/price/strip; explainable layers (contributing facts on pin)</td><td>Same as cards; ScoringService for layers</td><td>Swipe up → detail</td><td>Draft s9 map rules; matrix correction #12</td></tr>
+      <tr><td>Detail gallery</td><td>Edge-to-edge swipe photos</td><td>ImageryProvider/MLS</td><td>Swipe; tap → full-screen</td><td>Draft s7</td></tr>
+      <tr><td>Save · Share</td><td>Save to saved properties (S26); native share sheet</td><td>SavedPropertyRecord</td><td>Save requires soft account/contact capture [BEST GUESS: deferred prompt on first save]</td><td>Draft s7 + s26</td></tr>
+      <tr><td>Section chips (detail)</td><td>Overview/Commute/Schools/Investment in-page nav</td><td>—</td><td>Tap scrolls/switches</td><td>Draft s7</td></tr>
+      <tr><td>Sticky agent bar</td><td>"Ask {agent}" + "Book tour", persistent on detail pages</td><td>Brand vault; booking slots (PropFlow)</td><td>Ask → chat/SMS lead flow (consent-gated); Book → slot picker (pre-approved slots, confirm queue)</td><td>Draft s7; matrix PropFlow booking gap</td></tr>
+      <tr><td>Sticky homepage CTA bar</td><td>Value · Search · Call — replaces section CTAs on mobile</td><td>—</td><td>3 CTAs</td><td>Draft s5</td></tr>
+      <tr><td>Behavior-triggered soft prompt (mobile)</td><td>Repeat-visit/photo-binge/save prompts, dismissible, no hard gate on organic</td><td>Session events</td><td>Dismiss or capture</td><td>Draft s3 lead policy</td></tr>
+      <tr><td>Bottom-sheet pattern (shared primitive)</td><td>All secondary panels (filters, pin peek, monthly-cost editor, ask-a-question) render as bottom sheets, never new pages</td><td>—</td><td>Drag to dismiss</td><td>[BEST GUESS — consistent primitive]</td></tr>
+      <tr><td>Compare (mobile)</td><td>2-col swipeable cards, pinned baseline fixed left</td><td>Compare set (URL-addressable)</td><td>Horizontal swipe through candidates</td><td>Draft s4 note</td></tr>
+      <tr><td>Community tables (mobile)</td><td>Trends/schools tables scroll inside overflow-x containers</td><td>Screen 6 data</td><td>Horizontal in-container scroll only</td><td>Draft s6 / spec 06</td></tr>
+      <tr><td>Voice input (mic)</td><td>Dictated NL search</td><td>Device speech → parser</td><td>Tap-to-talk</td><td>Draft s1</td></tr>
+      <tr><td>Call/text deep links</td><td>tel:/sms: handoffs on all phone CTAs</td><td>identity.json phone</td><td>Native dialer</td><td>identity.json</td></tr>
+      <tr><td>Toast/inline notices</td><td>Blocked-send, consent, and fail-closed messages surface as inline notices (never silent)</td><td>ComplianceProvider</td><td>—</td><td>Matrix correction #11</td></tr>
+    </table>
+    </div>
+
+    <h2>States</h2>
+    <ul style="padding-left:20px">
+      <li><b>Default</b>: list-first results; detail with sticky bar.</li>
+      <li><b>Loading</b>: skeleton cards (photo + 2 lines); map toggle disabled until first page of results; LCP budget &lt;2s on detail (draft s3), &lt;2.5s homepage.</li>
+      <li><b>Empty</b>: zero-results never happens — engine relaxes the weakest constraint and <i>says which one</i> ("showing 2.9+ baths because 3+ returned nothing") (draft s1); saved/compare empty states carry a one-line explainer + primary action.</li>
+      <li><b>Error/degraded (fail-closed)</b>: map layers hide with "score unavailable" when ScoringService is down; intelligence strip drops any unavailable metric rather than fabricating; deal-rating labels disappear when ScoringService is unavailable, deterministic metrics remain (matrix correction #6); offline → cached last results with a stale banner [BEST GUESS].</li>
+      <li><b>Permission-limited</b>: anonymous users browse freely (no hard gate on organic); saves/alerts require contact capture; tour booking requires name+phone+consent line.</li>
+      <li><b>Orientation/small screens</b>: everything specified at 375px; wider phones get the same layout with more card image height; no horizontal page scroll ever.</li>
+    </ul>
+
+    <h2>Data fields</h2>
+    <p>Same records as the desktop counterparts (S1–S6): IDXDisplayCache listing fields (MLS whitelist), match score + criteria count, commute minutes, school ratings (attributed + disclaimed), all-in monthly cost, rent estimate + yield (RentEstimateSnapshot), AVM range + confidence + as-of, saved-property notes/tags, compare sets (URL-addressable, persistent). Mobile adds: device geolocation (opt-in, for "near me" search + commute origin) [BEST GUESS], voice transcript (transient, not stored beyond the SearchRecord parse).</p>
+
+    <h2>Rules & compliance</h2>
+    <ul style="padding-left:20px">
+      <li>All desktop compliance rules apply unchanged: schools firewall (§16), no crime data, AVM honesty, honest-miss framing, one-heatmap-plus-legend, brand tripwire (DRE 01466876 from identity.json).</li>
+      <li>Consent: "Ask {agent}" SMS/chat flows capture channel consent before the first outbound message; unknown consent blocks with a visible reason (matrix correction #11).</li>
+      <li>Ownership signals on map pins render as absentee/corporate/owner-occupied badges only — never raw owner names/addresses (matrix correction #12).</li>
+      <li>Geolocation is opt-in per browser prompt, used only for the session, never stored to the contact without explicit save [BEST GUESS].</li>
+      <li>Tap targets ≥44px; sticky bars respect safe-area insets; performance is a product KPI (lists &lt;500ms warm, per Screen 14 note — applies to mobile lists too).</li>
+    </ul>
+
+    <h2>Cross-links</h2>
+    <p>This screen defines primitives consumed by: S1/S2 (search/results), S3 (detail), S4 (compare), S5 (homepage), S6 (community), S10 (seller report — already mobile-first as a live page), S25 (client portal), S26 (saved searches), S27 (Past Client mobile call assistant — reuses sticky-bar + bottom-sheet + voice-note primitives). <b>Ledger events</b>: identical to desktop counterparts plus MAP_TOGGLED, VOICE_SEARCH_USED, STICKY_CTA_TAPPED, TOUR_REQUESTED — all attribution-keyed.</p>
+
+    <h2>Open decisions</h2>
+    <ul style="padding-left:20px">
+      <li>[DECIDE] Native app vs responsive web for v1. Interim: responsive web + PWA install prompt; native app deferred — no spec section mandates native [BEST GUESS].</li>
+      <li>[DECIDE] "Ask {agent}" channel (in-page chat vs SMS handoff vs Wattson-answered chat with agent escalation). Interim: in-page chat answered by the platform engine with agent escalation + consent capture before any outbound follow-up — keeps the compliance check server-side; UI unaffected by channel choice.</li>
+      <li>[DECIDE] Save gating moment (first save vs third). Interim: soft prompt on first save, skippable once, required on second [BEST GUESS].</li>
+      <li>[DECIDE] Map clustering + pin budget on mobile. Interim: cluster above 50 pins in viewport [BEST GUESS], legend always visible for the active layer.</li>
+      <li>[DECIDE] Voice search vendor (device WebSpeech vs server ASR). Interim: WebSpeech API with server fallback — parser input is plain text either way; UI unaffected.</li>
+    </ul>
+  </div>
+</div>

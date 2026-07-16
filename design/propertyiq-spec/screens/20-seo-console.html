@@ -1,0 +1,493 @@
+<title>PropertyIQ · Screen 20 — SEO Console</title>
+<link href="https://api.fontshare.com/v2/css?f[]=technor@500,600,700&display=swap" rel="stylesheet">
+<link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<style>
+  /* Type system — Technor for display (the squared machine look from the font exploration), Inter for UI. */
+  :root{ --font-display:'Technor', Inter, -apple-system, 'Segoe UI', sans-serif; --font-ui: Inter, -apple-system, 'Segoe UI', Roboto, sans-serif; }
+</style>
+<style>
+  /* Palette v4 — PropFlow design language: neutral ink UI, ink-as-accent, color reserved for data. (extracted verbatim from propsearch-design-draft.html) */
+  :root, :root[data-theme="dark"], :root[data-theme="light"]{
+    --ink:#23282f; --paper:#fbfaf8; --surface:#f1efe9; --line:#e2dfd6;
+    --mut:#6b7076; --soft:#9b9f9f;
+    --brand:#2e6b53; --brand-ink:#ffffff; --brand-soft:#eaf1ec; --brand-deep:#1e4c3a;
+    --signal:#b07a2e;
+    --good:#2e7d4f; --warn:#a8630a; --crit:#b3372f;
+    --r:10px;
+  }
+  .intel .score, .mintel{ color:var(--brand-deep) }
+  .intel{ border-left:3px solid var(--brand) }
+  h1{ letter-spacing:-.02em }
+  .stat b{ letter-spacing:-.01em }
+  body[data-agent="watts"]{ --brand:#2e6b53; --brand-soft:#eaf1ec; --brand-deep:#1e4c3a; }
+
+  *{box-sizing:border-box; margin:0}
+  body{font:15px/1.55 var(--font-ui); color:var(--ink); background:var(--paper); padding-bottom:80px}
+  h1,h2,h3{line-height:1.15; text-wrap:balance; font-family:var(--font-display); font-weight:600}
+  h1{letter-spacing:-.01em}
+  .site{box-shadow:0 1px 2px rgba(20,24,32,.04), 0 8px 32px rgba(20,24,32,.06)}
+  .stat{box-shadow:0 1px 2px rgba(20,24,32,.03); transition:box-shadow .15s, transform .15s}
+  .stat:hover{box-shadow:0 4px 14px rgba(20,24,32,.08)}
+  .chip{transition:all .12s}
+  button{font-family:var(--font-ui)}
+  .num{font-variant-numeric:tabular-nums}
+  .wrap{max-width:1180px; margin:0 auto; padding:0 20px}
+
+  .bar{position:sticky; top:0; z-index:50; background:var(--paper); border-bottom:1px solid var(--line); padding:10px 0; backdrop-filter:blur(8px)}
+  .bar .wrap{display:flex; flex-wrap:wrap; gap:10px; align-items:center}
+  .bar .ttl{font-weight:700; margin-right:auto}
+  .bar .ttl small{display:block; font-weight:400; color:var(--mut)}
+  .bar a{color:var(--brand); font-size:13px; text-decoration:none}
+
+  .note{background:var(--surface); border:1px solid var(--line); border-radius:var(--r); padding:14px 16px; margin:0 0 22px; font-size:13.5px; color:var(--mut)}
+  .note b{color:var(--ink)}
+
+  .site{border:1px solid var(--line); border-radius:14px; overflow:hidden; background:var(--paper)}
+  .sitehead{display:flex; align-items:center; gap:14px; padding:14px 22px; border-bottom:1px solid var(--line)}
+  .avatar{width:38px; height:38px; border-radius:50%; background:var(--brand); color:var(--brand-ink); display:grid; place-items:center; font-weight:700}
+  .sitehead .who b{display:block}
+  .sitehead .who small{color:var(--mut)}
+  .sitehead nav{margin-left:auto; display:flex; gap:18px; font-size:13.5px; color:var(--mut)}
+  .sitehead nav a{color:inherit; text-decoration:none}
+  .sitehead nav a:hover{color:var(--brand)}
+
+  .chip{display:inline-flex; align-items:center; gap:6px; font-size:12.5px; font-weight:500; border:1px solid var(--line); border-radius:99px; padding:6px 12px; background:var(--paper); cursor:pointer; color:var(--ink)}
+  .chip:hover{border-color:var(--brand)}
+  .chip.on{background:var(--brand); border-color:var(--brand); color:var(--brand-ink); font-weight:600; box-shadow:0 2px 8px color-mix(in srgb, var(--brand) 30%, transparent)}
+
+  .statrow{display:grid; grid-template-columns:repeat(4,1fr); gap:10px}
+  .stat{background:var(--surface); border:1px solid var(--line); border-radius:var(--r); padding:12px}
+  .stat small{display:block; color:var(--mut); font-size:11.5px; text-transform:uppercase; letter-spacing:.05em}
+  .stat b{font-size:18px}
+  .stat .up{color:var(--good); font-size:12px}
+
+  .bdg{font-size:11.5px; border-radius:6px; padding:3px 8px; background:var(--surface); border:1px solid var(--line); color:var(--mut)}
+  .bdg.good{color:var(--good); border-color:color-mix(in srgb,var(--good) 30%,var(--line))}
+  .bdg.warn{color:var(--warn); border-color:color-mix(in srgb,var(--warn) 30%,var(--line))}
+
+  .dtable{width:100%; border-collapse:collapse; font-size:13px}
+  .dtable td,.dtable th{border-bottom:1px solid var(--line); padding:8px 10px; text-align:left}
+  .dtable th{font-size:11px; text-transform:uppercase; letter-spacing:.05em; color:var(--soft)}
+
+  @media (max-width:860px){ .statrow{grid-template-columns:repeat(2,1fr)} .maingrid{grid-template-columns:1fr !important} .console{grid-template-columns:1fr !important} .rail{display:none !important} .modgrid{grid-template-columns:1fr !important} }
+  @media (prefers-reduced-motion: reduce){ *{transition:none!important} }
+
+  /* ---- page-specific additions (kept in the same design language) ---- */
+  .anno{font-size:11px; color:var(--soft)}
+  .cardbox{border:1px solid var(--line); border-radius:10px; padding:11px 14px; font-size:12.5px; background:var(--paper)}
+  .btn-ink{background:var(--ink); color:#fff; border:0; border-radius:7px; padding:7px 12px; font-size:11.5px; cursor:pointer; font-weight:600}
+  .btn-ghost{background:var(--paper); border:1px solid var(--line); border-radius:7px; padding:7px 12px; font-size:11.5px; cursor:pointer}
+  .btn-dis{background:var(--surface); color:var(--soft); border:1px solid var(--line); border-radius:7px; padding:7px 12px; font-size:11.5px; cursor:not-allowed}
+  .sechead{font-size:14px; font-weight:700; margin:0 0 8px; font-family:var(--font-display)}
+  .cov td.ok{color:var(--good); font-weight:700}
+  .specdoc h2{font-size:18px; margin:26px 0 8px}
+  .specdoc h3{font-size:15px; margin:18px 0 6px}
+  .specdoc p, .specdoc li{font-size:13.5px; color:var(--mut)}
+  .specdoc b{color:var(--ink)}
+  .specdoc table{margin:8px 0}
+  .diff{background:var(--surface); border-radius:8px; padding:9px; font-size:11.5px; font-family:Consolas,monospace; overflow-x:auto}
+  .diff .del{color:var(--crit)} .diff .add{color:var(--good)} .diff .ctx{color:var(--soft)}
+  .tabnav{display:flex; gap:0; border-bottom:1px solid var(--line); padding:0 22px; overflow-x:auto; font-size:12.5px}
+  .tabnav span{padding:9px 12px; white-space:nowrap; color:var(--mut); cursor:pointer; border-bottom:2px solid transparent}
+  .tabnav span.on{color:var(--ink); font-weight:700; border-bottom-color:var(--brand)}
+  .lgrid{display:grid; grid-template-columns:repeat(5,18px); gap:2px}
+  .lgrid div{width:18px; height:18px; border-radius:3px; display:grid; place-items:center; font-size:8.5px; color:#fff; font-weight:700}
+</style>
+
+<!-- ============ (1) slim header ============ -->
+<div class="bar">
+  <div class="wrap">
+    <div class="ttl">PropertyIQ · Screen 20 — SEO Console (SearchAtlas / OTTO) <small>Full-density per-screen mock · wireframe fidelity · dev-facing annotations in gray</small></div>
+    <a href="../wireframe.html">← All screens</a>
+  </div>
+</div>
+
+<!-- ============ (2) THE FULL MOCK ============ -->
+<div class="wrap" style="padding-top:24px">
+  <div class="note"><b>Screen 20 — SEO Console.</b> The single place where automated SEO becomes reviewable and auditable: site connections, audits/issues, OTTO-proposed changes shown as diffs, an approval-gated deploy flow, freeze flags, GBP posts/review replies, instant indexing, filter-URL handoff, and a client-shareable work summary. It exists because OTTO can mutate live sites — the console is the safety harness: <b>live SEO changes always preview first and always get human approval</b> (PR §17). Primary users: agent (Graeham persona), team member with SEO permission (read-only without deploy rights); client sees only the exported work summary.</div>
+
+  <div class="site" data-agent="watts">
+    <!-- site header + status line + site switcher + plan pill -->
+    <div class="sitehead" id="el-header">
+      <div class="avatar">GW</div>
+      <div class="who"><b>SEO · graehamwatts.com <span style="font-weight:400; color:var(--mut); font-size:12px; cursor:pointer">▾ switch site (2 connected)</span></b><small>GSC connected ✓ · OTTO active · weekly report Mondays <span class="anno">· click status → Settings tab</span></small></div>
+      <span id="el-plan-pill" class="bdg warn" title="SearchAtlas active-project-count warning (§17.4) — warn before creating projects past the plan limit" style="cursor:help">Projects 3/5 · nearing plan limit</span>
+      <nav><a href="#">Search (⌘K)</a><a href="#">🔔 2</a></nav>
+    </div>
+    <div class="tabnav">
+      <span class="on">Overview</span><span>Audits</span><span>Rank tracker</span><span>Keyword gap</span><span>Briefs</span><span>Backlinks</span><span>Local grid</span><span>GBP</span><span>Report</span><span>Change log</span><span>Settings</span>
+    </div>
+
+    <div class="console" style="display:grid; grid-template-columns:172px 1fr">
+      <!-- persistent agent-console left rail (Screen 9 chrome) -->
+      <div class="rail" style="border-right:1px solid var(--line); padding:14px 10px; font-size:12.5px; display:flex; flex-direction:column; gap:2px; background:var(--surface)">
+        <a href="#" style="text-decoration:none; color:var(--ink); border-radius:8px; padding:8px 10px">☰ Today</a>
+        <a href="#" style="text-decoration:none; color:var(--ink); border-radius:8px; padding:8px 10px">🗺 Farm map</a>
+        <a href="#" style="text-decoration:none; color:var(--ink); border-radius:8px; padding:8px 10px">🤝 Past clients</a>
+        <a href="#" style="text-decoration:none; color:var(--ink); border-radius:8px; padding:8px 10px">👤 Leads & clients</a>
+        <a href="#" style="text-decoration:none; color:var(--ink); border-radius:8px; padding:8px 10px">💬 Comms <span class="bdg" style="font-size:9.5px">6</span></a>
+        <a href="#" style="text-decoration:none; color:var(--ink); border-radius:8px; padding:8px 10px">🎬 Content studio</a>
+        <a href="#" style="text-decoration:none; color:var(--ink); border-radius:8px; padding:8px 10px">📣 Ads & funnels</a>
+        <a href="#" style="text-decoration:none; color:#fff; background:var(--ink); border-radius:8px; padding:8px 10px; font-weight:600">🔎 SEO <span class="bdg" style="font-size:9.5px; background:var(--paper)">1</span></a>
+        <a href="#" style="text-decoration:none; color:var(--ink); border-radius:8px; padding:8px 10px">⚙ Playbooks</a>
+        <a href="#" style="text-decoration:none; color:var(--ink); border-radius:8px; padding:8px 10px">📈 Reports</a>
+        <div style="margin-top:auto; padding-top:10px; border-top:1px solid var(--line)">
+          <a href="#" style="text-decoration:none; color:var(--ink); border-radius:8px; padding:8px 10px; display:block">⚙ Settings</a>
+          <div class="anno" style="padding:6px 10px">Global chrome: this rail is persistent across all agent-console screens (Screen 9 pattern). Consumer pages never show it.</div>
+        </div>
+      </div>
+
+      <div>
+        <!-- capability-probe banner -->
+        <div id="el-probe" style="padding:14px 22px 0">
+          <div class="cardbox" style="border-color:var(--warn); background:#fdf6ee; display:flex; gap:10px; align-items:center; flex-wrap:wrap">
+            <span style="color:var(--warn)">⚠</span>
+            <div style="flex:1; min-width:280px"><b>Capability probe: 1 SearchAtlas MCP tool missing</b>
+              <div style="color:var(--mut); font-size:12px"><code>deploySchema</code> not discovered at startup — schema-injection fixes are greyed below with this explanation. Everything else operational. Probe ran 6:02 AM.</div>
+            </div>
+            <button class="btn-ghost">Retry probe</button>
+            <div class="anno" style="width:100%">§17.4 capability probe at startup + dynamic tool discovery. Degraded = affected features disable fail-closed with inline reason — never a silent failure, never a fabricated success. Full-degraded state in the states strip ↓.</div>
+          </div>
+        </div>
+
+        <!-- main two-column grid -->
+        <div class="maingrid" style="padding:14px 22px; display:grid; grid-template-columns:1.3fr 1fr; gap:14px">
+          <div style="display:grid; gap:10px; align-content:start">
+
+            <!-- pending deploy card -->
+            <div id="el-pending-deploy" class="cardbox">
+              <div style="display:flex; align-items:center; gap:8px; flex-wrap:wrap"><b>Pending deploy — 14 title/meta changes</b><span class="bdg" style="font-size:10px">from GSC query data</span><span class="bdg" style="font-size:10px">preview generated 6:04 AM</span></div>
+              <div class="diff" style="margin-top:8px">
+                <div class="del">− Friendly Acres, Redwood City — Homes &amp; Market Statistics 2026</div>
+                <div class="add">+ Friendly Acres Homes for Sale &amp; Prices (2026) | Redwood City</div>
+                <div class="del">− Woodside Plaza | Listings</div>
+                <div class="add">+ Woodside Plaza Homes for Sale — Prices &amp; Sold Data | Redwood City</div>
+                <div class="ctx">…11 more · all through template variable slots, layout untouchable</div>
+                <div style="border-top:1px solid var(--line); margin-top:6px; padding-top:6px; color:var(--soft)">🔒 1 change targets /friendly-acres/ (frozen — A/B test) → <b style="color:var(--warn)">auto-excluded from this batch</b>; tooltip names the freeze reason</div>
+              </div>
+              <div style="display:flex; gap:6px; margin-top:8px; align-items:center; flex-wrap:wrap">
+                <button class="btn-ink">Approve &amp; deploy (13)</button>
+                <button class="btn-ghost">Review each</button>
+                <span class="anno">"Review each" → per-change list with individual include/exclude checkboxes</span>
+              </div>
+              <div id="el-diff-note" class="anno" style="margin-top:6px"><b style="color:var(--mut)">Diff constraint note:</b> changes flow through template variable slots only — brand-vault layout is locked, never touched. Approve creates an <code>SEO_DEPLOYMENT</code> ApprovalRecord in the Global Approvals Inbox (48h expiry, delegation per platform rules); on approval, <code>deployOnPageFixes()</code> executes with approval_id + correlation_id and lands in the change log. A diff must exist before an approve button renders. No silent mutation of a live site (§17.4).</div>
+            </div>
+
+            <!-- issues (audit) card -->
+            <div id="el-issues" class="cardbox">
+              <b>Issues (audit)</b>
+              <table class="dtable" style="font-size:11.5px; margin-top:6px">
+                <tr><th>Issue class</th><th>Count</th><th>Action</th></tr>
+                <tr><td>Thin vs siblings (uniqueness validator)</td><td class="num">3 pages</td><td><button class="btn-ghost" style="font-size:10.5px">Fix → preview</button></td></tr>
+                <tr><td>Orphan sold pages</td><td class="num">2</td><td><button class="btn-ghost" style="font-size:10.5px">Fix → preview</button> <span class="anno">internal links queued</span></td></tr>
+                <tr><td>Broken links</td><td class="num">0</td><td>—</td></tr>
+                <tr><td>Core Web Vitals</td><td class="num">LCP 1.9s ✓ pass</td><td>—</td></tr>
+                <tr><td>Schema validity</td><td class="num">214/214 ✓</td><td><button class="btn-dis" style="font-size:10.5px" title="deploySchema tool missing — see probe banner">Fix (disabled)</button></td></tr>
+              </table>
+              <div class="anno" style="margin-top:5px">getAudit() + getIssues(). Click an issue class → Audits tab filtered. Auto-fix via OTTO exists for 4 of 5 issue types — the 5th needs a human call. Every Fix button generates a <b>preview, never a direct deploy</b>. Schema Fix greyed fail-closed per the probe banner.</div>
+            </div>
+
+            <!-- work summary card + AI citations -->
+            <div id="el-work-summary" class="cardbox">
+              <div style="display:flex; align-items:center; gap:8px"><b>Work summary (client-shareable)</b><span class="bdg" style="font-size:10px">month-to-date · Jul 1–15</span></div>
+              <div class="statrow" style="grid-template-columns:repeat(4,1fr); margin-top:8px">
+                <div class="stat"><small>Changes deployed</small><b class="num">41</b> <span class="anno">all approval-logged</span></div>
+                <div class="stat"><small>Slugs minted</small><b class="num">6</b></div>
+                <div class="stat"><small>Rank moves</small><b class="num">#7→#4</b> <span class="anno">Friendly Acres guide</span></div>
+                <div class="stat" id="el-ai-citations"><small>AI citations</small><b class="num">6→9</b> <span class="up">▲3</span></div>
+              </div>
+              <div style="display:flex; gap:6px; margin-top:8px; align-items:center; flex-wrap:wrap">
+                <button class="btn-ink">Export client version</button>
+                <span class="anno">→ branded hosted URL + PDF · if emailed to a client it routes review-first (Graeham + Adrian forward) [DECIDE: format]</span>
+              </div>
+              <div class="anno" style="margin-top:5px">exportWorkSummary() + ledger. AI-citation counter reads <code>LLM_CITATION_DETECTED</code> events — click the tile → list of citing engines/queries ("Perplexity: 'redwood city adu rules' ×4 · ChatGPT: 'friendly acres home prices' ×3 · Gemini ×2"). No fabricated metrics: unknown renders "—", never a guess.</div>
+            </div>
+
+            <!-- AEO citation unit (Master Brain addition) -->
+            <div id="el-aeo" class="cardbox" style="border-left:3px solid var(--brand)">
+              <b>AEO citation-unit health <span class="bdg" style="font-size:10px">Master Brain addition</span></b>
+              <div style="color:var(--mut); font-size:12px; margin-top:5px" class="num">FAQPage + LocalBusiness JSON-LD on 38/38 lifestyle containers ✓ · visible last-updated timestamp on every page ✓ · Q&amp;A blocks short, factual, source-attributed · instant-indexing on publish (pages seen in hours, not days)</div>
+              <div style="background:#fdf6ee; border:1px solid color-mix(in srgb,var(--warn) 30%,var(--line)); border-radius:8px; padding:8px 10px; margin-top:6px; font-size:11.5px"><b style="color:var(--warn)">⚖ Fair-housing gate (lifestyle containers):</b> <span style="color:var(--mut)">templates render facts, never characterization — "best/top/worst" neighborhood or school rankings prohibited at the template level; every data point source-attributed ("boundaries per district"); NAR Fair Housing footer + "verify with the source" disclaimer; uniform availability. Template library has one-time broker/legal sign-off before first publish. Lint status: <b style="color:var(--good)">0 violations</b>.</span></div>
+              <div class="anno" style="margin-top:5px">PropCast MB — AEO Schema (the Citation Unit) + Fair Housing Gate for Lifestyle Containers. Facts come only from the PropSearch data floor (attributed, sourced, timestamped); the engine never invents local facts.</div>
+            </div>
+          </div>
+
+          <!-- right column -->
+          <div style="display:grid; gap:10px; align-content:start">
+            <!-- freeze flags -->
+            <div id="el-freeze" class="cardbox">
+              <b>Freeze flags</b>
+              <table class="dtable" style="font-size:11.5px; margin-top:6px">
+                <tr><th>Path</th><th>Reason</th><th>Until</th></tr>
+                <tr><td>/friendly-acres/ 🔒</td><td>A/B test running</td><td class="num">Aug 1 (auto-expires)</td></tr>
+                <tr><td>/sellers/valuation/ 🔒</td><td>Landing page mid-campaign</td><td>no end date</td></tr>
+              </table>
+              <div style="display:flex; gap:6px; margin-top:8px"><button class="btn-ghost">+ Add freeze</button><span class="anno" style="align-self:center">path picker + reason + optional end date</span></div>
+              <div class="anno" style="margin-top:5px">Per-project freeze flags (§17.4). OTTO skips frozen paths — <b>enforced server-side</b>; the UI additionally shows a lock on any proposed change touching a frozen path and auto-excludes it from batch deploys (see pending-deploy card ←).</div>
+            </div>
+
+            <!-- GBP queue -->
+            <div id="el-gbp" class="cardbox">
+              <b>GBP queue</b>
+              <div style="display:grid; gap:6px; margin-top:6px; font-size:11.5px">
+                <div style="border:1px solid var(--line); border-radius:8px; padding:7px 9px">📊 <b>Post (market stat):</b> "Redwood City median hit $1.61M in June — up 2.1% QoQ…" <button class="btn-ghost" style="font-size:10px; float:right">Preview</button></div>
+                <div style="border:1px solid var(--line); border-radius:8px; padding:7px 9px">🏠 <b>Post (listing alert):</b> "Just listed in Woodside Plaza — open Sat 1–4…" <button class="btn-ghost" style="font-size:10px; float:right">Preview</button></div>
+                <div style="border:1px solid var(--line); border-radius:8px; padding:7px 9px">⭐ <b>Review reply (5★, thank-you):</b> "Thank you, Maria — it was a pleasure helping you…" <span class="bdg good" style="font-size:9px">fair-housing lint ✓ (e.g. "family-friendly" block pattern, Screen 24)</span> <button class="btn-ghost" style="font-size:10px">Preview</button></div>
+              </div>
+              <div style="display:flex; gap:6px; margin-top:8px"><button class="btn-ink">Send all to Approvals (3)</button></div>
+              <div class="anno" style="margin-top:5px">PropCast GBP engine (weekly cadence: market stat / listing alert / community update + weekly GBP video). <b>Nothing posts directly from this card</b> — GBP posts and review replies always route to the Approvals Inbox; review replies are client-facing text and honor the fair-housing lint. Dev note (MB): GBP API is migrating — verify the stable endpoint before build.</div>
+            </div>
+
+            <!-- review-request cadence status -->
+            <div id="el-review-cadence" class="cardbox">
+              <b>Review-request cadence</b>
+              <div style="color:var(--mut); font-size:11.5px; margin-top:5px" class="num">At close +72h: 4/4 sent this quarter ✓ · 1-year mark: 3 queued via Past Client OS · GBP reviews: <b style="color:var(--ink)">47</b> (rank #2 for "real estate agent" locally — target top-3 ✓) · recency: last review 11 days ago (target &lt;30 ✓)</div>
+              <div style="display:flex; gap:6px; margin-top:6px"><button class="btn-ghost">Past Client OS trigger settings →</button></div>
+              <div class="anno" style="margin-top:5px">Ledger + GBP API. Strategy per PropCast MB: request from every closed transaction within 72h + every past client at the 1-year mark; targets = top-3 GBP review count, recency inside 30 days, weekly content activity.</div>
+            </div>
+
+            <!-- instant indexing -->
+            <div id="el-indexing" class="cardbox">
+              <b>Instant indexing</b>
+              <div style="color:var(--mut); font-size:11.5px; margin-top:5px" class="num">9 URLs submitted this week (7 new listings + 2 slugs) · avg index time <b style="color:var(--ink)">26h</b> · oldest unindexed: 41h (watching)</div>
+              <div style="display:flex; gap:6px; margin-top:8px; align-items:center"><button class="btn-ghost">Submit URL</button><span class="anno">manual add requires approval_id — batches into the deploy approval; never fires bare</span></div>
+              <div class="anno" style="margin-top:5px">requestIndexing() results (§17.3). Submission-on-publish is automatic for approved pages so new pages are seen in hours, not days (MB AEO rule).</div>
+            </div>
+
+            <!-- filter-URL handoff -->
+            <div id="el-filter-url" class="cardbox">
+              <b>Filter-URL handoff</b>
+              <div style="color:var(--mut); font-size:11.5px; margin-top:5px" class="num">Slug usage <b style="color:var(--ink)">61/250</b> market cap (Redwood City) · 118/5000 global · <b style="color:var(--ink)">3 candidates</b> awaiting mint (from prompt logs): "homes with adu potential redwood city" · "friendly acres under 1.5m" · "sequoia high school boundary homes"</div>
+              <div style="display:flex; gap:6px; margin-top:8px"><button class="btn-ink">Review candidates</button></div>
+              <div class="anno" style="margin-top:5px">PropSearch filter-URL library ("Submit to SEO" routes in here — matrix P1 gap item). Mint flow routes back through preview + approve like everything else; caps 250/market, 5000/global enforced with the plan-limit-style warning.</div>
+            </div>
+          </div>
+        </div>
+
+        <!-- ============ full console modules (Search Atlas parity) ============ -->
+        <div id="el-modules" style="padding:0 22px 14px">
+          <div style="border:1.5px solid var(--brand); border-radius:12px; padding:14px 16px; background:var(--brand-soft)">
+            <b style="font-size:14px">Full console modules (Search Atlas parity — every tile below is a tab of this screen)</b>
+            <div class="modgrid" style="display:grid; grid-template-columns:repeat(3,1fr); gap:10px; margin-top:10px; font-size:11.5px">
+              <div id="el-rank-tracker" style="background:var(--paper); border:1px solid var(--line); border-radius:9px; padding:10px"><b>📊 Rank tracker</b>
+                <div style="overflow-x:auto"><table class="dtable" style="font-size:10px; margin-top:5px"><tr><th>Keyword</th><th>Pos</th><th>Δ</th><th>vs J. Lee</th></tr><tr><td>friendly acres homes for sale</td><td class="num">4</td><td class="num" style="color:var(--good)">▲3</td><td class="num">9</td></tr><tr><td>redwood city adu rules</td><td class="num">2</td><td class="num" style="color:var(--good)">▲6</td><td class="num">—</td></tr><tr><td>east palo alto realtor</td><td class="num">11</td><td class="num" style="color:var(--crit)">▼1</td><td class="num">6</td></tr></table></div>
+                <div class="anno" style="margin-top:4px">142 tracked · daily · per-neighborhood groups · vs 3 named competitors · sort/filter · keyword click → SERP snapshot · "add keyword" · competitor toggle. Rank data always carries an as-of date; outage → "rank data unavailable", never stale-as-current.</div></div>
+              <div id="el-audit-tile" style="background:var(--paper); border:1px solid var(--line); border-radius:9px; padding:10px"><b>🩺 Site audit</b>
+                <div style="color:var(--mut); margin-top:4px" class="num">Health <b style="color:var(--ink)">91/100</b> · 3 thin-content pages · 2 orphans · 0 broken · CWV pass (LCP 1.9s) · schema valid 214/214 pages · <b style="color:var(--ink)">auto-fix via OTTO for 4 of 5 issue types</b> (the 5th needs a human call)</div>
+                <div class="anno" style="margin-top:4px">getAudit()/getIssues() · per-issue Fix → preview (never direct deploy) · export.</div></div>
+              <div id="el-keyword-gap" style="background:var(--paper); border:1px solid var(--line); border-radius:9px; padding:10px"><b>⚔ Competitor keyword gap</b>
+                <div style="color:var(--mut); margin-top:4px" class="num">J. Lee ranks for 41 keywords you don't → <b style="color:var(--ink)">9 worth taking</b> (volume × intent) · top gap: "sequoia high school homes" (590/mo, informational) → <button class="btn-ghost" style="font-size:10px">Create brief</button></div>
+                <div class="anno" style="margin-top:4px">Rank API + competitor set shared with Screen 11 ("OTTO: gap plan →" deep-links here). "Create brief" → Briefs tab → PropCast gauntlet, NOT a generic writer.</div></div>
+              <div id="el-briefs" style="background:var(--paper); border:1px solid var(--line); border-radius:9px; padding:10px"><b>✍ Content briefs (Content-Genius-style)</b>
+                <div style="color:var(--mut); margin-top:4px">3 queued: "sequoia high school homes" · "rwc property tax explained" · "adu cost redwood city" — each auto-brief carries H2s, questions, entities, competitor coverage → <button class="btn-ghost" style="font-size:10px">Send to PropCast gauntlet</button></div>
+                <div class="anno" style="margin-top:4px">Routes into PropCast's gauntlet — voice + compliance stay in PropCast; the console never publishes prose itself.</div></div>
+              <div id="el-backlinks" style="background:var(--paper); border:1px solid var(--line); border-radius:9px; padding:10px"><b>🔗 Backlinks &amp; mentions</b>
+                <div style="color:var(--mut); margin-top:4px" class="num">DR 24 · 118 ref. domains · 2 new (Patch article, chamber page) · 1 lost · unlinked-mention finder: <b style="color:var(--ink)">3 outreach drafts queued</b></div>
+                <div class="anno" style="margin-top:4px">Backlink API. Outreach drafts → Outbox — a human sends, always.</div></div>
+              <div id="el-local-grid" style="background:var(--paper); border:1px solid var(--line); border-radius:9px; padding:10px"><b>📍 Local SEO grid</b>
+                <div style="display:flex; gap:10px; margin-top:6px; align-items:flex-start">
+                  <div class="lgrid">
+                    <div style="background:var(--good)">2</div><div style="background:var(--good)">1</div><div style="background:var(--good)">3</div><div style="background:var(--warn)">6</div><div style="background:var(--crit)">11</div>
+                    <div style="background:var(--good)">2</div><div style="background:var(--good)">2</div><div style="background:var(--good)">3</div><div style="background:var(--warn)">7</div><div style="background:var(--crit)">9</div>
+                    <div style="background:var(--good)">1</div><div style="background:var(--good)">2</div><div style="background:var(--good)">2</div><div style="background:var(--warn)">5</div><div style="background:var(--warn)">8</div>
+                    <div style="background:var(--good)">3</div><div style="background:var(--good)">3</div><div style="background:var(--warn)">4</div><div style="background:var(--warn)">6</div><div style="background:var(--warn)">7</div>
+                    <div style="background:var(--good)">2</div><div style="background:var(--good)">3</div><div style="background:var(--warn)">4</div><div style="background:var(--warn)">5</div><div style="background:var(--warn)">6</div>
+                  </div>
+                  <div style="color:var(--mut); flex:1" class="num">"realtor near me" — top-3 in <b style="color:var(--ink)">14/25</b> cells · weak NE quadrant highlighted → <button class="btn-ghost" style="font-size:10px">Target plan</button></div>
+                </div>
+                <div class="anno" style="margin-top:4px">GBP map-pack rank, 5×5 geo-grid per keyword · per-cell detail · target plan = GBP cadence + review-velocity suggestions (advisory only, deploys nothing).</div></div>
+            </div>
+            <div style="font-size:10.5px; color:var(--soft); margin-top:8px">All modules share one data layer (GSC + OTTO + rank API + ledger) · weekly client-shareable report assembles from these panels · every module's "fix" routes through the diff-preview → Approvals flow — <b>nothing deploys silently</b>.</div>
+          </div>
+        </div>
+
+        <!-- ============ Report / Change log / Settings tab previews ============ -->
+        <div style="padding:0 22px 14px; display:grid; grid-template-columns:1fr 1fr 1fr; gap:10px" class="modgrid">
+          <div id="el-report" class="cardbox">
+            <b>Report tab (preview)</b>
+            <div style="color:var(--mut); font-size:11.5px; margin-top:5px">Weekly client-shareable report assembled from all panels: work summary + rank moves + audit health + backlinks + local grid + AI citations. Schedule: Mondays (matches the weekly SEO report email, which deep-links here).</div>
+            <div style="display:flex; gap:6px; margin-top:8px"><button class="btn-ghost">Export PDF</button><button class="btn-ghost">Copy hosted URL</button></div>
+            <div class="anno" style="margin-top:5px">Client-emailed reports follow the review-first rule — sent to Graeham + Adrian, who forward. Attribution honesty: SEO page views feed reporting-only attribution (default weight 0.2, labeled "reporting assumption, not proof of causation" — LINEAR_DECAY_REPORTING); nothing here changes lead_score or Scoring Master outputs.</div>
+          </div>
+          <div id="el-changelog" class="cardbox">
+            <b>Change log tab (preview)</b>
+            <table class="dtable num" style="font-size:10.5px; margin-top:6px">
+              <tr><th>When</th><th>Change</th><th>Approval</th></tr>
+              <tr><td>Jul 14 09:12</td><td>title/meta ×12 (batch)</td><td>apr_8842 · GW</td></tr>
+              <tr><td>Jul 11 15:40</td><td>schema: FAQPage ×6</td><td>apr_8791 · GW</td></tr>
+              <tr><td>Jul 09 10:03</td><td>indexing: 4 URLs</td><td>apr_8760 · GW</td></tr>
+            </table>
+            <div style="display:flex; gap:6px; margin-top:8px"><button class="btn-ghost">Filter: type/date/page</button><button class="btn-ghost">Revert…</button></div>
+            <div class="anno" style="margin-top:5px">Append-only ledger: every deployed change with approval_id, approver, timestamp, before/after, correlation_id (SeoDeploymentResult). <b>Revert creates a NEW proposed change</b> through the same preview→approve flow — no direct rollback, never silent [BEST GUESS, per open decision].</div>
+          </div>
+          <div id="el-settings" class="cardbox">
+            <b>Settings tab / connection wizard (preview)</b>
+            <table class="dtable" style="font-size:10.5px; margin-top:6px">
+              <tr><th>Site</th><th>Method</th><th>Status</th></tr>
+              <tr><td>graehamwatts.com</td><td>cloudflare (default, PropertyIQ-managed)</td><td><span class="bdg good">CONNECTED</span></td></tr>
+              <tr><td>friendlyacreshomes.com</td><td>pixel (fallback)</td><td><span class="bdg warn">PENDING — snippet not detected yet</span></td></tr>
+            </table>
+            <div style="color:var(--mut); font-size:11px; margin-top:6px">Methods: cloudflare / pixel / wordpress (WP sites only). Wizard shows pixel snippet / worker config / plugin instructions per method; on FAILED → routes to Settings/Integrations.</div>
+            <div style="background:var(--surface); border-radius:8px; padding:8px 10px; margin-top:6px; font-size:11px"><b>Auto-deploy toggles (per low-risk change class):</b> title/meta template-slot changes <span class="bdg" style="font-size:9px">OFF — eligible after 30d / ≥95% unmodified approvals / 0 incidents</span> · schema on noindex pages <span class="bdg" style="font-size:9px">OFF</span> · everything else <b>REVIEW_REQUIRED, not toggleable</b> [BEST GUESS: autonomy-matrix promotion pattern]</div>
+            <div class="anno" style="margin-top:5px">connectSite() §17.3 — <b>connecting a site is itself approval-gated</b> (requires approval_id). Secrets: SEARCHATLAS_TOKEN (MCP Bearer) and SEARCHATLAS_REST_API_KEY are distinct, never interchangeable — UI surfaces connection status only, <b>never key material</b>.</div>
+          </div>
+        </div>
+
+        <!-- ============ states strip ============ -->
+        <div id="el-states" style="padding:0 22px 14px">
+          <div class="cardbox" style="font-size:11.5px">
+            <b>States (dev reference)</b>
+            <div style="display:grid; grid-template-columns:repeat(3,1fr); gap:8px; margin-top:8px" class="modgrid">
+              <div style="border:1px dashed var(--line); border-radius:8px; padding:8px 10px"><b id="el-empty-nosite" style="font-size:11px">EMPTY — no site</b><div style="color:var(--mut); margin-top:3px">"Connect your site to start" + wizard CTA (launches connection wizard).</div></div>
+              <div style="border:1px dashed var(--line); border-radius:8px; padding:8px 10px"><b id="el-empty-nopending" style="font-size:11px">EMPTY — no pending</b><div style="color:var(--mut); margin-top:3px">"OTTO has nothing queued — next audit Jul 21." Quiet state. No gap keywords → "no competitor set defined — add competitors" (links to Screen 11 watch list).</div></div>
+              <div style="border:1px dashed var(--line); border-radius:8px; padding:8px 10px"><b style="font-size:11px">LOADING</b><div style="color:var(--mut); margin-top:3px">Skeleton cards; diff block shimmers; rank tiles never show stale data without an as-of date.</div></div>
+              <div style="border:1px dashed color-mix(in srgb,var(--crit) 40%,var(--line)); border-radius:8px; padding:8px 10px"><b style="font-size:11px; color:var(--crit)">DEGRADED (fail-closed)</b><div style="color:var(--mut); margin-top:3px">MCP probe fails or token invalid → ALL deploy/fix/indexing buttons disable with inline reason "OTTO connection degraded — read-only until reconnected"; ledger-sourced read-only data stays visible with as-of timestamps. Rank API outage → "rank data unavailable". No fabricated metrics, ever.</div></div>
+              <div style="border:1px dashed var(--line); border-radius:8px; padding:8px 10px"><b style="font-size:11px">PERMISSION-LIMITED</b><div style="color:var(--mut); margin-top:3px">Team member without SEO-deploy permission: everything read-only, approve buttons hidden (approval happens in the Approvals Inbox anyway, scoped by delegation rules).</div></div>
+              <div style="border:1px dashed color-mix(in srgb,var(--warn) 40%,var(--line)); border-radius:8px; padding:8px 10px"><b style="font-size:11px; color:var(--warn)">FROZEN-PATH CONFLICT</b><div style="color:var(--mut); margin-top:3px">Pending change touching a frozen path renders with a 🔒 lock badge, excluded from batch approve; tooltip names the freeze reason (see pending-deploy card ↑).</div></div>
+            </div>
+          </div>
+        </div>
+
+        <!-- ============ mobile variant strip ============ -->
+        <div id="el-mobile" style="padding:0 22px 18px">
+          <div class="cardbox" style="font-size:11.5px">
+            <b>Mobile variant (375px)</b>
+            <div style="display:flex; gap:10px; margin-top:8px; align-items:flex-start; flex-wrap:wrap">
+              <div style="width:150px; border:1px solid var(--line); border-radius:14px; padding:8px; background:var(--surface); flex-shrink:0">
+                <div style="font-size:8.5px; font-weight:700">SEO · graehamwatts.com</div>
+                <div style="display:flex; gap:3px; overflow:hidden; margin-top:4px"><span class="bdg" style="font-size:7px; background:var(--ink); color:#fff">Overview</span><span class="bdg" style="font-size:7px">Audits</span><span class="bdg" style="font-size:7px">Rank</span><span class="bdg" style="font-size:7px">Gap…</span></div>
+                <div style="background:var(--paper); border:1px solid var(--line); border-radius:6px; padding:5px; margin-top:4px; font-size:7.5px"><b>Pending deploy (13)</b><div style="overflow-x:auto; white-space:nowrap; font-family:Consolas,monospace; font-size:6.5px; color:var(--crit)">− Friendly Acres, Redwood City — Homes &amp; Mark…</div><div style="white-space:nowrap; overflow:hidden; font-family:Consolas,monospace; font-size:6.5px; color:var(--good)">+ Friendly Acres Homes for Sale &amp; Prices (20…</div></div>
+                <div style="background:var(--paper); border:1px solid var(--line); border-radius:6px; padding:5px; margin-top:3px; font-size:7.5px"><b>Issues</b> · 3 thin · 2 orphan</div>
+                <div style="background:var(--paper); border:1px solid var(--line); border-radius:6px; padding:5px; margin-top:3px; font-size:7.5px"><b>GBP queue</b> · 3 to review</div>
+                <div style="background:var(--ink); color:#fff; border-radius:6px; padding:5px; margin-top:4px; text-align:center; font-size:7.5px; font-weight:700">Approve &amp; deploy (13) — sticky</div>
+              </div>
+              <div style="flex:1; min-width:240px; color:var(--mut)">Tabs collapse to a horizontal-scroll chip row under the header. Cards stack single-column: <b>Pending deploy → Issues → GBP queue → Freeze flags → Work summary → Instant indexing → Filter-URL handoff → module tiles</b>. Diff blocks scroll horizontally inside their own container (overflow-x:auto). Approve buttons go full-width with a sticky bottom bar when a deploy is selected. The 5×5 local grid renders as a compact heatmap with tap-for-detail.</div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ============ Spec gaps found ============ -->
+  <div class="note" style="margin-top:24px; border-color:var(--warn)"><b>Spec gaps found (PropCast Master Brain, rendered above):</b> (1) <b>AEO citation unit</b> — FAQPage + LocalBusiness JSON-LD on every lifestyle container, short source-attributed Q&amp;A blocks, and a visible last-updated timestamp (MB "AEO Schema — the Citation Unit"); the spec covers schema validity generically but not the citation-unit contract → rendered as the <a href="#el-aeo">AEO citation-unit health card</a>. (2) <b>Fair-housing gate for lifestyle/programmatic pages</b> — facts never characterization, "best/top/worst" rankings prohibited at template level, source attribution + NAR footer + uniform availability, one-time broker/legal template sign-off (MB "Fair Housing Gate for Lifestyle Containers"); spec only carried the review-reply lint → rendered inside the same card. (3) <b>GBP API migration caveat</b> — verify the current stable endpoint before build (MB Part 10/dev checklist) → noted on the <a href="#el-gbp">GBP queue card</a>. Also confirmed by the MB: the evaluate-first vendor rule and factual-data-floor (PropSearch supplies facts, the engine never invents them) — both already reflected in the spec's open decisions and reiterated in annotations.</div>
+
+  <!-- ============ (3) ELEMENT COVERAGE ============ -->
+  <h2 style="font-size:20px; margin:24px 0 10px">Element coverage — spec inventory → this page</h2>
+  <table class="dtable cov" style="font-size:12.5px">
+    <tr><th>Spec inventory element</th><th>Rendered at</th><th>Status</th></tr>
+    <tr><td>Site header + status line (domain, GSC, OTTO, cadence, site switcher)</td><td><a href="#el-header">Site header</a></td><td class="ok">✓</td></tr>
+    <tr><td>Plan-limit pill (projects vs SearchAtlas plan limit)</td><td><a href="#el-plan-pill">Header pill</a></td><td class="ok">✓</td></tr>
+    <tr><td>Pending deploy card (batch, source badge, diff preview, approve / review-each)</td><td><a href="#el-pending-deploy">Pending deploy</a></td><td class="ok">✓</td></tr>
+    <tr><td>Diff constraint note (template variable slots, layout untouchable)</td><td><a href="#el-diff-note">Note under diff</a></td><td class="ok">✓</td></tr>
+    <tr><td>Issues (audit) card (thin/orphans/broken/CWV, Fix → preview)</td><td><a href="#el-issues">Issues card</a></td><td class="ok">✓</td></tr>
+    <tr><td>Work summary card (MTD deploys, slugs, rank moves, AI citations, export)</td><td><a href="#el-work-summary">Work summary</a></td><td class="ok">✓</td></tr>
+    <tr><td>Freeze flags card (path + reason + expiry, add/remove, server-side enforcement)</td><td><a href="#el-freeze">Freeze flags</a></td><td class="ok">✓</td></tr>
+    <tr><td>GBP queue card (drafted posts + review replies → Approvals only)</td><td><a href="#el-gbp">GBP queue</a></td><td class="ok">✓</td></tr>
+    <tr><td>Review-request cadence status (close +72h, 1-yr mark, top-3 / &lt;30d targets)</td><td><a href="#el-review-cadence">Review cadence</a></td><td class="ok">✓</td></tr>
+    <tr><td>Instant indexing card (URLs this week, avg index time, approval-gated submit)</td><td><a href="#el-indexing">Instant indexing</a></td><td class="ok">✓</td></tr>
+    <tr><td>Filter-URL handoff card (usage vs 250/5000 caps, mint candidates)</td><td><a href="#el-filter-url">Filter-URL handoff</a></td><td class="ok">✓</td></tr>
+    <tr><td>Rank tracker tile/tab (142 tracked, Δ, groups, competitor compare)</td><td><a href="#el-rank-tracker">Rank tracker tile</a></td><td class="ok">✓</td></tr>
+    <tr><td>Site audit tile/tab (health 91/100, schema 214/214, auto-fix 4/5)</td><td><a href="#el-audit-tile">Site audit tile</a></td><td class="ok">✓</td></tr>
+    <tr><td>Competitor keyword gap tile/tab (41 → 9 worth taking, create brief)</td><td><a href="#el-keyword-gap">Keyword gap tile</a></td><td class="ok">✓</td></tr>
+    <tr><td>Content briefs tile/tab (auto-briefs → PropCast gauntlet, never generic writer)</td><td><a href="#el-briefs">Briefs tile</a></td><td class="ok">✓</td></tr>
+    <tr><td>Backlinks &amp; mentions tile/tab (DR, ref domains, unlinked-mention outreach → Outbox)</td><td><a href="#el-backlinks">Backlinks tile</a></td><td class="ok">✓</td></tr>
+    <tr><td>Local SEO grid tile/tab (5×5 geo-grid, weak quadrant, advisory target plan)</td><td><a href="#el-local-grid">Local grid tile (real 5×5)</a></td><td class="ok">✓</td></tr>
+    <tr><td>Report tab (weekly client-shareable, Mondays, review-first email)</td><td><a href="#el-report">Report preview</a></td><td class="ok">✓</td></tr>
+    <tr><td>Change log tab (append-only, approval_id/approver/before-after, revert-as-new-proposal)</td><td><a href="#el-changelog">Change log preview</a></td><td class="ok">✓</td></tr>
+    <tr><td>Settings tab / connection wizard (cloudflare/pixel/wordpress, statuses, auto-deploy toggles)</td><td><a href="#el-settings">Settings preview</a></td><td class="ok">✓</td></tr>
+    <tr><td>Capability-probe banner (missing MCP tools, retry, greyed features)</td><td><a href="#el-probe">Probe banner</a></td><td class="ok">✓</td></tr>
+    <tr><td>AI-citation counter (6→9, click → citing engines/queries)</td><td><a href="#el-ai-citations">Work-summary tile</a></td><td class="ok">✓</td></tr>
+    <tr><td>Empty state — no site (wizard CTA)</td><td><a href="#el-empty-nosite">States strip</a></td><td class="ok">✓</td></tr>
+    <tr><td>Empty state — no pending ("next audit {date}")</td><td><a href="#el-empty-nopending">States strip</a></td><td class="ok">✓</td></tr>
+  </table>
+  <div style="border:1.5px solid var(--good); background:#f2f8f4; border-radius:10px; padding:12px 16px; margin:12px 0 0; font-weight:700; color:var(--good)">24 of 24 spec elements rendered ✓ <span style="font-weight:400; color:var(--mut); font-size:12.5px">— plus all six spec states (loading / two empties / degraded / permission-limited / frozen-path conflict) as a labeled strip, the mobile 375px variant, and 3 Master-Brain additions (AEO citation unit, lifestyle fair-housing gate, GBP API migration caveat).</span></div>
+
+  <!-- ============ (4) FULL SPEC AS HTML ============ -->
+  <div class="specdoc">
+    <h1 style="font-size:24px; margin:40px 0 6px">Spec — 20 · SEO Console (SearchAtlas / OTTO)</h1>
+    <p><b>Purpose</b> The single place where automated SEO becomes reviewable and auditable: site connections, audits/issues, OTTO-proposed changes shown as diffs, an approval-gated deploy flow, freeze flags, GBP posts/review replies, instant indexing, filter-URL handoff, and a client-shareable work summary. It exists because OTTO can mutate live sites — the console is the safety harness (PropReach Master Brain §17: SEO pages are destinations and attribution surfaces; live SEO changes always preview first and always get human approval).</p>
+    <p><b>Primary users</b> The agent (Graeham persona) — daily/weekly review. Secondarily an admin/team member with SEO permission. Read-only "work summary" view is client-shareable (exported, not a login).</p>
+    <p><b>Entry points</b> Left-nav "SEO"; Command Center cards (<code>PAGE_ORGANIC_TRAFFIC_SPIKE</code>, <code>LLM_CITATION_DETECTED</code>); Screen 11 "OTTO: gap plan →" into the keyword-gap tab; PropSearch filter-URL library "Submit to SEO" into the deploy preview flow; Approvals Inbox card back-links to diffs; weekly SEO report email (Mondays) → Report tab.</p>
+    <p><b>Exit points</b> "Approve &amp; deploy" → Approvals Inbox (<code>SEO_DEPLOYMENT</code> ApprovalRecord) → on approval <code>deployOnPageFixes</code>/<code>deploySchema</code> executes → change-log entry. Gap keyword "create brief" → PropCast briefing/gauntlet (NOT a generic writer). GBP queue → Approvals. Work summary export → client-shareable PDF/URL (Outbox review-first if emailed). Connection wizard → Settings/Integrations on failure.</p>
+
+    <h2>Layout</h2>
+    <p>Desktop: <b>Header (site strip)</b> — avatar + SEO · {domain} + status line ("GSC connected · OTTO active · weekly report Mondays") + tab nav <b>Overview · Audits · Rank tracker · Keyword gap · Briefs · Backlinks · Local grid · GBP · Report · Change log · Settings</b>; site-switcher dropdown if the tenant has &gt;1 site; plan-limit pill ("Projects 3/5"). <b>Main (Overview)</b>: two-column grid 1.3fr/1fr — left: pending-deploy (diff), issues, work summary; right: freeze flags, GBP queue, instant indexing, filter-URL handoff. <b>Below</b>: "Full console modules" — six tiles (rank tracker, site audit, keyword gap, briefs, backlinks, local grid), each a summary that opens its tab. Footer note: all modules share one data layer (GSC + OTTO + rank API + ledger); every module's "fix" routes through diff-preview → Approvals — nothing deploys silently.</p>
+    <p>Mobile (375px): tabs collapse to a horizontal-scroll chip row. Cards stack single-column: pending deploy → issues → GBP queue → freeze flags → work summary → instant indexing → filter-URL handoff → module tiles. Diff blocks scroll horizontally in their own container. Approve buttons full-width, sticky bottom bar when a deploy is selected.</p>
+
+    <h2>Element inventory</h2>
+    <div style="overflow-x:auto">
+    <table class="dtable">
+      <tr><th>Element</th><th>What it shows/does</th><th>Data source</th><th>Interactions</th><th>Spec source</th></tr>
+      <tr><td>Site header + status line</td><td>Domain, GSC connection, OTTO active, report cadence</td><td>SeoProvider project record + GSC OAuth status</td><td>Site switcher; click status → Settings tab</td><td>Draft Screen 20; PR §17.3 connectSite</td></tr>
+      <tr><td>Plan-limit pill</td><td>Active projects vs SearchAtlas plan limit; warns near limit</td><td>SearchAtlas account API</td><td>Tooltip; link to plan settings</td><td>PR §17.4 active project-count warning</td></tr>
+      <tr><td>Pending deploy card</td><td>Batch of proposed changes ("14 title/meta changes"), source badge ("from GSC query data"), diff preview (− old / + new, monospace, red/green)</td><td>previewDeployment() → SeoDeploymentPreview</td><td>"Approve &amp; deploy" (creates SEO_DEPLOYMENT ApprovalRecord); "Review each" → per-change list with individual include/exclude checkboxes</td><td>PR §17.3/17.4; draft</td></tr>
+      <tr><td>Diff constraint note</td><td>"…all through template variable slots, layout untouchable"</td><td>template engine</td><td>none (informational)</td><td>Draft; brand-vault layout-locked rule</td></tr>
+      <tr><td>Issues (audit) card</td><td>Thin-vs-siblings pages (uniqueness validator), orphan pages, broken links, Core Web Vitals</td><td>getAudit() + getIssues()</td><td>Click issue class → Audits tab filtered; auto-fix issue types show a Fix button that generates a preview (never direct deploy)</td><td>PR §17.3; draft (auto-fix via OTTO for 4 of 5 issue types — the 5th needs a human call)</td></tr>
+      <tr><td>Work summary card</td><td>Month-to-date: changes deployed, slugs minted, rank moves, AI-citation count</td><td>exportWorkSummary() + ledger</td><td>"Export client version" → shareable artifact</td><td>PR §17.3/17.4 auditable work summary</td></tr>
+      <tr><td>Freeze flags card</td><td>Frozen paths with reason + expiry ("/friendly-acres/ 🔒 A/B test until Aug 1")</td><td>per-project freeze flags</td><td>Add/remove freeze (path + reason + optional end date); OTTO skips frozen paths — enforced server-side; UI shows a lock on any proposed change touching a frozen path (auto-excluded from deploys)</td><td>PR §17.4 per-project freeze-flag support; draft</td></tr>
+      <tr><td>GBP queue card</td><td>Drafted GBP posts (weekly cadence: market stat / listing alert / community update) + drafted review replies</td><td>PropCast GBP engine + GBP API</td><td>Preview each; "Send to Approvals" — nothing posts directly from this card</td><td>PropCast MB (one GBP post weekly… GBP video weekly); draft</td></tr>
+      <tr><td>Review-request cadence status</td><td>Reviews requested at close (+72h) and 1-year mark; target top-3 GBP review count, recency &lt;30 days</td><td>ledger + GBP API</td><td>Link to Past Client OS trigger settings</td><td>PropCast MB review strategy</td></tr>
+      <tr><td>Instant indexing card</td><td>URLs submitted this week (new listings + slugs), avg index time</td><td>requestIndexing() results</td><td>"Submit URL" (manual add requires approval_id — batches into the deploy approval)</td><td>PR §17.3; PropCast MB instant indexing on publish</td></tr>
+      <tr><td>Filter-URL handoff card</td><td>Slug usage vs caps ("61/250 market cap"), candidates awaiting mint from prompt logs</td><td>PropSearch filter-URL library</td><td>"Review candidates" → mint flow → routes back through preview+approve</td><td>Matrix PropSearch gap (250/market, 5000/global); draft</td></tr>
+      <tr><td>Rank tracker tile/tab</td><td>Tracked keywords, position, Δ, per-neighborhood groups, vs named competitors</td><td>rank API (SearchAtlas)</td><td>Sort/filter; keyword → SERP snapshot; add keyword; competitor toggle</td><td>Draft (142 tracked · daily · vs 3 named competitors)</td></tr>
+      <tr><td>Site audit tile/tab</td><td>Health score, issue classes, CWV, schema validity per page</td><td>getAudit()/getIssues()</td><td>Per-issue Fix → preview; export</td><td>Draft (Health 91/100 · schema valid 214/214)</td></tr>
+      <tr><td>Competitor keyword gap tile/tab</td><td>Keywords competitors rank for that you don't, filtered by volume × intent; top gap surfaced</td><td>rank API + competitor set (shared with Screen 11)</td><td>"Create brief" per keyword → Briefs tab → PropCast gauntlet</td><td>Draft; cross-link Screen 11</td></tr>
+      <tr><td>Content briefs tile/tab</td><td>Auto-briefs (H2s, questions, entities, competitor coverage) queued into PropCast</td><td>brief generator</td><td>Open brief; "Send to PropCast gauntlet" (never a generic writer — voice + compliance stay in PropCast)</td><td>Draft</td></tr>
+      <tr><td>Backlinks &amp; mentions tile/tab</td><td>DR, referring domains, new/lost links, unlinked-mention finder with outreach drafts</td><td>backlink API</td><td>Outreach drafts → Outbox (human sends)</td><td>Draft</td></tr>
+      <tr><td>Local SEO grid tile/tab</td><td>GBP map-pack rank on a 5×5 geo-grid per keyword; weak quadrants highlighted</td><td>local rank grid API</td><td>Per-cell detail; "target plan" → GBP cadence + review-velocity suggestions (advisory)</td><td>Draft</td></tr>
+      <tr><td>Report tab</td><td>Weekly client-shareable report assembled from all panels</td><td>all module data + exportWorkSummary</td><td>Export PDF/URL; schedule (Mondays); email routes review-first</td><td>Draft footer note</td></tr>
+      <tr><td>Change log tab</td><td>Append-only list: every deployed change with approval_id, approver, timestamp, before/after, correlation_id</td><td>ledger + SeoDeploymentResult records</td><td>Filter by type/date/page; "revert" creates a NEW proposed change (never silent) [BEST GUESS: revert-as-new-proposal]</td><td>PR §17.4 auditable work summary… no silent mutation</td></tr>
+      <tr><td>Settings tab / connection wizard</td><td>Site connections: method = cloudflare (default for PropertyIQ-managed) / pixel (fallback) / wordpress (WP only); status PENDING/CONNECTED/FAILED; pixel snippet / worker config / plugin instructions</td><td>connectSite()</td><td>Add site (requires approval_id — connecting a site is itself approval-gated); auto-deploy toggles per low-risk change class [see Rules]</td><td>PR §17.3 connectSite; §17.4 method rules</td></tr>
+      <tr><td>Capability-probe banner</td><td>Warning if startup capability probe found missing MCP tools</td><td>MCP probe</td><td>"Retry probe"; degraded features greyed with explanation</td><td>PR §17.4 capability probe + dynamic tool discovery</td></tr>
+      <tr><td>AI-citation counter</td><td>LLM citations detected (e.g. "6→9")</td><td>LLM_CITATION_DETECTED events</td><td>Click → list of citing engines/queries</td><td>PR consumed events; draft work-summary</td></tr>
+      <tr><td>Empty state (no site)</td><td>"Connect your site to start" + wizard CTA</td><td>—</td><td>Launches connection wizard</td><td>standard</td></tr>
+      <tr><td>Empty state (no pending)</td><td>"OTTO has nothing queued — next audit {date}"</td><td>—</td><td>—</td><td>standard</td></tr>
+    </table>
+    </div>
+
+    <h2>States</h2>
+    <ul>
+      <li><b>Default</b>: Overview as drafted.</li>
+      <li><b>Loading</b>: skeleton cards; diff shimmer; never stale rank data without an as-of date.</li>
+      <li><b>Empty</b>: no connected site → wizard; no pending deploys → quiet state; no gap keywords → "no competitor set defined — add competitors" (Screen 11 watch list).</li>
+      <li><b>Error/degraded (fail-closed)</b>: MCP probe fails or token invalid → all deploy/fix/indexing buttons disable with inline reason ("OTTO connection degraded — read-only until reconnected"); read-only ledger data stays visible with as-of timestamps. Rank API outage → "rank data unavailable" — never last-known values presented as current. No fabricated metrics, ever.</li>
+      <li><b>Permission-limited</b>: team member without SEO-deploy permission sees everything read-only; approve buttons hidden.</li>
+      <li><b>Mobile</b>: per Layout; diff and grids scroll inside their containers; local grid = compact heatmap with tap-for-detail.</li>
+      <li><b>Frozen-path conflict</b>: pending change touching a frozen path renders with a lock badge, excluded from batch approve; tooltip names the freeze reason.</li>
+    </ul>
+
+    <h2>Data fields</h2>
+    <p>seo_project_id / tenant_id / domain (SeoProvider project record) · connection_status PENDING/CONNECTED/FAILED + method pixel/cloudflare/wordpress (connectSite) · pending change {change_type, page_url, before, after, source} (SeoDeploymentPreview) · approval_id + correlation_id on every deploy/indexing call (ApprovalRecord/ledger) · audit health int/100 + SeoIssue[] · CWV metrics (LCP etc., pass/fail) · freeze flag {path, reason, start, optional end} · keyword row {keyword, position, Δ, group, competitor positions} (rank API, daily) · gap keyword {keyword, volume/mo, intent class, competitor, brief_status} · backlink stats {DR, referring domains, new/lost} · local grid cell {lat/lng cell, rank, keyword} · indexing record {url, submitted_at, indexed_at, avg} · filter-URL usage {slugs/250 market, /5000 global, candidates} · work summary {changes deployed, slugs minted, rank deltas, AI citations, time_window} · GBP queue item {type post/review-reply, draft body, target, status} · AI citations {count + per-event detail}.</p>
+
+    <h2>Rules &amp; compliance</h2>
+    <ul>
+      <li><b>Human approval before any live SEO deployment</b> — every deploy, schema injection, indexing request, and site connection carries an approval_id; approve creates an SEO_DEPLOYMENT ApprovalRecord (48h expiry, delegation per platform rules). No silent mutation of a live site (§17.4).</li>
+      <li><b>Preview before deployment</b> — a diff must exist before an approve button renders.</li>
+      <li><b>Freeze flags</b> — OTTO skips frozen paths; UI enforces exclusion from batches.</li>
+      <li><b>Auto-deploy for low-risk classes</b> — per-change-class toggle in Settings; [BEST GUESS] auto classes limited to title/meta template-slot changes and schema on noindex pages, promoted only after a track record (30 days / ≥95% unmodified approvals / 0 incidents, mirroring the autonomy-matrix promotion pattern). Everything else stays REVIEW_REQUIRED.</li>
+      <li><b>Layout untouchable</b> — changes flow through template variable slots only; brand-vault layout is locked.</li>
+      <li><b>GBP posts and review replies never publish directly</b> — they route to Approvals; review replies are client-facing text and honor the fair-housing lint (e.g. the "family-friendly" block pattern from Screen 24).</li>
+      <li><b>Content briefs route into PropCast's gauntlet</b> for voice + compliance — the console never publishes prose itself.</li>
+      <li><b>Capability probe + dynamic tool discovery</b> at startup; degraded = read-only, fail closed.</li>
+      <li><b>Secrets</b>: SEARCHATLAS_TOKEN (MCP Bearer) and SEARCHATLAS_REST_API_KEY are distinct and never interchangeable (§17.2) — surface only connection status in UI, never key material.</li>
+      <li><b>Plan-limit warning</b> before creating projects past the SearchAtlas limit.</li>
+      <li><b>Attribution honesty</b>: SEO page views feed reporting-only attribution (default weight 0.2, labeled "reporting assumption, not proof of causation" — LINEAR_DECAY_REPORTING); nothing here changes lead_score or Scoring Master outputs.</li>
+      <li>Client-emailed reports follow the review-first rule (send to Graeham + Adrian, who forward).</li>
+    </ul>
+
+    <h2>Cross-links</h2>
+    <p><b>In</b>: left nav; Command Center event cards; Screen 11 gap-plan links; PropSearch filter-URL "Submit to SEO"; Approvals Inbox back-links; weekly report email. <b>Out</b>: Global Approvals Inbox (deploys, GBP, connections); PropCast briefing/gauntlet (briefs); Outbox (outreach drafts, client report emails); Settings/Integrations (GSC/GBP OAuth); Screen 11 (competitor set management). <b>Ledger events consumed</b>: SEO_PAGE_PUBLISHED, PAGE_ORGANIC_TRAFFIC_SPIKE, LLM_CITATION_DETECTED. <b>Emitted</b>: deploy/indexing results with approval_id + correlation_id; [BEST GUESS] SEO_DEPLOYMENT_EXECUTED-class ledger rows via SeoDeploymentResult; SEO_PAGE_PUBLISHED when a new page/slug goes live.</p>
+
+    <h2>Open decisions</h2>
+    <ul>
+      <li>[DECIDE] Rank/backlink/local-grid data vendor: assume SearchAtlas's own rank tracker, backlink index, and local grid — UI unaffected if a second vendor (e.g. DataForSEO) backs any panel.</li>
+      <li>[DECIDE] Auto-deploy class list and promotion criteria: interim = title/meta template-slot changes only, promoted per the platform autonomy-matrix thresholds [BEST GUESS above].</li>
+      <li>[DECIDE] Revert semantics: interim = revert creates a new proposed change through the same preview→approve flow; no direct rollback button.</li>
+      <li>[DECIDE] Client-facing work-summary format: interim = branded hosted URL + PDF export, assembled from the Report tab; delivered review-first.</li>
+      <li>[DECIDE] Evaluate-first outcome (PropCast MB Part 9): if SearchAtlas falls short on schema injection or the attribution/UTM handoff, only that gap is built in-house — console UI treats SeoProvider as the abstraction either way.</li>
+    </ul>
+    <p class="anno" style="margin-top:20px">Wireframe fidelity — colors are placeholders from the locked PropFlow design language. All keywords/numbers are realistic fake data. Agent identity: Graeham Watts, Intero Real Estate, DRE# 01466876 (from shared-references/identity.json — the identity.json blocklist is enforced; never hardcode elsewhere). No crime data anywhere on this screen.</p>
+  </div>
+</div>

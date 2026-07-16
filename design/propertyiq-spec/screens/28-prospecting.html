@@ -1,0 +1,444 @@
+<title>PropertyIQ · Screen 28 — Prospecting Hub</title>
+<link href="https://api.fontshare.com/v2/css?f[]=technor@500,600,700&display=swap" rel="stylesheet">
+<link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<style>
+  /* Type system — Technor for display (the squared machine look from the font exploration), Inter for UI. */
+  :root{ --font-display:'Technor', Inter, -apple-system, 'Segoe UI', sans-serif; --font-ui: Inter, -apple-system, 'Segoe UI', Roboto, sans-serif; }
+</style>
+<style>
+  /* Palette v4 — PropFlow design language: neutral ink UI, ink-as-accent, color reserved for data. (extracted verbatim from propsearch-design-draft.html) */
+  :root, :root[data-theme="dark"], :root[data-theme="light"]{
+    --ink:#23282f; --paper:#fbfaf8; --surface:#f1efe9; --line:#e2dfd6;
+    --mut:#6b7076; --soft:#9b9f9f;
+    --brand:#2e6b53; --brand-ink:#ffffff; --brand-soft:#eaf1ec; --brand-deep:#1e4c3a;
+    --signal:#b07a2e;
+    --good:#2e7d4f; --warn:#a8630a; --crit:#b3372f;
+    --r:10px;
+  }
+  .intel .score, .mintel{ color:var(--brand-deep) }
+  .intel{ border-left:3px solid var(--brand) }
+  h1{ letter-spacing:-.02em }
+  .stat b{ letter-spacing:-.01em }
+  body[data-agent="watts"]{ --brand:#2e6b53; --brand-soft:#eaf1ec; --brand-deep:#1e4c3a; }
+
+  *{box-sizing:border-box; margin:0}
+  body{font:15px/1.55 var(--font-ui); color:var(--ink); background:var(--paper); padding-bottom:80px}
+  h1,h2,h3{line-height:1.15; text-wrap:balance; font-family:var(--font-display); font-weight:600}
+  h1{letter-spacing:-.01em}
+  .site{box-shadow:0 1px 2px rgba(20,24,32,.04), 0 8px 32px rgba(20,24,32,.06)}
+  .stat{box-shadow:0 1px 2px rgba(20,24,32,.03); transition:box-shadow .15s, transform .15s}
+  .stat:hover{box-shadow:0 4px 14px rgba(20,24,32,.08)}
+  .chip{transition:all .12s}
+  button{font-family:var(--font-ui)}
+  .num{font-variant-numeric:tabular-nums}
+  .wrap{max-width:1180px; margin:0 auto; padding:0 20px}
+
+  .bar{position:sticky; top:0; z-index:50; background:var(--paper); border-bottom:1px solid var(--line); padding:10px 0; backdrop-filter:blur(8px)}
+  .bar .wrap{display:flex; flex-wrap:wrap; gap:10px; align-items:center}
+  .bar .ttl{font-weight:700; margin-right:auto}
+  .bar .ttl small{display:block; font-weight:400; color:var(--mut)}
+  .bar a{color:var(--brand); font-size:13px; text-decoration:none}
+
+  .note{background:var(--surface); border:1px solid var(--line); border-radius:var(--r); padding:14px 16px; margin:0 0 22px; font-size:13.5px; color:var(--mut)}
+  .note b{color:var(--ink)}
+
+  .site{border:1px solid var(--line); border-radius:14px; overflow:hidden; background:var(--paper)}
+  .sitehead{display:flex; align-items:center; gap:14px; padding:14px 22px; border-bottom:1px solid var(--line)}
+  .avatar{width:38px; height:38px; border-radius:50%; background:var(--brand); color:var(--brand-ink); display:grid; place-items:center; font-weight:700}
+  .sitehead .who b{display:block}
+  .sitehead .who small{color:var(--mut)}
+  .sitehead nav{margin-left:auto; display:flex; gap:18px; font-size:13.5px; color:var(--mut)}
+  .sitehead nav a{color:inherit; text-decoration:none}
+  .sitehead nav a:hover{color:var(--brand)}
+
+  .chip{display:inline-flex; align-items:center; gap:6px; font-size:12.5px; font-weight:500; border:1px solid var(--line); border-radius:99px; padding:6px 12px; background:var(--paper); cursor:pointer; color:var(--ink)}
+  .chip:hover{border-color:var(--brand)}
+  .chip.on{background:var(--brand); border-color:var(--brand); color:var(--brand-ink); font-weight:600; box-shadow:0 2px 8px color-mix(in srgb, var(--brand) 30%, transparent)}
+
+  .statrow{display:grid; grid-template-columns:repeat(4,1fr); gap:10px}
+  .stat{background:var(--surface); border:1px solid var(--line); border-radius:var(--r); padding:12px}
+  .stat small{display:block; color:var(--mut); font-size:11.5px; text-transform:uppercase; letter-spacing:.05em}
+  .stat b{font-size:18px}
+  .stat .up{color:var(--good); font-size:12px}
+
+  .bdg{font-size:11.5px; border-radius:6px; padding:3px 8px; background:var(--surface); border:1px solid var(--line); color:var(--mut)}
+  .bdg.good{color:var(--good); border-color:color-mix(in srgb,var(--good) 30%,var(--line))}
+  .bdg.warn{color:var(--warn); border-color:color-mix(in srgb,var(--warn) 30%,var(--line))}
+  .bdg.crit{color:var(--crit); border-color:color-mix(in srgb,var(--crit) 30%,var(--line))}
+
+  .dtable{width:100%; border-collapse:collapse; font-size:13px}
+  .dtable td,.dtable th{border-bottom:1px solid var(--line); padding:8px 10px; text-align:left}
+  .dtable th{font-size:11px; text-transform:uppercase; letter-spacing:.05em; color:var(--soft)}
+
+  @media (max-width:860px){ .statrow{grid-template-columns:repeat(2,1fr)} .maingrid{grid-template-columns:1fr !important} .console{grid-template-columns:1fr !important} .rail{display:none !important} }
+  @media (prefers-reduced-motion: reduce){ *{transition:none!important} }
+
+  /* ---- page-specific additions (kept in the same design language) ---- */
+  .anno{font-size:11px; color:var(--soft)}
+  .cardbox{border:1px solid var(--line); border-radius:10px; padding:11px 14px; font-size:12.5px; background:var(--paper)}
+  .btn-ink{background:var(--ink); color:#fff; border:0; border-radius:7px; padding:7px 12px; font-size:11.5px; cursor:pointer; font-weight:600}
+  .btn-ghost{background:var(--paper); border:1px solid var(--line); border-radius:7px; padding:7px 12px; font-size:11.5px; cursor:pointer}
+  .sechead{font-size:14px; font-weight:700; margin:0 0 8px; font-family:var(--font-display)}
+  .cov td.ok{color:var(--good); font-weight:700}
+  .specdoc h2{font-size:18px; margin:26px 0 8px}
+  .specdoc h3{font-size:15px; margin:18px 0 6px}
+  .specdoc p, .specdoc li{font-size:13.5px; color:var(--mut)}
+  .specdoc b{color:var(--ink)}
+  .specdoc table{margin:8px 0}
+  .tier{font-size:10.5px; font-weight:700; border-radius:5px; padding:2px 7px}
+  .tier.high{background:color-mix(in srgb,var(--brand) 14%,var(--paper)); color:var(--brand-deep); border:1px solid var(--brand)}
+  .tier.mid{background:#fdf6ee; color:var(--warn); border:1px solid color-mix(in srgb,var(--warn) 40%,var(--line))}
+  .tier.low{background:var(--surface); color:var(--mut); border:1px solid var(--line)}
+  .cadchip{font-size:10px; border:1px dashed var(--line); border-radius:99px; padding:2px 8px; color:var(--soft)}
+  .scorelink{color:var(--brand-deep); font-weight:700; text-decoration:underline dotted; cursor:pointer}
+</style>
+
+<!-- ============ (1) slim header ============ -->
+<div class="bar">
+  <div class="wrap">
+    <div class="ttl">PropertyIQ · Screen 28 — Prospecting Hub <small>Full-density per-screen mock · wireframe fidelity · dev-facing annotations in gray</small></div>
+    <a href="../wireframe.html">← All screens</a>
+  </div>
+</div>
+
+<!-- ============ (2) THE FULL MOCK ============ -->
+<div class="wrap" style="padding-top:24px">
+  <div class="note"><b>Screen 28 — Prospecting Hub (MLS playbooks + Predictive Seller).</b> One screen of ranked opportunity lists from the MLS-Enabled playbooks and the Predictive Seller workflow. Every row ends in a <b>drafted action that routes to review — never an auto-send</b>. Every score is explainable: click it and see the contributing facts (the math itself lives only in the Scoring Master Sheet). Primary users: agent; Wattson runs the playbooks (REVIEW_REQUIRED personas); ISA/team may work review queues per role routing.</div>
+
+  <div class="site" data-agent="watts">
+    <!-- header: farm identity + per-lane cadence chips (single "runs nightly" claim dropped per [DECIDE]) + nav -->
+    <div class="sitehead">
+      <div class="avatar">GW</div>
+      <div class="who"><b>Prospecting</b><small class="num">Farm: Friendly Acres + EPA · 5 HIGH candidates · 3 anomalies · 3 buyer matches · Sat route ready</small></div>
+      <span class="cadchip">each lane shows its own cadence ↓</span>
+      <nav><a href="#el-run-history">Predictive runs</a><a href="#el-buyer-match">Buyer matches</a><a href="#">🔔 4</a></nav>
+    </div>
+
+    <div class="console" style="display:grid; grid-template-columns:172px 1fr">
+      <!-- persistent agent-console left rail (same chrome as Screen 9) -->
+      <div class="rail" style="border-right:1px solid var(--line); padding:14px 10px; font-size:12.5px; display:flex; flex-direction:column; gap:2px; background:var(--surface)">
+        <a href="#" style="text-decoration:none; color:var(--ink); border-radius:8px; padding:8px 10px">☰ Today</a>
+        <a href="#" style="text-decoration:none; color:var(--ink); border-radius:8px; padding:8px 10px">🗺 Farm map</a>
+        <a href="#" style="text-decoration:none; color:var(--ink); border-radius:8px; padding:8px 10px">🤝 Past clients</a>
+        <a href="#" style="text-decoration:none; color:#fff; background:var(--ink); border-radius:8px; padding:8px 10px; font-weight:600">🎯 Prospecting</a>
+        <a href="#" style="text-decoration:none; color:var(--ink); border-radius:8px; padding:8px 10px">👤 Leads & clients</a>
+        <a href="#" style="text-decoration:none; color:var(--ink); border-radius:8px; padding:8px 10px">💬 Comms <span class="bdg" style="font-size:9.5px">6</span></a>
+        <a href="#" style="text-decoration:none; color:var(--ink); border-radius:8px; padding:8px 10px">📋 Transactions <span class="bdg" style="font-size:9.5px">2</span></a>
+        <a href="#" style="text-decoration:none; color:var(--ink); border-radius:8px; padding:8px 10px">🎬 Content studio</a>
+        <a href="#" style="text-decoration:none; color:var(--ink); border-radius:8px; padding:8px 10px">📣 Ads & funnels</a>
+        <a href="#" style="text-decoration:none; color:var(--ink); border-radius:8px; padding:8px 10px">⚙ Playbooks</a>
+        <a href="#" style="text-decoration:none; color:var(--ink); border-radius:8px; padding:8px 10px">📈 Reports</a>
+        <div style="margin-top:auto; padding-top:10px; border-top:1px solid var(--line)">
+          <a href="#" style="text-decoration:none; color:var(--ink); border-radius:8px; padding:8px 10px; display:block">⚙ Settings</a>
+          <div class="anno" style="padding:6px 10px">Global chrome: this rail is persistent across all agent-console screens (Screen 9 pattern). Consumer pages never show it.</div>
+        </div>
+      </div>
+
+      <div>
+        <!-- MLS compliance banner (framework-level gate) -->
+        <div id="el-held" style="padding:14px 22px 0">
+          <div class="cardbox" style="display:flex; gap:10px; align-items:center; flex-wrap:wrap; background:var(--surface)">
+            <span style="color:var(--good)">●</span>
+            <div style="flex:1; min-width:280px"><b>MLS compliance layer: GREEN</b> <span class="bdg good">CDP #11 ✓</span> <span class="bdg good">RESO Web API licensed ✓</span> <span class="bdg good">ZDR AI contract ✓</span>
+              <div style="color:var(--mut); font-size:11.5px">All MLS lanes live. If this gate is not green, every MLS lane below is replaced by a per-lane <span class="bdg warn">held: MLS compliance gate</span> badge — no cached listing display (session-purge rule).</div>
+            </div>
+            <button class="btn-ghost">Compliance detail</button>
+            <div class="anno" style="width:100%">OpenClaw framework-level MLS enforcement — built FIRST, enforced before any playbook runs. MLS data is purged from the session after every playbook response; only aggregates are retained (MLS-13). No MLS data flows through an AI provider without a ZDR-equivalent contract.</div>
+          </div>
+        </div>
+
+        <!-- ===== 2-col lane grid ===== -->
+        <div class="maingrid" style="padding:14px 22px; display:grid; grid-template-columns:1fr 1fr; gap:12px">
+
+          <!-- Predictive Seller lane -->
+          <div id="el-ps-lane" class="cardbox" style="border-left:3px solid var(--brand)">
+            <div style="display:flex; gap:8px; align-items:center; flex-wrap:wrap">
+              <b>Predictive Seller</b> <span class="cadchip">monthly refresh + on-demand</span>
+              <button class="btn-ink" style="margin-left:auto">▶ Run now</button>
+            </div>
+            <div style="color:var(--mut); font-size:12px; margin-top:5px" class="num">Last run <b style="color:var(--ink)">Jul 14, 2:04 AM · COMPLETED</b> · <span class="tier high">5 HIGH</span> <span class="tier mid">11 WARMING</span> · 96 scored · top candidate: <b style="color:var(--ink)">318 Hurlingame — <span class="scorelink" title="click → explainability">87</span></b> (owned 14y, 71% equity, valuation page ×2)</div>
+            <div style="display:flex; gap:6px; margin-top:8px; flex-wrap:wrap">
+              <a href="#el-candidates" class="btn-ghost" style="text-decoration:none; color:var(--ink)">Open candidates table ↓</a>
+              <span class="anno" style="align-self:center">Run launcher run_type: MONTHLY_REFRESH · ON_DEMAND_PROPERTY · (system: ENGAGEMENT_FACT_CHANGED)</span>
+            </div>
+            <div class="anno" style="margin-top:5px">PredictiveSellerRun §14.6 + candidates §14.7. ScoringService context PROPFLOW_PREDICTIVE_SELLER — the formula, tier thresholds, and list-window logic live ONLY in the Scoring Master Sheet; this UI displays returned outputs. Each HIGH spawned a review task — no outreach sent. Refresh day + HIGH threshold read from the sheet [DECIDE].</div>
+          </div>
+
+          <!-- DOM anomalies lane -->
+          <div id="el-dom" class="cardbox">
+            <div style="display:flex; gap:8px; align-items:center; flex-wrap:wrap"><b>DOM anomalies</b> <span class="cadchip">daily scan</span> <span class="bdg warn" style="margin-left:auto">3 flagged</span></div>
+            <table class="dtable" style="font-size:11.5px; margin-top:6px">
+              <tr><th>Listing</th><th>DOM / mkt avg</th><th>Cuts</th><th>Motivation</th><th>Action</th></tr>
+              <tr><td>88 Poplar Ave</td><td class="num">47 / 19 (2.5×)</td><td class="num">−$45K ×1</td><td><span class="scorelink num" title="click → facts">74</span></td><td><button class="btn-ghost" style="font-size:10.5px">Draft pitch → Approvals</button></td></tr>
+              <tr><td>210 Runnymede St</td><td class="num">39 / 19 (2.1×)</td><td class="num">—</td><td><span class="scorelink num">61</span></td><td><button class="btn-ghost" style="font-size:10.5px">Draft pitch → Approvals</button></td></tr>
+              <tr><td>1547 Bay Rd</td><td class="num">31 / 19 (1.6×)</td><td class="num">−$20K ×2</td><td><span class="scorelink num">58</span></td><td><button class="btn-ghost" style="font-size:10.5px">Draft pitch → Approvals</button></td></tr>
+            </table>
+            <div class="anno" style="margin-top:5px">MLS Playbook 6: listings sitting &gt;150% of market-average DOM for that geo + property type. Row → drafted buyer-opportunity pitch in Approvals (never auto-sent). MLS data purged from session after the run. Motivation scores come from ScoringService — deterministic DOM facts still render if scoring is down; the scores disappear (fail-closed).</div>
+          </div>
+
+          <!-- Expired / off-market lane -->
+          <div id="el-expired" class="cardbox">
+            <div style="display:flex; gap:8px; align-items:center; flex-wrap:wrap"><b>Expired / off-market</b> <span class="cadchip">weekly run</span> <span class="bdg" style="margin-left:auto">4 ranked</span></div>
+            <table class="dtable" style="font-size:11.5px; margin-top:6px">
+              <tr><th>#</th><th>Listing</th><th>Status</th><th>On title</th><th>Intent class</th><th>Draft</th></tr>
+              <tr><td class="num">1</td><td>733 Gailen Ave</td><td>Expired Jun 30</td><td><span class="bdg good">✓ verified</span></td><td>(a) relisting soon</td><td><span class="bdg warn num">holds until Aug 14 (MLS re-list rule)</span></td></tr>
+              <tr><td class="num">2</td><td>52 Wisteria Way</td><td>Withdrawn May 22</td><td><span class="bdg good">✓ verified</span></td><td>(b) withdrew — issues</td><td><span class="bdg">letter drafted → Approvals</span></td></tr>
+              <tr><td class="num">3</td><td>Cedar St FSBO</td><td>Pre-MLS</td><td><span class="bdg good">✓ verified</span></td><td>pre-MLS / FSBO</td><td><span class="bdg">door-knock note drafted</span></td></tr>
+              <tr><td class="num">4</td><td>19 O'Connor St</td><td>Cancelled Apr 3</td><td><span class="bdg good">✓ verified</span></td><td>(c) sold off-market</td><td><span style="color:var(--soft)">no outreach — gone</span></td></tr>
+            </table>
+            <div class="anno" style="margin-top:5px">MLS Playbooks 3 + 10 (weekly): expired/withdrawn/cancelled last 12 months + pre-MLS, owner-on-title verified via public records, intent classified (a) relisting (b) withdrew—issues (c) sold off-market (d) not selling; ranked; drafts for top 10. Categories (a)/(b) get drafts → agent approval. Expired drafts <b>hold for the legal re-list window</b> before eligible to send — the hold date is computed by the compliance layer, no hardcoded day count [DECIDE]. Copy uses the approved Pillar 8 trigger-event angle from the registry — missing copy → task, never invention.</div>
+          </div>
+
+          <!-- Buyer match lane -->
+          <div id="el-buyer-match" class="cardbox">
+            <div style="display:flex; gap:8px; align-items:center; flex-wrap:wrap"><b>Buyer matches</b> <span class="cadchip">background every 3h (2–4h band)</span> <span class="bdg good" style="margin-left:auto">3 new</span></div>
+            <table class="dtable" style="font-size:11.5px; margin-top:6px">
+              <tr><th>New listing</th><th>Buyer</th><th>Fit</th><th>Draft</th></tr>
+              <tr><td>315 Oak Ct (new today)</td><td>the Kims</td><td class="num">#1 high-fit</td><td><span class="bdg">personalized email drafted → your approval → send</span></td></tr>
+              <tr><td>315 Oak Ct</td><td>D. Alvarez</td><td class="num">#2</td><td><span class="bdg">tour-invite draft in Approvals</span></td></tr>
+              <tr><td>96 Newell Rd</td><td>the Fongs</td><td class="num">#1 high-fit</td><td><span class="bdg">email drafted → Approvals</span></td></tr>
+            </table>
+            <div style="display:flex; gap:8px; margin-top:6px; align-items:center; flex-wrap:wrap">
+              <span class="anno">Reverse prospecting: new MLS listings × each active buyer's saved criteria (MLS Playbook 4).</span>
+              <span class="bdg num" style="margin-left:auto" title="cost-runaway guardrail">MLS API usage: 41% of monthly budget</span>
+            </div>
+            <div class="anno" style="margin-top:4px">Run frequency: interim default 3h, tenant-configurable within the 2–4h band, with the cost-runaway guardrail (usage meter vs MLS API budget) surfaced here [DECIDE]. High-fit match → drafted personalized email → agent approval → send. Nothing goes to a buyer without approval.</div>
+          </div>
+
+          <!-- Territory monitor feed -->
+          <div id="el-territory" class="cardbox">
+            <div style="display:flex; gap:8px; align-items:center; flex-wrap:wrap"><b>Territory monitor</b> <span class="cadchip">hourly scan</span>
+              <div style="display:inline-flex; border:1px solid var(--line); border-radius:99px; overflow:hidden; font-size:10.5px; margin-left:auto"><span style="padding:4px 10px; background:var(--ink); color:#fff; font-weight:600">Digest</span><span style="padding:4px 10px; color:var(--mut); cursor:pointer">Real-time</span></div>
+            </div>
+            <div style="font-size:11.5px; color:var(--mut); margin-top:6px" class="num">
+              <div style="padding:4px 0; border-bottom:1px solid var(--line)">🆕 <b style="color:var(--ink)">96 Newell Rd</b> listed $1.28M — fed to Content Calendar (new-listing hook)</div>
+              <div style="padding:4px 0; border-bottom:1px solid var(--line)">💲 <b style="color:var(--ink)">88 Poplar Ave</b> −$45K → price-cut lane + buyer cross-ref</div>
+              <div style="padding:4px 0; border-bottom:1px solid var(--line)">🔁 <b style="color:var(--ink)">2201 Cooley Ave</b> Pending → Sold $1.41M · DOM 12 · list-to-sale 103% → event ledger (attribution)</div>
+              <div style="padding:4px 0">🔁 <b style="color:var(--ink)">440 Donohoe St</b> Active → Pending — tracked for a buyer alert</div>
+            </div>
+            <div class="anno" style="margin-top:5px">MLS Playbook 5 (Active Listing Monitor) + MLS-13 (Pending→Sold Attribution: sale price, DOM, list-to-sale ratio → event ledger — only aggregates retained). Digest/real-time is a per-agent preference toggle. Item click → listing detail. Status changes feed attribution; new listings feed the Content Calendar.</div>
+          </div>
+
+          <!-- Price-reduction alerts -->
+          <div id="el-price-cuts" class="cardbox">
+            <div style="display:flex; gap:8px; align-items:center; flex-wrap:wrap"><b>Price-reduction alerts</b> <span class="cadchip">daily scan</span> <span class="bdg warn" style="margin-left:auto">2 matched</span></div>
+            <table class="dtable" style="font-size:11.5px; margin-top:6px">
+              <tr><th>Listing</th><th>Cut</th><th>Days at price</th><th>Matched buyers</th><th>Framing</th></tr>
+              <tr><td>88 Poplar Ave</td><td class="num">−5% ($45K)</td><td class="num">21</td><td class="num">2 (Kims, Alvarez)</td><td style="color:var(--mut)">"dropped 5% after 21 days — likely motivated"</td></tr>
+              <tr><td>1547 Bay Rd</td><td class="num">−2% ($20K)</td><td class="num">9</td><td class="num">1 (Fongs)</td><td style="color:var(--mut)">"second cut in 30 days"</td></tr>
+            </table>
+            <div style="display:flex; gap:6px; margin-top:6px"><button class="btn-ghost">Review drafts → Approvals</button></div>
+            <div class="anno" style="margin-top:5px">MLS Playbook 7: drops in territory cross-referenced with active buyer criteria; context-aware framing. Approve → send to matched buyer; send logged in GHL; listing data purged after send.</div>
+          </div>
+        </div>
+
+        <!-- full-width open-house route -->
+        <div id="el-route" style="padding:0 22px 12px">
+          <div class="cardbox" style="border-left:3px solid var(--signal)">
+            <div style="display:flex; gap:8px; align-items:center; flex-wrap:wrap"><b>Weekend open-house route — Sat Jul 18</b> <span class="cadchip">built Fridays · daily for weekday opens</span>
+              <button class="btn-ink" style="margin-left:auto">📅 One-tap calendar sync</button>
+            </div>
+            <div style="display:grid; grid-template-columns:repeat(4,1fr); gap:8px; margin-top:8px; font-size:11.5px">
+              <div style="background:var(--surface); border-radius:8px; padding:8px 10px"><b class="num">1 · 11:00–11:45</b><div>315 Oak Ct (competitor open 11–1)</div><div class="anno num">drive 0 min — start here</div></div>
+              <div style="background:var(--surface); border-radius:8px; padding:8px 10px"><b class="num">2 · 12:00–12:40</b><div>44 Poplar Ave (competitor open 2–4, early walk)</div><div class="anno num">drive 9 min</div></div>
+              <div style="background:var(--brand-soft); border:1px solid var(--brand); border-radius:8px; padding:8px 10px"><b class="num">3 · 1:00–4:00</b><div><b>YOUR open — 118 Beech St</b></div><div class="anno num">drive 7 min · setup 12:45</div></div>
+              <div style="background:var(--surface); border-radius:8px; padding:8px 10px"><b>Per-buyer lists (3)</b><div>Kims: 315 Oak + 96 Newell · Fongs: 96 Newell · Alvarez: 315 Oak</div><div class="anno">requires your approval before sending</div></div>
+            </div>
+            <div class="anno" style="margin-top:5px">MLS Playbook 12: own opens + competitor opens worth walking, route-ordered by geography + time with drive times; per-buyer personalized open-house lists cross-referenced against saved criteria. Buyer emails go through agent approval; open-house data is short-lived — refreshed daily (Brain guardrail).</div>
+          </div>
+        </div>
+
+        <!-- ===== expanded candidates table ===== -->
+        <div id="el-candidates" style="padding:0 22px 12px">
+          <div style="border:1.5px solid var(--brand); border-radius:12px; padding:14px 16px; background:var(--brand-soft)">
+            <div style="display:flex; gap:8px; align-items:center; flex-wrap:wrap">
+              <b style="font-size:14px">Predictive Seller — candidates (run Jul 14)</b>
+              <span class="bdg num">96 scored · sorted by score ▾</span>
+              <span class="anno" style="margin-left:auto">columns sortable · owner identity redacted per rules — badges only, never raw owner names/mailing data</span>
+            </div>
+            <div style="overflow-x:auto; margin-top:10px">
+            <table class="dtable" style="font-size:11.5px; min-width:900px; background:var(--paper); border-radius:8px">
+              <tr><th>Address</th><th>Owner</th><th>Score ▾</th><th>Tier</th><th>Est. list window</th><th>Data confidence</th><th>Recommended next step (tier-routed)</th></tr>
+              <tr><td><b>318 Hurlingame Ave</b></td><td><span class="bdg">owner-occupied</span></td><td><span class="scorelink num">87</span></td><td><span class="tier high">HIGH</span></td><td class="num">0–6 months</td><td class="num">0.91</td><td id="el-actions"><button class="btn-ink" style="font-size:10.5px">CREATE_REVIEW_TASK</button> <span class="anno">→ review queue, never auto-outreach</span></td></tr>
+              <tr style="background:var(--surface)"><td colspan="7" style="font-size:11px">
+                <b>Explainability card — 318 Hurlingame (click on the score opened this)</b>
+                <div style="display:flex; gap:6px; flex-wrap:wrap; margin-top:4px" class="num">
+                  <span class="bdg">input: ownership_years = 14</span>
+                  <span class="bdg">input: estimated_equity_pct = 71</span>
+                  <span class="bdg">input: recent_permit_last_12m = false</span>
+                  <span class="bdg" id="el-engagement" title="hover → actions that counted: VALUE_PAGE_VIEW ×2 (high-intent ≥1 ✓)">input: agent_marketing_engagement = true ⓘ</span>
+                  <span class="bdg">source_facts: county assessor · permit registry · owned-site events</span>
+                  <span class="bdg">manual_review_flags: —</span>
+                </div>
+                <div class="anno" style="margin-top:4px">Engagement-fact chip (§14.4): true when ≥1 high-intent (IDX_PROPERTY_SAVE, VALUE_PAGE_VIEW, REPEAT_WEBSITE_VISIT, OPEN_HOUSE_SIGNIN, DIRECT_INQUIRY) OR ≥2 low-intent (EMAIL_OPEN, EMAIL_CLICK, CONTENT_VIEWED) actions in the trailing 90 days — hover lists exactly which actions counted. The score math is never shown or computed locally; it lives in the Scoring Master Sheet (§14.2). No raw owner names or mailing addresses anywhere — absentee/corporate/owner-occupied badges only (matrix correction #12).</div>
+              </td></tr>
+              <tr><td>412 Larkspur Dr</td><td><span class="bdg">absentee</span></td><td><span class="scorelink num">81</span></td><td><span class="tier high">HIGH</span></td><td class="num">0–6 months</td><td class="num">0.84</td><td><button class="btn-ghost" style="font-size:10.5px">CONSENT_CAPTURE_REQUIRED</button> <span class="anno">unknown consent → capture task, not a send</span></td></tr>
+              <tr><td>77 Kavanaugh Dr</td><td><span class="bdg">owner-occupied</span></td><td><span class="scorelink num">79</span></td><td><span class="tier high">HIGH</span></td><td class="num">6–12 months</td><td class="num">0.88</td><td><button class="btn-ghost" style="font-size:10.5px">PAST_CLIENT_WARM_EQUITY_TOUCH</button> <span class="anno">also a past client → warm touch via Screen 27, never a cold call</span></td></tr>
+              <tr><td>230 Azalia Dr</td><td><span class="bdg">corporate</span></td><td><span class="scorelink num">76</span></td><td><span class="tier high">HIGH</span></td><td class="num">6–12 months</td><td class="num">0.61</td><td><button class="btn-ghost" style="font-size:10.5px">CREATE_REVIEW_TASK</button> <span class="anno">manual_review_flags: [LOW_SOURCE_COVERAGE]</span></td></tr>
+              <tr><td>16 Gloria Way</td><td><span class="bdg">owner-occupied</span></td><td><span class="num" style="color:var(--soft)">—</span></td><td><span class="bdg crit">handoff</span></td><td class="num">—</td><td class="num">—</td><td><button class="btn-ghost" style="font-size:10.5px; color:var(--crit)">HUMAN_HANDOFF_REQUIRED</button> <span class="anno">sensitive-topic firewall §14.3: no score, no tag, no audience, no priority bump — human only</span></td></tr>
+              <tr><td>901 Garden St</td><td><span class="bdg">owner-occupied</span></td><td><span class="scorelink num">64</span></td><td><span class="tier mid">MID</span></td><td class="num">6–12 months</td><td class="num">0.79</td><td><button class="btn-ghost" style="font-size:10.5px">CONTENT_NURTURE_IF_CONSENTED</button> <span class="anno">consented content only</span></td></tr>
+              <tr><td>1120 Weeks St</td><td><span class="bdg">absentee</span></td><td><span class="scorelink num">38</span></td><td><span class="tier low">LOW</span></td><td class="num">12+ months</td><td class="num">0.72</td><td><button class="btn-ghost" style="font-size:10.5px">MONITOR_ONLY</button></td></tr>
+              <tr><td colspan="7" class="anno num">+ 89 more (virtual scroll) · 1 ineligible_reason: NOT_IN_FARM_GEO — ineligible rows shown collapsed, never ranked</td></tr>
+            </table>
+            </div>
+            <div class="anno" style="margin-top:6px">PredictiveSellerCandidate §14.7 full schema per row: input_facts (+ most_recent_permit_date when available), source_coverage, source_facts, scoring_output (score, tier, window, confidence, manual_review_flags, ineligible_reason, score_version), recommended_next_step. Routing §14.8: a score alone NEVER triggers outreach — HIGH → review task; unknown consent → consent-capture task (matrix correction #2). Fair Housing: schools are never a ranking factor (MLS-1 step 3); no protected-class inputs anywhere in the fact set.</div>
+          </div>
+        </div>
+
+        <!-- run history + explainability + disclosure tile row -->
+        <div style="padding:0 22px 12px; display:grid; grid-template-columns:1.2fr 1fr 1fr; gap:10px">
+          <!-- run history -->
+          <div id="el-run-history" class="cardbox">
+            <b>Run history — PredictiveSellerRun</b>
+            <table class="dtable" style="font-size:11px; margin-top:6px">
+              <tr><th>Run</th><th>Type</th><th>Status</th><th>By</th></tr>
+              <tr><td class="num">Jul 14 02:04</td><td>MONTHLY_REFRESH</td><td><span class="bdg good">COMPLETED</span></td><td>system</td></tr>
+              <tr><td class="num">Jul 2 09:31</td><td>ON_DEMAND_PROPERTY</td><td><span class="bdg good">COMPLETED</span></td><td>gwatts</td></tr>
+              <tr><td class="num">Jun 14 02:04</td><td>MONTHLY_REFRESH</td><td><span class="bdg crit">FAILED</span></td><td>system</td></tr>
+              <tr><td colspan="4" class="anno">failure_reason: "ScoringService timeout after 3 retries" · <a href="#" style="color:var(--brand)">Retry</a></td></tr>
+              <tr><td class="num">Jun 3 16:12</td><td>ENGAGEMENT_FACT_CHANGED</td><td><span class="bdg good">COMPLETED</span></td><td>system</td></tr>
+            </table>
+            <div class="anno" style="margin-top:5px">§14.6 rows: run id, region_profile_id, farm_geo_code (3-letter registry code: "FRA"), requested_by, run_type, score_version, status REQUESTED/RUNNING/COMPLETED/FAILED, failure_reason. Open a past run → its candidates as append-only snapshots (SCORING_SNAPSHOT_24M retention, §14.9 — snapshots + outcome labels recorded now for a future model, no model in v1).</div>
+          </div>
+          <!-- explainability popover -->
+          <div id="el-explain" class="cardbox">
+            <b>Score explainability — universal popover</b>
+            <div style="background:var(--surface); border-radius:8px; padding:8px 10px; margin-top:6px; font-size:11.5px">
+              <b class="num">motivation 74 — 88 Poplar</b>
+              <div style="color:var(--mut)" class="num">contributing facts: DOM 47 vs mkt 19 (2.5×) · 1 price cut −$45K · relist history: none · source_facts: MLS status feed, listing history</div>
+            </div>
+            <div class="anno" style="margin-top:5px">Every score on this screen (candidate scores, motivation scores) is clickable → contributing facts from source_facts on the record. The math is never shown or computed locally — formulas and thresholds live only in the PropertyIQ Scoring Master Sheet (§14.2); the UI displays returned outputs, full stop.</div>
+          </div>
+          <!-- disclosure auto-pull tile -->
+          <div id="el-disclosure" class="cardbox" style="border-left:3px solid var(--good)">
+            <b>Disclosure auto-pull (contextual)</b>
+            <div style="color:var(--mut); font-size:11.5px; margin-top:5px">Offer accepted on <b style="color:var(--ink)">440 Donohoe St</b> → MLS disclosure package pulled → Disclosure Analyzer run → <span class="bdg warn">3 red flags</span> + credit-request draft ready.</div>
+            <div style="display:flex; gap:6px; margin-top:6px"><button class="btn-ghost">Open in Transaction Workspace → disclosures tab</button></div>
+            <div class="anno" style="margin-top:5px">MLS Playbook 8. This tile only appears when a tracked offer is accepted; it exits to Screen 15. Red-flag summary + credit-request draft are review-first like everything else here.</div>
+          </div>
+        </div>
+
+        <!-- states strip -->
+        <div id="el-states" style="padding:0 22px 12px">
+          <div class="cardbox" style="font-size:11.5px">
+            <b>States (dev reference)</b>
+            <div style="display:grid; grid-template-columns:repeat(3,1fr); gap:8px; margin-top:6px">
+              <div style="background:var(--surface); border-radius:8px; padding:8px 10px"><b>Loading</b><div style="color:var(--mut)">per-lane skeletons · a RUNNING run shows a progress bar on its lane: <span class="bdg num">RUNNING · scoring 61/96…</span></div></div>
+              <div style="background:var(--surface); border-radius:8px; padding:8px 10px"><b>Empty</b><div style="color:var(--mut)">"No candidates above threshold this run — last run Jul 14, 2:04 AM" · "No anomalies in territory." <b style="color:var(--ink)">Never padded with low-confidence rows.</b></div></div>
+              <div style="background:var(--surface); border-radius:8px; padding:8px 10px"><b>Degraded — fail-closed</b><div style="color:var(--mut)">ScoringService down → Predictive lane: <span class="bdg warn">score unavailable — run deferred</span>; deterministic lanes (DOM, price cuts) still render as facts, their motivation <i>scores</i> disappear · MLS connector down/unlicensed → all MLS lanes replaced by <span class="bdg crit">MLS access unavailable</span> — no cached listing display (session-purge rule) · run FAILED → failure_reason + retry.</div></div>
+            </div>
+            <div style="color:var(--mut); margin-top:6px"><b style="color:var(--ink)">Permission-limited:</b> outreach approval restricted to approver roles · candidate PII (owner_name_redacted) stays redacted for non-agent roles · sensitive handoffs visible to the agent only.</div>
+          </div>
+        </div>
+
+        <!-- mobile variant strip -->
+        <div id="el-mobile" style="padding:0 22px 18px">
+          <div class="cardbox" style="font-size:11.5px">
+            <b>Mobile variant (375px)</b>
+            <div style="display:flex; gap:8px; margin-top:6px; overflow-x:auto">
+              <div style="min-width:120px; border:1px solid var(--line); border-radius:10px; padding:8px; background:var(--surface)"><b style="font-size:10.5px">Lanes stack</b><div class="anno">vertical summary cards, tap to expand</div></div>
+              <div style="min-width:120px; border:1px solid var(--line); border-radius:10px; padding:8px; background:var(--surface)"><b style="font-size:10.5px">Tables → row cards</b><div class="anno">swipeable candidate/anomaly cards</div></div>
+              <div style="min-width:120px; border:1px solid var(--line); border-radius:10px; padding:8px; background:var(--surface)"><b style="font-size:10.5px">Route → map-first</b><div class="anno">tap-to-navigate stops, drive times inline</div></div>
+              <div style="min-width:120px; border:1px solid var(--line); border-radius:10px; padding:8px; background:var(--surface)"><b style="font-size:10.5px">Approvals</b><div class="anno">bottom sheet per draft — approve / edit / skip</div></div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ============ Spec gaps found (Master Brain / Playbook Library additions) ============ -->
+  <div class="note" style="margin-top:26px"><b>Spec gaps found — Brain/Playbook Library details the spec missed (all rendered above):</b> (1) the exact high/low-intent action enumeration behind the engagement-fact chip (IDX_PROPERTY_SAVE, VALUE_PAGE_VIEW, REPEAT_WEBSITE_VISIT, OPEN_HOUSE_SIGNIN, DIRECT_INQUIRY / EMAIL_OPEN, EMAIL_CLICK, CONTENT_VIEWED — §14.4) rendered in the explainability hover; (2) <i>most_recent_permit_date</i> is a fifth optional input fact (§14.2) — spec's explainability card listed only four; (3) expired-outreach draft copy uses the approved <b>Pillar 8 trigger-event angle</b> from the registry (Playbook 10 step 4) — annotated on the expired lane; (4) open-house data is <b>short-lived, refreshed daily</b> (Playbook 12 guardrail) — annotated on the route card; (5) §14.9 explicitly records append-only snapshots + eventual list/close outcome labels for a future model (no model in v1) — annotated on run history; (6) the sensitive-topic firewall's forbidden-downstream list includes GHL custom-field writes and PropReach audience inclusion (§14.3) — reflected in the handoff row annotation.</div>
+
+  <!-- ============ (3) ELEMENT COVERAGE ============ -->
+  <h2 style="font-size:20px; margin:24px 0 10px">Element coverage — spec inventory → this page</h2>
+  <table class="dtable cov" style="font-size:12.5px">
+    <tr><th>Spec inventory element</th><th>Rendered at</th><th>Status</th></tr>
+    <tr><td>Predictive Seller lane (last run, HIGH/WARMING counts, teaser, run launcher)</td><td><a href="#el-ps-lane">Predictive Seller lane</a></td><td class="ok">✓</td></tr>
+    <tr><td>Candidates table (sortable, redacted owner, score/tier/window/confidence/next-step + explainability expand)</td><td><a href="#el-candidates">Candidates table</a></td><td class="ok">✓</td></tr>
+    <tr><td>Tier-routed action buttons (all six §14.8 next-steps, never auto-outreach)</td><td><a href="#el-actions">Per-row action column</a></td><td class="ok">✓</td></tr>
+    <tr><td>Engagement-fact chip (90-day rule + hover for counted actions)</td><td><a href="#el-engagement">Explainability card chip</a></td><td class="ok">✓</td></tr>
+    <tr><td>DOM anomalies lane (&gt;150% market DOM, motivation score, cut history)</td><td><a href="#el-dom">DOM anomalies</a></td><td class="ok">✓</td></tr>
+    <tr><td>Price-reduction alerts (buyer cross-ref, context framing, purge-after-send)</td><td><a href="#el-price-cuts">Price-reduction alerts</a></td><td class="ok">✓</td></tr>
+    <tr><td>Expired/off-market lane (on-title verified, intent classes, re-list-window hold, FSBO note)</td><td><a href="#el-expired">Expired / off-market</a></td><td class="ok">✓</td></tr>
+    <tr><td>Buyer Match lane (2–4h background run, high-fit drafts → approval)</td><td><a href="#el-buyer-match">Buyer matches</a></td><td class="ok">✓</td></tr>
+    <tr><td>Territory monitor feed (digest/real-time toggle, attribution + Content Calendar feeds)</td><td><a href="#el-territory">Territory monitor</a></td><td class="ok">✓</td></tr>
+    <tr><td>Open-house route card (own + competitor opens, drive times, per-buyer lists, calendar sync)</td><td><a href="#el-route">Weekend route</a></td><td class="ok">✓</td></tr>
+    <tr><td>Score explainability popover (facts only, math never local)</td><td><a href="#el-explain">Explainability popover</a> + in-table card</td><td class="ok">✓</td></tr>
+    <tr><td>Run history (status, requested_by, failure_reason, snapshot retention)</td><td><a href="#el-run-history">Run history</a></td><td class="ok">✓</td></tr>
+    <tr><td>Disclosure auto-pull tile (contextual, → Transaction Workspace)</td><td><a href="#el-disclosure">Disclosure auto-pull</a></td><td class="ok">✓</td></tr>
+    <tr><td>Empty/held badges (MLS compliance gate CDP #11)</td><td><a href="#el-held">Compliance banner</a> + degraded state strip</td><td class="ok">✓</td></tr>
+  </table>
+  <div style="border:1.5px solid var(--good); background:#f2f8f4; border-radius:10px; padding:12px 16px; margin:12px 0 0; font-weight:700; color:var(--good)">14 of 14 spec elements rendered ✓ <span style="font-weight:400; color:var(--mut); font-size:12.5px">— plus all four open decisions rendered as interim design ([DECIDE] chips: 3h buyer-match default + budget meter, per-lane cadence chips instead of "runs nightly", compliance-computed re-list hold date, sheet-owned refresh day/threshold), the full states strip, the mobile strip, and the 6 Brain additions in the gaps note above.</span></div>
+
+  <!-- ============ (4) FULL SPEC AS HTML ============ -->
+  <div class="specdoc">
+    <h1 style="font-size:24px; margin:40px 0 6px">Spec — 28 · Prospecting Hub (MLS playbooks + Predictive Seller)</h1>
+    <p><b>Purpose</b> One screen of ranked opportunity lists produced by the MLS-Enabled playbooks and the Predictive Seller workflow. Every row ends in a drafted action that routes to review — never an auto-send. Every score is explainable: click it and see the contributing facts.</p>
+    <p><b>Primary users</b> Agent. Wattson runs the playbooks (personas per registry, permission REVIEW_REQUIRED); ISA/team may work review queues per role routing.</p>
+    <p><b>Entry points</b> App nav "Prospecting"; Wattson chat intents ("show me motivated sellers in Redwood City", "what's my open house route this Saturday?", "find expired listings I should target"); morning brief links; Predictive Seller run-complete notification; map screen seller-propensity layer → candidate card.</p>
+    <p><b>Exit points</b> Every row's draft → Approvals/Outbox (review-gated); candidate → CRM contact record (14) or consent-capture task; buyer match → buyer's contact record + tour-invite approval; route → calendar sync; expired-outreach approved → held until legal re-list window then Outbox; disclosure auto-pull → Transaction Workspace (15).</p>
+
+    <h2>Layout</h2>
+    <p>Desktop: <b>Header</b> — farm identity ("Farm: Friendly Acres + EPA"), run cadence note (per-lane cadence chips — the single "runs nightly" claim is dropped per open decision), nav links Predictive runs / Buyer matches. <b>Main</b> — 2-column card grid of opportunity lanes: Predictive Seller (last run summary), DOM anomalies &amp; price cuts, Expired/off-market, Buyer matches (reverse prospecting), full-width Weekend open-house route. Each lane card expands to its full ranked table below the grid (candidates table, anomaly table, etc.). A <b>run launcher</b> button on the Predictive Seller lane (MONTHLY_REFRESH / ON_DEMAND_PROPERTY).</p>
+    <p>Mobile (375px): lanes stack vertically as summary cards; tables become swipeable row cards; route card becomes a map-first view with tap-to-navigate; approvals via bottom sheet.</p>
+
+    <h2>Element inventory</h2>
+    <div style="overflow-x:auto">
+    <table class="dtable">
+      <tr><th>Element</th><th>What it shows/does</th><th>Data source</th><th>Interactions</th><th>Spec source</th></tr>
+      <tr><td>Predictive Seller lane</td><td>Last run date, HIGH/WARMING counts, top candidate teaser ("318 Hurlingame 87 — owned 14y, 71% equity, valuation ×2")</td><td>PredictiveSellerRun §14.6 + candidates §14.7 (ScoringService context PROPFLOW_PREDICTIVE_SELLER)</td><td>"Open candidates table"; run launcher (run_type MONTHLY_REFRESH / ON_DEMAND_PROPERTY / ENGAGEMENT_FACT_CHANGED)</td><td>PF MB 14.6–14.7</td></tr>
+      <tr><td>Candidates table</td><td>Sortable rows: address, owner (redacted per rules), likelihood_to_list_score, tier (HIGH/MID/LOW), estimated_list_window (0-6/6-12/12+ months), data_quality_confidence, recommended_next_step</td><td>PredictiveSellerCandidate §14.7</td><td>Row expand → explainability card: input_facts (ownership_years, estimated_equity_pct, recent_permit_last_12m, agent_marketing_engagement) + source_facts; NO raw owner names/mailing addresses — absentee/corporate/owner-occupied badges only</td><td>PF MB 14.7; matrix correction #12</td></tr>
+      <tr><td>Tier-routed action buttons</td><td>Per recommended_next_step: CREATE_REVIEW_TASK, PAST_CLIENT_WARM_EQUITY_TOUCH, CONSENT_CAPTURE_REQUIRED, CONTENT_NURTURE_IF_CONSENTED, MONITOR_ONLY, HUMAN_HANDOFF_REQUIRED</td><td>§14.8 routing</td><td>HIGH tier → review task, <b>never auto-outreach</b>; unknown consent → consent-capture task, not a send</td><td>PF MB 14.8; matrix correction #2</td></tr>
+      <tr><td>Engagement-fact chip</td><td>agent_marketing_engagement true/false with the rule (≥1 high-intent OR ≥2 low-intent actions in trailing 90d)</td><td>AgentMarketingEngagementFact §14.4</td><td>Hover → which actions counted</td><td>PF MB 14.4</td></tr>
+      <tr><td>DOM anomalies lane</td><td>Listings sitting &gt;150% of market-average DOM for that geo + property type, motivated-seller score, price-cut history</td><td>MLS Playbook 6 (Days-on-Market Anomalies)</td><td>Row → draft buyer-opportunity pitch in Approvals; MLS data purged from session after run</td><td>Playbook Library MLS-6</td></tr>
+      <tr><td>Price-reduction alerts</td><td>Drops in territory cross-referenced with active buyer criteria; context-aware framing ("dropped 5% after 21 days — likely motivated")</td><td>MLS Playbook 7</td><td>Approve → send to matched buyer; logged in GHL; listing data purged after send</td><td>Playbook Library MLS-7</td></tr>
+      <tr><td>Expired/off-market lane</td><td>Expired/withdrawn/cancelled (last 12 months) + pre-MLS; owner-on-title verified via public records; intent classification: (a) relisting soon (b) withdrew—issues (c) sold off-market (d) not selling; ranked; draft outreach for top 10</td><td>MLS Playbooks 3 + 10 (weekly runs)</td><td>Categories (a)/(b) get drafts → agent approval; expired drafts <b>hold for the legal re-list window</b> before eligible to send; FSBO door-knock notes drafted</td><td>Playbook Library MLS-3/10; draft §28 (re-list window inherited)</td></tr>
+      <tr><td>Buyer Match lane</td><td>New MLS listings matched to each active buyer's saved criteria; background run every 2–4 hours</td><td>MLS Playbook 4 (Buyer Match Engine)</td><td>High-fit match → drafted personalized email → agent approval → send; tour-invite drafts land in Approvals</td><td>Playbook Library MLS-4</td></tr>
+      <tr><td>Territory monitor feed</td><td>New listings, price changes, status changes in territory — digest or real-time per preference; status changes feed attribution; new listings feed Content Calendar</td><td>MLS Playbook 5 (Active Listing Monitor) + MLS-13 (Pending→Sold Attribution: sale price, DOM, list-to-sale ratio → event ledger)</td><td>Preference toggle digest/real-time; item → listing detail</td><td>Playbook Library MLS-5, MLS-13</td></tr>
+      <tr><td>Open-house route card</td><td>Weekend plan: own opens + competitor opens worth walking, route-ordered by geography + time with drive times; per-buyer personalized open-house lists</td><td>MLS Playbook 12 (Fridays for weekend; daily for weekday opens)</td><td>One-tap calendar sync; per-buyer lists require agent approval before sending</td><td>Playbook Library MLS-12; draft §28</td></tr>
+      <tr><td>Score explainability popover</td><td>Contributing facts for ANY score on screen</td><td>source_facts on candidate/anomaly records</td><td>Click score → facts; math never shown/computed locally (lives in Scoring Master Sheet)</td><td>PF MB 14.2; draft §28 note</td></tr>
+      <tr><td>Run history</td><td>Past PredictiveSellerRun rows: status (REQUESTED/RUNNING/COMPLETED/FAILED), requested_by, failure_reason</td><td>§14.6</td><td>Open a past run's candidates (append-only snapshots, SCORING_SNAPSHOT_24M retention)</td><td>PF MB 14.6, 14.9</td></tr>
+      <tr><td>Disclosure auto-pull tile (contextual)</td><td>On offer accepted: MLS disclosure package pulled → Disclosure Analyzer → red-flag summary + credit-request draft</td><td>MLS Playbook 8</td><td>Opens in Transaction Workspace disclosures tab</td><td>Playbook Library MLS-8; matrix Wattson gap</td></tr>
+      <tr><td>Empty/held badges</td><td>Per-lane "held: MLS compliance gate" when the MLS connector/compliance layer (CDP #11) is not green</td><td>OpenClaw framework-level MLS enforcement</td><td>—</td><td>Playbook Library (compliance enforced at framework level, built FIRST)</td></tr>
+    </table>
+    </div>
+
+    <h2>States</h2>
+    <ul>
+      <li><b>Default</b>: lanes with last-run summaries.</li>
+      <li><b>Loading</b>: per-lane skeletons; a RUNNING run shows progress on its lane.</li>
+      <li><b>Empty</b>: "No candidates above threshold this run" / "No anomalies in territory" — with last-run timestamp; never pad with low-confidence rows.</li>
+      <li><b>Error/degraded (fail-closed)</b>: ScoringService down → Predictive Seller lane shows "score unavailable — run deferred"; deterministic lanes (DOM, price cuts) still render since they're facts, but their motivation <i>scores</i> disappear; MLS connector down/unlicensed → all MLS lanes replaced by "MLS access unavailable" (no cached listing display — session-purge rule); run FAILED → failure_reason shown + retry.</li>
+      <li><b>Permission-limited</b>: outreach approval restricted to approver roles; candidate PII (owner_name_redacted) stays redacted for non-agent roles.</li>
+      <li><b>Mobile</b>: as in Layout; approvals via bottom sheets.</li>
+    </ul>
+
+    <h2>Data fields</h2>
+    <p>PredictiveSellerRun: run id, region_profile_id, farm_geo_code (3-letter registry code), requested_by, run_type, score_version, status, timestamps, failure_reason. Candidate: full §14.7 schema (input_facts, source_coverage, source_facts, scoring_output incl. manual_review_flags + ineligible_reason, recommended_next_step). DOM row: address, DOM, market-avg DOM, ratio, reduction history, motivation score. Price-cut row: listing, % cut, days-at-price, matched buyers. Expired row: listing, status type, off-market date, owner-on-title (bool), intent class, rank, draft ref. Buyer match: buyer, listing, fit rank, draft ref. Route: stops (address, window), ordered times, drive times.</p>
+
+    <h2>Rules &amp; compliance</h2>
+    <ul>
+      <li><b>Never auto-send</b>: a score alone never triggers outreach (§14.8); every drafted action terminates in a review queue.</li>
+      <li>Sensitive-topic firewall (§14.3): divorce/probate/distress/etc. can only produce human_handoff_required — no score change, no tag, no audience inclusion, no priority bump; the future_life_event_signal hook stays disabled.</li>
+      <li>Fair Housing: schools never used as a ranking factor (MLS-1 step 3); no protected-class inputs; ownership signals shown as badges only, never raw owner mailing data.</li>
+      <li>MLS data purged from session after each playbook response (every MLS playbook); only aggregates retained (MLS-13); no MLS data through AI providers without ZDR-equivalent contract; MLS compliance enforced at framework level (CDP #11) before any playbook runs.</li>
+      <li>Unknown consent/DNC → consent-capture task, never a send (matrix correction #2).</li>
+      <li>Draft copy comes from approved templates/registries; missing copy → task, not invention.</li>
+      <li>Scoring formula/thresholds live only in the PropertyIQ Scoring Master Sheet; UI displays returned outputs only.</li>
+    </ul>
+
+    <h2>Cross-links</h2>
+    <p>In: Wattson chat/voice intents, morning brief, map seller-propensity layer, buyer saved-criteria (CRM), farm audience definitions. Out: Approvals/Outbox (all drafts), CRM contact record (14), Past Client OS equity touches (27), Transaction Workspace disclosures (15), Content Calendar (new-listing + market-update feeds), Calendar (route sync). <b>Emits</b>: PredictiveSellerRun events, review tasks (PropFlowTask CREATE_REVIEW_TASK / SENSITIVE_TOPIC_HANDOFF), ledger attribution points (pending→sold), scoring snapshots. <b>Consumes</b>: MLS RESO Web API data (via compliance layer), ScoringService outputs, buyer criteria, engagement facts from Event Ledger.</p>
+
+    <h2>Open decisions</h2>
+    <ul>
+      <li>[DECIDE] Buyer Match run frequency setting: spec says "every 2–4 hours" — interim default 3h, tenant-configurable within 2–4h band, with the cost-runaway guardrail (usage meter vs MLS API budget) surfaced on the lane [BEST GUESS on the 3h midpoint].</li>
+      <li>[DECIDE] "Runs nightly" header vs per-playbook cadences (weekly expired, 2–4h buyer match, hourly territory monitor, Friday routes): interim — header drops the single "nightly" claim; each lane shows its own cadence chip.</li>
+      <li>[DECIDE] Legal re-list window length for expired outreach: jurisdiction/MLS-rule dependent — interim design shows a "holds until {date} (MLS re-list rule)" chip with the date computed by the compliance layer, no hardcoded day count.</li>
+      <li>[DECIDE] Predictive Seller monthly refresh day + HIGH-tier threshold: both live in the Scoring Master Sheet — UI reads returned tier only; run scheduling default = monthly per §14.6 run_type.</li>
+    </ul>
+    <p class="anno" style="margin-top:20px">Wireframe fidelity — colors are placeholders from the locked PropFlow design language. All addresses/names/numbers are realistic fake data. No crime data anywhere on this screen. Agent identity: Graeham Watts, Intero Real Estate, DRE# 01466876 (from shared-references/identity.json — never hardcode elsewhere; the identity.json blocklist applies).</p>
+  </div>
+</div>

@@ -1,0 +1,429 @@
+<title>PropertyIQ · Screen 26 — Saved searches & properties</title>
+<link href="https://api.fontshare.com/v2/css?f[]=technor@500,600,700&display=swap" rel="stylesheet">
+<link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<style>
+  /* Type system — Technor for display, Inter for UI. */
+  :root{ --font-display:'Technor', Inter, -apple-system, 'Segoe UI', sans-serif; --font-ui: Inter, -apple-system, 'Segoe UI', Roboto, sans-serif; }
+</style>
+<style>
+  /* Palette v4 — PropFlow design language: neutral ink UI, ink-as-accent, color reserved for data. (extracted verbatim from propsearch-design-draft.html) */
+  :root, :root[data-theme="dark"], :root[data-theme="light"]{
+    --ink:#23282f; --paper:#fbfaf8; --surface:#f1efe9; --line:#e2dfd6;
+    --mut:#6b7076; --soft:#9b9f9f;
+    --brand:#2e6b53; --brand-ink:#ffffff; --brand-soft:#eaf1ec; --brand-deep:#1e4c3a;
+    --signal:#b07a2e;
+    --good:#2e7d4f; --warn:#a8630a; --crit:#b3372f;
+    --r:10px;
+  }
+  .intel .score, .mintel{ color:var(--brand-deep) }
+  .intel{ border-left:3px solid var(--brand) }
+  h1{ letter-spacing:-.02em }
+  .stat b{ letter-spacing:-.01em }
+  body[data-agent="watts"]{ --brand:#2e6b53; --brand-soft:#eaf1ec; --brand-deep:#1e4c3a; }
+
+  *{box-sizing:border-box; margin:0}
+  body{font:15px/1.55 var(--font-ui); color:var(--ink); background:var(--paper); padding-bottom:80px}
+  h1,h2,h3{line-height:1.15; text-wrap:balance; font-family:var(--font-display); font-weight:600}
+  h1{letter-spacing:-.01em}
+  .site{box-shadow:0 1px 2px rgba(20,24,32,.04), 0 8px 32px rgba(20,24,32,.06)}
+  .stat{box-shadow:0 1px 2px rgba(20,24,32,.03); transition:box-shadow .15s, transform .15s}
+  .stat:hover{box-shadow:0 4px 14px rgba(20,24,32,.08)}
+  .chip{transition:all .12s}
+  button{font-family:var(--font-ui)}
+  .num{font-variant-numeric:tabular-nums}
+  .wrap{max-width:1180px; margin:0 auto; padding:0 20px}
+
+  .bar{position:sticky; top:0; z-index:50; background:var(--paper); border-bottom:1px solid var(--line); padding:10px 0; backdrop-filter:blur(8px)}
+  .bar .wrap{display:flex; flex-wrap:wrap; gap:10px; align-items:center}
+  .bar .ttl{font-weight:700; margin-right:auto}
+  .bar .ttl small{display:block; font-weight:400; color:var(--mut)}
+  .bar a{color:var(--brand); font-size:13px; text-decoration:none}
+
+  .note{background:var(--surface); border:1px solid var(--line); border-radius:var(--r); padding:14px 16px; margin:0 0 22px; font-size:13.5px; color:var(--mut)}
+  .note b{color:var(--ink)}
+
+  .site{border:1px solid var(--line); border-radius:14px; overflow:hidden; background:var(--paper)}
+  .sitehead{display:flex; align-items:center; gap:14px; padding:14px 22px; border-bottom:1px solid var(--line)}
+  .avatar{width:38px; height:38px; border-radius:50%; background:var(--brand); color:var(--brand-ink); display:grid; place-items:center; font-weight:700}
+  .sitehead .who b{display:block}
+  .sitehead .who small{color:var(--mut)}
+  .sitehead nav{margin-left:auto; display:flex; gap:18px; font-size:13.5px; color:var(--mut)}
+  .sitehead nav a{color:inherit; text-decoration:none}
+  .sitehead nav a:hover{color:var(--brand)}
+
+  .chip{display:inline-flex; align-items:center; gap:6px; font-size:12.5px; font-weight:500; border:1px solid var(--line); border-radius:99px; padding:6px 12px; background:var(--paper); cursor:pointer; color:var(--ink)}
+  .chip:hover{border-color:var(--brand)}
+  .chip.on{background:var(--brand); border-color:var(--brand); color:var(--brand-ink); font-weight:600; box-shadow:0 2px 8px color-mix(in srgb, var(--brand) 30%, transparent)}
+  .chip[disabled]{opacity:.5; cursor:not-allowed}
+
+  .statrow{display:grid; grid-template-columns:repeat(4,1fr); gap:10px}
+  .stat{background:var(--surface); border:1px solid var(--line); border-radius:var(--r); padding:12px}
+  .stat small{display:block; color:var(--mut); font-size:11.5px; text-transform:uppercase; letter-spacing:.05em}
+  .stat b{font-size:18px}
+  .stat .up{color:var(--good); font-size:12px}
+
+  .bdg{font-size:11.5px; border-radius:6px; padding:3px 8px; background:var(--surface); border:1px solid var(--line); color:var(--mut)}
+  .bdg.good{color:var(--good); border-color:color-mix(in srgb,var(--good) 30%,var(--line))}
+  .bdg.warn{color:var(--warn); border-color:color-mix(in srgb,var(--warn) 30%,var(--line))}
+  .bdg.crit{color:var(--crit); border-color:color-mix(in srgb,var(--crit) 30%,var(--line))}
+
+  .dtable{width:100%; border-collapse:collapse; font-size:13px}
+  .dtable td,.dtable th{border-bottom:1px solid var(--line); padding:8px 10px; text-align:left}
+  .dtable th{font-size:11px; text-transform:uppercase; letter-spacing:.05em; color:var(--soft)}
+
+  .poweredby{font-size:11px; color:var(--soft); letter-spacing:.04em; text-transform:uppercase}
+
+  @media (max-width:860px){ .statrow{grid-template-columns:repeat(2,1fr)} .maingrid{grid-template-columns:1fr !important} }
+  @media (prefers-reduced-motion: reduce){ *{transition:none!important} }
+
+  /* ---- page-specific additions (same design language) ---- */
+  .anno{font-size:11px; color:var(--soft)}
+  .cardbox{border:1px solid var(--line); border-radius:10px; padding:11px 14px; font-size:12.5px; background:var(--paper)}
+  .btn-ink{background:var(--ink); color:#fff; border:0; border-radius:7px; padding:7px 12px; font-size:11.5px; cursor:pointer; font-weight:600}
+  .btn-ghost{background:var(--paper); border:1px solid var(--line); border-radius:7px; padding:7px 12px; font-size:11.5px; cursor:pointer}
+  .sechead{font-size:14px; font-weight:700; margin:0 0 8px; font-family:var(--font-display)}
+  .cov td.ok{color:var(--good); font-weight:700}
+  .specdoc h2{font-size:18px; margin:26px 0 8px}
+  .specdoc h3{font-size:15px; margin:18px 0 6px}
+  .specdoc p, .specdoc li{font-size:13.5px; color:var(--mut)}
+  .specdoc b{color:var(--ink)}
+  .specdoc table{margin:8px 0}
+  .propcard{border:1px solid var(--line); border-radius:10px; padding:12px 14px; font-size:12.5px; background:var(--paper); display:grid; gap:5px}
+  .propcard .thumb{height:64px; border-radius:7px; background:linear-gradient(135deg, var(--surface), var(--line)); display:grid; place-items:center; color:var(--soft); font-size:10.5px}
+  .skel{background:linear-gradient(90deg, var(--surface), #f7f5ef, var(--surface)); border-radius:6px}
+  .togl{display:inline-flex; width:30px; height:17px; border-radius:99px; background:var(--line); position:relative; vertical-align:middle}
+  .togl.on{background:var(--brand)}
+  .togl::after{content:""; width:13px; height:13px; border-radius:50%; background:#fff; position:absolute; top:2px; left:2px}
+  .togl.on::after{left:15px}
+</style>
+
+<!-- ============ (1) slim header ============ -->
+<div class="bar">
+  <div class="wrap">
+    <div class="ttl">PropertyIQ · Screen 26 — Saved searches &amp; properties <small>Full-density per-screen mock · wireframe fidelity · dev-facing annotations in gray</small></div>
+    <a href="../wireframe.html">← All screens</a>
+  </div>
+</div>
+
+<!-- ============ (2) THE FULL MOCK ============ -->
+<div class="wrap" style="padding-top:24px">
+  <div class="note"><b>Screen 26 — Saved searches &amp; properties (consumer).</b> The retention + alert engine: saved prompts re-run continuously and message on new matches (consent-gated, sent by PropFlow — PropSearch owns no outbound channel, MB §29); saved homes carry notes, custom rent assumptions, strategy tags, and assumption overrides for underwriting. Both feed compliant audience segments (prohibited inputs structurally removed) for the agent's PropReach side. Consumer chrome: agent-branded top nav, Powered-by footer — no agent-console rail on consumer pages.</div>
+
+  <div class="site" data-agent="watts">
+    <!-- Summary header: counts + global alert mode + Alert settings nav (spec: Summary header) -->
+    <div id="el-summary" class="sitehead">
+      <div class="avatar">GW</div>
+      <div class="who"><b>Your saved items</b><small class="num">2 searches · 5 homes · alerts: instant</small></div>
+      <nav><a href="#">Search homes</a><a href="#el-alert-settings">Alert settings</a><a href="#">Your account</a></nav>
+    </div>
+    <div class="anno" style="padding:6px 22px 0">Summary header reads SavedSearch list + SavedPropertyRecord list aggregates. "alerts: instant" = the dominant cadence across saved searches; Alert settings link → panel below. This page requires sign-in (it's the account surface — see states strip).</div>
+
+    <!-- ===== Saved searches section ===== -->
+    <div style="padding:14px 22px 0">
+      <div class="sechead">Saved searches (2) <span class="anno" style="font-weight:400">— stacked labeled sections, searches first (draft showed one of each in a 2-col grid; deepened to sections as counts grow)</span></div>
+      <div class="maingrid" style="display:grid; grid-template-columns:1fr 1fr; gap:12px">
+
+        <!-- saved-search card #1 -->
+        <div id="el-search-card" class="cardbox" style="display:grid; gap:6px">
+          <div style="display:flex; gap:8px; align-items:flex-start">
+            <b style="flex:1">“3bd, quiet street, ≤30 min Menlo Park, good elementary”</b>
+            <span id="el-delete-pause" style="color:var(--soft); cursor:pointer" title="Pause / delete">⋯</span>
+          </div>
+          <div style="color:var(--mut)" class="num">41 matches · <a href="#" style="color:var(--good); font-weight:600; text-decoration:none">2 new since yesterday →</a> · 1 price cut on a saved home</div>
+          <div id="el-cadence-chips" style="display:flex; gap:6px; flex-wrap:wrap">
+            <button class="chip on" style="font-size:11px">Instant alerts</button>
+            <button class="chip" style="font-size:11px">Daily digest</button>
+            <button class="chip" style="font-size:11px">Weekly</button>
+            <button id="el-edit-prompt" class="chip" style="font-size:11px">✎ Edit prompt</button>
+          </div>
+          <div class="anno">Card tap → Screen 02 pre-filled results; "2 new" → the delta view. Cadence change routes through consent-gated PropFlow messaging (MB §29 — PropSearch never sends). Edit prompt reopens Screen 01 input with the prompt loaded; edits re-parse with the same S1 parser rules and keep the saved-search id (mutate-in-place, change logged — [DECIDE]). ⋯ menu: <b style="color:var(--ink)">Pause</b> (stops alerts, keeps record) / <b style="color:var(--ink)">Delete</b> (confirm dialog; deletion propagates to any PropReach segment criteria built on this search). Map layer state is saved per saved-search (Draft S2).</div>
+          <div class="anno" style="border-top:1px dashed var(--line); padding-top:5px"><b style="color:var(--ink)">School firewall (§16.4):</b> "good elementary" persists only as the user's own boundary filter — school data is never used in alert logic, alert ranking, or ranking of alert results. Alert copy avoids school characterizations and carries §16.3 disclaimers wherever school facts render.</div>
+        </div>
+
+        <!-- saved-search card #2 (degraded re-run example) -->
+        <div class="cardbox" style="display:grid; gap:6px">
+          <div style="display:flex; gap:8px; align-items:flex-start">
+            <b style="flex:1">“duplex or triplex under $1.2M, East Palo Alto / Belle Haven, ADU upside”</b>
+            <span style="color:var(--soft); cursor:pointer" title="Pause / delete">⋯</span>
+          </div>
+          <div style="color:var(--mut)" class="num">7 matches <span class="bdg warn">as of Jul 13</span> — last re-run failed; showing last-known results, no fabricated deltas</div>
+          <div style="display:flex; gap:6px; flex-wrap:wrap">
+            <button class="chip" style="font-size:11px">Instant alerts</button>
+            <button class="chip on" style="font-size:11px">Daily digest</button>
+            <button class="chip" style="font-size:11px">Weekly</button>
+            <button class="chip" style="font-size:11px">✎ Edit prompt</button>
+          </div>
+          <div class="anno"><b style="color:var(--ink)">Fail-closed:</b> saved-search re-run failure → card shows last-known results with an "as of {date}" stamp; delta line suppressed rather than guessed. This ADU-upside search is also a valid AudienceSegmentBasis (SAVED_SEARCH) for the agent's PropReach side — invisible to the consumer.</div>
+        </div>
+      </div>
+      <div class="anno" style="margin-top:6px">SearchRecord (persisted saved variant) re-runs continuously; deltas computed vs last visit. Cadence enum interim: INSTANT / DAILY / WEEKLY, daily digest 8am local, delivered by PropFlow inside its consent + quiet-hour rules [DECIDE]. Sensitive-topic content in a saved prompt → human_handoff_required; that topic never drives alerts, routing, or audiences (§22.4-adjacent rule).</div>
+    </div>
+
+    <!-- ===== Saved properties section ===== -->
+    <div style="padding:16px 22px 0">
+      <div class="sechead">Saved properties (5) <span class="anno" style="font-weight:400">— duplicate saves prevented by unique (tenant_id, app_user_id, property_id) — Brain index table</span></div>
+      <div class="maingrid" style="display:grid; grid-template-columns:1fr 1fr; gap:12px">
+
+        <!-- saved-property card #1: the full-feature card -->
+        <div id="el-prop-card" class="propcard">
+          <div class="thumb">photo · IDX display cache (fetch-and-discard rules apply)</div>
+          <div style="display:flex; gap:8px; align-items:center; flex-wrap:wrap">
+            <b>742 Hurlingame Ave, Redwood City</b>
+            <span id="el-strategy" class="bdg" style="font-size:10px; cursor:pointer" title="Change strategy">saved · strategy: HOUSE_HACK ▾</span>
+            <label style="margin-left:auto; font-size:11px; color:var(--mut)"><input type="checkbox" checked> compare</label>
+          </div>
+          <div class="num" style="color:var(--mut)">$1,180,000 · 3bd 2ba · listed 24d</div>
+          <div id="el-note" style="background:var(--surface); border-radius:7px; padding:6px 9px; font-size:12px">📝 Your note: “ask about the sub-panel” <span class="anno">(inline edit · autosaves)</span></div>
+          <div id="el-assumptions" style="font-size:12px; color:var(--mut)">Your assumptions: <b style="color:var(--ink)">20% down, self-manage</b> · custom rent est. <b class="num" style="color:var(--ink)">$4,300/mo</b> <span class="anno">→ tap opens the assumptions drawer (same editor as underwriting)</span></div>
+          <div style="display:flex; gap:8px; align-items:center">
+            <a id="el-rerun" href="#" style="color:var(--brand); font-size:12.5px; font-weight:600; text-decoration:none">re-run underwrite →</a>
+            <span class="anno">launches underwriting with saved assumption_overrides applied; emits UNDERWRITE_RUN on completion (MB §19/25.1)</span>
+          </div>
+          <div class="anno">SavedPropertyRecord (MB 10.7): notes, custom_rent_estimate_monthly, assumption_overrides, investor_strategy, source_search_id (came from search #2 above), optional contact_id link for the agent-side PropFlow mirror. Strategy badge menu: BUY_HOLD / BRRRR / FLIP / HOUSE_HACK / … (InvestorStrategy enum). Card tap → Screen 03 property detail.</div>
+        </div>
+
+        <!-- saved-property card #2: price cut -->
+        <div id="el-status-badges" class="propcard">
+          <div class="thumb">photo</div>
+          <div style="display:flex; gap:8px; align-items:center; flex-wrap:wrap">
+            <b>118 Oak Grove Ave, Menlo Park</b>
+            <span class="bdg good" style="font-size:10px">▼ price cut −$46,000 (Jul 14)</span>
+            <label style="margin-left:auto; font-size:11px; color:var(--mut)"><input type="checkbox" checked> compare</label>
+          </div>
+          <div class="num" style="color:var(--mut)"><s style="color:var(--soft)">$1,795,000</s> $1,749,000 · 3bd 2ba</div>
+          <div style="font-size:12px; color:var(--mut)">📝 Your note: “backyard slope — check drainage report”</div>
+          <div class="anno">Price-change / status badges from IDX refresh (webhook/poll); this is the "1 price cut on a saved home" the search card cross-notes. Badge tap → detail. Stale IDX (&gt;24h) → freshness warning instead of a fake "live" count.</div>
+        </div>
+
+        <!-- saved-property card #3: pending -->
+        <div class="propcard">
+          <div class="thumb">photo</div>
+          <div style="display:flex; gap:8px; align-items:center; flex-wrap:wrap">
+            <b>2044 Cooley Ave, East Palo Alto</b>
+            <span class="bdg warn" style="font-size:10px">PENDING since save</span>
+            <label style="margin-left:auto; font-size:11px; color:var(--mut)"><input type="checkbox"> compare</label>
+          </div>
+          <div class="num" style="color:var(--mut)">$998,000 · duplex · strategy: BUY_HOLD</div>
+          <div class="anno">Status change (pending / sold / back-on-market since save) formatted with as-of dates. MLS-derived display honors mls_retention_expires_at — past that date the listing content is suppressed with MLS_RETENTION_EXPIRED, never shown stale.</div>
+        </div>
+
+        <!-- saved-property card #4: missing rent/AVM (fail-closed) -->
+        <div class="propcard">
+          <div class="thumb">photo</div>
+          <div style="display:flex; gap:8px; align-items:center; flex-wrap:wrap">
+            <b>331 Hazel Ave, San Bruno</b>
+            <span class="bdg" style="font-size:10px">saved · strategy: BRRRR</span>
+            <label style="margin-left:auto; font-size:11px; color:var(--mut)"><input type="checkbox"> compare</label>
+          </div>
+          <div class="num" style="color:var(--mut)">$1,049,000 · 2bd 1ba + bonus</div>
+          <div style="font-size:12px; color:var(--mut)">Rent estimate: <b style="color:var(--ink)">unavailable</b> · value estimate: <b style="color:var(--ink)">unavailable</b></div>
+          <div class="anno"><b style="color:var(--ink)">Fail-closed:</b> rent/AVM missing → chips suppressed with MISSING_RENT_ESTIMATE / MISSING_AVM — never an estimate without provenance. User may enter their own custom_rent_estimate_monthly, which is clearly labeled as theirs.</div>
+        </div>
+
+        <!-- saved-property card #5: watched own address -->
+        <div class="propcard">
+          <div class="thumb">photo</div>
+          <div style="display:flex; gap:8px; align-items:center; flex-wrap:wrap">
+            <b>86 Newell Rd, Palo Alto</b>
+            <span class="bdg" style="font-size:10px">watching this address</span>
+            <label style="margin-left:auto; font-size:11px; color:var(--mut)"><input type="checkbox"> compare</label>
+          </div>
+          <div style="font-size:12px; color:var(--mut)">Not for sale · you're watching neighborhood activity + your equity card</div>
+          <div class="anno">Homeowner-watch flavor of a save (Screen 01 "Watch this" lens closer). Equity-related saved-address flows emit EQUITY_CARD_CREATED. Notes/assumptions are the user's own data — never surfaced to ads; agent visibility via PropFlow follows platform privacy rules.</div>
+        </div>
+
+        <!-- compare tray -->
+        <div id="el-compare" class="cardbox" style="background:var(--surface); display:grid; gap:6px; align-content:start">
+          <b>Compare tray (2 selected)</b>
+          <div style="display:flex; gap:6px; flex-wrap:wrap"><span class="bdg">742 Hurlingame ✕</span><span class="bdg">118 Oak Grove ✕</span></div>
+          <button class="btn-ink" style="width:fit-content">Compare side-by-side →</button>
+          <div class="anno">Select saved homes into the compare tray → compare screen. Tray state persists across pages &amp; sessions and is URL-addressable (Draft S2 tray rule).</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- ===== Alert settings panel ===== -->
+    <div id="el-alert-settings" style="padding:16px 22px 0">
+      <div class="sechead">Alert settings</div>
+      <div class="cardbox" style="display:grid; gap:8px">
+        <table class="dtable" style="font-size:12px">
+          <tr><th>Saved search</th><th>Cadence</th><th>Email</th><th>SMS</th></tr>
+          <tr><td>“3bd, quiet street, ≤30 min Menlo Park…”</td><td><span class="bdg good">INSTANT</span></td><td><span class="togl on"></span> on</td><td><span class="togl"></span> <span style="color:var(--soft)">disabled — SMS consent not granted yet. <a href="#" style="color:var(--brand)">Verify your contact preferences</a></span></td></tr>
+          <tr><td>“duplex or triplex under $1.2M…”</td><td><span class="bdg">DAILY 8am</span></td><td><span class="togl on"></span> on</td><td><span class="togl"></span> <span style="color:var(--soft)">disabled — same consent gate</span></td></tr>
+        </table>
+        <div style="display:flex; gap:14px; flex-wrap:wrap; font-size:12px; color:var(--mut)">
+          <span><span class="togl"></span> Global mute (pause everything)</span>
+          <span>🌙 Quiet hours: <b style="color:var(--ink)" class="num">9pm – 8am</b> local</span>
+        </div>
+        <div class="anno">Channel offering is governed by the read-only PropFlowContactConsentSnapshot (sms / voice / ai_video / marketing_personalized consent + dnc_status). <b style="color:var(--ink)">Consent-gated, fail-closed:</b> unknown or denied consent, or DNC → channel blocked with a visible reason ("alerts paused — verify your contact preferences"), never a silent non-send. All sends go through PropFlow with ComplianceProvider checks — PropSearch owns no outbound channel (MB §29; matrix correction: every outbound surface runs the compliance check).</div>
+      </div>
+    </div>
+
+    <!-- ===== states strip ===== -->
+    <div id="el-states" style="padding:16px 22px 0">
+      <div class="sechead">States (dev reference — compact strip)</div>
+      <div class="maingrid" style="display:grid; grid-template-columns:1fr 1fr 1fr; gap:10px">
+        <!-- loading -->
+        <div class="cardbox">
+          <b>Loading</b>
+          <div style="display:grid; gap:6px; margin-top:6px">
+            <div class="skel" style="height:14px; width:80%"></div>
+            <div class="skel" style="height:10px; width:60%"></div>
+            <div class="skel" style="height:10px; width:70%"></div>
+          </div>
+          <div class="anno" style="margin-top:6px">Skeleton cards; counts fill progressively. Stale IDX data (&gt;24h) shows a freshness warning instead of fake "live" counts.</div>
+        </div>
+        <!-- empty -->
+        <div id="el-empty" class="cardbox" style="background:var(--surface)">
+          <b>Empty — teaching state, never a dead end</b>
+          <div style="font-size:12px; color:var(--mut); margin-top:4px">“Nothing saved yet. Save a search and we'll message you the moment a match appears.” Try one:</div>
+          <div style="display:flex; gap:5px; flex-wrap:wrap; margin-top:6px">
+            <button class="chip" style="font-size:10.5px">Homes under $1.4M in Redwood City</button>
+            <button class="chip" style="font-size:10.5px">Homes with ADU potential</button>
+            <button class="chip" style="font-size:10.5px">New listings this week</button>
+          </div>
+          <div class="anno" style="margin-top:6px">One-tap examples are filter-URL presets for the user's market; tap fires a real search (S1 never-dead-end principle).</div>
+        </div>
+        <!-- degraded -->
+        <div class="cardbox">
+          <b>Degraded (all fail-closed)</b>
+          <div style="font-size:11.5px; color:var(--mut); margin-top:4px">
+            · Re-run failure → last-known results + "as of {date}", no fabricated deltas<br>
+            · Rent/AVM missing → chips suppressed (MISSING_RENT_ESTIMATE / MISSING_AVM)<br>
+            · ScoringService down → fit ordering disappears, deterministic sort remains<br>
+            · Alert channel blocked (consent unknown/denied, DNC) → "alerts paused — verify your contact preferences", never a silent non-send
+          </div>
+        </div>
+        <!-- permission-limited -->
+        <div class="cardbox" style="grid-column:1 / -1">
+          <b>Permission-limited</b>
+          <span style="font-size:12px; color:var(--mut)"> — page requires sign-in (account surface). An anonymous visitor who saved via localStorage sees a soft prompt: <i>“Save across devices?”</i> — shown only after the first save, never before (S2 card rule). On first sign-in, localStorage saves migrate into the account [DECIDE]. Agent-side mirror: read-only "saved activity" panel on the PropFlow contact detail — separate surface, no consumer-facing indication [DECIDE].</span>
+        </div>
+      </div>
+    </div>
+
+    <!-- ===== mobile variant strip ===== -->
+    <div id="el-mobile" style="padding:16px 22px 18px">
+      <div class="sechead">Mobile variant (375px)</div>
+      <div class="cardbox" style="display:flex; gap:12px; align-items:flex-start; flex-wrap:wrap">
+        <div style="width:150px; border:1px solid var(--line); border-radius:14px; padding:8px; font-size:8px; background:var(--paper)">
+          <div style="font-weight:700; font-size:9px">Your saved items</div>
+          <div style="color:var(--soft)">2 searches · 5 homes</div>
+          <div style="border:1px solid var(--line); border-radius:6px; padding:5px; margin-top:5px"><b>“3bd, quiet street…”</b><div style="color:var(--soft)" class="num">41 · 2 new</div><div style="display:flex; gap:2px; margin-top:2px"><span style="background:var(--brand); color:#fff; border-radius:99px; padding:1px 5px">Instant</span><span style="border:1px solid var(--line); border-radius:99px; padding:1px 5px">Daily</span></div></div>
+          <div style="border:1px solid var(--line); border-radius:6px; padding:5px; margin-top:4px; position:relative; overflow:hidden"><b>742 Hurlingame</b><div style="color:var(--soft)">house-hack · note</div><div style="position:absolute; right:-1px; top:0; bottom:0; background:var(--crit); color:#fff; display:grid; place-items:center; padding:0 5px">🗑</div></div>
+          <div style="border-top:1px solid var(--line); margin-top:5px; padding-top:3px; color:var(--soft); text-align:center">▲ cadence bottom sheet</div>
+        </div>
+        <div style="flex:1; min-width:240px; font-size:12px; color:var(--mut)">
+          Single column, <b style="color:var(--ink)">searches first</b>; cadence chips wrap; per-card swipe actions (delete / edit) [BEST GUESS]; cadence chips become a bottom sheet on small widths [BEST GUESS]; alert settings behind the header link. Compare tray docks to the bottom edge.
+        </div>
+      </div>
+    </div>
+
+    <!-- consumer footer -->
+    <div style="padding:12px 22px; border-top:1px solid var(--line); display:flex; justify-content:space-between; flex-wrap:wrap; gap:8px">
+      <span class="poweredby">Powered by PropertyIQ</span>
+      <span style="font-size:12px; color:var(--soft)">Graeham Watts · Intero Real Estate · DRE# 01466876 · Equal Housing Opportunity</span>
+    </div>
+  </div>
+
+  <!-- ============ spec gaps found ============ -->
+  <div class="note" style="margin-top:22px"><b>Spec gaps found (Master Brain specifies, spec inventory missed — rendered above):</b>
+    (1) <b>Duplicate-save prevention</b> — unique (tenant_id, app_user_id, property_id) on saved_properties (Brain index table) → noted on the Saved-properties section header; a second save of the same home is a no-op, not a second card.
+    (2) <b>contact_id on SavedPropertyRecord (10.7)</b> — the optional link that powers the agent-side PropFlow mirror; annotated on the full-feature property card.
+    (3) <b>SAVED_SEARCH / SAVED_PROPERTY as AudienceSegmentBasis values (§22.2)</b> — segment supply carries saved_search_ids / saved_property_ids with prohibited_inputs_removed and requires_propreach_preflight; annotated on search card #2 and in Rules.
+    (4) <b>Reporting scope (Part 12)</b> — "search and saved-property reports" are a named reporting surface; saved-item data must stay report-addressable (no UI here, noted for dev).
+    (5) <b>v1 feedback rule (§21-adjacent)</b> — saved/shared/acted-upon content refining recommendations is future-only; PropSearch stores internal operational feedback for dashboard tuning and must not emit an unregistered event — saved-item activity logs as engagement signals via registered events only.
+  </div>
+
+  <!-- ============ (3) ELEMENT COVERAGE ============ -->
+  <h2 style="font-size:20px; margin:24px 0 10px">Element coverage — spec inventory → this page</h2>
+  <table class="dtable cov" style="font-size:12.5px">
+    <tr><th>Spec inventory element</th><th>Rendered at</th><th>Status</th></tr>
+    <tr><td>Summary header (counts + global alert mode + Alert settings link)</td><td><a href="#el-summary">Site header</a></td><td class="ok">✓</td></tr>
+    <tr><td>Saved-search card (prompt, live count, new-since delta, price-cut cross-note)</td><td><a href="#el-search-card">Saved searches</a></td><td class="ok">✓</td></tr>
+    <tr><td>Cadence chips (Instant / Daily selected state, consent-gated PropFlow routing)</td><td><a href="#el-cadence-chips">Card chips</a></td><td class="ok">✓</td></tr>
+    <tr><td>Edit prompt (re-parse, same S1 rules, keeps search id)</td><td><a href="#el-edit-prompt">✎ Edit prompt chip</a></td><td class="ok">✓</td></tr>
+    <tr><td>Delete / pause search (confirm; pause keeps record)</td><td><a href="#el-delete-pause">⋯ menu</a></td><td class="ok">✓</td></tr>
+    <tr><td>Saved-property card (address, tag, note, assumptions, underwrite link)</td><td><a href="#el-prop-card">742 Hurlingame card</a></td><td class="ok">✓</td></tr>
+    <tr><td>Strategy tag badge (InvestorStrategy, change via badge menu)</td><td><a href="#el-strategy">Strategy badge</a></td><td class="ok">✓</td></tr>
+    <tr><td>Note field (inline edit, autosave)</td><td><a href="#el-note">Note field</a></td><td class="ok">✓</td></tr>
+    <tr><td>Assumptions summary (→ assumptions drawer)</td><td><a href="#el-assumptions">Assumptions line</a></td><td class="ok">✓</td></tr>
+    <tr><td>Re-run underwrite link (saved overrides, emits UNDERWRITE_RUN)</td><td><a href="#el-rerun">re-run underwrite →</a></td><td class="ok">✓</td></tr>
+    <tr><td>Price-change / status badges (cut, pending, retention suppression)</td><td><a href="#el-status-badges">Oak Grove / Cooley cards</a></td><td class="ok">✓</td></tr>
+    <tr><td>Alert settings panel (cadence, channels, mute, quiet hours, consent gates)</td><td><a href="#el-alert-settings">Alert settings</a></td><td class="ok">✓</td></tr>
+    <tr><td>Empty state (teaching, one-tap example searches)</td><td><a href="#el-empty">States strip → Empty</a></td><td class="ok">✓</td></tr>
+    <tr><td>Compare-from-saved (persistent, URL-addressable tray)</td><td><a href="#el-compare">Compare tray</a></td><td class="ok">✓</td></tr>
+  </table>
+  <div style="border:1.5px solid var(--good); background:#f2f8f4; border-radius:10px; padding:12px 16px; margin:12px 0 0; font-weight:700; color:var(--good)">14 of 14 spec elements rendered ✓ <span style="font-weight:400; color:var(--mut); font-size:12.5px">— plus required regions beyond the inventory: degraded search card (as-of stamp), watched-address save, MISSING_RENT_ESTIMATE card, full states strip (loading/empty/degraded/permission-limited), mobile variant strip, school-firewall annotation, and the 5 Master-Brain additions listed above.</span></div>
+
+  <!-- ============ (4) FULL SPEC AS HTML ============ -->
+  <div class="specdoc">
+    <h1 style="font-size:24px; margin:40px 0 6px">Spec — 26 · Saved searches &amp; properties (consumer)</h1>
+    <p><b>Purpose</b> The consumer retention + alert engine: saved prompts re-run continuously and message on new matches (consent-gated, sent by PropFlow); saved homes carry notes, custom rent assumptions, strategy tags, and assumption overrides for underwriting. Both feed compliant audience segments to the agent's PropReach side — this screen is the raw material for alerts, audiences, and pipeline.</p>
+    <p><b>Primary users</b> Signed-in consumers (buyers, investors, homeowners watching an address). Secondary: the agent viewing a contact's saved items via PropFlow contact detail (read-only mirror, separate surface).</p>
+    <p><b>Entry points</b> "Save" heart on result cards / property detail; save-search inline bar on Screen 02 (incl. the "Alert me when one appears" zero-result path and the "Watch this" lens closers on Screen 01); alert email/SMS deep links ("2 new matches"); Screen 01 returning-visitor "Welcome back" card; account nav "Your saved items".</p>
+    <p><b>Exit points</b> Saved-search card → Screen 02 pre-filled results (or its "N new" delta view); Edit prompt → Screen 01 input state with prompt loaded; saved property → Screen 03 property detail; "re-run underwrite →" → underwriting workspace with saved assumption_overrides applied; Alert settings → notification preferences; compare from saved homes → compare screen.</p>
+
+    <h2>Layout</h2>
+    <p>Desktop: <b>Header</b> — avatar + "Your saved items" + summary subtitle ("2 searches · 5 homes · alerts: instant"); nav: Alert settings. <b>Main</b> — two-column grid, shared card layout: <b>Saved searches</b> section (cards: prompt text, live match count, delta line, cadence chips, Edit prompt) and <b>Saved properties</b> section (cards: address, strategy tag badge, note, saved assumptions summary, re-run underwrite link). [BEST GUESS: sections stacked with headers rather than interleaved, searches first — deepened here to labeled sections as counts grow.] <b>Per-search delta line</b>: "41 matches · 2 new since yesterday · 1 price cut on a saved home". <b>Empty-state hero</b> when nothing saved (see States). Footer: standard consumer site footer.</p>
+    <p>Mobile (375px): single column; searches first; cadence chips wrap; per-card swipe actions (delete/edit) [BEST GUESS]; alert settings behind the header link.</p>
+
+    <h2>Element inventory</h2>
+    <div style="overflow-x:auto">
+    <table class="dtable">
+      <tr><th>Element</th><th>What it shows/does</th><th>Data source</th><th>Interactions</th><th>Spec source</th></tr>
+      <tr><td>Summary header</td><td>Counts of searches/homes + global alert mode</td><td>SavedSearch list + SavedPropertyRecord list</td><td>Alert settings link</td><td>Draft S26</td></tr>
+      <tr><td>Saved-search card</td><td>Quoted prompt, live match count, new-since delta, price-cut cross-note</td><td>SearchRecord (persisted saved variant) re-run continuously; delta vs last visit</td><td>Tap card → Screen 02; "See the 2 new" delta view</td><td>Draft S26; matrix gap "Saved searches/properties … alerts basis"</td></tr>
+      <tr><td>Cadence chips</td><td>Instant alerts / Daily digest (selected state visible)</td><td>Saved-search alert preference</td><td>Tap switches cadence; change routes through consent-gated PropFlow messaging</td><td>Draft S26; MB 29 (PropSearch owns no channel)</td></tr>
+      <tr><td>Edit prompt</td><td>Reopens the prompt for modification</td><td>query_text + parsed_filters</td><td>Edits re-parse (same S1 parser rules), preserves the saved-search id [BEST GUESS]</td><td>Draft S26</td></tr>
+      <tr><td>Delete/pause search</td><td>Remove or mute a saved search</td><td>—</td><td>Confirm; pausing stops alerts, keeps the record [BEST GUESS]</td><td>Standard save pattern (matrix)</td></tr>
+      <tr><td>Saved-property card</td><td>Address + "saved · strategy: house-hack" tag + user note + assumptions summary</td><td>SavedPropertyRecord (notes, custom_rent_estimate_monthly, assumption_overrides, investor_strategy, source_search_id)</td><td>Tap → property detail; inline note edit</td><td>Draft S26; MB 10.7</td></tr>
+      <tr><td>Strategy tag badge</td><td>InvestorStrategy label (BUY_HOLD / BRRRR / FLIP / HOUSE_HACK …)</td><td>SavedPropertyRecord.investor_strategy</td><td>Change via badge menu</td><td>MB 10.7 / enums</td></tr>
+      <tr><td>Note field</td><td>Free-text user note ("ask about the sub-panel")</td><td>SavedPropertyRecord.notes</td><td>Inline edit, autosave</td><td>Draft S26; MB 10.7</td></tr>
+      <tr><td>Assumptions summary</td><td>"20% down, self-manage" + custom rent estimate</td><td>assumption_overrides + custom_rent_estimate_monthly</td><td>Tap → assumptions drawer (same editor as underwriting)</td><td>Draft S26; MB 10.7/19.4</td></tr>
+      <tr><td>Re-run underwrite link</td><td>Launches underwriting with saved overrides</td><td>UnderwriteRunRecord pipeline</td><td>→ underwriting workspace; emits UNDERWRITE_RUN on completion</td><td>Draft S26; MB 19/25.1</td></tr>
+      <tr><td>Price-change / status badges</td><td>Price cut, pending, sold, back-on-market since save</td><td>IDX refresh (webhook/poll, stale &gt;24h flagged)</td><td>Tap → detail</td><td>Draft S26 delta line; MB 14.3</td></tr>
+      <tr><td>Alert settings panel</td><td>Per-search cadence, channel (email/SMS), global mute, quiet hours</td><td>Consumer notification prefs; SMS requires granted consent snapshot</td><td>Consent-gated toggles; SMS toggle disabled until consent granted, with explanation</td><td>Matrix corrections (consent model); MB PropFlowContactConsentSnapshot</td></tr>
+      <tr><td>Empty state</td><td>"Nothing saved yet" + explain alerts + one-tap example searches for their market</td><td>Filter-URL presets</td><td>Tap fires a real search</td><td>[BEST GUESS] consistent with S1 never-dead-end principle</td></tr>
+      <tr><td>Compare-from-saved</td><td>Select saved homes into the compare tray</td><td>Compare state</td><td>Persists, URL-addressable</td><td>Draft S2 tray ("persists across pages &amp; sessions")</td></tr>
+    </table>
+    </div>
+
+    <h2>States</h2>
+    <ul>
+      <li><b>Default</b>: populated sections with live counts and deltas.</li>
+      <li><b>Loading</b>: skeleton cards; counts fill progressively; stale IDX data (&gt;24h) shows a freshness warning instead of fake "live" counts.</li>
+      <li><b>Empty</b>: teaching empty state with example searches (never a dead end).</li>
+      <li><b>Error/degraded (fail closed)</b>: saved-search re-run failure → card shows last-known results with "as of {date}" stamp, no fabricated deltas; rent/AVM missing on a saved home → those chips suppressed (MISSING_RENT_ESTIMATE / MISSING_AVM); ScoringService down → any fit ordering disappears, deterministic sort remains; alert channel blocked (consent unknown/denied, DNC) → cadence chip shows "alerts paused — verify your contact preferences" rather than silently not sending.</li>
+      <li><b>Permission-limited</b>: page requires sign-in (it's the account surface); an anonymous user who saved via localStorage sees a soft account prompt to sync across devices ("save across devices?" — never before first save, per S2 card rule).</li>
+      <li><b>Mobile</b>: single column, swipe actions, cadence chips as bottom sheet on small widths [BEST GUESS].</li>
+    </ul>
+
+    <h2>Data fields</h2>
+    <p><b>Saved search</b>: query_text, ParsedSearchFilters, result_count (live), new_since_last_visit count, alert cadence (INSTANT/DAILY/WEEKLY [BEST GUESS naming]), channel prefs, created/updated timestamps, map layer state (saved per saved-search — Draft S2). <b>Saved property</b> (SavedPropertyRecord, MB 10.7): saved_property_id, property_id, listing_id?, notes, custom_rent_estimate_monthly, assumption_overrides (UnderwritingAssumptionOverrides), investor_strategy, source_search_id, created/updated_at (+ contact_id? — Brain 10.7, powers the agent-side mirror). <b>Deltas</b>: new matches, price cuts ($ amount), status changes — all sourced from IDX refresh, formatted with as-of dates. <b>Consent snapshot</b> (read-only, from PropFlow): sms/voice/ai_video/marketing_personalized consent + dnc_status — governs which alert channels are offered.</p>
+
+    <h2>Rules &amp; compliance</h2>
+    <ul>
+      <li><b>PropSearch owns no outbound channel (MB 29)</b>: all alert sends go through PropFlow with ComplianceProvider checks; unknown consent = blocked with a visible reason (matrix correction: every outbound surface must run the compliance check).</li>
+      <li><b>School firewall (§16.4)</b>: school data must never be used in saved-search alert logic or ranking of alert results — a saved school-boundary filter re-runs as the user's own filter only; alert copy avoids school characterizations and carries §16.3 disclaimers when school facts render.</li>
+      <li>Saved searches/properties/underwrite runs feed PropSearchAudienceSegmentSupply (MB 22.2) with prohibited_inputs_removed (protected class, school data, sensitive life events, demographics) — invisible to the consumer, but deletion of a saved item must propagate to segment criteria. Segment supply also carries requires_propreach_preflight and the Meta housing rules (no ZIP as a targeting unit; customer-list certification if uploaded).</li>
+      <li>Sensitive-topic content in a saved prompt → human_handoff_required; that topic never drives alerts, routing, or audiences.</li>
+      <li>Retention per MB 26.3 tables; MLS-derived display honors mls_retention_expires_at and MLS_RETENTION_EXPIRED suppression.</li>
+      <li>Notes/assumptions are the user's own data; never surfaced to ads; agent visibility via PropFlow follows platform privacy rules.</li>
+      <li>No fabricated numbers anywhere: missing AVM/rent/mortgage-balance renders "unavailable" states, never estimates without provenance.</li>
+    </ul>
+
+    <h2>Cross-links</h2>
+    <p><b>In</b>: Screens 01/02 save affordances, alert deep links (PropFlow-sent), returning-visitor card, property-detail save. <b>Out</b>: Screen 02 (pre-filled/delta), Screen 01 (edit prompt), Screen 03 detail, underwriting workspace, compare screen, alert settings. <b>Ledger/events</b>: consumes IDX refresh (listing changes); underwrite launches emit UNDERWRITE_RUN; equity-related saved-address flows emit EQUITY_CARD_CREATED; saved-item activity logs to the event ledger as engagement signals (feeds lead heat + seller signals, agent-side); segment supply objects flow to PropReach (requires_propreach_preflight: true). PropSearch never emits LEAD_CAPTURED / PIPELINE_MOVED etc. (MB 25.3).</p>
+
+    <h2>Open decisions</h2>
+    <ul>
+      <li>[DECIDE] Alert cadence enum + digest send times — interim: INSTANT/DAILY/WEEKLY, daily digest at 8am local, delivered by PropFlow inside its consent + quiet-hour rules.</li>
+      <li>[DECIDE] Whether editing a saved prompt versions the search or mutates in place — interim: mutate in place, keep search_id, log the change (alerts continuity beats history here).</li>
+      <li>[DECIDE] Anonymous-save sync mechanism — interim: localStorage saves migrate into the account on first sign-in; soft prompt after first save only.</li>
+      <li>[DECIDE] Agent-side mirror of this screen — interim: read-only "saved activity" panel on the PropFlow contact detail (separate screen spec), no consumer-facing indication.</li>
+    </ul>
+    <p class="anno" style="margin-top:20px">Wireframe fidelity — colors are placeholders from the locked PropFlow design language. All addresses/prices/counts are realistic fake data. Agent identity: Graeham Watts, Intero Real Estate, DRE# 01466876 (from shared-references/identity.json — never hardcode elsewhere; the identity.json blocklist value must never appear). No crime data anywhere on this or any screen.</p>
+  </div>
+</div>

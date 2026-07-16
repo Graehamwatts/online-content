@@ -1,0 +1,505 @@
+<title>PropertyIQ · Screen 13 — Global Approvals Inbox</title>
+<link href="https://api.fontshare.com/v2/css?f[]=technor@500,600,700&display=swap" rel="stylesheet">
+<link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<style>
+  /* Type system — Technor for display, Inter for UI. */
+  :root{ --font-display:'Technor', Inter, -apple-system, 'Segoe UI', sans-serif; --font-ui: Inter, -apple-system, 'Segoe UI', Roboto, sans-serif; }
+</style>
+<style>
+  /* Palette v4 — PropFlow design language: neutral ink UI, ink-as-accent, color reserved for data. (extracted verbatim from propsearch-design-draft.html) */
+  :root, :root[data-theme="dark"], :root[data-theme="light"]{
+    --ink:#23282f; --paper:#fbfaf8; --surface:#f1efe9; --line:#e2dfd6;
+    --mut:#6b7076; --soft:#9b9f9f;
+    --brand:#2e6b53; --brand-ink:#ffffff; --brand-soft:#eaf1ec; --brand-deep:#1e4c3a;
+    --signal:#b07a2e;
+    --good:#2e7d4f; --warn:#a8630a; --crit:#b3372f;
+    --r:10px;
+  }
+  .intel .score, .mintel{ color:var(--brand-deep) }
+  .intel{ border-left:3px solid var(--brand) }
+  h1{ letter-spacing:-.02em }
+  .stat b{ letter-spacing:-.01em }
+  body[data-agent="watts"]{ --brand:#2e6b53; --brand-soft:#eaf1ec; --brand-deep:#1e4c3a; }
+
+  *{box-sizing:border-box; margin:0}
+  body{font:15px/1.55 var(--font-ui); color:var(--ink); background:var(--paper); padding-bottom:80px}
+  h1,h2,h3{line-height:1.15; text-wrap:balance; font-family:var(--font-display); font-weight:600}
+  h1{letter-spacing:-.01em}
+  .site{box-shadow:0 1px 2px rgba(20,24,32,.04), 0 8px 32px rgba(20,24,32,.06)}
+  .stat{box-shadow:0 1px 2px rgba(20,24,32,.03); transition:box-shadow .15s, transform .15s}
+  .stat:hover{box-shadow:0 4px 14px rgba(20,24,32,.08)}
+  .chip{transition:all .12s}
+  button{font-family:var(--font-ui)}
+  .num{font-variant-numeric:tabular-nums}
+  .wrap{max-width:1180px; margin:0 auto; padding:0 20px}
+
+  .bar{position:sticky; top:0; z-index:50; background:var(--paper); border-bottom:1px solid var(--line); padding:10px 0; backdrop-filter:blur(8px)}
+  .bar .wrap{display:flex; flex-wrap:wrap; gap:10px; align-items:center}
+  .bar .ttl{font-weight:700; margin-right:auto}
+  .bar .ttl small{display:block; font-weight:400; color:var(--mut)}
+  .bar a{color:var(--brand); font-size:13px; text-decoration:none}
+
+  .note{background:var(--surface); border:1px solid var(--line); border-radius:var(--r); padding:14px 16px; margin:0 0 22px; font-size:13.5px; color:var(--mut)}
+  .note b{color:var(--ink)}
+
+  .site{border:1px solid var(--line); border-radius:14px; overflow:hidden; background:var(--paper)}
+  .sitehead{display:flex; align-items:center; gap:14px; padding:14px 22px; border-bottom:1px solid var(--line)}
+  .avatar{width:38px; height:38px; border-radius:50%; background:var(--brand); color:var(--brand-ink); display:grid; place-items:center; font-weight:700}
+  .sitehead .who b{display:block}
+  .sitehead .who small{color:var(--mut)}
+  .sitehead nav{margin-left:auto; display:flex; gap:18px; font-size:13.5px; color:var(--mut)}
+  .sitehead nav a{color:inherit; text-decoration:none}
+  .sitehead nav a:hover{color:var(--brand)}
+
+  .chip{display:inline-flex; align-items:center; gap:6px; font-size:12.5px; font-weight:500; border:1px solid var(--line); border-radius:99px; padding:6px 12px; background:var(--paper); cursor:pointer; color:var(--ink)}
+  .chip:hover{border-color:var(--brand)}
+  .chip.on{background:var(--brand); border-color:var(--brand); color:var(--brand-ink); font-weight:600; box-shadow:0 2px 8px color-mix(in srgb, var(--brand) 30%, transparent)}
+
+  .statrow{display:grid; grid-template-columns:repeat(4,1fr); gap:10px}
+  .stat{background:var(--surface); border:1px solid var(--line); border-radius:var(--r); padding:12px}
+  .stat small{display:block; color:var(--mut); font-size:11.5px; text-transform:uppercase; letter-spacing:.05em}
+  .stat b{font-size:18px}
+  .stat .up{color:var(--good); font-size:12px}
+
+  .bdg{font-size:11.5px; border-radius:6px; padding:3px 8px; background:var(--surface); border:1px solid var(--line); color:var(--mut)}
+  .bdg.good{color:var(--good); border-color:color-mix(in srgb,var(--good) 30%,var(--line))}
+  .bdg.warn{color:var(--warn); border-color:color-mix(in srgb,var(--warn) 30%,var(--line))}
+  .bdg.crit{color:var(--crit); border-color:color-mix(in srgb,var(--crit) 30%,var(--line))}
+
+  .dtable{width:100%; border-collapse:collapse; font-size:13px}
+  .dtable td,.dtable th{border-bottom:1px solid var(--line); padding:8px 10px; text-align:left}
+  .dtable th{font-size:11px; text-transform:uppercase; letter-spacing:.05em; color:var(--soft)}
+
+  @media (max-width:860px){ .statrow{grid-template-columns:repeat(2,1fr)} .maingrid{grid-template-columns:1fr !important} .console{grid-template-columns:1fr !important} .rail{display:none !important} }
+  @media (prefers-reduced-motion: reduce){ *{transition:none!important} }
+
+  /* ---- page-specific additions (kept in the same design language) ---- */
+  .anno{font-size:11px; color:var(--soft)}
+  .cardbox{border:1px solid var(--line); border-radius:10px; padding:11px 14px; font-size:12.5px; background:var(--paper)}
+  .btn-ink{background:var(--ink); color:#fff; border:0; border-radius:7px; padding:7px 12px; font-size:11.5px; cursor:pointer; font-weight:600}
+  .btn-ghost{background:var(--paper); border:1px solid var(--line); border-radius:7px; padding:7px 12px; font-size:11.5px; cursor:pointer}
+  .btn-dis{background:var(--surface); border:1px solid var(--line); color:var(--soft); border-radius:7px; padding:7px 12px; font-size:11.5px; cursor:not-allowed}
+  .sechead{font-size:14px; font-weight:700; margin:0 0 8px; font-family:var(--font-display)}
+  .cov td.ok{color:var(--good); font-weight:700}
+  .specdoc h2{font-size:18px; margin:26px 0 8px}
+  .specdoc h3{font-size:15px; margin:18px 0 6px}
+  .specdoc p, .specdoc li{font-size:13.5px; color:var(--mut)}
+  .specdoc b{color:var(--ink)}
+  .specdoc table{margin:8px 0}
+  .acard{border:1px solid var(--line); border-radius:12px; padding:12px 16px; background:var(--paper)}
+  .exp{font-size:11px; font-weight:600; border-radius:6px; padding:2px 8px; border:1px solid var(--line)}
+  .exp.ok{color:var(--mut)}
+  .exp.amb{color:var(--warn); border-color:color-mix(in srgb,var(--warn) 40%,var(--line)); background:#fdf6ee}
+  .exp.red{color:var(--crit); border-color:color-mix(in srgb,var(--crit) 40%,var(--line)); background:#fbf0ef}
+  .skel{background:linear-gradient(90deg, var(--surface), #eceade, var(--surface)); border-radius:10px; height:56px; border:1px solid var(--line)}
+</style>
+
+<!-- ============ (1) slim header ============ -->
+<div class="bar">
+  <div class="wrap">
+    <div class="ttl">PropertyIQ · Screen 13 — Global Approvals Inbox <small>Full-density per-screen mock · wireframe fidelity · dev-facing annotations in gray</small></div>
+    <a href="../wireframe.html">← All screens</a>
+  </div>
+</div>
+
+<!-- ============ (2) THE FULL MOCK ============ -->
+<div class="wrap" style="padding-top:24px">
+  <div class="note"><b>Screen 13 — Global Approvals Inbox (P0 #1).</b> The single surface where every automation across all modules terminates for human sign-off. One card per logical unit of work (One-Approval UX, Wattson MB Part 8 — a hard architectural principle). Nothing consequential ships anywhere without passing through here; expired items default to NOT shipping (fail-closed). Primary users: agent/owner; secondarily delegated approvers with per-lane rights (never global — a team member's Wattson instance can never approve its own REVIEW_REQUIRED output, Part 3). Agent-console chrome (Screen 9 left rail) + the ✓ top-bar icon that lives on every agent screen.</div>
+
+  <div class="site" data-agent="watts">
+    <!-- header: summary line + lane chips + History/Delegation nav (spec Layout) -->
+    <div class="sitehead" id="el-header">
+      <div class="avatar">GW</div>
+      <div class="who"><b>Approvals</b><small class="num" id="el-summary">7 pending · oldest expires in 9h</small></div>
+      <div style="display:flex; gap:6px; margin-left:10px; flex-wrap:wrap" id="el-chips">
+        <button class="chip on">All (7)</button><button class="chip">Content (3)</button><button class="chip">Messages (2)</button><button class="chip">Spend (1)</button><button class="chip">SEO (1)</button><button class="chip">Gifts (1)</button><button class="chip">Postcards (1)</button><button class="chip">Video (1)</button>
+      </div>
+      <nav><a href="#el-history">History</a><a href="#el-delegation">Delegation</a>
+        <span id="el-topbar-icon" style="position:relative; display:inline-flex; align-items:center; border:1px solid var(--brand); border-radius:8px; padding:4px 10px; color:var(--brand); font-weight:700">✓<span class="num" style="position:absolute; top:-7px; right:-7px; background:var(--crit); color:#fff; border-radius:99px; font-size:10px; padding:1px 6px; font-weight:700">7</span></span>
+      </nav>
+    </div>
+    <div class="anno" style="padding:6px 22px 0">Top strip: the <b style="color:var(--ink)">✓ icon + badge</b> (right) is the app-wide entry point rendered on ALL ~26 agent screens (badge = ApprovalRecord count where status=PENDING; click → this screen). Lane chips filter the stack, live counts, state persists per session (lane enum CONTENT · CAMPAIGN · SPEND · MESSAGE · GIFT · SEO_DEPLOY · POSTCARD · VIDEO [BEST GUESS names]). Chips row + header stay sticky on scroll. No left/right rails inside the inbox column, no footer. Sort: oldest-expiry-first (SLA rule).</div>
+
+    <div class="console" style="display:grid; grid-template-columns:172px 1fr">
+      <!-- persistent agent-console left rail (same chrome as Screen 9) -->
+      <div class="rail" style="border-right:1px solid var(--line); padding:14px 10px; font-size:12.5px; display:flex; flex-direction:column; gap:2px; background:var(--surface)">
+        <a href="#" style="text-decoration:none; color:var(--ink); border-radius:8px; padding:8px 10px">☰ Today</a>
+        <a href="#" style="text-decoration:none; color:var(--ink); border-radius:8px; padding:8px 10px">🗺 Farm map</a>
+        <a href="#" style="text-decoration:none; color:var(--ink); border-radius:8px; padding:8px 10px">🤝 Past clients</a>
+        <a href="#" style="text-decoration:none; color:var(--ink); border-radius:8px; padding:8px 10px">👤 Leads & clients</a>
+        <a href="#" style="text-decoration:none; color:var(--ink); border-radius:8px; padding:8px 10px">💬 Comms <span class="bdg" style="font-size:9.5px">6</span></a>
+        <a href="#" style="text-decoration:none; color:var(--ink); border-radius:8px; padding:8px 10px">📋 Transactions <span class="bdg" style="font-size:9.5px">2</span></a>
+        <a href="#" style="text-decoration:none; color:#fff; background:var(--ink); border-radius:8px; padding:8px 10px; font-weight:600">✓ Approvals <span style="background:var(--crit); border-radius:99px; font-size:9.5px; padding:1px 6px">7</span></a>
+        <a href="#" style="text-decoration:none; color:var(--ink); border-radius:8px; padding:8px 10px">🎬 Content studio</a>
+        <a href="#" style="text-decoration:none; color:var(--ink); border-radius:8px; padding:8px 10px">📣 Ads & funnels</a>
+        <a href="#" style="text-decoration:none; color:var(--ink); border-radius:8px; padding:8px 10px">📈 Reports</a>
+        <div style="margin-top:auto; padding-top:10px; border-top:1px solid var(--line)">
+          <a href="#" style="text-decoration:none; color:var(--ink); border-radius:8px; padding:8px 10px; display:block">⚙ Settings</a>
+          <div class="anno" style="padding:6px 10px">Global chrome: persistent agent-console rail (Screen 9 pattern). Emergency kill switch lives in Settings (Tab 21) — deliberately NOT duplicated here. Consumer pages never show this rail.</div>
+        </div>
+      </div>
+
+      <div style="min-width:0">
+        <!-- entry-points / deep-link strip -->
+        <div style="padding:12px 22px 0">
+          <div class="anno">Deep-link entry points into this queue: Command Center content queue · Monday Briefing backlog · PropReach wizard ("Publish → Approvals") · Funnel builder (17) · SEO console (20) · Distribution Board nominations · Prospecting drafts · Voice Ops outbound queue · the ONE interrupt-tier push (expiring-unseen only; everything else batches to the morning brief — Tab 21 notification model). Mobile: Approvals is a first-class bottom-nav destination.</div>
+        </div>
+
+        <!-- volume-guard banner -->
+        <div id="el-volume-guard" style="padding:10px 22px 0">
+          <div class="cardbox" style="border-color:var(--signal); background:#fdf6ee; display:flex; gap:10px; align-items:center; flex-wrap:wrap">
+            <span style="color:var(--signal)">📈</span>
+            <div style="flex:1; min-width:280px"><b>Volume guard: "Predictive-seller postcard prep" is flooding this queue</b>
+              <div style="color:var(--mut); font-size:12px" class="num">14, 12 and 11 items/day over the last 3 days — and its last 30 days meet the promotion bar (63 runs, 98% approved unmodified, 0 incidents). Wattson proposes promoting its two reliable steps to AUTONOMOUS. Requires your explicit sign-off in Settings (logged with timestamp).</div>
+            </div>
+            <button class="btn-ink">Review promotion → Settings 21</button>
+            <button class="btn-ghost">Not now</button>
+            <div class="anno" style="width:100%">Trigger heuristic &gt;10 items/day × 3 days [BEST GUESS, draft]; promotion criteria themselves are MB Part 8 (30 days, &gt;95% approved-without-modification, 0 incidents, explicit owner approval logged in Admin Console). Never-Autonomous items have NO promotion path — the queue self-thins by earning trust, not by being ignored.</div>
+          </div>
+        </div>
+
+        <!-- card stack -->
+        <div style="padding:14px 22px; display:grid; gap:10px">
+
+          <!-- one-approval bundle card (emphasized, highest stakes) -->
+          <div id="el-bundle" style="border:1.5px solid var(--brand); border-radius:12px; padding:14px 16px; background:var(--brand-soft)">
+            <div style="display:flex; gap:8px; align-items:center; flex-wrap:wrap">
+              <b style="font-size:13.5px">📦 One-approval bundle — "ADU rules changed in Redwood City"</b>
+              <span class="bdg" style="font-size:10px">PropCast · ContentLock v2</span>
+              <span class="bdg good" style="font-size:10px">compliance ✓</span>
+              <span class="exp amb num" style="margin-left:auto" id="el-expiry">⏱ expires in 9h</span>
+            </div>
+            <div class="anno" style="margin-top:3px">Card = Wattson approval_group bundle {group_id: apg_88f2, correlation_id: cor_5501, outputs[4], recommended_action: "ship all 4", expires_at: default now+48h} — MB Part 8. Expiry chip: amber ≤12h, red ≤3h [BEST GUESS thresholds]; drives the oldest-expiry-first sort. Delivered as ONE card to the designated reviewer via NotificationProvider when all steps in the approval_group complete.</div>
+            <!-- quad preview -->
+            <div id="el-quad" style="display:grid; grid-template-columns:repeat(4,1fr); gap:8px; margin-top:10px; font-size:11px">
+              <div style="background:var(--paper); border:1px solid var(--line); border-radius:8px; padding:8px; cursor:pointer"><b>Video (0:15)</b><div style="min-height:52px; margin-top:4px; background:var(--surface); border-radius:6px; display:grid; place-items:center; color:var(--mut)">▶ preview</div><div class="anno" style="margin-top:3px">AI-disclosed avatar clip</div></div>
+              <div style="background:var(--paper); border:1px solid var(--line); border-radius:8px; padding:8px; cursor:pointer"><b>Landing page</b><div style="color:var(--mut); margin-top:4px">/adu-rules-redwood-city<br>lead-magnet gate on</div></div>
+              <div style="background:var(--paper); border:1px solid var(--line); border-radius:8px; padding:8px; cursor:pointer"><b>Lead magnet PDF</b><div style="color:var(--mut); margin-top:4px">"ADU Owner's Checklist" · 6 pp</div></div>
+              <div style="background:var(--paper); border:1px solid var(--line); border-radius:8px; padding:8px; cursor:pointer"><b>DM flow</b><div style="color:var(--mut); margin-top:4px">keyword ADU → checklist + follow-up msg</div></div>
+            </div>
+            <div class="anno" style="margin-top:4px">Click any quadrant → that element's edit modal in its owning module. Quad = the PropCast content-bundle shape (matrix P0).</div>
+            <div style="display:flex; gap:6px; margin-top:10px; flex-wrap:wrap; align-items:center">
+              <button id="el-approve-all" class="btn-ink" style="padding:9px 18px; font-size:12.5px; border-radius:8px">Approve all 4 → ships</button>
+              <button id="el-edit" class="btn-ghost" style="border-radius:8px">Edit an element</button>
+              <button id="el-reject" class="btn-ghost" style="border-radius:8px; color:var(--crit)">Reject w/ reason</button>
+              <button class="btn-ghost" style="border-radius:8px">Defer</button>
+              <span class="anno">on_approve: all 4 outputs execute atomically · mints ContentLock v3 · ledger events emitted · any edit → new version → NEW compliance pass → NEW lock → re-enters queue as v(n+1) · Reject requires a reason (modal below) → halts group, logs, notifies owner (on_reject) · Defer re-queues; the expiry clock keeps running.</span>
+            </div>
+          </div>
+
+          <!-- message card -->
+          <div id="el-message" class="acard" style="display:flex; gap:12px; align-items:center; flex-wrap:wrap">
+            <div style="flex:1; min-width:260px; font-size:12.5px">
+              <b>💬 Outbound message — M. Torres (SMS)</b> <span class="bdg" style="font-size:10px">requested by Wattson</span> <span class="exp ok num">⏱ 31h</span>
+              <div style="color:var(--mut); margin-top:3px">"Hi Maria, saw you ran the value on your place twice this week — want me to walk the real number with you Thursday?"</div>
+              <div style="font-size:11px; margin-top:3px"><span class="bdg good" style="font-size:10px">consent ✓ SMS</span> <span class="bdg good" style="font-size:10px">quiet-hours ok</span> <span class="bdg good" style="font-size:10px">DNC clear</span> <span class="anno">ComplianceProvider.check_outbound_contact() snapshot — rendered on every message card, never assumed</span></div>
+            </div>
+            <button class="btn-ink" style="border-radius:8px; padding:8px 14px">Send</button>
+            <button class="btn-ghost" style="border-radius:8px">Edit</button>
+            <button class="btn-ghost" style="border-radius:8px">Defer</button>
+            <button class="btn-ghost" style="border-radius:8px; color:var(--crit)">Reject</button>
+            <div class="anno" style="width:100%">Bucket-2 discretionary message (C22): Wattson-written, defaults REVIEW_REQUIRED — always lands here. Bucket-1 pre-approved transactional notices on locked templates (documents-ready, inspection-scheduled, appointment-confirmed) auto-send when compliance passes and do NOT appear in this queue (Brain addition — see gaps note). Provenance badge is mandatory. Client-facing comms are on the Never-Autonomous List: no promotion path, ever. Sensitive-topic items never appear here — they route to Outbox/Review Queue (Tab 24) as human handoffs with automation suspended (C1/B1.8).</div>
+          </div>
+
+          <!-- message card #2: compliance-blocked with fair-housing alternative -->
+          <div id="el-message-blocked" class="acard" style="display:flex; gap:12px; align-items:center; flex-wrap:wrap; border-color:color-mix(in srgb,var(--crit) 35%,var(--line))">
+            <div style="flex:1; min-width:260px; font-size:12.5px">
+              <b>💬 Outbound email — Willow Glen buyer list</b> <span class="bdg" style="font-size:10px">playbook WPB-FARM-digest</span> <span class="bdg crit" style="font-size:10px">compliance ✗ BLOCKED</span>
+              <div style="color:var(--mut); margin-top:3px">Draft said "perfect for young families" — <b style="color:var(--crit)">fair-housing rule: familial-status steering (FHA §3604)</b>. Compliant alternative offered: <i>"close to parks, trails and three schools"</i> (describes the property and area, not the buyer).</div>
+            </div>
+            <button class="btn-ghost" style="border-radius:8px">Use alternative → re-check</button>
+            <button class="btn-dis" style="border-radius:8px">Approve (disabled)</button>
+            <div class="anno" style="width:100%">Wattson refusal pattern: a compliance block always shows the SPECIFIC rule + a compliant alternative. Approve is hard-disabled until the compliance pass returns ✓ — fail-closed; nothing improvises. Accepting the alternative = an edit → new version → new compliance pass → new lock.</div>
+          </div>
+
+          <!-- spend card -->
+          <div id="el-spend" class="acard" style="display:flex; gap:12px; align-items:center; flex-wrap:wrap">
+            <div style="flex:1; min-width:260px; font-size:12.5px">
+              <b>💰 Spend — raise 742 Hurlingame ad budget $10/day → $25/day</b> <span class="bdg" style="font-size:10px">PropReach</span> <span class="exp ok num">⏱ 26h</span>
+              <div style="color:var(--mut); margin-top:3px" class="num">Rationale (source facts): CPL $40 vs $62 lane benchmark · 3 tour requests · CTR 2.1% · <b style="color:var(--ink)">within your spend envelope ($300/mo remaining: $178)</b></div>
+            </div>
+            <button class="btn-ink" style="border-radius:8px; padding:8px 14px">Approve</button>
+            <button class="btn-ghost" style="border-radius:8px">Defer</button>
+            <button class="btn-ghost" style="border-radius:8px; color:var(--crit)">Reject</button>
+            <div class="anno" style="width:100%">ad_spend_change_mode default REVIEW_REQUIRED (C15/B9.3). Envelope = owner-configured fields (max_daily_budget_increase_amount/pct, max_campaign_daily_budget, max_account_monthly_spend, bid floor/ceiling…) — <b>no default numeric limits are ever invented</b>. Spend above cap = Never-Autonomous. Auto-pause without approval is allowed ONLY for safety conditions (dead link, broken LP, policy violation, compliance block, tracking failure, malware); performance-based pause needs approval unless the envelope authorizes it (Brain addition).</div>
+          </div>
+
+          <!-- SEO deploy card -->
+          <div id="el-seo" class="acard" style="display:flex; gap:12px; align-items:center; flex-wrap:wrap">
+            <div style="flex:1; min-width:260px; font-size:12.5px">
+              <b>🔧 SEO deploy — OTTO: 14 title/meta changes on community pages</b> <span class="bdg" style="font-size:10px">SeoProvider</span> <span class="exp ok num">⏱ 22h</span>
+              <div style="color:var(--mut); margin-top:3px">otto_preview_deployment payload · applies through template variable slots only · <b style="color:var(--ink)">freeze flag respected on /friendly-acres/</b> (2 of 16 changes skipped, listed in diff)</div>
+            </div>
+            <button class="btn-ghost" style="border-radius:8px">View diff</button>
+            <button class="btn-ink" style="border-radius:8px; padding:8px 14px">Deploy</button>
+            <button class="btn-ghost" style="border-radius:8px; color:var(--crit)">Reject</button>
+            <div class="anno" style="width:100%">Live deploys / site-architecture changes = REVIEW_REQUIRED behind preview + approval + per-project freeze flag (MB Part 6). View diff opens the before/after overlay → Deploy or back. On deploy, the module holding this approval_id writes SEO_PAGE_PUBLISHED (dual-owner dedupe rule: whichever module holds the approval_id writes the event — never both; Brain addition).</div>
+          </div>
+
+          <!-- gift card -->
+          <div id="el-gift" class="acard" style="display:flex; gap:12px; align-items:center; flex-wrap:wrap">
+            <div style="flex:1; min-width:260px; font-size:12.5px">
+              <b>🎁 Gift — closing gift for the Kims: olive-wood cutting board</b> <span class="bdg" style="font-size:10px">GiftProvider</span> <span class="exp ok num">⏱ 20h</span>
+              <div style="color:var(--mut); margin-top:3px" class="num">$45 — <span class="bdg good" style="font-size:10px">under your $50 cap ✓</span> · vendor: approved GiftProvider adapter · gift_approval_mode = REVIEW_REQUIRED (default)</div>
+            </div>
+            <button class="btn-ink" style="border-radius:8px; padding:8px 14px">Approve</button>
+            <button class="btn-ghost" style="border-radius:8px; color:var(--crit)">Reject</button>
+            <div class="anno" style="width:100%">gift_budget_cap is owner-configured — the $50 shown is example data, no default cap is invented [spec BEST-GUESS note kept]. AUTO_WITHIN_BUDGET mode exists but only with a configured cap + approved vendor; spend above cap is Never-Autonomous.</div>
+          </div>
+
+          <!-- postcard proof card -->
+          <div id="el-postcard" class="acard" style="display:flex; gap:12px; align-items:center; flex-wrap:wrap">
+            <div style="flex:1; min-width:220px; font-size:12.5px">
+              <b>📬 Postcard proof — Aug 1 farm drop (EPA farm, 1,240 pieces)</b> <span class="bdg" style="font-size:10px">Direct Mail</span> <span class="exp ok num">⏱ 41h</span>
+              <div style="color:var(--mut); margin-top:3px">Proof image ↓ · drop date Aug 1 · print vendor deadline Jul 24</div>
+            </div>
+            <div style="width:150px; height:96px; background:var(--surface); border:1px solid var(--line); border-radius:8px; display:grid; place-items:center; font-size:10.5px; color:var(--mut); text-align:center">6×4 proof<br>“Your neighbor's sale<br>just moved your number”<br><span style="font-size:9px">Graeham Watts · Intero · DRE# 01466876</span></div>
+            <div style="display:grid; gap:6px">
+              <button class="btn-ink" style="border-radius:8px">Approve proof</button>
+              <button class="btn-ghost" style="border-radius:8px">Edit</button>
+              <button class="btn-ghost" style="border-radius:8px; color:var(--crit)">Reject</button>
+            </div>
+            <div class="anno" style="width:100%">farming-postcard pipeline (skills-library matrix). Contact block reads from shared-references/identity.json — DRE# 01466876 only; anything matching the identity.json blocklist hard-fails the compliance pass before the card can even render as approvable.</div>
+          </div>
+
+          <!-- milestone video card -->
+          <div id="el-video" class="acard" style="display:flex; gap:12px; align-items:center; flex-wrap:wrap; border-color:color-mix(in srgb,var(--warn) 35%,var(--line))">
+            <div style="flex:1; min-width:260px; font-size:12.5px">
+              <b>📹 Milestone video — "loan cleared!" personalized clip for the Kims</b> <span class="bdg" style="font-size:10px">PropFlow · PersonalizedVideoProvider</span> <span class="exp red num">⏱ 2h 40m</span>
+              <div style="margin-top:5px; display:flex; gap:6px; flex-wrap:wrap; font-size:11px">
+                <span class="bdg good" style="font-size:10px">consent (ai_video) ✓</span>
+                <span class="bdg good" style="font-size:10px">lead_score 71 ≥ 50 ✓</span>
+                <span class="bdg good" style="font-size:10px">high-intent action ✓ (portal ×5)</span>
+                <span class="bdg crit" style="font-size:10px">AI disclosure frame-1 ✗ MISSING</span>
+              </div>
+              <div style="color:var(--mut); font-size:11.5px; margin-top:3px">Gate checklist rendered per matrix correction #3 — the render is missing the non-removable CA AI-disclosure frame; card is <b style="color:var(--crit)">blocked</b> until re-rendered.</div>
+            </div>
+            <button class="btn-dis" style="border-radius:8px">Approve (blocked)</button>
+            <button class="btn-ghost" style="border-radius:8px">Re-render with disclosure</button>
+            <button class="btn-ghost" style="border-radius:8px; color:var(--crit)">Reject</button>
+            <div class="anno" style="width:100%">ANY failed gate blocks approval (fail-closed). Red expiry chip (≤3h): this is the one card eligible for the single interrupt-tier push if still unseen. If it expires: nothing ships; card → History as EXPIRED; re-request generation from there.</div>
+          </div>
+
+          <!-- overflow line -->
+          <div id="el-overflow" class="anno">Also in queue (stack shows top 7; &gt;5 card types collapses the rest): 💬 1 more message (open-house follow-up) · 🔧 schema deploy (3 pages). <span style="color:var(--mut)">The "depth spec" info panel from the draft is design documentation only — not shipped UI.</span></div>
+
+          <!-- per-lane batch + undo toast -->
+          <div style="display:grid; grid-template-columns:1fr 1fr; gap:10px" class="maingrid">
+            <div id="el-batch" class="cardbox">
+              <b>Per-lane batch actions</b>
+              <div style="display:grid; gap:6px; margin-top:8px; font-size:12px">
+                <div style="display:flex; gap:8px; align-items:center; flex-wrap:wrap"><span class="bdg">Content (3)</span><button class="btn-ink" style="border-radius:8px">Approve all 3 compliant content items</button><span class="anno">all 3 pass compliance → enabled · one shared undo window</span></div>
+                <div style="display:flex; gap:8px; align-items:center; flex-wrap:wrap"><span class="bdg">Messages (2)</span><button class="btn-dis" style="border-radius:8px" title="1 of 2 messages is compliance-blocked — resolve it first">Batch approve (disabled)</button><span class="anno">mixed compliance in lane → disabled with reason tooltip: "1 of 2 is compliance-blocked"</span></div>
+              </div>
+              <div class="anno" style="margin-top:6px">Batch is per-lane ONLY — a global approve-all does not exist by design. Batch approve → single undo window covering the batch.</div>
+            </div>
+            <div id="el-undo" class="cardbox" style="background:var(--ink); color:#fff; border-color:var(--ink)">
+              <b>Undo toast (shown after any approve)</b>
+              <div style="display:flex; gap:10px; align-items:center; margin-top:8px; flex-wrap:wrap; font-size:12px">
+                <span class="num">✓ Approved: ADU bundle (4 outputs) — dispatching in <b>4:37</b></span>
+                <button style="background:#fff; color:var(--ink); border:0; border-radius:7px; padding:6px 12px; font-weight:700; font-size:11.5px; cursor:pointer">Undo</button>
+              </div>
+              <div style="font-size:11px; color:#c9cdd2; margin-top:6px">5-minute undo before dispatch [BEST GUESS duration — draft, not an MB number]. Undo re-queues the card, never deletes work. Exception: hard-deadline items skip the window and the card says so ("dispatches immediately — postcard vendor cutoff").</div>
+            </div>
+          </div>
+
+          <!-- reject-with-reason modal (rendered inline as a mock) -->
+          <div id="el-reject-modal" class="cardbox" style="border-style:dashed">
+            <b>Reject modal (mock — opens over any card)</b>
+            <div style="margin-top:6px; font-size:12px; color:var(--mut)">Rejecting: <b style="color:var(--ink)">💬 Outbound message — M. Torres</b>. Reason is <b style="color:var(--ink)">required</b> (on_reject contract):</div>
+            <textarea style="width:100%; border:1px solid var(--line); border-radius:8px; padding:8px 10px; font:12px var(--font-ui); margin-top:6px; background:var(--paper); color:var(--ink)" rows="2" placeholder="e.g. Too forward — she hasn't replied to the last touch. Wait for the CMA open.">Too forward — she hasn't replied to the last touch. Wait for the CMA open.</textarea>
+            <div style="display:flex; gap:6px; margin-top:6px"><button class="btn-ink" style="background:var(--crit)">Reject & halt group</button><button class="btn-ghost">Cancel</button><span class="anno">halts the group · reason logged to the audit trail · owner notified · reason feeds playbook improvement</span></div>
+          </div>
+
+          <!-- delegation panel -->
+          <div id="el-delegation" class="cardbox">
+            <b>Delegation — who can approve what</b>
+            <div style="display:flex; gap:6px; margin-top:8px; flex-wrap:wrap; font-size:12px">
+              <span class="bdg">TC (Dana R.) can approve:</span><span class="chip" style="font-size:11px">docs ✕</span><span class="chip" style="font-size:11px">scheduling ✕</span>
+              <span class="bdg" style="margin-left:10px">Assistant (Adrian) can approve:</span><span class="chip" style="font-size:11px">content ✕</span>
+              <button class="btn-ghost" style="border-radius:99px">＋ grant a lane</button>
+            </div>
+            <div class="anno" style="margin-top:6px">Per-lane only, never global (MB Part 3; grants live in Admin Console). Every delegated approval is stamped approved_by + provenance in the audit log. Self-approval is forbidden: a team member's Wattson instance can never approve its own REVIEW_REQUIRED output — it routes to the owner or a delegate. Delegate view of this screen: ONLY their granted lanes (others hidden, not greyed) and no Delegation panel. Solo-agent mode: queues consolidate into one daily review session (Brain addition).</div>
+          </div>
+
+          <!-- history -->
+          <div id="el-history" class="cardbox">
+            <div style="display:flex; gap:8px; align-items:center; flex-wrap:wrap"><b>History — the E&amp;O answer file</b>
+              <input placeholder="Search decisions…" aria-label="search history" style="border:1px solid var(--line); border-radius:8px; padding:6px 10px; font-size:11.5px; background:var(--paper); color:var(--ink)">
+              <button class="chip" style="font-size:10.5px">Lane ▾</button><button class="chip" style="font-size:10.5px">Decision ▾</button><button class="chip" style="font-size:10.5px">Date ▾</button>
+            </div>
+            <table class="dtable" style="font-size:11.5px; margin-top:8px">
+              <tr><th>When</th><th>Item</th><th>Decision</th><th>By</th><th>Diff</th></tr>
+              <tr><td class="num">Jul 15 · 8:02</td><td>💬 SMS · J. Alvarez</td><td><span class="bdg good">APPROVED (edited)</span></td><td>Graeham</td><td><a href="#" style="color:var(--brand)">before/after</a></td></tr>
+              <tr><td class="num">Jul 14 · 16:40</td><td>📦 "Willow Glen equity" bundle v1</td><td><span class="bdg crit">REJECTED</span> — "stat unverified"</td><td>Graeham</td><td><a href="#" style="color:var(--brand)">view</a></td></tr>
+              <tr><td class="num">Jul 14 · 9:15</td><td>🎁 pop-by gift · Parks</td><td><span class="bdg good">APPROVED</span></td><td>Adrian <span class="bdg" style="font-size:9px">delegate · content lane? no — gift lane grant 6/30</span></td><td>—</td></tr>
+              <tr><td class="num">Jul 12 · 23:59</td><td>💬 email · open-house list</td><td><span class="bdg warn">EXPIRED — did not ship</span></td><td>system</td><td><a href="#" style="color:var(--brand)">re-request generation</a></td></tr>
+            </table>
+            <div class="anno" style="margin-top:6px">Searchable decisions log (approved / edited / rejected / expired) with before/after diffs, backed by the immutable audit log. Expired row doubles as the <b style="color:var(--ink)">expired-item handling</b> pattern: expired = safe default, nothing shipped, item filed as EXPIRED with a one-click "re-request generation." [DECIDE] Lightweight History lives here; deep-links into the Admin Console immutable log for full audit.</div>
+          </div>
+
+          <!-- states strip -->
+          <div id="el-states" class="cardbox" style="font-size:11.5px">
+            <b>States (dev reference — all rendered compactly)</b>
+            <div style="display:grid; grid-template-columns:repeat(3,1fr); gap:8px; margin-top:8px" class="statrow">
+              <div style="border:1px solid var(--line); border-radius:8px; padding:8px">
+                <b style="font-size:11px">Loading</b>
+                <div class="skel" style="margin-top:6px"></div><div class="skel" style="margin-top:4px; opacity:.7"></div><div class="skel" style="margin-top:4px; opacity:.4"></div>
+                <div class="anno" style="margin-top:4px">3 skeleton cards; header counts render LAST — no fabricated counts.</div>
+              </div>
+              <div id="el-empty" style="border:1px solid var(--line); border-radius:8px; padding:8px">
+                <b style="font-size:11px">Empty</b>
+                <div style="text-align:center; padding:14px 6px; color:var(--mut)"><span style="color:var(--good); font-size:18px">✓</span><br><b style="color:var(--ink)">Nothing needs your sign-off</b><br><span class="num" style="font-size:11px">next scheduled generation: tonight 9:00 PM (Monday-brief batch)</span></div>
+                <div class="anno">Closes the loop with the day-close ritual.</div>
+              </div>
+              <div id="el-degraded" style="border:1px solid color-mix(in srgb,var(--crit) 40%,var(--line)); border-radius:8px; padding:8px; background:#fbf0ef">
+                <b style="font-size:11px; color:var(--crit)">Degraded (fail-closed)</b>
+                <div style="color:var(--mut); margin-top:4px; font-size:11px"><b style="color:var(--ink)">ApprovalRecord service unreachable</b> → full-screen notice, ALL approve buttons disabled: "Can't verify queue state — nothing will ship until this recovers." <b style="color:var(--ink)">ComplianceProvider down</b> → message/content cards show compliance <span class="bdg" style="font-size:9px">UNKNOWN</span> and their Approve buttons disable (compliance must pass before send — V0 §14; nothing improvises).</div>
+              </div>
+            </div>
+            <div class="anno" style="margin-top:6px"><b style="color:var(--ink)">Permission-limited (delegate view):</b> only granted lanes visible (others hidden, not greyed); approvals stamped with delegate identity + provenance; no Delegation panel. <b style="color:var(--ink)">Mixed-compliance lane:</b> batch button disabled with reason tooltip (rendered above). <b style="color:var(--ink)">Expired:</b> safe default — nothing ships, filed to History as EXPIRED (rendered above).</div>
+          </div>
+
+          <!-- mobile variant strip -->
+          <div id="el-mobile" class="cardbox">
+            <b>Mobile variant (375px) — approvals are the #1 phone task</b>
+            <div style="display:flex; gap:10px; margin-top:8px; flex-wrap:wrap; align-items:flex-start">
+              <div style="width:180px; border:1px solid var(--line); border-radius:14px; padding:8px; background:var(--surface)">
+                <div style="font-size:10px; font-weight:700; text-align:center">Approvals <span class="num" style="color:var(--crit)">7</span></div>
+                <div style="display:flex; gap:3px; overflow:hidden; margin-top:4px"><span class="chip on" style="font-size:8.5px; padding:3px 7px">All 7</span><span class="chip" style="font-size:8.5px; padding:3px 7px">Content 3</span><span class="chip" style="font-size:8.5px; padding:3px 7px">Msgs 2</span></div>
+                <div style="background:var(--paper); border:1px solid var(--line); border-radius:10px; padding:8px; margin-top:6px; font-size:9.5px">
+                  <b>📦 ADU bundle</b> <span class="exp amb num" style="font-size:8.5px">9h</span>
+                  <div style="color:var(--mut)">4 outputs · compliance ✓</div>
+                  <div style="display:flex; justify-content:space-between; color:var(--soft); font-size:8.5px; margin-top:5px"><span>← reject</span><span>↓ defer</span><span style="color:var(--good)">approve →</span></div>
+                </div>
+                <div style="text-align:center; font-size:8.5px; color:var(--soft); margin-top:4px">tap = expand full card</div>
+                <div style="display:flex; justify-content:space-around; border-top:1px solid var(--line); margin-top:6px; padding-top:4px; font-size:9px; color:var(--mut)"><span>☰</span><span style="color:var(--brand); font-weight:700">✓</span><span>💬</span><span>👤</span></div>
+              </div>
+              <div class="anno" style="flex:1; min-width:220px">Entire inbox = swipe cards: right = approve, left = reject (ALWAYS opens the reason sheet — no blind left-swipe dispatch of a rejection without a reason), down = defer. Lane chips scroll horizontally under the header. Per-lane batch buttons collapse into a per-lane action sheet. Approvals is a first-class bottom-nav destination (✓, highlighted).</div>
+            </div>
+          </div>
+
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- spec gaps found -->
+  <div class="note" style="margin-top:26px; border-color:var(--signal)"><b>Spec gaps found (Wattson Master Brain — UPDATED, rendered above and flagged here):</b>
+    (1) <b>Bucket-1 bypass</b> — pre-approved transactional notices on locked templates auto-send when compliance passes and never enter this inbox; the spec's message-card row implies all outbound lands here (annotated on the message card; MB C22/Part 8).
+    (2) <b>Spend-envelope detail</b> — the full owner-configured field set (increase/decrease amounts &amp; pcts, campaign/account caps, bid floor/ceiling) with "no default numeric limits invented," plus the safety-only auto-pause carve-out (performance-based pause still needs approval) — spec had only "envelope remaining" (spend card; MB C15/B9.3).
+    (3) <b>Solo-agent mode</b> — approval queues consolidate into one daily review session when solo_mode:true (delegation panel note; MB Part 3).
+    (4) <b>SEO event dedupe rule</b> — SEO_PAGE_PUBLISHED is written by whichever module holds the approval_id, never both (SEO card; MB Part 6).
+    (5) <b>One-Approval delivery contract</b> — the card triggers only when ALL steps in the approval_group complete and is delivered to the designated reviewer via NotificationProvider (bundle card; MB Part 8 implementation block).
+    (6) <b>GBP review replies</b> — drafted by gbp_ai_generate_review_reply but a human approves AND publishes (Never-Autonomous list context, spec Rules row confirmed; MB Part 6).
+  </div>
+
+  <!-- ============ (3) ELEMENT COVERAGE ============ -->
+  <h2 style="font-size:20px; margin:30px 0 10px">Element coverage — spec inventory → this page</h2>
+  <table class="dtable cov" style="font-size:12.5px">
+    <tr><th>Spec inventory element</th><th>Rendered at</th><th>Status</th></tr>
+    <tr><td>✓ top-bar icon + badge (app-wide entry)</td><td><a href="#el-header">Header right + left rail</a></td><td class="ok">✓</td></tr>
+    <tr><td>Header summary ("7 pending · oldest expires in 9h")</td><td><a href="#el-summary">Header</a></td><td class="ok">✓</td></tr>
+    <tr><td>Lane filter chips w/ live counts (All/Content/Messages/Spend/SEO/Gifts/Postcards/Video)</td><td><a href="#el-chips">Header chips</a></td><td class="ok">✓</td></tr>
+    <tr><td>One-approval bundle card (title, module badge, ContentLock version, compliance chip, expiry)</td><td><a href="#el-bundle">Bundle card</a></td><td class="ok">✓</td></tr>
+    <tr><td>Bundle quad preview (video / landing page / PDF / DM flow)</td><td><a href="#el-quad">Quad grid</a></td><td class="ok">✓</td></tr>
+    <tr><td>"Approve all N → ships" (atomic on_approve, undo starts)</td><td><a href="#el-approve-all">Bundle actions</a></td><td class="ok">✓</td></tr>
+    <tr><td>"Edit an element" (edit → new version → new compliance pass → new lock)</td><td><a href="#el-edit">Bundle actions</a></td><td class="ok">✓</td></tr>
+    <tr><td>"Reject w/ reason" (halt group, log, notify)</td><td><a href="#el-reject">Bundle actions</a> + <a href="#el-reject-modal">reject modal</a></td><td class="ok">✓</td></tr>
+    <tr><td>Message card (full text, recipient, provenance badge, consent status line)</td><td><a href="#el-message">Message card</a> + <a href="#el-message-blocked">blocked variant w/ fair-housing rule + alternative</a></td><td class="ok">✓</td></tr>
+    <tr><td>Spend card (amount, campaign, rationale w/ source facts, envelope remaining)</td><td><a href="#el-spend">Spend card</a></td><td class="ok">✓</td></tr>
+    <tr><td>SEO deploy card (change set, freeze flag, template-slots note, diff)</td><td><a href="#el-seo">SEO card</a></td><td class="ok">✓</td></tr>
+    <tr><td>Gift card (amount vs cap, REVIEW_REQUIRED default)</td><td><a href="#el-gift">Gift card</a></td><td class="ok">✓</td></tr>
+    <tr><td>Postcard proof card (proof image + drop date)</td><td><a href="#el-postcard">Postcard card</a></td><td class="ok">✓</td></tr>
+    <tr><td>Milestone video card (gate checklist; blocked on any gate fail)</td><td><a href="#el-video">Video card</a></td><td class="ok">✓</td></tr>
+    <tr><td>Expiry countdown chip (amber 12h / red 3h; drives sort)</td><td><a href="#el-expiry">Bundle</a> + every card (ok/amb/red variants)</td><td class="ok">✓</td></tr>
+    <tr><td>Per-lane batch button (never global; disabled on mixed compliance)</td><td><a href="#el-batch">Batch panel</a></td><td class="ok">✓</td></tr>
+    <tr><td>Undo toast (5-min, re-queues, hard-deadline exception)</td><td><a href="#el-undo">Undo toast</a></td><td class="ok">✓</td></tr>
+    <tr><td>Delegation panel (per-lane grants, provenance, no self-approval)</td><td><a href="#el-delegation">Delegation</a></td><td class="ok">✓</td></tr>
+    <tr><td>History view (search, filters, before/after diffs)</td><td><a href="#el-history">History</a></td><td class="ok">✓</td></tr>
+    <tr><td>Volume-guard banner (flood → promotion proposal)</td><td><a href="#el-volume-guard">Volume guard</a></td><td class="ok">✓</td></tr>
+    <tr><td>Empty state ("Nothing needs your sign-off ✓" + next generation)</td><td><a href="#el-empty">States strip</a></td><td class="ok">✓</td></tr>
+    <tr><td>Expired-item handling (safe default; History EXPIRED row + re-request)</td><td><a href="#el-history">History expired row</a> + states note</td><td class="ok">✓</td></tr>
+  </table>
+  <div style="border:1.5px solid var(--good); background:#f2f8f4; border-radius:10px; padding:12px 16px; margin:12px 0 0; font-weight:700; color:var(--good)">22 of 22 spec elements rendered ✓ <span style="font-weight:400; color:var(--mut); font-size:12.5px">— plus prompt-required regions beyond the inventory: loading/degraded states strip, delegate-view + mixed-compliance notes, overflow line, deep-link entry-points strip, reject modal, mobile swipe-card strip; plus the 6 Master-Brain additions in the gaps note above.</span></div>
+
+  <!-- ============ (4) FULL SPEC AS HTML ============ -->
+  <div class="specdoc">
+    <h1 style="font-size:24px; margin:40px 0 6px">Spec — 13 · Global Approvals Inbox</h1>
+    <p><b>Purpose</b> The single surface where every automation across all modules terminates for human sign-off. One card per logical unit of work (One-Approval UX, Wattson Master Brain Part 8 — a hard architectural principle). Nothing consequential ships anywhere in PropertyIQ without passing through here; expired items default to NOT shipping (fail-closed).</p>
+    <p><b>Primary users</b> Agent/owner (Graeham-class user). Secondarily: delegated approvers — a TC or assistant granted per-lane approval rights (never global; a team member's Wattson instance can never approve its own REVIEW_REQUIRED output — Part 3).</p>
+    <p><b>Entry points</b> Persistent ✓ icon in the top bar of every agent screen; badge = pending count. Deep links from: Command Center content queue, Monday Briefing backlog actions, PropReach campaign wizard ("Publish → Approvals"), Funnel builder (17), SEO console deploy flows (20), Distribution Board nominations, Prospecting drafts, Voice Ops outbound queue. The single interrupt-tier push when an unseen item is about to expire. Mobile: first-class bottom-nav destination ("approvals are the #1 phone task").</p>
+    <p><b>Exit points</b> Approve → dispatch via owning module; mints ContentLock for content items; ledger events; card → History. Edit → element-specific edit modal (content) or inline editor (messages) → new version → NEW compliance pass → NEW lock → re-enters as v(n+1). Reject w/ reason → halt group, log, notify owner (on_reject). Defer → re-queue; expiry clock keeps running. View diff (SEO) → overlay → Deploy or back. History link → decision log. Delegation link → delegation panel. Emergency kill switch = Settings (21), not duplicated here.</p>
+
+    <h2>Layout</h2>
+    <p>Desktop: <b>Header (sitehead)</b> — avatar · "Approvals" · summary "N pending · oldest expires in Xh" · lane chips All / Content / Messages / Spend / SEO (+ Gifts, Postcards, Video as counts require; chips show live counts) · right nav History, Delegation. <b>Main: single-column card stack</b>, oldest-expiry-first (SLA rule). The highest-stakes bundle card renders emphasized (brand border + brand-soft background). Below the stack: an overflow line when &gt;5 card types; the draft's depth-spec info panel is design documentation only — not shipped UI. No left/right rails inside the inbox, no footer. Sticky: header with lane chips pins on scroll.</p>
+    <p>Mobile (375px): the entire inbox = swipe cards — right approve, left reject (with reason sheet), down defer; tap expands the full card. Lane chips scroll horizontally under the header. Batch buttons collapse into a per-lane action sheet.</p>
+
+    <h2>Element inventory</h2>
+    <div style="overflow-x:auto">
+    <table class="dtable">
+      <tr><th>Element</th><th>What it shows/does</th><th>Data source</th><th>Interactions</th><th>Spec source</th></tr>
+      <tr><td>✓ top-bar icon + badge</td><td>Pending approval count, app-wide</td><td>Platform · ApprovalRecord count where status=PENDING</td><td>Click → this screen</td><td>Matrix gap "Global Approvals Inbox"; draft note</td></tr>
+      <tr><td>Header summary</td><td>"7 pending · oldest expires in 9h"</td><td>ApprovalRecord aggregate (min expires_at)</td><td>none</td><td>Draft Screen 13</td></tr>
+      <tr><td>Lane filter chips</td><td>All / Content / Messages / Spend / SEO / Gifts / Postcards / Video, live counts</td><td>ApprovalRecord.lane</td><td>Click filters stack; state persists per session</td><td>Draft; matrix grouping list</td></tr>
+      <tr><td>One-approval bundle card</td><td>Logical unit of work: title, module badge, ContentLock version badge, compliance ✓/✗ chip, expiry countdown</td><td>Wattson approval_group bundle {group_id, outputs[], recommended_action, correlation_id, expires_at (default 48h)} — Part 8</td><td>Expand; per-element preview click</td><td>Wattson MB Part 8</td></tr>
+      <tr><td>Bundle quad preview</td><td>Video (0:15) · Landing page (URL + gate) · Lead magnet PDF (title, pages) · DM flow (keyword + follow-up)</td><td>PropCast content bundle assets</td><td>Click quadrant → element edit modal</td><td>PropCast one-approval screen (matrix P0); draft</td></tr>
+      <tr><td>"Approve all N → ships"</td><td>Approves the whole bundle atomically; on_approve executes all outputs atomically</td><td>Wattson Part 8 on_approve</td><td>Click → 5-min undo window → dispatch</td><td>Part 8; draft depth spec (undo)</td></tr>
+      <tr><td>"Edit an element"</td><td>Opens the clicked element's edit modal</td><td>Owning module editor</td><td>Any edit → new version → new compliance pass → new lock</td><td>Draft inline rule; matrix correction #10</td></tr>
+      <tr><td>"Reject w/ reason"</td><td>Halts group; reason required</td><td>Wattson Part 8 on_reject</td><td>Modal with reason textarea; logs + notifies owner</td><td>Part 8</td></tr>
+      <tr><td>Message card</td><td>Outbound SMS/email/DM with full text, recipient, provenance badge ("requested by Wattson"), consent status line ("consent ✓ SMS · quiet-hours ok")</td><td>PropFlow/Wattson Bucket-2 draft; ComplianceProvider.check_outbound_contact()</td><td>Send / Edit / Reject / Defer</td><td>Wattson C22 two-bucket model; matrix provenance gap; draft</td></tr>
+      <tr><td>Spend card</td><td>Budget change: amount, campaign, rationale with source facts, envelope remaining</td><td>PropReach recommendation + spend envelope config (Part 8 / C15)</td><td>Approve / Defer / Reject</td><td>Part 8 spend envelope; matrix PropReach spend gap</td></tr>
+      <tr><td>SEO deploy card</td><td>OTTO change set summary, freeze-flag note, "applies through template variable slots only"</td><td>SeoProvider otto_preview_deployment payload</td><td>View diff / Deploy / Reject</td><td>Wattson MB Part 6</td></tr>
+      <tr><td>Gift card</td><td>Description, amount vs gift_budget_cap</td><td>GiftProvider record; gift_approval_mode default REVIEW_REQUIRED</td><td>Approve / Reject</td><td>Wattson C22/B9.5; draft overflow line. [BEST GUESS] cap is owner-configured, no default invented</td></tr>
+      <tr><td>Postcard proof card</td><td>Farm postcard proof image + drop date</td><td>Direct Mail (farming-postcard pipeline)</td><td>Approve proof / Edit / Reject</td><td>Draft overflow line; skills-library matrix item</td></tr>
+      <tr><td>Milestone video card</td><td>Personalized video preview + gate checklist (consent, lead_score≥50, high-intent action, AI disclosure frame-1)</td><td>PropFlow personalized video record</td><td>Approve / Reject; card blocked if any gate fails</td><td>Matrix correction #3</td></tr>
+      <tr><td>Expiry countdown chip</td><td>Time remaining; amber at 12h, red at 3h</td><td>ApprovalRecord.expires_at</td><td>none; drives sort</td><td>Draft depth spec [BEST GUESS thresholds]</td></tr>
+      <tr><td>Per-lane batch button</td><td>"Approve all 3 compliant content items" — per lane only, never global; disabled on mixed compliance</td><td>Lane aggregate</td><td>Click → batch approve → single undo window</td><td>Draft depth spec</td></tr>
+      <tr><td>Undo toast</td><td>5-minute undo before dispatch (except hard-deadline items); undo re-queues, never deletes</td><td>Dispatch scheduler</td><td>Undo → card returns to queue</td><td>Draft depth spec [BEST GUESS duration]</td></tr>
+      <tr><td>Delegation panel</td><td>"TC: docs, scheduling · Assistant: content" chips; grant/revoke per lane</td><td>Admin Console delegation records (Part 3)</td><td>Add/remove grants; delegated approvals log who + provenance</td><td>Wattson MB Part 3; draft depth spec</td></tr>
+      <tr><td>History view</td><td>Searchable decisions log w/ before/after diffs ("the E&amp;O answer file")</td><td>Immutable audit log (Admin Console)</td><td>Search, filter, open diff</td><td>Draft depth spec; audit-log requirement</td></tr>
+      <tr><td>Volume-guard banner</td><td>Playbook floods queue (&gt;10/day × 3d) → Wattson proposes promoting reliable steps</td><td>Wattson promotion stats (Part 8 criteria)</td><td>"Review promotion" → Settings 21 autonomy matrix</td><td>Draft depth spec [BEST GUESS trigger]; MB Part 8 criteria</td></tr>
+      <tr><td>Empty state</td><td>"Nothing needs your sign-off ✓" + next generation time</td><td>Scheduler</td><td>none</td><td>Draft depth spec</td></tr>
+      <tr><td>Expired-item handling</td><td>Expired = safe default: nothing ships; → History as EXPIRED</td><td>ApprovalRecord lifecycle</td><td>Re-request generation from History</td><td>Matrix gap (48h expiry); draft note</td></tr>
+    </table>
+    </div>
+
+    <h2>States</h2>
+    <ul>
+      <li><b>Default</b>: card stack oldest-expiry-first; lane chips with counts.</li>
+      <li><b>Loading</b>: skeleton cards (3); header counts render last (no fabricated counts).</li>
+      <li><b>Empty</b>: "Nothing needs your sign-off ✓" + next generation time.</li>
+      <li><b>Error/degraded (fail-closed)</b>: ApprovalRecord service unreachable → full-screen degraded notice, all approve buttons disabled ("Can't verify queue state — nothing will ship until this recovers"). ComplianceProvider down → cards show compliance UNKNOWN, Approve disabled (compliance must pass before send — V0 §14; nothing improvises).</li>
+      <li><b>Permission-limited (delegate view)</b>: only granted lanes visible (others hidden, not greyed); approvals stamped with identity + provenance; no Delegation panel.</li>
+      <li><b>Mixed-compliance lane</b>: batch button disabled with reason tooltip.</li>
+      <li><b>Mobile</b>: swipe-card mode; reject ALWAYS requires the reason sheet.</li>
+    </ul>
+
+    <h2>Data fields</h2>
+    <p><b>group_id, correlation_id</b> string ids (Wattson bundle, Part 8) · <b>lane</b> enum CONTENT · CAMPAIGN · SPEND · MESSAGE · GIFT · SEO_DEPLOY · POSTCARD · VIDEO [BEST GUESS names] · <b>outputs[]</b> step_output payloads w/ previews (owning module) · <b>recommended_action</b> string · <b>expires_at</b> timestamp, default now+48h (Part 8) · <b>status</b> PENDING · APPROVED · REJECTED · DEFERRED · EXPIRED · UNDONE [BEST GUESS enum] · <b>compliance_result</b> pass / block / needs_review + reason (ComplianceProvider) · <b>content_lock_version</b> "ContentLock v2" (PropCast lock registry) · <b>provenance</b> requested_by (Wattson / playbook id / user), approved_by, approved_at (audit log) · <b>consent snapshot</b> (message cards) channel consent + DNC + quiet-hours (check_outbound_contact) · <b>envelope remaining</b> (spend cards) currency, from envelope config · <b>rejection_reason</b> required text.</p>
+
+    <h2>Rules &amp; compliance</h2>
+    <ul>
+      <li><b>Fail-closed everywhere:</b> expired = nothing ships; compliance-unknown = approve disabled; missing approved copy = BLOCKED, never invented.</li>
+      <li><b>Never-Autonomous List</b> items (any client-facing comm, Reddit posts, GBP review replies, voice price/commitment, cloned voice w/o VoiceIdentity, testimonial w/o ReleaseRecord, spend above cap, contract terms, MLS submission, financial categorization) ALWAYS arrive here — no promotion path exists (MB Part 8).</li>
+      <li>Approve = atomic execution of the bundle; any post-approval edit = new version → new compliance pass → new ContentLock (two governed decisions total: Monday backlog approval + per-piece version approval).</li>
+      <li>Delegation is per-lane, never global; delegated approvals log identity; self-approval by the producing instance is forbidden (Part 3).</li>
+      <li>Sensitive-topic items never appear here — they route to the Outbox/Review Queue (Tab 24) as human handoffs with automation suspended (C1/B1.8).</li>
+      <li>Fair-housing/compliance blocks show the specific rule and a compliant alternative (Wattson refusal pattern).</li>
+      <li>One interrupt-tier push only: expiring-unseen items (all else batches to the morning brief — Tab 21 notification model).</li>
+    </ul>
+
+    <h2>Cross-links</h2>
+    <p><b>In:</b> every module's terminal automation step; top-bar icon on all ~26 screens; Monday Briefing (12) backlog approval; Funnel builder publish; SEO console deploys; Distribution Board nominations; Prospecting drafts; Voice Ops outbound queue. <b>Out:</b> Distribution Board (18, post-approval shipping), Settings 21 (delegation, autonomy promotion, spend envelope), Outbox 24 (client-facing sends a human forwards), owning-module detail screens (edit modals). <b>Ledger events emitted:</b> APPROVAL_GRANTED / APPROVAL_REJECTED / APPROVAL_EXPIRED [BEST GUESS names], SEO_PAGE_PUBLISHED (with approval_id, by owning module), NOTIFICATION_QUEUED/SENT, ContentLock mint events. <b>Consumes:</b> approval_group completion events, compliance results, promotion-stat aggregates.</p>
+
+    <h2>Open decisions</h2>
+    <ul>
+      <li>[DECIDE] Amber/red expiry thresholds (12h/3h) and undo-window length (5 min) — interim design keeps draft values; not Master Brain numbers.</li>
+      <li>[DECIDE] Volume-guard trigger (&gt;10 items/day × 3 days) — interim keeps the draft heuristic; promotion criteria themselves are locked by MB Part 8.</li>
+      <li>[DECIDE] Lane enum finalization (does POSTCARD fold into CONTENT?) — interim: separate lanes per matrix grouping list.</li>
+      <li>[DECIDE] Whether History lives here or in Admin Console audit browser — interim: lightweight History here, deep-links into the immutable log for full audit.</li>
+    </ul>
+    <p class="anno" style="margin-top:20px">Wireframe fidelity — colors are placeholders from the locked PropFlow design language. All names/numbers/copy are realistic fake data. Agent identity: Graeham Watts, Intero Real Estate, DRE# 01466876 (from shared-references/identity.json — never hardcode elsewhere; anything on the identity.json blocklist hard-fails the brand tripwire).</p>
+  </div>
+</div>

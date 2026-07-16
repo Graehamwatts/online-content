@@ -1,0 +1,552 @@
+<title>PropertyIQ · Screen 32 — Video Studio</title>
+<link href="https://api.fontshare.com/v2/css?f[]=technor@500,600,700&display=swap" rel="stylesheet">
+<link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<style>
+  /* Type system — Technor for display, Inter for UI. */
+  :root{ --font-display:'Technor', Inter, -apple-system, 'Segoe UI', sans-serif; --font-ui: Inter, -apple-system, 'Segoe UI', Roboto, sans-serif; }
+</style>
+<style>
+  /* Palette v4 — PropFlow design language: neutral ink UI, ink-as-accent, color reserved for data. (extracted verbatim from propsearch-design-draft.html) */
+  :root, :root[data-theme="dark"], :root[data-theme="light"]{
+    --ink:#23282f; --paper:#fbfaf8; --surface:#f1efe9; --line:#e2dfd6;
+    --mut:#6b7076; --soft:#9b9f9f;
+    --brand:#2e6b53; --brand-ink:#ffffff; --brand-soft:#eaf1ec; --brand-deep:#1e4c3a;
+    --signal:#b07a2e;
+    --good:#2e7d4f; --warn:#a8630a; --crit:#b3372f;
+    --r:10px;
+  }
+  .intel .score, .mintel{ color:var(--brand-deep) }
+  .intel{ border-left:3px solid var(--brand) }
+  h1{ letter-spacing:-.02em }
+  .stat b{ letter-spacing:-.01em }
+  body[data-agent="watts"]{ --brand:#2e6b53; --brand-soft:#eaf1ec; --brand-deep:#1e4c3a; }
+
+  *{box-sizing:border-box; margin:0}
+  body{font:15px/1.55 var(--font-ui); color:var(--ink); background:var(--paper); padding-bottom:80px}
+  h1,h2,h3{line-height:1.15; text-wrap:balance; font-family:var(--font-display); font-weight:600}
+  h1{letter-spacing:-.01em}
+  .site{box-shadow:0 1px 2px rgba(20,24,32,.04), 0 8px 32px rgba(20,24,32,.06)}
+  .stat{box-shadow:0 1px 2px rgba(20,24,32,.03); transition:box-shadow .15s, transform .15s}
+  .stat:hover{box-shadow:0 4px 14px rgba(20,24,32,.08)}
+  .chip{transition:all .12s}
+  button{font-family:var(--font-ui)}
+  .num{font-variant-numeric:tabular-nums}
+  .wrap{max-width:1180px; margin:0 auto; padding:0 20px}
+
+  .bar{position:sticky; top:0; z-index:50; background:var(--paper); border-bottom:1px solid var(--line); padding:10px 0; backdrop-filter:blur(8px)}
+  .bar .wrap{display:flex; flex-wrap:wrap; gap:10px; align-items:center}
+  .bar .ttl{font-weight:700; margin-right:auto}
+  .bar .ttl small{display:block; font-weight:400; color:var(--mut)}
+  .bar a{color:var(--brand); font-size:13px; text-decoration:none}
+
+  .note{background:var(--surface); border:1px solid var(--line); border-radius:var(--r); padding:14px 16px; margin:0 0 22px; font-size:13.5px; color:var(--mut)}
+  .note b{color:var(--ink)}
+
+  .site{border:1px solid var(--line); border-radius:14px; overflow:hidden; background:var(--paper)}
+  .sitehead{display:flex; align-items:center; gap:14px; padding:14px 22px; border-bottom:1px solid var(--line)}
+  .avatar{width:38px; height:38px; border-radius:50%; background:var(--brand); color:var(--brand-ink); display:grid; place-items:center; font-weight:700}
+  .sitehead .who b{display:block}
+  .sitehead .who small{color:var(--mut)}
+  .sitehead nav{margin-left:auto; display:flex; gap:18px; font-size:13.5px; color:var(--mut)}
+  .sitehead nav a{color:inherit; text-decoration:none}
+  .sitehead nav a:hover{color:var(--brand)}
+
+  .chip{display:inline-flex; align-items:center; gap:6px; font-size:12.5px; font-weight:500; border:1px solid var(--line); border-radius:99px; padding:6px 12px; background:var(--paper); cursor:pointer; color:var(--ink)}
+  .chip:hover{border-color:var(--brand)}
+  .chip.on{background:var(--brand); border-color:var(--brand); color:var(--brand-ink); font-weight:600; box-shadow:0 2px 8px color-mix(in srgb, var(--brand) 30%, transparent)}
+
+  .statrow{display:grid; grid-template-columns:repeat(4,1fr); gap:10px}
+  .stat{background:var(--surface); border:1px solid var(--line); border-radius:var(--r); padding:12px}
+  .stat small{display:block; color:var(--mut); font-size:11.5px; text-transform:uppercase; letter-spacing:.05em}
+  .stat b{font-size:18px}
+  .stat .up{color:var(--good); font-size:12px}
+
+  .bdg{font-size:11.5px; border-radius:6px; padding:3px 8px; background:var(--surface); border:1px solid var(--line); color:var(--mut)}
+  .bdg.good{color:var(--good); border-color:color-mix(in srgb,var(--good) 30%,var(--line))}
+  .bdg.warn{color:var(--warn); border-color:color-mix(in srgb,var(--warn) 30%,var(--line))}
+  .bdg.crit{color:var(--crit); border-color:color-mix(in srgb,var(--crit) 30%,var(--line))}
+
+  .dtable{width:100%; border-collapse:collapse; font-size:13px}
+  .dtable td,.dtable th{border-bottom:1px solid var(--line); padding:8px 10px; text-align:left}
+  .dtable th{font-size:11px; text-transform:uppercase; letter-spacing:.05em; color:var(--soft)}
+
+  @media (max-width:860px){ .statrow{grid-template-columns:repeat(2,1fr)} .maingrid{grid-template-columns:1fr !important} .console{grid-template-columns:1fr !important} .rail{display:none !important} }
+  @media (prefers-reduced-motion: reduce){ *{transition:none!important} }
+
+  /* ---- page-specific additions (same design language) ---- */
+  .anno{font-size:11px; color:var(--soft)}
+  .cardbox{border:1px solid var(--line); border-radius:10px; padding:11px 14px; font-size:12.5px; background:var(--paper)}
+  .btn-ink{background:var(--ink); color:#fff; border:0; border-radius:7px; padding:7px 12px; font-size:11.5px; cursor:pointer; font-weight:600}
+  .btn-ghost{background:var(--paper); border:1px solid var(--line); border-radius:7px; padding:7px 12px; font-size:11.5px; cursor:pointer}
+  .sechead{font-size:14px; font-weight:700; margin:0 0 8px; font-family:var(--font-display)}
+  .cov td.ok{color:var(--good); font-weight:700}
+  .specdoc h2{font-size:18px; margin:26px 0 8px}
+  .specdoc h3{font-size:15px; margin:18px 0 6px}
+  .specdoc p, .specdoc li{font-size:13.5px; color:var(--mut)}
+  .specdoc b{color:var(--ink)}
+  .specdoc table{margin:8px 0}
+  .thumb{background:repeating-linear-gradient(135deg, var(--surface), var(--surface) 6px, var(--line) 6px, var(--line) 8px); border:1px solid var(--line); border-radius:6px; display:grid; place-items:center; color:var(--soft); font-size:10px}
+  .lane{display:inline-block; width:10px; height:10px; border-radius:3px; margin-right:4px; vertical-align:-1px}
+  .meterbar{height:14px; border-radius:7px; overflow:hidden; display:flex; border:1px solid var(--line)}
+</style>
+
+<!-- ============ (1) slim header ============ -->
+<div class="bar">
+  <div class="wrap">
+    <div class="ttl">PropertyIQ · Screen 32 — Video Studio <small>Full-density per-screen mock · wireframe fidelity · dev-facing annotations in gray</small></div>
+    <a href="../wireframe.html">← All screens</a>
+  </div>
+</div>
+
+<!-- ============ (2) THE FULL MOCK ============ -->
+<div class="wrap" style="padding-top:24px">
+  <div class="note"><b>Screen 32 — Video Studio + Production Asset Registry.</b> The machine room behind the shoot pipeline and content engine: render job queues (HeyGen-class avatar / Remotion alpha / Higgsfield-class b-roll), the clip lifecycle from PLANNED to published, the file-match reviewer that enforces system-assigned shot-ID naming ("humans never name files"), the avatar/voice asset library with consent records, the 90/10 authenticity meter, QC holds (incl. AI-disclosure manual holds), and the swipe-file/hook library. Everything here executes AFTER ContentLock inside the governed run — render issues fail render QA but can never alter locked copy. Primary users: agent, editor + videographer (scoped lanes), marketing coordinator, internal QC.</div>
+
+  <div class="site" data-agent="watts">
+    <!-- header: rendering count, file-match count, published stat + nav (spec Layout) -->
+    <div class="sitehead">
+      <div class="avatar">GW</div>
+      <div class="who"><b>Video studio</b><small class="num">3 rendering · 2 need file-match review · 14 published this month</small></div>
+      <div style="display:inline-flex; border:1px solid var(--line); border-radius:99px; overflow:hidden; font-size:12px; font-weight:600; margin-left:10px">
+        <span style="padding:6px 14px; background:var(--ink); color:#fff">▶ Queues</span>
+        <span style="padding:6px 14px; color:var(--mut); cursor:pointer">🎭 Avatar looks</span>
+        <span style="padding:6px 14px; color:var(--mut); cursor:pointer">🪝 Swipe file</span>
+      </div>
+      <nav><a href="#">Search (⌘K)</a><a href="#">🔔 4</a></nav>
+    </div>
+
+    <div class="console" style="display:grid; grid-template-columns:172px 1fr">
+      <!-- persistent agent-console left rail (Screen 9 chrome) -->
+      <div class="rail" style="border-right:1px solid var(--line); padding:14px 10px; font-size:12.5px; display:flex; flex-direction:column; gap:2px; background:var(--surface)">
+        <a href="#" style="text-decoration:none; color:var(--ink); border-radius:8px; padding:8px 10px">☰ Today</a>
+        <a href="#" style="text-decoration:none; color:var(--ink); border-radius:8px; padding:8px 10px">🗺 Farm map</a>
+        <a href="#" style="text-decoration:none; color:var(--ink); border-radius:8px; padding:8px 10px">🤝 Past clients</a>
+        <a href="#" style="text-decoration:none; color:var(--ink); border-radius:8px; padding:8px 10px">👤 Leads & clients</a>
+        <a href="#" style="text-decoration:none; color:var(--ink); border-radius:8px; padding:8px 10px">💬 Comms <span class="bdg" style="font-size:9.5px">6</span></a>
+        <a href="#" style="text-decoration:none; color:var(--ink); border-radius:8px; padding:8px 10px">📋 Transactions <span class="bdg" style="font-size:9.5px">2</span></a>
+        <a href="#" style="text-decoration:none; color:#fff; background:var(--ink); border-radius:8px; padding:8px 10px; font-weight:600">🎬 Video studio <span class="bdg" style="font-size:9.5px; background:var(--paper)">2</span></a>
+        <a href="#" style="text-decoration:none; color:var(--ink); border-radius:8px; padding:8px 10px">📣 Ads & funnels</a>
+        <a href="#" style="text-decoration:none; color:var(--ink); border-radius:8px; padding:8px 10px">⚙ Playbooks</a>
+        <a href="#" style="text-decoration:none; color:var(--ink); border-radius:8px; padding:8px 10px">📈 Reports</a>
+        <div style="margin-top:auto; padding-top:10px; border-top:1px solid var(--line)">
+          <a href="#" style="text-decoration:none; color:var(--ink); border-radius:8px; padding:8px 10px; display:block">⚙ Settings</a>
+          <div class="anno" style="padding:6px 10px">Global chrome: persistent agent-console rail (Screen 9 pattern). Consumer pages never show it. Videographer/editor logins see a reduced rail (own lane only — see permission strip below).</div>
+        </div>
+      </div>
+
+      <div>
+        <!-- KPI row -->
+        <div id="el-published" style="padding:14px 22px 0">
+          <div class="statrow" style="grid-template-columns:repeat(6,1fr)">
+            <div class="stat"><small>Rendering now</small><b class="num">3</b> <span class="anno">2 avatar · 1 alpha</span></div>
+            <div class="stat" style="border-left:3px solid var(--warn)"><small>File-match</small><b class="num">2</b> <span class="anno">need review</span></div>
+            <div class="stat" style="border-left:3px solid var(--crit)"><small>QC holds</small><b class="num">3</b> <span class="anno">1 disclosure hold</span></div>
+            <div class="stat"><small>Failed (24h)</small><b class="num">1</b> <span class="anno">retry w/ idempotency key</span></div>
+            <div class="stat"><small>Published this mo.</small><b class="num">14</b> <span class="up">click → Distribution (19)</span></div>
+            <div class="stat"><small>90/10 ratio</small><b class="num">84:16</b> <span class="anno">inside policy</span></div>
+          </div>
+          <div class="anno" style="margin-top:4px">"Published" = READY_FOR_PROPREACH → published pieces counted from the Event Ledger. Every job on this screen carries content_lock_id — a job without one is rejected at creation (Part 5 hard rule). Unknown values render "—", never fabricated.</div>
+        </div>
+
+        <!-- kill-switch / provider banner (contextual, degraded state visible) -->
+        <div id="el-degraded" style="padding:12px 22px 0">
+          <div class="cardbox" style="border-color:var(--warn); background:#fdf6ee; display:flex; gap:10px; align-items:center; flex-wrap:wrap">
+            <span style="color:var(--warn)">⚠</span>
+            <div style="flex:1; min-width:280px"><b>Provider status: Higgsfield-class b-roll API degraded (elevated latency since 9:41 AM)</b>
+              <div style="color:var(--mut); font-size:12px">2 b-roll jobs held QUEUED — no silent retry storms: typed BLOCKED reason <code>PROVIDER_DEGRADED</code>, idempotency keys on every retry, per-provider rate limits + backoff enforced by the Redis render queue (bounded workers).</div>
+            </div>
+            <button class="btn-ghost">Provider status page</button>
+            <div class="anno" style="width:100%">Kill switches / cost circuit breakers can pause this whole layer — banner then shows scope (global / tenant / agent / listing_content / mode / asset_revoked / compliance_incident_hold) + reason, and resumes only by explicit re-enable. Fail-closed: jobs never auto-drop, they wait.</div>
+          </div>
+        </div>
+
+        <!-- main two-column -->
+        <div class="maingrid" style="padding:14px 22px; display:grid; grid-template-columns:1.3fr 1fr; gap:14px">
+          <!-- LEFT -->
+          <div style="display:grid; gap:12px; align-content:start">
+
+            <!-- render queue -->
+            <div id="el-render-queue">
+              <div class="sechead">Render queue</div>
+              <div style="display:flex; gap:5px; flex-wrap:wrap; margin-bottom:8px">
+                <button class="chip on" style="font-size:10.5px">All engines</button><button class="chip" style="font-size:10.5px">Avatar</button><button class="chip" style="font-size:10.5px">Remotion alpha</button><button class="chip" style="font-size:10.5px">B-roll</button><button class="chip" style="font-size:10.5px">Personalized</button>
+              </div>
+              <div style="overflow-x:auto">
+              <table class="dtable" style="font-size:11.5px">
+                <tr><th>Job</th><th>Engine</th><th>State</th><th>Elapsed</th><th>Artifact</th><th></th></tr>
+                <tr><td><b>"Loan cleared" milestone video</b><div class="anno num">RJ-4182 · lock CL-9931</div></td><td>HeyGen-class avatar</td><td><span class="bdg warn">RUNNING</span></td><td class="num">2m 14s</td><td class="anno">—</td><td><button class="btn-ghost">Logs</button></td></tr>
+                <tr><td><b>Beech teaser captions (alpha overlay)</b><div class="anno num">RJ-4183 · lock CL-9928</div></td><td>Remotion alpha</td><td><span class="bdg">QUEUED</span></td><td class="num">—</td><td class="anno">—</td><td><button class="btn-ghost">Open</button></td></tr>
+                <tr><td><b>Neighborhood b-roll ×2 (Redwood City)</b><div class="anno num">RJ-4179 · lock CL-9925</div></td><td>Higgsfield-class b-roll</td><td><span class="bdg good">READY ✓</span></td><td class="num">11m 03s</td><td><a href="#" style="color:var(--brand)">2 clips</a></td><td><button class="btn-ghost">Open</button></td></tr>
+                <tr><td><b>Personalized: Okafor equity video</b><div class="anno num">RJ-4184 · lock CL-9932 · PropFlow-triggered</div></td><td>BHuman adapter</td><td><span class="bdg warn">RUNNING</span></td><td class="num">94s <span style="color:var(--crit)">/ 120s fail-safe</span></td><td class="anno">—</td><td><button class="btn-ghost">Logs</button></td></tr>
+                <tr><td><b>ADU explainer VO + assembly</b><div class="anno num">RJ-4177 · lock CL-9919</div></td><td>HeyGen-class avatar</td><td><span class="bdg crit">FAILED</span></td><td class="num">—</td><td class="anno">error: vendor 502</td><td><button class="btn-ink">Retry</button> <button class="btn-ghost">Cancel</button></td></tr>
+              </table>
+              </div>
+              <div class="anno" style="margin-top:4px">Jobs = render child activities on CreativeProductionRun; Redis render queue (bounded workers, idempotency keys, backoff, per-provider rate limits). State enum verbatim: QUEUED / RUNNING / READY / FAILED. Retry reuses the idempotency key — never a duplicate render. Personalized (PropFlow-triggered) jobs share this queue behind the "Personalized" filter chip [DECIDE — interim]; at 120s not-READY, PropFlow delivers the static fallback and this layer logs FALLBACK (mode STATIC | GENERATED | FALLBACK). Every job requires content_lock_id; render failures fail QA without mutating the lock.</div>
+            </div>
+
+            <!-- remotion detail + avatar engine log -->
+            <div style="display:grid; grid-template-columns:1fr 1fr; gap:10px">
+              <div id="el-remotion" class="cardbox">
+                <b>Remotion render detail — RJ-4183</b>
+                <div style="color:var(--mut); font-size:11.5px; margin-top:4px" class="num">GitHub-Actions run: <a href="#" style="color:var(--brand)">workflow #1841 → logs</a><br>Output: <b style="color:var(--ink)">PNG-sequence (primary)</b> · ProRes 4444 · WebM VP9 alpha<br>manifest.json: 900 frames · 30.0s · 1920×1080 · git SHA <code>a3f19c2</code></div>
+                <div style="display:flex; gap:6px; margin-top:6px"><button class="btn-ghost">Open workflow run</button><button class="btn-ghost">Download artifact</button></div>
+                <div class="anno" style="margin-top:4px">remotion-alpha-video-render playbook: commit project via GitHub App → repository_dispatch → poll → download artifact. True alpha (no chroma-key), 3D extruded text via react-three-fiber. Reproducible: every render has a run URL + logs.</div>
+              </div>
+              <div id="el-engine-log" class="cardbox">
+                <b>Avatar engine log (read-only per job)</b>
+                <table class="dtable" style="font-size:11px; margin-top:4px">
+                  <tr><th>Job</th><th>Requested</th><th>Rendered</th></tr>
+                  <tr><td class="num">RJ-4182</td><td>Premium engine (explicit)</td><td><span class="bdg good">Premium ✓</span></td></tr>
+                  <tr><td class="num">RJ-4177</td><td>Premium engine (explicit)</td><td><span class="bdg warn">Fell back: prev-gen (look "car" unsupported)</span></td></tr>
+                </table>
+                <div class="anno" style="margin-top:4px">Engine selection rule (Part 11): always request the premium engine explicitly via the render API's engine parameter; vendor may auto-fall back if the look doesn't support it. Which engine ACTUALLY rendered is logged from the render API response — kills the render-then-re-render loop.</div>
+              </div>
+            </div>
+
+            <!-- file-match review (warning-styled) -->
+            <div id="el-file-match">
+              <div class="sechead">File-match review (2) — the only human step in naming</div>
+              <div style="display:grid; gap:8px">
+                <div class="cardbox" style="border-color:var(--warn); background:#fdf6ee; display:flex; gap:12px; align-items:center; flex-wrap:wrap">
+                  <div class="thumb" style="width:86px; height:52px">IMG_4471.mov</div>
+                  <div style="flex:1; min-width:240px"><b>"IMG_4471.mov" → VID-BEECH-KIT-02</b> <span class="bdg warn num">87% visual match</span>
+                    <div style="color:var(--mut); font-size:11.5px; margin-top:3px">Videographer upload arrived without a shot-ID. Best guess: kitchen pan, 118 Beech St (shot spec: "slow lateral, island foreground"). Side-by-side compare: thumbnail vs. candidate shot spec.</div>
+                  </div>
+                  <div style="display:flex; gap:6px; flex-direction:column"><button class="btn-ink">✓ Confirm match</button><button class="btn-ghost">Pick other clip_id ▾</button><button class="btn-ghost">Mark as new clip</button></div>
+                </div>
+                <div class="cardbox" style="border-color:var(--warn); background:#fdf6ee; display:flex; gap:12px; align-items:center; flex-wrap:wrap">
+                  <div class="thumb" style="width:86px; height:52px">DJI_0092.mp4</div>
+                  <div style="flex:1; min-width:240px"><b>"DJI_0092.mp4" → VID-BEECH-EXT-05</b> <span class="bdg num">62% visual match — low confidence</span>
+                    <div style="color:var(--mut); font-size:11.5px; margin-top:3px">Drone orbit; two exterior candidates score close (EXT-05 orbit / EXT-06 reveal). Low-confidence matches are never auto-applied.</div>
+                  </div>
+                  <div style="display:flex; gap:6px; flex-direction:column"><button class="btn-ink">✓ Confirm match</button><button class="btn-ghost">Pick other clip_id ▾</button><button class="btn-ghost">Mark as new clip</button></div>
+                </div>
+              </div>
+              <div class="anno" style="margin-top:4px">Production Asset Registry (platform service, Spec Part F). Contract: humans never name files — clip_ids are system-assigned at call-sheet time; uploads without an ID get a best-guess match that a human confirms. Match record: {file_name, candidate clip_id, match_confidence %, decided_by}. The naming contract is what keeps auto-assembly trustworthy. <b>Fail-closed:</b> registry unreachable → this panel disables with "matching unavailable — uploads held"; uploads are never auto-guessed without the reviewer.</div>
+            </div>
+
+            <!-- clip lifecycle board -->
+            <div id="el-lifecycle">
+              <div class="sechead">Clip lifecycle — 118 Beech St shoot</div>
+              <div class="cardbox">
+                <div style="display:flex; gap:8px; align-items:center; flex-wrap:wrap">
+                  <span class="bdg num">Rollup: 23 planned → 21 uploaded → 19 matched</span>
+                  <span class="anno">filter:</span><button class="chip on" style="font-size:10px">Beech shoot</button><button class="chip" style="font-size:10px">Oakwood shoot</button><button class="chip" style="font-size:10px">By video</button>
+                </div>
+                <table class="dtable" style="font-size:11px; margin-top:8px">
+                  <tr><th>clip_id</th><th>Shot</th><th>Route</th><th>Status</th></tr>
+                  <tr><td class="num">VID-BEECH-KIT-01</td><td>Kitchen wide</td><td><span class="bdg">[FILM]</span></td><td><span class="bdg good">MATCHED</span></td></tr>
+                  <tr><td class="num">VID-BEECH-KIT-02</td><td>Kitchen pan</td><td><span class="bdg">[FILM]</span></td><td><span class="bdg warn">INGESTED — in file-match ↑</span></td></tr>
+                  <tr><td class="num">VID-BEECH-EXT-04</td><td>Street approach</td><td><span class="bdg">[MAP]</span></td><td><span class="bdg good">MATCHED</span></td></tr>
+                  <tr><td class="num">VID-BEECH-NBHD-07</td><td>Park b-roll</td><td><span class="bdg">[AI]</span></td><td><span class="bdg">SHOT (generated, QC pending)</span></td></tr>
+                  <tr><td class="num">VID-BEECH-YARD-03</td><td>Backyard golden hour</td><td><span class="bdg">[FILM]</span></td><td><span class="bdg crit">MISSING</span></td></tr>
+                </table>
+                <div style="border-top:1px solid var(--line); margin-top:8px; padding-top:8px; font-size:12px" class="num">
+                  <b>Assembly progress:</b> <span style="color:var(--mut)">walkthrough 80% ▓▓▓▓░ · reel 1 <span class="bdg good">READY</span> · teaser awaiting captions (RJ-4183) — the listing's product page fills in as pieces finish.</span>
+                </div>
+                <div class="anno" style="margin-top:4px">Per-clip status enum verbatim: PLANNED / SHOT / INGESTED / MATCHED / MISSING (Intelligence Engine LISTING_PLAN view). Source routes [AI]/[STOCK]/[MAP]/[FILM]. Data: Production Asset Registry + assembly jobs; clip status also feeds back to the LISTING_PLAN view on the shoot pipeline. No active shoot → this panel is hidden.</div>
+              </div>
+            </div>
+
+            <!-- missing-clip alerts -->
+            <div id="el-missing" class="cardbox" style="border-left:3px solid var(--crit); display:flex; gap:10px; align-items:center; flex-wrap:wrap">
+              <span style="color:var(--crit)">🎯</span>
+              <div style="flex:1; min-width:240px"><b>Missing clip: VID-BEECH-YARD-03 (backyard golden hour)</b>
+                <div style="color:var(--mut); font-size:11.5px">Flagged to shoot owner (Ellie — videographer). Never uploaded from the Jul 12 shoot; walkthrough assembly can proceed without it, teaser cannot.</div>
+              </div>
+              <button class="btn-ink">Create pickup task</button>
+              <div class="anno" style="width:100%">MISSING clips route back to the shoot owner as a pickup task (registry-driven); the task lands on the next call sheet for this listing.</div>
+            </div>
+
+            <!-- b-roll coverage indicator -->
+            <div id="el-broll-coverage" class="cardbox">
+              <b>B-roll coverage — per video vs. floor</b>
+              <table class="dtable" style="font-size:11.5px; margin-top:6px">
+                <tr><th>Video</th><th>Non-TH runtime</th><th>Shots vs floor</th><th>Routes</th></tr>
+                <tr><td>Beech walkthrough (long-form)</td><td class="num">3m 40s</td><td class="num"><span class="bdg good">44 / 40+ ✓</span></td><td class="anno num">[FILM] 31 · [AI] 8 · [MAP] 3 · [STOCK] 2</td></tr>
+                <tr><td>Beech reel 1 (short-form)</td><td class="num">32s</td><td class="num"><span class="bdg good">11 / 8–14 ✓</span></td><td class="anno num">[FILM] 9 · [AI] 2</td></tr>
+                <tr><td>ADU explainer (short-form)</td><td class="num">41s</td><td class="num"><span class="bdg crit">6 / 8–14 — under floor</span></td><td class="anno num">[AI] 4 · [MAP] 2 · <button class="btn-ghost" style="font-size:10px">Expand shot list</button></td></tr>
+              </table>
+              <div class="anno" style="margin-top:4px">Floors verbatim (Part 11): ~1 distinct shot per 3–5s of non-talking-head time; short-form 8–14, long-form 40+ — never a flat 2–3. [MAP] route = Google Aerial View + Street View Static for geo-specific shots (also the photo-decline fallback path). Under-floor blocks assembly QC, not the lock.</div>
+            </div>
+
+            <!-- first-frame QC gate -->
+            <div id="el-firstframe" class="cardbox">
+              <b>First-frame QC gate — b-roll stills awaiting review (3)</b>
+              <div style="display:grid; grid-template-columns:repeat(3,1fr); gap:8px; margin-top:8px; font-size:11px">
+                <div><div class="thumb" style="height:58px">still: park path</div><div style="margin-top:4px">VID-BEECH-NBHD-07 <span class="bdg good">clean</span></div><div style="display:flex; gap:4px; margin-top:4px"><button class="btn-ink" style="font-size:10px">Approve still</button></div></div>
+                <div><div class="thumb" style="height:58px; outline:1.5px solid var(--crit)">still: cafe ext.</div><div style="margin-top:4px">VID-BEECH-NBHD-08 <span class="bdg crit">malformed signage text</span></div><div style="display:flex; gap:4px; margin-top:4px"><button class="btn-ghost" style="font-size:10px">Regenerate still</button></div></div>
+                <div><div class="thumb" style="height:58px; outline:1.5px solid var(--crit)">still: street dusk</div><div style="margin-top:4px">VID-BEECH-EXT-09 <span class="bdg crit">wrong location look</span></div><div style="display:flex; gap:4px; margin-top:4px"><button class="btn-ghost" style="font-size:10px">Regenerate still</button></div></div>
+              </div>
+              <div class="anno" style="margin-top:6px">Two-stage, start-frame first (Part 11): generate the still → QC gate (no malformed faces/text, real location, intended lighting, no artifacts) BEFORE animating. Regenerate the cheap still, not the expensive video.</div>
+            </div>
+
+            <!-- audio prep status -->
+            <div id="el-audio-prep" class="cardbox">
+              <b>Audio prep — pre-render text-normalization check</b>
+              <div style="display:flex; gap:6px; flex-wrap:wrap; margin-top:6px; font-size:11.5px">
+                <span class="bdg good">no em-dashes in spoken lines ✓</span>
+                <span class="bdg good">terminal periods ✓</span>
+                <span class="bdg good">numbers spelled out ✓</span>
+                <span class="bdg good">break-tags only (prosody markup stripped) ✓</span>
+                <span class="bdg good">pronunciation dictionary applied ✓</span>
+                <button class="btn-ghost" style="font-size:10.5px">View normalized script</button>
+              </div>
+              <div class="anno" style="margin-top:4px">SSML pipeline + pronunciation dictionary (Part 11, mandatory): em-dashes/double hyphens are the biggest garble source — converted to period/comma/break tag; em-dashes belong in on-screen overlays only. The voice model honors break tags only — rate/pitch markup is silently dropped, so delivery control = bracket audio tags + voice-settings stability. Normalization is verifiably applied per render (checklist stored on the job); SSML-ready output is produced from ContentLock, never loose script text.</div>
+            </div>
+          </div>
+
+          <!-- RIGHT -->
+          <div style="display:grid; gap:12px; align-content:start">
+
+            <!-- avatar & voice assets -->
+            <div id="el-avatar-assets" class="cardbox">
+              <b>Avatar & voice assets library</b>
+              <table class="dtable" style="font-size:11px; margin-top:6px">
+                <tr><th>Look</th><th>Consent</th><th>Engines</th><th>Usage contexts</th></tr>
+                <tr><td>🏡 Porch</td><td><span class="bdg good">signed 2026-03-02 ✓</span></td><td>Premium + prev</td><td class="anno">milestone, market update</td></tr>
+                <tr><td>🖥 Office</td><td><span class="bdg good">signed 2026-03-02 ✓</span></td><td>Premium + prev</td><td class="anno">explainer, VO no-lines</td></tr>
+                <tr><td>🚗 Car</td><td><span class="bdg good">signed 2026-05-11 ✓</span></td><td>prev-gen only</td><td class="anno">casual updates</td></tr>
+              </table>
+              <div style="border-top:1px solid var(--line); margin-top:8px; padding-top:8px; font-size:12px">
+                <b>🎙 Voice clone v2</b> <span class="bdg good">signed identity ✓</span> <span class="bdg">revocation: none</span>
+                <div class="anno" style="margin-top:3px">Provider-signed voice-identity record; revocation kills all future renders using this identity (asset_revoked kill-switch scope).</div>
+              </div>
+              <div style="display:flex; gap:6px; margin-top:8px"><button class="btn-ink">＋ Add look</button><button class="btn-ghost">Retire look</button></div>
+              <div class="anno" style="margin-top:4px">Add-look requires the recorded consent/signature flow before training — no consent, no clone (Wattson gap: voice-identity signing/revocation). Every render from these assets carries the per-platform AI-disclosure note; personalized renders additionally carry the CA AI disclosure as line 1 of the script and frame 1 of the asset (hard-coded, non-removable).</div>
+            </div>
+
+            <!-- avatar-opportunity chips -->
+            <div id="el-avatar-opportunity" class="cardbox">
+              <b>Avatar-look gaps → next shoot</b>
+              <div style="display:flex; gap:6px; flex-wrap:wrap; margin-top:6px">
+                <span class="bdg warn">2 queued videos need a "kitchen counter" look — doesn't exist</span>
+                <span class="bdg warn">1 needs "outdoor walking" — doesn't exist</span>
+              </div>
+              <div style="background:var(--surface); border-radius:8px; padding:8px 10px; margin-top:8px; font-size:12px">
+                <b>Proposal:</b> <span style="color:var(--mut)">slot both captures onto the Oakwood shoot (Jul 22) — 15 min added to the call sheet.</span>
+                <div style="display:flex; gap:6px; margin-top:6px"><button class="btn-ink">Accept slot → call sheet</button><button class="btn-ghost">Decline</button></div>
+              </div>
+              <div class="anno" style="margin-top:4px">Avatar-opportunity scan runs monthly (Intelligence Engine Part 12): queued videos needing a nonexistent look get flagged and slotted onto the most convenient upcoming shoot. Accepting writes the capture to that shoot's call sheet.</div>
+            </div>
+
+            <!-- 90/10 meter -->
+            <div id="el-9010" class="cardbox">
+              <b>90/10 authenticity meter — July</b>
+              <div class="meterbar" style="margin-top:8px" title="hover → per-piece classification">
+                <div style="width:84%; background:var(--brand)" title="PERSONAL (real footage): 84%"></div>
+                <div style="width:16%; background:var(--signal)" title="AVATAR/AI: 16%"></div>
+              </div>
+              <div style="display:flex; justify-content:space-between; font-size:10.5px; color:var(--soft)" class="num"><span>Real footage 84%</span><span>Avatar/AI 16%</span></div>
+              <div style="display:flex; gap:6px; flex-wrap:wrap; margin-top:6px">
+                <span class="bdg good">inside policy ✓</span>
+                <span class="bdg">early-warning line: 25% [BEST GUESS — UI convention]</span>
+                <span class="bdg crit">hard cap: avatar ≤ 90%</span>
+              </div>
+              <div class="anno" style="margin-top:4px">Policy (Part 5 hard rule, verbatim): ≥10% genuinely personal content from the agent's own camera; avatar capped at 90% of output. The 90/10 classifier runs BEFORE the avatar renderer is called; relationship/personal content (sphere, community, milestones) is hard-blocked from the avatar pipeline and routed to the human production queue. Hover → per-piece classification (PERSONAL vs AVATAR/AI). <b>Fail-closed:</b> a breach hard-blocks publishing of further avatar content with an explanation — a queue hold, not a publish.</div>
+            </div>
+
+            <!-- swipe file / hook library -->
+            <div id="el-swipe" class="cardbox">
+              <b>Swipe file / hook library <span class="bdg num">61 saved</span></b>
+              <div style="display:flex; gap:5px; flex-wrap:wrap; margin:6px 0"><button class="chip on" style="font-size:10px">All</button><button class="chip" style="font-size:10px">Reels</button><button class="chip" style="font-size:10px">Shorts</button><button class="chip" style="font-size:10px">Titles</button><button class="chip" style="font-size:10px">Thumbnails</button></div>
+              <table class="dtable" style="font-size:11px">
+                <tr><th>#</th><th>Hook</th><th>Autopsy rank</th><th></th></tr>
+                <tr><td class="num">1</td><td>"Your neighbor just left $118,000 on the table."</td><td class="num">▲ 3.1× median hold · 214 shares</td><td><button class="btn-ghost" style="font-size:10px">→ concept engine</button></td></tr>
+                <tr><td class="num">2</td><td>"41% of lots here can legally add a second home."</td><td class="num">▲ 2.4× · saves-heavy</td><td><button class="btn-ghost" style="font-size:10px">→ concept engine</button></td></tr>
+                <tr><td class="num">3</td><td>"I priced the same house three ways. One was wrong on purpose."</td><td class="num">▲ 1.9× · A/B winner (pair v2)</td><td><button class="btn-ghost" style="font-size:10px">→ concept engine</button></td></tr>
+              </table>
+              <div style="font-size:11.5px; color:var(--mut); margin-top:6px"><b style="color:var(--ink)">Top pattern this quarter:</b> specific-dollar-number opens.</div>
+              <div class="anno" style="margin-top:4px">Hook-autopsy log + performance-ledger joins; variants logged as A/B pairs {content_id, content_lock_id, lock_hash, approved_version_id, platform, variant_id, field, text} — the autopsy pattern extends to titles and thumbnails (Part 10). List sorted by autopsy composite; exact score formula lives in the learning layer, UI shows rank + supporting metrics [BEST GUESS]. "Send to concept engine" feeds concept-forge; wins feed back from Attribution (Tab 31).</div>
+            </div>
+
+            <!-- editor lane view -->
+            <div id="el-editor-lane" class="cardbox">
+              <b>Editor lane — assembly instructions (role-scoped)</b>
+              <div style="font-size:11.5px; color:var(--mut); margin-top:4px" class="num">
+                <b style="color:var(--ink)">Beech walkthrough (edit v1):</b><br>
+                1. VID-BEECH-EXT-04 (street approach, 0:00–0:06) + address lower-third (alpha overlay A2)<br>
+                2. VID-BEECH-KIT-01 → KIT-02 (kitchen sequence) + feature callout overlay<br>
+                3. VID-BEECH-NBHD-07 (park b-roll) under VO segment 3<br>
+                4. Close on EXT-05 orbit + CTA end-card (locked copy — do not retype)
+              </div>
+              <div style="display:flex; gap:6px; margin-top:8px"><button class="btn-ink">Mark assembled → upload master</button><button class="btn-ghost">Open call sheet</button></div>
+              <div class="anno" style="margin-top:4px">Call Sheet editor lane + registry (Hybrid Production role-split): editor sees which clip_ids in what order with which overlays — never the whole console. Overlay text renders from the ContentLock; the editor cannot alter locked copy (a copy change = new version + new lock).</div>
+            </div>
+          </div>
+        </div>
+
+        <!-- ============ QC strip (full width, shown when items exist) ============ -->
+        <div id="el-qc" style="padding:0 22px 14px">
+          <div style="border:1.5px solid var(--warn); border-radius:12px; padding:14px 16px; background:#fdf6ee">
+            <b style="font-size:14px">QC holds (3)</b> <span class="anno">audio QC · video QC · AI-disclosure manual holds — pass/fail limited to QC-permitted roles</span>
+            <div style="display:grid; grid-template-columns:1fr 1fr 1fr; gap:10px; margin-top:10px; font-size:11.5px" class="maingrid">
+              <div id="el-qc-audio" style="background:var(--paper); border:1px solid var(--line); border-radius:9px; padding:10px">
+                <b>🎧 Audio QC (1)</b>
+                <div style="color:var(--mut); margin-top:4px" class="num">"Loan cleared" VO — loudness −14.2 LUFS <span class="bdg good">WINNER threshold ✓</span> · sibilance spike at 0:41 <span class="bdg warn">UNDERPERFORMER — flag</span></div>
+                <div style="display:flex; gap:6px; margin-top:6px"><button class="btn-ink" style="font-size:10.5px">Pass</button><button class="btn-ghost" style="font-size:10.5px">Fail → re-render from same lock</button></div>
+              </div>
+              <div id="el-qc-video" style="background:var(--paper); border:1px solid var(--line); border-radius:9px; padding:10px">
+                <b>🎞 Video QC (1)</b>
+                <div style="color:var(--mut); margin-top:4px">Beech reel 1 — caption overlay clips the safe zone on 9:16 crop. <span class="bdg warn">render issue</span></div>
+                <div style="display:flex; gap:6px; margin-top:6px"><button class="btn-ink" style="font-size:10.5px">Pass</button><button class="btn-ghost" style="font-size:10.5px">Fail → re-render from same lock</button></div>
+                <div class="anno" style="margin-top:4px">Render issues can fail render QA but CANNOT alter locked copy — a fix that changes copy = new version + new lock (Master Brain render QA rule).</div>
+              </div>
+              <div id="el-disclosure-hold" style="background:var(--paper); border:1.5px solid var(--crit); border-radius:9px; padding:10px">
+                <b style="color:var(--crit)">⛔ AI-disclosure manual hold (1)</b>
+                <div style="color:var(--mut); margin-top:4px">ADU explainer → <b style="color:var(--ink)">TikTok via Buffer</b>: Buffer cannot set TikTok's AI-content label programmatically. HELD in QC. Manual step: post publishes → open TikTok app → toggle "AI-generated content" label → confirm here.</div>
+                <div style="display:flex; gap:6px; margin-top:6px"><button class="btn-ink" style="font-size:10.5px">Mark manually labeled → release</button></div>
+                <div class="anno" style="margin-top:4px">AI Disclosure Per Platform table (Part 10). Hold rule verbatim (Part 5): if a platform's API doesn't support programmatic AI disclosure, the video is HELD and flagged for manual disclosure before publish — no exceptions. <b>Fail-closed:</b> disclosure-hold items cannot be released to Distribution (19) until marked.</div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- permission-limited strip -->
+        <div id="el-permissions" style="padding:0 22px 14px">
+          <div class="cardbox" style="font-size:11.5px">
+            <b>Role-scoped lanes (permission-limited views)</b>
+            <div style="display:flex; gap:8px; flex-wrap:wrap; margin-top:6px">
+              <span class="bdg"><span class="lane" style="background:var(--brand)"></span>Agent / coordinator — sees everything</span>
+              <span class="bdg"><span class="lane" style="background:var(--signal)"></span>Videographer — upload + own shot list only</span>
+              <span class="bdg"><span class="lane" style="background:var(--warn)"></span>Editor — assembly lane + file-match only</span>
+              <span class="bdg"><span class="lane" style="background:var(--crit)"></span>QC pass/fail — QC-permitted roles only</span>
+            </div>
+            <div class="anno" style="margin-top:4px">Scoped lanes per spec: a videographer login lands directly on the upload + shot-list surface; an editor login lands on the assembly lane. Neither sees cost meters, the swipe file, or other shoots' registries.</div>
+          </div>
+        </div>
+
+        <!-- mobile variant strip -->
+        <div id="el-mobile" style="padding:0 22px 14px">
+          <div class="cardbox" style="font-size:11.5px">
+            <b>Mobile variant (375px) — priority order</b>
+            <div style="display:flex; gap:8px; overflow-x:auto; margin-top:8px; padding-bottom:4px">
+              <div style="min-width:120px; border:1px solid var(--warn); border-radius:10px; padding:8px; background:#fdf6ee"><b style="font-size:10.5px">1 · File-match</b><div class="anno">full-screen compare sheet: thumbnail vs. candidate shot spec → Confirm / Relabel — the primary mobile job</div></div>
+              <div style="min-width:120px; border:1px solid var(--line); border-radius:10px; padding:8px"><b style="font-size:10.5px">2 · Render queue</b><div class="anno">state + elapsed; retry FAILED</div></div>
+              <div style="min-width:120px; border:1px solid var(--line); border-radius:10px; padding:8px"><b style="font-size:10.5px">3 · QC holds</b><div class="anno">incl. disclosure manual-mark</div></div>
+              <div style="min-width:120px; border:1px solid var(--line); border-radius:10px; padding:8px"><b style="font-size:10.5px">4 · Clip lifecycle</b><div class="anno">rollup + MISSING alerts</div></div>
+              <div style="min-width:120px; border:1px solid var(--line); border-radius:10px; padding:8px"><b style="font-size:10.5px">5 · Accordions</b><div class="anno">assets / 90-10 meter / swipe file collapsed</div></div>
+            </div>
+            <div class="anno" style="margin-top:4px">Single column, priority per spec Layout: file-match (actionable) → render queue → QC holds → clip lifecycle → assets/meter/swipe as collapsed accordions.</div>
+          </div>
+        </div>
+
+        <!-- states strip -->
+        <div id="el-states" style="padding:0 22px 18px">
+          <div class="cardbox" style="font-size:11.5px">
+            <b>States (dev reference)</b>
+            <div style="color:var(--mut); margin-top:4px">
+              <b style="color:var(--ink)">Loading:</b> per-panel skeletons; render queue polls job states.
+              <b style="color:var(--ink)">Empty:</b> "No renders queued — approved content appears here automatically" · file-match empty = "all uploads matched" · no active shoot = lifecycle panel hidden.
+              <b style="color:var(--ink)">Degraded (all fail-closed):</b> render provider down → jobs stay QUEUED with provider-status banner (shown live above), typed BLOCKED reasons, no silent retry storms, idempotency keys on retry · registry unreachable → file-match disabled, "matching unavailable — uploads held", uploads never auto-guessed · 90/10 breach → further avatar publishing hard-blocked with explanation · disclosure-hold items cannot release to distribution until marked · kill switch / cost circuit breaker → whole layer pauses, UI shows scope + reason.
+              <b style="color:var(--ink)">Permission-limited:</b> videographer = upload + own shot list; editor = assembly lane + file-match; agent/coordinator = all; QC pass/fail = QC roles.
+              <b style="color:var(--ink)">Mobile:</b> per the strip above — file-match compare sheet is the primary mobile job.
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ============ spec gaps found ============ -->
+  <div class="note" style="margin-top:24px"><b>Spec gaps found (Master Brain specifies, spec inventory missed — rendered above):</b> (1) Kill-switch scopes enumerated (global / tenant / agent / listing_content / mode / asset_revoked / compliance_incident_hold) — spec says "shows scope + reason" without the enum; rendered in the provider/kill-switch banner. (2) Personalized-video delivery mode enum STATIC | GENERATED | FALLBACK + VIDEO_SENT event with sequence_id (Part 13) — rendered on the personalized queue row annotation. (3) [MAP] route named sources: Google Aerial View + Street View Static, also the photo-decline fallback path — rendered in the b-roll coverage annotation. (4) A/B pair logging extends the hook-autopsy pattern to titles AND thumbnails with the full key shape {content_id, content_lock_id, lock_hash, approved_version_id, platform, variant_id, field, text} (Part 10) — rendered as swipe-file filter chips + annotation. (5) 90/10 classifier ordering: it runs BEFORE the avatar renderer is called, and relationship/personal content is hard-routed to a human production queue (violation = queue hold, not publish) — rendered in the 90/10 meter annotation. (6) Buffer/TikTok manual-label mechanics (Buffer posts, agent adds the label in-app afterward) — rendered in the disclosure-hold card.</div>
+
+  <!-- ============ (3) ELEMENT COVERAGE ============ -->
+  <h2 style="font-size:20px; margin:24px 0 10px">Element coverage — spec inventory → this page</h2>
+  <table class="dtable cov" style="font-size:12.5px">
+    <tr><th>Spec inventory element</th><th>Rendered at</th><th>Status</th></tr>
+    <tr><td>Render queue (engine, QUEUED/RUNNING/READY/FAILED, elapsed, artifacts, retry/cancel)</td><td><a href="#el-render-queue">Render queue table</a></td><td class="ok">✓</td></tr>
+    <tr><td>Remotion render detail (GH-Actions run URL, output formats, manifest.json)</td><td><a href="#el-remotion">Remotion detail card</a></td><td class="ok">✓</td></tr>
+    <tr><td>Avatar engine log (requested vs actually rendered)</td><td><a href="#el-engine-log">Engine log card</a></td><td class="ok">✓</td></tr>
+    <tr><td>First-frame QC gate items (approve still / regenerate)</td><td><a href="#el-firstframe">First-frame QC gate</a></td><td class="ok">✓</td></tr>
+    <tr><td>B-roll coverage indicator (shots vs floor + source routes)</td><td><a href="#el-broll-coverage">B-roll coverage table</a></td><td class="ok">✓</td></tr>
+    <tr><td>File-match review card (confirm / relabel / mark new)</td><td><a href="#el-file-match">File-match review</a></td><td class="ok">✓</td></tr>
+    <tr><td>Clip lifecycle board (PLANNED→MISSING enum, rollup, assembly progress)</td><td><a href="#el-lifecycle">Clip lifecycle — Beech</a></td><td class="ok">✓</td></tr>
+    <tr><td>Missing-clip alerts (→ pickup task)</td><td><a href="#el-missing">Missing-clip alert</a></td><td class="ok">✓</td></tr>
+    <tr><td>Avatar & voice assets library (consent + signing, engines, retire, disclosure note)</td><td><a href="#el-avatar-assets">Avatar & voice assets</a></td><td class="ok">✓</td></tr>
+    <tr><td>Avatar-opportunity chips (look gaps → shoot slot)</td><td><a href="#el-avatar-opportunity">Avatar-look gaps</a></td><td class="ok">✓</td></tr>
+    <tr><td>90/10 meter (ratio, per-piece classification, alert threshold, hard cap)</td><td><a href="#el-9010">90/10 authenticity meter</a></td><td class="ok">✓</td></tr>
+    <tr><td>QC dashboard queues (audio/video, WINNER/UNDERPERFORMER, fail → re-render from same lock)</td><td><a href="#el-qc">QC strip</a> (<a href="#el-qc-audio">audio</a> / <a href="#el-qc-video">video</a>)</td><td class="ok">✓</td></tr>
+    <tr><td>AI-disclosure manual holds (platform + manual step → release)</td><td><a href="#el-disclosure-hold">Disclosure hold card</a></td><td class="ok">✓</td></tr>
+    <tr><td>Audio prep status (normalization checklist, view normalized script)</td><td><a href="#el-audio-prep">Audio prep check</a></td><td class="ok">✓</td></tr>
+    <tr><td>Swipe file / hook library (autopsy scores, top patterns, → concept engine)</td><td><a href="#el-swipe">Swipe file</a></td><td class="ok">✓</td></tr>
+    <tr><td>Editor lane view (assembly instructions, role-scoped, mark assembled)</td><td><a href="#el-editor-lane">Editor lane</a></td><td class="ok">✓</td></tr>
+    <tr><td>Published this month stat (→ Distribution)</td><td><a href="#el-published">KPI row</a></td><td class="ok">✓</td></tr>
+  </table>
+  <div style="border:1.5px solid var(--good); background:#f2f8f4; border-radius:10px; padding:12px 16px; margin:12px 0 0; font-weight:700; color:var(--good)">17 of 17 spec elements rendered ✓ <span style="font-weight:400; color:var(--mut); font-size:12.5px">— plus spec-required regions beyond the inventory: header stats, provider-degraded/kill-switch banner, role-scoped permission lanes, mobile priority strip, states strip; plus the 6 Master-Brain gap additions listed above.</span></div>
+
+  <!-- ============ (4) FULL SPEC AS HTML ============ -->
+  <div class="specdoc">
+    <h1 style="font-size:24px; margin:40px 0 6px">Spec — 32 · Video Studio + Production Asset Registry</h1>
+    <p><b>Purpose</b> The machine room behind the shoot pipeline and the content engine: render job queues (HeyGen-class avatar, Remotion alpha motion-graphics, Higgsfield-class b-roll), the clip lifecycle from PLANNED to published, the file-match reviewer that enforces system-assigned shot-ID naming ("humans never name files"), the avatar/voice asset library, the 90/10 authenticity meter, QC holds, and the swipe-file/hook library.</p>
+    <p><b>Primary users</b> Agent; editor and videographer roles (scoped lanes); marketing coordinator; internal ops (QC).</p>
+    <p><b>Entry points</b> Command Center production alerts; Content Review (Tab 16) approve → render jobs appear here; Shoot pipeline / LISTING_PLAN view (call sheet clips); notification "2 need file-match review"; Wattson ("what's rendering?").</p>
+    <p><b>Exit points</b> READY renders → Distribution Board (Tab 19) as DistributionPayloads; QC holds → Approvals/Review Queue; failed renders → retry/route to manual; clip status → LISTING_PLAN view; hooks/autopsy → Attribution (Tab 31); avatar-look gaps → next shoot's call sheet.</p>
+
+    <h2>Layout</h2>
+    <p>Desktop: <b>Header</b> — "Video studio · 3 rendering · 2 need file-match review · 14 published this month"; nav: Avatar looks / Swipe file. <b>Two-column main.</b> Left: Render queue, File-match review (warning-styled), Clip lifecycle per active shoot. Right: Avatar & voice assets, 90/10 meter, Swipe file/hook library. <b>QC strip</b> (below when items exist): audio/video QC queues + AI-disclosure manual-hold items.</p>
+    <p>Mobile (375px): single column, priority order: file-match review (actionable) → render queue → QC holds → clip lifecycle → assets/meter/swipe collapsed accordions. File-match confirm works as a full-screen compare sheet (thumbnail vs. candidate shot spec, Confirm / Relabel buttons).</p>
+
+    <h2>Element inventory</h2>
+    <div style="overflow-x:auto">
+    <table class="dtable">
+      <tr><th>Element</th><th>What it shows/does</th><th>Data source</th><th>Interactions</th><th>Spec source</th></tr>
+      <tr><td>Render queue</td><td>Jobs with engine (HeyGen avatar / Remotion alpha / Higgsfield b-roll), state QUEUED / RUNNING / READY / FAILED, elapsed time, artifact links</td><td>Render child activities on CreativeProductionRun; Redis render queue (bounded workers, idempotency keys, backoff, per-provider rate limits)</td><td>Open job → logs/artifact; retry FAILED; cancel</td><td>matrix gap "Video Studio: HeyGen render queue…" P1 + design_note (state enum verbatim); Master Brain Part 13 render contract</td></tr>
+      <tr><td>Remotion render detail</td><td>GitHub-Actions run URL + logs; output formats PNG-sequence (primary) / ProRes 4444 / WebM VP9 alpha + manifest.json (frame count, duration, resolution, source git SHA)</td><td>remotion-alpha-video-render playbook</td><td>Open workflow run; download artifact</td><td>Master Brain Part 11 §Motion Graphics Render Layer</td></tr>
+      <tr><td>Avatar engine log</td><td>Which engine actually rendered (premium engine explicitly requested; vendor may fall back)</td><td>render API response</td><td>Read-only per job</td><td>Master Brain Part 11 §Engine Selection</td></tr>
+      <tr><td>First-frame QC gate items</td><td>B-roll stills awaiting/failing first-frame QC (malformed faces/text, wrong location, lighting, artifacts) — regenerate the cheap still, not the video</td><td>b-roll generation pipeline</td><td>Approve still / regenerate</td><td>Master Brain Part 11 §B-Roll</td></tr>
+      <tr><td>B-roll coverage indicator</td><td>Per video: shots vs. floor (~1 distinct shot per 3–5s non-talking-head; short-form 8–14, long-form 40+) with source routes [AI]/[STOCK]/[MAP]/[FILM]</td><td>shot plan</td><td>Expand shot list</td><td>Master Brain Part 11 (floors verbatim)</td></tr>
+      <tr><td>File-match review card</td><td>Videographer upload without shot-ID → best-guess match (e.g. "IMG_4471.mov → VID-BEECH-KIT-02, 87% visual match") → Confirm or Relabel</td><td>Production Asset Registry (platform service, Spec Part F)</td><td>Confirm match / pick other clip_id / mark new</td><td>draft s32 (inherited); Intelligence Engine "humans never name files"</td></tr>
+      <tr><td>Clip lifecycle board (per shoot)</td><td>Per clip_id: PLANNED / SHOT / INGESTED / MATCHED / MISSING; rollup "23 planned → 21 uploaded → 19 matched"; assembly progress per finished video; product page fills as pieces finish</td><td>Production Asset Registry + assembly jobs</td><td>Filter by shoot/video; open clip</td><td>Intelligence Engine LISTING_PLAN view (status enum verbatim); draft s32</td></tr>
+      <tr><td>Missing-clip alerts</td><td>MISSING clips flagged back to the shoot owner</td><td>registry</td><td>Create pickup task</td><td>Intelligence Engine registry</td></tr>
+      <tr><td>Avatar & voice assets library</td><td>Avatar looks (e.g. porch/office/car) each consented + signed, supported engines, usage contexts; voice clone version; per-render AI-disclosure note</td><td>avatar library + voice-identity records</td><td>Add look (requires consent/signature flow), retire look</td><td>draft s32; matrix Wattson gap "voice-identity signing/revocation"</td></tr>
+      <tr><td>Avatar-opportunity chips</td><td>Queued videos needing a look that doesn't exist → flagged + slotted onto the most convenient upcoming shoot</td><td>avatar-opportunity scan (monthly)</td><td>Accept slot → call sheet</td><td>Intelligence Engine Part 12 §Avatar-Opportunity Detection</td></tr>
+      <tr><td>90/10 meter</td><td>Real-footage : avatar ratio this month (e.g. 84:16); policy: ≥10% genuinely personal from the agent's own camera, avatar capped at 90%; alert threshold as it climbs [BEST GUESS: draft's 25% early-warning line is a UI convention; the hard rule is the 90 cap]</td><td>90/10 content classifier</td><td>Hover → per-piece classification</td><td>Master Brain Part 5 hard rule + glossary (verbatim); draft s32</td></tr>
+      <tr><td>QC dashboard queues</td><td>Audio QC + video QC with WINNER/UNDERPERFORMER thresholds; render issues can fail render QA but cannot alter locked copy</td><td>QC pipeline</td><td>Pass/fail; fail → re-render from same lock</td><td>matrix gap "QC dashboard" P1; Master Brain render QA rule</td></tr>
+      <tr><td>AI-disclosure manual holds</td><td>Videos HELD because the target platform lacks programmatic AI labeling (e.g. TikTok via Buffer) — shows exactly which platform + manual step</td><td>AI Disclosure Per Platform table</td><td>Mark manually labeled → release</td><td>Master Brain Part 10 (verbatim hold rule); matrix design_note</td></tr>
+      <tr><td>Audio prep status</td><td>Text-normalization applied (no em-dashes in spoken lines, terminal periods, spelled-out numbers, break-tags only) — shown as a pre-render check</td><td>SSML pipeline + pronunciation dictionary</td><td>View normalized script</td><td>Master Brain Part 11 §Audio Prep</td></tr>
+      <tr><td>Swipe file / hook library</td><td>Saved hooks scored by autopsy results; top patterns surfaced (e.g. "specific-dollar-number opens")</td><td>hook-autopsy log + performance ledger joins</td><td>Browse/filter; send hook to concept engine</td><td>draft s32; Master Brain Part 10 A/B variant logging</td></tr>
+      <tr><td>Editor lane view</td><td>Assembly instructions per finished video: which clip_ids in what order with which overlays (role-scoped)</td><td>Call Sheet editor lane + registry</td><td>Mark assembled → upload master</td><td>Intelligence Engine Hybrid Production (role-split)</td></tr>
+      <tr><td>Published this month stat</td><td>Count of READY_FOR_PROPREACH → published pieces</td><td>ledger</td><td>Click → Distribution</td><td>draft s32 header</td></tr>
+    </table>
+    </div>
+
+    <h2>States</h2>
+    <ul>
+      <li><b>Default</b>: queues + lifecycle + assets as above.</li>
+      <li><b>Loading</b>: per-panel skeletons; render queue polls job states.</li>
+      <li><b>Empty</b>: "No renders queued — approved content appears here automatically"; file-match empty = "all uploads matched"; no active shoot = lifecycle panel hidden.</li>
+      <li><b>Error/degraded (fail-closed)</b>: render provider down → jobs stay QUEUED with provider-status banner, no silent retry storms (typed BLOCKED reasons, idempotency keys on retry); registry unreachable → file-match disabled with "matching unavailable — uploads held" (uploads never auto-guessed without the reviewer); 90/10 breach → publishing of further avatar content hard-blocked with explanation; disclosure-hold items cannot be released to distribution until marked.</li>
+      <li><b>Permission-limited</b>: videographer sees only upload + own shot list; editor sees assembly lane + file-match; agent/coordinator see all; QC pass/fail limited to QC-permitted roles.</li>
+      <li><b>Mobile</b>: single-column per Layout; file-match compare sheet is the primary mobile job.</li>
+    </ul>
+
+    <h2>Data fields</h2>
+    <p><b>render job</b>: {job_id, engine, state, started_at, elapsed, artifact_url, workflow_run_url, engine_rendered, content_lock_id} — render queue / provider webhooks. <b>clip</b>: {clip_id (system-assigned, e.g. VID-BEECH-KIT-02), shoot_id, status enum, source route, feeds content_id[]} — Production Asset Registry (Spec Part F). <b>upload match</b>: {file_name, candidate clip_id, match_confidence %, decided_by} — registry matcher. <b>avatar look</b>: {look_id, name, consent + signature record, supported_engines[], trained_at} — avatar library. <b>voice clone</b>: {version, provider, signed identity, revocation status} — voice-identity records. <b>90/10</b>: monthly ratio + per-piece classification (PERSONAL vs AVATAR/AI) — 90/10 classifier. <b>QC item</b>: {type audio/video, thresholds, result, hold_reason (incl. AI_DISCLOSURE_MANUAL)} — QC pipeline. <b>hook entry</b>: {hook text, source content_id, autopsy scores, platform, variant A/B pair ids} — hook-autopsy log / Event Ledger. <b>render manifest</b>: frame count, duration, resolution, git SHA — Remotion artifact manifest.json.</p>
+
+    <h2>Rules & compliance</h2>
+    <ul>
+      <li>Everything here executes AFTER ContentLock inside the governed run — render issues fail render QA but can never alter locked copy; a fix that changes copy = new version + new lock.</li>
+      <li>Humans never name files: clip_ids are system-assigned at call-sheet time; file-match review is the only human step in naming.</li>
+      <li>90/10 hard rule: avatar/AI content capped; avatar-source captures hard-blocked from exceeding personal-content rules.</li>
+      <li>AI disclosure per platform is non-negotiable (Part 5): unlabelable platform ⇒ HELD in QC, flagged for manual disclosure.</li>
+      <li>CA AI disclosure hard-coded as line 1 of every personalized-video script and frame 1 of every asset (personalized renders passing through this queue).</li>
+      <li>Avatar looks and voice clones require recorded consent/signing; revocation kills future renders using that identity.</li>
+      <li>Kill switches / cost circuit breakers can pause the whole render layer; UI shows scope + reason.</li>
+      <li>MLS footage/data in clips follows MLS hard rules (no AI training, no public exposure beyond permitted use).</li>
+    </ul>
+
+    <h2>Cross-links</h2>
+    <p>In: Tab 16 (approved runs → renders), shoot pipeline/call sheets (clips), Tab 12 briefing (production routes), Wattson. Out: Tab 19 Distribution (READY payloads incl. thumbnail + container fields), Tab 31 Attribution (autopsy/A-B data), Approvals/Review Queue (QC + disclosure holds), Admin (cost meters). <b>Ledger:</b> consumes ContentLock identity on every job; emits render/QC state events and FALLBACK logs (120s personalized-video fail-safe); performance joins feed the swipe file.</p>
+
+    <h2>Open decisions</h2>
+    <ul>
+      <li><b>[DECIDE] Avatar/video vendor set</b>: assume HeyGen-class avatar API + Remotion (locked pipeline) + Higgsfield-class b-roll; personalized-video vendor is BHuman-primary behind a swappable adapter (BHUMAN | GANAI | TAVUS | HEYGEN_REMOTION). UI is adapter-agnostic — engine is a label on the job.</li>
+      <li><b>[DECIDE]</b> Whether personalized-video (PropFlow-triggered) jobs share this queue or a separate lane. Interim: same queue, separate "Personalized" filter chip — they share the render contract and the Redis queue.</li>
+      <li><b>[BEST GUESS] 90/10 alert threshold</b>: warn at avatar share &gt;25% of the month early (draft convention) with the hard block only at the cap.</li>
+      <li><b>[BEST GUESS] Swipe file size/scoring display</b>: list sorted by autopsy composite; exact score formula lives in the learning layer, UI shows rank + supporting metrics.</li>
+    </ul>
+    <p class="anno" style="margin-top:20px">Wireframe fidelity — colors are placeholders from the locked PropFlow design language. All job IDs/clip IDs/numbers are realistic fake data. Agent identity: Graeham Watts, Intero Real Estate, DRE# 01466876 (from shared-references/identity.json — never hardcode elsewhere; the identity.json blocklist entry must never appear).</p>
+  </div>
+</div>

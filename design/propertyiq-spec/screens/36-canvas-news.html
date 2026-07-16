@@ -1,0 +1,454 @@
+<title>PropertyIQ · Screen 36 — Ideation Canvas + News-to-Post Queue</title>
+<link href="https://api.fontshare.com/v2/css?f[]=technor@500,600,700&display=swap" rel="stylesheet">
+<link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<style>
+  /* Type system — Technor for display (the squared machine look from the font exploration), Inter for UI. */
+  :root{ --font-display:'Technor', Inter, -apple-system, 'Segoe UI', sans-serif; --font-ui: Inter, -apple-system, 'Segoe UI', Roboto, sans-serif; }
+</style>
+<style>
+  /* Palette v4 — PropFlow design language: neutral ink UI, ink-as-accent, color reserved for data. (extracted verbatim from propsearch-design-draft.html) */
+  :root, :root[data-theme="dark"], :root[data-theme="light"]{
+    --ink:#23282f; --paper:#fbfaf8; --surface:#f1efe9; --line:#e2dfd6;
+    --mut:#6b7076; --soft:#9b9f9f;
+    --brand:#2e6b53; --brand-ink:#ffffff; --brand-soft:#eaf1ec; --brand-deep:#1e4c3a;
+    --signal:#b07a2e;
+    --good:#2e7d4f; --warn:#a8630a; --crit:#b3372f;
+    --r:10px;
+  }
+  .intel .score, .mintel{ color:var(--brand-deep) }
+  .intel{ border-left:3px solid var(--brand) }
+  h1{ letter-spacing:-.02em }
+  .stat b{ letter-spacing:-.01em }
+  body[data-agent="watts"]{ --brand:#2e6b53; --brand-soft:#eaf1ec; --brand-deep:#1e4c3a; }
+
+  *{box-sizing:border-box; margin:0}
+  body{font:15px/1.55 var(--font-ui); color:var(--ink); background:var(--paper); padding-bottom:80px}
+  h1,h2,h3{line-height:1.15; text-wrap:balance; font-family:var(--font-display); font-weight:600}
+  h1{letter-spacing:-.01em}
+  .site{box-shadow:0 1px 2px rgba(20,24,32,.04), 0 8px 32px rgba(20,24,32,.06)}
+  .stat{box-shadow:0 1px 2px rgba(20,24,32,.03); transition:box-shadow .15s, transform .15s}
+  .stat:hover{box-shadow:0 4px 14px rgba(20,24,32,.08)}
+  .chip{transition:all .12s}
+  button{font-family:var(--font-ui)}
+  .num{font-variant-numeric:tabular-nums}
+  .wrap{max-width:1180px; margin:0 auto; padding:0 20px}
+
+  .bar{position:sticky; top:0; z-index:50; background:var(--paper); border-bottom:1px solid var(--line); padding:10px 0; backdrop-filter:blur(8px)}
+  .bar .wrap{display:flex; flex-wrap:wrap; gap:10px; align-items:center}
+  .bar .ttl{font-weight:700; margin-right:auto}
+  .bar .ttl small{display:block; font-weight:400; color:var(--mut)}
+  .bar a{color:var(--brand); font-size:13px; text-decoration:none}
+
+  .note{background:var(--surface); border:1px solid var(--line); border-radius:var(--r); padding:14px 16px; margin:0 0 22px; font-size:13.5px; color:var(--mut)}
+  .note b{color:var(--ink)}
+
+  .site{border:1px solid var(--line); border-radius:14px; overflow:hidden; background:var(--paper)}
+  .sitehead{display:flex; align-items:center; gap:14px; padding:14px 22px; border-bottom:1px solid var(--line)}
+  .avatar{width:38px; height:38px; border-radius:50%; background:var(--brand); color:var(--brand-ink); display:grid; place-items:center; font-weight:700}
+  .sitehead .who b{display:block}
+  .sitehead .who small{color:var(--mut)}
+  .sitehead nav{margin-left:auto; display:flex; gap:18px; font-size:13.5px; color:var(--mut)}
+  .sitehead nav a{color:inherit; text-decoration:none}
+  .sitehead nav a:hover{color:var(--brand)}
+
+  .chip{display:inline-flex; align-items:center; gap:6px; font-size:12.5px; font-weight:500; border:1px solid var(--line); border-radius:99px; padding:6px 12px; background:var(--paper); cursor:pointer; color:var(--ink)}
+  .chip:hover{border-color:var(--brand)}
+  .chip.on{background:var(--brand); border-color:var(--brand); color:var(--brand-ink); font-weight:600; box-shadow:0 2px 8px color-mix(in srgb, var(--brand) 30%, transparent)}
+
+  .statrow{display:grid; grid-template-columns:repeat(4,1fr); gap:10px}
+  .stat{background:var(--surface); border:1px solid var(--line); border-radius:var(--r); padding:12px}
+  .stat small{display:block; color:var(--mut); font-size:11.5px; text-transform:uppercase; letter-spacing:.05em}
+  .stat b{font-size:18px}
+  .stat .up{color:var(--good); font-size:12px}
+
+  .bdg{font-size:11.5px; border-radius:6px; padding:3px 8px; background:var(--surface); border:1px solid var(--line); color:var(--mut)}
+  .bdg.good{color:var(--good); border-color:color-mix(in srgb,var(--good) 30%,var(--line))}
+  .bdg.warn{color:var(--warn); border-color:color-mix(in srgb,var(--warn) 30%,var(--line))}
+
+  .dtable{width:100%; border-collapse:collapse; font-size:13px}
+  .dtable td,.dtable th{border-bottom:1px solid var(--line); padding:8px 10px; text-align:left}
+  .dtable th{font-size:11px; text-transform:uppercase; letter-spacing:.05em; color:var(--soft)}
+
+  @media (max-width:860px){ .statrow{grid-template-columns:repeat(2,1fr)} .maingrid{grid-template-columns:1fr !important} .console{grid-template-columns:1fr !important} .rail{display:none !important} }
+  @media (prefers-reduced-motion: reduce){ *{transition:none!important} }
+
+  /* ---- page-specific additions (kept in the same design language) ---- */
+  .anno{font-size:11px; color:var(--soft)}
+  .cardbox{border:1px solid var(--line); border-radius:10px; padding:11px 14px; font-size:12.5px; background:var(--paper)}
+  .btn-ink{background:var(--ink); color:#fff; border:0; border-radius:7px; padding:7px 12px; font-size:11.5px; cursor:pointer; font-weight:600}
+  .btn-ghost{background:var(--paper); border:1px solid var(--line); border-radius:7px; padding:7px 12px; font-size:11.5px; cursor:pointer}
+  .sechead{font-size:14px; font-weight:700; margin:0 0 8px; font-family:var(--font-display)}
+  .cov td.ok{color:var(--good); font-weight:700}
+  .specdoc h2{font-size:18px; margin:26px 0 8px}
+  .specdoc h3{font-size:15px; margin:18px 0 6px}
+  .specdoc p, .specdoc li{font-size:13.5px; color:var(--mut)}
+  .specdoc b{color:var(--ink)}
+  .specdoc table{margin:8px 0}
+
+  /* canvas nodes */
+  .cnode{position:absolute; background:var(--paper); border:1px solid var(--line); border-radius:10px; padding:8px 10px; font-size:11px; max-width:180px; box-shadow:0 1px 3px rgba(20,24,32,.06); cursor:grab}
+  .cnode b{display:block; font-size:9.5px; letter-spacing:.06em; color:var(--mut)}
+  .cnode.sel{border:1.5px solid var(--brand); box-shadow:0 2px 10px color-mix(in srgb, var(--brand) 25%, transparent)}
+  .cnode .tag{font-size:9px; border-radius:4px; padding:1px 5px; margin-top:4px; display:inline-block}
+  .pin{position:absolute; width:20px; height:20px; border-radius:50% 50% 50% 3px; background:var(--signal); color:#fff; display:grid; place-items:center; font-size:10px; font-weight:700; cursor:pointer}
+  .rung{display:flex; gap:8px; align-items:flex-start; font-size:11.5px; padding:6px 0; border-bottom:1px dashed var(--line)}
+  .rung:last-child{border-bottom:0}
+  .rdot{width:14px; height:14px; border-radius:50%; border:2px solid var(--line); background:var(--paper); margin-top:2px; flex:none}
+  .rdot.done{background:var(--good); border-color:var(--good)}
+  .rdot.now{background:var(--paper); border-color:var(--signal)}
+  .safez{position:relative; border:1px solid var(--line); border-radius:8px; overflow:hidden; background:linear-gradient(160deg, #dfe6e0, #cfd8d2); aspect-ratio:4/5; font-size:10px}
+  .safez .top{position:absolute; top:0; left:0; right:0; height:13%; background:repeating-linear-gradient(45deg, rgba(179,55,47,.10), rgba(179,55,47,.10) 4px, transparent 4px, transparent 8px); border-bottom:1px dashed var(--crit)}
+  .safez .bot{position:absolute; bottom:0; left:0; right:0; height:12%; background:repeating-linear-gradient(45deg, rgba(179,55,47,.10), rgba(179,55,47,.10) 4px, transparent 4px, transparent 8px); border-top:1px dashed var(--crit)}
+  .safez .hl{position:absolute; top:26%; left:8%; right:8%; font-family:var(--font-display); font-weight:700; font-size:14px; color:var(--ink); line-height:1.2}
+  .safez .cred{position:absolute; bottom:16%; left:8%; font-size:8.5px; color:var(--mut)}
+</style>
+
+<!-- ============ (1) slim header ============ -->
+<div class="bar">
+  <div class="wrap">
+    <div class="ttl">PropertyIQ · Screen 36 — Ideation Canvas + News-to-Post Queue <small>Full-density per-screen mock · wireframe fidelity · dev-facing annotations in gray</small></div>
+    <a href="../wireframe.html">← All screens</a>
+  </div>
+</div>
+
+<!-- ============ (2) THE FULL MOCK ============ -->
+<div class="wrap" style="padding-top:24px">
+  <div class="note"><b>Screen 36 — Ideation Canvas + News-to-Post Queue (PropCast, P2).</b> Two ideation surfaces on one screen. The Canvas is the Monday briefing's visual ideation layer: heterogeneous sources dropped as typed nodes, briefs generated against any selected set, full lineage from source to output — the canvas state IS the saved brief object. The News queue is the approval surface for the News-to-Post engine: rendered headline cards with the geo-broadening framing toggle and the engagement escalation ladder (card → video → paid ads). Nothing self-publishes; every output stages to approval. Primary users: agent + multiplayer role owners (content lead, editor, marketing coordinator); news Approve = agent or approval-permitted role.</div>
+
+  <div class="site" data-agent="watts">
+    <!-- header per spec Layout: canvas name + pending count + My canvases nav -->
+    <div class="sitehead">
+      <div class="avatar">GW</div>
+      <div class="who"><b>Ideation</b><small class="num">Canvas: "August listing push" · News queue: 3 pending</small></div>
+      <div id="el-presence" style="display:flex; align-items:center; margin-left:10px">
+        <span class="avatar" style="width:26px; height:26px; font-size:10px; border:2px solid var(--paper)">GW</span>
+        <span class="avatar" style="width:26px; height:26px; font-size:10px; background:var(--signal); margin-left:-8px; border:2px solid var(--paper)">EL</span>
+        <span class="avatar" style="width:26px; height:26px; font-size:10px; background:var(--ink); margin-left:-8px; border:2px solid var(--paper)">PT</span>
+        <span class="anno" style="margin-left:8px">3 on canvas — multiplayer presence (agent + role owners; tenant-scoped, invited roles only)</span>
+      </div>
+      <nav><a href="#el-mycanvases">My canvases</a><a href="#">🔔 3 pending</a></nav>
+    </div>
+
+    <div class="console" style="display:grid; grid-template-columns:172px 1fr">
+      <!-- persistent agent-console left rail (Screen 9 chrome) -->
+      <div class="rail" style="border-right:1px solid var(--line); padding:14px 10px; font-size:12.5px; display:flex; flex-direction:column; gap:2px; background:var(--surface)">
+        <a href="#" style="text-decoration:none; color:var(--ink); border-radius:8px; padding:8px 10px">☰ Today</a>
+        <a href="#" style="text-decoration:none; color:var(--ink); border-radius:8px; padding:8px 10px">🗺 Farm map</a>
+        <a href="#" style="text-decoration:none; color:var(--ink); border-radius:8px; padding:8px 10px">🤝 Past clients</a>
+        <a href="#" style="text-decoration:none; color:var(--ink); border-radius:8px; padding:8px 10px">👤 Leads & clients</a>
+        <a href="#" style="text-decoration:none; color:var(--ink); border-radius:8px; padding:8px 10px">💬 Comms <span class="bdg" style="font-size:9.5px">6</span></a>
+        <a href="#" style="text-decoration:none; color:var(--ink); border-radius:8px; padding:8px 10px">📋 Transactions</a>
+        <a href="#" style="text-decoration:none; color:#fff; background:var(--ink); border-radius:8px; padding:8px 10px; font-weight:600">🎬 Content studio</a>
+        <a href="#" style="text-decoration:none; color:var(--ink); border-radius:8px; padding:8px 10px">📣 Ads & funnels</a>
+        <a href="#" style="text-decoration:none; color:var(--ink); border-radius:8px; padding:8px 10px">⚙ Playbooks</a>
+        <a href="#" style="text-decoration:none; color:var(--ink); border-radius:8px; padding:8px 10px">📈 Reports</a>
+        <div style="margin-top:auto; padding-top:10px; border-top:1px solid var(--line)">
+          <a href="#" style="text-decoration:none; color:var(--ink); border-radius:8px; padding:8px 10px; display:block">⚙ Settings</a>
+          <div class="anno" style="padding:6px 10px">Global chrome: persistent agent-console rail (Screen 9 pattern). This screen lives under Content studio. Consumer pages never show it.</div>
+        </div>
+      </div>
+
+      <div>
+        <!-- KPI row -->
+        <div id="el-kpis" style="padding:14px 22px 0">
+          <div class="statrow" style="grid-template-columns:repeat(5,1fr)">
+            <div class="stat"><small>Canvas nodes</small><b class="num">6</b> <span class="anno">3 selected</span></div>
+            <div class="stat"><small>Briefs generated</small><b class="num">4</b> <span class="anno">from this canvas</span></div>
+            <div class="stat" style="border-left:3px solid var(--signal)"><small>News pending</small><b class="num">3</b> <span class="anno">+ 1 GBP + 1 blog</span></div>
+            <div class="stat"><small>On the ladder</small><b class="num">2</b> <span class="anno">1 at video rung</span></div>
+            <div class="stat"><small>Outputs traced</small><b class="num">11</b> <span class="up num">2 winners</span></div>
+          </div>
+          <div class="anno" style="margin-top:4px">Counts read from canvas store + News-to-Post queue + Event Ledger. Unknown renders as "—", never fabricated.</div>
+        </div>
+
+        <!-- escalation notification banner -->
+        <div id="el-escalation-notif" style="padding:12px 22px 0">
+          <div class="cardbox" style="background:var(--surface); display:flex; gap:12px; align-items:center; flex-wrap:wrap">
+            <span>📈</span>
+            <div style="flex:1; min-width:280px"><b>Last week's rate card crossed the share threshold — video version auto-queued</b>
+              <div style="color:var(--mut); font-size:12px" class="num">"Peninsula rates dip below 6.3%" static: 214 shares vs threshold 10 → promoted to the video queue (Tab 16/32). If the video clears benchmark, an ad-spend recommendation lands in Approvals (Tab 13) — money never moves without your approval.</div>
+            </div>
+            <button class="btn-ink">Open video queue →</button>
+            <div class="anno" style="width:100%">Escalation events from the Event Ledger. Click-through targets: Tab 16 (content engine) / Tab 32 (renders). The promoted video goes through the full run → compliance → ContentLock path like everything else.</div>
+          </div>
+        </div>
+
+        <!-- ============ main split: canvas (left ~55%) / news queue (right ~45%) ============ -->
+        <div class="maingrid" style="padding:14px 22px; display:grid; grid-template-columns:1.2fr 1fr; gap:14px">
+
+          <!-- LEFT: the canvas -->
+          <div style="display:grid; gap:10px; align-content:start">
+            <div id="el-canvas">
+              <div class="sechead">Canvas — "August listing push"</div>
+
+              <!-- add-node toolbar -->
+              <div id="el-add-node" style="display:flex; gap:5px; flex-wrap:wrap; margin-bottom:8px">
+                <button class="chip" style="font-size:10.5px">＋ Listing</button>
+                <button class="chip" style="font-size:10.5px">＋ News item</button>
+                <button class="chip" style="font-size:10.5px">＋ Competitor video</button>
+                <button class="chip" style="font-size:10.5px">＋ Voice note 🎙</button>
+                <button class="chip" style="font-size:10.5px">＋ Doc upload</button>
+                <button class="chip" style="font-size:10.5px; opacity:.45; cursor:not-allowed" title="GSC connector degraded">＋ Query cluster ⚠</button>
+              </div>
+              <div class="anno" style="margin:-4px 0 8px">Add from: listing picker · news feed item · competitor video (official-API monitored only) · voice-note recorder · doc upload · GSC query cluster. Each node arrives PRE-DIGESTED by existing ingestion (video-intelligence transcripts, Part 4 market read, GSC demand connector). <b style="color:var(--crit)">Fail-closed:</b> the Query-cluster affordance is disabled here because the GSC connector is stale — reason shown on hover; the system never creates a node with a fabricated summary.</div>
+
+              <!-- infinite canvas surface -->
+              <div style="border:1px solid var(--line); border-radius:12px; background:var(--surface); min-height:390px; position:relative; overflow:hidden; background-image:radial-gradient(var(--line) 1px, transparent 1px); background-size:22px 22px">
+                <span id="el-lineage" class="bdg" style="position:absolute; top:10px; right:12px; font-size:10px; background:var(--paper); cursor:pointer" title="Click → outputs generated from this canvas">🧬 lineage: 11 outputs · 2 winners — nodes keep lineage into every output</span>
+
+                <!-- selection marquee -->
+                <div style="position:absolute; top:34px; left:12px; width:300px; height:200px; border:1.5px dashed var(--brand); border-radius:8px; background:color-mix(in srgb, var(--brand) 5%, transparent)"></div>
+
+                <!-- nodes: all 6 types of the enum -->
+                <div class="cnode sel" style="top:48px; left:24px"><b>LISTING</b>118 Beech St, EPA<div style="color:var(--mut)">3bd/2ba · live Jul 22 · summary: fresh remodel, ADU-ready lot</div><span class="tag" style="background:var(--brand-soft); color:var(--brand-deep)">MLS rules</span></div>
+                <div class="cnode sel" style="top:150px; left:44px"><b>NEWS</b>ADU ordinance change<div style="color:var(--mut)">Palo Alto Online · summary: permit fast-track approved</div><span class="tag" style="background:var(--surface); border:1px solid var(--line)">source-credited</span></div>
+                <div class="cnode sel" style="top:92px; left:180px"><b>VOICE_NOTE</b>"buyers keep asking about rates…"<div style="color:var(--mut)">recorded Mon · transcribed + summarized</div></div>
+                <div class="cnode" style="top:262px; left:30px"><b>QUERY_CLUSTER</b>"adu cost redwood city" ↑340%<div style="color:var(--mut)">GSC demand connector</div><span class="tag" style="background:var(--surface); color:var(--warn); border:1px solid var(--warn)">⚠ stale — as of Jul 9</span></div>
+                <div class="cnode" style="top:196px; left:250px"><b>COMPETITOR_VIDEO</b>"Why EPA is heating up" — rival reel<div style="color:var(--mut)">official-API monitored · summary only</div><span class="tag" style="background:var(--surface); color:var(--signal); border:1px solid var(--signal)" title="Part 8 corpus rules: no ingestion of copyrighted full text; storage = hash/URL/excerpt/summary only">inspiration-only</span></div>
+                <div class="cnode" style="top:300px; left:230px"><b>DOC</b>Q3 farm equity memo.pdf<div style="color:var(--mut); font-style:italic">digesting…</div><span class="tag" style="background:var(--surface); border:1px solid var(--line)">⏳ pre-digestion async</span></div>
+
+                <!-- comment pin -->
+                <div id="el-comments" class="pin" style="top:140px; left:158px" title="Ellie (content lead): 'pair this with the ordinance node — the fast-track angle is the hook'">2</div>
+
+                <!-- generate brief action docked bottom-left -->
+                <div style="position:absolute; bottom:12px; left:14px; display:flex; gap:8px; align-items:center">
+                  <button id="el-generate" class="btn-ink" style="padding:9px 16px; font-size:12px">Generate brief from 3 selected →</button>
+                  <span class="anno" style="background:var(--paper); border-radius:6px; padding:3px 8px">brief.sources = [source_ids] → CreativeKernelBrief → gauntlet → Tab 16</span>
+                </div>
+              </div>
+              <div class="anno" style="margin-top:5px">Node = {source_id, type: LISTING | NEWS | COMPETITOR_VIDEO | VOICE_NOTE | DOC | QUERY_CLUSTER, ref, extracted_summary, position, added_by}. Drag to position; click-through opens the source record (listing, GSC cluster, competitor summary). Marquee or shift-click multi-selects. Comment pins anchor to nodes — hover shows the thread. Lineage flows into content_id ancestry + the Event Ledger so attribution (Tab 31) can trace which inputs produce winners. Guardrail chips: competitor/third-party nodes carry "inspiration-only" (hover → Part 8 rule text); listing nodes carry the MLS-rules badge (no embeddings / AI training / public exposure).</div>
+            </div>
+
+            <!-- canvas-as-brief + my canvases -->
+            <div id="el-mycanvases" class="cardbox">
+              <b>My canvases — the canvas state IS the saved brief</b>
+              <table class="dtable" style="font-size:11.5px; margin-top:6px">
+                <tr><th>Canvas</th><th>Nodes</th><th>Outputs</th><th>Collaborators</th><th></th></tr>
+                <tr><td><b>August listing push</b> <span class="bdg good">open</span></td><td class="num">6</td><td class="num">11 (2 winners)</td><td>GW · EL · PT</td><td><button class="btn-ghost">Rename</button></td></tr>
+                <tr><td>Rates explainer series</td><td class="num">4</td><td class="num">7</td><td>GW · EL</td><td><button class="btn-ghost">Duplicate</button></td></tr>
+                <tr><td>Spring farm anniversary</td><td class="num">9</td><td class="num">16 (1 winner)</td><td>GW · EL · PT · JN</td><td><button class="btn-ghost">Archive</button></td></tr>
+              </table>
+              <div class="anno" style="margin-top:5px">No separate brief document — saving is implicit; rename / duplicate / archive are the only board-level actions. Canvases are tenant-scoped and visible only to invited role owners. Entry points that land here: Briefing (Tab 12) "open canvas" · news notification · Wattson ("add this voice note to the canvas") · voice-note capture · content object "send to canvas".</div>
+            </div>
+          </div>
+
+          <!-- RIGHT: news queue -->
+          <div style="display:grid; gap:10px; align-content:start">
+            <div class="sechead">News queue — 3 pending <span class="anno" style="font-weight:400">(rendered server-side; nothing self-publishes)</span></div>
+
+            <!-- source policy indicator -->
+            <div id="el-source-policy" class="cardbox" style="background:var(--surface); font-size:11.5px">
+              <b>Sourcing policy</b> <span class="bdg good">RSS-first · paywall-aware</span>
+              <div style="color:var(--mut); margin-top:3px">Content outlets: SFGATE, KQED, SFist, SocketSite, Patch, Palo Alto Online, city sites, Bay City News · Google News RSS = discovery only · hard-paywalled (SF Chronicle) excluded. Never reproduce paywalled text — summarize public facts + credit the source. <span class="anno">Hover any outlet → its policy.</span></div>
+            </div>
+
+            <!-- news card 1: full card with framing toggle + safe-zone preview -->
+            <div id="el-news-card" class="cardbox" style="border-left:3px solid var(--signal)">
+              <b>"Peninsula mortgage rates dip below 6.3%"</b>
+              <div style="color:var(--mut); font-size:11px; margin-top:2px">Cluster of 3 related articles: SFGATE · KQED · Bay City News <span class="bdg" style="font-size:10px">source credit: SFGATE</span></div>
+              <div id="el-framing" style="margin:8px 0 6px; display:flex; gap:6px; align-items:center; flex-wrap:wrap">
+                <span style="font-size:11px; color:var(--mut)">Framing:</span>
+                <button class="chip on" style="font-size:10.5px">Local — East Palo Alto (your farm data)</button>
+                <button class="chip" style="font-size:10.5px">Broad — Peninsula</button>
+                <span class="anno">toggle previews BOTH renders</span>
+              </div>
+              <div style="display:grid; grid-template-columns:1fr 1fr; gap:8px">
+                <div id="el-safezone">
+                  <div class="safez">
+                    <div class="top"></div><div class="bot"></div>
+                    <div class="hl">Rates just dipped below 6.3% — what it means in East Palo Alto</div>
+                    <div class="cred">Source: SFGATE · Graeham Watts, Intero Real Estate</div>
+                  </div>
+                  <div class="anno" style="margin-top:3px">Safe-zone overlay ON: no critical text top ~13% / bottom UI band; 4:5 tile inside center square for grid crop. <button class="btn-ghost" style="font-size:9.5px; padding:2px 7px">toggle overlay</button></div>
+                </div>
+                <div style="font-size:11px; color:var(--mut)">
+                  <b style="color:var(--ink)">Geo decision (computed, never assumed)</b><br>
+                  target_area: East Palo Alto · density_class: below threshold → <span class="bdg warn">LOCAL_AND_BROAD</span> — this story renders a local AND a broader-region variant. San Francisco (self-sustaining) would be <span class="bdg">LOCAL_ONLY</span>.<br>
+                  <span class="anno">Broadening is a market-density decision, never a demographic one (Fair Housing).</span>
+                </div>
+              </div>
+              <div style="display:flex; gap:6px; margin-top:8px">
+                <button class="btn-ink">✓ Approve → staged to distribution</button>
+                <button class="btn-ghost">Edit</button>
+                <button class="btn-ghost">Skip</button>
+              </div>
+              <div id="el-compliance" style="border-top:1px solid var(--line); margin-top:8px; padding-top:6px; font-size:10.5px; color:var(--mut)">
+                <b style="color:var(--good)">Compliance ✓</b> Fair Housing pass on all copy · source credited · framing = geography by market density, never demographic <button class="btn-ghost" style="font-size:9.5px; padding:2px 7px">expand ComplianceResult</button>
+                <div class="anno">Approve → staged post (approval queue → Tab 19 Distribution). Edit → re-render + re-gate through compliance. Approval restricted to approval-permitted roles.</div>
+              </div>
+            </div>
+
+            <!-- news card 2 (compact) + card 3 (skipped/failed) -->
+            <div class="cardbox">
+              <b>"ADU permit fast-track approved in Palo Alto"</b> <span class="bdg">carousel · 4 tiles</span>
+              <div style="color:var(--mut); font-size:11px">Palo Alto Online + city site · framing: <span class="bdg">LOCAL_ONLY (self-sustaining pocket)</span> · safe-zone render ready</div>
+              <div style="display:flex; gap:6px; margin-top:6px"><button class="btn-ink">Approve</button><button class="btn-ghost">Edit</button><button class="btn-ghost">Skip</button></div>
+              <div style="font-size:10.5px; color:var(--mut); margin-top:4px"><b style="color:var(--good)">Compliance ✓</b> Fair Housing pass · credited</div>
+            </div>
+            <div class="cardbox" style="border-style:dashed; color:var(--soft); font-size:11.5px">
+              <b style="color:var(--mut)">⚠ Story skipped — fetch failure (logged)</b>
+              <div>A third clustered story failed source verification → no card is built on unverified facts. Skipped + logged, never rendered. <span class="anno">(fail-closed rule)</span></div>
+            </div>
+
+            <!-- GBP / blog drafts -->
+            <div id="el-gbp-blog" class="cardbox">
+              <b>Also assembled from this cluster — approve per format</b>
+              <table class="dtable" style="font-size:11.5px; margin-top:6px">
+                <tr><th>Format</th><th>Draft</th><th></th></tr>
+                <tr><td>📍 GBP post</td><td style="color:var(--mut)">"Rates dipped this week — what EPA sellers should know" + booking link</td><td><button class="btn-ghost">Approve</button></td></tr>
+                <tr><td>📝 Blog draft</td><td style="color:var(--mut)">"July rate check: East Palo Alto edition" · 640 words · sources credited</td><td><button class="btn-ghost">Review</button></td></tr>
+              </table>
+              <div class="anno" style="margin-top:4px">News engine output formats: static, carousel, GBP post, blog draft — each stages to approval independently.</div>
+            </div>
+
+            <!-- escalation ladder panel -->
+            <div id="el-ladder" class="cardbox">
+              <b>Escalation ladder — per-story position</b> <span class="bdg num" title="[DECIDE] canonical 'roughly 10+ shares' — configurable tenant setting, default 10">threshold: 10 shares (tenant setting)</span>
+              <div style="margin-top:6px">
+                <div style="font-size:11.5px; font-weight:600">"Peninsula rates dip below 6.3%" <span class="bdg" style="font-size:9.5px">content_id PC-20260708-epa-nws-3f2a</span></div>
+                <div class="rung"><span class="rdot done"></span><div><b>Static posted</b> — Jul 8 · <span class="num">214 shares</span> vs threshold 10 <span class="bdg good">✓ crossed</span></div></div>
+                <div class="rung"><span class="rdot now"></span><div><b>Video version queued</b> — auto-promoted; render in Tab 32 · full run → compliance → ContentLock path</div></div>
+                <div class="rung"><span class="rdot"></span><div style="color:var(--mut)"><b style="color:var(--ink)">Ad-spend recommendation</b> — only if video clears benchmark → lands in Approvals (Tab 13); never auto-spends</div></div>
+              </div>
+              <div style="border-top:1px dashed var(--line); margin-top:6px; padding-top:6px">
+                <div style="font-size:11.5px; font-weight:600">"ADU fast-track" story</div>
+                <div class="rung"><span class="rdot done"></span><div><b>Static posted</b> — Jul 11 · <span class="num">4 shares</span> — below threshold, ladder holds</div></div>
+              </div>
+              <div class="anno" style="margin-top:4px">Data: Event Ledger share/engagement events + escalation logic. Open a story → each rung's underlying object. content_id reused for roll-up; lock identity carried per promoted variant. <b style="color:var(--crit)">Fail-closed:</b> escalation data unavailable → "performance data unavailable", never synthesized share counts.</div>
+            </div>
+          </div>
+        </div>
+
+        <!-- states & mobile strip -->
+        <div id="el-states" style="padding:0 22px 18px">
+          <div class="cardbox" style="font-size:11.5px">
+            <b>States (dev reference)</b>
+            <div style="color:var(--mut); margin-top:4px">
+              <b style="color:var(--ink)">Empty:</b> canvas → "Drag in a listing, a news story, a voice note — generate a brief from any selection" · news queue → "No pending stories — sources checked continuously, RSS-first".
+              <b style="color:var(--ink)">Loading:</b> new node shows "digesting…" until extracted_summary lands (see DOC node above) · news cards render server-side; queue shows count while rendering.
+              <b style="color:var(--ink)">Degraded (all fail-closed):</b> ingestion service down for a node type → that add-affordance disabled with reason (see Query-cluster chip) — never a node with fabricated summary · GSC stale → QUERY_CLUSTER nodes carry as-of date + stale badge · escalation data unavailable → "performance data unavailable" · news fetch failure → story skipped + logged, no card on unverified facts · approval always stages — nothing self-publishes even degraded.
+              <b style="color:var(--ink)">Permission-limited:</b> collaborators add nodes + comment · brief generation [BEST GUESS] any collaborator · news Approve = approval-permitted roles only · canvas visible only to invited role owners (tenant-scoped).
+            </div>
+            <div style="border-top:1px solid var(--line); margin-top:8px; padding-top:8px; color:var(--mut)">
+              <b style="color:var(--ink)">Mobile (375px):</b> tabbed [Canvas] / [News]. Canvas becomes a node LIST grouped by type with multi-select checkboxes + a Generate button (the drag canvas is desktop-first — spec flags it as the UI-heavy human-dev lane); News cards go full-width with the framing toggle and swipe-to-approve.
+              <div style="display:flex; gap:8px; margin-top:6px; overflow-x:auto">
+                <div style="flex:none; width:150px; border:1px solid var(--line); border-radius:12px; padding:8px; font-size:9px; background:var(--paper)">
+                  <div style="display:flex; gap:4px; margin-bottom:5px"><span style="background:var(--ink); color:#fff; border-radius:99px; padding:2px 8px; font-weight:600">Canvas</span><span style="border:1px solid var(--line); border-radius:99px; padding:2px 8px; color:var(--mut)">News (3)</span></div>
+                  <div style="border:1px solid var(--line); border-radius:6px; padding:4px 6px; margin-bottom:3px">☑ LISTING · 118 Beech St</div>
+                  <div style="border:1px solid var(--line); border-radius:6px; padding:4px 6px; margin-bottom:3px">☑ NEWS · ADU ordinance</div>
+                  <div style="border:1px solid var(--line); border-radius:6px; padding:4px 6px; margin-bottom:3px">☑ VOICE_NOTE · "rates…"</div>
+                  <div style="border:1px solid var(--line); border-radius:6px; padding:4px 6px; margin-bottom:5px; color:var(--soft)">☐ COMPETITOR_VIDEO</div>
+                  <div style="background:var(--ink); color:#fff; border-radius:6px; padding:4px; text-align:center; font-weight:600">Generate brief (3)</div>
+                </div>
+                <div style="flex:none; width:150px; border:1px solid var(--line); border-radius:12px; padding:8px; font-size:9px; background:var(--paper)">
+                  <div style="display:flex; gap:4px; margin-bottom:5px"><span style="border:1px solid var(--line); border-radius:99px; padding:2px 8px; color:var(--mut)">Canvas</span><span style="background:var(--ink); color:#fff; border-radius:99px; padding:2px 8px; font-weight:600">News (3)</span></div>
+                  <div style="border:1px solid var(--line); border-radius:6px; padding:5px 6px"><b>Rates dip below 6.3%</b><div style="color:var(--mut)">Local ◉ / Broad ○</div><div style="color:var(--good); margin-top:3px">→ swipe right to approve</div></div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ============ spec gaps found ============ -->
+  <div class="note" style="margin-top:26px"><b>Spec gaps found (Master Brain / Intelligence Engine items the spec inventory missed — rendered above):</b> (1) Escalation-ladder content_id reuse explicitly extends to <b>email-newsletter campaign roll-up</b> (Master Brain §Escalation Ladder: "reuse content_id for campaign roll-up in the email newsletter") — carried on the ladder panel's content_id badge. (2) A source node is defined as a <b>"minimal, attributed evidence record"</b> (Intelligence Engine §Source node) — rendered as attribution/source-credit tags on the NEWS and COMPETITOR_VIDEO nodes. (3) Doc conflict worth flagging to dev: MVP1 doc lists "Ideation Canvas <b>[AGENT BUILDS]</b>" while the Intelligence Engine marks the canvas "UI-heavy — a human development lane"; the spec follows the Intelligence Engine — noted in the build-phase open decision below.</div>
+
+  <!-- ============ (3) ELEMENT COVERAGE ============ -->
+  <h2 style="font-size:20px; margin:14px 0 10px">Element coverage — spec inventory → this page</h2>
+  <table class="dtable cov" style="font-size:12.5px">
+    <tr><th>Spec inventory element</th><th>Rendered at</th><th>Status</th></tr>
+    <tr><td>Canvas node (6-type enum, pre-digested, drag/select/open-source)</td><td><a href="#el-canvas">Canvas surface (all 6 types shown)</a></td><td class="ok">✓</td></tr>
+    <tr><td>Add-node affordance (6 sources; disabled-with-reason when ingestion down)</td><td><a href="#el-add-node">Add-node toolbar</a></td><td class="ok">✓</td></tr>
+    <tr><td>Selection + "Generate brief from n selected"</td><td><a href="#el-generate">Marquee + docked action</a></td><td class="ok">✓</td></tr>
+    <tr><td>Lineage badge (→ content_id ancestry + Event Ledger)</td><td><a href="#el-lineage">Canvas top-right badge</a></td><td class="ok">✓</td></tr>
+    <tr><td>Multiplayer presence + node-anchored comments</td><td><a href="#el-presence">Presence avatars</a> + <a href="#el-comments">comment pin</a></td><td class="ok">✓</td></tr>
+    <tr><td>Canvas-as-brief (implicit save; rename/duplicate/archive)</td><td><a href="#el-mycanvases">My canvases card</a></td><td class="ok">✓</td></tr>
+    <tr><td>Guardrail chips (inspiration-only / MLS-rules, hover → rule text)</td><td><a href="#el-canvas">Node tags on canvas</a></td><td class="ok">✓</td></tr>
+    <tr><td>News queue card (headline, credit, cluster, toggle, Approve/Edit/Skip)</td><td><a href="#el-news-card">Rate-dip card</a></td><td class="ok">✓</td></tr>
+    <tr><td>Geo-framing toggle (Local vs Broad; per-area density decision)</td><td><a href="#el-framing">Framing toggle + geo-decision panel</a></td><td class="ok">✓</td></tr>
+    <tr><td>Source-policy indicator (RSS-first, paywall-aware, outlet list)</td><td><a href="#el-source-policy">Sourcing policy card</a></td><td class="ok">✓</td></tr>
+    <tr><td>Safe-zone preview (top ~13% / bottom band / 4:5 center square)</td><td><a href="#el-safezone">Rendered static w/ overlay</a></td><td class="ok">✓</td></tr>
+    <tr><td>Escalation ladder panel (rungs, threshold, content_id + lock identity)</td><td><a href="#el-ladder">Ladder panel (214-share example)</a></td><td class="ok">✓</td></tr>
+    <tr><td>Escalation notifications ("crossed threshold — video auto-queued")</td><td><a href="#el-escalation-notif">Notification banner</a></td><td class="ok">✓</td></tr>
+    <tr><td>GBP/blog draft cards (approve per format)</td><td><a href="#el-gbp-blog">Also-assembled card</a></td><td class="ok">✓</td></tr>
+    <tr><td>Compliance footer per card (Fair Housing, credit, never demographic)</td><td><a href="#el-compliance">Card compliance footer</a></td><td class="ok">✓</td></tr>
+    <tr><td>My canvases list (name, node count, outputs, collaborators)</td><td><a href="#el-mycanvases">My canvases card</a></td><td class="ok">✓</td></tr>
+  </table>
+  <div style="border:1.5px solid var(--good); background:#f2f8f4; border-radius:10px; padding:12px 16px; margin:12px 0 0; font-weight:700; color:var(--good)">16 of 16 spec elements rendered ✓ <span style="font-weight:400; color:var(--mut); font-size:12.5px">— plus prompt-required regions beyond the inventory: KPI row, geo-decision panel, skipped-story fail-closed card, states strip, mobile-variant strip; plus the 3 Master-Brain gap additions noted above.</span></div>
+
+  <!-- ============ (4) FULL SPEC AS HTML ============ -->
+  <div class="specdoc">
+    <h1 style="font-size:24px; margin:40px 0 6px">Spec — 36 · Ideation Canvas + News-to-Post Queue (PropCast, P2)</h1>
+    <p><b>Purpose</b> Two ideation surfaces on one screen. The Canvas is the Monday briefing's visual ideation layer: heterogeneous sources dropped as nodes, briefs generated against any selected set, full lineage from source to output — the canvas state IS the saved brief object. The News queue is the approval surface for the News-to-Post engine: rendered headline cards with the geo-broadening framing toggle and the engagement escalation ladder (card → video → paid ads).</p>
+    <p><b>Primary users</b> Agent; multiplayer role owners on the canvas (content lead, editor, marketing coordinator); news queue approval is agent (or approval-permitted role).</p>
+    <p><b>Entry points</b> Briefing (Tab 12) "open canvas"; "My canvases" nav; news notification ("3 pending"); Wattson ("add this voice note to the canvas"); voice-note capture; content object "send to canvas".</p>
+    <p><b>Exit points</b> Generate brief → content engine (CreativeKernelBrief → gauntlet → Tab 16); news card approve → staged post (approval queue → distribution); escalated stories → video queue (Tab 16/32) and ad-spend recommendation → Approvals (Tab 13); node click-through → source records (listing, GSC cluster, competitor summary).</p>
+
+    <h2>Layout</h2>
+    <p>Desktop: <b>Header</b> — "Ideation · Canvas: {name} · News queue: n pending"; nav: My canvases. <b>Main left (~55%)</b>: infinite pannable canvas surface — typed nodes, selection marquee, comment pins anchored to nodes, "Generate brief from n selected →" action docked bottom-left, lineage badge top-right. <b>Main right (~45%)</b>: News queue — pending headline cards (framing toggle + rendered static preview + approve), escalation-ladder panel showing per-story ladder position.</p>
+    <p>Mobile (375px): tabbed [Canvas] / [News]. Canvas becomes a node LIST grouped by type with multi-select checkboxes + Generate button (full drag canvas is desktop-first; spec flags this as UI-heavy human dev lane); News cards full-width with framing toggle and swipe-to-approve.</p>
+
+    <h2>Element inventory</h2>
+    <div style="overflow-x:auto">
+    <table class="dtable">
+      <tr><th>Element</th><th>What it shows/does</th><th>Data source</th><th>Interactions</th><th>Spec source</th></tr>
+      <tr><td>Canvas node</td><td>Typed source: {source_id, type: LISTING | NEWS | COMPETITOR_VIDEO | VOICE_NOTE | DOC | QUERY_CLUSTER, ref, extracted_summary}; pre-digested by existing ingestion (video-intelligence transcripts, Part 4 market read, GSC demand connector)</td><td>canvas/brief store + ingestion services</td><td>Drag/position; open source; select</td><td>Intelligence Engine §Ideation Canvas (type enum verbatim); matrix gap P2</td></tr>
+      <tr><td>Add-node affordance</td><td>Add from: listing picker, news feed item, competitor video (official-API monitored), voice-note recorder, doc upload, GSC query cluster</td><td>respective ingestion services</td><td>Add → node appears pre-digested</td><td>Intelligence Engine</td></tr>
+      <tr><td>Selection + Generate brief</td><td>Marquee/multi-select; "Generate brief from n selected" runs generation against the selected node set</td><td>selected node set</td><td>Click → brief with brief.sources=[source_ids] → content engine</td><td>Intelligence Engine (verbatim)</td></tr>
+      <tr><td>Lineage badge</td><td>"Nodes keep lineage into every output" — lineage flows into content_id ancestry and the Event Ledger so attribution can trace which inputs produce winners</td><td>Event Ledger + content_id ancestry</td><td>Click → outputs generated from this canvas</td><td>Intelligence Engine; draft s36</td></tr>
+      <tr><td>Multiplayer presence + comments</td><td>Agent + role owners share the canvas; comments anchor to nodes</td><td>canvas store</td><td>Comment threads per node</td><td>Intelligence Engine (multiplayer rule)</td></tr>
+      <tr><td>Canvas-as-brief</td><td>No separate brief document — saving is implicit; My canvases lists saved boards</td><td>canvas state = saved content-brief object</td><td>Rename, duplicate, archive</td><td>Intelligence Engine (verbatim)</td></tr>
+      <tr><td>Guardrail chips</td><td>Competitor/third-party nodes carry "inspiration-only" badge (no ingestion of copyrighted full text, Part 8 corpus rules); listing nodes carry MLS-rules badge</td><td>node metadata</td><td>Hover → rule text</td><td>Intelligence Engine guardrails; matrix correction #5 (official-API, hash/URL/excerpt/summary storage only)</td></tr>
+      <tr><td>News queue card</td><td>Rendered headline static (safe-zone enforced) + headline, source credit, cluster of related articles, framing toggle, Approve / Edit / Skip</td><td>News-to-Post engine output (staged, nothing self-publishes)</td><td>Approve → staged to distribution; edit → re-render + re-gate</td><td>Master Brain Part 13 §News-to-Post; matrix gap P1/P2</td></tr>
+      <tr><td>Geo-framing toggle</td><td>Local (target-area framing, agent's farm data) vs Broad(er region); broadening computed per target area: below a density threshold (e.g. EPA or a single neighborhood) produce local AND broader-region content; self-sustaining areas local-only — decided per area, never assumed</td><td>geographic-broadening computation</td><td>Toggle previews both framings</td><td>Master Brain Part 13 (verbatim rule); draft s36</td></tr>
+      <tr><td>Source-policy indicator</td><td>RSS-first, paywall-aware: free outlets (SFGATE, KQED, SFist, SocketSite, Patch, Palo Alto Online, city sites, Bay City News) for content; Google News RSS discovery-only; hard-paywalled (SF Chronicle) excluded; never reproduce paywalled text — summarize public facts + credit</td><td>news sourcing config</td><td>Hover → outlet policy</td><td>Master Brain Part 13 (verbatim)</td></tr>
+      <tr><td>Safe-zone preview</td><td>Static/carousel rendered inside iPhone safe zones (no critical text top ~13% / bottom UI band; 4:5 tiles inside center square for grid crop)</td><td>layout prompt emitter</td><td>Toggle safe-zone overlay</td><td>Master Brain Part 13 §Static and Carousel Post Rules</td></tr>
+      <tr><td>Escalation ladder panel</td><td>Per-story ladder position: static posted → shares vs threshold (~10+ shares auto-promotes) → video version queued → video clears benchmark → ad-spend recommendation lands in Approvals; reuses content_id for roll-up + lock identity per promoted variant</td><td>Event Ledger performance + escalation logic</td><td>Open story → each rung's object</td><td>Master Brain Part 13 §Escalation Ladder (threshold verbatim "roughly 10+ shares"); draft s36 shows 214-share example</td></tr>
+      <tr><td>Escalation notifications</td><td>"Last week's rate card crossed threshold — video auto-queued"</td><td>escalation events</td><td>Click → Tab 16/32</td><td>matrix gap design_note ("share-threshold escalation shown as a ladder indicator")</td></tr>
+      <tr><td>GBP/blog draft cards</td><td>News engine also assembles GBP posts and blog drafts for approval alongside statics/carousels</td><td>News-to-Post output types</td><td>Approve per format</td><td>Master Brain Part 13 (formats verbatim)</td></tr>
+      <tr><td>Compliance footer per card</td><td>Fair Housing pass on all copy; source credit; framing never demographic</td><td>ComplianceResult</td><td>Expand</td><td>Master Brain Part 13 Strict Controls</td></tr>
+      <tr><td>My canvases list</td><td>Saved boards with name, node count, outputs generated, collaborators</td><td>canvas store</td><td>Open/archive</td><td>Intelligence Engine</td></tr>
+    </table>
+    </div>
+
+    <h2>States</h2>
+    <ul>
+      <li><b>Default</b>: active canvas + pending news cards.</li>
+      <li><b>Loading</b>: node pre-digestion runs async — new node shows "digesting…" until extracted_summary lands; news cards render server-side, queue shows count while rendering.</li>
+      <li><b>Empty</b>: canvas empty-state ("Drag in a listing, a news story, a voice note — generate a brief from any selection"); news queue empty ("No pending stories — sources checked continuously, RSS-first").</li>
+      <li><b>Error/degraded (fail-closed)</b>: ingestion service down for a node type → that add-affordance disabled with reason (never a node with fabricated summary); GSC connector stale → QUERY_CLUSTER nodes show as-of date + stale badge; escalation data unavailable → ladder shows "performance data unavailable" (never synthesized share counts); news source fetch failure → story skipped, logged — no card with unverified facts; approval always stages, nothing self-publishes even in degraded mode.</li>
+      <li><b>Permission-limited</b>: collaborators add nodes + comment; brief generation [BEST GUESS] any collaborator; news Approve restricted to approval-permitted roles; canvas visible only to invited role owners (tenant-scoped).</li>
+      <li><b>Mobile</b>: tabbed list variant per Layout.</li>
+    </ul>
+
+    <h2>Data fields</h2>
+    <p><b>node</b> {source_id, type enum (6 values), ref, extracted_summary, position, added_by} — canvas/brief store. <b>brief</b> {brief_id, sources[]=source_ids, generated_at, resulting content_id[]} — CreativeKernelBrief + ancestry. <b>comment</b> {node_id anchor, author, text, ts} — canvas store. <b>news story</b> {cluster of article refs, chosen angle, headline, source credit, outlet, framing (LOCAL/BROAD), formats[]} — News-to-Post engine. <b>rendered asset</b> layout prompt (canvas, text, safe-zone anchor, font, contrast) + image — layout emitter (template-first; AI images for conceptual topics only). <b>ladder state</b> {story content_id, rung: STATIC→VIDEO→ADS, shares count, threshold, next action} — Event Ledger + escalation logic. <b>geo decision</b> {target_area, density_class, broadening: LOCAL_AND_BROAD vs LOCAL_ONLY} — per-target-area computation.</p>
+
+    <h2>Rules & compliance</h2>
+    <ul>
+      <li>Nothing self-publishes: every news output stages to an approval queue; promoted variants that spend money route to Approvals (Tab 13).</li>
+      <li>Paywall law: never reproduce paywalled text; summarize public facts, credit the source; hard-paywalled outlets excluded from content.</li>
+      <li>Copyright/corpus: competitor + third-party canvas sources are inspiration-only; storage limited to hash/URL/excerpt/summary; monitoring via official APIs or manual review — no scraping (matrix correction #5).</li>
+      <li>MLS hard rules on listing nodes (no embeddings/AI training/public exposure).</li>
+      <li>Safe zones are law on statics/carousels; visual styling stays configurable (open design decision — never hardcode colors/fonts).</li>
+      <li>Fair Housing pass on all generated copy; geographic broadening is a market-density decision, never a demographic one.</li>
+      <li>Escalated content carries content_id for roll-up + lock identity per locked/promoted variant; a promoted video goes through the full run → compliance → ContentLock path like everything else.</li>
+      <li>Tenant isolation: canvases, briefs, news outputs all tenant-scoped.</li>
+    </ul>
+
+    <h2>Cross-links</h2>
+    <p><b>In:</b> Briefing (Tab 12), voice notes, GSC demand connector, market read, competitor monitoring, listings. <b>Out:</b> content engine → Tab 16 (briefs), Tab 13 Approvals (ad-spend rungs), Tab 19 Distribution (approved statics/GBP posts), Tab 31 Attribution (lineage tracing), Tab 32 (escalated video renders). <b>Ledger:</b> brief lineage → content_id ancestry; consumes share/engagement events for the ladder; emits approval + escalation events.</p>
+
+    <h2>Open decisions</h2>
+    <ul>
+      <li><b>[DECIDE] Build phase</b>: spec marks the Canvas P2 and "UI-heavy — human development lane; v1 can be a thin layer over existing ingestion plus brief storage." Interim design: ship v1 as the mobile-style node LIST + generate flow on all breakpoints; the drag canvas is the v2 desktop layer. Screen contract identical either way. (Note the doc conflict flagged above: MVP1 lists the canvas "[AGENT BUILDS]" — Intelligence Engine's human-dev-lane call governs.)</li>
+      <li><b>[DECIDE] Exact share threshold</b>: canonical is "roughly 10+ shares" — make it a configurable tenant setting defaulting to 10, surfaced next to the ladder.</li>
+      <li><b>[BEST GUESS] Real-time multiplayer transport</b> (presence/comments): standard collaborative-doc sync; no spec constraint — UI only needs presence avatars + node-anchored comments.</li>
+      <li><b>[BEST GUESS] News check cadence</b>: continuous RSS polling with the queue badge updating on new clusters; spec sets no interval.</li>
+    </ul>
+    <p class="anno" style="margin-top:20px">Wireframe fidelity — colors are placeholders from the locked PropFlow design language; static-post visual styling itself is an OPEN design decision (never hardcoded). All headlines/numbers are realistic fake data. No crime data appears anywhere on this screen. Agent identity: Graeham Watts, Intero Real Estate, DRE# 01466876 (from shared-references/identity.json — never hardcode elsewhere; the identity.json blocklist applies).</p>
+  </div>
+</div>

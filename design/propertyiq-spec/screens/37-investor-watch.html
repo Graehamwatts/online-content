@@ -1,0 +1,488 @@
+<title>PropertyIQ · Screen 37 — Investor Watch + Metered Scans</title>
+<link href="https://api.fontshare.com/v2/css?f[]=technor@500,600,700&display=swap" rel="stylesheet">
+<link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<style>
+  /* Type system — Technor for display, Inter for UI. */
+  :root{ --font-display:'Technor', Inter, -apple-system, 'Segoe UI', sans-serif; --font-ui: Inter, -apple-system, 'Segoe UI', Roboto, sans-serif; }
+</style>
+<style>
+  /* Palette v4 — PropFlow design language: neutral ink UI, ink-as-accent, color reserved for data. (extracted verbatim from propsearch-design-draft.html) */
+  :root, :root[data-theme="dark"], :root[data-theme="light"]{
+    --ink:#23282f; --paper:#fbfaf8; --surface:#f1efe9; --line:#e2dfd6;
+    --mut:#6b7076; --soft:#9b9f9f;
+    --brand:#2e6b53; --brand-ink:#ffffff; --brand-soft:#eaf1ec; --brand-deep:#1e4c3a;
+    --signal:#b07a2e;
+    --good:#2e7d4f; --warn:#a8630a; --crit:#b3372f;
+    --r:10px;
+  }
+  .intel .score, .mintel{ color:var(--brand-deep) }
+  .intel{ border-left:3px solid var(--brand) }
+  h1{ letter-spacing:-.02em }
+  .stat b{ letter-spacing:-.01em }
+  body[data-agent="watts"]{ --brand:#2e6b53; --brand-soft:#eaf1ec; --brand-deep:#1e4c3a; }
+
+  *{box-sizing:border-box; margin:0}
+  body{font:15px/1.55 var(--font-ui); color:var(--ink); background:var(--paper); padding-bottom:80px}
+  h1,h2,h3{line-height:1.15; text-wrap:balance; font-family:var(--font-display); font-weight:600}
+  h1{letter-spacing:-.01em}
+  .site{box-shadow:0 1px 2px rgba(20,24,32,.04), 0 8px 32px rgba(20,24,32,.06)}
+  .stat{box-shadow:0 1px 2px rgba(20,24,32,.03); transition:box-shadow .15s, transform .15s}
+  .stat:hover{box-shadow:0 4px 14px rgba(20,24,32,.08)}
+  .chip{transition:all .12s}
+  button{font-family:var(--font-ui)}
+  .num{font-variant-numeric:tabular-nums}
+  .wrap{max-width:1180px; margin:0 auto; padding:0 20px}
+
+  .bar{position:sticky; top:0; z-index:50; background:var(--paper); border-bottom:1px solid var(--line); padding:10px 0; backdrop-filter:blur(8px)}
+  .bar .wrap{display:flex; flex-wrap:wrap; gap:10px; align-items:center}
+  .bar .ttl{font-weight:700; margin-right:auto}
+  .bar .ttl small{display:block; font-weight:400; color:var(--mut)}
+  .bar a{color:var(--brand); font-size:13px; text-decoration:none}
+
+  .note{background:var(--surface); border:1px solid var(--line); border-radius:var(--r); padding:14px 16px; margin:0 0 22px; font-size:13.5px; color:var(--mut)}
+  .note b{color:var(--ink)}
+
+  .site{border:1px solid var(--line); border-radius:14px; overflow:hidden; background:var(--paper)}
+  .sitehead{display:flex; align-items:center; gap:14px; padding:14px 22px; border-bottom:1px solid var(--line)}
+  .avatar{width:38px; height:38px; border-radius:50%; background:var(--brand); color:var(--brand-ink); display:grid; place-items:center; font-weight:700}
+  .sitehead .who b{display:block}
+  .sitehead .who small{color:var(--mut)}
+  .sitehead nav{margin-left:auto; display:flex; gap:18px; font-size:13.5px; color:var(--mut)}
+  .sitehead nav a{color:inherit; text-decoration:none}
+  .sitehead nav a:hover{color:var(--brand)}
+
+  .chip{display:inline-flex; align-items:center; gap:6px; font-size:12.5px; font-weight:500; border:1px solid var(--line); border-radius:99px; padding:6px 12px; background:var(--paper); cursor:pointer; color:var(--ink)}
+  .chip:hover{border-color:var(--brand)}
+  .chip.on{background:var(--brand); border-color:var(--brand); color:var(--brand-ink); font-weight:600; box-shadow:0 2px 8px color-mix(in srgb, var(--brand) 30%, transparent)}
+
+  .statrow{display:grid; grid-template-columns:repeat(4,1fr); gap:10px}
+  .stat{background:var(--surface); border:1px solid var(--line); border-radius:var(--r); padding:12px}
+  .stat small{display:block; color:var(--mut); font-size:11.5px; text-transform:uppercase; letter-spacing:.05em}
+  .stat b{font-size:18px}
+  .stat .up{color:var(--good); font-size:12px}
+
+  .bdg{font-size:11.5px; border-radius:6px; padding:3px 8px; background:var(--surface); border:1px solid var(--line); color:var(--mut)}
+  .bdg.good{color:var(--good); border-color:color-mix(in srgb,var(--good) 30%,var(--line))}
+  .bdg.warn{color:var(--warn); border-color:color-mix(in srgb,var(--warn) 30%,var(--line))}
+
+  .dtable{width:100%; border-collapse:collapse; font-size:13px}
+  .dtable td,.dtable th{border-bottom:1px solid var(--line); padding:8px 10px; text-align:left}
+  .dtable th{font-size:11px; text-transform:uppercase; letter-spacing:.05em; color:var(--soft)}
+
+  @media (max-width:860px){ .statrow{grid-template-columns:repeat(2,1fr)} .maingrid{grid-template-columns:1fr !important} .console{grid-template-columns:1fr !important} .rail{display:none !important} }
+  @media (prefers-reduced-motion: reduce){ *{transition:none!important} }
+
+  /* ---- page-specific additions (kept in the same design language) ---- */
+  .anno{font-size:11px; color:var(--soft)}
+  .cardbox{border:1px solid var(--line); border-radius:10px; padding:11px 14px; font-size:12.5px; background:var(--paper)}
+  .btn-ink{background:var(--ink); color:#fff; border:0; border-radius:7px; padding:7px 12px; font-size:11.5px; cursor:pointer; font-weight:600}
+  .btn-ghost{background:var(--paper); border:1px solid var(--line); border-radius:7px; padding:7px 12px; font-size:11.5px; cursor:pointer}
+  .sechead{font-size:14px; font-weight:700; margin:0 0 8px; font-family:var(--font-display)}
+  .cov td.ok{color:var(--good); font-weight:700}
+  .specdoc h2{font-size:18px; margin:26px 0 8px}
+  .specdoc h3{font-size:15px; margin:18px 0 6px}
+  .specdoc p, .specdoc li{font-size:13.5px; color:var(--mut)}
+  .specdoc b{color:var(--ink)}
+  .specdoc table{margin:8px 0}
+  .sig{border:1px solid var(--line); border-radius:10px; padding:10px 12px; background:var(--paper)}
+  .sig .plat{font-size:10.5px; text-transform:uppercase; letter-spacing:.05em; color:var(--soft)}
+  .sig .tags{display:flex; gap:5px; flex-wrap:wrap; margin-top:5px}
+  .conf{display:inline-block; width:64px; height:6px; border-radius:4px; background:var(--surface); vertical-align:middle; overflow:hidden}
+  .conf i{display:block; height:100%; background:var(--brand)}
+  .disc{border:1px dashed var(--line); border-radius:8px; padding:7px 10px; font-size:11.5px; color:var(--mut); background:var(--surface)}
+</style>
+
+<!-- ============ (1) slim header ============ -->
+<div class="bar">
+  <div class="wrap">
+    <div class="ttl">PropertyIQ · Screen 37 — Investor Watch + Metered Scans <small>Full-density per-screen mock · wireframe fidelity · dev-facing annotations in gray</small></div>
+    <a href="../wireframe.html">← All screens</a>
+  </div>
+</div>
+
+<!-- ============ (2) THE FULL MOCK ============ -->
+<div class="wrap" style="padding-top:24px">
+  <div class="note"><b>Screen 37 — Investor Watch + Metered Scans.</b> Two P2, honest-by-design surfaces on one screen: (1) the Investor Video Monitoring dashboard (§21) — non-predictive market signals from public investor content via PropCast's VideoIntelligenceService, with an explicit degraded state when v1 pattern queries aren't live; (2) the metered zoning area-scan flow (§17.7) — draw an area, get a price quote reflecting actual API cost, pay, scan, cache. Neither surface ever fabricates: no synthesized trends, no charge without a quote, no re-charge without a cached-result warning. Agent/team-facing only in v1 — no client-facing output ships from here.</div>
+
+  <div class="site" data-agent="watts">
+    <!-- header: watchlist size, weekly brief cadence, Billing & scans nav (spec Layout) -->
+    <div class="sitehead">
+      <div class="avatar">GW</div>
+      <div class="who"><b>Investor watch</b><small class="num">Watchlist: 6 channels · weekly brief Fridays · 2 cached scans</small></div>
+      <div id="el-brief-toggle" style="display:inline-flex; gap:8px; align-items:center; border:1px solid var(--line); border-radius:99px; padding:5px 12px; font-size:11.5px; margin-left:10px">
+        <span>📬 Weekly brief</span><span class="bdg good">ON · Fridays</span>
+        <span class="anno">in-app + internal email (send-not-draft) [DECIDE §23 if ever client-facing]</span>
+      </div>
+      <nav><a href="#el-history" id="el-billing-nav">Billing &amp; scans</a><a href="#">Search (⌘K)</a></nav>
+    </div>
+
+    <div class="console" style="display:grid; grid-template-columns:172px 1fr">
+      <!-- persistent agent-console left rail (same chrome as Screen 9) -->
+      <div class="rail" style="border-right:1px solid var(--line); padding:14px 10px; font-size:12.5px; display:flex; flex-direction:column; gap:2px; background:var(--surface)">
+        <a href="#" style="text-decoration:none; color:var(--ink); border-radius:8px; padding:8px 10px">☰ Today</a>
+        <a href="#" style="text-decoration:none; color:var(--ink); border-radius:8px; padding:8px 10px">🗺 Farm map</a>
+        <a href="#" style="text-decoration:none; color:var(--ink); border-radius:8px; padding:8px 10px">🤝 Past clients</a>
+        <a href="#" style="text-decoration:none; color:var(--ink); border-radius:8px; padding:8px 10px">👤 Leads &amp; clients</a>
+        <a href="#" style="text-decoration:none; color:var(--ink); border-radius:8px; padding:8px 10px">💬 Comms <span class="bdg" style="font-size:9.5px">6</span></a>
+        <a href="#" style="text-decoration:none; color:var(--ink); border-radius:8px; padding:8px 10px">📋 Transactions</a>
+        <a href="#" style="text-decoration:none; color:#fff; background:var(--ink); border-radius:8px; padding:8px 10px; font-weight:600">📡 Investor watch</a>
+        <a href="#" style="text-decoration:none; color:var(--ink); border-radius:8px; padding:8px 10px">🎬 Content studio</a>
+        <a href="#" style="text-decoration:none; color:var(--ink); border-radius:8px; padding:8px 10px">📣 Ads &amp; funnels</a>
+        <a href="#" style="text-decoration:none; color:var(--ink); border-radius:8px; padding:8px 10px">📈 Reports</a>
+        <div style="margin-top:auto; padding-top:10px; border-top:1px solid var(--line)">
+          <a href="#" style="text-decoration:none; color:var(--ink); border-radius:8px; padding:8px 10px; display:block">⚙ Settings</a>
+          <div class="anno" style="padding:6px 10px">Global chrome: persistent agent-console rail (Screen 9 pattern). Consumer pages never show it.</div>
+        </div>
+      </div>
+
+      <div>
+        <!-- KPI row -->
+        <div style="padding:14px 22px 0">
+          <div class="statrow" style="grid-template-columns:repeat(5,1fr)">
+            <div class="stat"><small>Signals this week</small><b class="num">14</b> <span class="anno">weekly aggregation §21.5</span></div>
+            <div class="stat"><small>Watchlist sources</small><b class="num">6</b> <span class="anno">all public/API-approved</span></div>
+            <div class="stat"><small>Deep dives queued</small><b class="num">1</b> <span class="anno">REVIEW_REQUIRED</span></div>
+            <div class="stat"><small>Cached scans</small><b class="num">2</b> <span class="up">free to reopen</span></div>
+            <div class="stat"><small>Pending quotes</small><b class="num">1</b> <span class="anno num">$19 · expires Jul 22</span></div>
+          </div>
+          <div class="anno" style="margin-top:4px">KPIs read from InvestorMonitoringSignal aggregates + scan/billing records. Unknown renders as "—", never fabricated. Monitoring column and scans column load independently — a VideoIntelligence outage must not hide scan history.</div>
+        </div>
+
+        <!-- non-prediction disclaimer (persistent, above both columns) -->
+        <div id="el-disclaimer" style="padding:10px 22px 0">
+          <div class="disc">⚖️ <b style="color:var(--ink)">Content-discussion signals — not predictions, not investment advice, not scores.</b> Signals are read-only market-intelligence summaries: never ScoringService inputs, never protected-targeting inputs, never property-specific off-market lead claims (§21.6, §10.18). <span class="anno">Persistent line — the UI must never render signals as leads or scores. Fair-housing posture: no protected-class targeting anywhere on this screen.</span></div>
+        </div>
+
+        <!-- main two-column: left monitoring / right metered scans (1fr/1fr per draft) -->
+        <div class="maingrid" style="padding:14px 22px; display:grid; grid-template-columns:1fr 1fr; gap:14px">
+
+          <!-- ================= LEFT: This week's patterns ================= -->
+          <div style="display:grid; gap:10px; align-content:start">
+
+            <!-- weekly patterns card -->
+            <div id="el-patterns">
+              <div class="sechead">This week's patterns — Jul 7–13</div>
+              <div class="cardbox" style="border-left:3px solid var(--brand)">
+                <div style="display:grid; gap:6px; font-size:12.5px">
+                  <div>📉 <b>Sentiment on Bay Area multifamily: cooling</b> <span style="color:var(--mut)">(3 of 6 tracked channels)</span> <a href="#el-signals" style="color:var(--brand); font-size:11px">→ 5 contributing signals</a></div>
+                  <div>🏗 <b>Strategy shift: 2 channels pivoting to ADU-value-add</b> <span style="color:var(--mut)">— matches your farm thesis</span> <a href="#el-signals" style="color:var(--brand); font-size:11px">→ 4 signals</a></div>
+                  <div class="num">📊 <b>Cap-rate discussion range, Bay Area investor content this month: 6.2%–7.4%</b> <span style="color:var(--mut)">(§21.6 allowed-output form)</span></div>
+                  <div class="num">🧭 Sentiment by geo (last 60 days): Austin <span class="bdg warn">BEARISH</span> · East Palo Alto <span class="bdg">NEUTRAL</span> · Atlanta <span class="bdg good">BULLISH</span></div>
+                  <div>🔍 Deep-dive queued: <i>"Ramit's EPA duplex breakdown"</i> <span class="bdg warn">PENDING APPROVAL</span> <span style="color:var(--mut)">— in your Approvals inbox (Screen 24 lane)</span></div>
+                </div>
+                <div class="anno" style="margin-top:6px">Weekly aggregation over InvestorMonitoringSignal (§10.18); content checked daily, dashboard aggregates weekly (§21.5). Click a line → contributing signal cards below. If VideoIntelligence v1 is unavailable this entire panel is replaced by the §21.2 banner — never synthesized trends (see degraded state ↓).</div>
+              </div>
+            </div>
+
+            <!-- geo + signal filters -->
+            <div id="el-geo-filter">
+              <div style="display:flex; gap:5px; flex-wrap:wrap; align-items:center">
+                <span class="anno" style="margin-right:2px">Geo:</span>
+                <button class="chip on" style="font-size:10.5px">Bay Area</button><button class="chip" style="font-size:10.5px">East Palo Alto</button><button class="chip" style="font-size:10.5px">Austin</button><button class="chip" style="font-size:10.5px">Atlanta</button><button class="chip" style="font-size:10.5px">All geos</button>
+                <span class="anno" style="margin:0 2px 0 8px">Type:</span>
+                <button class="chip on" style="font-size:10.5px">All</button><button class="chip" style="font-size:10.5px">Cap rate</button><button class="chip" style="font-size:10.5px">Sentiment</button><button class="chip" style="font-size:10.5px">Strategy</button><button class="chip" style="font-size:10.5px">ADU</button><button class="chip" style="font-size:10.5px">Off-market pattern</button>
+              </div>
+              <div class="anno" style="margin-top:4px">Hybrid scoping (§21.4): national sources monitored; geo relevance extracted via geo_tag/topic_tag; this filter selects the local view. Filters map to PropSearchVideoPatternQuery {geo_tag, topic_tag, investor_strategy, signal_type, sentiment} in SMART_SAMPLING mode (§12.11). Tag click on any card also refilters.</div>
+            </div>
+
+            <!-- signal feed -->
+            <div id="el-signals">
+              <div class="sechead">Signal feed <span class="anno" style="font-weight:400">— 14 this window, filtered: 5</span></div>
+              <div style="display:grid; gap:8px">
+                <div class="sig">
+                  <div style="display:flex; gap:8px; align-items:center; flex-wrap:wrap"><span class="plat">▶ YOUTUBE</span><span class="bdg warn">BEARISH</span><span class="bdg">SUBMARKET_SENTIMENT</span><span class="anno num" style="margin-left:auto">window Jul 6–12</span></div>
+                  <div style="margin-top:5px"><b>"Bay Area 5–10 unit deals penciling worse than any point since '23"</b> <span style="color:var(--mut)">— short excerpt only (minimal storage §21.3)</span></div>
+                  <div class="tags"><button class="chip" style="font-size:10px">geo: bay-area</button><button class="chip" style="font-size:10px">topic: multifamily</button><button class="chip" style="font-size:10px">strategy: BUY_AND_HOLD</button></div>
+                  <div style="display:flex; gap:10px; align-items:center; margin-top:6px; font-size:11px; color:var(--mut)">extraction confidence — not a score: <span class="conf"><i style="width:82%"></i></span> <span class="num">0.82</span> <a href="#" style="color:var(--brand); margin-left:auto">Open source video ↗</a></div>
+                </div>
+                <div class="sig">
+                  <div style="display:flex; gap:8px; align-items:center; flex-wrap:wrap"><span class="plat">🎙 PODCAST_VIDEO</span><span class="bdg good">BULLISH</span><span class="bdg">ADU_DISCUSSION</span><span class="anno num" style="margin-left:auto">window Jul 8–12</span></div>
+                  <div style="margin-top:5px"><b>"ADU strategy mentions in East Palo Alto-tagged content up vs prior quarter"</b> <span style="color:var(--mut)">— pattern_summary</span></div>
+                  <div class="tags"><button class="chip" style="font-size:10px">geo: east-palo-alto</button><button class="chip" style="font-size:10px">topic: adu-value-add</button><button class="chip" style="font-size:10px">strategy: ADU_ADD</button></div>
+                  <div style="display:flex; gap:10px; align-items:center; margin-top:6px; font-size:11px; color:var(--mut)">extraction confidence — not a score: <span class="conf"><i style="width:74%"></i></span> <span class="num">0.74</span> <a href="#" style="color:var(--brand); margin-left:auto">Open source video ↗</a></div>
+                </div>
+                <div class="sig">
+                  <div style="display:flex; gap:8px; align-items:center; flex-wrap:wrap"><span class="plat">🎵 PUBLIC_TIKTOK_APPROVED_SOURCE</span><span class="bdg">MIXED</span><span class="bdg">CAP_RATE_DISCUSSION</span><span class="anno num" style="margin-left:auto">window Jul 5–11</span></div>
+                  <div style="margin-top:5px" class="num"><b>"Creators quoting 6.2–7.4% asks on small multifamily; split on whether that holds"</b></div>
+                  <div class="tags"><button class="chip" style="font-size:10px">geo: bay-area</button><button class="chip" style="font-size:10px">topic: cap-rates</button></div>
+                  <div style="display:flex; gap:10px; align-items:center; margin-top:6px; font-size:11px; color:var(--mut)">extraction confidence — not a score: <span class="conf"><i style="width:61%"></i></span> <span class="num">0.61</span> <a href="#" style="color:var(--brand); margin-left:auto">Open source video ↗</a></div>
+                </div>
+                <div class="sig">
+                  <div style="display:flex; gap:8px; align-items:center; flex-wrap:wrap"><span class="plat">📺 OTHER_APPROVED_PUBLIC_VIDEO</span><span class="bdg">NEUTRAL</span><span class="bdg">OFF_MARKET_STRATEGY_PATTERN</span><span class="anno num" style="margin-left:auto">window Jul 7–13</span></div>
+                  <div style="margin-top:5px"><b>"Direct-mail-to-probate sourcing discussion trending in national channels"</b> <span style="color:var(--mut)">— strategy discussion only, no private-property identification (§21.1)</span></div>
+                  <div class="tags"><button class="chip" style="font-size:10px">geo: national</button><button class="chip" style="font-size:10px">topic: off-market-sourcing</button></div>
+                  <div style="display:flex; gap:10px; align-items:center; margin-top:6px; font-size:11px; color:var(--mut)">extraction confidence — not a score: <span class="conf"><i style="width:57%"></i></span> <span class="num">0.57</span> <a href="#" style="color:var(--brand); margin-left:auto">Open source video ↗</a></div>
+                </div>
+              </div>
+              <div class="anno" style="margin-top:5px">Card = InvestorMonitoringSignal §10.18: source_platform (YOUTUBE / PODCAST_VIDEO / PUBLIC_TIKTOK_APPROVED_SOURCE / OTHER_APPROVED_PUBLIC_VIDEO), pattern_summary, sentiment_label (BULLISH/BEARISH/NEUTRAL/MIXED/UNKNOWN), signal_type, geo/topic/strategy tags, source_window, confidence (0–1, labeled extraction confidence). Storage = hash + URL + basic metadata + short excerpt/summary + timestamp + source — never full transcripts, comment threads, or 3rd-party PII (§21.3). retention_class REDDIT_MINIMAL_24M (24-month minimal retention). Excerpts stay short — copyright posture per the minimal-storage rule. Sentiment badge colors are data colors, not judgments.</div>
+            </div>
+
+            <!-- empty state inline -->
+            <div id="el-empty-signals" class="cardbox" style="background:var(--surface); text-align:center; color:var(--mut)">
+              <b style="color:var(--ink)">Empty state (when filters match nothing):</b> "No signals matched your filters this window." <button class="btn-ghost" style="margin-left:8px">Widen window to 30 days</button>
+              <div class="anno" style="margin-top:4px">Standard pattern [BEST GUESS in spec] — suggest widening the source_window or clearing geo/type filters; never pad with out-of-filter signals.</div>
+            </div>
+
+            <!-- deep-dive request -->
+            <div id="el-deep-dive" class="cardbox">
+              <div style="display:flex; gap:10px; align-items:center; flex-wrap:wrap">
+                <span>🔍</span>
+                <div style="flex:1; min-width:220px"><b>Request a deep dive</b>
+                  <div style="color:var(--mut); font-size:11.5px">Per-video or per-topic analysis — routes to your Approvals inbox as REVIEW_REQUIRED. Never auto-runs.</div>
+                </div>
+                <button class="btn-ink">Request deep dive → Approvals</button>
+              </div>
+              <div style="border-top:1px solid var(--line); margin-top:8px; padding-top:8px; font-size:11.5px" class="num">
+                Queue: "Ramit's EPA duplex breakdown" <span class="bdg warn">PENDING</span> · "Austin cap-rate roundup" <span class="bdg good">DONE Jul 3</span>
+              </div>
+              <div class="anno" style="margin-top:4px">InvestorMonitoringMode = DEEP_DIVE_REVIEW_REQUIRED (§8); SMART_SAMPLING is the only autonomous mode. Action PROPSEARCH_QUERY_INVESTOR_MONITORING (§30): no review for dashboard queries, review required for deep dives; emits NO ledger events. Deep-dive output stores summary + excerpt only — a full transcript is not retained where not licensed; report renders ephemeral/linked [BEST GUESS respecting §21.3]. Restricted to owner/admin roles [BEST GUESS]; viewers are read-only.</div>
+            </div>
+
+            <!-- watchlist manager -->
+            <div id="el-watchlist" class="cardbox">
+              <b>Watchlist manager — 6 sources</b>
+              <table class="dtable" style="font-size:11.5px; margin-top:6px">
+                <tr><th>Source</th><th>Access basis</th><th></th></tr>
+                <tr><td>BiggerPockets</td><td><span class="bdg good">Public channel</span></td><td><a href="#" style="color:var(--mut)">remove</a></td></tr>
+                <tr><td>Pace Morby (public)</td><td><span class="bdg good">Public channel</span></td><td><a href="#" style="color:var(--mut)">remove</a></td></tr>
+                <tr><td>Codie Sanchez (public)</td><td><span class="bdg good">Public channel</span></td><td><a href="#" style="color:var(--mut)">remove</a></td></tr>
+                <tr><td>Dion Talk (public)</td><td><span class="bdg good">Public channel</span></td><td><a href="#" style="color:var(--mut)">remove</a></td></tr>
+                <tr><td>Investor podcast networks</td><td><span class="bdg good">Approved API</span></td><td><a href="#" style="color:var(--mut)">remove</a></td></tr>
+                <tr><td>Bay Area channels (owner-approved)</td><td><span class="bdg good">Public · owner-approved</span></td><td><a href="#" style="color:var(--mut)">remove</a></td></tr>
+              </table>
+              <div style="display:flex; gap:6px; margin-top:8px; align-items:center"><input placeholder="Add source URL…" style="flex:1; border:1px solid var(--line); border-radius:7px; padding:6px 10px; font-size:11.5px; background:var(--paper)"><button class="btn-ink">Add</button></div>
+              <div style="background:var(--surface); border-radius:7px; padding:7px 10px; margin-top:6px; font-size:11px; color:var(--crit)">✕ Rejected example: "TikTok ad library — competitor ads" — <b>ad-library scraping is not allowed</b> (§21.3). Also rejected inline: any source requiring the owner's personal account for scraping/auth.</div>
+              <div class="anno" style="margin-top:4px">v1 seed list per §21.3; user customization allowed. Sources must be public or approved-API; each row shows its access basis. Watchlist config record = tenant-level settings entity [BEST GUESS — no typed record in the Brain]. Save → "customized source list" persisted.</div>
+            </div>
+
+            <!-- refresh cadence + left honesty footer -->
+            <div id="el-cadence" class="disc">🕐 <b style="color:var(--ink)">New content checked daily · dashboard aggregates weekly · deep dives on approved request only</b> (§21.5). <span class="anno">Honesty microcopy: this dashboard tunes internally from your usage but must NOT promise "improves your recommendations" — no Event Ledger feedback event exists in v1 (§21.7).</span></div>
+
+            <!-- degraded banner (left column state) -->
+            <div id="el-degraded" class="cardbox" style="border-color:var(--warn); background:#fdf6ee">
+              <b style="color:var(--warn)">Degraded state (rendered when available_capability = V0_INGEST_ONLY):</b>
+              <div style="margin-top:6px; border:1px dashed var(--warn); border-radius:8px; padding:14px; text-align:center; color:var(--mut)">
+                ⚠️ <b style="color:var(--ink)">"Video ingestion/report records available; pattern dashboard unavailable"</b>
+                <div style="font-size:11.5px; margin-top:4px">This banner replaces the entire patterns panel + signal feed. Watchlist stays editable. Scans column unaffected.</div>
+              </div>
+              <div class="anno" style="margin-top:4px">§21.2 verbatim. Sets manual_review_flag = VIDEO_INTELLIGENCE_V1_UNAVAILABLE (§12.11: skip pattern logic, log flag, continue safe workflows, never fabricate pattern data). Fail-closed by design.</div>
+            </div>
+          </div>
+
+          <!-- ================= RIGHT: Area scans (metered) ================= -->
+          <div style="display:grid; gap:10px; align-content:start">
+
+            <!-- scan launcher -->
+            <div id="el-launcher">
+              <div class="sechead">Area scans (metered)</div>
+              <div class="cardbox" style="border-left:3px solid var(--brand)">
+                <b>Draw an area → quote → run → cached</b>
+                <div style="display:grid; grid-template-columns:repeat(4,1fr); gap:6px; font-size:11px; text-align:center; margin-top:8px">
+                  <div style="background:var(--surface); border-radius:8px; padding:8px 6px"><b>1 · Draw</b><div style="color:var(--mut)">polygon on the map's zoning layer</div></div>
+                  <div style="background:var(--surface); border-radius:8px; padding:8px 6px"><b>2 · Quote</b><div style="color:var(--mut)">price = actual API cost, shown first</div></div>
+                  <div style="background:var(--surface); border-radius:8px; padding:8px 6px"><b>3 · Pay &amp; run</b><div style="color:var(--mut)">no charge without a quote</div></div>
+                  <div style="background:var(--surface); border-radius:8px; padding:8px 6px"><b>4 · Cached</b><div style="color:var(--mut)">reopen free, forever</div></div>
+                </div>
+                <div style="display:flex; gap:6px; margin-top:8px; flex-wrap:wrap">
+                  <button class="btn-ink">🗺 Draw area on map</button>
+                  <span style="display:flex; gap:5px"><button class="chip" style="font-size:10.5px">ADU</button><button class="chip on" style="font-size:10.5px">SB-9 lot split</button><button class="chip" style="font-size:10.5px">Garage conversion</button></span>
+                </div>
+                <div class="anno" style="margin-top:6px">§17.7: layer types ADU / SB9_LOT_SPLIT / GARAGE_CONVERSION. "Draw area" deep-links to the map screen's polygon tool — the quote modal renders THERE; this screen holds the launcher, pending quotes, and history (one quote object, two surfaces [DECIDE]). Consumes ZoningProvider/Zoneomics; ScoringService deliberately unused. Scans restricted to owner/admin roles [BEST GUESS]; viewers see history read-only, no Run scan.</div>
+              </div>
+            </div>
+
+            <!-- per-property zoning note -->
+            <div id="el-zoning-note" class="disc">🆓 <b style="color:var(--ink)">Per-property zoning facts are always free on property detail — scans are for area-wide layers only.</b> <span class="anno">§17.7: controls/plu/capacity/overlays/geom stay part of the standard property-detail experience, no separate charge. Panel 17.6 and layers 17.7 render from one response — no separate endpoint.</span></div>
+
+            <!-- pending quote card -->
+            <div id="el-quote" class="cardbox" style="border-color:var(--brand)">
+              <div style="display:flex; gap:8px; align-items:center; flex-wrap:wrap"><b>Pending quote — "EPA SB-9 scan"</b><span class="bdg warn num">expires Jul 22</span></div>
+              <table class="dtable" style="font-size:11.5px; margin-top:6px">
+                <tr><td>Area</td><td>East Palo Alto — drawn polygon (2.1 sq mi)</td></tr>
+                <tr><td>Layer type</td><td>SB-9 lot split eligibility</td></tr>
+                <tr><td>Parcels</td><td class="num">1,240</td></tr>
+                <tr><td>Quoted price</td><td class="num"><b>$19.00</b> <span class="anno">reflects actual API cost of scanning</span></td></tr>
+              </table>
+              <div style="display:flex; gap:6px; margin-top:8px"><button class="btn-ink">Run scan — pay $19.00</button><button class="btn-ghost">Cancel quote</button></div>
+              <div class="anno" style="margin-top:4px">Quote before charge, always (§17.7). Run → payment confirm (Stripe one-off [BEST GUESS]) → scan executes → results cached, open on the map as a filter layer. Payment failure → scan not run, no partial charge, quote retained. Interim pricing: parcel_count × per-parcel API cost + margin; 7-day expiry [DECIDE — billing design pass with Mehmood/Sami pending; UI unaffected by the formula].</div>
+            </div>
+
+            <!-- cached-result warning -->
+            <div id="el-cache-warn" class="cardbox" style="border-color:var(--warn); background:#fdf6ee">
+              <b>⚠ Cached-result warning (shown on re-running an identical/overlapping polygon):</b>
+              <div style="background:var(--paper); border:1px solid var(--line); border-radius:8px; padding:10px 12px; margin-top:6px; font-size:12px">
+                "You have a cached result for <b>Friendly Acres · ADU</b> from <b class="num">Jul 8</b> — reopen it free, or re-run for <b class="num">$12.00</b>?"
+                <div style="display:flex; gap:6px; margin-top:8px"><button class="btn-ink">Reopen cached (free)</button><button class="btn-ghost num">Re-run — new $12.00 charge</button></div>
+              </div>
+              <div class="anno" style="margin-top:4px">§17.7: "re-running the same area is a new charge" — so the warning always fires first; never a silent double-charge. Cache keyed by polygon + layer type.</div>
+            </div>
+
+            <!-- scan history -->
+            <div id="el-history" class="cardbox">
+              <b>Scan history</b> <span class="anno">· full history + invoices on the Billing screen →</span>
+              <table class="dtable" style="font-size:11.5px; margin-top:6px">
+                <tr><th>Date</th><th>Area</th><th>Layer</th><th>Parcels</th><th>Paid</th><th>Status</th><th></th></tr>
+                <tr><td class="num">Jul 8</td><td>Friendly Acres</td><td>ADU</td><td class="num">640</td><td class="num">$12.00</td><td><span class="bdg good">CACHED</span></td><td><a href="#" style="color:var(--brand)">Reopen (free)</a> · <a href="#" style="color:var(--mut)">receipt</a></td></tr>
+                <tr><td class="num">Jun 24</td><td>Willows, Menlo Park</td><td>Garage conv.</td><td class="num">910</td><td class="num">$15.00</td><td><span class="bdg good">CACHED</span></td><td><a href="#" style="color:var(--brand)">Reopen (free)</a> · <a href="#" style="color:var(--mut)">receipt</a></td></tr>
+                <tr><td class="num">Jun 20</td><td>Belle Haven</td><td>SB-9</td><td class="num">1,080</td><td class="num">$17.00</td><td><span class="bdg" style="color:var(--crit); border-color:var(--crit)">FAILED</span></td><td><span class="anno">auto-credited · retry free [DECIDE]</span></td></tr>
+              </table>
+              <div class="anno" style="margin-top:4px">Row = date, area label, layer type, parcels, price paid, cached badge, reopen action (§17.7 + draft). Reopen → cached map layer, no charge. Statuses QUOTED / PAID / RUNNING / CACHED / FAILED [BEST GUESS shapes — §17.7 defines the mechanic, not records]. Post-payment scan failure → FAILED, auto-credit/retry [DECIDE — billing pass]. Ledger: scans emit GENERATED_ASSET_CREATED only if a generated asset is created; payment events live with the billing provider, not the PropSearch ledger [BEST GUESS].</div>
+            </div>
+
+            <!-- quote-service degraded -->
+            <div id="el-quote-degraded" class="cardbox" style="border-color:var(--warn); background:#fdf6ee">
+              <b style="color:var(--warn)">Degraded state (quote service unavailable):</b>
+              <div style="margin-top:6px; border:1px dashed var(--warn); border-radius:8px; padding:10px; text-align:center; color:var(--mut); font-size:12px">
+                "Scan pricing unavailable — try again later." <button class="btn-ghost" disabled style="opacity:.5; margin-left:8px">Run scan</button>
+              </div>
+              <div class="anno" style="margin-top:4px">Fail-closed: no scan can run unquoted. Run buttons disabled everywhere while pricing is down; cached results still reopen free.</div>
+            </div>
+
+            <!-- right honesty footer -->
+            <div id="el-honesty-right" class="disc">💳 <b style="color:var(--ink)">Metered honesty:</b> quote before charge, always · cached results reusable free · identical-area re-run warns before charging again · per-property zoning facts never metered (§17.7).</div>
+          </div>
+        </div>
+
+        <!-- ============ states strip ============ -->
+        <div id="el-states" style="padding:0 22px 14px">
+          <div class="cardbox" style="font-size:11.5px">
+            <b>States (dev reference)</b>
+            <div style="color:var(--mut); margin-top:4px">
+              <b style="color:var(--ink)">Loading:</b> skeleton cards per column; monitoring and scans columns load independently (different services — a VideoIntelligence outage must not hide scan history).
+              <b style="color:var(--ink)">Empty (first visit):</b> watchlist card front-and-center with the §21.3 seed list preloaded + "monitoring begins after first daily check"; scans column shows the launcher only.
+              <b style="color:var(--ink)">Degraded (all fail-closed):</b> VideoIntelligence v0-only → left column collapses to the §21.2 banner verbatim, flag VIDEO_INTELLIGENCE_V1_UNAVAILABLE, watchlist still editable, scans unaffected, never fabricated pattern data · quote service down → "Scan pricing unavailable", Run disabled, nothing runs unquoted · payment failure → scan not run, no partial charge, quote retained · post-payment scan failure → FAILED + auto-credit/retry [DECIDE].
+              <b style="color:var(--ink)">Permission-limited:</b> deep-dive requests + paid scans = owner/admin only [BEST GUESS]; viewers get a read-only dashboard, no Run scan.
+            </div>
+          </div>
+        </div>
+
+        <!-- ============ mobile variant strip ============ -->
+        <div id="el-mobile" style="padding:0 22px 18px">
+          <div class="cardbox" style="font-size:11.5px">
+            <b>Mobile variant (375px)</b>
+            <div style="display:flex; gap:8px; margin-top:8px; overflow-x:auto">
+              <div style="min-width:150px; border:1px solid var(--line); border-radius:10px; padding:8px; font-size:9.5px"><b>1 · Stack order</b><div style="color:var(--mut)">header → pattern summary → signal feed (cards stack) → watchlist (collapsed accordion) → scans: launcher, quotes, history</div></div>
+              <div style="min-width:150px; border:1px solid var(--line); border-radius:10px; padding:8px; font-size:9.5px"><b>2 · Signal card</b><div style="color:var(--mut)">full-width; tags wrap; confidence bar under excerpt</div></div>
+              <div style="min-width:150px; border:1px solid var(--brand); border-radius:10px; padding:8px; font-size:9.5px"><b>3 · Quote bottom sheet</b><div style="color:var(--mut)">quote modal becomes a bottom sheet; confirm button restates price explicitly: <b style="color:var(--ink)">"Pay $19 &amp; run scan"</b></div></div>
+              <div style="min-width:150px; border:1px solid var(--line); border-radius:10px; padding:8px; font-size:9.5px"><b>4 · Map handoff</b><div style="color:var(--mut)">drawing happens on the map screen and returns here with the pending quote</div></div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ============ spec gaps found ============ -->
+  <div class="note" style="margin-top:24px"><b>Spec gaps found (Master Brain §17.7/§21 items the spec missed or softened — rendered above):</b> (1) §21.6's three concrete allowed-output examples (cap-rate range "6.2%–7.4%", EPA ADU mentions up vs prior quarter, Austin/EPA/Atlanta sentiment lines) are rendered verbatim-style in the patterns card — the spec only paraphrased one; (2) the 4th source_platform enum value is <b>OTHER_APPROVED_PUBLIC_VIDEO</b>, not "OTHER" as the spec's signal-card row wrote it (§10.18) — corrected in the signal feed; (3) §12.11 rule "continue safe workflows" on v1-unavailable is stated explicitly on the degraded banner; (4) the single-response rule "panel 17.6 and map layers 17.7 render from this single response — no separate endpoint" is annotated on the per-property zoning note; (5) §30 action-registry footnote — dashboard query needs no review, deep dive does, action emits NO ledger events with payload {tenant_id, geo_tag, topic_tag, source_window, mode} — annotated on the deep-dive card.</div>
+
+  <!-- ============ (3) ELEMENT COVERAGE ============ -->
+  <h2 style="font-size:20px; margin:34px 0 10px">Element coverage — spec inventory → this page</h2>
+  <table class="dtable cov" style="font-size:12.5px">
+    <tr><th>Spec inventory element</th><th>Rendered at</th><th>Status</th></tr>
+    <tr><td>Weekly patterns card (aggregated read, click → contributing signals)</td><td><a href="#el-patterns">This week's patterns</a></td><td class="ok">✓</td></tr>
+    <tr><td>Signal cards (platform, pattern_summary, sentiment, signal_type, tags, window, extraction confidence)</td><td><a href="#el-signals">Signal feed</a></td><td class="ok">✓</td></tr>
+    <tr><td>Non-prediction disclaimer (persistent)</td><td><a href="#el-disclaimer">Disclaimer strip</a></td><td class="ok">✓</td></tr>
+    <tr><td>Geo filter (hybrid scoping, user-selected geography)</td><td><a href="#el-geo-filter">Geo + type filters</a></td><td class="ok">✓</td></tr>
+    <tr><td>Watchlist manager (seed list, access basis, add/remove, inline rejections)</td><td><a href="#el-watchlist">Watchlist manager</a></td><td class="ok">✓</td></tr>
+    <tr><td>Refresh cadence note (daily check · weekly aggregate)</td><td><a href="#el-cadence">Cadence strip</a></td><td class="ok">✓</td></tr>
+    <tr><td>Deep-dive request button (REVIEW_REQUIRED, queue status chips)</td><td><a href="#el-deep-dive">Deep-dive card</a></td><td class="ok">✓</td></tr>
+    <tr><td>Weekly brief subscription (Fridays indicator + toggle)</td><td><a href="#el-brief-toggle">Header brief toggle</a></td><td class="ok">✓</td></tr>
+    <tr><td>Degraded-state banner (§21.2 verbatim, no synthesized data)</td><td><a href="#el-degraded">Degraded banner</a></td><td class="ok">✓</td></tr>
+    <tr><td>Scan launcher (draw→quote→pay→cache, layer types, map deep-link)</td><td><a href="#el-launcher">Scan launcher</a></td><td class="ok">✓</td></tr>
+    <tr><td>Quote card/modal (area, parcels, price, expiry, Run/cancel)</td><td><a href="#el-quote">Pending quote</a></td><td class="ok">✓</td></tr>
+    <tr><td>Cached-result warning (reopen free vs re-run new charge)</td><td><a href="#el-cache-warn">Cached-result warning</a></td><td class="ok">✓</td></tr>
+    <tr><td>Scan history rows (date/area/layer/parcels/paid/cached/reopen/receipt)</td><td><a href="#el-history">Scan history</a></td><td class="ok">✓</td></tr>
+    <tr><td>Billing &amp; scans nav</td><td><a href="#el-billing-nav">Header nav</a> + history note</td><td class="ok">✓</td></tr>
+    <tr><td>Per-property zoning note (facts always free on property detail)</td><td><a href="#el-zoning-note">Zoning note</a></td><td class="ok">✓</td></tr>
+    <tr><td>Empty-state (no signals this window + widen suggestion)</td><td><a href="#el-empty-signals">Empty state</a></td><td class="ok">✓</td></tr>
+  </table>
+  <div style="border:1.5px solid var(--good); background:#f2f8f4; border-radius:10px; padding:12px 16px; margin:12px 0 0; font-weight:700; color:var(--good)">16 of 16 spec elements rendered ✓ <span style="font-weight:400; color:var(--mut); font-size:12.5px">— plus prompt-required regions beyond the inventory: KPI row, quote-service degraded card, right/left honesty footers, states strip, mobile-variant strip; plus the 5 Master-Brain additions in the "Spec gaps found" note above.</span></div>
+
+  <!-- ============ (4) FULL SPEC AS HTML ============ -->
+  <div class="specdoc">
+    <h1 style="font-size:24px; margin:40px 0 6px">Spec — 37 · Investor Watch + Metered Scans</h1>
+    <p><b>Purpose</b> Two P2, honest-by-design surfaces sharing one screen: (1) the Investor Video Monitoring dashboard (Master Brain §21) — non-predictive market signals extracted from public investor content via PropCast's VideoIntelligenceService, with an explicit degraded state when v1 pattern queries aren't live; (2) the metered zoning area-scan flow (§17.7) — draw an area, get a price quote reflecting actual API cost, pay, scan, cache. Both surfaces never fabricate: no synthesized trends, no charge without a quote, no double-charge without a cached-result warning.</p>
+    <p><b>Primary users</b> Agent (Graeham) and team analysts. Investor-persona subscribers [BEST GUESS: v1 is agent-facing only; consumer exposure unscoped]. No client-facing output ships from this screen directly.</p>
+    <p><b>Entry points</b> Global nav / PropSearch section → "Investor watch"; weekly brief email/notification (Friday aggregation, §21.5) → deep link to that week's patterns; map screen → "Scan this area" after drawing a polygon on a zoning-capability filter layer (§17.7) → quote modal; Billing screen → scan history row → cached scan results.</p>
+    <p><b>Exit points</b> Signal card → source video URL (external, public content); deep-dive request → REVIEW_REQUIRED approval item (Approvals inbox / Screen 24 lane) — never auto-runs; watchlist editor → saves customized source list; "Run scan" → payment flow (Stripe [BEST GUESS]) → cached results open on the map as a filter layer; Billing &amp; scans nav → Billing/usage screen; cached scan "reopen" → map layer render, no charge.</p>
+
+    <h2>Layout</h2>
+    <p>Desktop (two-column grid, 1fr/1fr — matches draft): <b>Header (sitehead)</b> — "Investor watch" · "Watchlist: N channels · weekly brief Fridays" · right nav <b>Billing &amp; scans</b>. <b>Left column — This week's patterns:</b> pattern summary card (sentiment lines, strategy-shift callouts, deep-dive queue status); signal feed of InvestorMonitoringSignal cards filterable by geo_tag / topic_tag / strategy / signal_type / sentiment; watchlist manager with add/remove. <b>Right column — Area scans (metered):</b> scan launcher ("Draw an area → quote → run → cached" with map deep-link); pending quote card(s) (area, parcel count, quoted price, Run scan); scan history list (date, area, layer type ADU/SB9/garage, price paid, cached badge, reopen). <b>Footer notes both columns:</b> honesty microcopy — degraded-state note left, re-run-warning note right (inherited verbatim intent from draft).</p>
+    <p>Mobile (375px): single column — header → pattern summary → signal feed → watchlist (collapsed accordion) → scans (launcher, quotes, history). Quote modal becomes a bottom sheet; map drawing happens on the map screen and returns here.</p>
+
+    <h2>Element inventory</h2>
+    <div style="overflow-x:auto">
+    <table class="dtable">
+      <tr><th>Element</th><th>What it shows/does</th><th>Data source</th><th>Interactions</th><th>Spec source</th></tr>
+      <tr><td>Weekly patterns card</td><td>Aggregated read: e.g. "Sentiment on Bay Area multifamily: cooling (3 of 6 tracked)"; "2 channels pivoting ADU-value-add"</td><td>Weekly aggregation over InvestorMonitoringSignal (§10.18); cadence weekly (§21.5)</td><td>Click line → contributing signal cards</td><td>§21.5–21.6, draft</td></tr>
+      <tr><td>Signal cards</td><td>One public-content signal: platform icon (YOUTUBE / PODCAST_VIDEO / PUBLIC_TIKTOK_APPROVED_SOURCE / OTHER_APPROVED_PUBLIC_VIDEO), pattern_summary (short excerpt only), sentiment_label (BULLISH/BEARISH/NEUTRAL/MIXED/UNKNOWN), signal_type chip (CAP_RATE_DISCUSSION / SUBMARKET_SENTIMENT / STRATEGY_PATTERN / OFF_MARKET_STRATEGY_PATTERN / ADU_DISCUSSION / OTHER), geo/topic/strategy tags, source_window dates, extraction confidence (labeled "not a score")</td><td>InvestorMonitoringSignal §10.18 via PropSearchVideoPatternQuery (§12.11, mode SMART_SAMPLING)</td><td>Open source URL; tag click filters feed</td><td>§10.18, §12.11</td></tr>
+      <tr><td>Non-prediction disclaimer</td><td>Persistent line: "Content-discussion signals — not predictions, not investment advice, not scores"</td><td>static</td><td>none</td><td>§21.6, §10.18</td></tr>
+      <tr><td>Geo filter</td><td>User-selected geography filter over nationally-monitored sources</td><td>geo_tag extraction, hybrid scoping</td><td>Select market → refilter</td><td>§21.4</td></tr>
+      <tr><td>Watchlist manager</td><td>Source list (v1 seed: BiggerPockets, Pace Morby, Codie Sanchez, Dion Talk, investor podcast networks, owner-approved Bay Area channels) with add/remove; each row shows access basis (public/API-approved)</td><td>watchlist config record [BEST GUESS: tenant-level settings record — no typed record in Brain]</td><td>Add source (must be public/approved-API; TikTok ad-library scraping blocked; owner personal accounts never used for auth — enforced with inline rejection reasons)</td><td>§21.3</td></tr>
+      <tr><td>Refresh cadence note</td><td>"New content checked daily · dashboard aggregates weekly"</td><td>static per §21.5</td><td>none</td><td>§21.5</td></tr>
+      <tr><td>Deep-dive request button</td><td>Request per-video/topic deep dive → creates REVIEW_REQUIRED approval item; queue status ("deep-dive queued: …")</td><td>InvestorMonitoringMode = DEEP_DIVE_REVIEW_REQUIRED (§8); action PROPSEARCH_QUERY_INVESTOR_MONITORING (§30)</td><td>Request → routes to Approvals; status chip PENDING/APPROVED/DONE</td><td>§21.5, §30</td></tr>
+      <tr><td>Weekly brief subscription</td><td>"Weekly brief Fridays" indicator; toggle destination [BEST GUESS: report catalog / internal email, review-first if ever client-facing]</td><td>Report requirements §23</td><td>Toggle on/off</td><td>§21.5, §23</td></tr>
+      <tr><td>Degraded-state banner</td><td>Full-panel replacement: "Video ingestion/report records available; pattern dashboard unavailable" when only v0 exists</td><td>PropSearchVideoPatternResponse.available_capability = V0_INGEST_ONLY; flag VIDEO_INTELLIGENCE_V1_UNAVAILABLE</td><td>none — no synthesized data, safe workflows continue</td><td>§21.2, §12.11</td></tr>
+      <tr><td>Scan launcher</td><td>Explains draw→quote→pay→cache flow; "Draw area" deep-links to map polygon tool</td><td>—</td><td>Opens map draw mode for layer type ADU / SB9_LOT_SPLIT / GARAGE_CONVERSION</td><td>§17.7</td></tr>
+      <tr><td>Quote card/modal</td><td>Area name, parcel count ("1,240 parcels"), layer type, quoted price reflecting actual API cost, expiry [BEST GUESS: 7 days — pricing pass with Mehmood/Sami pending]</td><td>metered-scan quote service [DECIDE — billing design pass not yet scoped, §17.7]</td><td>"Run scan" → payment confirm → scan executes; cancel</td><td>§17.7</td></tr>
+      <tr><td>Cached-result warning</td><td>On re-running an identical/overlapping polygon: "You have a cached result from ⟨date⟩ — reopen free, or re-run for $N"</td><td>scan cache keyed by polygon + layer type</td><td>Reopen (free) vs re-run (new charge — §17.7 "re-running the same area is a new charge")</td><td>§17.7, draft</td></tr>
+      <tr><td>Scan history rows</td><td>Date, area label, layer type, parcels, price paid, cached badge, reopen link</td><td>scan/billing records [BEST GUESS shape]</td><td>Reopen → map layer from cache; receipt link</td><td>§17.7, draft</td></tr>
+      <tr><td>Billing &amp; scans nav</td><td>Links to Billing screen (payment method, scan invoices, usage)</td><td>billing provider</td><td>navigate</td><td>matrix gap</td></tr>
+      <tr><td>Per-property zoning note</td><td>"Per-property zoning facts are always free on property detail — scans are for area-wide layers only"</td><td>static</td><td>none</td><td>§17.7</td></tr>
+      <tr><td>Empty-state (no signals this window)</td><td>"No signals matched your filters this window" + widen-window suggestion</td><td>query result</td><td>adjust filters</td><td>[BEST GUESS, standard pattern]</td></tr>
+    </table>
+    </div>
+
+    <h2>States</h2>
+    <ul>
+      <li><b>Default:</b> v1 available, this week's aggregation + signal feed populated; ≥1 cached scan in history.</li>
+      <li><b>Loading:</b> skeleton cards per column; scans column loads independently of the monitoring column (different services — a VideoIntelligence outage must not hide scan history).</li>
+      <li><b>Empty:</b> first visit — watchlist card front-and-center with seed list preloaded and "monitoring begins after first daily check"; scans column shows launcher only.</li>
+      <li><b>Degraded (fail-closed):</b> VideoIntelligence v0-only → left column collapses to the §21.2 banner verbatim; manual_review_flag = VIDEO_INTELLIGENCE_V1_UNAVAILABLE; watchlist still editable; scans unaffected; never fabricated pattern data. Quote service unavailable → "Scan pricing unavailable — try again later"; Run buttons disabled; no scan can run unquoted. Payment failure → scan not run, no partial charge, quote retained. Scan job failure post-payment → status FAILED with auto-credit/retry [DECIDE — billing pass].</li>
+      <li><b>Permission-limited:</b> deep-dive requests and paid scans restricted to owner/admin roles [BEST GUESS]; viewers see dashboard read-only, no Run scan.</li>
+      <li><b>Mobile:</b> single column per Layout; quote confirm as bottom sheet with explicit price restated on the confirm button ("Pay $19 &amp; run scan").</li>
+    </ul>
+
+    <h2>Data fields</h2>
+    <div style="overflow-x:auto">
+    <table class="dtable">
+      <tr><th>Field</th><th>Format</th><th>Source of truth</th></tr>
+      <tr><td>investor_monitoring_signal_id, tenant_id</td><td>ids</td><td>InvestorMonitoringSignal §10.18</td></tr>
+      <tr><td>source_video_url, source_platform, content_hash</td><td>url, enum, hash</td><td>§10.18 (minimal storage: hash, URL, basic metadata, short excerpt/summary, timestamp, source — never full transcripts/comment threads/3rd-party PII, §21.3)</td></tr>
+      <tr><td>geo_tag, topic_tag, strategy</td><td>strings / InvestorStrategy enum</td><td>§10.18</td></tr>
+      <tr><td>signal_type, sentiment_label</td><td>enums §8/§10.18</td><td>§10.18</td></tr>
+      <tr><td>pattern_summary</td><td>short text</td><td>§10.18</td></tr>
+      <tr><td>confidence</td><td>0–1, labeled extraction confidence</td><td>§10.18</td></tr>
+      <tr><td>source_window.start_at/end_at</td><td>ISO datetimes</td><td>§10.18</td></tr>
+      <tr><td>retention_class</td><td>"REDDIT_MINIMAL_24M" (24-month minimal retention)</td><td>§10.18</td></tr>
+      <tr><td>available_capability</td><td>V0_INGEST_ONLY / V1_PATTERN_QUERY</td><td>PropSearchVideoPatternResponse §12.11</td></tr>
+      <tr><td>Scan: polygon geometry, layer_type (ADU/SB9/garage), parcel_count, quote_amount (USD), quote_created_at/expires_at, paid_at, status (QUOTED/PAID/RUNNING/CACHED/FAILED), cache key, result asset/layer ref</td><td>[BEST GUESS shapes — §17.7 defines mechanic, not records]</td><td>metered-scan billing design pass (pending)</td></tr>
+    </table>
+    </div>
+
+    <h2>Rules &amp; compliance</h2>
+    <ul>
+      <li><b>Availability gate (§21.2):</b> dashboard requires VideoIntelligenceService v1 pattern queries; v0 → banner + flag, never fabricated data.</li>
+      <li><b>Non-prediction rule (§21.6, §10.18):</b> signals are read-only market-intelligence summaries — not predictions, not investment advice, not ScoringService inputs, not protected-targeting inputs, not property-specific off-market lead claims. UI must never render them as leads or scores.</li>
+      <li><b>Source legality (§21.3):</b> public or approved-API access only; no TikTok ad-library scraping; owner's personal accounts never used for scraping/auth; minimal storage posture.</li>
+      <li><b>Deep dive = REVIEW_REQUIRED (§21.5, §30):</b> user request routes through approvals; SMART_SAMPLING is the only autonomous mode.</li>
+      <li><b>Feedback loop (§21.7):</b> no Event Ledger event for saved/shared/acted-upon feedback in v1 — internal operational tuning only; UI must not promise "improves your recommendations."</li>
+      <li><b>Metered scan honesty (§17.7):</b> quote before charge, always; cached results reusable free; identical-area re-run warns before charging again; per-property zoning facts never metered.</li>
+      <li><b>Quiet compliance:</b> signals carry source_facts; excerpts stay short (copyright posture per minimal-storage rule).</li>
+    </ul>
+
+    <h2>Cross-links</h2>
+    <p><b>In:</b> global nav, Friday weekly brief link, map draw tool (scan flow), Billing screen. <b>Out:</b> external source videos; Approvals inbox (deep-dive REVIEW_REQUIRED items); map screen (cached scan layers, zoning-capability filter layers §17.7); Billing screen; watchlist settings. <b>Ledger events:</b> monitoring emits none of PropSearch's four events by itself (PROPSEARCH_QUERY_INVESTOR_MONITORING emits none, §30); §21.7 forbids an unregistered feedback event. Scans: GENERATED_ASSET_CREATED only if a generated asset is created; payment events belong to the billing provider, not the PropSearch ledger [BEST GUESS]. <b>Consumes:</b> VideoIntelligenceService (PropCast-owned), ZoningProvider/Zoneomics (scans), ScoringService not used here — deliberately.</p>
+
+    <h2>Open decisions</h2>
+    <ul>
+      <li><b>[DECIDE] Metered-scan billing implementation</b> (§17.7: "mechanic approved, implementation isn't scoped — needs its own product/billing design pass with Mehmood/Sami"). Interim: Stripe one-off charges, quote = parcel_count × per-parcel API cost + margin, quotes expire in 7 days, failed scans auto-credit. UI unaffected by the pricing formula chosen.</li>
+      <li><b>[DECIDE] Where the quote modal lives:</b> interim — drawing happens on the map screen; the quote modal renders there; this screen holds the launcher, pending quotes, and history. One quote object, two surfaces.</li>
+      <li><b>[DECIDE] Weekly brief delivery channel:</b> interim — in-app notification + internal email (send-not-draft per workspace rule); becomes a §23 report type if client-facing later.</li>
+      <li><b>[DECIDE] Consumer/investor-subscriber access:</b> interim — agent/team only in v1.</li>
+      <li><b>[BEST GUESS] Watchlist config record shape</b> — assume tenant-level settings entity with per-source access-basis metadata.</li>
+      <li><b>[BEST GUESS] Draft's deep-dive example ("transcript + claims check")</b> must respect §21.3 storage limits — deep-dive output stores summary + excerpt, not a retained full transcript where not licensed; interim design renders the deep-dive report ephemeral/linked rather than stored verbatim.</li>
+    </ul>
+  </div>
+</div>

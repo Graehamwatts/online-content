@@ -1,0 +1,487 @@
+<title>PropertyIQ · Screen 34 — Admin Console</title>
+<link href="https://api.fontshare.com/v2/css?f[]=technor@500,600,700&display=swap" rel="stylesheet">
+<link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<style>
+  /* Type system — Technor for display, Inter for UI. */
+  :root{ --font-display:'Technor', Inter, -apple-system, 'Segoe UI', sans-serif; --font-ui: Inter, -apple-system, 'Segoe UI', Roboto, sans-serif; }
+</style>
+<style>
+  /* Palette v4 — PropFlow design language: neutral ink UI, ink-as-accent, color reserved for data. (extracted verbatim from propsearch-design-draft.html) */
+  :root, :root[data-theme="dark"], :root[data-theme="light"]{
+    --ink:#23282f; --paper:#fbfaf8; --surface:#f1efe9; --line:#e2dfd6;
+    --mut:#6b7076; --soft:#9b9f9f;
+    --brand:#2e6b53; --brand-ink:#ffffff; --brand-soft:#eaf1ec; --brand-deep:#1e4c3a;
+    --signal:#b07a2e;
+    --good:#2e7d4f; --warn:#a8630a; --crit:#b3372f;
+    --r:10px;
+  }
+  .intel .score, .mintel{ color:var(--brand-deep) }
+  .intel{ border-left:3px solid var(--brand) }
+  h1{ letter-spacing:-.02em }
+  .stat b{ letter-spacing:-.01em }
+  body[data-agent="watts"]{ --brand:#2e6b53; --brand-soft:#eaf1ec; --brand-deep:#1e4c3a; }
+
+  *{box-sizing:border-box; margin:0}
+  body{font:15px/1.55 var(--font-ui); color:var(--ink); background:var(--paper); padding-bottom:80px}
+  h1,h2,h3{line-height:1.15; text-wrap:balance; font-family:var(--font-display); font-weight:600}
+  h1{letter-spacing:-.01em}
+  .site{box-shadow:0 1px 2px rgba(20,24,32,.04), 0 8px 32px rgba(20,24,32,.06)}
+  .stat{box-shadow:0 1px 2px rgba(20,24,32,.03); transition:box-shadow .15s, transform .15s}
+  .stat:hover{box-shadow:0 4px 14px rgba(20,24,32,.08)}
+  .chip{transition:all .12s}
+  button{font-family:var(--font-ui)}
+  .num{font-variant-numeric:tabular-nums}
+  .wrap{max-width:1180px; margin:0 auto; padding:0 20px}
+
+  .bar{position:sticky; top:0; z-index:50; background:var(--paper); border-bottom:1px solid var(--line); padding:10px 0; backdrop-filter:blur(8px)}
+  .bar .wrap{display:flex; flex-wrap:wrap; gap:10px; align-items:center}
+  .bar .ttl{font-weight:700; margin-right:auto}
+  .bar .ttl small{display:block; font-weight:400; color:var(--mut)}
+  .bar a{color:var(--brand); font-size:13px; text-decoration:none}
+
+  .note{background:var(--surface); border:1px solid var(--line); border-radius:var(--r); padding:14px 16px; margin:0 0 22px; font-size:13.5px; color:var(--mut)}
+  .note b{color:var(--ink)}
+
+  .site{border:1px solid var(--line); border-radius:14px; overflow:hidden; background:var(--paper)}
+  .sitehead{display:flex; align-items:center; gap:14px; padding:14px 22px; border-bottom:1px solid var(--line)}
+  .avatar{width:38px; height:38px; border-radius:50%; background:var(--ink); color:#fff; display:grid; place-items:center; font-weight:700}
+  .sitehead .who b{display:block}
+  .sitehead .who small{color:var(--mut)}
+  .sitehead nav{margin-left:auto; display:flex; gap:18px; font-size:13.5px; color:var(--mut); align-items:center}
+  .sitehead nav a{color:inherit; text-decoration:none}
+  .sitehead nav a:hover{color:var(--brand)}
+
+  .chip{display:inline-flex; align-items:center; gap:6px; font-size:12.5px; font-weight:500; border:1px solid var(--line); border-radius:99px; padding:6px 12px; background:var(--paper); cursor:pointer; color:var(--ink)}
+  .chip:hover{border-color:var(--brand)}
+  .chip.on{background:var(--brand); border-color:var(--brand); color:var(--brand-ink); font-weight:600; box-shadow:0 2px 8px color-mix(in srgb, var(--brand) 30%, transparent)}
+
+  .statrow{display:grid; grid-template-columns:repeat(4,1fr); gap:10px}
+  .stat{background:var(--surface); border:1px solid var(--line); border-radius:var(--r); padding:12px}
+  .stat small{display:block; color:var(--mut); font-size:11.5px; text-transform:uppercase; letter-spacing:.05em}
+  .stat b{font-size:18px}
+  .stat .up{color:var(--good); font-size:12px}
+
+  .bdg{font-size:11.5px; border-radius:6px; padding:3px 8px; background:var(--surface); border:1px solid var(--line); color:var(--mut)}
+  .bdg.good{color:var(--good); border-color:color-mix(in srgb,var(--good) 30%,var(--line))}
+  .bdg.warn{color:var(--warn); border-color:color-mix(in srgb,var(--warn) 30%,var(--line))}
+  .bdg.crit{color:var(--crit); border-color:color-mix(in srgb,var(--crit) 35%,var(--line))}
+
+  .dtable{width:100%; border-collapse:collapse; font-size:13px}
+  .dtable td,.dtable th{border-bottom:1px solid var(--line); padding:8px 10px; text-align:left}
+  .dtable th{font-size:11px; text-transform:uppercase; letter-spacing:.05em; color:var(--soft)}
+
+  @media (max-width:860px){ .statrow{grid-template-columns:repeat(2,1fr)} .maingrid{grid-template-columns:1fr !important} }
+  @media (prefers-reduced-motion: reduce){ *{transition:none!important} }
+
+  /* ---- page-specific additions (same design language) ---- */
+  .anno{font-size:11px; color:var(--soft)}
+  .cardbox{border:1px solid var(--line); border-radius:10px; padding:11px 14px; font-size:12.5px; background:var(--paper)}
+  .btn-ink{background:var(--ink); color:#fff; border:0; border-radius:7px; padding:7px 12px; font-size:11.5px; cursor:pointer; font-weight:600}
+  .btn-ghost{background:var(--paper); border:1px solid var(--line); border-radius:7px; padding:7px 12px; font-size:11.5px; cursor:pointer}
+  .btn-crit{background:var(--crit); color:#fff; border:0; border-radius:7px; padding:7px 12px; font-size:11.5px; cursor:pointer; font-weight:700}
+  .sechead{font-size:14px; font-weight:700; margin:0 0 8px; font-family:var(--font-display)}
+  .cov td.ok{color:var(--good); font-weight:700}
+  .specdoc h2{font-size:18px; margin:26px 0 8px}
+  .specdoc h3{font-size:15px; margin:18px 0 6px}
+  .specdoc p, .specdoc li{font-size:13.5px; color:var(--mut)}
+  .specdoc b{color:var(--ink)}
+  .specdoc table{margin:8px 0}
+  .meter{height:8px; border-radius:99px; background:var(--surface); border:1px solid var(--line); overflow:hidden; margin-top:4px}
+  .meter i{display:block; height:100%; background:var(--brand)}
+  .meter i.warn{background:var(--warn)}
+  .meter i.crit{background:var(--crit)}
+  .mrow{display:grid; grid-template-columns:150px 1fr 92px; gap:8px; align-items:center; font-size:11.5px; padding:4px 0}
+</style>
+
+<!-- ============ (1) slim header ============ -->
+<div class="bar">
+  <div class="wrap">
+    <div class="ttl">PropertyIQ · Screen 34 — Admin Console <small>Full-density per-screen mock · wireframe fidelity · dev-facing annotations in gray</small></div>
+    <a href="../wireframe.html">← All screens</a>
+  </div>
+</div>
+
+<!-- ============ (2) THE FULL MOCK ============ -->
+<div class="wrap" style="padding-top:24px">
+  <div class="note"><b>Screen 34 — Admin Console (PropertyIQ ops / broker tier).</b> The trust machinery for the platform team and (Stage 3) the broker tier: kill switches, live rate/budget meters, the immutable append-only audit log, per-tenant cost/COGS, seam status, evaluation metrics, and the migration console. Agents rarely see this; the owner and platform team live here. Stage 1: owner-only. Stage 3: RBAC Owner/Admin/Agent/TC/Reviewer/Compliance (List A #34). The Brain calls it a "premium luxury command center" but explicitly defers visual/UI design to a separate track — this mock inherits the platform design system [DECIDE].</div>
+
+  <div class="site" data-agent="watts">
+    <!-- header: PQ platform avatar (not agent), tenant switcher, sticky kill switch -->
+    <div class="sitehead">
+      <div class="avatar">PQ</div>
+      <div class="who"><b>Admin</b><small>Tenant: graehamwatts · plan: Pro</small></div>
+      <div id="el-tenant" style="display:inline-flex; align-items:center; gap:6px; border:1px solid var(--line); border-radius:99px; padding:4px 6px 4px 12px; font-size:12px; margin-left:6px">
+        <span style="color:var(--mut)">Tenant:</span> <b>graehamwatts</b> <button class="btn-ghost" style="padding:3px 9px">Switch ▾</button>
+      </div>
+      <span class="anno">Tenant switcher — platform staff only; every panel re-scopes; the switch itself is a logged privileged action. Tenant isolation: no cross-tenant data in any panel, ever.</span>
+      <nav>
+        <a href="#">Search log (⌘K)</a>
+        <a href="#el-kill" style="color:var(--crit); font-weight:700; border:1.5px solid var(--crit); border-radius:99px; padding:5px 14px">⏻ Kill switch</a>
+      </nav>
+    </div>
+    <div class="anno" style="padding:6px 22px; border-bottom:1px solid var(--line); background:var(--surface)">Sticky rule: the red ⏻ Kill switch button remains pinned in this header at every scroll position, on every panel. Entry points: left-nav "Admin" (role-gated) · "⏻ Emergency stop" link in Settings (Screen 21) header · cost/margin/incident alert deep-links · SMS kill command works independently of this UI.</div>
+
+    <div style="padding:16px 22px">
+
+      <!-- top status stat row -->
+      <div class="statrow" style="grid-template-columns:repeat(6,1fr); margin-bottom:14px">
+        <div class="stat"><small>System</small><b style="color:var(--good)">All green</b> <span class="anno">no kill active</span></div>
+        <div class="stat"><small>Open incidents</small><b class="num">1</b> <span class="anno">SEV-3 below</span></div>
+        <div class="stat"><small>Margin (this tenant)</small><b class="num">68%</b> <span class="anno">floor alert at 60%</span></div>
+        <div class="stat"><small>Audit entries today</small><b class="num">1,412</b> <span class="anno">append-only</span></div>
+        <div class="stat"><small>Seams</small><b class="num">5/7</b> <span class="anno">auto-publish checklist</span></div>
+        <div class="stat"><small>Eval: unmodified rate</small><b class="num">93%</b> <span class="anno">promo gate ≥95%</span></div>
+      </div>
+
+      <div class="maingrid" style="display:grid; grid-template-columns:1fr 1fr; gap:12px">
+
+        <!-- ===== KILL SWITCH PANEL (red-bordered, top-left) ===== -->
+        <div id="el-kill" class="cardbox" style="border:1.5px solid var(--crit)">
+          <div style="display:flex; gap:8px; align-items:center; flex-wrap:wrap"><b style="color:var(--crit)">⏻ Kill switches — &lt;5s propagation</b><span class="bdg good">no halt active</span></div>
+          <div style="margin-top:8px; font-size:12px"><b>Scope:</b>
+            <span style="display:inline-flex; gap:5px; flex-wrap:wrap; margin-left:4px">
+              <button class="chip" style="font-size:11px">Global</button>
+              <button class="chip on" style="font-size:11px; background:var(--crit); border-color:var(--crit)">Tenant: graehamwatts</button>
+              <button class="chip" style="font-size:11px">User</button>
+              <button class="chip" style="font-size:11px">Module ▾</button>
+            </span>
+          </div>
+          <div style="background:var(--surface); border-radius:8px; padding:8px 10px; margin-top:8px; font-size:11.5px; color:var(--mut)">
+            <b style="color:var(--ink)">Mechanism (C14 / B7.4):</b> Temporal workflow cancel/pause → connector.stop() on every active connector → emergency policy flag set (blocks new step admission at the Guardrail Engine) → active ElevenLabs voice sessions terminated. <b style="color:var(--crit)">OS SIGSTOP is forbidden</b> — Temporal must own workflow state. Independent path: designed to work when everything else is down.
+          </div>
+          <div style="display:flex; gap:8px; margin-top:8px; align-items:center; flex-wrap:wrap">
+            <button class="btn-crit">⏻ Halt tenant…</button>
+            <span class="anno">→ confirm modal with typed confirmation ("halt graehamwatts") [BEST GUESS] → halt · Resume is a SEPARATE explicit re-enable action, never automatic — both logged.</span>
+          </div>
+          <div id="el-drill" style="border-top:1px solid var(--line); margin-top:8px; padding-top:8px; font-size:12px; display:flex; gap:10px; align-items:center; flex-wrap:wrap">
+            <b>Kill-drill record:</b> <span class="bdg good">last test drill Jul 1 ✓ — full halt in 3.8s, all 4 mechanisms confirmed</span>
+            <button class="btn-ghost">Schedule next drill</button>
+          </div>
+          <div id="el-sms" style="border-top:1px solid var(--line); margin-top:8px; padding-top:8px; font-size:12px">
+            <b>📱 SMS kill command</b> — <span style="color:var(--mut)">registered number ···-··-4471 <span class="bdg good">active</span> · owner-only (Stage 1) · works even if this console is unreachable</span>
+            <button class="btn-ghost" style="margin-left:6px">Manage number</button>
+          </div>
+          <div class="anno" style="margin-top:6px">kill_switch is a registered capability in the capability registry: WATTSON → PLATFORM, admin-only (owner in Stage 1), scope global/tenant halt, <b>no undo</b> (Brain capability table — see Spec gaps). Kill/enable events write to the audit log like everything else.</div>
+        </div>
+
+        <!-- ===== AUDIT LOG BROWSER ===== -->
+        <div id="el-audit" class="cardbox">
+          <div style="display:flex; gap:8px; align-items:center; flex-wrap:wrap"><b>Audit log — append-only, immutable</b><span class="bdg">tenant_id on every entry</span>
+            <button class="btn-ghost" style="margin-left:auto">⬇ Export (E&amp;O / DRE inquiry)</button>
+          </div>
+          <div style="display:flex; gap:5px; margin-top:8px; flex-wrap:wrap">
+            <button class="chip on" style="font-size:10.5px">All</button><button class="chip" style="font-size:10.5px">Contact ▾</button><button class="chip" style="font-size:10.5px">Playbook ▾</button><button class="chip" style="font-size:10.5px">Day ▾</button><button class="chip" style="font-size:10.5px">User ▾</button><button class="chip" style="font-size:10.5px">Event type ▾</button>
+          </div>
+          <table class="dtable" style="font-size:11px; margin-top:6px">
+            <tr><th>Time</th><th>Actor</th><th>Action</th><th>Snapshots</th><th>Retention</th></tr>
+            <tr><td class="num">14:22:03</td><td>WATTSON</td><td>CMA_DRAFTED → Outbox (contact c_8841)</td><td><span class="bdg" style="font-size:9.5px">capability ✓</span> <span class="bdg" style="font-size:9.5px">policy ✓</span></td><td class="num">24M</td></tr>
+            <tr><td class="num">14:19:47</td><td>graeham (OWNER)</td><td>APPROVAL: anniversary bundle (Nguyen)</td><td><span class="bdg" style="font-size:9.5px">capability ✓</span> <span class="bdg" style="font-size:9.5px">policy ✓</span></td><td class="num">24M</td></tr>
+            <tr><td class="num">13:58:10</td><td>SYSTEM</td><td>RATE_LIMIT_CHECK pass (SMS, user graeham)</td><td><span class="bdg" style="font-size:9.5px">policy ✓</span></td><td class="num">24M</td></tr>
+            <tr><td class="num">13:41:29</td><td>WATTSON (voice)</td><td>Voice transcript stream — call vc_2231</td><td><span class="bdg" style="font-size:9.5px">real-time</span></td><td class="num">VOICE_TRANSCRIPT_24M</td></tr>
+            <tr><td class="num">12:07:55</td><td>platform:ops</td><td>TENANT_SWITCH → demo-broker (privileged)</td><td><span class="bdg warn" style="font-size:9.5px">privileged</span></td><td class="num">24M</td></tr>
+          </table>
+          <div style="display:flex; gap:8px; margin-top:6px; align-items:center; flex-wrap:wrap; font-size:11.5px">
+            <button class="btn-ghost">Open row → provenance detail</button>
+            <span class="anno">Row detail = who/what/why + correlation_id → jumps to the originating record (contact, playbook run, content lock).</span>
+          </div>
+          <div class="anno" style="margin-top:6px">Every entry carries the capability + policy snapshot <b>at decision time</b> (not current policy). The export action is itself logged. Every admin write on this screen is itself an audit entry. <b>Separate security audit log (Brain C23/B6.10, see Spec gaps):</b> WIRE_INSTRUCTIONS_EVENT / DOCUMENT_ACCESS_EVENT / SECURITY_ACCESS_EVENT live in a distinct security log (retention SECURITY_AUDIT_7Y), never the marketing Event Ledger — rendered here as a separate locked tab: <span class="bdg" style="font-size:9.5px">🔒 Security log (7y) — restricted</span></div>
+        </div>
+
+        <!-- ===== COST / COGS ===== -->
+        <div id="el-cogs" class="cardbox">
+          <div style="display:flex; gap:8px; align-items:center; flex-wrap:wrap"><b>Cost / COGS — this tenant, July</b><span class="bdg good">margin 68% · floor 60%</span></div>
+          <table class="dtable" style="font-size:11.5px; margin-top:6px" class="num">
+            <tr><th>Category</th><th>This tenant / mo</th><th>COGS model band (per user/mo)</th></tr>
+            <tr><td>LLM</td><td class="num">$38</td><td class="num">$20–40</td></tr>
+            <tr><td>Voice (metered separately — largest variable cost)</td><td class="num">$6</td><td class="num">$50–300</td></tr>
+            <tr><td>Render / compute</td><td class="num">$11</td><td class="num">$10–20</td></tr>
+            <tr><td>Data / broker</td><td class="num">$9</td><td class="num">$3–8</td></tr>
+            <tr><td>Storage + audit log</td><td class="num">— (incl.)</td><td class="num">$2–5</td></tr>
+            <tr><td>Monitoring</td><td class="num">— (incl.)</td><td class="num">$5–10</td></tr>
+            <tr><td><b>Total vs plan</b></td><td class="num"><b>$64 vs $199 Pro</b></td><td class="num">$90–380 band</td></tr>
+          </table>
+          <div style="display:flex; gap:6px; margin-top:6px; flex-wrap:wrap">
+            <button class="btn-ghost">Trend lines per user</button><button class="btn-ghost">Drill per module</button><button class="btn-ghost">Configure alerts</button>
+          </div>
+          <div class="anno" style="margin-top:6px">Margin-floor alert fires at 60% [draft number, [DECIDE] until pricing/metering resolved]. Cost tiles never render silently stale — degraded pipeline shows "as of [timestamp]". Cost tile → per-tenant drill-down.</div>
+          <!-- SEO + ISA sub-tiles -->
+          <div style="display:grid; grid-template-columns:1fr 1fr; gap:8px; margin-top:8px">
+            <div id="el-seo" style="border:1px solid var(--line); border-radius:8px; padding:8px 10px; font-size:11.5px">
+              <b>SEO cost elimination</b>
+              <div style="color:var(--mut); margin-top:3px" class="num">vendor_cost_before <b style="color:var(--ink)">$400/mo</b> → after <b style="color:var(--good)">$0</b> · SearchAtlas/OTTO + compute this mo: $47 · <b style="color:var(--good)">net savings $353/mo</b></div>
+              <div style="color:var(--mut); margin-top:3px" class="num">OTTO projects: <b style="color:var(--ink)">3 of 4</b> (Pro limit) <span class="bdg warn" style="font-size:9.5px">warns before exceed</span> <span class="anno">(Starter=1)</span></div>
+              <a href="#" style="font-size:11px; color:var(--brand)">→ SEO console</a>
+            </div>
+            <div id="el-isa" style="border:1px solid var(--line); border-radius:8px; padding:8px 10px; font-size:11.5px">
+              <b>ISA comparison</b>
+              <div style="color:var(--mut); margin-top:3px" class="num">Human ISA: <b style="color:var(--ink)">$15–25/hr</b> (business hours) vs Wattson: <b style="color:var(--good)">~$0.05–0.15/min</b>, 24/7/365</div>
+              <div class="anno" style="margin-top:3px">Static model + actual usage; display-only tile (no interactions per spec).</div>
+            </div>
+          </div>
+        </div>
+
+        <!-- ===== SEAMS + EVALUATION ===== -->
+        <div class="cardbox">
+          <div id="el-seams">
+            <b>Seam status</b>
+            <table class="dtable" style="font-size:11.5px; margin-top:6px">
+              <tr><th>Seam</th><th>State</th><th></th></tr>
+              <tr><td>Auto-publish seam checklist</td><td><span class="bdg warn">5 / 7 items</span></td><td><a href="#" style="font-size:11px; color:var(--brand)">→ Distribution Board checklist</a></td></tr>
+              <tr><td>Voice SLA</td><td><span class="bdg good">green · p95 380ms</span></td><td></td></tr>
+              <tr><td>AI-disclosure hold (per platform)</td><td><span class="bdg good">IG ✓ · FB ✓ · YT ✓</span> <span class="bdg warn">TikTok — held</span></td><td></td></tr>
+            </table>
+            <div class="anno" style="margin-top:4px">Distribution/seam registry; each row deep-links to the Distribution Board. Platforms with an unresolved AI-disclosure hold never auto-publish (fail-closed).</div>
+          </div>
+          <div id="el-eval" style="border-top:1px solid var(--line); margin-top:10px; padding-top:8px">
+            <b>Evaluation metrics — the autonomy-promotion gate</b>
+            <div style="display:flex; gap:8px; flex-wrap:wrap; margin-top:6px" class="num">
+              <span class="bdg good">approval-unmodified rate 93%</span>
+              <span class="bdg good">hallucination flags: 0 this month</span>
+              <span class="bdg good">complaints: 0</span>
+              <span class="bdg">incidents/step: 0.002</span>
+            </div>
+            <div style="display:flex; gap:5px; margin-top:6px; flex-wrap:wrap">
+              <button class="chip" style="font-size:10.5px">Per playbook ▾</button><button class="chip" style="font-size:10.5px">Per step ▾</button>
+              <a href="#" class="chip" style="font-size:10.5px; text-decoration:none">→ Promotion workflow (Settings › Autonomy)</a>
+            </div>
+            <div class="anno" style="margin-top:4px">Same stats that gate promotion: 30 days + ≥95% unmodified + 0 incidents (Screen 21). Current 93% = <b>not yet eligible</b> — the gate renders the shortfall, never rounds up.</div>
+          </div>
+          <div id="el-promo" style="border-top:1px solid var(--line); margin-top:10px; padding-top:8px">
+            <b>Mode-promotion log</b>
+            <table class="dtable" style="font-size:11px; margin-top:4px">
+              <tr><th>When</th><th>Step</th><th>Change</th><th>Approved by</th></tr>
+              <tr><td class="num">Jun 28, 09:14</td><td>WPB-PCOS-monthly-newsletter › draft</td><td>REVIEW_REQUIRED → AUTO_WITH_LOG</td><td>graeham (OWNER) · timestamped</td></tr>
+              <tr><td class="num">Jun 12, 16:40</td><td>Lead-triage › intent-score</td><td>SHADOW → REVIEW_REQUIRED</td><td>graeham (OWNER) · timestamped</td></tr>
+            </table>
+            <div class="anno" style="margin-top:4px">"Explicit owner approval logged in Admin Console with timestamp" (Brain line 301). View-only history; the promotion action itself lives in Settings › Autonomy.</div>
+          </div>
+        </div>
+
+        <!-- ===== RATE LIMITS ===== -->
+        <div id="el-rate" class="cardbox">
+          <div style="display:flex; gap:8px; align-items:center; flex-wrap:wrap"><b>Rate limits — live usage vs Stage 1 defaults</b><span class="bdg">policy-based, never hardcoded</span></div>
+          <div style="margin-top:6px">
+            <div class="mrow"><span>✉️ Email / user / day</span><div class="meter"><i style="width:31%"></i></div><span class="num" style="text-align:right">62 / 200</span></div>
+            <div class="mrow"><span>💬 SMS / user / day</span><div class="meter"><i style="width:24%"></i></div><span class="num" style="text-align:right">24 / 100</span></div>
+            <div class="mrow"><span>🎙 Voice min / user / day</span><div class="meter"><i class="warn" style="width:78%"></i></div><span class="num" style="text-align:right">94 / 120</span></div>
+            <div class="mrow"><span>⚙ API calls / user / day</span><div class="meter"><i style="width:42%"></i></div><span class="num" style="text-align:right">2,104 / 5,000</span></div>
+            <div class="mrow"><span>🏠 MLS queries / user / day</span><div class="meter"><i style="width:35%"></i></div><span class="num" style="text-align:right">176 / 500</span></div>
+          </div>
+          <div style="display:flex; gap:6px; margin-top:6px; align-items:center; flex-wrap:wrap">
+            <button class="btn-ghost">Edit limits (policy write — logged)</button>
+            <span class="anno">Scopes: global / tenant / user / plan / channel / region (List A #33). Limits live in ChannelPolicy etc., never in code (C21).</span>
+          </div>
+          <div style="background:#fdf6ee; border:1px solid color-mix(in srgb,var(--warn) 30%,var(--line)); border-radius:8px; padding:8px 10px; margin-top:8px; font-size:11.5px">
+            <b style="color:var(--warn)">⚠ Breach behavior:</b> <span style="color:var(--mut)">the offending playbook <b style="color:var(--ink)">auto-pauses + alerts — never silent degradation</b>. Voice minutes at 78% will alert at threshold; at 100% the calling playbook pauses and this panel shows which one.</span>
+          </div>
+        </div>
+
+        <!-- ===== BUDGET CAPS + BREAKERS ===== -->
+        <div class="cardbox">
+          <div id="el-budget">
+            <b>Budget caps — per user / day defaults</b>
+            <table class="dtable" style="font-size:11.5px; margin-top:6px">
+              <tr><th>Cap</th><th>Default</th><th>Today</th><th></th></tr>
+              <tr><td>LLM spend</td><td class="num">$10</td><td class="num">$4.10</td><td><span class="bdg good">41%</span></td></tr>
+              <tr><td>Voice API spend</td><td class="num">$15</td><td class="num">$9.80</td><td><span class="bdg warn">65%</span></td></tr>
+              <tr><td>Ads (configurable default)</td><td class="num">$50</td><td class="num">$0</td><td><span class="bdg">also gated by the spend envelope (Part 8 — envelope edits in Settings; cap shown here)</span></td></tr>
+            </table>
+            <div style="font-size:11.5px; color:var(--mut); margin-top:6px"><b style="color:var(--ink)">Call cutoffs:</b> max duration 10 min · 2 calls/number/day · calling hours 09:00–20:00.</div>
+            <div style="display:flex; gap:6px; margin-top:6px"><button class="btn-ghost">Edit caps (logged)</button></div>
+            <div class="anno" style="margin-top:4px">No default spend-envelope amounts are invented anywhere — envelope limits are owner-set only (rule). This panel shows caps + meters; the envelope itself is edited in Settings.</div>
+          </div>
+          <div id="el-breaker" style="border-top:1px solid var(--line); margin-top:10px; padding-top:8px">
+            <b>Token-budget circuit breakers — LLM spend per tenant</b>
+            <div class="mrow" style="grid-template-columns:150px 1fr 120px"><span>graehamwatts (Pro)</span><div class="meter"><i style="width:38%"></i></div><span class="num" style="text-align:right">$38 / $100 mo · <span class="bdg good" style="font-size:9.5px">CLOSED</span></span></div>
+            <div class="mrow" style="grid-template-columns:150px 1fr 120px"><span>demo-broker (Starter)</span><div class="meter"><i class="crit" style="width:96%"></i></div><span class="num" style="text-align:right">$48 / $50 mo · <span class="bdg crit" style="font-size:9.5px">TRIPPED</span></span></div>
+            <div style="display:flex; gap:6px; margin-top:6px; align-items:center; flex-wrap:wrap"><button class="btn-ghost">Configure thresholds</button><span class="anno">The $600/day incident (Jul 1 model-migration burn) is the design rationale for this tile — a tripped breaker halts new LLM calls for the tenant, alerts, and requires explicit reset.</span></div>
+          </div>
+        </div>
+
+        <!-- ===== OBSERVABILITY / INCIDENTS ===== -->
+        <div id="el-obs" class="cardbox">
+          <div style="display:flex; gap:8px; align-items:center; flex-wrap:wrap"><b>Observability &amp; incidents</b><span class="bdg">OpenTelemetry tracing · Sentry/Datadog-style monitoring (List A #37)</span></div>
+          <table class="dtable" style="font-size:11.5px; margin-top:6px">
+            <tr><th>Sev</th><th>Incident</th><th>State</th><th>Assigned</th><th></th></tr>
+            <tr><td><span class="bdg warn">SEV-3</span></td><td>Rentometer adapter latency p95 &gt; 4s (trace tr_88a1)</td><td>Investigating</td><td>platform:ops</td><td><button class="btn-ghost" style="font-size:10.5px">Open</button></td></tr>
+            <tr><td><span class="bdg">SEV-4</span></td><td>Render queue retried ×2 then succeeded — auto-resolved</td><td><span class="bdg good">Resolved</span></td><td>—</td><td><button class="btn-ghost" style="font-size:10.5px">Trace</button></td></tr>
+          </table>
+          <div style="background:var(--surface); border-radius:8px; padding:8px 10px; margin-top:8px; font-size:11.5px; color:var(--mut)">
+            <b style="color:var(--ink)">Failure-handling record (rule):</b> on failure Wattson <b style="color:var(--ink)">halts + escalates to the right human</b> — it never improvises around a broken path. Retry only when step.on_failure == retry and attempt &lt; 3. Escalations write log_escalation() to the audit log.
+          </div>
+          <div class="anno" style="margin-top:4px">Incident-severity workflow: open → assign → resolve; incident notifications deep-link into this panel. Correlation uses NOTIFICATION_* and COMPLIANCE_BLOCKED event streams alongside traces.</div>
+        </div>
+
+        <!-- ===== MIGRATION CONSOLE ===== -->
+        <div id="el-migration" class="cardbox">
+          <div style="display:flex; gap:8px; align-items:center; flex-wrap:wrap"><b>Migration console — feature flags, dry-run, rollback</b>
+            <span class="bdg warn">Source of truth: GHL (now) → PropFlow (after explicit approved migration)</span>
+          </div>
+          <table class="dtable" style="font-size:11.5px; margin-top:6px">
+            <tr><th>Flag</th><th>State</th><th>Dry-run</th><th>Rollback point</th><th></th></tr>
+            <tr><td>propflow_crm_reads</td><td><span class="bdg good">ON (shadow)</span></td><td class="num">Jul 12 ✓ — 0 diffs on 2,140 contacts</td><td class="num">snap_0712</td><td><button class="btn-ghost" style="font-size:10.5px">Rollback</button></td></tr>
+            <tr><td>propflow_crm_writes</td><td><span class="bdg">OFF</span></td><td class="num">not run</td><td>—</td><td><button class="btn-ghost" style="font-size:10.5px">Run dry-run</button></td></tr>
+            <tr><td>temporal_cadence_owner</td><td><span class="bdg">OFF (interim crons)</span></td><td class="num">scheduled Jul 20</td><td>—</td><td><button class="btn-ghost" style="font-size:10.5px">Toggle…</button></td></tr>
+          </table>
+          <div class="anno" style="margin-top:4px">Flag toggle = confirm modal + audit entry; every toggle emits a feature-flag change record (exit point). Rollback restores the snapshot and logs who/when/why. Migration actions are how GHL→PropFlow (and similar) cut over — never a big-bang switch.</div>
+        </div>
+
+        <!-- ===== APPROVAL DELEGATION ===== -->
+        <div id="el-delegation" class="cardbox">
+          <b>Approval delegation</b>
+          <table class="dtable" style="font-size:11.5px; margin-top:6px">
+            <tr><th>Delegate</th><th>Scope</th><th>Granted</th><th></th></tr>
+            <tr><td>Adrian (clientcare)</td><td>Content approvals (non-client-facing)</td><td class="num">Jun 30, 11:02 — logged</td><td><button class="btn-ghost" style="font-size:10.5px">Remove</button></td></tr>
+            <tr><td colspan="4"><button class="btn-ghost" style="font-size:10.5px">＋ Add delegate…</button></td></tr>
+          </table>
+          <div style="background:#fdf6ee; border:1px solid color-mix(in srgb,var(--warn) 30%,var(--line)); border-radius:8px; padding:8px 10px; margin-top:8px; font-size:11.5px">
+            <b style="color:var(--warn)">Self-approval prohibition (enforced here):</b> <span style="color:var(--mut)">a team member's Wattson instance can <b style="color:var(--ink)">never approve its own REVIEW_REQUIRED output</b> — approval routes to the owner or a named delegate. Add/remove actions logged with timestamp.</span>
+          </div>
+          <div class="anno" style="margin-top:4px">Brain Part 3 line 47 / line 301. Solo-agent mode note (Brain, see Spec gaps): with solo_mode:true, team-routed tasks fall back to the owner, rate limits adjust to single-person throughput, approval queues consolidate to one daily review — surfaced here as a config chip: <span class="bdg" style="font-size:9.5px">solo_mode: ON</span></div>
+        </div>
+      </div>
+
+      <!-- ===== KILL-ACTIVE STATE PREVIEW ===== -->
+      <div id="el-kill-active" style="margin-top:12px; border:1.5px solid var(--crit); border-radius:10px; padding:10px 14px; background:color-mix(in srgb, var(--crit) 6%, var(--paper)); font-size:12px">
+        <b style="color:var(--crit)">State preview — kill active:</b> <span style="color:var(--mut)">when any kill is live, the entire console shows a persistent red banner: <b style="color:var(--ink)">"⏻ HALTED — scope: tenant graehamwatts · triggered by graeham (SMS) at 14:02:11 · all mechanisms confirmed"</b> + a single <b style="color:var(--ink)">Re-enable…</b> control (explicit, confirmed, logged). Nothing resumes automatically.</span>
+      </div>
+
+      <!-- ===== STATES STRIP ===== -->
+      <div id="el-states" style="margin-top:12px">
+        <div class="cardbox" style="font-size:11.5px">
+          <b>States (dev reference)</b>
+          <div style="color:var(--mut); margin-top:4px">
+            <b style="color:var(--ink)">Default:</b> all green — meters under caps, no incidents, seams progressing.
+            <b style="color:var(--ink)">Loading:</b> meters/log paginate with skeletons; audit-log search is server-side.
+            <b style="color:var(--ink)">Empty (new tenant):</b> zeroed meters + empty log — "actions will appear here with their policy snapshots."
+            <b style="color:var(--ink)">Degraded (fail-closed):</b> cost pipeline stale → tiles show "as of Jul 15 06:00", never silently stale · audit-log store unreachable → banner + <b style="color:var(--ink)">WRITE-blocking posture: if actions can't be audited, gated actions pause</b> [BEST GUESS per fail-closed doctrine] · kill switch works when everything else is down (independent path).
+            <b style="color:var(--ink)">Kill active:</b> persistent red banner (preview above) with scope + who + re-enable.
+            <b style="color:var(--ink)">Permission-limited:</b> Stage 1 non-owner → no access at all; Stage 3 role-scoped (Compliance = audit log + eval dashboard read-only [DECIDE]); every config write logged with actor.
+          </div>
+        </div>
+      </div>
+
+      <!-- ===== MOBILE VARIANT STRIP ===== -->
+      <div id="el-mobile" style="margin-top:12px">
+        <div class="cardbox" style="font-size:11.5px">
+          <b>Mobile variant (375px) — emergency-access mode [BEST GUESS]</b>
+          <div style="display:flex; gap:10px; margin-top:8px; flex-wrap:wrap; align-items:flex-start">
+            <div style="width:190px; border:1px solid var(--line); border-radius:14px; padding:10px; background:var(--surface)">
+              <div style="background:var(--crit); color:#fff; border-radius:8px; padding:8px; text-align:center; font-weight:700; font-size:11px">⏻ KILL SWITCH — pinned first</div>
+              <div style="background:var(--paper); border:1px solid var(--line); border-radius:8px; padding:6px 8px; margin-top:6px; font-size:10px"><b>Incidents (1)</b><br><span style="color:var(--mut)">SEV-3 Rentometer latency</span></div>
+              <div style="background:var(--paper); border:1px solid var(--line); border-radius:8px; padding:6px 8px; margin-top:6px; font-size:10px"><b>Meters (read-only)</b><div class="meter" style="margin-top:4px"><i class="warn" style="width:78%"></i></div><span style="color:var(--mut)" class="num">voice 94/120 min</span></div>
+              <div style="background:var(--paper); border:1px solid var(--line); border-radius:8px; padding:6px 8px; margin-top:6px; font-size:10px"><b>Audit log</b><br><span style="color:var(--mut)">search-first list 🔍</span></div>
+            </div>
+            <div style="flex:1; min-width:220px; color:var(--mut)">Single column, kill switch pinned first. Meters render as horizontal bars, <b style="color:var(--ink)">read-only</b> on mobile. Audit log becomes a search-first list. Admin is desktop-primary; mobile exists for emergencies (kill + incidents) — config writes (limits, caps, flags, delegates) are desktop-only [BEST GUESS].</div>
+          </div>
+        </div>
+      </div>
+
+    </div>
+  </div>
+
+  <!-- ============ Spec gaps found (Master Brain additions) ============ -->
+  <div class="note" style="margin-top:22px; border-color:var(--signal)"><b>Spec gaps found — Master Brain requirements the spec inventory missed (rendered above):</b>
+    (1) <b>Separate security audit log</b> — WIRE_INSTRUCTIONS_EVENT / DOCUMENT_ACCESS_EVENT / SECURITY_ACCESS_EVENT go to a distinct security log with retention SECURITY_AUDIT_7Y, never the marketing Event Ledger; raw wire instructions never enter Wattson context (C23 / B6.10) → rendered as the locked "🔒 Security log" tab in the audit browser.
+    (2) <b>Voice transcripts stream to the Audit Log in real time</b> with retention class VOICE_TRANSCRIPT_24M; retention is category-based → rendered as the Retention column + the voice-stream row.
+    (3) <b>kill_switch is a registered capability</b> in the capability registry (WATTSON → PLATFORM, admin-only, global/tenant halt, no undo) → rendered in the kill-panel annotation.
+    (4) <b>Solo-agent mode (solo_mode: true)</b> — team-routed tasks fall back to the owner, rate limits adjust to single-person throughput, approval queues consolidate into one daily review → rendered as the solo_mode config chip on the delegation panel.
+  </div>
+
+  <!-- ============ (3) ELEMENT COVERAGE ============ -->
+  <h2 style="font-size:20px; margin:34px 0 10px">Element coverage — spec inventory → this page</h2>
+  <table class="dtable cov" style="font-size:12.5px">
+    <tr><th>Spec inventory element</th><th>Rendered at</th><th>Status</th></tr>
+    <tr><td>Kill-switch panel (scope selector, &lt;5s, mechanism, no-SIGSTOP, explicit re-enable)</td><td><a href="#el-kill">Kill switches</a></td><td class="ok">✓</td></tr>
+    <tr><td>SMS-command note (registered number + status, owner-only Stage 1)</td><td><a href="#el-sms">SMS kill command</a></td><td class="ok">✓</td></tr>
+    <tr><td>Rate-limit meters (Stage 1 defaults, scoped policies, breach → auto-pause + alert)</td><td><a href="#el-rate">Rate limits</a></td><td class="ok">✓</td></tr>
+    <tr><td>Budget caps (LLM $10 · voice $15 · ads $50 default; call cutoffs)</td><td><a href="#el-budget">Budget caps</a></td><td class="ok">✓</td></tr>
+    <tr><td>Token-budget circuit breakers (spend meter + breaker state per tenant)</td><td><a href="#el-breaker">Circuit breakers</a></td><td class="ok">✓</td></tr>
+    <tr><td>Audit log browser (append-only, snapshots at decision time, filters, export)</td><td><a href="#el-audit">Audit log</a></td><td class="ok">✓</td></tr>
+    <tr><td>Cost / COGS dashboard (per-tenant split vs bands, 60% margin floor, voice metered)</td><td><a href="#el-cogs">Cost / COGS</a></td><td class="ok">✓</td></tr>
+    <tr><td>SEO cost-elimination tile ($400→$0, OTTO project count vs plan limit)</td><td><a href="#el-seo">SEO tile</a></td><td class="ok">✓</td></tr>
+    <tr><td>ISA comparison tile ($15–25/hr vs ~$0.05–0.15/min)</td><td><a href="#el-isa">ISA tile</a></td><td class="ok">✓</td></tr>
+    <tr><td>Seam status panel (checklist 5/7, voice SLA, AI-disclosure holds)</td><td><a href="#el-seams">Seam status</a></td><td class="ok">✓</td></tr>
+    <tr><td>Evaluation metrics dashboard (unmodified rate, flags, complaints, incidents/step)</td><td><a href="#el-eval">Evaluation metrics</a></td><td class="ok">✓</td></tr>
+    <tr><td>Observability / incident view (OTel + monitoring, severity workflow, halt+escalate rule)</td><td><a href="#el-obs">Observability &amp; incidents</a></td><td class="ok">✓</td></tr>
+    <tr><td>Migration console (flags, dry-run, rollback, source-of-truth indicator)</td><td><a href="#el-migration">Migration console</a></td><td class="ok">✓</td></tr>
+    <tr><td>Approval-delegation panel (delegates, self-approval prohibition)</td><td><a href="#el-delegation">Approval delegation</a></td><td class="ok">✓</td></tr>
+    <tr><td>Mode-promotion log (owner-approved promotions, timestamped)</td><td><a href="#el-promo">Mode-promotion log</a></td><td class="ok">✓</td></tr>
+    <tr><td>Tenant switcher (platform staff only, logged, all panels re-scope)</td><td><a href="#el-tenant">Header tenant switcher</a></td><td class="ok">✓</td></tr>
+    <tr><td>Kill-drill record (last drill date + result, schedule drill)</td><td><a href="#el-drill">Kill-drill record</a></td><td class="ok">✓</td></tr>
+  </table>
+  <div style="border:1.5px solid var(--good); background:#f2f8f4; border-radius:10px; padding:12px 16px; margin:12px 0 0; font-weight:700; color:var(--good)">17 of 17 spec elements rendered ✓ <span style="font-weight:400; color:var(--mut); font-size:12.5px">— plus prompt-required regions beyond the inventory: status stat row, kill-active state preview, states strip, mobile emergency-mode strip; plus the 4 Master-Brain gap additions noted above.</span></div>
+
+  <!-- ============ (4) FULL SPEC AS HTML ============ -->
+  <div class="specdoc">
+    <h1 style="font-size:24px; margin:40px 0 6px">Spec — 34 · Admin Console (PropertyIQ ops / broker tier)</h1>
+    <p><b>Purpose</b> The trust machinery for the platform team and (Stage 3) broker tier: kill switches, live rate/budget meters, the immutable append-only audit log, per-tenant cost/COGS, seam status, evaluation metrics, and the migration console. Agents rarely see this; the owner and platform team live here. (Wattson Master Brain Parts 10/12/13; List A #32/#33/#34/#37.)</p>
+    <p><b>Primary users</b> Stage 1: owner only. Stage 3: RBAC roles Owner/Admin/Agent/TC/Reviewer/Compliance (List A #34) — most panels Owner/Admin; Compliance role gets audit log + eval dashboard read access [role mapping BEST GUESS beyond "owner-only Stage 1"].</p>
+    <p><b>Entry points</b> Left nav "Admin" (role-gated); "⏻ Emergency stop" link in the Settings header (Screen 21) jumps to the kill-switch panel; cost/margin alerts and incident notifications deep-link to their panels; SMS kill command exists independent of the UI (owner-only Stage 1).</p>
+    <p><b>Exit points</b> Audit-log rows → the originating record (contact, playbook run, content lock); cost tiles → per-tenant drill-down; seam panel → Distribution Board seam checklist; migration console actions → feature-flag change records; eval metrics → promotion workflow in Settings › Autonomy.</p>
+
+    <h2>Layout</h2>
+    <p><b>Header:</b> "PQ" avatar (platform, not agent), "Admin", subtitle "Tenant: graehamwatts · plan: Pro" (tenant switcher for platform staff), nav right: red "⏻ Kill switch" always visible. <b>Main (desktop): 2-column card grid</b> per draft: Kill switches (red-bordered, top-left) · Audit log · Cost/COGS · Seams &amp; evaluation. Extended panels below [matrix requires them]: Rate limits &amp; budget caps with live meters · Migration console · Incident/observability view · Token-budget circuit breakers. <b>Mobile (375px):</b> single column, kill switch pinned first; meters render as horizontal bars; audit log becomes a search-first list. Admin is desktop-primary; mobile is emergency-access mode (kill switch + incidents) [BEST GUESS]. <b>Sticky:</b> kill-switch button in header at every scroll position.</p>
+
+    <h2>Element inventory</h2>
+    <div style="overflow-x:auto">
+    <table class="dtable">
+      <tr><th>Element</th><th>What it shows/does</th><th>Data source</th><th>Interactions</th><th>Spec source</th></tr>
+      <tr><td>Kill-switch panel</td><td>Scope selector global/tenant/user/module; &lt;5s propagation; mechanism = Temporal workflow cancel/pause + connector.stop() on every active connector + emergency policy flag (blocks new step admission at the Guardrail Engine) + active ElevenLabs voice-session termination; NO OS SIGSTOP; last test drill date shown; resume ONLY by explicit re-enable, never auto</td><td>Emergency Controls (Wattson Part 13)</td><td>Select scope → confirm modal (typed confirmation [BEST GUESS]) → halt; re-enable is a separate explicit action, logged</td><td>Wattson Brain C14/B7.4; draft s34</td></tr>
+      <tr><td>SMS-command note</td><td>Kill switch also triggerable by SMS command (owner-only Stage 1) — registered number/status displayed</td><td>Emergency Controls config</td><td>Manage number</td><td>Wattson Brain Part 13</td></tr>
+      <tr><td>Rate-limit meters</td><td>Live usage vs Stage 1 defaults: email 200/user/day · SMS 100/user/day · voice 120 min/user/day · API 5,000/user/day · MLS queries 500/user/day; policy-based, scoped global/tenant/user/plan/channel/region (List A #33)</td><td>Policy store + usage counters</td><td>Edit limits (policy write, logged); breach → offending playbook auto-pauses + alert, never silent degrade</td><td>Wattson Brain Part 13; Screen 21 draft</td></tr>
+      <tr><td>Budget caps</td><td>Per user/day defaults: LLM $10 · voice API $15 · ads configurable default $50 (also gated by the spend envelope, Part 8 — envelope edits in Settings, cap shown here); call cutoffs: max 10 min, 2 calls/number/day, hours 09:00–20:00</td><td>Budget policy</td><td>Edit, logged</td><td>Wattson Brain Part 13</td></tr>
+      <tr><td>Token-budget circuit breakers</td><td>LLM spend meter + breaker state per tenant (the $600/day incident is the design rationale)</td><td>Cost pipeline</td><td>Configure thresholds</td><td>Matrix "token budget circuit breakers"; draft s34</td></tr>
+      <tr><td>Audit log browser</td><td>Append-only, immutable; every action with capability + policy snapshot at decision time; tenant_id on every entry; filter by contact/playbook/day/user/event type; exportable for E&amp;O or DRE inquiries</td><td>Audit Log (immutable store)</td><td>Filter, search, export (export itself logged); row → provenance detail (who/what/why, correlation_id)</td><td>Wattson Brain Parts 4/10; matrix; draft s34</td></tr>
+      <tr><td>Cost / COGS dashboard</td><td>Per-tenant monthly split ($38 LLM · $6 voice · $11 render · $9 data = $64 vs $199 plan) vs COGS bands (LLM $20–40, compute $10–20, broker $3–8, storage $2–5, monitoring $5–10, voice $50–300 = $90–380/user/mo); margin-floor alert at 60% [draft number]; voice metered separately (largest variable cost)</td><td>Cost pipeline per tenant</td><td>Trend lines per user; drill per module; alert config</td><td>Wattson Brain Part 12; draft s34</td></tr>
+      <tr><td>SEO cost-elimination tile</td><td>vendor_cost_before $400/mo vs $0 after + monthly SearchAtlas/OTTO + compute; net savings; OTTO project count vs plan limit (Starter=1, Pro=4) with warn-before-exceed</td><td>SearchAtlasOttoAdapter</td><td>Link to SEO console</td><td>Wattson Brain Part 6 (lines 203/233)</td></tr>
+      <tr><td>ISA comparison tile</td><td>Human ISA $15–25/hr vs Wattson ~$0.05–0.15/min 24/7</td><td>Static model + usage</td><td>None</td><td>Wattson Brain Parts 7/12</td></tr>
+      <tr><td>Seam status panel</td><td>Auto-publish seam checklist progress (5/7), voice SLA state, per-platform AI-disclosure hold status</td><td>Distribution/seam registry</td><td>Row → Distribution Board</td><td>Draft s34; matrix (7-item checklist)</td></tr>
+      <tr><td>Evaluation metrics dashboard</td><td>Approval-unmodified rate (93%), hallucination flags, complaint count, incidents per step — the stats that gate autonomy promotion (30 days + ≥95% unmodified + 0 incidents, per Screen 21)</td><td>Eval pipeline / ApprovalRecord stats</td><td>Filter per playbook/step; link to promotion workflow</td><td>Draft s34 + s21; matrix</td></tr>
+      <tr><td>Observability / incident view</td><td>OpenTelemetry tracing + Sentry/Datadog-style monitoring + incident-severity workflow; failure-handling record (halt + escalate, retry only if step.on_failure==retry and &lt;3)</td><td>Observability stack (List A #37)</td><td>Open incident, assign, resolve</td><td>Wattson Brain Part 13</td></tr>
+      <tr><td>Migration console</td><td>Feature flags, dry-run, rollback for GHL→PropFlow (and similar); source-of-truth indicator (GHL now → PropFlow after explicit approved migration)</td><td>Migration/flag service</td><td>Toggle flag (confirm + log), run dry-run, rollback</td><td>Matrix Platform settings gap; Wattson Brain C8/B8</td></tr>
+      <tr><td>Approval-delegation panel</td><td>Owner delegates approval rights to named users (a team member's instance can never approve its own REVIEW_REQUIRED output)</td><td>Admin Console config</td><td>Add/remove delegate, logged with timestamp</td><td>Wattson Brain Part 3 line 47 / line 301</td></tr>
+      <tr><td>Mode-promotion log</td><td>Owner-approved autonomy promotions with timestamps ("explicit owner approval logged in Admin Console with timestamp")</td><td>Admin config log</td><td>View history</td><td>Wattson Brain line 301</td></tr>
+      <tr><td>Tenant switcher</td><td>Platform staff only: pick tenant; all panels re-scope</td><td>Tenant registry</td><td>Switch (logged)</td><td>Draft header; multi-tenant isolation rules</td></tr>
+      <tr><td>Kill-drill record</td><td>Last kill-switch test drill date + result ("last test drill Jul 1 ✓")</td><td>Drill log</td><td>Schedule drill</td><td>Draft s34</td></tr>
+    </table>
+    </div>
+
+    <h2>States</h2>
+    <ul>
+      <li><b>Default:</b> all green — meters under caps, no incidents, seams progressing.</li>
+      <li><b>Loading:</b> meters/log paginate with skeletons; audit-log search is server-side.</li>
+      <li><b>Empty:</b> new tenant → zeroed meters, empty log with "actions will appear here with their policy snapshots."</li>
+      <li><b>Error/degraded (fail-closed):</b> cost pipeline stale → tiles show "as of [timestamp]", never silently stale; audit-log store unreachable → banner + WRITE-blocking posture (if actions can't be audited, gated actions pause) [BEST GUESS consistent with fail-closed doctrine]; kill switch works when everything else is down (independent path).</li>
+      <li><b>Kill active:</b> whole console shows a persistent red state banner with scope + who triggered + re-enable control.</li>
+      <li><b>Permission-limited:</b> non-owner Stage 1 → no access; Stage 3 role-scoped panels; every config write logged with actor.</li>
+      <li><b>Mobile:</b> emergency mode (kill switch, incidents, meters read-only).</li>
+    </ul>
+
+    <h2>Data fields</h2>
+    <p>Kill state {scope, triggered_by, at, mechanism results}, drill log, rate-limit policies {channel, scope, limit, window} + usage counters, budget caps + spend, token-breaker thresholds/state, audit entries {tenant_id, actor, action, capability snapshot, policy snapshot, correlation_id, timestamp} (append-only), cost lines per tenant per category, margin %, seam checklist items + status, eval stats {unmodified-approval rate, hallucination flags, complaints, incidents} per step, incidents {severity, trace, state}, feature flags {name, state, dry-run results, rollback point}, delegates list, plan tier + limits.</p>
+
+    <h2>Rules &amp; compliance</h2>
+    <ul>
+      <li>Kill switch: &lt;5s halt; Temporal owns workflow state (SIGSTOP forbidden); resume only by explicit re-enable.</li>
+      <li>Audit log is append-only and immutable; entries carry capability + policy snapshot at decision time; exportable for E&amp;O/DRE inquiries; every admin write is itself an audit entry.</li>
+      <li>Rate limits/budget caps live in policy (ChannelPolicy etc.), never hardcoded; breaches pause the offending playbook and alert — no silent degradation.</li>
+      <li>Self-approval prohibition and delegation flow enforced here.</li>
+      <li>Tenant isolation: no cross-tenant data in any panel; tenant switch is a logged privileged action.</li>
+      <li>No default numeric spend-envelope limits invented — owner-set only (envelope in Settings; this console shows caps/meters).</li>
+    </ul>
+
+    <h2>Cross-links</h2>
+    <p><b>In:</b> Settings emergency-stop link, margin/breach alerts, incident notifications, Voice Ops (usage meters link), SEO console (cost tile). <b>Out:</b> Distribution Board (seams), Settings › Autonomy (promotion workflow), originating records from audit rows, Billing/plan. <b>Emits:</b> kill/enable events, policy-change events, export events, promotion approvals — all into the audit log itself; <b>consumes</b> every module's events as the log's content plus NOTIFICATION_* and COMPLIANCE_BLOCKED streams for incident correlation.</p>
+
+    <h2>Open decisions</h2>
+    <ul>
+      <li>[DECIDE] Broker-tier (Stage 3) panel subset for the Compliance role — interim: audit log + eval dashboard read-only, no controls.</li>
+      <li>[DECIDE] Margin-floor alert threshold — draft says 60%; keep 60% as interim until pricing/metering (List B voice-overage item) is resolved.</li>
+      <li>[DECIDE] Visual design: the Brain explicitly defers Admin Console visual/UI (incl. light/dark, colors) to a separate design track (List A #34) — interim: inherit the platform design system, no bespoke theme.</li>
+      <li>[BEST GUESS] Audit-unavailable write-blocking posture; typed confirmation on global kill; mobile emergency-mode scope.</li>
+    </ul>
+    <p class="anno" style="margin-top:20px">Wireframe fidelity — colors are placeholders from the locked PropFlow design language. All tenants/numbers/incidents are realistic fake data. This is a platform-ops screen (PQ chrome, no agent left rail — draft s34 pattern). Agent identity, where any client-facing surface references it elsewhere in the product: Graeham Watts, Intero Real Estate, DRE# 01466876 (from shared-references/identity.json — never hardcode; the identity.json blocklist value must never appear). No crime data anywhere in the platform.</p>
+  </div>
+</div>

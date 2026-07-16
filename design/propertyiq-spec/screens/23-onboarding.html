@@ -1,0 +1,440 @@
+<title>PropertyIQ · Screen 23 — Onboarding Wizard</title>
+<link href="https://api.fontshare.com/v2/css?f[]=technor@500,600,700&display=swap" rel="stylesheet">
+<link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<style>
+  /* Type system — Technor for display, Inter for UI. */
+  :root{ --font-display:'Technor', Inter, -apple-system, 'Segoe UI', sans-serif; --font-ui: Inter, -apple-system, 'Segoe UI', Roboto, sans-serif; }
+</style>
+<style>
+  /* Palette v4 — PropFlow design language: neutral ink UI, ink-as-accent, color reserved for data. (extracted verbatim from propsearch-design-draft.html) */
+  :root, :root[data-theme="dark"], :root[data-theme="light"]{
+    --ink:#23282f; --paper:#fbfaf8; --surface:#f1efe9; --line:#e2dfd6;
+    --mut:#6b7076; --soft:#9b9f9f;
+    --brand:#2e6b53; --brand-ink:#ffffff; --brand-soft:#eaf1ec; --brand-deep:#1e4c3a;
+    --signal:#b07a2e;
+    --good:#2e7d4f; --warn:#a8630a; --crit:#b3372f;
+    --r:10px;
+  }
+  h1{ letter-spacing:-.02em }
+  body[data-agent="watts"]{ --brand:#2e6b53; --brand-soft:#eaf1ec; --brand-deep:#1e4c3a; }
+
+  *{box-sizing:border-box; margin:0}
+  body{font:15px/1.55 var(--font-ui); color:var(--ink); background:var(--paper); padding-bottom:80px}
+  h1,h2,h3{line-height:1.15; text-wrap:balance; font-family:var(--font-display); font-weight:600}
+  .site{box-shadow:0 1px 2px rgba(20,24,32,.04), 0 8px 32px rgba(20,24,32,.06)}
+  .stat{box-shadow:0 1px 2px rgba(20,24,32,.03)}
+  button{font-family:var(--font-ui)}
+  .num{font-variant-numeric:tabular-nums}
+  .wrap{max-width:1180px; margin:0 auto; padding:0 20px}
+
+  .bar{position:sticky; top:0; z-index:50; background:var(--paper); border-bottom:1px solid var(--line); padding:10px 0; backdrop-filter:blur(8px)}
+  .bar .wrap{display:flex; flex-wrap:wrap; gap:10px; align-items:center}
+  .bar .ttl{font-weight:700; margin-right:auto}
+  .bar .ttl small{display:block; font-weight:400; color:var(--mut)}
+  .bar a{color:var(--brand); font-size:13px; text-decoration:none}
+
+  .note{background:var(--surface); border:1px solid var(--line); border-radius:var(--r); padding:14px 16px; margin:0 0 22px; font-size:13.5px; color:var(--mut)}
+  .note b{color:var(--ink)}
+
+  .site{border:1px solid var(--line); border-radius:14px; overflow:hidden; background:var(--paper)}
+  .sitehead{display:flex; align-items:center; gap:14px; padding:14px 22px; border-bottom:1px solid var(--line)}
+  .avatar{width:38px; height:38px; border-radius:50%; background:var(--brand); color:var(--brand-ink); display:grid; place-items:center; font-weight:700}
+  .sitehead .who b{display:block}
+  .sitehead .who small{color:var(--mut)}
+  .sitehead nav{margin-left:auto; display:flex; gap:18px; font-size:13.5px; color:var(--mut)}
+
+  .chip{display:inline-flex; align-items:center; gap:6px; font-size:12.5px; font-weight:500; border:1px solid var(--line); border-radius:99px; padding:6px 12px; background:var(--paper); cursor:pointer; color:var(--ink)}
+  .chip.on{background:var(--brand); border-color:var(--brand); color:var(--brand-ink); font-weight:600}
+
+  .bdg{font-size:11.5px; border-radius:6px; padding:3px 8px; background:var(--surface); border:1px solid var(--line); color:var(--mut)}
+  .bdg.good{color:var(--good); border-color:color-mix(in srgb,var(--good) 30%,var(--line))}
+  .bdg.warn{color:var(--warn); border-color:color-mix(in srgb,var(--warn) 30%,var(--line))}
+  .bdg.crit{color:var(--crit); border-color:color-mix(in srgb,var(--crit) 30%,var(--line))}
+
+  .dtable{width:100%; border-collapse:collapse; font-size:13px}
+  .dtable td,.dtable th{border-bottom:1px solid var(--line); padding:8px 10px; text-align:left}
+  .dtable th{font-size:11px; text-transform:uppercase; letter-spacing:.05em; color:var(--soft)}
+
+  @media (max-width:860px){ .stepgrid{grid-template-columns:1fr !important} }
+  @media (prefers-reduced-motion: reduce){ *{transition:none!important} }
+
+  /* ---- page-specific additions (same design language) ---- */
+  .anno{font-size:11px; color:var(--soft)}
+  .cardbox{border:1px solid var(--line); border-radius:10px; padding:11px 14px; font-size:12.5px; background:var(--paper)}
+  .btn-ink{background:var(--ink); color:#fff; border:0; border-radius:7px; padding:7px 12px; font-size:11.5px; cursor:pointer; font-weight:600}
+  .btn-ink[disabled]{opacity:.35; cursor:not-allowed}
+  .btn-ghost{background:var(--paper); border:1px solid var(--line); border-radius:7px; padding:7px 12px; font-size:11.5px; cursor:pointer}
+  .sechead{font-size:14px; font-weight:700; margin:0 0 8px; font-family:var(--font-display)}
+  .cov td.ok{color:var(--good); font-weight:700}
+  .specdoc h2{font-size:18px; margin:26px 0 8px}
+  .specdoc h3{font-size:15px; margin:18px 0 6px}
+  .specdoc p, .specdoc li{font-size:13.5px; color:var(--mut)}
+  .specdoc b{color:var(--ink)}
+  .specdoc table{margin:8px 0}
+  .slider{flex:1; height:6px; background:var(--surface); border-radius:99px; position:relative}
+  .slider .fill{position:absolute; left:0; top:0; bottom:0; background:var(--brand); border-radius:99px}
+  .slider .knob{position:absolute; top:-5px; width:16px; height:16px; background:var(--ink); border-radius:50%}
+  .stops{display:flex; justify-content:space-between; font-size:9.5px; color:var(--soft); margin:2px 0 0 80px}
+  .field{border:1px solid var(--line); border-radius:8px; padding:7px 10px; font-size:12px; background:var(--paper)}
+  .field small{display:block; color:var(--soft); font-size:10px; text-transform:uppercase; letter-spacing:.05em}
+  .stepcard{border:1px solid var(--line); border-radius:12px; padding:14px 16px; background:var(--paper)}
+  .stepcard .shd{display:flex; gap:8px; align-items:center; margin-bottom:8px}
+  .stepcard .shd .n{width:22px; height:22px; border-radius:50%; background:var(--ink); color:#fff; display:grid; place-items:center; font-size:11px; font-weight:700}
+  .oauth{display:flex; gap:8px; align-items:center; border:1px solid var(--line); border-radius:8px; padding:7px 10px; font-size:11.5px}
+</style>
+
+<!-- ============ (1) slim header ============ -->
+<div class="bar">
+  <div class="wrap">
+    <div class="ttl">PropertyIQ · Screen 23 — Onboarding Wizard <small>Full-density per-screen mock · wireframe fidelity · dev-facing annotations in gray</small></div>
+    <a href="../wireframe.html">← All screens</a>
+  </div>
+</div>
+
+<!-- ============ (2) THE FULL MOCK ============ -->
+<div class="wrap" style="padding-top:24px">
+  <div class="note"><b>Screen 23 — Onboarding wizard.</b> The first-run flow that makes every other screen possible: profile → brand voice → AI Personality Dial (with the BLOCKING hard-ceiling acknowledgement — no content generation platform-wide until checked) → voice/avatar clone (or skip → static videos) → sphere import + analysis → farm + listing-focus + budget tier → platform connections → brand vault scan → 3 previews → deploy. Target: producing by day one, branded in under 10 minutes. Forced on first login; each step becomes a Settings panel afterwards. Fully phone-completable — agents onboard from their phone.</div>
+
+  <div class="site" data-agent="watts">
+    <!-- wizard header (all steps): avatar chip, welcome, step label, progress dots -->
+    <div class="sitehead">
+      <div class="avatar">GW</div>
+      <div class="who"><b>Welcome to PropertyIQ</b><small>Step 3 of 8 — your AI's personality</small></div>
+      <nav><span class="num" style="font-size:11px; color:var(--soft)" title="progress dots — not clickable forward; Back allowed">●●●○○○○○</span></nav>
+    </div>
+    <div class="anno" style="padding:6px 22px; border-bottom:1px solid var(--line)" id="el-progress">Header chrome is identical on all 8 steps. Dots are display-only — no forward jumping; Back always allowed. Mobile: dots collapse to "3/8". Wattson can deep-link a user to an incomplete step; abandon → resume banner on next login at the last incomplete step. No left rail here — onboarding precedes the agent console; consumer chrome never applies.</div>
+
+    <!-- ===== STEP 3 rendered in full (the draft's rendered step) ===== -->
+    <div style="padding:22px; max-width:640px; margin:0 auto">
+      <h2 style="font-size:19px">How should your AI sound?</h2>
+      <p style="color:var(--mut); font-size:13px; margin:6px 0 16px">These sliders steer every script, caption, and reply. Watch the example rewrite as you drag.</p>
+
+      <div style="border:1px solid var(--line); border-radius:12px; padding:14px 16px; font-size:12.5px">
+        <!-- humor slider -->
+        <div id="el-humor">
+          <div style="display:flex; align-items:center; gap:10px"><b style="width:70px">Humor</b><div class="slider"><div class="fill" style="width:40%"></div><div class="knob" style="left:38%"></div></div><span class="num" style="width:44px; text-align:right">2 / 5</span></div>
+          <div class="stops"><span>0 straight</span><span>1</span><span>2 · pilot default</span><span>3</span><span>4</span><span>5 max</span></div>
+        </div>
+        <!-- edge slider -->
+        <div id="el-edge" style="margin-top:12px">
+          <div style="display:flex; align-items:center; gap:10px"><b style="width:70px">Edge</b><div class="slider"><div class="fill" style="width:60%"></div><div class="knob" style="left:58%"></div></div><span class="num" style="width:44px; text-align:right">3 / 5</span></div>
+          <div class="stops"><span>0 soft</span><span>1</span><span>2</span><span>3 · pilot default</span><span>4</span><span>5 direct</span></div>
+          <div class="anno" style="margin-top:4px">Worked example copy at each slider stop appears on hover of the stop labels (matrix design note). Humor and edge are separate dials — the system never treats "more edge" as "more comedy" (Brain Part 5). Scale is the Brain's 0–5 (AgentTasteProfile ints); the older draft rendered /10 — normalized here per open decision, visual style kept.</div>
+        </div>
+
+        <!-- tone_mode toggle -->
+        <div id="el-tonemode" style="display:flex; gap:10px; align-items:center; margin-top:14px; flex-wrap:wrap">
+          <b style="width:70px">Mode</b>
+          <div style="display:inline-flex; border:1px solid var(--line); border-radius:99px; overflow:hidden; font-size:11.5px; font-weight:600">
+            <span style="padding:6px 14px; color:var(--mut); cursor:pointer">LOCKED</span>
+            <span style="padding:6px 14px; background:var(--ink); color:#fff">FLOAT ✓</span>
+          </div>
+          <span style="font-size:11.5px; color:var(--mut)">FLOAT = per-piece recommendation inside hard limits · LOCKED = your baseline used exactly as configured</span>
+          <div class="anno" style="width:100%">pilot_default FLOAT. FLOAT is never permission to ignore the preset, the brokerage edge cap, the hard ceiling, or sensitive/somber zero-tone locks (Brain Part 5 resolution order).</div>
+        </div>
+
+        <!-- example rewrite card -->
+        <div id="el-example" style="background:var(--surface); border-radius:8px; padding:10px 12px; margin-top:12px; font-size:12px; color:var(--mut)">
+          <b style="color:var(--ink)">Example at humor 2 / edge 3 (dry, no snark):</b> "The median here went up 3.1% this year. Your garage did not get the memo — it's still just holding boxes. It could be a $2,400/mo ADU."
+          <div class="anno" style="margin-top:4px">Live rewrite updates on every drag (client-side template + dial values). Examples keyed to the agent's market — edge_level_examples_market: east_palo_alto (Brain Onboarding Capture spec). Allowed humor targets: the market, the paperwork, timing, pricing strategy, automated valuation estimates, the process, the agent's own mild inconvenience — never the seller, buyer, neighborhood, family, school, or the home itself.</div>
+        </div>
+
+        <!-- hard-ceiling acknowledgement (BLOCKING) -->
+        <div id="el-ceiling" style="border:1.5px solid var(--crit); border-radius:10px; padding:10px 12px; margin-top:12px; background:#fdecec">
+          <label style="display:flex; gap:8px; font-size:12px; color:var(--ink); align-items:flex-start">
+            <input type="checkbox" style="margin-top:2px">
+            <span><b>I understand the hard ceiling:</b> no politics, no punching down, facts never bent for a joke — content generation unlocks when checked. <a href="#" style="color:var(--brand)">See the full hard-ceiling list ▾</a></span>
+          </label>
+          <div style="font-size:11px; color:var(--mut); margin-top:6px; border-top:1px solid color-mix(in srgb, var(--crit) 25%, var(--line)); padding-top:6px">Expanded (rendered verbatim from personality_hard_ceiling_v1, never paraphrased-only): never crude · never sexual · never mean · never at a client's expense · never at a buyer's expense · never at a seller's expense · never mocking the home or listing · never Fair-Housing-adjacent · never protected-class references · never "who lives where" claims · never schools-as-proxy language · never demographic assumptions.</div>
+          <div class="anno" style="margin-top:6px"><b style="color:var(--crit)">BLOCKING:</b> Continue is disabled AND all content generation platform-wide is disabled until checked — enforced server-side (missing hard_ceiling_acknowledged=true is a deterministic block in the Brain's gate table). On check, capture hard_ceiling_acknowledged_at / _by / policy_id personality_hard_ceiling_v1 / policy_version into AgentTasteProfile v1.</div>
+        </div>
+      </div>
+
+      <!-- back / continue -->
+      <div id="el-nav" style="display:flex; gap:8px; margin-top:14px; align-items:center">
+        <button class="btn-ghost" style="padding:10px 18px; font-size:13px">← Back</button>
+        <button class="btn-ink" style="padding:10px 22px; font-size:13px" disabled>Continue → voice &amp; avatar</button>
+        <span class="anno">Continue = primary ink button, disabled until the step validates (here: acknowledgement checked). Shown disabled — the box above is unchecked.</span>
+      </div>
+
+      <!-- footer note: remaining steps -->
+      <div id="el-remaining" style="font-size:11px; color:var(--soft); margin-top:14px">Remaining steps: 4 voice/avatar clone (or skip → static videos) · 5 sphere import + analysis report · 6 farm + listing-focus commitment + budget tier · 7 platform connections (OAuth) · 8 brand vault scan → 3 previews → deploy.</div>
+    </div>
+
+    <!-- ===== ALL 8 STEPS at density (dev walkthrough) ===== -->
+    <div style="border-top:1px solid var(--line); padding:16px 22px">
+      <div class="sechead">All 8 steps — full walkthrough (do not reorder; steps 1–3 mandatory, 4–8 skippable with consequence banners — interim decision)</div>
+      <div class="stepgrid" style="display:grid; grid-template-columns:1fr 1fr; gap:12px">
+
+        <!-- step 1 profile -->
+        <div class="stepcard" id="el-profile">
+          <div class="shd"><span class="n">1</span><b>Profile — agent identity capture</b></div>
+          <div style="display:grid; grid-template-columns:1fr 1fr; gap:6px">
+            <div class="field"><small>Full name</small>Graeham Watts</div>
+            <div class="field"><small>Brokerage</small>Intero Real Estate 🔒</div>
+            <div class="field"><small>DRE #</small>01466876 🔒 <span class="bdg good">validated ✓</span></div>
+            <div class="field"><small>Markets</small>East Palo Alto · Redwood City · Menlo Park</div>
+            <div class="field"><small>Niche</small>Move-up sellers + ADU-curious owners</div>
+            <div class="field"><small>Years / team</small>12 yrs · Solo (team invite later)</div>
+          </div>
+          <div class="anno" style="margin-top:6px">5–7 questions [BEST GUESS — exact list from PropCast Group 1 form]. DRE + brokerage validate against the identity.json-style brand record and become read-only afterwards (brand tripwire); any value on the identity.json blocklist is rejected at entry. Locked post-onboarding — tenant identity record.</div>
+        </div>
+
+        <!-- step 2 brand voice -->
+        <div class="stepcard" id="el-voicecap">
+          <div class="shd"><span class="n">2</span><b>Brand voice capture</b></div>
+          <div class="cardbox" style="background:var(--surface)">Paste 2–3 writing samples (an email you liked sending, a listing description, a social caption) — or answer "how do you talk?" prompts.
+            <div style="background:var(--paper); border:1px dashed var(--line); border-radius:7px; padding:8px 10px; margin-top:6px; color:var(--mut); font-size:11.5px">"Priced it like the comps actually matter. Three offers by Tuesday. Call me if you want the boring version with the spreadsheets." <span class="bdg good">sample 1 of 3</span></div>
+          </div>
+          <div class="anno" style="margin-top:6px">Precedes the dial by design — the Brain places the dial step "after brand voice capture and before first content generation." Empty state: no samples → "answer 5 quick questions instead."</div>
+        </div>
+
+        <!-- step 4 voice/avatar -->
+        <div class="stepcard" id="el-voiceclone">
+          <div class="shd"><span class="n">4</span><b>Voice &amp; avatar clone — or skip</b></div>
+          <div style="display:grid; gap:6px">
+            <div class="oauth">🎙 <b>Voice clone</b> <span style="color:var(--mut)">Record 2 min or upload → ElevenLabs PVC clone</span> <button class="btn-ink" style="margin-left:auto">Record</button></div>
+            <div class="cardbox" style="border-color:var(--warn); background:#fdf6ee; font-size:11.5px"><b>Consent required before any cloned voice is used:</b> signed VoiceIdentity authorization — consent, allowed use, ElevenLabs provider voice ID, revocation path, fallback voice. <button class="btn-ghost" style="margin-left:6px">Review &amp; sign</button><div class="anno" style="margin-top:4px">Wattson Brain Part 7, Never-Autonomous List A #19 — no signature, no cloned voice, ever. Fail-closed: provider down → Skip path offered, a clone is never faked.</div></div>
+            <div class="oauth" id="el-avatarclone">🎬 <b>Avatar setup</b> <span style="color:var(--mut)">Upload footage or book a capture session</span> <button class="btn-ghost" style="margin-left:auto">Upload</button></div>
+            <div class="anno">[BEST GUESS / DECIDE] vendor HeyGen-class (LipDub/BeHuman candidates) — this UI is unaffected by the vendor choice. Avatar content is capped at 90% of output; personal/relationship content hard-routes to human production (Brain 90/10 rule — surfaced to set expectations).</div>
+            <div class="cardbox" id="el-skipvoice" style="background:var(--surface); font-size:11.5px">⏭ <b>Skip for now → static videos only.</b> <span style="color:var(--mut)">Your account is flagged static-videos-only until a voice/avatar is added in Settings › Voice &amp; Tone. Everything else still works.</span> <button class="btn-ghost">Skip</button></div>
+          </div>
+        </div>
+
+        <!-- step 5 sphere -->
+        <div class="stepcard" id="el-sphere">
+          <div class="shd"><span class="n">5</span><b>Sphere import + analysis report</b></div>
+          <div style="display:grid; gap:6px">
+            <div class="oauth">📸 Instagram <span class="bdg good">connected ✓</span> <span style="color:var(--mut)">followers scanned for known contacts</span></div>
+            <div class="oauth">📇 Contacts <span class="bdg good">CSV imported · 412 rows</span> <button class="btn-ghost" style="margin-left:auto">or pull from GHL</button></div>
+            <div class="cardbox" style="border-color:var(--warn); background:#fdf6ee; font-size:11.5px">⚠ <b>Consent:</b> imported contacts default to <b>consent = unknown</b> — outreach is blocked per contact until consent is captured. This wizard never promises "we'll start messaging your sphere."</div>
+            <div class="cardbox" id="el-spherereport" style="border-color:var(--brand); background:var(--brand-soft); font-size:11.5px"><b>Your sphere analysis (generating… ~2 min)</b><div class="num" style="color:var(--mut); margin-top:3px">412 contacts · <b style="color:var(--ink)">208 homeowners matched</b> · 31 likely movers (equity + tenure signals) · 9 past clients recognized → Past Client OS. Full report lands in-wizard + emailed copy.</div><div class="anno" style="margin-top:3px">PropCast Group 1 deliverable. Async — you can continue to step 6 while it runs [BEST GUESS: steps 5 &amp; 8 scans parallelizable].</div></div>
+          </div>
+        </div>
+
+        <!-- step 6 farm/budget -->
+        <div class="stepcard" id="el-farm">
+          <div class="shd"><span class="n">6</span><b>Farm + listing-focus + budget tier</b></div>
+          <div style="display:grid; grid-template-columns:130px 1fr; gap:8px">
+            <div style="background:var(--surface); border:1px solid var(--line); border-radius:8px; height:96px; display:grid; place-items:center; font-size:10.5px; color:var(--soft)">🗺 mini-map<br>draw tiers</div>
+            <div style="font-size:11.5px; display:grid; gap:4px; align-content:start">
+              <div><span class="bdg good">Tier 1</span> East Palo Alto — University Village + Woodland (1,840 parcels)</div>
+              <div><span class="bdg">Tier 2</span> Redwood City — Friendly Acres (2,210 parcels)</div>
+              <div id="el-focus" style="margin-top:4px"><b>Listing-focus commitment:</b> <span class="chip on" style="font-size:10.5px">Listings-first</span> <span class="chip" style="font-size:10.5px">Balanced</span> <span class="chip" style="font-size:10.5px">Buyer-heavy</span></div>
+            </div>
+          </div>
+          <div id="el-budget" style="display:grid; grid-template-columns:repeat(3,1fr); gap:6px; margin-top:8px; font-size:11px; text-align:center">
+            <div style="border:1px solid var(--line); border-radius:8px; padding:8px"><b>Starter</b><div style="color:var(--mut)">organic only</div></div>
+            <div style="border:1.5px solid var(--brand); border-radius:8px; padding:8px; background:var(--brand-soft)"><b>Growth ✓</b><div style="color:var(--mut)">+$600/mo ad budget</div></div>
+            <div style="border:1px solid var(--line); border-radius:8px; padding:8px"><b>Dominant</b><div style="color:var(--mut)">+$2,000/mo</div></div>
+          </div>
+          <div class="anno" style="margin-top:6px">Consumed by the Market Read Layer: <b>budget-not-mix</b> — your tier sets spend, the system decides mix (PropCast Brain Stage 2). Geo tiers per matrix gap #4. <span id="el-cityguide"><b>City Guide "Local Business Partner" slot (optional):</b> one merchant deal/coupon per city guide, filled here, stays until you update it — e.g. "Backyard Coffee EPA — free cortado with any pastry" <button class="btn-ghost" style="font-size:10px">Fill slot</button> <button class="btn-ghost" style="font-size:10px">Skip</button> (Brain ~line 758).</span></div>
+        </div>
+
+        <!-- step 7 oauth -->
+        <div class="stepcard" id="el-oauth">
+          <div class="shd"><span class="n">7</span><b>Platform connections (OAuth)</b></div>
+          <div style="display:grid; grid-template-columns:1fr 1fr; gap:6px">
+            <div class="oauth">▶ YouTube <span class="bdg good" style="margin-left:auto">connected ✓</span></div>
+            <div class="oauth">📸 Instagram <span class="bdg crit" style="margin-left:auto">failed — retry</span></div>
+            <div class="oauth">📘 Facebook Page <span class="bdg good" style="margin-left:auto">connected ✓</span></div>
+            <div class="oauth">🎵 TikTok <button class="btn-ghost" style="margin-left:auto">Connect</button></div>
+            <div class="oauth">📍 Google Business Profile <span class="bdg good" style="margin-left:auto">connected ✓</span></div>
+            <div class="oauth">💼 LinkedIn <button class="btn-ghost" style="margin-left:auto">Connect</button></div>
+            <div class="oauth">⚙ GHL (CRM interim) <span class="bdg good" style="margin-left:auto">connected ✓</span></div>
+            <div class="oauth">🏠 MLS <span class="bdg warn" style="margin-left:auto">pending broker approval</span></div>
+          </div>
+          <div class="cardbox" style="border-color:var(--warn); background:#fdf6ee; margin-top:6px; font-size:11.5px">⚠ <b>Instagram requires a Business Account linked to a Facebook Page</b> — a tenant onboarding requirement (personal IG accounts cannot publish via the API; Meta publish + insights need it). Your IG is personal → <button class="btn-ghost" style="font-size:10px">How to convert (2 min)</button><div class="anno" style="margin-top:3px">Failed card shows retry + "what breaks without this" (mirrors Screen 21 integration cards): no IG → no Reels publishing, no comment-DM keywords on IG, insights gap.</div></div>
+          <div class="anno" style="margin-top:5px">Each connect → OAuth popup → integrations registry token per platform. Fail-closed: a failed connection never silently drops — the card persists in Settings › Integrations.</div>
+        </div>
+
+        <!-- step 8 brand vault / deploy -->
+        <div class="stepcard" id="el-vault" style="grid-column:1 / -1">
+          <div class="shd"><span class="n">8</span><b>Brand vault scan → 3 previews → Deploy</b></div>
+          <div style="display:grid; grid-template-columns:1fr 3fr auto; gap:10px; align-items:center">
+            <div class="cardbox" style="font-size:11.5px"><b>Scan (Tab 8 flow)</b><div style="color:var(--mut)">grahamwatts.com + IG scanned → logo, gold/black palette, headshot, fonts pulled into the brand vault · <span class="bdg good">done in 84s</span></div></div>
+            <div style="display:grid; grid-template-columns:repeat(3,1fr); gap:6px; font-size:10.5px; text-align:center">
+              <div style="border:1px solid var(--line); border-radius:8px; padding:10px 6px"><b>Preview 1</b><div style="color:var(--mut)">market-update Reel frame, your colors + DRE strip</div></div>
+              <div style="border:1.5px solid var(--brand); border-radius:8px; padding:10px 6px; background:var(--brand-soft)"><b>Preview 2 ✓</b><div style="color:var(--mut)">farm newsletter header, gold/black lockup</div></div>
+              <div style="border:1px solid var(--line); border-radius:8px; padding:10px 6px"><b>Preview 3</b><div style="color:var(--mut)">listing carousel cover</div></div>
+            </div>
+            <button class="btn-ink" style="padding:12px 20px; font-size:13px">🚀 Deploy</button>
+          </div>
+          <div class="anno" style="margin-top:6px">Approve a preview set → Deploy → Command Center (Screen 1) with your first Monday-style briefing queued. Every preview carries the correct brand record (DRE 01466876) — the brand tripwire runs on the vault output too. Async scan: progress card "~2 min", other steps continue.</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- states strip -->
+    <div id="el-states" style="border-top:1px solid var(--line); padding:14px 22px">
+      <div class="cardbox" style="font-size:11.5px">
+        <b>States (dev reference)</b>
+        <div style="color:var(--mut); margin-top:4px">
+          <b style="color:var(--ink)">Default:</b> pilot defaults pre-filled — humor 2, edge 3, tone_mode FLOAT.
+          <b style="color:var(--ink)">Loading:</b> sphere analysis + brand-vault scan are async — progress card "this takes ~2 min", other steps continue [BEST GUESS: 5 &amp; 8 parallelizable].
+          <b style="color:var(--ink)">Empty:</b> step 2 with no writing samples → "answer 5 quick questions instead."
+          <b style="color:var(--ink)">Degraded (all fail-closed):</b> OAuth failure → retry card + "what breaks without this" · voice-clone provider down → Skip path, never a faked clone · acknowledgement missing on an imported/existing profile → generation stays blocked platform-wide + resume banner.
+          <b style="color:var(--ink)">Permission-limited:</b> only the tenant owner runs onboarding; later team invites see a trimmed profile-only flow [BEST GUESS].
+          <b style="color:var(--ink)">Re-entry (Settings):</b> dial changes after onboarding are future-only — a new profile_version is created; in-flight drafts keep their version; locked content never mutates (info note shown when editing from Settings › Voice &amp; Tone).
+          <b style="color:var(--ink)">Abandon:</b> resume banner on next login at the last incomplete step.
+        </div>
+      </div>
+    </div>
+
+    <!-- mobile variant strip -->
+    <div id="el-mobile" style="border-top:1px solid var(--line); padding:14px 22px">
+      <div class="sechead">Mobile variant (375px) — the one flow that must be fully phone-completable</div>
+      <div style="display:flex; gap:10px; overflow-x:auto">
+        <div style="min-width:170px; border:1px solid var(--line); border-radius:14px; padding:10px; font-size:9.5px">
+          <div style="display:flex; justify-content:space-between; color:var(--soft)"><b style="color:var(--ink)">Welcome</b><span class="num">3/8</span></div>
+          <div style="margin-top:6px"><b>Humor</b><div class="slider" style="height:10px; margin-top:3px"><div class="fill" style="width:40%"></div></div></div>
+          <div style="margin-top:6px"><b>Edge</b><div class="slider" style="height:10px; margin-top:3px"><div class="fill" style="width:60%"></div></div></div>
+          <div class="anno" style="margin-top:4px">sliders full-width, touch targets ≥44px</div>
+        </div>
+        <div style="min-width:170px; border:1px solid var(--line); border-radius:14px; padding:10px; font-size:9.5px">
+          <b>Example rewrite</b>
+          <div style="background:var(--surface); border-radius:6px; padding:6px; margin-top:4px; color:var(--mut)">"Your garage did not get the memo…"</div>
+          <div class="anno" style="margin-top:4px">rewrite card stacks BELOW the sliders</div>
+        </div>
+        <div style="min-width:170px; border:1px solid var(--crit); border-radius:14px; padding:10px; font-size:9.5px">
+          <b>☑ Hard ceiling</b>
+          <div style="color:var(--mut); margin-top:4px">full-width checkbox row; Continue pinned bottom, disabled until checked</div>
+        </div>
+        <div style="min-width:170px; border:1px solid var(--line); border-radius:14px; padding:10px; font-size:9.5px">
+          <b>Steps 4–8</b>
+          <div style="color:var(--mut); margin-top:4px">identical single column; OAuth opens native app sheets; voice record uses the phone mic (best capture path); map picker full-screen</div>
+        </div>
+      </div>
+      <div class="anno" style="margin-top:6px">Progress dots collapse to "3/8". Single-column flow identical to desktop — one decision per screen.</div>
+    </div>
+  </div>
+
+  <!-- ============ (3) SPEC GAPS + ELEMENT COVERAGE ============ -->
+  <div class="note" style="margin-top:28px"><b>Spec gaps found (Master Brains → rendered above, not in the spec inventory):</b> (1) <b>Brokerage edge cap</b> sits above the agent's dial in the resolution order (hard ceiling → brokerage_edge_cap → override → preset → baseline) — noted on the tone_mode row; (2) the Brain's <b>allowed safe humor targets</b> list (market/paperwork/timing/AVMs/process — never seller, buyer, neighborhood, family, school, or the home) — rendered in the example card; (3) the <b>90/10 avatar cap</b> (personal/relationship content hard-routes to human production) — surfaced at step 4 to set expectations; (4) the hard ceiling is a <b>compliance reject gate, not a numeric clamp</b> — violating copy is rejected outright, never "clamped safe"; (5) MVP1 names the IG-Business-linked-to-FB-Page rule a <b>tenant onboarding requirement</b> (personal IG cannot publish via API) — rendered as the step-7 warning card. Also per spec rule: default tone presets are stored in schema even though the preset UI is deferred (MVP 0).</div>
+
+  <h2 style="font-size:20px; margin:20px 0 10px">Element coverage — spec inventory → this page</h2>
+  <table class="dtable cov" style="font-size:12.5px">
+    <tr><th>Spec inventory element</th><th>Rendered at</th><th>Status</th></tr>
+    <tr><td>Progress dots + step label (no forward jumping)</td><td><a href="#el-progress">Wizard header</a></td><td class="ok">✓</td></tr>
+    <tr><td>Humor slider (0–5, pilot default 2, normalized scale)</td><td><a href="#el-humor">Step 3 — Humor</a></td><td class="ok">✓</td></tr>
+    <tr><td>Edge slider (0–5, pilot default 3, worked examples per stop)</td><td><a href="#el-edge">Step 3 — Edge</a></td><td class="ok">✓</td></tr>
+    <tr><td>tone_mode toggle (LOCKED / FLOAT + one-line explanations)</td><td><a href="#el-tonemode">Step 3 — Mode</a></td><td class="ok">✓</td></tr>
+    <tr><td>Example rewrite card (live, market-keyed east_palo_alto)</td><td><a href="#el-example">Step 3 — Example</a></td><td class="ok">✓</td></tr>
+    <tr><td>Hard-ceiling acknowledgement checkbox (BLOCKING, verbatim list, capture fields)</td><td><a href="#el-ceiling">Step 3 — Hard ceiling</a></td><td class="ok">✓</td></tr>
+    <tr><td>Voice clone recorder + signed VoiceIdentity authorization (List A #19)</td><td><a href="#el-voiceclone">Step 4</a></td><td class="ok">✓</td></tr>
+    <tr><td>Avatar clone setup ([DECIDE] vendor, UI vendor-agnostic)</td><td><a href="#el-avatarclone">Step 4 — Avatar</a></td><td class="ok">✓</td></tr>
+    <tr><td>Skip-voice notice (→ static videos consequence banner)</td><td><a href="#el-skipvoice">Step 4 — Skip</a></td><td class="ok">✓</td></tr>
+    <tr><td>Sphere import (IG OAuth + CSV/GHL, consent=unknown blocks outreach)</td><td><a href="#el-sphere">Step 5</a></td><td class="ok">✓</td></tr>
+    <tr><td>Sphere analysis report (in-wizard card + emailed copy)</td><td><a href="#el-spherereport">Step 5 — Report</a></td><td class="ok">✓</td></tr>
+    <tr><td>Farm/geo picker (tier-1/tier-2 mini-map)</td><td><a href="#el-farm">Step 6</a></td><td class="ok">✓</td></tr>
+    <tr><td>Listing-focus commitment (Market Read Layer, budget-not-mix)</td><td><a href="#el-focus">Step 6 — Focus</a></td><td class="ok">✓</td></tr>
+    <tr><td>Budget tier selector (plan cards)</td><td><a href="#el-budget">Step 6 — Tiers</a></td><td class="ok">✓</td></tr>
+    <tr><td>City Guide "Local Business Partner" slot (fill or skip)</td><td><a href="#el-cityguide">Step 6 — annotation slot</a></td><td class="ok">✓</td></tr>
+    <tr><td>OAuth connection cards (8 platforms, connected/failed, IG Business+FB Page requirement inline)</td><td><a href="#el-oauth">Step 7</a></td><td class="ok">✓</td></tr>
+    <tr><td>Brand vault scan → 3 previews → Deploy (Tab 8 flow)</td><td><a href="#el-vault">Step 8</a></td><td class="ok">✓</td></tr>
+    <tr><td>Back / Continue buttons (Continue disabled until valid)</td><td><a href="#el-nav">Step 3 — Nav</a></td><td class="ok">✓</td></tr>
+  </table>
+  <div style="border:1.5px solid var(--good); background:#f2f8f4; border-radius:10px; padding:12px 16px; margin:12px 0 0; font-weight:700; color:var(--good)">18 of 18 spec elements rendered ✓ <span style="font-weight:400; color:var(--mut); font-size:12.5px">— plus prompt-required regions beyond the inventory: full 8-step walkthrough (steps 1, 2 rendered too), remaining-steps footer note, states strip, mobile variant strip, and the 5 Master-Brain additions listed in "Spec gaps found" above.</span></div>
+
+  <!-- ============ (4) FULL SPEC AS HTML ============ -->
+  <div class="specdoc">
+    <h1 style="font-size:24px; margin:40px 0 6px">Spec — 23 · Onboarding Wizard</h1>
+    <p><b>Purpose</b> The first-run flow that makes every other screen possible: it captures the agent's profile, tone (AI Personality Dial with the blocking hard-ceiling acknowledgement), voice/avatar assets, sphere, farm geography, budget tier, and platform connections, then scans the brand vault and deploys. Target set in the draft: "producing by day one, branded in under 10 minutes."</p>
+    <p><b>Primary users</b> New agent/tenant owner (Graeham-persona) on first login. Also re-enterable per-step from Settings (each step becomes a Settings panel after completion).</p>
+    <p><b>Entry points</b> First login after account creation (forced — no other screen unlocks content generation until the personality-dial acknowledgement is captured, per PropCast Master Brain "Onboarding Capture"); Settings › Voice &amp; Tone / Strategy deep-links back into individual steps; Wattson can deep-link a user to an incomplete step.</p>
+    <p><b>Exit points</b> Step 8 "Deploy" → Command Center (Screen 1) with the first Monday-style briefing queued. "Skip voice/avatar" → continues wizard but flags account as static-videos-only. Abandon → resume banner on next login at the last incomplete step.</p>
+
+    <h2>Layout</h2>
+    <ul>
+      <li><b>Header (all steps):</b> avatar chip, "Welcome to PropertyIQ", step label ("Step 3 of 8 — your AI's personality"), progress dots (●●●○○○○○) right-aligned. Matches draft markup.</li>
+      <li><b>Main:</b> single centered column, max-width 640px, one decision per screen. Back / Continue buttons bottom-left; Continue is primary (ink button) and disabled until the step's required fields validate.</li>
+      <li><b>Footer note:</b> small grey line listing remaining steps (as in draft).</li>
+      <li><b>Mobile (375px):</b> identical single-column flow; sliders become full-width touch targets ≥44px; progress dots collapse to "3/8"; the example-rewrite card stacks below the sliders. The wizard is the one flow that must be fully phone-completable (agents onboard from their phone).</li>
+    </ul>
+
+    <h2>Step sequence (8 steps, per draft screen 23 note — do not reorder)</h2>
+    <ol style="font-size:13.5px; color:var(--mut)">
+      <li><b>Profile</b> — agent identity capture (5–7 questions per matrix gap item): name, brokerage, DRE, markets, niche, years, team-or-solo. DRE/brokerage fields validate against identity.json-style brand record and become read-only afterwards (brand tripwire).</li>
+      <li><b>Brand voice capture</b> — writing samples / "how do you talk" prompts (precedes the dial, per Brain: dial step comes "after brand voice capture and before first content generation").</li>
+      <li><b>AI Personality Dial</b> (the draft's rendered step) — see element inventory.</li>
+      <li><b>Voice &amp; avatar clone</b> — or skip → static videos.</li>
+      <li><b>Sphere import + analysis report</b> — Instagram OAuth + contact import; generates the sphere analysis report (PropCast Group 1 deliverable).</li>
+      <li><b>Farm + listing-focus commitment + budget tier</b> — geo tiers, the Market Read Layer's "budget-not-mix" logic and listing-focus commitment.</li>
+      <li><b>Platform connections (OAuth)</b> — YT / IG (Business acct linked to FB Page — a tenant onboarding requirement per Brain Part 10 metrics rule) / FB / TikTok / GBP / LinkedIn / GHL / MLS.</li>
+      <li><b>Brand vault scan → 3 previews → deploy</b> — reuses Tab 8's brand-vault flow; shows 3 branded content previews before Deploy.</li>
+    </ol>
+
+    <h2>Element inventory</h2>
+    <div style="overflow-x:auto">
+    <table class="dtable">
+      <tr><th>Element</th><th>What it shows/does</th><th>Data source</th><th>Interactions</th><th>Spec source</th></tr>
+      <tr><td>Progress dots + step label</td><td>Position in the 8-step flow</td><td>wizard state</td><td>none (dots not clickable forward; back allowed)</td><td>draft s23</td></tr>
+      <tr><td>Humor slider</td><td>humor_amount 0–5, pilot_default 2 (draft shows a 0–10 render — normalize to the Brain's 0–5 scale; keep the visual style)</td><td>AgentTasteProfile.humor_amount</td><td>drag; live example rewrite updates</td><td>PropCast Brain "Onboarding Capture"</td></tr>
+      <tr><td>Edge slider</td><td>edge_level 0–5, pilot_default 3</td><td>AgentTasteProfile.edge_level</td><td>drag; example rewrite updates; worked example copy at each slider level (matrix design note)</td><td>PropCast Brain; matrix gap #4</td></tr>
+      <tr><td>tone_mode toggle</td><td>LOCKED / FLOAT, pilot_default FLOAT, with one-line explanations ("FLOAT = per-piece recommendation inside hard limits")</td><td>AgentTasteProfile.tone_mode</td><td>toggle</td><td>PropCast Brain</td></tr>
+      <tr><td>Example rewrite card</td><td>Live sample copy at the current dial setting (draft: the "garage did not get the memo" ADU line) — edge_level_examples_market keyed to the agent's market (pilot: east_palo_alto)</td><td>client-side template + dial values</td><td>updates on drag</td><td>PropCast Brain; draft s23</td></tr>
+      <tr><td>Hard-ceiling acknowledgement checkbox</td><td>"I understand the hard ceiling: no politics, no punching down, facts never bent for a joke — content generation unlocks when checked." BLOCKING: Continue disabled and ALL content generation platform-wide disabled until checked.</td><td>hard_ceiling_acknowledged (must_equal true) + capture of acknowledged_at / acknowledged_by / policy_id personality_hard_ceiling_v1 / policy_version</td><td>check; hover/expand shows the full hard-ceiling list (never crude/sexual/mean/at client-buyer-seller expense/mocking home/Fair-Housing-adjacent/protected-class/who-lives-where/schools-as-proxy/demographic assumptions)</td><td>PropCast Brain "The Hard Ceiling" + matrix: "blocking acknowledgement checkbox — no generation until checked"</td></tr>
+      <tr><td>Voice clone recorder (step 4)</td><td>Record/upload voice sample → ElevenLabs PVC clone; requires signed VoiceIdentity authorization (consent, allowed use, provider ID, revocation path, fallback voice) before any cloned voice is used</td><td>VoiceIdentity record; ElevenLabs Agents</td><td>record, review consent text, sign, or Skip</td><td>Wattson Brain Part 7, List A #19</td></tr>
+      <tr><td>Avatar clone setup (step 4)</td><td>Upload footage / book capture for avatar looks; [BEST GUESS] vendor HeyGen-class (LipDub/BeHuman candidates) — UI unaffected by vendor choice</td><td>avatar asset registry</td><td>upload or Skip</td><td>matrix gap #4; [DECIDE]</td></tr>
+      <tr><td>Skip-voice notice</td><td>"Skip → static videos" consequence banner</td><td>wizard flag</td><td>click Skip</td><td>draft s23 footer</td></tr>
+      <tr><td>Sphere import (step 5)</td><td>Instagram OAuth + CSV/GHL contact import; imported contacts default to unknown consent (blocks outreach until captured)</td><td>PropFlow contact intake</td><td>connect, upload</td><td>matrix corrections (consent model); PropCast Group 1</td></tr>
+      <tr><td>Sphere analysis report</td><td>Generated report card shown in-wizard ("your sphere: N owners, M likely movers…")</td><td>PropCast sphere pipeline</td><td>view; emailed copy</td><td>PropCast Group 1 deliverable</td></tr>
+      <tr><td>Farm/geo picker (step 6)</td><td>Tier-1/tier-2 geography selection on a mini-map</td><td>geo config</td><td>draw/select</td><td>matrix gap #4 ("geo tiers")</td></tr>
+      <tr><td>Listing-focus commitment</td><td>Commitment selector consumed by the Market Read Layer (budget-not-mix logic)</td><td>strategy config</td><td>select</td><td>PropCast Brain Stage 2</td></tr>
+      <tr><td>Budget tier selector</td><td>Plan/content budget tier cards</td><td>PlanTier / tenant config</td><td>select</td><td>matrix gap #4</td></tr>
+      <tr><td>City Guide "Local Business Partner" slot</td><td>Optional: one merchant deal/coupon per city guide, filled during onboarding, stays until updated</td><td>City Guide container config</td><td>fill or skip</td><td>PropCast Brain line ~758</td></tr>
+      <tr><td>OAuth connection cards (step 7)</td><td>Per-platform connect buttons with connected/failed state; IG requires Business Account linked to a FB Page (hard requirement called out inline)</td><td>integrations registry</td><td>click → OAuth popup</td><td>PropCast Brain Part 10; Screen 21 integrations</td></tr>
+      <tr><td>Brand vault scan (step 8)</td><td>Scans site/social for brand colors/logo → 3 branded previews → Deploy</td><td>brand vault (Tab 8 flow)</td><td>approve a preview set, Deploy</td><td>draft s23 note</td></tr>
+      <tr><td>Back / Continue buttons</td><td>Navigation; Continue disabled until step valid</td><td>—</td><td>click</td><td>draft s23</td></tr>
+    </table>
+    </div>
+
+    <h2>States</h2>
+    <ul>
+      <li><b>Default:</b> step renders with pilot defaults pre-filled (humor 2, edge 3, FLOAT).</li>
+      <li><b>Loading:</b> sphere analysis and brand-vault scan are async — show progress card with "this takes ~2 min" and allow continuing other steps [BEST GUESS: parallelizable steps 5 and 8 scans].</li>
+      <li><b>Empty:</b> no writing samples in step 2 → offer "answer 5 quick questions instead."</li>
+      <li><b>Error/degraded (fail-closed):</b> OAuth failure → card shows retry + "what breaks without this" (mirrors Screen 21 integration cards); voice-clone provider down → offer Skip path, never fake a clone; acknowledgement missing on an existing/imported profile → generation stays blocked platform-wide and a resume banner appears.</li>
+      <li><b>Permission-limited:</b> only the tenant owner runs onboarding; team members invited later see a trimmed profile-only flow [BEST GUESS].</li>
+      <li><b>Mobile:</b> see Layout.</li>
+      <li><b>Re-entry:</b> dial changes after onboarding are future-only: create a new profile_version; in-flight drafts keep their version; locked content never mutates (Brain rule — surface this as an info note when editing later from Settings).</li>
+    </ul>
+
+    <h2>Data fields</h2>
+    <div style="overflow-x:auto">
+    <table class="dtable">
+      <tr><th>Field</th><th>Format</th><th>Source of truth</th></tr>
+      <tr><td>humor_amount, edge_level</td><td>int 0–5</td><td>AgentTasteProfile (versioned, profile_version)</td></tr>
+      <tr><td>tone_mode</td><td>enum LOCKED/FLOAT</td><td>AgentTasteProfile</td></tr>
+      <tr><td>hard_ceiling_acknowledged / _at / _by / policy_id / policy_version</td><td>bool + timestamps + ids (policy_id = personality_hard_ceiling_v1)</td><td>AgentTasteProfile</td></tr>
+      <tr><td>VoiceIdentity</td><td>signed authorization record: consent, allowed use, ElevenLabs voice ID, revocation path, fallback voice</td><td>Wattson voice config</td></tr>
+      <tr><td>Agent profile</td><td>name, DRE, brokerage, markets, niche</td><td>tenant identity record (locked post-onboarding, identity.json-equivalent)</td></tr>
+      <tr><td>Sphere contacts</td><td>contact records, consent = unknown by default</td><td>PropFlow (GHL now → PropFlow after migration)</td></tr>
+      <tr><td>Farm geo, listing-focus, budget tier</td><td>geo polygons/ids, enum, tier</td><td>strategy config</td></tr>
+      <tr><td>OAuth tokens</td><td>per platform</td><td>integrations registry</td></tr>
+    </table>
+    </div>
+
+    <h2>Rules &amp; compliance</h2>
+    <ul>
+      <li><b>No generation before acknowledgement</b> — the single hard gate of this screen; enforced server-side (missing hard_ceiling_acknowledged=true is a deterministic block per the Brain's gate table).</li>
+      <li>Hard ceiling text rendered verbatim from personality_hard_ceiling_v1, never paraphrased-only.</li>
+      <li>DRE/brokerage locked from the brand record; values on the identity.json blocklist rejected (brand tripwire). The only valid DRE for this tenant is 01466876.</li>
+      <li>Voice cloning gated on signed VoiceIdentity authorization (Never-Autonomous adjacent, List A #19).</li>
+      <li>Imported contacts: unknown consent blocks outreach; wizard must not promise "we'll start messaging your sphere."</li>
+      <li>Default tone presets stored in schema even though the preset UI is deferred (MVP 0 rule).</li>
+    </ul>
+
+    <h2>Cross-links</h2>
+    <p><b>In:</b> first login; Settings deep-links. <b>Out:</b> Command Center (deploy), Settings › Voice &amp; Tone (dial), Settings › Integrations (step 7 cards), Brand vault (Tab 8), Video Studio (avatar/voice assets, Screen 32), Past Client OS / CRM (sphere import results). Ledger events: profile created, AgentTasteProfile v1 written, VOICE identity signed, OAUTH_CONNECTED per platform, sphere report generated [event names BEST GUESS except AgentTasteProfile semantics].</p>
+
+    <h2>Open decisions</h2>
+    <ul>
+      <li>[DECIDE] Avatar-clone vendor: assume HeyGen-class avatar API (LipDub/BeHuman candidates) — UI unaffected by vendor choice.</li>
+      <li>[DECIDE] Slider scale display: Brain is 0–5; draft renders /10. Interim design: 0–5 with labeled stops, keep the draft's visual style.</li>
+      <li>[DECIDE] Whether step 2 (brand voice) and step 5 (sphere) can be deferred with "finish later"; interim: steps 1–3 mandatory, 4–8 skippable with consequence banners, since only the dial gates generation.</li>
+      <li>[BEST GUESS] "5–7 questions" profile content — exact question list to be finalized from the onboarding form implementation (PropCast Group 1).</li>
+    </ul>
+  </div>
+</div>

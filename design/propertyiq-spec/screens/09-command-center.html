@@ -1,0 +1,789 @@
+<title>PropertyIQ · Screen 09 — Command Center</title>
+<link href="https://api.fontshare.com/v2/css?f[]=technor@500,600,700&display=swap" rel="stylesheet">
+<link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<style>
+  /* Type system — Technor for display (the squared machine look from the font exploration), Inter for UI. */
+  :root{ --font-display:'Technor', Inter, -apple-system, 'Segoe UI', sans-serif; --font-ui: Inter, -apple-system, 'Segoe UI', Roboto, sans-serif; }
+</style>
+<style>
+  /* Palette v4 — PropFlow design language: neutral ink UI, ink-as-accent, color reserved for data. (extracted verbatim from propsearch-design-draft.html) */
+  :root, :root[data-theme="dark"], :root[data-theme="light"]{
+    --ink:#23282f; --paper:#fbfaf8; --surface:#f1efe9; --line:#e2dfd6;
+    --mut:#6b7076; --soft:#9b9f9f;
+    --brand:#2e6b53; --brand-ink:#ffffff; --brand-soft:#eaf1ec; --brand-deep:#1e4c3a;
+    --signal:#b07a2e;
+    --good:#2e7d4f; --warn:#a8630a; --crit:#b3372f;
+    --r:10px;
+  }
+  .intel .score, .mintel{ color:var(--brand-deep) }
+  .intel{ border-left:3px solid var(--brand) }
+  h1{ letter-spacing:-.02em }
+  .stat b{ letter-spacing:-.01em }
+  body[data-agent="watts"]{ --brand:#2e6b53; --brand-soft:#eaf1ec; --brand-deep:#1e4c3a; }
+
+  *{box-sizing:border-box; margin:0}
+  body{font:15px/1.55 var(--font-ui); color:var(--ink); background:var(--paper); padding-bottom:80px}
+  h1,h2,h3{line-height:1.15; text-wrap:balance; font-family:var(--font-display); font-weight:600}
+  h1{letter-spacing:-.01em}
+  .site{box-shadow:0 1px 2px rgba(20,24,32,.04), 0 8px 32px rgba(20,24,32,.06)}
+  .stat{box-shadow:0 1px 2px rgba(20,24,32,.03); transition:box-shadow .15s, transform .15s}
+  .stat:hover{box-shadow:0 4px 14px rgba(20,24,32,.08)}
+  .chip{transition:all .12s}
+  button{font-family:var(--font-ui)}
+  .num{font-variant-numeric:tabular-nums}
+  .wrap{max-width:1180px; margin:0 auto; padding:0 20px}
+
+  .bar{position:sticky; top:0; z-index:50; background:var(--paper); border-bottom:1px solid var(--line); padding:10px 0; backdrop-filter:blur(8px)}
+  .bar .wrap{display:flex; flex-wrap:wrap; gap:10px; align-items:center}
+  .bar .ttl{font-weight:700; margin-right:auto}
+  .bar .ttl small{display:block; font-weight:400; color:var(--mut)}
+  .bar a{color:var(--brand); font-size:13px; text-decoration:none}
+
+  .note{background:var(--surface); border:1px solid var(--line); border-radius:var(--r); padding:14px 16px; margin:0 0 22px; font-size:13.5px; color:var(--mut)}
+  .note b{color:var(--ink)}
+
+  .site{border:1px solid var(--line); border-radius:14px; overflow:hidden; background:var(--paper)}
+  .sitehead{display:flex; align-items:center; gap:14px; padding:14px 22px; border-bottom:1px solid var(--line); flex-wrap:wrap}
+  .avatar{width:38px; height:38px; border-radius:50%; background:var(--brand); color:var(--brand-ink); display:grid; place-items:center; font-weight:700}
+  .sitehead .who b{display:block}
+  .sitehead .who small{color:var(--mut)}
+  .sitehead nav{margin-left:auto; display:flex; gap:18px; font-size:13.5px; color:var(--mut)}
+  .sitehead nav a{color:inherit; text-decoration:none}
+  .sitehead nav a:hover{color:var(--brand)}
+
+  .chip{display:inline-flex; align-items:center; gap:6px; font-size:12.5px; font-weight:500; border:1px solid var(--line); border-radius:99px; padding:6px 12px; background:var(--paper); cursor:pointer; color:var(--ink)}
+  .chip:hover{border-color:var(--brand)}
+  .chip.on{background:var(--brand); border-color:var(--brand); color:var(--brand-ink); font-weight:600; box-shadow:0 2px 8px color-mix(in srgb, var(--brand) 30%, transparent)}
+
+  .statrow{display:grid; grid-template-columns:repeat(4,1fr); gap:10px}
+  .stat{background:var(--surface); border:1px solid var(--line); border-radius:var(--r); padding:12px}
+  .stat small{display:block; color:var(--mut); font-size:11.5px; text-transform:uppercase; letter-spacing:.05em}
+  .stat b{font-size:18px}
+  .stat .up{color:var(--good); font-size:12px}
+
+  .bdg{font-size:11.5px; border-radius:6px; padding:3px 8px; background:var(--surface); border:1px solid var(--line); color:var(--mut)}
+  .bdg.good{color:var(--good); border-color:color-mix(in srgb,var(--good) 30%,var(--line))}
+  .bdg.warn{color:var(--warn); border-color:color-mix(in srgb,var(--warn) 30%,var(--line))}
+
+  .dtable{width:100%; border-collapse:collapse; font-size:13px}
+  .dtable td,.dtable th{border-bottom:1px solid var(--line); padding:8px 10px; text-align:left}
+  .dtable th{font-size:11px; text-transform:uppercase; letter-spacing:.05em; color:var(--soft)}
+
+  @media (max-width:860px){ .statrow{grid-template-columns:repeat(2,1fr)} .maingrid{grid-template-columns:1fr !important} .console{grid-template-columns:1fr !important} .rail{display:none !important} }
+  @media (prefers-reduced-motion: reduce){ *{transition:none!important} }
+
+  /* ---- page-specific additions (kept in the same design language) ---- */
+  .anno{font-size:11px; color:var(--soft)}
+  .cardbox{border:1px solid var(--line); border-radius:10px; padding:11px 14px; font-size:12.5px; background:var(--paper)}
+  .btn-ink{background:var(--ink); color:#fff; border:0; border-radius:7px; padding:7px 12px; font-size:11.5px; cursor:pointer; font-weight:600}
+  .btn-ghost{background:var(--paper); border:1px solid var(--line); border-radius:7px; padding:7px 12px; font-size:11.5px; cursor:pointer}
+  .sechead{font-size:14px; font-weight:700; margin:0 0 8px; font-family:var(--font-display)}
+  .cov td.ok{color:var(--good); font-weight:700}
+  .specdoc h2{font-size:18px; margin:26px 0 8px}
+  .specdoc h3{font-size:15px; margin:18px 0 6px}
+  .specdoc p, .specdoc li{font-size:13.5px; color:var(--mut)}
+  .specdoc b{color:var(--ink)}
+  .specdoc table{margin:8px 0}
+  .qrow{padding:12px 14px; border-bottom:1px solid var(--line); display:flex; gap:10px; align-items:center; flex-wrap:wrap}
+  .qdot{width:9px; height:9px; border-radius:50%; flex:none}
+  .prompt{display:flex; gap:6px; border:1px solid var(--line); border-radius:12px; padding:4px; background:var(--paper)}
+  .prompt input{flex:1; border:0; background:transparent; font:13px var(--font-ui); padding:8px 6px; color:var(--ink); outline:none}
+  .prompt button{background:var(--ink); color:#fff; border:0; border-radius:9px; padding:8px 16px; font-weight:600; cursor:pointer}
+  .mapbox{min-height:340px; position:relative; border:1px solid var(--line); border-radius:12px; overflow:hidden; background:repeating-linear-gradient(0deg, var(--surface), var(--surface) 1px, var(--paper) 1px, var(--paper) 34px), repeating-linear-gradient(90deg, var(--surface), var(--surface) 1px, var(--paper) 1px, var(--paper) 34px)}
+  .pin{position:absolute; font-size:10px; font-weight:700; color:#fff; border-radius:99px; padding:3px 8px; box-shadow:0 2px 6px rgba(20,24,32,.2); white-space:nowrap; cursor:pointer}
+  .maplbl{position:absolute; left:12px; bottom:10px; right:280px; font-size:10px; color:var(--soft); background:color-mix(in srgb, var(--paper) 88%, transparent); border-radius:6px; padding:4px 8px}
+  .overlaytag{position:absolute; left:12px; top:12px; font-size:10.5px; background:color-mix(in srgb, var(--paper) 92%, transparent); border:1px solid var(--line); border-radius:99px; padding:4px 10px}
+  .cgroup{display:flex; gap:8px; align-items:baseline; flex-wrap:wrap}
+  .glbl{font-size:10.5px; text-transform:uppercase; letter-spacing:.06em; color:var(--soft); flex:none}
+  code{background:var(--surface); padding:1px 5px; border-radius:4px; font-size:11px}
+</style>
+
+<!-- ============ (1) slim header ============ -->
+<div class="bar">
+  <div class="wrap">
+    <div class="ttl">PropertyIQ · Screen 09 — Command Center <small>Full-density per-screen mock · wireframe fidelity · dev-facing annotations in gray</small></div>
+    <a href="../wireframe.html">← All screens</a>
+  </div>
+</div>
+
+<!-- ============ (2) THE FULL MOCK ============ -->
+<div class="wrap" style="padding-top:24px">
+  <div class="note"><b>Screen 09 — Command Center (Today queue + Map mode).</b> The agent's single daily operating surface. The <b>event ledger is the engine; "Today" is the interface</b>: every system event flows into one ledger and renders as ONE ranked queue — calls first, promises second, cadences third, approvals last. The Map mode toggle (PropSearch MB §17.7) overlays the farm with seller-propensity pins, market-forecast heat, and zoning-capability layers — every color explainable on click. Both modes are rendered below (toggle swaps them in-app). This is the default landing screen after agent login and the demo screen.</div>
+
+  <div class="site" data-agent="watts">
+    <!-- header -->
+    <div class="sitehead" id="el-header">
+      <div class="avatar">GW</div>
+      <div class="who"><b>Command Center</b><small class="num">Tuesday, July 14 · Graeham Watts</small></div>
+      <div id="el-toggle" style="display:inline-flex; border:1px solid var(--line); border-radius:99px; overflow:hidden; font-size:12px; font-weight:600; margin-left:10px">
+        <span style="padding:6px 16px; background:var(--ink); color:#fff; cursor:pointer">☰ Today</span>
+        <span style="padding:6px 16px; color:var(--mut); cursor:pointer">🗺 Map</span>
+      </div>
+      <span class="anno">segmented toggle actually switches views · persists per session</span>
+      <nav>
+        <a href="#" id="el-cmdk">Search anything (⌘K)</a>
+        <a href="#" id="el-bell">🔔 3</a>
+        <a href="#" id="el-approvals-icon" style="font-weight:700; color:var(--ink)">☑ Approvals <span class="bdg" style="font-size:9.5px">5</span></a>
+      </nav>
+      <div class="anno" style="width:100%">⌘K = global search + typed command grammar via the Wattson Action Registry (Part 17): <code>318 hurl cma</code> → CMA draft · <code>esc cedar</code> → that escrow; Enter executes/queues a governed typed module_action with a correlation_id. 🔔 = NotificationProvider feed (channels GHL_TASK / EMAIL / SMS / IN_APP). ☑ = persistent Approvals-inbox icon (matrix gap #1, P0): badge = pending ApprovalRecord count; each approval_group bundle carries group_id, outputs[], recommended_action, correlation_id, expires_at (default 48h) → opens the Global Approvals Inbox screen (13).</div>
+    </div>
+
+    <div class="console" style="display:grid; grid-template-columns:172px 1fr">
+      <!-- left rail: persistent agent-console chrome -->
+      <div class="rail" id="el-rail" style="border-right:1px solid var(--line); padding:14px 10px; font-size:12.5px; display:flex; flex-direction:column; gap:2px; background:var(--surface)">
+        <a href="#" style="text-decoration:none; color:#fff; background:var(--ink); border-radius:8px; padding:8px 10px; font-weight:600">☰ Today</a>
+        <a href="#" style="text-decoration:none; color:var(--ink); border-radius:8px; padding:8px 10px">🗺 Farm map</a>
+        <a href="#" style="text-decoration:none; color:var(--ink); border-radius:8px; padding:8px 10px">👤 Leads & clients</a>
+        <a href="#" style="text-decoration:none; color:var(--ink); border-radius:8px; padding:8px 10px">💬 Comms <span class="bdg" style="font-size:9.5px">6</span></a>
+        <a href="#" style="text-decoration:none; color:var(--ink); border-radius:8px; padding:8px 10px">📋 Transactions <span class="bdg" style="font-size:9.5px">2</span></a>
+        <a href="#" style="text-decoration:none; color:var(--ink); border-radius:8px; padding:8px 10px">🎬 Content studio</a>
+        <a href="#" style="text-decoration:none; color:var(--ink); border-radius:8px; padding:8px 10px">📅 Content calendar</a>
+        <a href="#" style="text-decoration:none; color:var(--ink); border-radius:8px; padding:8px 10px">📣 Ads & funnels</a>
+        <a href="#" style="text-decoration:none; color:var(--ink); border-radius:8px; padding:8px 10px">🔎 Competitor intel</a>
+        <a href="#" style="text-decoration:none; color:var(--ink); border-radius:8px; padding:8px 10px">⚙ Playbooks</a>
+        <a href="#" style="text-decoration:none; color:var(--ink); border-radius:8px; padding:8px 10px">📈 Reports</a>
+        <div style="margin-top:auto; padding-top:10px; border-top:1px solid var(--line)">
+          <a href="#" style="text-decoration:none; color:var(--ink); border-radius:8px; padding:8px 10px; display:block">⚙ Settings</a>
+          <div class="anno" style="padding:6px 10px">Global chrome: this 172px rail is persistent across every agent-console screen (draft note ~1354). Consumer pages (01–07, 10, 25, 26) keep the light agent-branded top nav only — never this sidebar.</div>
+        </div>
+      </div>
+
+      <div>
+        <!-- Wattson command bar -->
+        <div id="el-wattson-bar" style="padding:14px 22px 0">
+          <div class="prompt" style="box-shadow:none">
+            <span style="align-self:center; padding:0 4px 0 10px">✦</span>
+            <input placeholder="Ask Wattson anything — 'draft a reply to the Kims', 'which past clients have the most equity?', 'how did the July postcard do?'" aria-label="Wattson command bar">
+            <button>Ask</button>
+          </div>
+          <div style="border:1px solid var(--line); border-radius:9px; padding:8px 12px; margin-top:6px; font-size:12px; background:var(--surface)">
+            <b>✦ Inline answer:</b> <span style="color:var(--mut)">"The Okafors, Nguyens and Parks hold the most equity — Nguyens ≈ $210K gained since 2023."</span>
+            <span class="bdg" style="font-size:10px">source: Event Ledger</span> <span class="bdg" style="font-size:10px">source: PropSearch valuations</span>
+            <div style="display:flex; gap:5px; margin-top:6px; flex-wrap:wrap"><button class="btn-ghost">ASK_WHY</button><button class="btn-ink">APPROVE</button><button class="btn-ghost">REJECT</button><button class="btn-ghost">REQUEST_HUMAN_REVIEW</button></div>
+          </div>
+          <div class="anno" style="margin-top:4px">Wattson = the front door to every module: answers from the ledger, drafts comms, runs reports, queues actions for approval — every utterance maps to a governed typed action (Command Registry #29: typed module actions + correlation IDs + approval cards + annotated final reports). Intent buttons ASK_WHY / APPROVE / REJECT / REQUEST_HUMAN_REVIEW (matrix Wattson P0 gap). ⌘K grammar: <code>318 hurl cma</code> · <code>esc cedar</code> · keys j/k navigate, e done, s snooze, c call (Bloomberg/Superhuman pattern). Matrix P0: this surface is app-wide (right rail or ⌘K panel on EVERY screen) — Command Center hosts the always-visible instance.</div>
+        </div>
+
+        <!-- ============ TODAY MODE ============ -->
+        <div style="padding:14px 22px 18px">
+          <!-- morning brief -->
+          <div id="el-brief" style="border:1.5px solid var(--line); border-radius:12px; padding:14px 16px; margin-bottom:10px; background:var(--surface); display:flex; gap:16px; align-items:center; flex-wrap:wrap">
+            <div style="flex:1; min-width:300px">
+              <b style="font-size:13.5px">✦ Morning brief — Tuesday, July 14</b>
+              <div style="font-size:12.5px; color:var(--mut); margin-top:6px; display:grid; gap:3px">
+                <div>Overnight: 2 new leads (1 hot), Kim asked to move the tour, postcard drove 2 more valuations.</div>
+                <div>Hard deadlines: 42 Cedar contingency removal Thursday · CMA promised to Torres by 3pm.</div>
+                <div><b style="color:var(--ink)">First move: call M. Torres before noon</b> — she's opened everything you've sent.</div>
+                <div style="color:var(--warn)">Risk: the Hendersons (hot lead) untouched 48h — 3 signals this week.</div>
+              </div>
+            </div>
+            <button style="background:var(--ink); color:#fff; border:0; border-radius:9px; padding:12px 20px; font-weight:600; cursor:pointer">▶ Start my day</button>
+            <div class="anno" style="width:100%">Ledger digest job over the overnight window. "Start my day" enters guided mode: queue left, the action itself center (dialer / pre-drafted email / approval), full client card right — complete → auto-advance (Lofty "plan my day" + HubSpot guided execution). Degraded: digest failure → raw event list instead of narrative [BEST GUESS].</div>
+          </div>
+
+          <!-- Monday briefing envelope -->
+          <div id="el-monday" style="border:1px dashed var(--brand); border-radius:12px; padding:12px 16px; margin-bottom:10px; background:var(--brand-soft); font-size:12.5px">
+            <b>📅 Monday variant — this card becomes the PropCast weekly briefing envelope</b>
+            <div style="display:grid; grid-template-columns:repeat(4,1fr); gap:8px; margin-top:8px; font-size:11.5px">
+              <div style="background:var(--paper); border:1px solid var(--line); border-radius:8px; padding:8px"><b>Lead — never buried</b><div style="color:var(--mut)">"Inventory just flipped: 31 actives, most since 2023 — your farm's sellers are testing the water."</div></div>
+              <div style="background:var(--paper); border:1px solid var(--line); border-radius:8px; padding:8px"><b>Market-state card</b><div style="color:var(--mut)" class="num">31 actives · 12 DOM · 102% s/l · rates 6.4%</div></div>
+              <div style="background:var(--paper); border:1.5px solid var(--brand); border-radius:8px; padding:8px"><b>Ranked content backlog (7)</b><div style="color:var(--mut)">approve as ONE card — governed decision #1 of the week</div><button class="btn-ink" style="margin-top:4px">Approve backlog</button></div>
+              <div style="background:var(--paper); border:1px solid var(--line); border-radius:8px; padding:8px"><b>Posture + question</b><div style="display:flex; gap:4px; margin:4px 0"><span class="chip on" style="font-size:10px; padding:3px 8px">ATTACK</span><span class="chip" style="font-size:10px; padding:3px 8px">HOLD</span><span class="chip" style="font-size:10px; padding:3px 8px">DEFEND</span></div><div style="color:var(--mut)">One clarifying question: "Push the north blocks where J. Lee is winning, or hold?"</div></div>
+            </div>
+            <div class="anno" style="margin-top:5px">Matrix P0: the Command Center morning brief IS this envelope on Mondays (PropCast briefing record). Backlog approval is the first of exactly two governed content decisions (ContentLock, correction #9).</div>
+          </div>
+
+          <!-- triage strip -->
+          <div id="el-triage" style="display:flex; gap:8px; margin-bottom:12px; align-items:center; flex-wrap:wrap">
+            <span class="bdg" style="border-color:var(--warn); color:var(--warn); font-weight:600">Triage: 4 new — nothing enters Today without your accept</span>
+            <span style="font-size:11.5px; color:var(--mut)">Wattson pre-sorted: 1 hot lead → <button class="btn-ink" style="padding:3px 8px">accept + call</button> · 2 tire-kickers → <button class="btn-ghost" style="padding:3px 8px">nurture plan</button> · 1 duplicate → <button class="btn-ghost" style="padding:3px 8px">send to duplicate review</button></span>
+            <span class="anno" style="width:100%">PropFlow lead inbox (Linear Triage pattern) + duplicate detection — no auto-merge, ever; merge is a review action (matrix PropFlow gap). One tap each.</span>
+          </div>
+
+          <!-- KPI row -->
+          <div id="el-kpis">
+            <div class="statrow" style="grid-template-columns:repeat(6,1fr)">
+              <div class="stat" style="border-left:3px solid var(--crit)"><small>Needs you now</small><b class="num">4</b> <span style="font-size:11.5px;color:var(--mut)">2 calls · 1 CMA · 1 escrow</span></div>
+              <div class="stat"><small>Unread comms</small><b class="num">6</b> <span style="font-size:11.5px;color:var(--mut)">2 SMS · 3 email · 1 vm</span></div>
+              <div class="stat"><small>In escrow</small><b class="num">2</b> <span style="font-size:11.5px;color:var(--warn)">1 deadline Thu</span></div>
+              <div class="stat"><small>New leads (7d)</small><b class="num">12</b> <span class="up num">+4 vs last wk</span></div>
+              <div class="stat"><small>Seller signals</small><b class="num">5</b> <span style="font-size:11.5px;color:var(--mut)">valuations in your farm</span></div>
+              <div class="stat"><small>AI handled</small><b class="num">31</b> <span style="font-size:11.5px;color:var(--mut)">convos · 4 booked</span></div>
+            </div>
+            <div class="anno" style="margin-top:4px">Ledger aggregates (queue, comms inbox, PropClose, PropFlow, PropSearch valuation events, Wattson convo log). Each tile click-filters the queue or opens its module [BEST GUESS: tiles are filters]. Loading state: tiles show "—", never fabricated counts. "AI handled" is labeled "~" — interim computation = Wattson-completed convo turns × avg handling estimate [DECIDE].</div>
+          </div>
+
+          <!-- two-column: queue + right stack -->
+          <div class="maingrid" style="display:grid; grid-template-columns:1.4fr 1fr; gap:16px; margin-top:14px">
+            <div style="border:1px solid var(--line); border-radius:12px; overflow:hidden">
+              <div style="padding:10px 14px; border-bottom:1px solid var(--line); display:flex; align-items:center" id="el-queue"><b style="font-size:14px">Today — ranked by the ledger</b><span style="margin-left:auto; font-size:12px; color:var(--mut)">9 items · calls → promises → cadences → approvals</span></div>
+              <div class="qrow" style="background:var(--surface)">
+                <span class="qdot" style="background:var(--crit)"></span>
+                <div style="flex:1; min-width:240px"><b style="font-size:13.5px">📞 Call M. Torres</b> <span class="bdg" style="font-size:10.5px">seller signal · Friendly Acres</span><div style="font-size:12px; color:var(--mut)">Ran valuation ×2, tuned +$40K, opened CMA email. Best window: before noon (opened email 8:04am).</div></div>
+                <button class="btn-ink">Call</button>
+              </div>
+              <div class="qrow">
+                <span class="qdot" style="background:var(--crit)"></span>
+                <div style="flex:1; min-width:240px"><b style="font-size:13.5px">📄 Send CMA — 318 Hurlingame Ave</b> <span class="bdg" style="font-size:10.5px">promised · due today</span><div style="font-size:12px; color:var(--mut)">You promised "within 24h" yesterday 3:10pm (Wattson promise tracker). Draft is generated — review & send.</div></div>
+                <button class="btn-ink">Review draft</button>
+              </div>
+              <div class="qrow">
+                <span class="qdot" style="background:var(--crit)"></span>
+                <div style="flex:1; min-width:240px"><b style="font-size:13.5px">📋 Escrow — 42 Cedar St: contingency removal due Thursday</b> <span class="bdg" style="font-size:10.5px">PropClose · day 11 of 21</span><div style="font-size:12px; color:var(--mut)">Inspection response signed ✓ · appraisal in ✓ · loan contingency open — lender ETA tomorrow. 2 docs await your signature.</div></div>
+                <button class="btn-ink">Open file</button>
+              </div>
+              <div class="qrow">
+                <span class="qdot" style="background:var(--warn)"></span>
+                <div style="flex:1; min-width:240px"><b style="font-size:13.5px">🔁 Past-client touch — the Nguyens (bought 2023)</b> <span class="bdg" style="font-size:10.5px">cadence · anniversary</span><div style="font-size:12px; color:var(--mut)">3-year anniversary Thursday. Equity up ≈ $210K — suggested note drafted with their equity card.</div></div>
+                <button class="btn-ghost">Edit & send</button>
+              </div>
+              <div class="qrow">
+                <span class="qdot" style="background:var(--warn)"></span>
+                <div style="flex:1; min-width:240px"><b style="font-size:13.5px">✅ Confirm tour — J. & A. Kim, Sat 11am</b> <span class="bdg" style="font-size:10.5px">742 Hurlingame</span><div style="font-size:12px; color:var(--mut)">Pre-approved $1.4M (shared) · AI concierge scheduled it, one tap to lock.</div></div>
+                <button class="btn-ink">Confirm</button>
+              </div>
+              <div class="qrow">
+                <span class="qdot" style="background:var(--soft)"></span>
+                <div style="flex:1; min-width:240px"><b style="font-size:13.5px">👍 Approve — July market video + 2 just-sold cards</b> <span class="bdg" style="font-size:10.5px">PropCast · content</span><div style="font-size:12px; color:var(--mut)">Ready to post. Approvals batched at the bottom — they never outrank calls (One-Approval UX, Wattson MB Part 8).</div></div>
+                <button class="btn-ghost">Review 3</button>
+              </div>
+              <div class="anno" style="padding:6px 14px; border-bottom:1px solid var(--line)">Row shape: {type, rank, urgency crit/warn/soft (the colored dot), title, context_badge, why_line, ONE primary action, entity_ref, correlation_id}. Keyboard: j/k navigate · e done · s snooze (re-queues) · c call. Rank order fixed: calls → promises → cadences → approvals. Every row deep-links to its owning module.</div>
+              <div class="qrow" id="el-atrisk" style="background:#fdf6ee">
+                <span class="qdot" style="background:var(--warn)"></span>
+                <div style="flex:1; min-width:240px"><b style="font-size:13.5px">⚠ At risk — things that DIDN'T happen</b><div style="font-size:12px; color:var(--mut)">Hendersons (hot) untouched 48h → Wattson drafted a re-engage text (review task) · 118 Beech: showing velocity −40% wk/wk → suggests a price-cut analysis. (Gong negative-space pattern; ledger absence-detection / neglect watchdog.)</div></div>
+                <button class="btn-ghost">Fix both</button>
+              </div>
+              <div id="el-fyi" style="padding:10px 14px; font-size:12px; color:var(--mut); background:var(--surface); border-bottom:1px solid var(--line)">FYI (no action): R. Patel viewed 14 ADU listings — AI nurturing · 4 more cadence touches auto-queued for tomorrow · <a href="#" style="color:var(--brand)">open full event ledger →</a> <span class="anno">(→ Reports/Attribution screen)</span></div>
+              <div id="el-allclear" style="padding:10px 14px; font-size:12px; color:var(--good); display:flex; gap:8px; align-items:center; flex-wrap:wrap">✅ All clear beneath this line — 14 things running normally (cadences, nurtures, syncs). Queue is finite: clear these 7 and you're done. <span style="margin-left:auto; color:var(--soft)" class="num">streak: 6 days · Wattson saved ~2.1h this week</span></div>
+            </div>
+
+            <div style="display:grid; gap:14px; align-content:start">
+              <!-- farm watch -->
+              <div id="el-farmwatch" style="border:1px solid var(--line); border-radius:12px; padding:12px 14px">
+                <b style="font-size:14px">Farm watch · Friendly Acres + EPA</b>
+                <div style="font-size:11.5px; color:var(--mut); margin:6px 0 8px; padding:6px 8px; background:var(--surface); border-radius:7px">Competitive share: <b style="color:var(--ink)">you 20%</b> · J. Lee (KW) 3 of last 5 listings · <a href="#" style="color:var(--brand)">agent analysis →</a></div>
+                <div style="font-size:12.5px; color:var(--mut); display:grid; gap:8px">
+                  <div>🔔 <b style="color:var(--ink)">New listing</b> — 315 Oak St, $1.19M · J. Lee (KW) · 2% under model
+                    <div style="display:flex; gap:5px; margin-top:5px; flex-wrap:wrap"><button class="chip" style="font-size:11px; padding:4px 10px; border-color:var(--brand); color:var(--brand); font-weight:600">⚡ CMA the neighbors</button><button class="chip" style="font-size:11px; padding:4px 10px; border-color:var(--brand); color:var(--brand); font-weight:600">📬 Postcard the block</button><button class="chip" style="font-size:11px; padding:4px 10px; border-color:var(--brand); color:var(--brand); font-weight:600">▶ Just-listed nurture</button></div></div>
+                  <div>📉 <b style="color:var(--ink)">Price cut</b> — 88 Poplar Ave, −$45K after 21 DOM · indep.
+                    <div style="display:flex; gap:5px; margin-top:5px; flex-wrap:wrap"><button class="chip" style="font-size:11px; padding:4px 10px; border-color:var(--brand); color:var(--brand); font-weight:600">🔔 Alert 2 matching buyers</button><button class="chip" style="font-size:11px; padding:4px 10px; border-color:var(--brand); color:var(--brand); font-weight:600">🚪 Door-knock note</button></div></div>
+                  <div>🏠 <b style="color:var(--ink)">Sold</b> — 12 Fair Oaks Ln, $1.51M (104%) → <span class="bdg good" style="font-size:10.5px">just-sold card queued ✓</span></div>
+                </div>
+                <div class="anno" style="margin-top:8px">Every signal ends in a one-click action, never a dead-end alert. <b>Compliance:</b> all outreach chips create <b>review tasks</b> — consent + DNC checked FIRST (daily DNC scrub + the four canonical consent-status fields, Wattson MB); unknown consent → consent-capture task, never a send; blocks emit DNC_BLOCK (corrections #2). Competitor intel = official-API/public monitoring only; storage is hash/URL/excerpt/summary (correction #5).</div>
+              </div>
+              <!-- content queue -->
+              <div id="el-contentq" style="border:1px solid var(--line); border-radius:12px; padding:12px 14px">
+                <b style="font-size:14px">Content queue · PropCast</b>
+                <div style="font-size:12.5px; color:var(--mut); margin-top:8px; display:grid; gap:6px">
+                  <div><span class="bdg good" style="font-size:10.5px">ready</span> July market update video → approve & post</div>
+                  <div><span class="bdg" style="font-size:10.5px">draft</span> Just-sold card: Hurlingame Ave</div>
+                  <div><span class="bdg warn" style="font-size:10.5px">goes stale Fri</span> Newsletter slot — draft attached, never blank-start</div>
+                </div>
+                <div style="font-size:11.5px; color:var(--mut); margin-top:8px; padding-top:8px; border-top:1px solid var(--line)" class="num">Last 4 wks: reels reach <b style="color:var(--good)">+22%</b> · letter opens <b style="color:var(--good)">61%</b> · GBP views <b style="color:var(--crit)">−8%</b> vs trailing avg</div>
+                <div class="anno" style="margin-top:6px">"Approve & post" → Content Review & Approve screen. Every approve mints a <b>ContentLock</b> (exact-version lock); any post-approval edit = new version → new compliance pass → new lock. Exactly two governed decisions: Monday backlog + per-piece version approval (correction #9).</div>
+              </div>
+              <!-- comms -->
+              <div id="el-comms" style="border:1px solid var(--line); border-radius:12px; padding:12px 14px">
+                <b style="font-size:14px">Comms · unified inbox</b>
+                <div style="display:flex; gap:5px; margin-top:8px; flex-wrap:wrap">
+                  <span class="chip on" style="font-size:10.5px; padding:3px 9px">Clients (2)</span>
+                  <span class="chip" style="font-size:10.5px; padding:3px 9px">Escrow (1)</span>
+                  <span class="chip" style="font-size:10.5px; padding:3px 9px">New leads (2)</span>
+                  <span class="chip" style="font-size:10.5px; padding:3px 9px">Vendors (1)</span>
+                </div>
+                <div style="font-size:12.5px; color:var(--mut); margin-top:8px; display:grid; gap:6px">
+                  <div>💬 <b style="color:var(--ink)">Kim (SMS)</b> "Can we do 10:30 instead?" · <a href="#" style="color:var(--brand)">draft attached — 1 tap to send</a></div>
+                  <div>📧 <b style="color:var(--ink)">Escrow officer</b> — wire instructions confirmed <span class="anno">(wire/security events → security audit log, not the Event Ledger)</span></div>
+                  <div>🎙 <b style="color:var(--ink)">Voicemail</b> — unknown, transcribed: postcard callback ☎</div>
+                </div>
+                <div class="anno" style="margin-top:8px">Split streams w/ per-stream rules (Superhuman) · every convo opens with a grounded Wattson draft + source chips (copilot not autopilot) · synced 2 min ago — no message silently dropped. <b>Never-Autonomous List:</b> client comms are drafted by Wattson, SENT by a human — the "1 tap to send" IS the human send (Wattson MB Part 8).</div>
+              </div>
+              <!-- campaigns -->
+              <div id="el-campaigns" style="border:1px solid var(--line); border-radius:12px; padding:12px 14px">
+                <b style="font-size:14px">Campaigns · PropReach</b>
+                <div style="font-size:12.5px; color:var(--mut); margin-top:8px; display:grid; gap:6px" class="num">
+                  <div>July farm postcard: 412 sent · 31 QR scans · <b style="color:var(--good)">5 valuations run</b></div>
+                  <div>Listing launch ads (742 Hurlingame): 18K reach · 3 tour requests</div>
+                  <div>Farm letter: 61% open rate · 9 replies</div>
+                </div>
+                <div class="anno" style="margin-top:6px">PropReach campaign records + attribution events · click → Campaign Manager.</div>
+              </div>
+              <!-- site performance -->
+              <div id="el-siteperf" style="border:1px solid var(--line); border-radius:12px; padding:12px 14px">
+                <b style="font-size:14px">Site performance (30d)</b>
+                <div style="font-size:12.5px; color:var(--mut); margin-top:8px; display:grid; gap:6px">
+                  <div class="num">2,140 visits · 61% organic · 12 leads (0.56%)</div>
+                  <div class="num">Top page: Friendly Acres guide (388 visits, #4 on Google)</div>
+                  <div class="num">AI citations: 9 (ChatGPT 5 · Perplexity 3 · AIO 1)</div>
+                  <div>✦ Wattson: "OTTO fixed 12 meta descriptions this week — Friendly Acres guide moved 7→4." <span class="anno">SEO-console (OTTO) work summaries surface here; changes are preview + approval, never silent</span></div>
+                </div>
+                <div class="anno" style="margin-top:6px">GSC + analytics + AEO citation tracker · click → SEO Console / Reports.</div>
+              </div>
+            </div>
+          </div>
+
+          <!-- goal pace + day close -->
+          <div style="margin-top:16px; display:grid; grid-template-columns:1.4fr 1fr; gap:10px">
+            <div id="el-goal" style="border:1px solid var(--line); border-radius:12px; padding:12px 16px; font-size:12.5px">
+              <b style="font-size:13.5px">🎯 Goal pace — the "why" behind the queue</b>
+              <div style="display:flex; gap:16px; margin-top:8px; align-items:center; flex-wrap:wrap" class="num">
+                <div><b style="font-size:18px">$118K</b><div style="font-size:11px; color:var(--mut)">GCI YTD</div></div>
+                <div style="flex:1; min-width:160px"><div style="height:8px; background:var(--surface); border-radius:99px; position:relative; border:1px solid var(--line)"><div style="position:absolute; left:0; width:47%; top:0; bottom:0; background:var(--brand); border-radius:99px"></div><div style="position:absolute; left:54%; top:-3px; width:2px; height:14px; background:var(--ink)"></div></div><div style="font-size:10.5px; color:var(--mut); margin-top:3px">47% of $250K goal · pace line says 54% — <b style="color:var(--warn)">1 deal behind</b></div></div>
+                <div style="font-size:11.5px; color:var(--mut)">Wattson's read: 2 more listing consults/mo closes the gap → today's Torres call is the pace-maker, which is why it's ranked #1.</div>
+              </div>
+              <div class="anno" style="margin-top:5px">Goal config lives in Settings (edit goal → Settings). $118K/$250K/47%/54% are demo data.</div>
+            </div>
+            <div id="el-dayclose" style="border:1px solid var(--line); border-radius:12px; padding:12px 16px; font-size:12px">
+              <b style="font-size:13.5px">🌙 Day close (5:30pm)</b>
+              <div style="color:var(--mut); margin-top:6px" class="num">Queue cleared 9/9 ✓ · Wattson handled 31 · streak: 6 days · tomorrow's #1 already set (42 Cedar signatures) — <b style="color:var(--good)">nothing is waiting on you tonight.</b></div>
+              <div class="anno" style="margin-top:5px">The permission-to-stop ritual — an explicit all-clear is a retention feature. Appears after a configurable time [BEST GUESS: default 5:30pm local, Settings-editable — DECIDE]. Emits day_closed to the ledger.</div>
+            </div>
+          </div>
+
+          <!-- pipeline strip + escrow lane -->
+          <div id="el-pipeline" style="margin-top:10px; border:1px solid var(--line); border-radius:12px; padding:14px 16px">
+            <b style="font-size:14px">Pipeline — every relationship, one strip</b>
+            <div style="display:grid; grid-template-columns:repeat(6,1fr); gap:8px; margin-top:10px; text-align:center; font-size:12px">
+              <div style="background:var(--surface); border-radius:9px; padding:10px"><b class="num" style="font-size:18px">4</b><div style="color:var(--mut)">Triage</div></div>
+              <div style="background:var(--surface); border-radius:9px; padding:10px"><b class="num" style="font-size:18px">23</b><div style="color:var(--mut)">Nurturing (AI)</div></div>
+              <div style="background:var(--surface); border-radius:9px; padding:10px"><b class="num" style="font-size:18px">6</b><div style="color:var(--mut)">Active buyers</div></div>
+              <div style="background:var(--surface); border-radius:9px; padding:10px"><b class="num" style="font-size:18px">3</b><div style="color:var(--mut)">Seller convos</div></div>
+              <div style="background:var(--brand-soft); border-radius:9px; padding:10px; border:1px solid var(--brand)"><b class="num" style="font-size:18px">2</b><div style="color:var(--mut)">In escrow · $2.64M</div></div>
+              <div style="background:var(--surface); border-radius:9px; padding:10px"><b class="num" style="font-size:18px">112</b><div style="color:var(--mut)">Past clients on cadence</div></div>
+            </div>
+            <div class="anno" style="margin:8px 0 12px">Projected pipeline GCI: <b class="num" style="color:var(--ink)">$66K</b> · counts driven by the same ledger as the queue. Stage click routes to the CRM kanban (12-day New-Lead sprint boards live on the CRM screen, not here — DECIDE resolved interim). Expanded below: the escrow lane, PropClose-style compact mirror.</div>
+
+            <div id="el-escrow" style="border:1px solid var(--line); border-radius:10px; padding:12px 14px; margin-bottom:8px">
+              <div style="display:flex; gap:10px; align-items:center; flex-wrap:wrap">
+                <b style="font-size:13px">42 Cedar St — buyer side · $1,315,000</b>
+                <span class="bdg" style="font-size:10.5px">Day 11 of 21</span>
+                <span class="bdg" style="font-size:10.5px; color:var(--crit); border-color:var(--crit)">Next: loan contingency Thu</span>
+                <span style="margin-left:auto; font-size:11px; color:var(--mut)" class="num">GCI $32,875</span>
+              </div>
+              <div style="display:flex; gap:4px; margin-top:8px; font-size:10.5px; text-align:center">
+                <div style="flex:1; background:var(--brand); color:#fff; border-radius:5px; padding:4px">Offer ✓</div>
+                <div style="flex:1; background:var(--brand); color:#fff; border-radius:5px; padding:4px">EMD ✓</div>
+                <div style="flex:1; background:var(--brand); color:#fff; border-radius:5px; padding:4px">Inspection ✓</div>
+                <div style="flex:1; background:var(--brand); color:#fff; border-radius:5px; padding:4px">Appraisal ✓</div>
+                <div style="flex:1; background:#fdecec; color:var(--crit); border-radius:5px; padding:4px; font-weight:700">Loan ⏳ Thu</div>
+                <div style="flex:1; background:var(--surface); color:var(--soft); border-radius:5px; padding:4px">Docs</div>
+                <div style="flex:1; background:var(--surface); color:var(--soft); border-radius:5px; padding:4px">Close 7/25</div>
+              </div>
+              <div style="font-size:11.5px; color:var(--mut); margin-top:8px">Waiting on: <b style="color:var(--ink)">lender (ETA tmrw)</b> · your court: 2 signatures <button class="btn-ghost" style="padding:3px 8px">Sign 2 docs</button> · TC: disclosures ✓ · Wattson nudged the loan officer this morning, no reply → escalates to you at 2pm.</div>
+              <div id="el-milestone" style="font-size:11.5px; margin-top:8px; padding:8px 10px; background:var(--brand-soft); border-radius:8px; color:var(--mut)">🎥 <b style="color:var(--ink)">Milestone videos:</b> "EMD received" personalized avatar video sent to the Kims day 3 (their names + address + what happens next) · <span class="num">watched 2×</span> ✓. Queued: "loan cleared," "clear to close." <b>Gates (verbatim, correction #3):</b> requires ai_video consent + channel consent + lead_score≥50 + explicit high-intent action · defaults REVIEW_REQUIRED · non-removable CA AI disclosure on frame one. <span class="anno">Vendor per Wattson MB: PersonalizedVideoProvider = B-Human primary / LipDub backup; HeyGen is broadcast-avatar only — see Spec-gaps note.</span></div>
+            </div>
+            <div style="border:1px solid var(--line); border-radius:10px; padding:12px 14px">
+              <div style="display:flex; gap:10px; align-items:center; flex-wrap:wrap">
+                <b style="font-size:13px">118 Beech St — listing · $1,325,000</b>
+                <span class="bdg" style="font-size:10.5px">Day 4 of 30</span>
+                <span class="bdg good" style="font-size:10.5px">On track</span>
+                <span style="margin-left:auto; font-size:11px; color:var(--mut)" class="num">GCI $33,125</span>
+              </div>
+              <div style="display:flex; gap:4px; margin-top:8px; font-size:10.5px; text-align:center">
+                <div style="flex:1; background:var(--brand); color:#fff; border-radius:5px; padding:4px">Offer ✓</div>
+                <div style="flex:1; background:var(--brand); color:#fff; border-radius:5px; padding:4px">EMD ✓</div>
+                <div style="flex:1; background:#fdf6ee; color:var(--warn); border-radius:5px; padding:4px; font-weight:700">Inspection Fri</div>
+                <div style="flex:1; background:var(--surface); color:var(--soft); border-radius:5px; padding:4px">Appraisal</div>
+                <div style="flex:1; background:var(--surface); color:var(--soft); border-radius:5px; padding:4px">Loan</div>
+                <div style="flex:1; background:var(--surface); color:var(--soft); border-radius:5px; padding:4px">Docs</div>
+                <div style="flex:1; background:var(--surface); color:var(--soft); border-radius:5px; padding:4px">Close 8/8</div>
+              </div>
+              <div class="anno" style="margin-top:8px">TransactionRecord {address, side, price, day_n/day_total, stage[7], next_deadline, gci, waiting_on}. The 7-segment stepper is the compact mirror of the full Transaction Workspace (its own screen — matrix PropClose P0). "Open file" → Transaction Workspace; signature chips → doc-sign flow. Sellers see a client-safe mirror on their portal page.</div>
+            </div>
+          </div>
+
+          <!-- week ahead -->
+          <div id="el-week" style="margin-top:14px; border:1px solid var(--line); border-radius:12px; padding:14px 16px">
+            <div style="display:flex; align-items:center; gap:10px; flex-wrap:wrap"><b style="font-size:14px">Week ahead</b><span class="anno">2-way Google Calendar sync · every event links to its client/escrow/content record · deadlines cannot be dragged — only escalated</span></div>
+            <div style="display:grid; grid-template-columns:repeat(5,1fr); gap:8px; margin-top:10px; font-size:11.5px">
+              <div style="border-left:3px solid var(--crit); padding-left:8px"><b>Wed</b><div style="color:var(--mut)">Torres listing consult 4pm (prep pack auto-drafted)</div></div>
+              <div style="border-left:3px solid var(--crit); padding-left:8px"><b>Thu</b><div style="color:var(--mut)">42 Cedar contingency removal · Nguyen anniversary</div></div>
+              <div style="border-left:3px solid var(--warn); padding-left:8px"><b>Fri</b><div style="color:var(--mut)">Newsletter slot goes stale · 2 cadence calls</div></div>
+              <div style="border-left:3px solid var(--line); padding-left:8px"><b>Sat</b><div style="color:var(--mut)">Kim tour 10:30 · open house 315 Oak (competitor)</div></div>
+              <div style="border-left:3px solid var(--line); padding-left:8px"><b>Aug 1</b><div style="color:var(--mut)">Farm postcard deadline (options ready for pick)</div></div>
+            </div>
+            <details style="margin-top:12px" open>
+              <summary style="cursor:pointer; font-size:12.5px; font-weight:600; color:var(--brand)">▾ Expand full calendar</summary>
+              <div style="overflow-x:auto; margin-top:10px">
+                <div style="display:grid; grid-template-columns:52px repeat(7,1fr); gap:2px; min-width:780px; font-size:10.5px">
+                  <div></div>
+                  <div style="text-align:center; font-weight:700; padding:4px">Mon 13</div><div style="text-align:center; font-weight:700; padding:4px; background:var(--brand-soft); border-radius:6px 6px 0 0">Tue 14 · today</div><div style="text-align:center; font-weight:700; padding:4px">Wed 15</div><div style="text-align:center; font-weight:700; padding:4px">Thu 16</div><div style="text-align:center; font-weight:700; padding:4px">Fri 17</div><div style="text-align:center; font-weight:700; padding:4px">Sat 18</div><div style="text-align:center; font-weight:700; padding:4px">Sun 19</div>
+                  <div style="color:var(--soft); text-align:right; padding-right:6px">9am</div>
+                  <div style="background:var(--surface); border-radius:4px; min-height:34px"></div>
+                  <div style="background:var(--brand-soft); border-radius:4px; padding:4px"><b>Call block</b><br>Torres + 2 queue calls (auto-held 9–10, sized to queue)</div>
+                  <div style="background:var(--surface); border-radius:4px"></div>
+                  <div style="background:#fdecec; border-radius:4px; padding:4px"><b>42 Cedar</b><br>contingency deadline 9am ⚠ (immovable)</div>
+                  <div style="background:var(--surface); border-radius:4px"></div>
+                  <div style="background:var(--surface); border-radius:4px"></div>
+                  <div style="background:var(--surface); border-radius:4px"></div>
+                  <div style="color:var(--soft); text-align:right; padding-right:6px">11am</div>
+                  <div style="background:var(--surface); border-radius:4px; min-height:34px"></div>
+                  <div style="background:var(--surface); border-radius:4px"></div>
+                  <div style="background:var(--surface); border-radius:4px"></div>
+                  <div style="background:var(--surface); border-radius:4px"></div>
+                  <div style="background:var(--surface); border-radius:4px"></div>
+                  <div style="background:var(--brand-soft); border-radius:4px; padding:4px"><b>Kim tour 10:30</b><br>742 Hurlingame · route + docs attached</div>
+                  <div style="background:var(--surface); border-radius:4px"></div>
+                  <div style="color:var(--soft); text-align:right; padding-right:6px">2pm</div>
+                  <div style="background:var(--surface); border-radius:4px; min-height:34px"></div>
+                  <div style="background:var(--surface); border-radius:4px"></div>
+                  <div style="background:var(--surface); border-radius:4px"></div>
+                  <div style="background:#fdf6ee; border-radius:4px; padding:4px"><b>Nguyen anniversary</b><br>equity note queued 2pm</div>
+                  <div style="background:#fdf6ee; border-radius:4px; padding:4px"><b>Content</b><br>newsletter final by EOD</div>
+                  <div style="background:var(--surface); border-radius:4px"></div>
+                  <div style="background:var(--surface); border-radius:4px"></div>
+                  <div style="color:var(--soft); text-align:right; padding-right:6px">4pm</div>
+                  <div style="background:var(--surface); border-radius:4px; min-height:34px"></div>
+                  <div style="background:var(--surface); border-radius:4px"></div>
+                  <div style="background:var(--brand-soft); border-radius:4px; padding:4px"><b>Torres consult 4pm</b><br>CMA + net sheet + ADU concept in prep pack ✓</div>
+                  <div style="background:var(--surface); border-radius:4px"></div>
+                  <div style="background:var(--surface); border-radius:4px"></div>
+                  <div style="background:var(--surface); border-radius:4px"></div>
+                  <div style="background:var(--surface); border-radius:4px"></div>
+                </div>
+              </div>
+              <div class="anno" style="margin-top:8px">Color code: <span style="color:var(--brand)">■ client events</span> · <span style="color:var(--crit)">■ hard deadlines (escrow/legal)</span> · <span style="color:var(--warn)">■ content & cadence due</span>. Wattson auto-holds the daily 9–10am call block sized to the queue, attaches prep packs to every client event, proposes reschedules on conflicts. Full build: drag-to-reschedule non-deadline events; deadlines escalate, never drag.</div>
+            </details>
+
+            <!-- shoot pipeline -->
+            <div id="el-shoot" style="margin-top:10px; border:1.5px solid var(--warn); border-radius:10px; padding:14px 16px; background:#fdf6ee">
+              <b style="font-size:13.5px">🎬 Shoot detected — 118 Beech St, your videographer, Thu 10am–2pm. Full pipeline auto-ran:</b>
+              <div style="display:grid; grid-template-columns:repeat(6,1fr); gap:8px; margin-top:10px; font-size:11px">
+                <div style="background:var(--paper); border:1px solid var(--line); border-radius:8px; padding:9px"><b>1 · Analyze ✓</b><div style="color:var(--mut); margin-top:3px">Property + area scanned: ADU-eligible corner lot, oak-lined street, park 2 blocks, Caltrain angle, sunset faces west</div></div>
+                <div style="background:var(--paper); border:1px solid var(--line); border-radius:8px; padding:9px"><b>2 · Shot list ✓</b><div style="color:var(--mut); margin-top:3px">23 named shots w/ file-IDs: VID-BEECH-EXT-01 (front push-in), VID-BEECH-KIT-02, VID-BEECH-NBHD-05 (walk-down-street — agent optional, no lines), DRN-BEECH-01…</div></div>
+                <div style="background:var(--brand-soft); border:1.5px solid var(--brand); border-radius:8px; padding:9px"><b>3 · YOUR approval — Listing-Plan Card</b><div style="color:var(--mut); margin-top:3px"><b style="color:var(--crit)">Hard gate: NOTHING_DISPATCHES_UNTIL_APPROVED.</b> One card shows the whole plan — shots, scripts, who gets what. Approve once → every role packet dispatches; edit/reject → nothing moves.</div></div>
+                <div style="background:var(--paper); border:1px solid var(--line); border-radius:8px; padding:9px"><b>4 · Call sheet → videographer</b><div style="color:var(--mut); margin-top:3px">Your own videographer gets the time-blocked sheet: what to shoot/say, golden hour flagged, upload folder pre-made — clips titled by shot-ID</div></div>
+                <div style="background:var(--paper); border:1px solid var(--line); border-radius:8px; padding:9px"><b>5 · Assembly map → editor</b><div style="color:var(--mut); margin-top:3px">Your editor — or PropertyIQ's editor network (upsell) — gets the recipe: walkthrough = EXT-01+INT-03..08 · Reel 1 = HOOK from KIT-02 + NBHD-05 · 15s ad cut · 10-still carousel</div></div>
+                <div style="background:var(--paper); border:1px solid var(--line); border-radius:8px; padding:9px"><b>6 · Product page</b><div style="color:var(--mut); margin-top:3px">One review page per listing: every finished asset → approve → calendar slots + ad slots fill themselves</div></div>
+              </div>
+              <div style="display:flex; gap:6px; margin-top:10px; flex-wrap:wrap">
+                <button class="btn-ink" style="padding:8px 14px; font-size:12px">Review shot list (23)</button>
+                <button class="btn-ghost" style="padding:8px 14px; font-size:12px; opacity:.5" disabled>Send call sheet — enabled ONLY post-approval</button>
+                <button class="btn-ghost" style="padding:8px 14px; font-size:12px">Preview assembly map</button>
+              </div>
+              <div class="anno" style="margin-top:8px">Wattson MB Part 9 Dashboard Alert card (ADVISORY_ONLY surface; nothing dispatches until APPROVED). Pre-shoot emails are REVIEW_REQUIRED team sends and fire only after the one-approval card clears (correction #1). Shot-ID naming = the shooter↔editor contract; canonical events LISTING_PLAN_APPROVED → SHOOT_PACKET_READY → FOOTAGE_UPLOADED → ASSET_MATCHED.</div>
+            </div>
+
+            <!-- weekly content calendar -->
+            <div id="el-contentcal" style="margin-top:10px; border:1px solid var(--line); border-radius:10px; padding:14px 16px">
+              <div style="display:flex; align-items:center"><b style="font-size:13.5px">📅 This week's content calendar — auto-drafted Sunday, approve once</b><a href="#" style="margin-left:auto; font-size:11.5px; color:var(--brand)">full calendar →</a></div>
+              <div style="overflow-x:auto; margin-top:8px">
+              <table class="dtable" style="font-size:11px; min-width:640px">
+                <tr><th></th><th>Mon</th><th>Tue</th><th>Wed</th><th>Thu</th><th>Fri</th></tr>
+                <tr><td><b>IG / FB</b></td><td>Just-sold card (Fair Oaks)</td><td>Reel: "$1.4M gets you this" <span class="bdg good" style="font-size:9px">ready</span></td><td style="background:#fdf6ee; color:var(--warn)">gap — suggested: "ADU rules explained" (competitor-intel inject)</td><td>Beech teaser reel (from shoot)</td><td>Carousel: Beech 10 stills</td></tr>
+                <tr><td><b>YouTube</b></td><td>—</td><td>—</td><td>July market update <span class="bdg good" style="font-size:9px">ready</span></td><td>—</td><td>Beech walkthrough</td></tr>
+                <tr><td><b>Email/GBP</b></td><td>GBP post: market stat</td><td>—</td><td>—</td><td>Farm letter final</td><td>GBP: open house Sat</td></tr>
+              </table>
+              </div>
+              <div style="display:flex; gap:6px; margin-top:8px"><button class="btn-ink">Approve all</button><button class="btn-ghost">Per-item review</button></div>
+              <div class="anno" style="margin-top:6px">Slots fill from shoot-pipeline outputs, PropCast evergreen engine, and market-data triggers. Gaps render amber; competitor-intel gap topics injected (screen 11). Approve-all AND per-item both mint ContentLocks.</div>
+            </div>
+          </div>
+
+          <!-- playbooks + ads -->
+          <div style="margin-top:14px; display:grid; grid-template-columns:1.15fr 1fr; gap:14px">
+            <div id="el-playbooks" style="border:1px solid var(--line); border-radius:12px; padding:14px 16px">
+              <div style="display:flex; align-items:center"><b style="font-size:14px">Wattson playbooks — automations running</b><a href="#" style="margin-left:auto; font-size:11.5px; color:var(--brand)">library (24) →</a></div>
+              <div style="font-size:12px; color:var(--mut); margin-top:10px; display:grid; gap:7px">
+                <div style="display:flex; gap:8px"><span style="color:var(--good)">●</span><div style="flex:1"><b style="color:var(--ink)">New listing in farm</b> → text/email the surrounding block + ask you: "create content on this one?" — <span class="bdg warn" style="font-size:10px">1 pending approval</span></div><span class="bdg" style="font-size:10px">on</span></div>
+                <div style="display:flex; gap:8px"><span style="color:var(--good)">●</span><div style="flex:1"><b style="color:var(--ink)">Your new listing goes live</b> → listing-launch: shoot plan + 9-asset package + launch ads, each step gated on your approval</div><span class="bdg" style="font-size:10px">on</span></div>
+                <div style="display:flex; gap:8px"><span style="color:var(--good)">●</span><div style="flex:1"><b style="color:var(--ink)">CMA promised</b> → draft generated, deadline tracked in Today, follow-up 3 days after send <span class="bdg good" style="font-size:10px">promotion: 31d · 97% unmodified · eligible for AUTONOMOUS</span></div><span class="bdg" style="font-size:10px">on</span></div>
+                <div style="display:flex; gap:8px"><span style="color:var(--good)">●</span><div style="flex:1"><b style="color:var(--ink)">Past-client cadence</b> → anniversary equity notes, holiday touch, 30/90 post-close check-ins — 112 enrolled, 4 queued this week</div><span class="bdg" style="font-size:10px">on</span></div>
+                <div style="display:flex; gap:8px"><span style="color:var(--good)">●</span><div style="flex:1"><b style="color:var(--ink)">Escrow milestone videos</b> → every PropClose milestone sends a personalized avatar video — static fallback where avatar isn't set up</div><span class="bdg" style="font-size:10px">on</span></div>
+                <div style="display:flex; gap:8px"><span style="color:var(--good)">●</span><div style="flex:1"><b style="color:var(--ink)">Seller-signal escalation</b> → valuation ×2 or check-in tapped → call task ranked into Today</div><span class="bdg" style="font-size:10px">on</span></div>
+                <div style="display:flex; gap:8px"><span style="color:var(--soft)">○</span><div style="flex:1"><b style="color:var(--ink)">Expired/FSBO watch</b> → drafts outreach when a farm listing expires — <span style="color:var(--warn)">off (enable?)</span></div><span class="bdg" style="font-size:10px">off</span></div>
+              </div>
+              <div class="anno" style="margin-top:8px">Playbook = trigger (ledger event) → steps → approval gates; per-step StepPermissionMode (AUTONOMOUS | REVIEW_REQUIRED | ADVISORY_ONLY). Toggle per playbook; Wattson proposes new ones from patterns. Promotion path REVIEW_REQUIRED→AUTONOMOUS: ≥30 consecutive days, >95% unmodified-approval, zero incidents 30d, explicit owner approval logged in Admin Console — the green chip is the surfaced stat; full stats on the Playbook Library screen.</div>
+            </div>
+            <div id="el-ads" style="border:1px solid var(--line); border-radius:12px; padding:14px 16px">
+              <div style="display:flex; align-items:center"><b style="font-size:14px">Ads & funnels · PropReach</b><a href="#" style="margin-left:auto; font-size:11.5px; color:var(--brand)">manage →</a></div>
+              <div style="font-size:12px; color:var(--mut); margin-top:10px; display:grid; gap:8px" class="num">
+                <div><b style="color:var(--ink)">742 Hurlingame launch</b> (Meta+GHL) · $240 spent · 18K reach · 41 clicks → funnel page → <b style="color:var(--good)">6 leads @ $40 CPL</b></div>
+                <div><b style="color:var(--ink)">"What's your home worth" — Friendly Acres</b> (Meta) · $180 · 9 valuations → 2 hot</div>
+                <div><b style="color:var(--ink)">Google LSA</b> · 3 calls · 1 qualified</div>
+              </div>
+              <div style="border-top:1px solid var(--line); margin-top:10px; padding-top:10px; font-size:11.5px; color:var(--mut)">
+                <b style="color:var(--ink)">Funnel pages</b> — one per campaign: listing tour gate · home-value capture · open-house RSVP · buyer-guide download. <b>Branded or unbranded</b> per compliance need (unbranded for portal-style teaser ads, branded elsewhere; the licensed-identity DRE footer — DRE# 01466876, Intero Real Estate — stays on both). Per-page UTM + source tag so ad → funnel → valuation → call reads end-to-end in the ledger.
+                <div style="margin-top:8px"><button class="btn-ink" style="padding:8px 14px; font-size:12px">+ New funnel page</button> <span class="anno">publish routes through Approvals (matrix P0 Funnel Builder)</span></div>
+              </div>
+              <div class="anno" style="margin-top:8px">Spend rules (Wattson MB #30 + Part 8): any spend/launch/publish/budget-increase is REVIEW_REQUIRED permanently; null spend envelope = nothing autonomous on spend; daily caps + alert on &gt;3× the 7-day rolling average; auto-pause for safety conditions only. Brand lock: only the tenant's licensed identity appears on public output; the identity.json blocklist number is prohibited everywhere.</div>
+            </div>
+          </div>
+        </div>
+
+        <!-- ============ MAP MODE ============ -->
+        <div style="border-top:2px dashed var(--line)">
+          <div style="padding:14px 22px 0" id="el-mapmode"><b style="font-size:15px">🗺 Map mode — the farm, scored (PropSearch MB §17.7)</b><div style="font-size:12.5px; color:var(--mut); margin:4px 0 12px">Replaces the main column when the header toggle flips. Every property in the farm as a pin, three chip groups, every color explainable on click. <span class="anno">Rendered inline here for the static mock; in-app the Today/Map toggle swaps views.</span></div></div>
+          <div id="el-mapchips" style="padding:0 22px 10px; display:grid; gap:8px">
+            <div class="cgroup"><span class="glbl">Intelligence layers</span>
+              <button class="chip on">Seller propensity pins</button>
+              <button class="chip">Market forecast heat</button>
+              <button class="chip">ADU-eligible parcels · <span class="num">metered scan — draw area for quote</span></button>
+              <button class="chip">SB-9 eligible</button>
+            </div>
+            <div class="cgroup"><span class="glbl">My business</span>
+              <button class="chip on">Past clients (28)</button>
+              <button class="chip">Active listings (2)</button>
+              <button class="chip">Hot leads (3)</button>
+            </div>
+            <div class="cgroup"><span class="glbl">Defend</span>
+              <button class="chip on">Competitor listings (5)</button>
+              <button class="chip">Expiring in 30d (3)</button>
+              <button class="chip">FSBO (1)</button>
+              <button class="chip">Absentee clusters</button>
+            </div>
+            <div class="anno">Layer sources: ScoringService keys PROPSEARCH_SELLER_PROPENSITY + PROPSEARCH_MARKET_FORECAST (Wattson computes no scores; rendering-ready values only, fail-closed when missing) · Zoneomics v3 capacity facts · PropFlow contact geo. <b>Metered mechanic (§17.7 verbatim):</b> ADU/SB-9 area layers — draw/select area → quoted price (actual API cost, no invented defaults) → pay → scan runs → results cached; re-run = new charge; payment/API failure → NO partial results, quote re-shown with error. Emits metered_scan_purchased. Billing UX interim: quote → one-tap charge to card on file, receipts in Settings→Billing [DECIDE].</div>
+          </div>
+          <div id="el-pulse" style="display:flex; gap:10px; margin:0 22px 10px; flex-wrap:wrap; font-size:12px" class="num">
+            <span class="bdg"><b>Farm pulse:</b>&nbsp;31 active · 12 DOM · 102% s/l</span>
+            <span class="bdg"><b>Your share:</b>&nbsp;20% trailing-12mo <span style="color:var(--crit)">▼ from 26%</span></span>
+            <span class="bdg"><b>Threat:</b>&nbsp;J. Lee (KW) 3 of last 5 listings</span>
+            <span class="bdg good"><b>Opportunity:</b>&nbsp;5 high-propensity owners not yet on a cadence</span>
+            <span class="anno" style="width:100%">PropSearch farm aggregates + competitor intel (official-API/public monitoring; hash/URL/excerpt storage only) · threat/opportunity lines link to Competitor Intel (11).</span>
+          </div>
+          <div class="mapbox" id="el-canvas" style="margin:0 22px 16px">
+            <div class="overlaytag">Seller propensity: 🔴 high (5) · 🟠 warming (11) · ⚪ low — click any pin for the why</div>
+            <div class="pin" style="top:30%; left:34%; background:var(--crit)">318 Hurlingame</div>
+            <div class="pin" style="top:48%; left:52%; background:var(--warn)">88 Poplar</div>
+            <div class="pin" style="top:62%; left:26%; background:var(--warn)">12 Fair Oaks</div>
+            <div class="pin" style="top:40%; left:64%; background:var(--paper); color:var(--ink); border:1px solid var(--line)">Nguyen ⌂</div>
+            <div class="pin" style="top:68%; left:58%; background:var(--brand)">Your listing</div>
+            <div class="pin" style="top:22%; left:54%; background:var(--paper); color:var(--crit); border:1.5px solid var(--crit)">KW · 315 Oak</div>
+            <div class="pin" style="top:76%; left:40%; background:var(--paper); color:var(--warn); border:1.5px dashed var(--warn)">Expires 8/02</div>
+            <!-- pin-detail popover -->
+            <div id="el-popover" style="position:absolute; right:14px; top:14px; width:252px; background:var(--paper); border:1px solid var(--line); border-radius:10px; padding:12px; font-size:12px">
+              <b style="font-size:12.5px">318 Hurlingame Ave</b> <span class="bdg" style="font-size:10px; color:var(--crit)">High propensity</span>
+              <div style="color:var(--mut); margin-top:6px; display:grid; gap:3px" class="num">
+                <div>Owned 14 yrs · equity ≈ 71%</div>
+                <div>Owner-occupied · valuation run ×2 this week</div>
+                <div>ADU by right · builds to 3 units (1 built)</div>
+              </div>
+              <div style="display:flex; gap:6px; margin-top:8px">
+                <button class="btn-ink" style="flex:1; padding:6px">Add to Today</button>
+                <button class="btn-ghost" style="flex:1; padding:6px">Property page</button>
+              </div>
+              <div class="anno" style="margin-top:5px">Decomposable score — contributing factors listed so the agent can "do their own research rather than trust a color alone" (§17.7). "Add to Today" emits add_to_today → ledger call/review task.</div>
+            </div>
+            <!-- heat-layer click popover -->
+            <div id="el-heatclick" style="position:absolute; right:14px; bottom:36px; width:252px; background:var(--paper); border:1px solid var(--line); border-radius:10px; padding:10px 12px; font-size:11.5px">
+              <b>Forecast heat — north Friendly Acres</b> <span class="bdg warn" style="font-size:9.5px">warming</span>
+              <div style="color:var(--mut); margin-top:4px" class="num">Drivers: inventory +18% · DOM 12→9 · price-cut freq 1 in 6 · appreciation +4.1%/yr · rate 6.4%</div>
+              <div class="anno" style="margin-top:4px">Click any area band → factor breakdown (PROPSEARCH_MARKET_FORECAST area aggregate). Never an unexplained color.</div>
+            </div>
+            <div class="maplbl" id="el-legend">Legend + compliance: pins = decomposable scores, never opaque colors · <b>fail-closed:</b> ScoringService down → layer hides with "score unavailable," never stale colors · owner signals = absentee / corporate / owner-occupied badges only — never names/addresses on the map layer · ADU/SB-9 area scans metered: draw → quote → run · no crime data on any layer, ever · fair-housing guardrail: layers describe properties and markets, never people or protected classes</div>
+          </div>
+          <div id="el-defend" style="margin:0 22px 16px; border:1px solid var(--line); border-radius:12px; padding:12px 16px; display:flex; gap:14px; align-items:center; flex-wrap:wrap">
+            <b style="font-size:13px">Defend this farm — Wattson's read:</b>
+            <span style="font-size:12.5px; color:var(--mut); flex:1; min-width:280px">J. Lee is winning the north blocks (3 listings, all near Oak St). Your 5 highest-propensity owners cluster two streets south — postcard + door-knock there this week gets ahead of her next farm push.</span>
+            <div style="display:flex; gap:6px; flex-wrap:wrap">
+              <button class="btn-ink" style="padding:8px 14px; font-size:12px">📬 Postcard the 5</button>
+              <button class="btn-ghost" style="padding:8px 14px; font-size:12px">🚪 Door-knock route</button>
+              <button class="btn-ghost" style="padding:8px 14px; font-size:12px">Add all to cadence</button>
+            </div>
+            <div class="anno" style="width:100%">ALL outreach actions here create <b>review tasks</b> only — consent + DNC checked first; unknown consent → consent-capture task; Predictive-Seller HIGH-tier candidates can NEVER auto-outreach (matrix correction #2). Emits review_task_created / consent_capture_task_created.</div>
+          </div>
+        </div>
+
+        <!-- mobile variant strip -->
+        <div id="el-mobile" style="padding:0 22px 14px">
+          <div class="cardbox" style="background:var(--surface)">
+            <b>📱 Mobile variant (375px)</b>
+            <div style="display:grid; grid-template-columns:repeat(4,minmax(150px,1fr)); gap:8px; margin-top:8px; font-size:11px">
+              <div style="background:var(--paper); border:1px solid var(--line); border-radius:8px; padding:8px"><b>Chrome</b><div style="color:var(--mut)">Rail → hamburger + bottom tab bar: Today · Map · Comms · Approvals · More [BEST GUESS]. Wattson bar docks to bottom above the tabs.</div></div>
+              <div style="background:var(--paper); border:1px solid var(--line); border-radius:8px; padding:8px"><b>Queue is the screen</b><div style="color:var(--mut)">Full-width cards, primary action full-width button · swipe right = done, swipe left = snooze (mirrors j/k/e/s) [BEST GUESS]. KPI row → horizontal scroll of stat chips. Right-rail cards stack behind an "Overview" accordion.</div></div>
+              <div style="background:var(--paper); border:1px solid var(--line); border-radius:8px; padding:8px"><b>Guided mode</b><div style="color:var(--mut)">"Start my day" → full-screen one-item-at-a-time flow (native mobile pattern for guided execution).</div></div>
+              <div style="background:var(--paper); border:1px solid var(--line); border-radius:8px; padding:8px"><b>Map + calendar</b><div style="color:var(--mut)">Map full-bleed · chip groups → bottom-sheet filter · pin popover → bottom card · week calendar → vertical agenda list, not a grid.</div></div>
+            </div>
+          </div>
+        </div>
+
+        <!-- states strip -->
+        <div id="el-states" style="padding:0 22px 18px">
+          <div class="cardbox" style="font-size:11.5px">
+            <b>States (dev reference — all fail-closed)</b>
+            <div style="color:var(--mut); margin-top:4px">
+              <b style="color:var(--ink)">Loading:</b> skeleton rows in queue + shimmer cards; KPI tiles show "—". Map: basemap first, layers stream in with per-chip spinners [BEST GUESS].
+              <b style="color:var(--ink)">Empty:</b> new account → morning brief becomes an onboarding-completion checklist; queue: "Nothing yet — Wattson is watching your farm and inbox" + connect-channels / import-sphere links [BEST GUESS]. Mid-day cleared queue → the all-clear line is the hero (permission-to-stop ritual).
+              <b style="color:var(--ink)">Degraded:</b> ScoringService down / PROPSEARCH_MARKET_FORECAST unpublished → gauge + heat layer HIDE with "score unavailable"; deterministic facts (inventory, DOM, price-cut count) still render; never stale colors (§17.6/17.7) · propensity layer down → pins hide, "score unavailable" chip; business-layer pins remain · comms sync failure → banner "last synced 14m ago — no message silently dropped" + per-stream stale badges · ledger digest failure → brief shows raw event list [BEST GUESS] · approval bundle past expires_at (48h) → card marked expired, action halts, owner notified (Part 8) · metered-scan payment/API failure → no partial results, quote re-shown with error.
+              <b style="color:var(--ink)">Permission-limited:</b> team member sees own queue only; approvals of their REVIEW_REQUIRED outputs route to owner/delegate — buttons render "Sent to Graeham for approval" (a member's instance can never approve its own output, Part 16). Reviewer/TC roles see transactions + approvals lanes only [BEST GUESS pending RBAC Stage 3: Owner/Admin/Agent/TC/Reviewer/Compliance, MB #34].
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div style="padding:12px 22px; border-top:1px solid var(--line)"><span style="font-size:11.5px; color:var(--soft)">PropertyIQ · agent console</span></div>
+  </div>
+
+  <!-- ============ spec gaps found ============ -->
+  <div class="note" style="margin-top:26px"><b>Spec gaps found (Master Brain specifies, spec inventory missed — rendered above):</b>
+    (1) <b>Personalized-video vendor rule</b> — Wattson MB acceptance criteria: personalized/1:1 + anniversary/milestone videos use PersonalizedVideoProvider (B-Human primary, LipDub backup); HeyGen is BroadcastAvatarVideoProvider ONLY — the draft's "your HeyGen avatar" wording is corrected in the milestone strip.
+    (2) <b>Ad-spend anomaly alerts</b> — MB #30: daily caps + alert on &gt;3× the 7-day rolling spend average, added to the Ads & funnels annotation.
+    (3) <b>DNC daily scrub + four canonical consent-status fields + DNC_BLOCK event</b> — MB acceptance criteria: checked before every outbound text/call/AI-video; unknown blocks; rendered in Farm-watch/Defend annotations.
+    (4) <b>Command Registry shape (#29)</b> — typed module actions + correlation IDs + approval cards + annotated final reports; each module owns its own execution — added to the Wattson-bar annotation.
+    (5) <b>NotificationProvider channels</b> — GHL_TASK | EMAIL | SMS | IN_APP with NOTIFICATION_QUEUED/SENT/FAILED events — added to the 🔔 annotation.
+    (6) <b>Security/wire-event separation</b> — wire/security events go to the security audit log, never the Event Ledger — annotated on the escrow-officer comms row.
+    (7) <b>Brand lock</b> — the tenant's licensed identity (DRE# 01466876, Intero Real Estate) on all public-facing output; the identity.json blocklist number prohibited everywhere — annotated on the funnel-pages block.
+    (8) <b>Dashboard Alert permission mode</b> — the shoot-pipeline card surfaces as ADVISORY_ONLY; nothing dispatches until APPROVED (MB Part 9 step-mode table) — annotated on the shoot card, and the "Send call sheet" button renders disabled pre-approval.
+  </div>
+
+  <!-- ============ (3) ELEMENT COVERAGE ============ -->
+  <h2 style="font-size:20px; margin:26px 0 10px">Element coverage — spec inventory → this page</h2>
+  <table class="dtable cov" style="font-size:12.5px">
+    <tr><th>Spec inventory element</th><th>Rendered at</th><th>Status</th></tr>
+    <tr><td>Today/Map segmented toggle</td><td><a href="#el-toggle">Header toggle</a></td><td class="ok">✓</td></tr>
+    <tr><td>⌘K search / command palette (typed command grammar)</td><td><a href="#el-cmdk">Header ⌘K</a> + <a href="#el-wattson-bar">Wattson bar helper</a></td><td class="ok">✓</td></tr>
+    <tr><td>Notification bell 🔔 (NotificationProvider feed)</td><td><a href="#el-bell">Header bell</a></td><td class="ok">✓</td></tr>
+    <tr><td>Approvals inbox icon (ApprovalRecord bundles, expires_at 48h)</td><td><a href="#el-approvals-icon">Header ☑ Approvals</a></td><td class="ok">✓</td></tr>
+    <tr><td>Wattson command bar (answer + source chips + intent buttons)</td><td><a href="#el-wattson-bar">Wattson command bar</a></td><td class="ok">✓</td></tr>
+    <tr><td>Morning brief card (+ Start my day guided mode)</td><td><a href="#el-brief">Morning brief</a></td><td class="ok">✓</td></tr>
+    <tr><td>Monday briefing envelope (backlog approval, posture, question)</td><td><a href="#el-monday">Monday variant card</a></td><td class="ok">✓</td></tr>
+    <tr><td>Triage strip (accept / nurture / duplicate review)</td><td><a href="#el-triage">Triage strip</a></td><td class="ok">✓</td></tr>
+    <tr><td>KPI stat row ×6 (click-filters)</td><td><a href="#el-kpis">KPI row</a></td><td class="ok">✓</td></tr>
+    <tr><td>Today queue — ranked list (urgency dots, one primary action, j/k/e/s/c)</td><td><a href="#el-queue">Today queue</a></td><td class="ok">✓</td></tr>
+    <tr><td>"At risk — things that DIDN'T happen" row (neglect watchdog)</td><td><a href="#el-atrisk">At-risk row</a></td><td class="ok">✓</td></tr>
+    <tr><td>FYI line (+ open full event ledger link)</td><td><a href="#el-fyi">FYI line</a></td><td class="ok">✓</td></tr>
+    <tr><td>All-clear line (queue is finite, streak, time saved)</td><td><a href="#el-allclear">All-clear line</a></td><td class="ok">✓</td></tr>
+    <tr><td>Farm watch card (signals → one-click review-task chips, consent/DNC)</td><td><a href="#el-farmwatch">Farm watch</a></td><td class="ok">✓</td></tr>
+    <tr><td>Content queue card (statuses, micro-stats, ContentLock)</td><td><a href="#el-contentq">Content queue</a></td><td class="ok">✓</td></tr>
+    <tr><td>Comms unified inbox card (streams, VM transcription, human-send drafts)</td><td><a href="#el-comms">Comms inbox</a></td><td class="ok">✓</td></tr>
+    <tr><td>Campaigns card (PropReach)</td><td><a href="#el-campaigns">Campaigns</a></td><td class="ok">✓</td></tr>
+    <tr><td>Site performance card (GSC, AEO citations, OTTO wins)</td><td><a href="#el-siteperf">Site performance</a></td><td class="ok">✓</td></tr>
+    <tr><td>Goal pace card (GCI vs goal, pace line, Wattson's "why")</td><td><a href="#el-goal">Goal pace</a></td><td class="ok">✓</td></tr>
+    <tr><td>Day close card (5:30pm ritual)</td><td><a href="#el-dayclose">Day close</a></td><td class="ok">✓</td></tr>
+    <tr><td>Pipeline strip (6 stages + projected GCI)</td><td><a href="#el-pipeline">Pipeline strip</a></td><td class="ok">✓</td></tr>
+    <tr><td>Escrow transaction cards ×2 (7-segment stepper, waiting-on, nudge)</td><td><a href="#el-escrow">Escrow lane</a></td><td class="ok">✓</td></tr>
+    <tr><td>Milestone-video strip (consent gates + CA AI disclosure)</td><td><a href="#el-milestone">Milestone videos</a></td><td class="ok">✓</td></tr>
+    <tr><td>Week ahead strip + full calendar (call block, prep packs, immovable deadlines)</td><td><a href="#el-week">Week ahead</a></td><td class="ok">✓</td></tr>
+    <tr><td>Shoot-detected pipeline card (6 steps, Listing-Plan hard gate)</td><td><a href="#el-shoot">Shoot pipeline</a></td><td class="ok">✓</td></tr>
+    <tr><td>Weekly content calendar table (gaps amber, competitor-intel injects)</td><td><a href="#el-contentcal">Content calendar</a></td><td class="ok">✓</td></tr>
+    <tr><td>Playbooks card (toggles, pending chips, promotion stats)</td><td><a href="#el-playbooks">Playbooks</a></td><td class="ok">✓</td></tr>
+    <tr><td>Ads & funnels card (spend/CPL, funnel pages, UTM attribution)</td><td><a href="#el-ads">Ads & funnels</a></td><td class="ok">✓</td></tr>
+    <tr><td>MAP MODE — layer chips (3 groups, metered ADU/SB-9)</td><td><a href="#el-mapchips">Map layer chips</a></td><td class="ok">✓</td></tr>
+    <tr><td>Farm pulse badge strip</td><td><a href="#el-pulse">Farm pulse</a></td><td class="ok">✓</td></tr>
+    <tr><td>Map canvas + pins (propensity, past-client, listing, competitor, expiring)</td><td><a href="#el-canvas">Map canvas</a></td><td class="ok">✓</td></tr>
+    <tr><td>Pin-detail popover (decomposable factors + Add to Today)</td><td><a href="#el-popover">Pin popover</a></td><td class="ok">✓</td></tr>
+    <tr><td>Map legend / compliance label (fail-closed + privacy rules)</td><td><a href="#el-legend">Map legend</a></td><td class="ok">✓</td></tr>
+    <tr><td>"Defend this farm" card (review tasks only, HIGH-tier never auto)</td><td><a href="#el-defend">Defend card</a></td><td class="ok">✓</td></tr>
+    <tr><td>Heat-layer click (area factor breakdown)</td><td><a href="#el-heatclick">Heat-click popover</a></td><td class="ok">✓</td></tr>
+  </table>
+  <div style="border:1.5px solid var(--good); background:#f2f8f4; border-radius:10px; padding:12px 16px; margin:12px 0 0; font-weight:700; color:var(--good)">35 of 35 spec elements rendered ✓ <span style="font-weight:400; color:var(--mut); font-size:12.5px">— plus prompt-required regions beyond the inventory: persistent left rail, mobile-variant strip, states strip, and the 8 Master-Brain additions in the Spec-gaps note above.</span></div>
+
+  <!-- ============ (4) FULL SPEC AS HTML ============ -->
+  <div class="specdoc">
+    <h1 style="font-size:24px; margin:40px 0 6px">Spec — 09 · Command Center (Today queue + Map mode)</h1>
+    <p><b>Purpose.</b> The agent's single daily operating surface. The event ledger is the engine; "Today" is the interface: every system event (valuation run, tour request, cadence due, CMA promised, escrow deadline, content ready) flows into one ledger and renders as ONE ranked queue — calls first, promises second, cadences third, approvals last. The Map mode toggle (PropSearch Master Brain §17.7) overlays the farm with seller-propensity pins, market-forecast heat, and zoning-capability layers — every color explainable on click. No competitor combines the ranked ledger with the intelligence map; this is the demo screen.</p>
+    <p><b>Primary users.</b> Solo agent (Graeham archetype) — owner role. Team variant: owner sees cross-team items; team members see only their own queue (Wattson Part 16: a member's instance can never approve its own REVIEW_REQUIRED output; approval routes to owner/delegate).</p>
+    <p><b>Entry points.</b> Default landing screen after agent login · left-rail "Today" from any agent-console screen · morning-brief email "Start my day" deep link · push notification tap (queue item deep link) · Wattson answer chips ("Add to Today") from Map mode or any module.</p>
+    <p><b>Exit points.</b> Every queue item deep-links to its owning module: Call → dialer overlay + contact record (PropFlow) · CMA draft → Universal Review Queue / CMA presentation · Escrow item → Transaction Workspace (PropClose) · Content approve → Content Review & Approve (ContentLock flow) · Comms rows → unified inbox thread · Campaign card → Campaign Manager (PropReach) · Farm-watch actions → review-task creation (never direct send) · Map pin → property detail or "Add to Today" · Left rail → all agent-console screens · Top bar → ⌘K palette, notification center, Global Approvals Inbox icon.</p>
+
+    <h2>Layout</h2>
+    <p><b>Desktop (persistent chrome):</b> the 172px left rail is global across every agent-console screen; consumer pages never show it. Header: avatar + "Command Center · {weekday, date} · {agent name}" · Today/Map segmented toggle (actually switches views) · right nav: ⌘K + 🔔 bell with count + persistent Approvals-inbox icon (matrix gap #1, P0). Wattson command bar full-width under the header in both modes — matrix P0: this surface must be app-wide; Command Center hosts the always-visible instance. Main column (Today), top→bottom: morning brief → triage strip → KPI ×6 → two-column grid (1.4fr ranked queue / 1fr stacked cards: Farm watch · Content queue · Comms · Campaigns · Site performance) → goal-pace + day-close row → pipeline strip + expanded escrow lane (2 cards, 7-segment steppers) → week ahead (5-day strip + details full grid) → shoot-detected pipeline (6 steps, Listing-Plan gate) → weekly content calendar table → Playbooks + Ads & funnels. Map mode replaces the main column: header line · 3 chip groups · farm-pulse badges · map canvas with pins + popover + legend/compliance label · "Defend this farm" card. Footer: "PropertyIQ · agent console."</p>
+    <p><b>Mobile (375px):</b> rail → hamburger + bottom tab bar (Today · Map · Comms · Approvals · More) [BEST GUESS]. KPI row → horizontal stat-chip scroll. Queue is the screen: full-width cards, swipe right = done, swipe left = snooze [BEST GUESS, mirrors j/k/e/s]. Right-rail cards stack behind an "Overview" accordion. "Start my day" → full-screen one-item-at-a-time guided flow. Map full-bleed; chips → bottom sheet; popover → bottom card. Week calendar → vertical agenda list. Wattson bar docks to bottom above the tabs.</p>
+
+    <h2>Element inventory</h2>
+    <div style="overflow-x:auto">
+    <table class="dtable">
+      <tr><th>Element</th><th>What it shows/does</th><th>Data source</th><th>Interactions</th><th>Spec source</th></tr>
+      <tr><td>Today/Map segmented toggle</td><td>Switches main view</td><td>UI state</td><td>Click/tap; persists per session</td><td>Draft Screen 9 note</td></tr>
+      <tr><td>⌘K search / command palette</td><td>Global search + typed command grammar (<code>318 hurl cma</code> → CMA draft; <code>esc cedar</code> → escrow)</td><td>Wattson Action Registry (Part 17) → typed module_actions</td><td>Open ⌘K anywhere; Enter executes/queues governed action</td><td>Wattson MB Part 17 + matrix P0</td></tr>
+      <tr><td>Notification bell 🔔</td><td>Unread count; opens Notification Center feed</td><td>NotificationProvider events</td><td>Click → feed panel</td><td>Matrix P0 "Settings Suite + Notification Center"</td></tr>
+      <tr><td>Approvals inbox icon</td><td>Pending ApprovalRecord count; opens Global Approvals Inbox</td><td>ApprovalRecord (group_id, outputs[], recommended_action, correlation_id, expires_at 48h)</td><td>Click → Approvals screen; items expire at expires_at</td><td>Wattson MB Part 8; matrix gap #1 (P0)</td></tr>
+      <tr><td>Wattson command bar</td><td>Free-text ask: answers from ledger, drafts comms, runs reports, queues actions for approval</td><td>Event Ledger + Action Registry; every utterance = a governed typed action</td><td>Ask → inline answer w/ source chips + ASK_WHY / APPROVE / REJECT / REQUEST_HUMAN_REVIEW</td><td>Wattson MB Parts 1, 17; matrix P0</td></tr>
+      <tr><td>Morning brief card</td><td>Overnight summary, hard deadlines, "first move," risk callout</td><td>Ledger digest job (overnight)</td><td>"Start my day" → guided mode</td><td>Draft ~1367–1379</td></tr>
+      <tr><td>Monday briefing envelope</td><td>Monday brief = PropCast weekly briefing: lead headline, market-state card, ranked backlog, ATTACK/HOLD/DEFEND posture, one clarifying question; backlog approval = governed decision #1</td><td>PropCast briefing record</td><td>Approve backlog (one card) · answer question · adjust posture</td><td>Matrix P0; PropCast MB</td></tr>
+      <tr><td>Triage strip</td><td>"Triage: N new — nothing enters Today without your accept"; Wattson pre-sort</td><td>PropFlow lead inbox; duplicate detection (no auto-merge)</td><td>One-tap accept / nurture / send-to-duplicate-review</td><td>Draft ~1380–1383; matrix PropFlow gap</td></tr>
+      <tr><td>KPI stat row (6)</td><td>Needs you now · Unread comms · In escrow · New leads (7d) · Seller signals · AI handled</td><td>Ledger aggregates</td><td>Tiles click-filter the queue [BEST GUESS]</td><td>Draft ~1384–1391</td></tr>
+      <tr><td>Today queue (ranked)</td><td>Single ranked list; calls → promises → cadences → approvals; urgency dot; icon + title + badge + why-line + ONE primary action</td><td>Event Ledger typed items across all modules</td><td>Primary action per row · j/k/e/s/c · snooze re-queues</td><td>Draft ~1394–1425</td></tr>
+      <tr><td>"At risk" row</td><td>Negative-space alerts (untouched hot lead 48h; showing velocity −40% → price-cut analysis)</td><td>Ledger absence-detection (neglect watchdog)</td><td>"Fix both" → drafted re-engage (review task) + analysis</td><td>Draft ~1426–1430; matrix PropFlow gap</td></tr>
+      <tr><td>FYI line</td><td>No-action info + "open full event ledger →"</td><td>Ledger low-priority events</td><td>Link → Event Ledger browser</td><td>Draft ~1431</td></tr>
+      <tr><td>All-clear line</td><td>"Queue is finite" — N running normally, streak, Wattson time-saved</td><td>Ledger</td><td>None (reassurance)</td><td>Draft ~1432</td></tr>
+      <tr><td>Farm watch card</td><td>New/cut/sold in farm; competitive-share line; one-click action chips</td><td>PropSearch farm feed + competitor intel (official-API/public; hash/URL/excerpt storage)</td><td>Chips create review tasks — consent/DNC first; unknown → consent-capture task</td><td>Draft ~1436–1447; corrections #2, #5</td></tr>
+      <tr><td>Content queue card</td><td>PropCast items by status + 4-wk micro-stats; ContentLock note</td><td>PropCast items + ContentLock versions</td><td>"approve & post" → Content Review & Approve; edits = new version + pass + lock</td><td>Draft ~1448–1457; correction #9</td></tr>
+      <tr><td>Comms unified inbox card</td><td>Split streams w/ chips; SMS/email/VM; VM transcribed; grounded Wattson draft per convo</td><td>Comms service + sync timestamp</td><td>Chips filter; drafts open for HUMAN send (Never-Autonomous)</td><td>Draft ~1458–1471; Wattson MB Part 8</td></tr>
+      <tr><td>Campaigns card</td><td>Postcard / ads / farm-letter one-liners</td><td>PropReach + attribution events</td><td>Click → Campaign Manager</td><td>Draft ~1473–1479</td></tr>
+      <tr><td>Site performance card</td><td>30d visits, % organic, leads, top page + rank, AI citations; OTTO wins</td><td>GSC + analytics + AEO tracker; SEO console</td><td>Click → SEO Console / Reports</td><td>Draft ~1481–1488 + 1098</td></tr>
+      <tr><td>Goal pace card</td><td>GCI YTD vs goal, pace line, deals-behind, Wattson's "why the queue is ranked this way"</td><td>Goal config (Settings) + closed-deal ledger</td><td>Edit goal → Settings</td><td>Draft ~1493–1499 (demo numbers)</td></tr>
+      <tr><td>Day close card</td><td>5:30pm ritual: cleared count, streak, tomorrow's #1, explicit all-clear</td><td>Ledger end-of-day digest</td><td>Appears after configurable time [BEST GUESS 5:30pm]</td><td>Draft ~1501–1505</td></tr>
+      <tr><td>Pipeline strip</td><td>6 counts + projected pipeline GCI</td><td>Ledger; PropFlow pipelines + PropClose</td><td>Stage click → CRM kanban (12-day sprint boards live there)</td><td>Draft ~1507–1517; matrix PropFlow P0</td></tr>
+      <tr><td>Escrow transaction cards (×2)</td><td>Address/side/price, day X of Y, next deadline, GCI, 7-segment stepper, waiting-on, Wattson nudge</td><td>PropClose TransactionRecord (compact mirror)</td><td>"Open file" → Transaction Workspace; signature chips → doc-sign</td><td>Draft ~1519–1555; matrix PropClose P0</td></tr>
+      <tr><td>Milestone-video strip</td><td>Personalized avatar milestone videos w/ watch counts</td><td>PropCast render + PropClose milestones</td><td>Gates: ai_video consent + channel consent + lead_score≥50 + explicit high-intent action, defaults REVIEW_REQUIRED, non-removable CA AI disclosure frame one</td><td>Correction #3 (verbatim); draft ~1536</td></tr>
+      <tr><td>Week ahead + full calendar</td><td>5 highlighted days; 7-day × slot grid; 2-way GCal sync; auto-held 9–10am call block; prep packs; deadlines cannot be dragged — only escalated</td><td>Calendar sync + ledger deadlines</td><td>Expand · drag non-deadline events (full build) · event → linked record</td><td>Draft ~1558–1608</td></tr>
+      <tr><td>Shoot-detected pipeline card</td><td>6 steps incl. YOUR approval — Listing-Plan Card (hard gate NOTHING_DISPATCHES_UNTIL_APPROVED)</td><td>Wattson listing-lifecycle playbooks (Part 9) + listing-launch-engine</td><td>Review shot list · Send call sheet (post-approval only) · Preview assembly map</td><td>Wattson MB Part 9; correction #1</td></tr>
+      <tr><td>Weekly content calendar table</td><td>IG/FB · YouTube · Email/GBP × Mon–Fri; status chips; amber gaps; competitor-intel injects</td><td>PropCast calendar</td><td>Approve-all or per-item (both mint ContentLocks)</td><td>Draft ~1627–1638</td></tr>
+      <tr><td>Playbooks card</td><td>Running automations w/ on/off; Wattson proposes new ones from patterns</td><td>Wattson Playbook Library (trigger → steps → gates)</td><td>Toggle per playbook; library → Playbook Library screen; pending chips → Approvals</td><td>Draft ~1642–1653; Wattson Playbook Library NX</td></tr>
+      <tr><td>Ads & funnels card</td><td>Campaigns w/ spend/reach/CPL; funnel pages (branded/unbranded, DRE footer on both, per-page UTM); + New funnel page</td><td>PropReach + funnel builder + attribution ledger</td><td>Manage → Campaign Manager; new page → Funnel Builder (publish via Approvals)</td><td>Draft ~1655–1665; matrix P0 Funnel Builder</td></tr>
+      <tr><td>MAP MODE — layer chips</td><td>3 groups: Intelligence / My business / Defend; ADU + SB-9 metered</td><td>PropSearch §17.7 layers; ScoringService keys; Zoneomics; PropFlow geo</td><td>Toggle chips; metered: draw → quote (actual API cost) → pay → run → cached; re-run = new charge</td><td>PropSearch MB §17.7 (verbatim)</td></tr>
+      <tr><td>Farm pulse badge strip</td><td>Actives · DOM · s/l % · trailing-12mo share w/ trend · threat · opportunity</td><td>PropSearch aggregates + competitor intel</td><td>Links to Competitor Intel</td><td>Draft ~1692–1697</td></tr>
+      <tr><td>Map canvas + pins</td><td>Propensity pins (🔴/🟠/⚪), past-client ⌂, your listing, competitor, expiring</td><td>ScoringService rendering-ready values; PropSearch never defines formula/weights</td><td>Click pin → explain popover (decomposable score, never opaque color)</td><td>§17.7 explainability rule</td></tr>
+      <tr><td>Pin-detail popover</td><td>Address, badge, contributing facts (years owned, equity %, occupancy, valuation runs, zoning capacity)</td><td>ScoringService factors + PropSearch facts + Zoneomics</td><td>"Add to Today" (ledger call/review task) · "Property page"</td><td>Draft ~1706–1717; §17.7</td></tr>
+      <tr><td>Map legend / compliance label</td><td>Pin/color legend + fail-closed + privacy rules text</td><td>—</td><td>—</td><td>Draft ~1720 (rules verbatim)</td></tr>
+      <tr><td>"Defend this farm" card</td><td>Wattson's spatial read + Postcard the 5 · Door-knock route · Add all to cadence</td><td>Wattson analysis over map layers</td><td>ALL outreach = review tasks; Predictive-Seller HIGH-tier can NEVER auto-outreach</td><td>Draft ~1722–1730; correction #2</td></tr>
+      <tr><td>Heat-layer click</td><td>Area popover: inventory, DOM, price-cut frequency, appreciation trend, current rate</td><td>PROPSEARCH_MARKET_FORECAST area aggregate</td><td>Click area band → factor breakdown</td><td>PropSearch MB §17.7</td></tr>
+    </table>
+    </div>
+
+    <h2>States</h2>
+    <ul>
+      <li><b>Default:</b> Today mode, queue populated, all cards live.</li>
+      <li><b>Loading:</b> skeleton rows + shimmer cards; KPI tiles "—". Map: basemap first, layers stream with per-chip spinners [BEST GUESS].</li>
+      <li><b>Empty:</b> new account → onboarding-completion checklist brief; "Nothing yet — Wattson is watching your farm and inbox" + connect/import links [BEST GUESS]. Mid-day cleared queue → all-clear line is the hero.</li>
+      <li><b>Error / degraded (fail-closed):</b> ScoringService down / forecast unpublished → hide with "score unavailable," deterministic facts still render, never stale colors · propensity layer down → pins hide, business pins remain · comms sync failure → "last synced Xm ago — no message silently dropped" + stale badges · digest failure → raw event list [BEST GUESS] · approval bundle past expires_at → expired, halted, owner notified · metered-scan failure → no partial results, quote re-shown with error.</li>
+      <li><b>Permission-limited:</b> team member sees own queue; their REVIEW_REQUIRED approvals route to owner/delegate ("Sent to {owner} for approval"); Reviewer/TC see transactions + approvals lanes only [BEST GUESS pending RBAC Stage 3].</li>
+      <li><b>Mobile:</b> guided mode full-screen; map chips in bottom sheet.</li>
+    </ul>
+
+    <h2>Data fields</h2>
+    <div style="overflow-x:auto">
+    <table class="dtable">
+      <tr><th>Field</th><th>Format</th><th>Source of truth</th></tr>
+      <tr><td>Queue item</td><td>{type, rank, urgency(crit/warn/soft), title, context_badge, why_line, primary_action, entity_ref, correlation_id}</td><td>Event Ledger</td></tr>
+      <tr><td>ApprovalRecord bundle</td><td>group_id, outputs[], recommended_action, correlation_id, expires_at (48h default)</td><td>Wattson Part 8</td></tr>
+      <tr><td>KPI counts</td><td>integers + deltas</td><td>Ledger aggregates</td></tr>
+      <tr><td>GCI / goal</td><td>USD, % of goal, pace %</td><td>Settings goal + closed deals</td></tr>
+      <tr><td>Transaction card</td><td>address, side, price, day_n/day_total, stage[7], next_deadline, gci, waiting_on</td><td>PropClose TransactionRecord</td></tr>
+      <tr><td>Seller-propensity pin</td><td>property_id, tier (high/warming/low), factors[] (years_owned, equity_pct, occupancy, valuation_run_count)</td><td>ScoringService PROPSEARCH_SELLER_PROPENSITY over PropSearch facts</td></tr>
+      <tr><td>Market-forecast area</td><td>score + drivers (inventory, DOM, price-cut freq, appreciation, rate)</td><td>ScoringService PROPSEARCH_MARKET_FORECAST</td></tr>
+      <tr><td>Zoning-capacity pin data</td><td>ADU-by-right, buildable units, built units</td><td>Zoneomics v3 fields via PropSearch</td></tr>
+      <tr><td>Metered scan</td><td>area geometry, quoted_price (actual API cost), status, cached results</td><td>PropSearch §17.7 billing mechanic</td></tr>
+      <tr><td>Content item</td><td>content_id, version, ContentLock id, status, stale_at</td><td>PropCast</td></tr>
+      <tr><td>Farm-watch signal</td><td>event type (new/cut/sold), address, price/delta, listing agent + brokerage, model-delta %</td><td>PropSearch farm feed</td></tr>
+      <tr><td>Competitor intel</td><td>agent, brokerage, trailing-5 count; storage = hash/URL/excerpt/summary only</td><td>Official-API/public monitoring (correction #5)</td></tr>
+      <tr><td>Playbook</td><td>id, trigger_event, steps[], StepPermissionMode per step, enabled</td><td>Wattson Playbook Library</td></tr>
+      <tr><td>Comms message</td><td>channel (sms/email/vm), stream, transcript, wattson_draft, source_chips</td><td>Comms service</td></tr>
+      <tr><td>Streak / time-saved</td><td>integer days · hours</td><td>Ledger [BEST GUESS on "time saved" computation]</td></tr>
+    </table>
+    </div>
+
+    <h2>Rules & compliance</h2>
+    <ul>
+      <li><b>One-Approval UX:</b> related actions arrive as one card per unit of work; approvals batched at queue bottom, never outranking calls. Approve executes atomically; reject halts group + logs reason (Part 8).</li>
+      <li><b>Never-Autonomous List applies everywhere:</b> any client-facing communication, spend above cap, GBP review replies, cloned voice without VoiceIdentity, testimonial clips without ReleaseRecord. Wattson drafts; a human sends — "1 tap to send" IS the human send.</li>
+      <li><b>Outreach from farm watch / map / defend card:</b> review tasks only; consent + DNC first; unknown consent → consent-capture task, never a send; Predictive-Seller HIGH-tier never auto-outreach (correction #2).</li>
+      <li><b>Shoot pipeline hard gate:</b> NOTHING_DISPATCHES_UNTIL_APPROVED — Listing-Plan Card approval precedes any role packet; pre-shoot emails are REVIEW_REQUIRED team sends (Part 9; correction #1). Videographer = agent's own; editors = as-a-service upsell.</li>
+      <li><b>Milestone videos:</b> ai_video consent + channel consent + lead_score≥50 + explicit high-intent action; default REVIEW_REQUIRED; non-removable CA AI disclosure frame one (correction #3).</li>
+      <li><b>ContentLock:</b> exactly two governed content decisions — Monday backlog + per-piece exact-version approval; any post-approval edit = new version → new compliance pass → new lock (correction #9).</li>
+      <li><b>Map explainability:</b> pins are decomposable scores, never opaque colors; fail-closed when ScoringService down ("score unavailable," never stale colors); owner signals = absentee/corporate/owner-occupied badges only — never names/addresses on the map layer.</li>
+      <li><b>Metered scans:</b> draw → quote → pay → run; cached; re-run = new charge; no invented default prices (§17.7).</li>
+      <li><b>Spend envelope:</b> null envelope = nothing autonomous on spend; ad_spend_change_mode defaults REVIEW_REQUIRED; auto-pause only for safety conditions (Part 8).</li>
+      <li><b>Promotion path:</b> REVIEW_REQUIRED→AUTONOMOUS needs ≥30 consecutive days, &gt;95% unmodified-approval rate, zero incidents 30d, explicit owner approval logged in Admin Console; chip here, full stats on Playbook Library.</li>
+      <li><b>Deadlines are immovable on the calendar</b> — escalate, never drag.</li>
+    </ul>
+
+    <h2>Cross-links</h2>
+    <p><b>In:</b> login default · morning email · notifications · every module's "back to Today." <b>Out:</b> Approvals Inbox (13) · CRM Contacts+Pipelines · Transaction Workspace · Content Review & Approve · Content Calendar · Campaign Manager · Funnel Builder · SEO Console · Competitor Intel (11) · Playbook Library · Reports/Attribution · Settings (21) · Property detail (3) · Seller report (10) · CMA presentation.</p>
+    <p><b>Ledger events consumed:</b> every event type (valuation_run, tour_requested, cadence_due, cma_promised, escrow_deadline, content_ready, campaign_metric, comms_received, competitor_listing, playbook_trigger…). <b>Emitted:</b> item_completed, item_snoozed, approval_granted/rejected, triage_accepted, review_task_created, consent_capture_task_created, add_to_today, metered_scan_purchased, day_closed.</p>
+
+    <h2>Open decisions</h2>
+    <ul>
+      <li>[DECIDE] Map provider: assume <b>Mapbox</b> (already referenced in PropIQ doc-rebuild corrections) — layer/pin design is provider-agnostic.</li>
+      <li>[DECIDE] Heat-layer API pricing beyond membership — flagged open in §17.7; interim: layer ships included, usage metered internally for pricing data.</li>
+      <li>[DECIDE] Metered-scan billing UX (wallet vs per-charge) — interim: quote → one-tap charge to card on file, receipts in Settings→Billing.</li>
+      <li>[DECIDE] "AI handled / time saved" computation — interim: Wattson-completed convo turns × average handling estimate, labeled "~".</li>
+      <li>[DECIDE] Day-close trigger time — interim: 5:30pm local, Settings-editable.</li>
+      <li>[DECIDE] Pipeline strip: inline kanban vs route to CRM — interim: routes to CRM (kanban with 12-day sprint counters lives there).</li>
+      <li>[DECIDE] Video vendor for milestone/avatar videos — Wattson MB resolves direction: PersonalizedVideoProvider = B-Human primary / LipDub backup; HeyGen broadcast-only. UI unaffected by vendor.</li>
+      <li>[DECIDE] Mobile bottom-tab set — interim as listed [BEST GUESS].</li>
+    </ul>
+  </div>
+</div>
