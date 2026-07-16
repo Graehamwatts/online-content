@@ -1,4 +1,12 @@
-<title>PropSearch — Design Draft v1</title>
+<title>PropertyIQ — Design Wireframe</title>
+<link href="https://api.fontshare.com/v2/css?f[]=technor@500,600,700&display=swap" rel="stylesheet">
+<link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<style>
+  /* Type system — Technor for display (the squared machine look from the font exploration), Inter for UI.
+     Loads on GitHub Pages; inside the claude.ai artifact the CSP blocks font CDNs and the stack falls back gracefully. */
+  :root{ --font-display:'Technor', Inter, -apple-system, 'Segoe UI', sans-serif; --font-ui: Inter, -apple-system, 'Segoe UI', Roboto, sans-serif; }
+</style>
 <style>
   /* Palette v4 — PropFlow design language: neutral ink UI, ink-as-accent, color reserved for data.
      Primary actions are ink; the agent brand color appears only in data surfaces (chips, intel strips, links). */
@@ -23,8 +31,23 @@
   body[data-agent="lee"]{ --brand:#4b5b8f; --brand-soft:#eceef6; --brand-deep:#354268; }
 
   *{box-sizing:border-box; margin:0}
-  body{font:15px/1.55 -apple-system,"Segoe UI",Roboto,Helvetica,Arial,sans-serif; color:var(--ink); background:var(--paper); padding-bottom:80px}
-  h1,h2,h3{line-height:1.2; text-wrap:balance}
+  body{font:15px/1.55 var(--font-ui); color:var(--ink); background:var(--paper); padding-bottom:80px}
+  h1,h2,h3{line-height:1.15; text-wrap:balance; font-family:var(--font-display); font-weight:600}
+  h1{letter-spacing:-.01em}
+  /* finish pass: layered depth instead of flat borders */
+  .site{box-shadow:0 1px 2px rgba(20,24,32,.04), 0 8px 32px rgba(20,24,32,.06)}
+  .stat, .comm, .feat{box-shadow:0 1px 2px rgba(20,24,32,.03)}
+  .stat{transition:box-shadow .15s, transform .15s}
+  .stat:hover{box-shadow:0 4px 14px rgba(20,24,32,.08)}
+  .explore a{box-shadow:0 1px 2px rgba(20,24,32,.03)}
+  .explore a:hover{box-shadow:0 6px 18px rgba(20,24,32,.10); transform:translateY(-1px)}
+  .chip{transition:all .12s}
+  button{font-family:var(--font-ui)}
+  .prompt{box-shadow:0 2px 6px rgba(20,24,32,.05), 0 12px 36px rgba(20,24,32,.07)}
+  .card{transition:background .12s}
+  .card:hover{background:color-mix(in srgb, var(--surface) 45%, var(--paper))}
+  .bar{backdrop-filter:blur(8px); background:color-mix(in srgb, var(--paper) 92%, transparent)}
+  .num{font-variant-numeric:tabular-nums}
   .wrap{max-width:1180px; margin:0 auto; padding:0 20px}
   .num{font-variant-numeric:tabular-nums}
 
