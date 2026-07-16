@@ -1,0 +1,549 @@
+<title>PropertyIQ · Screen 27 — Past Client OS</title>
+<link href="https://api.fontshare.com/v2/css?f[]=technor@500,600,700&display=swap" rel="stylesheet">
+<link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<style>
+  /* Type system — Technor for display (the squared machine look from the font exploration), Inter for UI. */
+  :root{ --font-display:'Technor', Inter, -apple-system, 'Segoe UI', sans-serif; --font-ui: Inter, -apple-system, 'Segoe UI', Roboto, sans-serif; }
+</style>
+<style>
+  /* Palette v4 — PropFlow design language: neutral ink UI, ink-as-accent, color reserved for data. (extracted verbatim from propsearch-design-draft.html) */
+  :root, :root[data-theme="dark"], :root[data-theme="light"]{
+    --ink:#23282f; --paper:#fbfaf8; --surface:#f1efe9; --line:#e2dfd6;
+    --mut:#6b7076; --soft:#9b9f9f;
+    --brand:#2e6b53; --brand-ink:#ffffff; --brand-soft:#eaf1ec; --brand-deep:#1e4c3a;
+    --signal:#b07a2e;
+    --good:#2e7d4f; --warn:#a8630a; --crit:#b3372f;
+    --r:10px;
+  }
+  .intel .score, .mintel{ color:var(--brand-deep) }
+  .intel{ border-left:3px solid var(--brand) }
+  h1{ letter-spacing:-.02em }
+  .stat b{ letter-spacing:-.01em }
+  body[data-agent="watts"]{ --brand:#2e6b53; --brand-soft:#eaf1ec; --brand-deep:#1e4c3a; }
+
+  *{box-sizing:border-box; margin:0}
+  body{font:15px/1.55 var(--font-ui); color:var(--ink); background:var(--paper); padding-bottom:80px}
+  h1,h2,h3{line-height:1.15; text-wrap:balance; font-family:var(--font-display); font-weight:600}
+  h1{letter-spacing:-.01em}
+  .site{box-shadow:0 1px 2px rgba(20,24,32,.04), 0 8px 32px rgba(20,24,32,.06)}
+  .stat{box-shadow:0 1px 2px rgba(20,24,32,.03); transition:box-shadow .15s, transform .15s}
+  .stat:hover{box-shadow:0 4px 14px rgba(20,24,32,.08)}
+  .chip{transition:all .12s}
+  button{font-family:var(--font-ui)}
+  .num{font-variant-numeric:tabular-nums}
+  .wrap{max-width:1180px; margin:0 auto; padding:0 20px}
+
+  .bar{position:sticky; top:0; z-index:50; background:var(--paper); border-bottom:1px solid var(--line); padding:10px 0; backdrop-filter:blur(8px)}
+  .bar .wrap{display:flex; flex-wrap:wrap; gap:10px; align-items:center}
+  .bar .ttl{font-weight:700; margin-right:auto}
+  .bar .ttl small{display:block; font-weight:400; color:var(--mut)}
+  .bar a{color:var(--brand); font-size:13px; text-decoration:none}
+
+  .note{background:var(--surface); border:1px solid var(--line); border-radius:var(--r); padding:14px 16px; margin:0 0 22px; font-size:13.5px; color:var(--mut)}
+  .note b{color:var(--ink)}
+
+  .site{border:1px solid var(--line); border-radius:14px; overflow:hidden; background:var(--paper)}
+  .sitehead{display:flex; align-items:center; gap:14px; padding:14px 22px; border-bottom:1px solid var(--line)}
+  .avatar{width:38px; height:38px; border-radius:50%; background:var(--brand); color:var(--brand-ink); display:grid; place-items:center; font-weight:700}
+  .sitehead .who b{display:block}
+  .sitehead .who small{color:var(--mut)}
+  .sitehead nav{margin-left:auto; display:flex; gap:18px; font-size:13.5px; color:var(--mut)}
+  .sitehead nav a{color:inherit; text-decoration:none}
+  .sitehead nav a:hover{color:var(--brand)}
+
+  .chip{display:inline-flex; align-items:center; gap:6px; font-size:12.5px; font-weight:500; border:1px solid var(--line); border-radius:99px; padding:6px 12px; background:var(--paper); cursor:pointer; color:var(--ink)}
+  .chip:hover{border-color:var(--brand)}
+  .chip.on{background:var(--brand); border-color:var(--brand); color:var(--brand-ink); font-weight:600; box-shadow:0 2px 8px color-mix(in srgb, var(--brand) 30%, transparent)}
+
+  .statrow{display:grid; grid-template-columns:repeat(4,1fr); gap:10px}
+  .stat{background:var(--surface); border:1px solid var(--line); border-radius:var(--r); padding:12px}
+  .stat small{display:block; color:var(--mut); font-size:11.5px; text-transform:uppercase; letter-spacing:.05em}
+  .stat b{font-size:18px}
+  .stat .up{color:var(--good); font-size:12px}
+
+  .bdg{font-size:11.5px; border-radius:6px; padding:3px 8px; background:var(--surface); border:1px solid var(--line); color:var(--mut)}
+  .bdg.good{color:var(--good); border-color:color-mix(in srgb,var(--good) 30%,var(--line))}
+  .bdg.warn{color:var(--warn); border-color:color-mix(in srgb,var(--warn) 30%,var(--line))}
+
+  .dtable{width:100%; border-collapse:collapse; font-size:13px}
+  .dtable td,.dtable th{border-bottom:1px solid var(--line); padding:8px 10px; text-align:left}
+  .dtable th{font-size:11px; text-transform:uppercase; letter-spacing:.05em; color:var(--soft)}
+
+  @media (max-width:860px){ .statrow{grid-template-columns:repeat(2,1fr)} .maingrid{grid-template-columns:1fr !important} .console{grid-template-columns:1fr !important} .rail{display:none !important} }
+  @media (prefers-reduced-motion: reduce){ *{transition:none!important} }
+
+  /* ---- page-specific additions (kept in the same design language) ---- */
+  .anno{font-size:11px; color:var(--soft)}
+  .cardbox{border:1px solid var(--line); border-radius:10px; padding:11px 14px; font-size:12.5px; background:var(--paper)}
+  .btn-ink{background:var(--ink); color:#fff; border:0; border-radius:7px; padding:7px 12px; font-size:11.5px; cursor:pointer; font-weight:600}
+  .btn-ghost{background:var(--paper); border:1px solid var(--line); border-radius:7px; padding:7px 12px; font-size:11.5px; cursor:pointer}
+  .sechead{font-size:14px; font-weight:700; margin:0 0 8px; font-family:var(--font-display)}
+  .cov td.ok{color:var(--good); font-weight:700}
+  .specdoc h2{font-size:18px; margin:26px 0 8px}
+  .specdoc h3{font-size:15px; margin:18px 0 6px}
+  .specdoc p, .specdoc li{font-size:13.5px; color:var(--mut)}
+  .specdoc b{color:var(--ink)}
+  .specdoc table{margin:8px 0}
+  .heatwrap{overflow-x:auto}
+  .heat{display:grid; grid-auto-rows:14px; gap:2px; min-width:900px}
+  .heat .cell{border-radius:2px; background:var(--surface)}
+  .heat .lbl{font-size:10.5px; color:var(--mut); white-space:nowrap; padding-right:6px; line-height:14px}
+  .h1x{background:color-mix(in srgb, var(--brand) 25%, var(--surface))}
+  .h2x{background:color-mix(in srgb, var(--brand) 55%, var(--surface))}
+  .h3x{background:var(--brand)}
+  .hdue{background:var(--signal)}
+  .hgap{background:color-mix(in srgb, var(--crit) 35%, var(--surface)); outline:1px solid var(--crit)}
+  .hsup{background:repeating-linear-gradient(45deg, var(--surface), var(--surface) 3px, var(--line) 3px, var(--line) 5px)}
+</style>
+
+<!-- ============ (1) slim header ============ -->
+<div class="bar">
+  <div class="wrap">
+    <div class="ttl">PropertyIQ · Screen 27 — Past Client OS <small>Full-density per-screen mock · wireframe fidelity · dev-facing annotations in gray</small></div>
+    <a href="../propsearch-design-draft.html#s27">← Back to index (38-tab draft)</a>
+  </div>
+</div>
+
+<!-- ============ (2) THE FULL MOCK ============ -->
+<div class="wrap" style="padding-top:24px">
+  <div class="note"><b>Screen 27 — Past Client OS.</b> The machine that keeps every closed client (112 enrolled) warm for life: canonical touch cadence spread across the year, 13-week call rotation with a morning queue, the year heatmap, the voice-note call-logging loop, and suppression flags. Nothing lapses silently and nothing client-facing sends without review (Bucket 2, §17.3). Primary users: agent (queue + approvals), Sharon (handwritten-note lists), Adrian (briefing), Wattson (CRM_WATTSON persona, REVIEW_REQUIRED).</div>
+
+  <div class="site" data-agent="watts">
+    <!-- header: enrolled count, rotation health, touches this week + nav tabs (spec Layout) -->
+    <div class="sitehead">
+      <div class="avatar">GW</div>
+      <div class="who"><b>Past clients</b><small class="num">112 enrolled · rotation healthy · 9 touches this week</small></div>
+      <div style="display:inline-flex; border:1px solid var(--line); border-radius:99px; overflow:hidden; font-size:12px; font-weight:600; margin-left:10px">
+        <span style="padding:6px 14px; background:var(--ink); color:#fff">☰ Today</span>
+        <span style="padding:6px 14px; color:var(--mut); cursor:pointer">▦ Year heatmap</span>
+        <span style="padding:6px 14px; color:var(--mut); cursor:pointer">↝ Referrals</span>
+      </div>
+      <nav><a href="#">Search (⌘K)</a><a href="#">🔔 3</a></nav>
+    </div>
+
+    <div class="console" style="display:grid; grid-template-columns:172px 1fr">
+      <!-- persistent agent-console left rail (same chrome as Screen 9) -->
+      <div class="rail" style="border-right:1px solid var(--line); padding:14px 10px; font-size:12.5px; display:flex; flex-direction:column; gap:2px; background:var(--surface)">
+        <a href="#" style="text-decoration:none; color:var(--ink); border-radius:8px; padding:8px 10px">☰ Today</a>
+        <a href="#" style="text-decoration:none; color:var(--ink); border-radius:8px; padding:8px 10px">🗺 Farm map</a>
+        <a href="#" style="text-decoration:none; color:#fff; background:var(--ink); border-radius:8px; padding:8px 10px; font-weight:600">🤝 Past clients</a>
+        <a href="#" style="text-decoration:none; color:var(--ink); border-radius:8px; padding:8px 10px">👤 Leads & clients</a>
+        <a href="#" style="text-decoration:none; color:var(--ink); border-radius:8px; padding:8px 10px">💬 Comms <span class="bdg" style="font-size:9.5px">6</span></a>
+        <a href="#" style="text-decoration:none; color:var(--ink); border-radius:8px; padding:8px 10px">📋 Transactions <span class="bdg" style="font-size:9.5px">2</span></a>
+        <a href="#" style="text-decoration:none; color:var(--ink); border-radius:8px; padding:8px 10px">🎬 Content studio</a>
+        <a href="#" style="text-decoration:none; color:var(--ink); border-radius:8px; padding:8px 10px">📣 Ads & funnels</a>
+        <a href="#" style="text-decoration:none; color:var(--ink); border-radius:8px; padding:8px 10px">⚙ Playbooks</a>
+        <a href="#" style="text-decoration:none; color:var(--ink); border-radius:8px; padding:8px 10px">📈 Reports</a>
+        <div style="margin-top:auto; padding-top:10px; border-top:1px solid var(--line)">
+          <a href="#" style="text-decoration:none; color:var(--ink); border-radius:8px; padding:8px 10px; display:block">⚙ Settings</a>
+          <div class="anno" style="padding:6px 10px">Global chrome: this rail is persistent across all agent-console screens (Screen 9 pattern). Consumer pages never show it.</div>
+        </div>
+      </div>
+
+      <div>
+        <!-- KPI row -->
+        <div id="el-kpis" style="padding:14px 22px 0">
+          <div class="statrow" style="grid-template-columns:repeat(6,1fr)">
+            <div class="stat"><small>Enrolled</small><b class="num">112</b> <span class="anno">auto at close §20.7</span></div>
+            <div class="stat" style="border-left:3px solid var(--crit)"><small>Overdue</small><b class="num">1</b> <span class="anno">board rank #1 §20.5</span></div>
+            <div class="stat"><small>Due today</small><b class="num">3</b> <span class="anno">2 calls · 1 note</span></div>
+            <div class="stat"><small>This week</small><b class="num">9</b> <span class="anno">rotation 8–9/wk</span></div>
+            <div class="stat"><small>Referrals YTD</small><b class="num">7</b> <span class="up num">$41K GCI</span></div>
+            <div class="stat"><small>Coverage</small><b class="num">96%</b> <span class="anno">clients on-cadence</span></div>
+          </div>
+          <div class="anno" style="margin-top:4px">Board priority order (§20.5): overdue → due today → due this week → referral_grade → past-client value. KPIs read from PastClientRecord aggregates; no fabricated numbers — unknown renders as "—".</div>
+        </div>
+
+        <!-- morning push banner -->
+        <div id="el-morning-push" style="padding:12px 22px 0">
+          <div class="cardbox" style="background:var(--surface); display:flex; gap:12px; align-items:center; flex-wrap:wrap">
+            <span>🌅</span>
+            <div style="flex:1; min-width:280px"><b>Morning push — Tue, Jul 15</b>
+              <div style="color:var(--mut); font-size:12px" class="num">Today's queue: 3 rotation calls · 1 handwritten-note prompt (routed to Sharon) · 1 CMA touch for review. Delivered 7:05 AM via NotificationProvider — this banner is where the push deep-links to (§20.6).</div>
+            </div>
+            <button class="btn-ink">▶ Start call queue</button>
+            <div class="anno" style="width:100%">Interim crons (Daily Call Email Mon–Fri 10:00, anniversary batch 24th, CMA weekly digest Mon, bimonthly market update, birthday 24th, Sharon weekly notes, Adrian briefing) migrate to Temporal per Playbook Library — this UI is owner-agnostic [DECIDE].</div>
+          </div>
+        </div>
+
+        <!-- enrollment banner (contextual) -->
+        <div id="el-enrollment" style="padding:10px 22px 0">
+          <div class="cardbox" style="border-color:var(--good); background:#f2f8f4; display:flex; gap:10px; align-items:center; flex-wrap:wrap">
+            <span style="color:var(--good)">＋</span>
+            <div style="flex:1; min-width:260px"><b>New close enrolled: the Riveras (42 Cedar, closed Jul 11)</b>
+              <div style="color:var(--mut); font-size:12px">Status active · anniversary set Jul 11 · rotation week 6 assigned · 19 touches scheduled for year 1 · referral grade B carried in · <b style="color:var(--ink)">post-close 30/90 check-in sequence queued</b> (Day 30 "how's the house" call · Day 90 settling-in note + vendor list).</div>
+            </div>
+            <button class="btn-ghost">Review / adjust rotation week</button>
+            <div class="anno" style="width:100%">Auto-enrollment from Transaction Workspace close wizard (§20.7). Idempotency key {transaction_id, contact_id, close_date} — re-running the close wizard never double-enrolls or double-schedules. Testimonial-release gate anchors here too: no release → no shoot, no creative, no ad.</div>
+          </div>
+        </div>
+
+        <!-- main two-column: left action cards / right balancer + referrals -->
+        <div class="maingrid" style="padding:14px 22px; display:grid; grid-template-columns:1.3fr 1fr; gap:14px">
+          <div style="display:grid; gap:10px; align-content:start">
+
+            <!-- morning call queue: rotation call cards -->
+            <div id="el-rotation-call">
+              <div class="sechead">Morning call queue — 13-week rotation</div>
+              <div style="display:grid; gap:8px">
+                <div class="cardbox" style="border-left:3px solid var(--crit); display:flex; gap:10px; align-items:center; flex-wrap:wrap">
+                  <span style="color:var(--crit)">📞</span>
+                  <div style="flex:1; min-width:240px"><b>Call the Hendersons</b> — rotation wk 13 of 13 · <span class="bdg" style="color:var(--crit); border-color:var(--crit)">OVERDUE 2d</span>
+                    <div style="color:var(--mut); font-size:11.5px; margin-top:3px"><b style="color:var(--ink)">Context card:</b> bought 2021 · equity +$310K (estimate) · kid started at Sequoia this fall · last note: "deck project — ask how it turned out" · last call 97 days ago</div>
+                  </div>
+                  <button class="btn-ink">Tap-to-call</button>
+                </div>
+                <div class="cardbox" style="display:flex; gap:10px; align-items:center; flex-wrap:wrap">
+                  <span>📞</span>
+                  <div style="flex:1; min-width:240px"><b>Call the Okafors</b> — rotation wk 3 · <span class="bdg">DUE TODAY</span>
+                    <div style="color:var(--mut); font-size:11.5px; margin-top:3px">Context: bought 2019 · refi'd 2024 · grade A referrer (2 closed referrals) · last note: "planning a kitchen remodel — send my contractor list"</div>
+                  </div>
+                  <button class="btn-ink">Tap-to-call</button>
+                </div>
+                <div class="cardbox" style="display:flex; gap:10px; align-items:center; flex-wrap:wrap">
+                  <span>📞</span>
+                  <div style="flex:1; min-width:240px"><b>Call the Patels</b> — rotation wk 3 · <span class="bdg">DUE TODAY</span>
+                    <div style="color:var(--mut); font-size:11.5px; margin-top:3px">Context: bought 2023 · equity line renders <b style="color:var(--ink)">"estimate unavailable"</b> — mortgage balance unknown; prompt to enter it, never guessed (fail-closed).</div>
+                  </div>
+                  <button class="btn-ink">Tap-to-call</button>
+                </div>
+              </div>
+              <div class="anno" style="margin-top:4px">Card = PastClientRecord (call_rotation_week, last_relationship_call_at) + timeline notes. Tap-to-call opens the phone dialer, then the voice-note logger below. Quarterly cadence: each client's call lands once per 13-week cycle (§20.2, §25.6). Wattson receives only structured, minimized contact context (§20.6). If a predictive-seller candidate is ALSO a past client, they route here as a warm-equity touch — never a cold AI voice call (Brain §24 routing rule; added from Master Brain, not in the spec inventory).</div>
+            </div>
+
+            <!-- voice-note loop -->
+            <div id="el-voice-note">
+              <div class="sechead">After the call — voice-note logging loop</div>
+              <div class="cardbox" style="background:var(--surface)">
+                <div style="display:grid; grid-template-columns:repeat(5,1fr); gap:6px; font-size:11px; text-align:center">
+                  <div style="background:var(--paper); border:1px solid var(--line); border-radius:8px; padding:8px 6px"><b>1 · Hold mic</b><div style="color:var(--mut)">"Deck came out great, mentioned his brother might sell in Hayward"</div></div>
+                  <div style="background:var(--paper); border:1px solid var(--line); border-radius:8px; padding:8px 6px"><b>2 · Transcribe</b><div style="color:var(--mut)">+ summarize</div></div>
+                  <div style="background:var(--paper); border:1px solid var(--line); border-radius:8px; padding:8px 6px"><b>3 · Read-back</b><div style="color:var(--mut)">"Logged: deck done. New referral: brother, Hayward, possible sale. Correct?"</div></div>
+                  <div style="background:var(--paper); border:1px solid var(--brand); border-radius:8px; padding:8px 6px"><b>4 · One-tap confirm</b><div style="color:var(--mut)">or edit / re-record</div></div>
+                  <div style="background:var(--paper); border:1px solid var(--line); border-radius:8px; padding:8px 6px"><b>5 · Written</b><div style="color:var(--mut)">call log + last_relationship_call_at stamped · brother → referral lead in Triage</div></div>
+                </div>
+                <div class="anno" style="margin-top:6px">Conversational Call Assistant §20.6 (playbook WPB-PCOS-conversational-call-assistant). Mentions of new people become REFERRAL_RECEIVED leads in Lead Triage. Unlogged call → end-of-day reminder, then next-day follow-up until complete — a call is never silently unlogged. <b>Fail-closed:</b> transcription unavailable → voice note saved as raw audio + manual-log form; the task stays open until logged. TouchHistory writes completed_by = HUMAN_USER / WATTSON_REVIEWED_ACTION / SYSTEM + outcome_summary + next_action.</div>
+              </div>
+            </div>
+
+            <!-- anniversary / birthday bundles -->
+            <div id="el-bundle">
+              <div class="sechead">Anniversary & birthday bundles</div>
+              <div style="display:grid; gap:8px">
+                <div class="cardbox" style="display:flex; gap:10px; align-items:center; flex-wrap:wrap">
+                  <span style="color:var(--warn)">🏠</span>
+                  <div style="flex:1; min-width:240px"><b>Nguyen home anniversary Thu</b> — 3 items, ONE bundle, one approval:
+                    <div style="color:var(--mut); font-size:11.5px; margin-top:3px">🎥 avatar anniversary video (AI-disclosed) + 📝 equity note drafted ($210K gain) + 🎁 gift suggestion under cap</div>
+                  </div>
+                  <button class="btn-ghost">Review all → Approvals</button>
+                </div>
+                <div class="cardbox" style="display:flex; gap:10px; align-items:center; flex-wrap:wrap">
+                  <span style="color:var(--warn)">🎂</span>
+                  <div style="flex:1; min-width:240px"><b>Sofia Kim's birthday Sat</b> — BIRTHDAY_TOUCH flow:
+                    <div style="color:var(--mut); font-size:11.5px; margin-top:3px">e-card drafted + call prompt added to Sat queue · fixed_date touch, never rescheduled by the balancer</div>
+                  </div>
+                  <button class="btn-ghost">Review card</button>
+                </div>
+              </div>
+              <div class="anno" style="margin-top:4px">PastClientTouch §20.4 (BIRTHDAY_TOUCH, CLOSING_HOME_ANNIVERSARY_TOUCH) + GiftProvider §9.15. Gifts default REVIEW_REQUIRED (§19.8). AI-generated anniversary videos carry the ai_video consent gate + the non-removable CA AI disclosure (§21.7, matrix correction #3) — no consent, no video; the bundle degrades to note + gift.</div>
+            </div>
+
+            <!-- suppressions + collision -->
+            <div id="el-suppressions">
+              <div class="sechead">Suppressions & collision detection</div>
+              <div class="cardbox">
+                <b>Active suppressions (3)</b>
+                <table class="dtable" style="font-size:11.5px; margin-top:6px">
+                  <tr><th>Client</th><th>Reason</th><th>Resumes</th></tr>
+                  <tr><td>Parks</td><td>In escrow — no marketing touches</td><td>Auto at close (relationship calls continue)</td></tr>
+                  <tr><td>Diaz</td><td>Sensitive-topic hold (§22.4)</td><td style="color:var(--crit)">Your explicit clearance ONLY — no automation touches this contact</td></tr>
+                  <tr><td>Wongs</td><td>Requested space until Sept</td><td style="color:var(--good)">Auto-resumes Sep 1 — cadence picks up where it paused</td></tr>
+                </table>
+                <div style="border-top:1px solid var(--line); margin-top:8px; padding-top:8px; font-size:12px"><b>⚡ Collision detected:</b> <span style="color:var(--mut)">Okafors are in an active listing-launch drip — this week's MARKET_UPDATE_DIGEST auto-suppressed by touch_ledger_lock so they don't get two touches in one week. Shown on the calendar as a struck cell, never silent.</span></div>
+                <div class="anno" style="margin-top:4px">Touch governance §13.9 + sensitive firewall §22.4. Sensitive-suppressed clients are hidden from team queues (Sharon/Adrian never see them). Every outbound touch also passes ComplianceProvider + channel consent + DNC (§22.1–22.3). <b>Fail-closed:</b> ComplianceProvider down → ALL outbound touches (newsletter/digest/video) held with reason shown here.</div>
+              </div>
+            </div>
+          </div>
+
+          <!-- right column -->
+          <div style="display:grid; gap:10px; align-content:start">
+            <!-- balancer -->
+            <div id="el-balancer" class="cardbox">
+              <b>13-week rotation balancer</b>
+              <div style="display:flex; gap:2px; margin-top:8px; align-items:flex-end; height:52px">
+                <div style="flex:1; background:var(--brand); height:78%" title="wk1: 9"></div><div style="flex:1; background:var(--brand); height:86%" title="wk2: 10"></div><div style="flex:1; background:var(--brand); height:78%" title="wk3: 9"></div><div style="flex:1; background:var(--warn); height:26%" title="wk4: 3 — light"></div><div style="flex:1; background:var(--brand); height:95%" title="wk5: 11"></div><div style="flex:1; background:var(--brand); height:70%" title="wk6: 8"></div><div style="flex:1; background:var(--brand); height:78%" title="wk7: 9"></div><div style="flex:1; background:var(--brand); height:70%" title="wk8: 8"></div><div style="flex:1; background:var(--brand); height:78%" title="wk9: 9"></div><div style="flex:1; background:var(--brand); height:70%" title="wk10: 8"></div><div style="flex:1; background:var(--brand); height:78%" title="wk11: 9"></div><div style="flex:1; background:var(--brand); height:86%" title="wk12: 10"></div><div style="flex:1; background:var(--brand); height:78%" title="wk13: 9"></div>
+              </div>
+              <div style="display:flex; justify-content:space-between; font-size:9.5px; color:var(--soft)"><span>wk1</span><span>wk7</span><span>wk13</span></div>
+              <div style="background:var(--surface); border-radius:8px; padding:8px 10px; margin-top:8px; font-size:12px">
+                <b>Proposal:</b> <span style="color:var(--mut)">week 4 is light (3) and week 5 is heavy (11) — pull 5 clients forward from week 5?</span>
+                <div style="display:flex; gap:6px; margin-top:6px"><button class="btn-ink">Accept</button><button class="btn-ghost">Decline</button></div>
+              </div>
+              <div class="anno" style="margin-top:5px">call_rotation_week (1–13) distribution across 112 clients ≈ 8–9 calls/week — balancer displays ACTUAL per-week counts, no hardcoded target [DECIDE §20.5]. Rebalancing is always propose → accept/decline, never silent. fixed_date touches (birthdays, anniversaries) are never moved.</div>
+            </div>
+
+            <!-- touch-mix legend -->
+            <div id="el-touch-mix" class="cardbox">
+              <b>Touch mix — per person, per year (canonical cadence §20.3)</b>
+              <table class="dtable" style="font-size:11.5px; margin-top:6px">
+                <tr><th>Touch</th><th>Freq/yr</th><th>Playbook owner</th></tr>
+                <tr><td>📞 Relationship call</td><td class="num">4 (quarterly)</td><td>WPB-PCOS-quarterly-call</td></tr>
+                <tr><td>📰 Personalized newsletter</td><td class="num">12 (monthly)</td><td>WPB-PCOS-monthly-newsletter</td></tr>
+                <tr><td>📈 Market digest</td><td class="num">6 (every 2 mo)</td><td>WPB-PCOS-bimonthly-market-touch</td></tr>
+                <tr><td>📊 CMA / equity touch</td><td class="num">2 (every 6 mo)</td><td>WPB-PCOS-annual-cma-email</td></tr>
+                <tr><td>🎂 Birthday</td><td class="num">1 (fixed)</td><td>WPB-PCOS-birthday-touch</td></tr>
+                <tr><td>🏠 Home anniversary</td><td class="num">1 (fixed)</td><td>WPB-PCOS-anniversary-video</td></tr>
+                <tr><td>✍️ Handwritten-note prompts</td><td class="num">~2 [BEST GUESS]</td><td>WPB-PCOS-handwritten-note</td></tr>
+              </table>
+              <div class="anno" style="margin-top:5px">Handwritten-note prompts are event-driven (referral / close / milestone / annual moment), not a fixed 2 — the "~2/yr" figure is a display convention [DECIDE]. Newsletter + market-digest touches send only after Outbox review; both stamp last_newsletter_at / last_market_update_at. Also in the 14 canonical touch_types but not in the annual default mix: POSTCARD, VOICEMAIL_DROP_INTERIM, POP_BY_PROMPT, HOLIDAY_GIFT_PROMPT, CLIENT_APPRECIATION_EVENT_INVITE, CHARITABLE_DONATION_PROMPT, E_CARD, CUSTOM.</div>
+            </div>
+
+            <!-- referral tracker + gift queue -->
+            <div id="el-referrals" class="cardbox">
+              <b>Referral tracker & grading</b>
+              <div style="font-size:12px; margin-top:6px" class="num">
+                <div style="display:flex; gap:8px; flex-wrap:wrap; margin-bottom:6px"><span class="bdg good">A-grade referrers: 9</span><span class="bdg">B: 31</span><span class="bdg">C: 72</span><span class="bdg good">YTD referral GCI: $41K</span></div>
+                <table class="dtable" style="font-size:11.5px">
+                  <tr><th>Referrer →</th><th>Referee</th><th>Status</th></tr>
+                  <tr><td>Henderson</td><td>brother (Hayward)</td><td><span class="bdg warn">NEW — from today's call note</span></td></tr>
+                  <tr><td>Nguyens</td><td>the Kims</td><td><span class="bdg good">CLOSED · thank-you gift queued</span></td></tr>
+                  <tr><td>Okafors</td><td>coworker</td><td>Nurturing (12-day sprint)</td></tr>
+                </table>
+              </div>
+              <div style="border-top:1px solid var(--line); margin-top:8px; padding-top:8px; font-size:12px">
+                <b>🎁 Gift queue (2) — budget caps</b>
+                <div style="color:var(--mut); font-size:11.5px; margin-top:3px" class="num">Nguyens thank-you: succulent box $42 <span class="bdg">under A-cap $45 ✓</span> REVIEW_REQUIRED · Kims closing gift: cutting board $58 <span class="bdg warn">over cap → needs approver role</span></div>
+                <div style="display:flex; gap:6px; margin-top:6px"><button class="btn-ghost">Open gift queue</button></div>
+              </div>
+              <div class="anno" style="margin-top:5px">ReferralEdge §19.2 (directed edges, never tags/free text — §25.7) + ReferrerGradeSettings §19.5. $45 is an example value; the cap is a tenant setting (§19.8). AUTO_WITHIN_BUDGET only with a configured cap + approved GiftProvider vendor (Handwrytten / Loop-&-Tie class [DECIDE]); no vendor → manual one-click task. Gift approvals restricted to the approver role. Referrals view = left-to-right referrer→referee list; force-graph out of scope v1.</div>
+            </div>
+          </div>
+        </div>
+
+        <!-- ============ cadence board (full width) ============ -->
+        <div id="el-cadence-board" style="padding:0 22px 14px">
+          <div style="border:1.5px solid var(--brand); border-radius:12px; padding:14px 16px; background:var(--brand-soft)">
+            <div style="display:flex; gap:8px; align-items:center; flex-wrap:wrap">
+              <b style="font-size:14px">Cadence board — every client, every touch, one view</b>
+              <div style="display:inline-flex; border:1px solid var(--line); border-radius:99px; overflow:hidden; font-size:11px; background:var(--paper)"><span style="padding:5px 12px; color:var(--mut)">Today</span><span style="padding:5px 12px; background:var(--ink); color:#fff; font-weight:600">Week</span><span style="padding:5px 12px; color:var(--mut)">Month</span><span style="padding:5px 12px; color:var(--mut)">Year</span><span style="padding:5px 12px; color:var(--mut)">By person</span></div>
+              <div style="display:flex; gap:5px; margin-left:auto; flex-wrap:wrap"><button class="chip on" style="font-size:10.5px">All touches</button><button class="chip" style="font-size:10.5px">📞 Calls</button><button class="chip" style="font-size:10.5px">📝 Notes</button><button class="chip" style="font-size:10.5px">🎁 Gifts</button><button class="chip" style="font-size:10.5px">🎥 Videos</button><button class="chip" style="font-size:10.5px">📊 CMAs</button><button class="chip" style="font-size:10.5px">📰 Newsletters</button><button class="chip" style="font-size:10.5px">Custom</button></div>
+            </div>
+            <div class="anno" style="margin:6px 0 0">Other views (one-line previews): <b>Today</b> = just the queue above · <b>Month</b> = 4-week strip per client, touch icons only · <b>Year</b> = jumps to the heatmap tab below · <b>By person</b> = one client's full 12-month cadence timeline (see position card ↓). Cell click → touch detail: status SCHEDULED / DUE / OVERDUE / COMPLETED / CANCELLED, step_permission_mode, template_id.</div>
+            <div style="overflow-x:auto; margin-top:10px">
+            <table class="dtable" style="font-size:10.5px; min-width:860px; background:var(--paper); border-radius:8px">
+              <tr><th>This week (Jul 14–18)</th><th>Mon</th><th>Tue</th><th>Wed</th><th>Thu</th><th>Fri</th></tr>
+              <tr><td><b>Hendersons</b> <span style="color:var(--soft)">wk 13 of 13</span></td><td style="background:var(--brand-soft)">📞 rotation call — <b style="color:var(--crit)">OVERDUE</b> (context card ready)</td><td></td><td></td><td></td><td></td></tr>
+              <tr><td><b>Okafors</b> <span style="color:var(--soft)">wk 3</span></td><td></td><td style="background:var(--brand-soft)">📞 rotation call — DUE</td><td></td><td></td><td style="color:var(--soft); text-decoration:line-through">📈 digest — ⚡ collision-suppressed (drip lock §13.9)</td></tr>
+              <tr><td><b>Nguyens</b> <span style="color:var(--soft)">anniv. cycle</span></td><td></td><td></td><td></td><td style="background:#fdf6ee">🏠 anniversary bundle: 🎥 video + 📝 equity note + 🎁 gift — one approval</td><td></td></tr>
+              <tr><td><b>Parks</b> <span style="color:var(--soft)">6-mo cycle</span></td><td></td><td colspan="2" style="background:var(--surface)">📊 auto-CMA generated ✓ → Outbox for review → sends with "coffee?" note</td><td></td><td></td></tr>
+              <tr><td><b>Riveras</b> <span style="color:var(--soft)">NEW · wk 6</span></td><td></td><td></td><td style="background:var(--brand-soft)">📞 Day-30 post-close check-in (30/90 sequence)</td><td></td><td></td></tr>
+              <tr><td><b>Sofia Kim</b></td><td></td><td></td><td></td><td></td><td style="background:#fdf6ee">🎂 birthday Sat → e-card review + call prompt (fixed_date)</td></tr>
+              <tr><td><b>Aldertons</b> <span style="color:var(--soft)">yr 1 anniv.</span></td><td></td><td></td><td>🏡 <b>Annual home review</b> invite — equity + maintenance checklist + "want a walk-through?" (template)</td><td></td><td></td></tr>
+              <tr style="color:var(--soft)"><td><b>Diaz</b></td><td colspan="5">⏸ suppressed (sensitive-topic hold) — row greyed with reason; cadence resumes only on your clearance</td></tr>
+              <tr><td><b>+ 104 more</b></td><td colspan="5" style="color:var(--soft)" class="num">this week: 9 active touches · next week: 11 · everyone's position on the Year heatmap ↓</td></tr>
+            </table>
+            </div>
+
+            <!-- per-client cadence position card (By-person preview) -->
+            <div id="el-position-card" style="background:var(--paper); border:1px solid var(--line); border-radius:9px; padding:10px; margin-top:10px; font-size:11.5px">
+              <b>By-person view — cadence position card (Okafors)</b>
+              <div style="display:flex; gap:4px; margin-top:6px; flex-wrap:wrap" class="num">
+                <span class="bdg good">📞 Q1 call ✓ Feb 3</span><span class="bdg good">📊 CMA ✓ Mar 12 (opened ×3)</span><span class="bdg good">📞 Q2 call ✓ May 1</span><span class="bdg warn">📞 Q3 call — DUE TODAY</span><span class="bdg">🏠 anniversary Oct 9</span><span class="bdg">📊 CMA #2 Sep 12</span><span class="bdg">🎂 birthday Nov 2</span><span class="bdg">📰 newsletter monthly ✓ 7/12</span>
+              </div>
+              <div class="anno" style="margin-top:4px">One row per client: where they sit in the year's cadence, what completed (touch_history), what's next (next_touch_schedule). Click any pill → touch detail.</div>
+            </div>
+
+            <!-- template library + auto-CMA -->
+            <div style="display:grid; grid-template-columns:1fr 1fr; gap:10px; margin-top:10px; font-size:11.5px">
+              <div id="el-templates" style="background:var(--paper); border:1px solid var(--line); border-radius:9px; padding:10px">
+                <b>Template library + build-your-own</b>
+                <div style="color:var(--mut); margin-top:4px">Stock templates: rotation call script · handwritten-note prompts · gift picks by budget · anniversary avatar video · 6-mo auto-CMA · holiday cards · e-cards · pop-by prompts · client-appreciation event invite · charitable-donation prompt · annual home review invite.</div>
+                <div style="background:var(--surface); border-radius:7px; padding:8px 10px; margin-top:6px"><b style="color:var(--ink)">Build your own, in plain English:</b> <i style="color:var(--mut)">"Every client who bought with a pool: pool-service reminder each May with my guy's number"</i> → Wattson builds it as a CUSTOM cadence template, auto-sorts it into the right filter chip, applies to matching clients (18), and <b>shows you the first instance before it ever runs</b>.</div>
+                <div class="anno" style="margin-top:4px">PipelineSequenceRegistry + touch_type CUSTOM (§20.4). Approval required before first run — locked decision. Missing registry rows → tasks may be created but discretionary copy is never invented (fail-closed, §11).</div>
+              </div>
+              <div id="el-cma" style="background:var(--paper); border:1px solid var(--line); border-radius:9px; padding:10px">
+                <b>Auto-CMA engine status</b>
+                <div style="color:var(--mut); margin-top:4px" class="num">6-month CMAs: <b style="color:var(--ink)">8 generated</b> this month (cma-generator pipeline, WPB-PCOS-annual-cma-email) · <b style="color:var(--ink)">5 sent ✓</b> — 2 opened ×2+ → <span class="bdg warn">seller-signal flags</span> · <b style="color:var(--ink)">3 in Outbox</b> awaiting your review · next batch: 11 due in August.</div>
+                <div style="color:var(--mut); margin-top:4px">Every CMA = hosted URL on the client's owner page — opens are tracked and feed the agent_marketing_engagement propensity fact (§14.4). EQUITY_CARD_CREATED events from PropSearch give the equity-touch context.</div>
+                <div style="display:flex; gap:6px; margin-top:6px"><button class="btn-ghost">Open Outbox (3)</button></div>
+                <div class="anno" style="margin-top:4px"><b>Fail-closed:</b> cma-generator failure → the touch flips to a review task; a fabricated CMA is never sent. Client-facing CMAs/newsletters/equity notes are always review-first (Bucket 2, §17.3) — Outbox, never auto-send.</div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- ============ year heatmap ============ -->
+        <div id="el-heatmap" style="padding:0 22px 14px">
+          <div class="cardbox">
+            <div style="display:flex; gap:10px; align-items:center; flex-wrap:wrap">
+              <b>Year heatmap — every client's touch coverage at a glance</b>
+              <span class="anno">52 weeks × clients, grouped by referral grade · click a row → contact record (Screen 14) · gaps flagged red</span>
+              <div style="margin-left:auto; display:flex; gap:8px; align-items:center; font-size:10.5px; color:var(--mut)">
+                <span style="display:inline-flex; gap:3px; align-items:center"><span class="cell h1x" style="width:11px; height:11px; display:inline-block; border-radius:2px"></span>1 touch</span>
+                <span style="display:inline-flex; gap:3px; align-items:center"><span class="cell h2x" style="width:11px; height:11px; display:inline-block; border-radius:2px"></span>2</span>
+                <span style="display:inline-flex; gap:3px; align-items:center"><span class="cell h3x" style="width:11px; height:11px; display:inline-block; border-radius:2px"></span>3+</span>
+                <span style="display:inline-flex; gap:3px; align-items:center"><span class="cell hdue" style="width:11px; height:11px; display:inline-block; border-radius:2px"></span>due/scheduled</span>
+                <span style="display:inline-flex; gap:3px; align-items:center"><span class="cell hgap" style="width:11px; height:11px; display:inline-block; border-radius:2px"></span>gap ≥6wk</span>
+                <span style="display:inline-flex; gap:3px; align-items:center"><span class="cell hsup" style="width:11px; height:11px; display:inline-block; border-radius:2px"></span>suppressed</span>
+              </div>
+            </div>
+            <div class="heatwrap" style="margin-top:10px">
+              <div id="heatgrid" class="heat" style="grid-template-columns:150px repeat(52, 1fr)"></div>
+            </div>
+            <div class="anno" style="margin-top:6px">Data: touch_history[] (past weeks) + next_touch_schedule[] (future weeks). Rows shown here: a sample of the 112 across A/B/C grades — the real screen virtual-scrolls all 112. The Hendersons row shows the flagged gap the balancer is chasing; the Diaz row renders the suppression hatch for the hold window. Loading state: heatmap renders progressively after skeleton cards. Mobile: pinch-zoomable full-screen view.</div>
+          </div>
+        </div>
+
+        <!-- states & empty/error strip -->
+        <div id="el-states" style="padding:0 22px 18px">
+          <div class="cardbox" style="font-size:11.5px">
+            <b>States (dev reference)</b>
+            <div style="color:var(--mut); margin-top:4px">
+              <b style="color:var(--ink)">Empty:</b> no clients enrolled → "Past Client OS activates automatically at your first close" + manual-enroll action · no touches today → "Nothing due — next: Nguyen anniversary, Thu".
+              <b style="color:var(--ink)">Loading:</b> skeleton cards; heatmap progressive.
+              <b style="color:var(--ink)">Degraded (all fail-closed):</b> transcription down → audio saved + manual log, task stays open · cma-generator down → review task, never a fabricated CMA · ComplianceProvider down → all outbound held with reason · equity unknown → "estimate unavailable", never guessed.
+              <b style="color:var(--ink)">Permission-limited:</b> handwritten-note lists routable to a team member (Sharon) · gift approvals = approver role only · sensitive-suppressed clients hidden from team queues.
+              <b style="color:var(--ink)">Mobile (375px):</b> call-assistant flow is the primary surface — swipeable context cards → tap-to-call → hold-mic → transcribed summary → one-tap confirm; balancer + board collapse to horizontal strips.
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ============ (3) ELEMENT COVERAGE ============ -->
+  <h2 style="font-size:20px; margin:34px 0 10px">Element coverage — spec inventory → this page</h2>
+  <table class="dtable cov" style="font-size:12.5px">
+    <tr><th>Spec inventory element</th><th>Rendered at</th><th>Status</th></tr>
+    <tr><td>Rotation call card (context card, tap-to-call)</td><td><a href="#el-rotation-call">Morning call queue</a></td><td class="ok">✓</td></tr>
+    <tr><td>Voice-note logging loop (transcribe → confirm → log → referral capture)</td><td><a href="#el-voice-note">After the call</a></td><td class="ok">✓</td></tr>
+    <tr><td>Anniversary/birthday bundle card (one approval)</td><td><a href="#el-bundle">Anniversary & birthday bundles</a></td><td class="ok">✓</td></tr>
+    <tr><td>Suppression card (in-escrow, sensitive hold, auto-resume window)</td><td><a href="#el-suppressions">Suppressions & collision detection</a></td><td class="ok">✓</td></tr>
+    <tr><td>13-week rotation balancer (light weeks flagged, propose/accept)</td><td><a href="#el-balancer">Rotation balancer</a></td><td class="ok">✓</td></tr>
+    <tr><td>Touch-mix legend (canonical cadence + playbook owners)</td><td><a href="#el-touch-mix">Touch mix table</a></td><td class="ok">✓</td></tr>
+    <tr><td>Referral tracker card (edges, grades, thank-yous, YTD GCI)</td><td><a href="#el-referrals">Referral tracker & gift queue</a></td><td class="ok">✓</td></tr>
+    <tr><td>Cadence board (Week/Month/Year/By-person + filter chips + statuses + greyed suppressed rows)</td><td><a href="#el-cadence-board">Cadence board</a> + <a href="#el-position-card">position card</a></td><td class="ok">✓</td></tr>
+    <tr><td>Template library + build-your-own (plain-English → preview-before-run)</td><td><a href="#el-templates">Template library</a></td><td class="ok">✓</td></tr>
+    <tr><td>Auto-CMA engine status (counts, Outbox, opens → seller signals)</td><td><a href="#el-cma">Auto-CMA engine</a></td><td class="ok">✓</td></tr>
+    <tr><td>Year heatmap tab (coverage at a glance, gaps flagged, click → record)</td><td><a href="#el-heatmap">Year heatmap (real 52-week grid)</a></td><td class="ok">✓</td></tr>
+    <tr><td>Morning push (queue + note prompts + CMA reviews, deep-links here)</td><td><a href="#el-morning-push">Morning push banner</a></td><td class="ok">✓</td></tr>
+    <tr><td>Enrollment banner (auto-enroll at close, idempotent, adjust rotation week)</td><td><a href="#el-enrollment">Enrollment banner</a></td><td class="ok">✓</td></tr>
+  </table>
+  <div style="border:1.5px solid var(--good); background:#f2f8f4; border-radius:10px; padding:12px 16px; margin:12px 0 0; font-weight:700; color:var(--good)">13 of 13 spec elements rendered ✓ <span style="font-weight:400; color:var(--mut); font-size:12.5px">— plus prompt-required regions beyond the inventory: KPIs, post-close 30/90 sequence, annual home review, birthday flow, newsletter/digest touches, per-client cadence position card, collision note, suppression auto-resume, states strip; plus Master-Brain additions noted below.</span></div>
+
+  <div class="note" style="margin-top:14px"><b>Master Brain additions not in the spec inventory (added to the mock):</b> (1) predictive-seller candidates who are also past clients route through this OS as a warm-equity touch — never a cold AI voice call (§24 routing table); (2) VOICEMAIL_DROP_INTERIM is a 15th listed touch_type in §20.4 (spec said "14 canonical types"); (3) acceptance criterion "Google Sheets are not the system of record" (§25.6); (4) EQUITY_CARD_CREATED events from PropSearch feed the equity-touch context (§ event table); (5) the close-time testimonial-release gate anchors to enrollment (§20.7 anchors: no release → no shoot/creative/ad); (6) referral stored as a directed edge, never a tag or free text (§25.7).</div>
+
+  <!-- ============ (4) FULL SPEC AS HTML ============ -->
+  <div class="specdoc">
+    <h1 style="font-size:24px; margin:40px 0 6px">Spec — 27 · Past Client OS</h1>
+    <p><b>Purpose</b> The machine that keeps every closed client (112 enrolled today) warm for life: a canonical touch cadence spread across the year, a 13-week call rotation with a morning queue, the year heatmap, the voice-note call-logging loop, and suppression flags. Nothing lapses silently and nothing client-facing sends without review.</p>
+    <p><b>Primary users</b> Agent (call queue, approvals), team (Sharon handwritten-note lists, Adrian briefing — interim workflow owners), Wattson (CRM_WATTSON persona, REVIEW_REQUIRED).</p>
+    <p><b>Entry points</b> App nav "Past clients"; morning push notification (call queue); Today queue PAST_CLIENT_TOUCH tasks; automatic enrollment at close (from Transaction Workspace close wizard); contact record "Past client" chip.</p>
+    <p><b>Exit points</b> Tap-to-call → phone dialer + voice-note logger; Review buttons → Outbox/Approvals (equity notes, CMAs, gifts); referral capture ("brother might sell") → Lead Triage/CRM; heatmap client → contact record (14); gift approval → gift queue; CMA link → hosted CMA URL.</p>
+
+    <h2>Layout</h2>
+    <p>Desktop: <b>Header</b> — enrolled count, rotation health, touches this week; nav tabs <b>Today / Year heatmap / Referrals</b> (the spec's three v1 views §20.5: Today/This-Week board, year-at-a-glance heatmap, rotation balancer). <b>Main, two columns</b>: left (1.3fr) = today's action cards (rotation calls with context card, anniversary/birthday bundles, suppression summary); right (1fr) = 13-week rotation balancer bar chart + referral tracker card. <b>Below full-width</b>: Cadence board — every client × every touch in Week/Month/Year/By-person views with touch-type filter chips; beneath it Template-library card and Auto-CMA engine status card.</p>
+    <p>Mobile (375px): the <b>call-assistant flow is the primary mobile surface</b> — morning queue as swipeable cards (context card → Tap-to-call → hold-mic voice note → transcribed summary → one-tap confirm). Balancer and cadence board collapse to vertically stacked, horizontally scrollable strips. Heatmap = pinch-zoomable full-screen view.</p>
+
+    <h2>Element inventory</h2>
+    <div style="overflow-x:auto">
+    <table class="dtable">
+      <tr><th>Element</th><th>What it shows/does</th><th>Data source</th><th>Interactions</th><th>Spec source</th></tr>
+      <tr><td>Rotation call card</td><td>Client due this week (rotation wk N of 13) + context card: bought year, equity delta, life details from last notes ("deck project — ask how it turned out")</td><td>PastClientRecord §20.2 (call_rotation_week, last_relationship_call_at) + timeline notes</td><td>Tap-to-call; after-call voice-note loop</td><td>PF MB 20.2, 20.6</td></tr>
+      <tr><td>Voice-note logging loop</td><td>Hold mic → speak outcome → transcribe/summarize → read-back → one-tap confirm → call log written, last_relationship_call_at stamped; mentions of new people become referral leads in Triage</td><td>Conversational Call Assistant §20.6 (WPB-PCOS-conversational-call-assistant)</td><td>Confirm / edit / re-record; unlogged call → end-of-day reminder, then next-day follow-up until complete</td><td>PF MB 20.6; Playbook Library registry</td></tr>
+      <tr><td>Anniversary/birthday bundle card</td><td>e.g. "Nguyen home anniversary Thu — equity note drafted + gift suggestion under cap" — avatar video + note + gift as ONE bundle, one approval</td><td>PastClientTouch §20.4 (BIRTHDAY_TOUCH, CLOSING_HOME_ANNIVERSARY_TOUCH) + GiftProvider §9.15</td><td>"Review both/all" → Approvals; gift default REVIEW_REQUIRED</td><td>PF MB 20.4, 19.8; draft §27</td></tr>
+      <tr><td>Suppression card</td><td>Active suppressions with reason: in-escrow (no marketing touches), sensitive-topic hold, requested-space window with auto-resume date</td><td>Touch governance §13.9 + sensitive firewall §22.4</td><td>Sensitive holds resume only on explicit agent clearance; timed holds auto-resume</td><td>Draft §27 (inherited); PF MB 22.4</td></tr>
+      <tr><td>13-week rotation balancer</td><td>Bar per week (clients assigned); light weeks flagged</td><td>call_rotation_week distribution</td><td>Balancer proposes rebalancing ("pull 5 forward from week 5") — agent accepts/declines; never silent</td><td>PF MB 20.5; draft §27</td></tr>
+      <tr><td>Touch-mix legend</td><td>Per person/year: 4 quarterly calls, monthly newsletter (12), market digest every 2 months, CMA/equity touch every 6 months, birthday, home anniversary, handwritten-note prompts</td><td>Canonical Cadence §20.3 table (owners: WPB-PCOS-quarterly-call, -monthly-newsletter, -bimonthly-market-touch, -annual-cma-email, -birthday-touch, -anniversary-video, -handwritten-note)</td><td>—</td><td>PF MB 20.3 + Playbook Library cadence table. Note: draft's "2 handwritten notes" count is [BEST GUESS] — spec says prompts fire on referral/close/milestone/annual moment, not a fixed 2</td></tr>
+      <tr><td>Referral tracker card</td><td>New edges, thank-yous queued (review-gated), A-grade referrer count, YTD referral GCI</td><td>ReferralEdge §19.2, ReferrerGradeSettings §19.5</td><td>Open Referrals dashboard (left-to-right referrer→referee list; force-graph is out of scope v1)</td><td>PF MB 19.4, 19.5</td></tr>
+      <tr><td>Cadence board</td><td>Clients × week grid, every scheduled touch as a cell; Week/Month/Year/By-person toggle; filter chips (calls, notes, gifts, videos, CMAs, custom)</td><td>next_touch_schedule (PastClientTouch[])</td><td>Cell click → touch detail (status SCHEDULED/DUE/OVERDUE/COMPLETED/CANCELLED, permission mode, template); suppressed rows render greyed with reason</td><td>PF MB 20.4; draft §27</td></tr>
+      <tr><td>Template library + build-your-own</td><td>Stock touch templates + plain-English custom cadences ("pool clients: pool-service reminder each May") → Wattson builds template, applies to matching clients, <b>shows first instance before it ever runs</b></td><td>PipelineSequenceRegistry + CUSTOM touch_type</td><td>Create/edit; approval required before first run</td><td>Draft §27 (locked decision); PF MB 20.4 CUSTOM</td></tr>
+      <tr><td>Auto-CMA engine status</td><td>Generated/sent/in-Outbox counts, next batch due, opens ×N → seller-signal flags</td><td>cma-generator pipeline (WPB-PCOS-annual-cma-email); hosted URL per client owner page</td><td>Open Outbox items; opens feed propensity (agent_marketing_engagement fact §14.4)</td><td>Draft §27; PF MB 14.4</td></tr>
+      <tr><td>Year heatmap tab</td><td>Every client's touch position/coverage for the year at a glance</td><td>touch_history + next_touch_schedule</td><td>Click client → record; gaps visually flagged</td><td>PF MB 20.5</td></tr>
+      <tr><td>Morning push</td><td>Daily call queue + handwritten-note prompts + CMA touches for review, via NotificationProvider</td><td>§20.6 morning workflow</td><td>Deep-links into this screen</td><td>PF MB 20.6</td></tr>
+      <tr><td>Enrollment banner (contextual)</td><td>New close auto-enrolled: status active, anniversary set, rotation week assigned, touches scheduled, referral grade carried</td><td>§20.7, idempotency {transaction_id, contact_id, close_date}</td><td>Review/adjust rotation week</td><td>PF MB 20.7</td></tr>
+    </table>
+    </div>
+
+    <h2>States</h2>
+    <ul>
+      <li><b>Default</b>: today's cards + balancer.</li>
+      <li><b>Loading</b>: skeleton cards; heatmap renders progressively.</li>
+      <li><b>Empty</b>: no clients enrolled → "Past Client OS activates automatically at your first close" + manual-enroll action; no touches today → "Nothing due — next: {touch, date}".</li>
+      <li><b>Error/degraded (fail-closed)</b>: transcription unavailable → voice note saved as audio + manual-log form, task stays open until logged; cma-generator failure → touch flips to review task, never a fabricated CMA; ComplianceProvider down → all outbound touches (newsletter/digest/video) held with reason; equity unknown → equity line renders "estimate unavailable"/prompts mortgage-balance entry, never guessed.</li>
+      <li><b>Permission-limited</b>: handwritten-note lists routable to a team member; gift approvals restricted to approver role; sensitive-suppressed clients hidden from team queues.</li>
+      <li><b>Mobile</b>: call-assistant flow as above.</li>
+    </ul>
+
+    <h2>Data fields</h2>
+    <p>PastClientRecord §20.2: past_client_status, past_client_os_active, close_date, home_anniversary_date, birthday, primary_address, geo_code, referral_grade (A/B/C), call_rotation_week (1–13), last_relationship_call_at, last_cma_equity_touch_at, last_market_update_at, last_newsletter_at, next_touch_schedule[], touch_history[]. PastClientTouch §20.4: touch_type (canonical types incl. POSTCARD, VOICEMAIL_DROP_INTERIM, POP_BY_PROMPT, HOLIDAY_GIFT_PROMPT, CLIENT_APPRECIATION_EVENT_INVITE, CHARITABLE_DONATION_PROMPT, E_CARD, CUSTOM), due_at, fixed_date, status, step_permission_mode, template_id. TouchHistory: completed_by (HUMAN_USER/WATTSON_REVIEWED_ACTION/SYSTEM), outcome_summary, next_action. Gift: budget cap from ReferrerGradeSettings-adjacent gift settings ($45 in draft = example value, cap is a tenant setting §19.8).</p>
+
+    <h2>Rules & compliance</h2>
+    <ul>
+      <li>Every outbound touch passes ComplianceProvider + channel consent + DNC (§22.1–22.3); touch_ledger_lock prevents collisions with sprint/drip/video touches (§13.9) — collision suppressions shown on the calendar.</li>
+      <li>Client-facing content (CMAs, newsletters, equity notes) is review-first: lands in Outbox for agent review, never auto-sends to the client (Bucket 2, §17.3).</li>
+      <li>Gifts: default REVIEW_REQUIRED; AUTO_WITHIN_BUDGET only with a configured cap + approved vendor; no vendor → manual one-click task (§19.8).</li>
+      <li>Sensitive-topic hold: only human clearance resumes; no automation touches the contact (§22.4).</li>
+      <li>Wattson receives only structured, minimized contact context in the call assistant (§20.6).</li>
+      <li>Board priority order: overdue → due today → due this week → referral_grade → past-client value (§20.5).</li>
+      <li>AI-generated anniversary videos carry the ai_video consent gate + non-removable CA AI disclosure (§21.7; matrix correction #3).</li>
+    </ul>
+
+    <h2>Cross-links</h2>
+    <p>In: close wizard (15) enrollment, Today queue, morning push, CRM contact chip. Out: CRM record (14), Referrals dashboard, Outbox/Approvals, gift queue, hosted CMA URLs, Prospecting (equity-touch opens feed seller propensity). <b>Emits</b>: PAST_CLIENT_TOUCH activities, touch-completion history, REFERRAL_RECEIVED (from call notes), CMA sent/opened events. <b>Consumes</b>: DEAL_CLOSED/closing detection (§18.2), PORTAL/CMA view events, suppression flags, scoring facts.</p>
+
+    <h2>Open decisions</h2>
+    <ul>
+      <li>[DECIDE] Interim vs Temporal cadence owner: current N8N/interim crons (Daily Call Email Mon–Fri 10:00, anniversary batch 24th, CMA weekly digest Mon, bimonthly market update, birthday 24th, Sharon weekly notes, Adrian briefing) migrate to Temporal cron per Playbook Library — UI shows owner-agnostic status; interim design assumes Temporal names.</li>
+      <li>[DECIDE] Handwritten-note annual count: interim = prompt-driven (referral/close/milestone/annual), surfaced as ~2/yr in the mix legend [BEST GUESS].</li>
+      <li>[DECIDE] Rotation size math: 112 clients / 13 weeks ≈ 8–9 calls/week (draft says "~22-client weekly rotation" in the interim workflow — that figure includes multi-touch weeks). Interim: balancer displays actual per-week counts, no hardcoded target.</li>
+      <li>[DECIDE] Gift vendor: assume GiftProvider-abstracted vendor (Handwrytten/Loop-&-Tie-class) — UI unaffected by vendor choice.</li>
+    </ul>
+    <p class="anno" style="margin-top:20px">Wireframe fidelity — colors are placeholders from the locked PropFlow design language. All client names/numbers are realistic fake data. Agent identity: Graeham Watts, Intero Real Estate, DRE# 01466876 (from shared-references/identity.json — never hardcode elsewhere).</p>
+  </div>
+</div>
+
+<script>
+// Year heatmap: 52-week × client-grade grid, generated deterministically (no randomness so the mock is stable).
+(function(){
+  var g = document.getElementById('heatgrid');
+  var NOW = 29; // current week index (mid-July)
+  // [name, grade, suppressedFrom, suppressedTo, gapStart, gapEnd]
+  var clients = [
+    ["Okafors","A"],["Nguyens","A"],["Sofia Kim","A"],["Aldertons","A"],
+    ["Hendersons","B",null,null,23,29],   // flagged gap — the overdue rotation call
+    ["Parks","B",27,33,null,null],        // in-escrow suppression window
+    ["Riveras","B"],["Torres","B"],
+    ["Diaz","C",20,52,null,null],         // sensitive hold — hatched to year end
+    ["Wongs","C",26,35,null,null],        // asked-for-space window, auto-resumes Sep
+    ["Patels","C"],["Mercados","C"]
+  ];
+  var lastGrade = null, html = "";
+  function density(grade, w, ci){
+    // deterministic pseudo-pattern: monthly newsletter every ~4wks, digest ~8wks, quarterly call, CMA twice
+    var base = ((w + ci*3) % 4 === 0) ? 1 : 0;                 // newsletter
+    if((w + ci*5) % 9 === 0) base++;                            // digest
+    if((w + ci*7) % 13 === 0) base++;                           // rotation call
+    if(grade==="A" && (w + ci) % 6 === 0) base++;               // A-grade extra touches
+    return Math.min(base,3);
+  }
+  clients.forEach(function(c, ci){
+    var name=c[0], grade=c[1], s0=c[2], s1=c[3], g0=c[4], g1=c[5];
+    if(grade!==lastGrade){
+      html += '<div class="lbl" style="grid-column:1/-1; font-weight:700; color:var(--ink); margin-top:'+(lastGrade?'6px':'0')+'">Grade '+grade+' referrers</div>';
+      lastGrade = grade;
+    }
+    html += '<div class="lbl">'+name+' <span style="color:var(--soft)">('+grade+')</span></div>';
+    for(var w=1; w<=52; w++){
+      var cls="cell", t=name+" · wk"+w;
+      if(s0!==null && s0!==undefined && w>=s0 && w<=s1){ cls+=" hsup"; t+=" · suppressed"; }
+      else if(g0!==null && g0!==undefined && w>=g0 && w<=g1){ cls+=" hgap"; t+=" · GAP flagged"; }
+      else if(w>NOW){ var d=density(grade,w,ci); if(d>0){ cls+=" hdue"; t+=" · scheduled"; } }
+      else { var d2=density(grade,w,ci); if(d2===1)cls+=" h1x"; else if(d2===2)cls+=" h2x"; else if(d2>=3)cls+=" h3x"; if(d2>0)t+=" · "+d2+" touch(es)"; }
+      html += '<div class="'+cls+'" title="'+t+'"></div>';
+    }
+  });
+  html += '<div class="lbl" style="grid-column:1/-1; margin-top:6px; color:var(--soft)">… + 100 more clients (virtual scroll on the real screen)</div>';
+  g.innerHTML = html;
+})();
+</script>
