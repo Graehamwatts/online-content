@@ -90,6 +90,19 @@
       "dormant": 2303,
       "pipeline_value": 1400000.0,
       "generated_at": "2026-07-13T17:03:27.846858+00:00"
+    },
+    {
+      "date": "2026-07-20",
+      "score": 40,
+      "grade": "D",
+      "label": "Needs Attention",
+      "new_opps": 0,
+      "active_open": 1755,
+      "stale_recent": 8,
+      "old_active": 1729,
+      "dormant": 2304,
+      "pipeline_value": 1400000.0,
+      "generated_at": "2026-07-20T16:18:00.307666+00:00"
     }
   ]
 }
