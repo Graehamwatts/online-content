@@ -30,6 +30,17 @@ Mobile (375px): lanes stack vertically as summary cards; tables become swipeable
 | Disclosure auto-pull tile (contextual) | On offer accepted: MLS disclosure package pulled → Disclosure Analyzer → red-flag summary + credit-request draft | MLS Playbook 8 | Opens in Transaction Workspace disclosures tab | Playbook Library MLS-8; matrix Wattson gap |
 | Empty/held badges | Per-lane "held: MLS compliance gate" when the MLS connector/compliance layer (CDP #11) is not green | OpenClaw framework-level MLS enforcement | — | Playbook Library (compliance enforced at framework level, built FIRST) |
 
+### PropMatch extension — Buyer Match lane (Graeham, 2026-07-22 — logged, not yet scoped)
+
+Extends the Buyer Match lane row above (MLS Playbook 4). Source: Graeham's PropMatch reverse-prospecting concept, captured 2026-07-22 after Jason Pantana's AiM "Summer Surge #1 — AI Heat Sheets Agent". Four extension points:
+
+- **(a) Buy-box distilled from ALL PropFlow contact notes**, not saved criteria only — a running per-contact profile, re-distilled as notes accrue (more notes = sharper matches), with high/medium/low confidence tiers.
+- **(b) Multimodal listing read** — the buy-box is compared against listing photos + description, not just beds/baths/price metadata.
+- **(c) Zoneomics feasibility checks on shortlisted matches only** (cost control) — ADU/garage-conversion potential becomes an explicit match reason ("small backyard, but the garage converts — and this contact doesn't care about losing the garage"), subject to the existing zoning confidence gates + mandatory disclaimer in the PropSearch Master Brain §17.
+- **(d) Outreach drafted in the contact's format** — text, email, GIF, personalized video — always into the agent approval queue; nothing auto-sends (Fair Housing + permission-based marketing, same posture as every other lane on this screen).
+
+Urgency overlay: Pantana's Heat Score (portal saves ÷ days on market — a call-list prioritizer, NOT a sell-probability predictor). Possible v2: a true will-it-sell-fast predictor from pricing-vs-comps. Full spec: AI-Library `sources/new-2026-07/propiq-feature-reverse-prospecting-engine_2026-07-22.md`.
+
 ## States
 - **Default**: lanes with last-run summaries.
 - **Loading**: per-lane skeletons; a RUNNING run shows progress on its lane.
