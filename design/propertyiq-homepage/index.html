@@ -10,8 +10,8 @@
   :root{
     --ink:#0a0c0f; --panel:#12161c; --panel-2:#171c23; --line:rgba(255,255,255,.09); --line-strong:rgba(255,255,255,.16);
     --fg:#eef1f4; --fog:#8d97a3; --dim:#5c6570;
-    --cyan:#5fd6e3; --cyan-dim:rgba(95,214,227,.14);
-    --amber:#e8a13d; --amber-dim:rgba(232,161,61,.16);
+    --amber:#e8a13d; --amber-dim:rgba(232,161,61,.16); --amber-deep:#b9791f;
+    /* NOTE: cyan removed 2026-08-07 — it was never confirmed, carried over from an early verbal brief ("cyan intelligence light"). The real codebase's brand color is named "azure" per Watson's token extraction; swap --amber-family placeholders for real --piq-* values once the brief is in hand. Amber is the one confirmed color (visible on the live PropCast hero image itself). */
     --good:#5fbf8a; --r:14px; --r-sm:9px;
   }
   /* This page commits to one visual world — the same dark/cinematic system as PropCast — so it does not redefine tokens for prefers-color-scheme or a light data-theme. */
@@ -24,8 +24,8 @@
   a{color:inherit}
   .wrap{max-width:1180px; margin:0 auto; padding:0 28px}
   @media (max-width:720px){.wrap{padding:0 20px}}
-  ::selection{background:var(--cyan); color:#00171c}
-  :focus-visible{outline:2px solid var(--cyan); outline-offset:3px; border-radius:4px}
+  ::selection{background:var(--amber); color:#1a1102}
+  :focus-visible{outline:2px solid var(--amber); outline-offset:3px; border-radius:4px}
 
   .eyebrow{font-family:'Inter'; font-size:12px; font-weight:600; letter-spacing:.16em; text-transform:uppercase; color:var(--amber)}
   .glass{background:linear-gradient(180deg, rgba(255,255,255,.05), rgba(255,255,255,.02)); border:1px solid var(--line); border-radius:var(--r); backdrop-filter:blur(18px) saturate(140%); -webkit-backdrop-filter:blur(18px) saturate(140%)}
@@ -33,7 +33,7 @@
   /* ===== nav ===== */
   .nav{position:fixed; top:0; left:0; right:0; z-index:50; padding:18px 28px; display:flex; align-items:center; gap:28px; background:linear-gradient(180deg, rgba(10,12,15,.82), rgba(10,12,15,0)); backdrop-filter:blur(6px)}
   .nav .word{font-family:'Unbounded'; font-weight:900; font-size:15px; letter-spacing:.02em}
-  .nav .word b{color:var(--cyan)}
+  .nav .word b{color:var(--amber)}
   .navlinks{display:flex; gap:26px; margin-left:auto; font-size:13.5px; color:var(--fog)}
   .navlinks a{text-decoration:none; transition:color .15s}
   .navlinks a:hover{color:var(--fg)}
@@ -48,7 +48,7 @@
   .hero .eyebrow{display:block; margin-bottom:22px}
   .hero h1{font-size:clamp(46px,9.5vw,124px); font-weight:900}
   .hero h1 .fade1{opacity:0; animation:riseIn .8s .15s forwards ease-out}
-  .hero h1 .fade2{opacity:0; animation:riseIn .8s .38s forwards ease-out; color:var(--cyan)}
+  .hero h1 .fade2{opacity:0; animation:riseIn .8s .38s forwards ease-out}
   @keyframes riseIn{from{opacity:0; transform:translateY(14px)} to{opacity:1; transform:translateY(0)}}
   .hero-sub{max-width:620px; margin:26px auto 0; font-size:17px; color:var(--fog); opacity:0; animation:riseIn .8s .6s forwards ease-out}
   .hero-actions{display:flex; gap:12px; justify-content:center; margin-top:34px; flex-wrap:wrap; opacity:0; animation:riseIn .8s .78s forwards ease-out}
@@ -63,7 +63,7 @@
   .media-gap{padding:10px 0 40px}
   .mediaframe{position:relative; aspect-ratio:16/8.2; border-radius:20px; overflow:hidden; background:linear-gradient(135deg, #10151b, #0d1015 55%, #141a20); border:1px solid var(--line-strong); display:flex; align-items:center; justify-content:center}
   .mediaframe .mgrid{position:absolute; inset:0; background-image:linear-gradient(rgba(255,255,255,.04) 1px,transparent 1px),linear-gradient(90deg,rgba(255,255,255,.04) 1px,transparent 1px); background-size:46px 46px; opacity:.6}
-  .mediaframe .mglow{position:absolute; width:60%; height:140%; left:-10%; top:-20%; background:radial-gradient(ellipse, var(--cyan-dim), transparent 70%); filter:blur(30px)}
+  .mediaframe .mglow{position:absolute; width:60%; height:140%; left:-10%; top:-20%; background:radial-gradient(ellipse, rgba(255,255,255,.05), transparent 70%); filter:blur(30px)}
   .mediaframe .mglow2{position:absolute; width:50%; height:120%; right:-10%; bottom:-10%; background:radial-gradient(ellipse, var(--amber-dim), transparent 70%); filter:blur(30px)}
   .playbtn{position:relative; z-index:2; width:74px; height:74px; border-radius:50%; background:rgba(255,255,255,.1); border:1px solid var(--line-strong); backdrop-filter:blur(10px); display:flex; align-items:center; justify-content:center; cursor:pointer; transition:transform .2s}
   .playbtn:hover{transform:scale(1.06)}
@@ -80,7 +80,7 @@
   .ba-after{background:linear-gradient(160deg, rgba(95,214,227,.07), rgba(255,255,255,.02))}
   .ba-label{font-size:10px; font-weight:700; letter-spacing:.14em; text-transform:uppercase; margin-bottom:16px; display:block}
   .ba-before .ba-label{color:var(--dim)}
-  .ba-after .ba-label{color:var(--cyan)}
+  .ba-after .ba-label{color:var(--amber)}
   .chaos-chip{display:inline-flex; align-items:center; gap:6px; background:rgba(255,255,255,.05); border:1px solid var(--line); border-radius:8px; padding:6px 10px; font-size:11.5px; color:var(--fog); margin:0 6px 8px 0}
   .chaos-chip.buzz{border-color:rgba(232,161,61,.3); color:#d8b98a}
   .ba-before .caption{margin-top:14px; font-size:13px; color:#9aa2ab; font-style:italic}
@@ -88,7 +88,7 @@
   .glimpse-card .gtitle{font-weight:700; font-size:14px; font-family:'Inter'}
   .glimpse-card .gaddr{font-size:11.5px; color:var(--fog); margin-top:2px}
   .glimpse-badges{display:flex; gap:5px; flex-wrap:wrap; margin-top:10px}
-  .gbdg{font-size:10px; border-radius:6px; padding:3px 7px; border:1px solid rgba(95,214,227,.35); color:var(--cyan); background:rgba(95,214,227,.08)}
+  .gbdg{font-size:10px; border-radius:6px; padding:3px 7px; border:1px solid rgba(232,161,61,.35); color:var(--amber); background:rgba(232,161,61,.08)}
   .ba-after .caption{margin-top:14px; font-size:13px; color:var(--fog)}
 
   /* ===== system-flow diagram ===== */
@@ -103,7 +103,7 @@
   .exrow{display:flex; gap:12px; align-items:baseline; font-size:14.5px; padding:12px 16px; border:1px solid var(--line); border-radius:10px; background:rgba(255,255,255,.02)}
   .exrow .q{color:var(--fg); font-weight:600; white-space:nowrap}
   .exrow .a{color:var(--fog)}
-  .difftag{display:inline-block; margin-top:24px; font-family:'Unbounded'; font-weight:700; font-size:15px; color:var(--cyan)}
+  .difftag{display:inline-block; margin-top:24px; font-family:'Unbounded'; font-weight:700; font-size:15px; color:var(--amber)}
 
   /* ===== reveal sections (pain point sequence) ===== */
   .reveal-seq{padding:60px 0}
@@ -115,13 +115,12 @@
   .beat-arrow{color:var(--dim); font-size:13px; letter-spacing:.1em; text-transform:uppercase; margin:22px 0 14px; display:flex; align-items:center; gap:10px}
   .beat-arrow::before{content:''; width:26px; height:1px; background:var(--dim)}
   .beat-answer{font-size:clamp(22px,3.4vw,34px); font-weight:900; color:var(--fg)}
-  .beat-answer b{color:var(--cyan); font-weight:900}
+  .beat-answer b{color:var(--fg); font-weight:900}
   .beat-detail{margin-top:14px; font-size:15.5px; color:var(--fog); max-width:60ch}
   .beat-tag{display:inline-flex; align-items:center; gap:7px; margin-top:22px; font-size:11.5px; font-weight:700; letter-spacing:.1em; color:var(--amber); text-decoration:none}
   .beat-tag::after{content:'→'; transition:transform .15s}
   .beat-tag:hover::after{transform:translateX(3px)}
   .beat-kicker{font-family:'Unbounded'; font-weight:900; font-size:13px; letter-spacing:.06em; color:var(--amber); margin-bottom:16px; display:block}
-  .beat-kicker.cy{color:var(--cyan)}
   .beat-closer{margin-top:26px; padding-top:22px; border-top:1px solid var(--line); font-size:16px; color:#c6ccd3; font-weight:600}
 
   /* ===== modules grid ===== */
@@ -131,11 +130,11 @@
   .modules-head p{color:var(--fog); margin-top:16px; font-size:16px}
   .mod-flagship{display:flex; align-items:center; gap:34px; padding:38px; margin-bottom:16px; background:linear-gradient(120deg, rgba(95,214,227,.10), rgba(232,161,61,.05) 60%, rgba(255,255,255,.02)); text-decoration:none; color:inherit}
   .mod-flagship .fs-text{flex:1; min-width:260px}
-  .mod-flagship .mtag{color:var(--cyan); font-size:10.5px; letter-spacing:.14em; text-transform:uppercase; font-weight:600}
+  .mod-flagship .mtag{color:var(--fog); font-size:10.5px; letter-spacing:.14em; text-transform:uppercase; font-weight:600}
   .mod-flagship h3{font-family:'Unbounded'; font-size:clamp(24px,3vw,34px); font-weight:900; margin-top:14px}
   .mod-flagship p{font-size:15.5px; color:var(--fog); margin-top:12px; max-width:52ch; line-height:1.6}
-  .mod-flagship .go{color:var(--cyan); font-size:13px; font-weight:700; margin-top:20px; display:inline-flex; align-items:center; gap:6px}
-  .fs-badge{flex-shrink:0; width:120px; height:120px; border-radius:50%; border:1px solid var(--line-strong); display:flex; align-items:center; justify-content:center; font-family:'Unbounded'; font-weight:900; font-size:13px; color:var(--cyan); text-align:center; background:radial-gradient(circle, rgba(95,214,227,.12), transparent 70%)}
+  .mod-flagship .go{color:var(--fg); font-size:13px; font-weight:700; margin-top:20px; display:inline-flex; align-items:center; gap:6px}
+  .fs-badge{flex-shrink:0; width:120px; height:120px; border-radius:50%; border:1px solid var(--line-strong); display:flex; align-items:center; justify-content:center; font-family:'Unbounded'; font-weight:900; font-size:13px; color:var(--fg); text-align:center; background:radial-gradient(circle, rgba(255,255,255,.08), transparent 70%)}
   @media (max-width:640px){.mod-flagship{flex-direction:column; text-align:center} .fs-badge{display:none}}
 
   .modgrid{display:grid; grid-template-columns:repeat(3,1fr); grid-auto-rows:auto; gap:14px}
@@ -231,7 +230,7 @@
   <div class="beat">
     <div class="beat-inner">
       <span class="beat-kicker">PROPSEARCH</span>
-      <p class="beat-problem">Search real estate the way people actually think. <b style="color:var(--cyan)">By outcome, not filters.</b></p>
+      <p class="beat-problem">Search real estate the way people actually think. <b style="color:var(--amber)">By outcome, not filters.</b></p>
       <div class="beat-arrow">Which means</div>
       <p class="beat-answer">A website that finally <b>moves the needle for you.</b></p>
       <p class="beat-detail">PropSearch isn't a portal — it's a research engine that works for you. The work that used to take you an hour happens before your client finishes typing the question.</p>
@@ -271,11 +270,34 @@
 
   <div class="beat">
     <div class="beat-inner">
-      <span class="beat-kicker cy">PROPCAST</span>
+      <span class="beat-kicker">PROPCAST</span>
       <p class="beat-problem">You're on a hamster wheel trying to figure out what to post, what to say, and how to say it.</p>
       <div class="beat-arrow">PropCast answers</div>
       <p class="beat-answer">It already knows your market <b>better than you do.</b></p>
       <p class="beat-detail">PropCast reads Reddit, YouTube, Instagram, Google News, local news, and every competitor already posting in your market — pulls it into a script, formats it for each platform, and generates the video in your voice, on your face. Then it keeps watching: if a competitor's video starts outranking yours for your topics in your geography, PropCast re-cuts and re-releases until you're the one on top. Not just on YouTube — everywhere people search.</p>
+      <div class="baframe">
+        <div class="ba-half ba-before">
+          <span class="ba-label">Without PropCast</span>
+          <div>
+            <span class="chaos-chip">📝 Blank content calendar</span>
+            <span class="chaos-chip">🎬 3 unfinished drafts</span>
+            <span class="chaos-chip buzz">😩 "what do I even post this week"</span>
+          </div>
+          <p class="caption">It's Thursday. Nothing's scheduled. The market didn't stop talking — you did.</p>
+        </div>
+        <div class="ba-half ba-after">
+          <span class="ba-label">With PropCast</span>
+          <div class="glimpse-card">
+            <div class="gtitle">This week — auto-scripted</div>
+            <div class="gaddr">4 videos · your voice · your face</div>
+            <div class="glimpse-badges">
+              <span class="gbdg">Sourced: Reddit + YouTube + News</span>
+              <span class="gbdg">Ranking vs. 2 competitors</span>
+            </div>
+          </div>
+          <p class="caption">The calendar fills itself. You just approve it.</p>
+        </div>
+      </div>
       <a class="beat-tag" href="https://propcast-landing.vercel.app" target="_blank" rel="noopener">PropCast — see the flagship</a>
     </div>
   </div>
@@ -298,13 +320,34 @@
       <div class="beat-arrow">PropClose answers</div>
       <p class="beat-answer">Does the work of your transaction software. <b>All of it, in one place.</b></p>
       <p class="beat-detail">Checklists, disclosures, offers, deadlines, and closing — the same ground covered by tools like Glide, SkySlope, and disclosure-delivery platforms — in one workspace. Every milestone can trigger a personalized video, text, or email that lands automatically in PropFlow, so clients hear from you without you lifting a finger.</p>
+      <div class="baframe">
+        <div class="ba-half ba-before">
+          <span class="ba-label">Without PropClose</span>
+          <div>
+            <span class="chaos-chip">💬 12-person group text</span>
+            <span class="chaos-chip">📑 3 versions of the same PDF</span>
+            <span class="chaos-chip buzz">😰 "did anyone confirm the inspection?"</span>
+          </div>
+          <p class="caption">Somewhere in that thread is the answer. Good luck finding it.</p>
+        </div>
+        <div class="ba-half ba-after">
+          <div class="glimpse-card">
+            <div class="gtitle">742 Hurlingame — Day 11 of 21</div>
+            <div class="gaddr">Inspection ✓ · Appraisal ✓ · Loan pending</div>
+            <div class="glimpse-badges">
+              <span class="gbdg">Buyer, seller, lender auto-notified</span>
+            </div>
+          </div>
+          <p class="caption">One glance tells you exactly where it stands.</p>
+        </div>
+      </div>
       <span class="beat-tag">PropClose</span>
     </div>
   </div>
 
   <div class="beat">
     <div class="beat-inner">
-      <span class="beat-kicker cy">PROPREACH</span>
+      <span class="beat-kicker">PROPREACH</span>
       <p class="beat-problem">Great content means nothing if nobody in your market ever sees it.</p>
       <div class="beat-arrow">PropReach answers</div>
       <p class="beat-answer">PropCast creates it. <b>PropReach makes sure your market can't miss it.</b></p>
@@ -320,6 +363,27 @@
       <div class="beat-arrow">Meet</div>
       <p class="beat-answer">Your assistant. <b>Included.</b></p>
       <p class="beat-detail">Chevy works from your car, over text message, on the go — no app to open, no screen to stare at. Tell it what you need, the way you'd tell a real assistant, and it takes full control: pulls a CMA together and has it ready when you're back at your desk, logs the note from the call you just took, books the showing, sends the reminder. Not a chat window that answers questions — an assistant that produces the actual result.</p>
+      <div class="baframe">
+        <div class="ba-half ba-before">
+          <span class="ba-label">Without Chevy</span>
+          <div>
+            <span class="chaos-chip">🚗 Driving, phone in the cupholder</span>
+            <span class="chaos-chip">📝 "remind me to type this up later"</span>
+            <span class="chaos-chip buzz">😬 Never typed up. Never followed up.</span>
+          </div>
+          <p class="caption">The note that mattered lives in your head for exactly as long as you can hold it there.</p>
+        </div>
+        <div class="ba-half ba-after">
+          <div class="glimpse-card">
+            <div class="gtitle">🎙 "Log that — Sarah wants an office, not a 3rd bedroom"</div>
+            <div class="gaddr">Saved to Sarah's contact · CMA queued for tonight</div>
+            <div class="glimpse-badges">
+              <span class="gbdg">Done, no app opened</span>
+            </div>
+          </div>
+          <p class="caption">Said out loud at a red light. Already handled.</p>
+        </div>
+      </div>
       <span class="beat-tag">Chevy</span>
     </div>
   </div>
@@ -339,8 +403,8 @@
           <marker id="arrow" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse">
             <path d="M0,0 L10,5 L0,10 z" fill="currentColor"></path>
           </marker>
-          <marker id="arrowCyan" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse">
-            <path d="M0,0 L10,5 L0,10 z" fill="#5fd6e3"></path>
+          <marker id="arrowAmber" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse">
+            <path d="M0,0 L10,5 L0,10 z" fill="#e8a13d"></path>
           </marker>
         </defs>
 
@@ -385,8 +449,8 @@
         <text x="837" y="98" text-anchor="middle" font-family="Inter" font-size="9" fill="currentColor" fill-opacity="0.7">ready to buy</text>
 
         <!-- loop-back arc: PropClose -> PropCast -->
-        <path d="M 919 69 C 919 18, 700 14, 591 14 C 482 14, 263 18, 263 69" fill="none" stroke="#5fd6e3" stroke-width="1.6" marker-end="url(#arrowCyan)"></path>
-        <text x="591" y="10" text-anchor="middle" font-family="Inter" font-weight="600" font-size="11" fill="#5fd6e3">closed deal becomes the next story</text>
+        <path d="M 919 69 C 919 18, 700 14, 591 14 C 482 14, 263 18, 263 69" fill="none" stroke="#e8a13d" stroke-width="1.6" marker-end="url(#arrowAmber)"></path>
+        <text x="591" y="10" text-anchor="middle" font-family="Inter" font-weight="600" font-size="11" fill="#e8a13d">closed deal becomes the next story</text>
 
         <!-- Chevy baseplate -->
         <rect x="8" y="205" width="984" height="55" rx="12" fill="#e8a13d" fill-opacity="0.08" stroke="#e8a13d" stroke-opacity="0.4" stroke-width="1.2"></rect>
@@ -427,7 +491,7 @@
         <span class="go">Learn more →</span>
       </a>
       <a class="modcard glass" href="#">
-        <div class="glow" style="background:var(--cyan)"></div>
+        <div class="glow" style="background:rgba(255,255,255,.35)"></div>
         <span class="mtag">CRM & Cadence</span>
         <h3>PropFlow</h3>
         <p>Every contact, every note, every touch — on a cadence that actually runs itself.</p>
@@ -441,15 +505,27 @@
         <span class="go">Learn more →</span>
       </a>
       <a class="modcard glass" href="#">
-        <div class="glow" style="background:var(--cyan)"></div>
+        <div class="glow" style="background:rgba(255,255,255,.35)"></div>
         <span class="mtag">Ads & Distribution</span>
         <h3>PropReach</h3>
         <p>PropCast creates it, PropReach spreads it — campaigns and funnel pages that trace every dollar to a closed deal.</p>
         <span class="go">Learn more →</span>
       </a>
+      <a class="modcard glass" href="#">
+        <div class="glow" style="background:rgba(255,255,255,.35)"></div>
+        <span class="mtag">Reverse Prospecting</span>
+        <h3>PropMatch</h3>
+        <p>Reads every note you've ever written about a buyer, reads every new listing's photos and zoning, and tells you when the two match — before the buyer even asks.</p>
+        <span class="go">Learn more →</span>
+      </a>
       <div class="modcard glass soon">
         <span class="mtag">Coming soon</span>
         <h3>PropVault</h3>
+        <p>More on this shortly.</p>
+      </div>
+      <div class="modcard glass soon">
+        <span class="mtag">Coming soon</span>
+        <h3>PropMarket</h3>
         <p>More on this shortly.</p>
       </div>
       <a class="modcard glass chevycard" href="#chevy-full">
@@ -486,7 +562,7 @@
   <div class="wrap">
     <div class="fgrid">
       <div>
-        <div class="fword">Property<span style="color:var(--cyan)">IQ</span></div>
+        <div class="fword">Property<span style="color:var(--amber)">IQ</span></div>
         <p style="margin-top:8px; max-width:320px">The agentic operating platform for real estate — search, content, CRM, transactions, and marketing, in one system.</p>
       </div>
       <div class="flinks">
@@ -505,7 +581,7 @@
 </footer>
 
 <script>
-  // ---- hero canvas: dark map grid with amber signal traces + cyan scan ----
+  // ---- hero canvas: dark room grid with amber signal traces (single accent, varied brightness for depth) ----
   (function(){
     var canvas = document.getElementById('heroCanvas');
     var ctx = canvas.getContext('2d');
@@ -533,7 +609,7 @@
           horizontal = !horizontal;
           pts.push([x,y]);
         }
-        traces.push({pts:pts, amber: Math.random() > 0.35, phase: Math.random()*Math.PI*2, speed: 0.4+Math.random()*0.5});
+        traces.push({pts:pts, bright: Math.random() > 0.4, phase: Math.random()*Math.PI*2, speed: 0.4+Math.random()*0.5});
       }
     }
     var t = 0;
@@ -547,14 +623,14 @@
       // traces
       traces.forEach(function(tr){
         var pulse = (Math.sin(t*tr.speed + tr.phase) + 1) / 2;
-        var alpha = 0.12 + pulse * 0.34;
-        ctx.strokeStyle = tr.amber ? 'rgba(232,161,61,'+alpha+')' : 'rgba(95,214,227,'+(alpha*0.8)+')';
+        var alpha = (tr.bright ? 0.14 : 0.08) + pulse * 0.3;
+        ctx.strokeStyle = 'rgba(232,161,61,'+alpha+')';
         ctx.lineWidth = 1.4;
         ctx.beginPath();
         tr.pts.forEach(function(p,i){ i===0 ? ctx.moveTo(p[0],p[1]) : ctx.lineTo(p[0],p[1]); });
         ctx.stroke();
         var last = tr.pts[tr.pts.length-1];
-        ctx.fillStyle = tr.amber ? 'rgba(232,161,61,'+(alpha+0.2)+')' : 'rgba(95,214,227,'+(alpha+0.15)+')';
+        ctx.fillStyle = 'rgba(232,161,61,'+(alpha+0.2)+')';
         ctx.beginPath(); ctx.arc(last[0], last[1], 2.2, 0, Math.PI*2); ctx.fill();
       });
       t += 0.016;
