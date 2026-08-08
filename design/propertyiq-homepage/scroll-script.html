@@ -1,0 +1,351 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>PropertyIQ — Full Scroll Production Script</title>
+<style>
+  :root{
+    --ink:#0b0d10; --panel:#12151a; --line:#242a33; --fg:#eef1f5; --dim:#9aa4b2; --accent:#e8a13d;
+  }
+  *{box-sizing:border-box;}
+  body{
+    margin:0; background:var(--ink); color:var(--fg);
+    font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Inter,Arial,sans-serif;
+    line-height:1.6;
+  }
+  .wrap{max-width:860px; margin:0 auto; padding:64px 24px 120px;}
+  header.doc{border-bottom:1px solid var(--line); padding-bottom:32px; margin-bottom:48px;}
+  header.doc .kicker{font-family:ui-monospace,Consolas,monospace; font-size:12px; letter-spacing:.08em; color:var(--accent); text-transform:uppercase;}
+  header.doc h1{font-size:32px; margin:12px 0 8px; letter-spacing:-0.01em;}
+  header.doc p{color:var(--dim); font-size:15px; margin:4px 0;}
+  header.doc a{color:var(--accent); text-decoration:none;}
+  header.doc a:hover{text-decoration:underline;}
+  .callout{
+    background:var(--panel); border:1px solid var(--line); border-left:3px solid var(--accent);
+    border-radius:8px; padding:16px 20px; margin:24px 0; font-size:14.5px; color:var(--dim);
+  }
+  .callout strong{color:var(--fg);}
+  h2{
+    font-size:22px; margin-top:56px; padding-top:24px; border-top:1px solid var(--line);
+    letter-spacing:-0.01em;
+  }
+  h2:first-of-type{border-top:none; padding-top:0;}
+  h3{font-size:16px; margin-top:32px; color:var(--fg);}
+  p{color:#c9d0da; font-size:15px;}
+  ul,ol{color:#c9d0da; font-size:15px; padding-left:22px;}
+  li{margin:6px 0;}
+  li > ul{margin-top:6px;}
+  strong{color:var(--fg);}
+  code{
+    background:var(--panel); border:1px solid var(--line); border-radius:4px;
+    padding:1px 6px; font-family:ui-monospace,Consolas,monospace; font-size:13px; color:var(--accent);
+  }
+  .meta-line{
+    display:flex; flex-wrap:wrap; gap:8px 20px; font-size:13px; color:var(--dim);
+    margin:14px 0 18px; font-family:ui-monospace,Consolas,monospace;
+  }
+  .meta-line b{color:var(--fg); font-weight:600;}
+  .scene{
+    background:var(--panel); border:1px solid var(--line); border-radius:12px;
+    padding:24px 28px; margin:20px 0 40px;
+  }
+  .scene h2{margin-top:0; border-top:none; padding-top:0; font-size:19px;}
+  .scene h2 .num{
+    display:inline-block; font-family:ui-monospace,Consolas,monospace; font-size:12px;
+    color:var(--accent); border:1px solid var(--line); border-radius:20px; padding:2px 10px;
+    margin-right:10px; vertical-align:middle;
+  }
+  hr{border:none; border-top:1px solid var(--line); margin:40px 0;}
+  .toc{
+    columns:2; column-gap:32px; font-size:14px; margin:24px 0;
+  }
+  .toc a{color:var(--dim); text-decoration:none; display:block; padding:3px 0;}
+  .toc a:hover{color:var(--accent);}
+  footer{margin-top:64px; padding-top:24px; border-top:1px solid var(--line); color:var(--dim); font-size:13px;}
+</style>
+</head>
+<body>
+<div class="wrap">
+
+<header class="doc">
+  <div class="kicker">PropertyIQ &middot; Production Reference</div>
+  <h1>Full Scroll Production Script</h1>
+  <p>For: Junaid / QuestLab &middot; Companion to <a href="../">the reference build</a></p>
+  <p><strong>Status of this document:</strong> structure, motion, and timing are the real spec. Every color/font named below is a <strong>role</strong>, not a value — map each role onto your real <code>--piq-*</code> tokens in <code>app/globals.css</code>. Do not use hex codes from the reference build; it was built without access to your token system.</p>
+</header>
+
+<div class="toc">
+  <a href="#global">Global rules</a>
+  <a href="#s1">Scene 1 — Hero</a>
+  <a href="#s2">Scene 2 — Video slot</a>
+  <a href="#s3">Scene 3 — Beat: Chevy teaser</a>
+  <a href="#s4">Scene 4 — Beat: PropSearch</a>
+  <a href="#s5">Scene 5 — Beat: PropCast</a>
+  <a href="#s6">Scene 6 — Beat: PropFlow</a>
+  <a href="#s7">Scene 7 — Beat: PropClose</a>
+  <a href="#s8">Scene 8 — Beat: PropReach</a>
+  <a href="#s9">Scene 9 — Beat: Chevy full</a>
+  <a href="#s10">Scene 10 — How it all connects</a>
+  <a href="#s11">Scene 11 — Module grid</a>
+  <a href="#s12">Scene 12 — Close</a>
+  <a href="#s13">Scene 13 — Footer</a>
+  <a href="#cross">Cross-cutting notes</a>
+</div>
+
+<h2 id="global">Global rules (apply to every scene below)</h2>
+
+<p><strong>Typography:</strong> GeneralSans for every headline/answer line. Switzer for every body/detail paragraph. A monospace or system-mono face for kickers, tags, and badges (short uppercase labels) — this three-way split (display / body / label) is what gives each scene its hierarchy; don't collapse label text into the body face.</p>
+
+<p><strong>Color roles</strong> (map each to your real tokens):</p>
+<ul>
+  <li><code>ground</code> — the dark base background, used everywhere, all scenes.</li>
+  <li><code>accent</code> — your one brand accent (per Watson's brief, this is "azure" in your system, not the amber/cyan seen in the reference build). Used <strong>sparingly and deliberately</strong>: small labels/kickers, badges, links, the hero's second headline line, and the one loop-arrow in Scene 10. Never used for large blocks of body text or big washes of color.</li>
+  <li><code>neutral-bright</code> — near-white, used for primary emphasis text (the bold word in each beat's answer line, module names).</li>
+  <li><code>neutral-dim</code> — a lower-opacity/muted version of your foreground color, used for problem statements and body copy — these should read as quieter than the answer line that follows them.</li>
+  <li><code>warning</code> — a distinct semantic color (not accent) used only on the one "urgent/unresolved" chip in each before/after panel (the client's unanswered text, the missed inspection question, etc.). This must not share a hue with <code>accent</code> — they mean different things and should never be confused.</li>
+  <li><code>line</code> — your hairline border color, used on every card/panel edge and the diagram's node boxes.</li>
+</ul>
+
+<p><strong>Motion system:</strong></p>
+<ul>
+  <li>Entrances: fade + 14–20px upward rise, 0.5–0.8s duration, ease-out-cubic (<code>cubic-bezier(0.16, 1, 0.3, 1)</code> or your team's equivalent decelerate curve). Things arriving should feel like they're settling into place, not popping.</li>
+  <li>Any list of 3+ small items (example rows, chips, grid tiles) staggers at 100–150ms per item — never reveal a whole list at once, it reads as static rather than sequenced.</li>
+  <li>Trigger point: each scene's content begins animating in when the scene crosses ~30% into the viewport from the bottom (IntersectionObserver threshold ~0.3, or GSAP ScrollTrigger <code>start: "top 70%"</code>).</li>
+  <li><code>prefers-reduced-motion: reduce</code> — disable every entrance animation, render final states immediately. No information should exist only in motion.</li>
+  <li><strong>Continuity rule:</strong> the ambient background layer (see Scene 1) persists unbroken across every scene transition — it never resets or hard-cuts. This is what makes the page feel like one continuous room rather than a stack of separate blocks, and it's the single most important rule in this document.</li>
+</ul>
+
+<div class="callout">Scroll-depth percentages throughout this doc are approximate targets on a standard 13" viewport — treat them as pacing guidance, not pixel-exact triggers; tune to however your actual section heights land.</div>
+
+<div class="scene" id="s1">
+<h2><span class="num">01</span>Hero</h2>
+<div class="meta-line"><span><b>Trigger:</b> page load, 0% scroll</span><span><b>Camera:</b> static, full 100vh</span></div>
+<p>This is the establishing shot, nothing moves the frame yet.</p>
+<p><strong>Background:</strong> <code>ground</code> fills the frame. Your swirl gradient runs at low opacity (~15–20%), full drift cycle 40–60s — slow enough that it's felt as atmosphere, never noticed as motion.</p>
+<p><strong>Foreground, entrance order:</strong></p>
+<ol>
+  <li>Eyebrow — "THE AGENTIC OPERATING PLATFORM FOR REAL ESTATE" (mono, small caps, centered). Fades in first, 0.4s.</li>
+  <li>Headline line 1 — "Your business," (GeneralSans, largest weight on the page). Starts 0.15s after the eyebrow, 0.8s duration, <code>neutral-bright</code>.</li>
+  <li>Headline line 2 — "already built." Starts 0.23s after line 1 (so they overlap slightly, reading as one continuous reveal, not two separate pops). Same duration/easing. <strong>Color: <code>accent</code></strong> — this is the one place the accent touches large display text on the entire page. Spend it here.</li>
+  <li>Subhead — "PropertyIQ replaces the tools you're juggling — search, content, SEO, leads, and transactions — with one system built specifically for real estate, run by an assistant that actually works for you." Switzer, <code>neutral-dim</code>, max-width ~60ch. Starts +0.6s.</li>
+  <li>CTA pair — primary button (<code>neutral-bright</code> fill, <code>ground</code> text) + ghost button (outlined, <code>line</code> border). Starts +0.78s.</li>
+  <li>Scroll cue — "Scroll" label + a thin vertical line that pulses opacity (2s ease-in-out loop). Bottom-center, persistent until user scrolls past ~15% of hero height, then fades out (0.3s).</li>
+</ol>
+<p><strong>Exit / handoff to Scene 2:</strong> as the user scrolls past, the entire hero content group (items 1–6) fades out and scales to 0.96x together, as one unit. <strong>The ambient background layer does not fade — it continues unchanged into Scene 2.</strong> This unbroken background is the transition; there is no hard cut.</p>
+</div>
+
+<div class="scene" id="s2">
+<h2><span class="num">02</span>Video overview slot</h2>
+<div class="meta-line"><span><b>Trigger:</b> ~8–10% total scroll</span><span><b>Camera:</b> static</span></div>
+<p><strong>Background:</strong> ambient layer continues, dimmed slightly (~10% opacity) so this reads as a pause/breath, not another beat competing for attention.</p>
+<p><strong>Foreground:</strong> one glass-bordered frame, 16:8.2 aspect ratio, full content width. Inside it:</p>
+<ul>
+  <li>A faint grid texture (~6% opacity) for depth.</li>
+  <li>Two soft directional glow blobs — one <code>neutral</code> (upper-left), one <code>accent</code> (lower-right, kept subtle, ~10% opacity). Never two accent glows in the same frame.</li>
+  <li>A centered circular play button: glass fill, blurred backdrop, scales to 1.06x on hover (0.2s).</li>
+  <li>Bottom-left caption: a small pulsing accent dot + "90-second product overview" in <code>neutral-dim</code>.</li>
+  <li>Top-right dashed-border tag: "Video placeholder — real reel drops here." <strong>Remove this tag the moment real video is dropped in</strong> — flag it in code with a <code>// TODO: remove placeholder tag</code> comment so it can't ship by accident.</li>
+</ul>
+<p><strong>Enter:</strong> the whole frame fades + rises as one object (0.7s) — it's a single unit, no internal stagger. <strong>Exit:</strong> none, scrolls past naturally.</p>
+</div>
+
+<div class="scene" id="s3">
+<h2><span class="num">03</span>Beat: Chevy teaser (the hook)</h2>
+<div class="meta-line"><span><b>Trigger:</b> ~14–16% scroll</span><span><b>Camera:</b> still static</span></div>
+<p>This is the beat that establishes the reading pattern every later beat repeats.</p>
+<div class="callout"><strong>Optional enhancement</strong> (not required for v1): three small ember particles in the background, labeled implicitly as ChatGPT / Claude / Grok, flicker and extinguish at the exact moment the "answer" line finishes animating in — a subtle visual echo of the copy, not required to ship the page.</div>
+<p><strong>Foreground, entrance order</strong> (this stagger rhythm — kicker &rarr; problem &rarr; arrow &rarr; answer &rarr; detail &rarr; tag — repeats identically in every beat from here on; only the copy changes):</p>
+<ol>
+  <li>Kicker — "CHEVY" (mono, small caps, <code>accent</code>). 0s.</li>
+  <li>Problem — "Paying for ChatGPT. Paying for Claude. Paying for Grok. Paying to run your business somewhere else entirely." Large, <code>neutral-dim</code> (deliberately quieter than the answer that follows — this is the "before" register). +0.1s.</li>
+  <li>Arrow/transition — "PropertyIQ answers" (small, uppercase, short horizontal rule before it). +0.5s.</li>
+  <li>Answer — "One assistant, native to your business. <strong>Chevy replaces all of it.</strong>" Bold portion in <code>neutral-bright</code> (not accent — accent is reserved for the hero and for small tags/badges, never for beat-answer emphasis, or it stops meaning anything by beat three). +0.6s.</li>
+  <li>Detail — "Everything you use a general AI chatbot for, Chevy does — faster and cheaper, because it already knows your listings, your clients, and your market. No more paying for intelligence that lives outside your business." Switzer, <code>neutral-dim</code>. +0.75s.</li>
+  <li>Tag — "Meet Chevy, below" (<code>accent</code>, anchor-links down to Scene 9). +0.9s.</li>
+</ol>
+<p>Each element: fade + 20px rise, 0.6s, ease-out-cubic — this exact timing recipe is what every later beat reuses.</p>
+<p><strong>Exit:</strong> scrolls past naturally; if the ember enhancement is built, embers extinguish in sync with item 4's entrance.</p>
+</div>
+
+<div class="scene" id="s4">
+<h2><span class="num">04</span>Beat: PropSearch (the richest beat — full detail)</h2>
+<div class="meta-line"><span><b>Trigger:</b> ~22–25% scroll</span><span><b>Camera:</b> slow parallax begins here</span></div>
+<p>From here on, introduce a very slow parallax — background ambient layer drifts at ~0.3x scroll speed while foreground content moves at 1x. This is what "the camera settling on a new part of the room" actually means in practice; no literal camera object needed.</p>
+<p><strong>Standard beat sequence</strong> (per Scene 3's rhythm):</p>
+<ol>
+  <li>Kicker — "PROPSEARCH"</li>
+  <li>Problem — "Every buyer starts on Zillow. Zillow sells your own leads back to you."</li>
+  <li>Arrow — "PropertyIQ answers"</li>
+  <li>Answer — "A website that finally <strong>moves the needle for you.</strong>"</li>
+  <li>Detail — "PropSearch isn't a portal — it's a research engine that works for you. It searches by outcome, not just filters, so the work that used to take you an hour happens before your client finishes typing the question."</li>
+</ol>
+<p><strong>Then, as a distinct sub-component (new stagger group, starts +150ms after item 5 completes):</strong></p>
+<ol start="6">
+  <li>Example list — container max-width ~640px, four bordered rows, each with a subtle <code>ground</code>-tinted background. <strong>Rows stagger in at 120ms apart, each row fading + rising 0.5s individually</strong> — do not reveal all four at once.
+    <ul>
+      <li>Row 1: <strong>"A client who wants an ADU?"</strong> (bold, <code>neutral-bright</code>) &rarr; "It scans every lot in the area and shows you exactly which homes qualify." (<code>neutral-dim</code>)</li>
+      <li>Row 2: <strong>"Chasing a specific cap rate?"</strong> &rarr; "Every listing gets ranked by the real numbers, automatically."</li>
+      <li>Row 3: <strong>"Tired of checking school boundaries by hand?"</strong> &rarr; "Every listing already knows which school it feeds."</li>
+      <li>Row 4: <strong>"Can't be more than 25 minutes from the office?"</strong> &rarr; "Commute time is a filter here, not a separate tab."</li>
+    </ul>
+  </li>
+  <li>Differentiator line — "Search real estate the way people actually think. <strong>By outcome, not filters.</strong>" GeneralSans, bold portion in <code>accent</code>. This is a brand-level line — give it an extra 200ms pause beyond the standard stagger rhythm before it enters, so it lands with weight rather than arriving on the same beat as the rows above it.</li>
+</ol>
+<p><strong>Then the before/after panel (its own stagger group, arrives last in this beat, +300ms after item 7):</strong></p>
+<ol start="8">
+  <li>Split panel, 2px gap between halves, rounded corners on the outer edges only (reads as one object split in two, not two separate cards):
+    <ul>
+      <li><strong>Left ("Without PropSearch"):</strong> darker/flatter background than the right half. Label in <code>neutral-dim</code> small-caps. Three chips: "Zillow tab," "GreatSchools tab," "Cap rate spreadsheet" — give these chips slightly inconsistent sizing and a hair of rotation (&plusmn;1–2&deg;, alternating) to read as clutter, not a tidy list. Fourth chip in <strong><code>warning</code></strong> (not accent): "'any luck finding an ADU lot?'" — this is the one urgent/unresolved element in the panel. Caption below, italic, <code>neutral-dim</code>: "Four tabs, a spreadsheet, and a client waiting on a reply since this morning."</li>
+      <li><strong>Right ("With PropSearch"):</strong> background carries a near-invisible <code>accent</code> wash (5–8% opacity) — this and the hero headline are the only two places on the page where accent touches a large surface, everywhere else it's small marks only. One clean card inside: address/title, a sub-line (beds/commute), then three small badges in <code>accent</code> outline+text — "ADU-eligible," "Cap rate 6.1%," "Roy Cloud Elem &middot; 9/10." Badges are a legitimate functional use of accent (they're data signals, not decoration) even though large text isn't. Caption below, plain (not italic — the "after" state is stated, not wistful): "One search. Every answer already on the card."</li>
+    </ul>
+  </li>
+</ol>
+<p><strong>Exit:</strong> scrolls past naturally; parallax focal point begins drifting toward Scene 5's implied position.</p>
+</div>
+
+<div class="scene" id="s5">
+<h2><span class="num">05</span>Beat: PropCast</h2>
+<div class="meta-line"><span><b>Trigger:</b> ~34–37% scroll</span></div>
+<p><strong>Standard beat sequence</strong> (Scene 3's rhythm):</p>
+<ol>
+  <li>Kicker — "PROPCAST"</li>
+  <li>Problem — "You're on a hamster wheel trying to figure out what to post, what to say, and how to say it."</li>
+  <li>Arrow — "PropertyIQ answers"</li>
+  <li>Answer — "It already knows your market <strong>better than you do.</strong>"</li>
+  <li>Detail — "PropCast reads Reddit, YouTube, Instagram, Google News, local news, and every competitor already posting in your market — pulls it into a script, formats it for each platform, and generates the video in your voice, on your face. Then it keeps watching: if a competitor's video starts outranking yours for your topics in your geography, PropCast re-cuts and re-releases until you're the one on top. Not just on YouTube — everywhere people search."</li>
+</ol>
+<p><strong>Before/after panel:</strong></p>
+<ul>
+  <li><strong>Before:</strong> chips "Blank content calendar," "3 unfinished drafts," <strong>warning</strong>-chip "'what do I even post this week.'" Caption: "It's Thursday. Nothing's scheduled. The market didn't stop talking — you did."</li>
+  <li><strong>After:</strong> card "This week — auto-scripted" / "4 videos &middot; your voice &middot; your face" / badges "Sourced: Reddit + YouTube + News" and "Ranking vs. 2 competitors." Caption: "The calendar fills itself. You just approve it."</li>
+</ul>
+<p><strong>Photo inset:</strong> this is where the "relief" generation prompt (see companion email) belongs — a small photo, roughly 30–35% of the after-panel's width, positioned alongside/behind the UI-fragment card, allowed to bleed slightly past the glass frame's edge for depth. Supporting element, not a replacement for the card.</p>
+<p><strong>Tag:</strong> "PropCast — see the flagship" — this is the <strong>one beat-tag that is a real navigational link</strong> (to the actual PropCast site, same tab per the navigation notes in the companion email). Give it a visual "this is clickable" signal the other plain-text tags don't have — an arrow glyph, underline-on-hover — since users need to learn this specific tag behaves differently.</p>
+</div>
+
+<div class="scene" id="s6">
+<h2><span class="num">06</span>Beat: PropFlow (lighter treatment)</h2>
+<div class="meta-line"><span><b>Trigger:</b> ~46–48% scroll</span></div>
+<ol>
+  <li>Kicker — "PROPFLOW"</li>
+  <li>Problem — "Great leads go cold because nobody followed up in week thirteen."</li>
+  <li>Arrow — "PropertyIQ answers"</li>
+  <li>Answer — "A follow-up system that <strong>doesn't forget.</strong>"</li>
+  <li>Detail — "PropFlow keeps every contact on a real cadence — calls, notes, check-ins — and a virtual assistant handles the busywork so it actually happens. Nothing falls through, because nothing is left to memory."</li>
+</ol>
+<p><strong>No before/after panel here</strong> — per direction to keep this beat lighter than PropSearch/PropCast/PropClose/Chevy. Instead: one small inline SVG — a horizontal row of 5–6 dots representing cadence touchpoints, filling/lighting left to right as the section scrolls into view (simple stroke/fill animation, ~0.15s per dot). Enough visual proof without the full two-panel weight.</p>
+<p><strong>Tag:</strong> "PropFlow" (plain, not a link).</p>
+</div>
+
+<div class="scene" id="s7">
+<h2><span class="num">07</span>Beat: PropClose</h2>
+<div class="meta-line"><span><b>Trigger:</b> ~58–60% scroll</span></div>
+<ol>
+  <li>Kicker — "PROPCLOSE"</li>
+  <li>Problem — "Transactions live in group texts and spreadsheets until something gets missed."</li>
+  <li>Arrow — "PropClose answers"</li>
+  <li>Answer — "Does the work of your transaction software. <strong>All of it, in one place.</strong>"</li>
+  <li>Detail — "Checklists, disclosures, offers, deadlines, and closing — the same ground covered by tools like Glide, SkySlope, and disclosure-delivery platforms — in one workspace. Every milestone can trigger a personalized video, text, or email that lands automatically in PropFlow, so clients hear from you without you lifting a finger."</li>
+</ol>
+<p><strong>Before/after panel:</strong></p>
+<ul>
+  <li><strong>Before:</strong> chips "12-person group text," "3 versions of the same PDF," <strong>warning</strong>-chip "'did anyone confirm the inspection?'" Caption: "Somewhere in that thread is the answer. Good luck finding it."</li>
+  <li><strong>After:</strong> card "742 Hurlingame — Day 11 of 21" / "Inspection &check; &middot; Appraisal &check; &middot; Loan pending" / badge "Buyer, seller, lender auto-notified." Caption: "One glance tells you exactly where it stands."</li>
+</ul>
+<p><strong>Tag:</strong> "PropClose" (plain).</p>
+</div>
+
+<div class="scene" id="s8">
+<h2><span class="num">08</span>Beat: PropReach (lighter treatment)</h2>
+<div class="meta-line"><span><b>Trigger:</b> ~70–72% scroll</span></div>
+<ol>
+  <li>Kicker — "PROPREACH"</li>
+  <li>Problem — "Great content means nothing if nobody in your market ever sees it."</li>
+  <li>Arrow — "PropertyIQ answers"</li>
+  <li>Answer — "PropCast creates it. <strong>PropReach makes sure your market can't miss it.</strong>"</li>
+  <li>Detail — "Every video and post PropCast makes gets pushed further — campaigns, funnel pages, and targeting built to help you dominate your geographic area, not just post into the void."</li>
+</ol>
+<p><strong>No before/after panel</strong> (matches PropFlow's lighter treatment). Instead: a small inline motion graphic — one content icon with 3–4 arrow-lines fanning outward toward small platform dots (IG / FB / GBP / email), arrows drawing themselves in sequence via stroke-dasharray animation (~0.2s per arrow, staggered) as the section enters view.</p>
+<p><strong>Tag:</strong> "PropReach" (plain).</p>
+</div>
+
+<div class="scene" id="s9">
+<h2><span class="num">09</span>Beat: Chevy, full (the climax of the sequence)</h2>
+<div class="meta-line"><span><b>Trigger:</b> ~82–85% scroll</span></div>
+<p>This beat should feel like the peak of the whole scroll — give it an extra 300–400ms pause before entrance vs. the standard rhythm, and make its answer line the largest of any beat.</p>
+<ol>
+  <li>Kicker — "CHEVY"</li>
+  <li>Problem — "And running underneath all of it —"</li>
+  <li>Arrow — "Meet"</li>
+  <li>Answer — "Your assistant. <strong>Included.</strong>" (Largest beat-answer text on the page.)</li>
+  <li>Detail — "Chevy works from your car, over text message, on the go — no app to open, no screen to stare at. Tell it what you need, the way you'd tell a real assistant, and it takes full control: pulls a CMA together and has it ready when you're back at your desk, logs the note from the call you just took, books the showing, sends the reminder. Not a chat window that answers questions — an assistant that produces the actual result."</li>
+</ol>
+<p><strong>Before/after panel:</strong></p>
+<ul>
+  <li><strong>Before:</strong> chips "Driving, phone in the cupholder," "'remind me to type this up later,'" <strong>warning</strong>-chip "Never typed up. Never followed up." Caption: "The note that mattered lives in your head for exactly as long as you can hold it there."</li>
+  <li><strong>After:</strong> card "&#127908; 'Log that — Sarah wants an office, not a 3rd bedroom'" / "Saved to Sarah's contact &middot; CMA queued for tonight" / badge "Done, no app opened." Caption: "Said out loud at a red light. Already handled."</li>
+</ul>
+<p><strong>Photo inset:</strong> the "in the car" generation prompt belongs here, same treatment as PropCast's photo (30–35% width, bleeding slightly past the frame).</p>
+<p><strong>This after-panel's accent glow should be the brightest accent moment on the page outside the hero</strong> — still restrained (this is a dark, quiet page, not a neon one), but noticeably the visual peak of the sequence, since this is where the emotional payoff of the whole scroll lands.</p>
+<p><strong>Tag:</strong> "Chevy" (plain — nothing to link to, this is the Chevy section itself).</p>
+</div>
+
+<div class="scene" id="s10">
+<h2><span class="num">10</span>"How it all connects" (the payoff diagram)</h2>
+<div class="meta-line"><span><b>Trigger:</b> ~90% scroll</span></div>
+<div class="callout"><strong>This is the climax of the entire page — pace it the most deliberately of any scene.</strong></div>
+<p><strong>Camera:</strong> the one moment a literal pull-back happens. Even without true 3D, simulate it: the diagram scales in from 92% to 100% over 1.2s as it settles, reading as "now step back and see the whole system at once."</p>
+<p><strong>Content sequence:</strong></p>
+<ol>
+  <li>Eyebrow — "Why it's one system, not six"</li>
+  <li>Headline — "The loop that runs itself."</li>
+  <li>Sub-line — "Every module hands off to the next automatically — and a closed deal doesn't end the story. It starts the next one."</li>
+  <li><strong>The diagram itself:</strong>
+    <ul>
+      <li>Five module boxes — PropCast, PropReach, PropSearch, PropFlow, PropClose — draw in left to right. Each box's border animates via stroke-dashoffset over 0.4s, staggered 150ms apart box-to-box.</li>
+      <li>Connecting arrows draw in immediately after each preceding box completes, labeled: "publishes" (PropCast&rarr;PropReach), "sends buyers" (PropReach&rarr;PropSearch), "new leads" (PropSearch&rarr;PropFlow), "ready to buy" (PropFlow&rarr;PropClose).</li>
+      <li><strong>Pause 0.6s</strong> once all five boxes and their arrows have finished drawing.</li>
+      <li><strong>Then, distinctly slower than everything before it (1.2s, not 0.4s):</strong> the curved loop-back arrow draws from PropClose up and over to PropCast, in <code>accent</code>, with its label — "closed deal becomes the next story" — fading in exactly as the arrowhead reaches PropCast. <strong>This is the single most important visual beat on the entire page. Do not rush it.</strong></li>
+      <li>0.5s after the loop completes: the Chevy baseplate band fades in beneath all five boxes, with dashed connector ticks rising up into each one, establishing "and this runs underneath everything you just watched connect."</li>
+    </ul>
+  </li>
+  <li>Figcaption below the diagram: "Signals become content, content becomes buyers, buyers become clients, clients close — and closing becomes the next thing PropCast has to talk about. Chevy operates every step underneath."</li>
+</ol>
+<p><strong>Color roles:</strong> the five boxes and their arrows are deliberately <code>neutral</code> — they're "the given." Only the loop-back arrow and the Chevy baseplate use <code>accent</code> — they're "the insight." This is the one diagram on the page and it should carry the full weight of the accent color's meaning.</p>
+</div>
+
+<div class="scene" id="s11">
+<h2><span class="num">11</span>Module grid</h2>
+<div class="meta-line"><span><b>Trigger:</b> ~94% scroll</span></div>
+<ol>
+  <li>PropCast flagship banner — full-width, taller than the tiles below it, fades + rises first as its own unit.</li>
+  <li>Grid tiles stagger in <strong>by row, not all at once</strong>: row 1 (PropSearch, PropFlow, PropClose), pause 100ms, row 2 (PropReach, PropMatch, PropVault), pause 100ms, row 3 (PropMarket, Chevy).</li>
+</ol>
+<p><strong>Tiles:</strong> PropSearch, PropFlow, PropClose, PropReach, PropMatch (real copy — it's the reverse-prospecting engine), PropVault (marked "Coming soon," no description), PropMarket (marked "Coming soon," no description), Chevy (accent-bordered, distinct from the rest — it's the assistant, not a module in the same sense).</p>
+</div>
+
+<div class="scene" id="s12">
+<h2><span class="num">12</span>Close</h2>
+<div class="meta-line"><span><b>Trigger:</b> ~98% scroll</span></div>
+<p>Single fade+rise unit, no internal stagger (short content, doesn't need sequencing):</p>
+<p>"PropertyIQ isn't public yet" (eyebrow) &rarr; "Stop patching together six tools. Run your business <strong>on one.</strong>" (headline, bold portion in <code>accent</code>) &rarr; "We're onboarding agents in small batches before general availability. Tell us where you sell, and we'll reach out when your market opens up." &rarr; one CTA button.</p>
+</div>
+
+<div class="scene" id="s13">
+<h2><span class="num">13</span>Footer</h2>
+<p>Static, no scroll-triggered motion. Standard treatment: wordmark, nav links, Equal Housing Opportunity + MLS-sourcing disclosure line, copyright.</p>
+</div>
+
+<h2 id="cross">Cross-cutting notes</h2>
+<ul>
+  <li><strong>The parallax/camera-settle effect</strong> introduced in Scene 4 should be consistent for every remaining beat (Scenes 4–9) — same 0.3x background-drift ratio throughout, so the "moving through one room" feeling is continuous, not something that starts and stops.</li>
+  <li><strong>The <code>warning</code> chip appears exactly once per before/after panel</strong> (four total: PropSearch, PropCast, PropClose, Chevy) — it should never be the majority of a panel, just the one element that signals "this specific thing is the actual pain point," with the rest of the chips reading as ordinary clutter, not alarm.</li>
+  <li><strong>Accent budget for the whole page</strong>, to keep the single-accent discipline enforceable in review: hero headline (1 use) &middot; kickers/tags (small, repeated, fine) &middot; badges in after-panels (functional, fine) &middot; the loop-back arrow + Chevy baseplate in Scene 10 (1 use, the most important one) &middot; Close headline's bold word (1 use). If accent shows up anywhere else large, that's a signal to reconsider, not a style choice.</li>
+</ul>
+
+<footer>PropertyIQ &middot; internal production reference &middot; not for public distribution</footer>
+
+</div>
+</body>
+</html>
