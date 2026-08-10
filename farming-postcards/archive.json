@@ -8,9 +8,23 @@
     "market": "East Palo Alto / Peninsula",
     "vendor_default": "Universal Mail Works",
     "dashboard_url": "https://graehamwatts.github.io/online-content/farming-postcards/",
-    "last_updated": "2026-06-29"
+    "last_updated": "2026-07-27"
   },
   "cards": [
+    {
+      "id": "2026-08-15-quiet-sale",
+      "mail_date": "2026-08-15",
+      "archetype": "Quiet Sale / No-Hassle",
+      "lever": "Hassle aversion + privacy",
+      "front_headline": "Sell Your Home Without A Single Open House",
+      "back_headline": "No Sign. No Strangers. Just A Sale",
+      "cta_type": "Landing page (seller consultation)",
+      "cta_line": "Ask how a quiet sale works",
+      "audience": "Both (strongest on privacy-conscious, long-time owners)",
+      "preview_html": "2026-08-15-quiet-sale-preview.html",
+      "status": "PRINT-READY — with Peter (headshots + real QR)",
+      "notes": "New archetype #8, first run. BREAKS THE 3-CARD CALL/TEXT STREAK: QR now resolves to a real live landing page (east-palo-alto/seller-consultation/) with UTM tracking, instead of another SMS keyword. Also the first card built on the CORRECTED master template — flat brass gold (no gradient/gloss), no cream back panel, full-width front headline, no arrow-to-nowhere. See headline-library.md for the full design-drift fix log."
+    },
     {
       "id": "2026-08-01-equity",
       "mail_date": "2026-08-01",

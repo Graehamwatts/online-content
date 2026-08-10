@@ -37,7 +37,7 @@
     { "id": "prop_19_guide",    "label": "Prop 19 move-planning guide",   "canonical_url": null, "sms_keyword": "PROP19", "allowed": true, "note": "Build /east-palo-alto/prop-19-guide/ landing page." },
     { "id": "market_report",    "label": "Neighborhood market report",    "canonical_url": null, "sms_keyword": "MARKET", "allowed": true },
     { "id": "ai_score_report",  "label": "Property AI-visibility score",   "canonical_url": null, "sms_keyword": "AISCORE","allowed": true },
-    { "id": "seller_consultation","label": "Seller consultation",         "canonical_url": null, "sms_keyword": "SELL",   "allowed": true },
+    { "id": "seller_consultation","label": "Seller consultation",         "canonical_url": "https://graehamwatts.github.io/online-content/east-palo-alto/seller-consultation/", "sms_keyword": "SELL",   "allowed": true, "note": "LIVE 2026-07-27 — first real evergreen landing page, breaks the SMS-only CTA streak. Call/text is still the page's own primary CTA (no GHL form wired yet), but the QR itself now resolves to a real trackable URL instead of an SMSTO: link." },
     { "id": "sms_keyword",      "label": "Call / text (generic)",         "canonical_url": null, "sms_keyword": "GRAEHAM","allowed": true, "note": "Terminal fallback channel." }
   ],
 
