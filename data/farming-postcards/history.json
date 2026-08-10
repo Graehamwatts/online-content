@@ -11,6 +11,6 @@
     { "drop_date": "2026-06-15", "status": "shipped", "archetype": "low_inventory",  "cta_destination_id": "market_report",   "villain_type": "none",             "core_claim_slug": "timing_favors_seller",      "headline": "Right Now, Your Home Would Have Almost No Competition" },
     { "drop_date": "2026-07-01", "status": "shipped", "archetype": "prop_19",       "cta_destination_id": "sms_keyword",     "villain_type": "none",             "core_claim_slug": "tax_base_is_portable",      "headline": "Your Low Property Tax Rate Can Move With You" },
     { "drop_date": "2026-07-15", "status": "shipped", "archetype": "buyer_tagged",   "cta_destination_id": "sms_keyword",     "villain_type": "none",             "core_claim_slug": "i_have_buyers",             "headline": "Your Buyer Might Already Be Looking" },
-    { "drop_date": "2026-08-01", "status": "queued", "archetype": "equity",          "cta_destination_id": "sms_keyword",     "villain_type": "none",             "core_claim_slug": "wealth_you_built",          "headline": "You've Built More Wealth Here Than You Think" }
+    { "drop_date": "2026-08-01", "status": "shipped", "archetype": "equity",          "cta_destination_id": "sms_keyword",     "villain_type": "none",             "core_claim_slug": "wealth_you_built",          "headline": "You've Built More Wealth Here Than You Think" }
   ]
 }
