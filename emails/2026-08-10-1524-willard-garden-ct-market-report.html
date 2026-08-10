@@ -16,68 +16,49 @@
   .header h1 { font-size:26px; font-weight:600; margin:0 0 4px 0; color:#0f1729; letter-spacing:-0.4px; }
   .header .meta { font-size:13px; color:#6a7488; }
   .header .meta strong { color:#0f1729; font-weight:600; }
-  .status { margin:0 36px; padding:16px 18px; border-radius:6px; display:flex; align-items:center; gap:14px; background:#fef5e6; border:1px solid #f0c98a; }
-  .status .dot { width:10px; height:10px; border-radius:50%; background:#d49019; flex-shrink:0; box-shadow:0 0 0 4px rgba(212,144,25,0.15); }
+  .status { margin:0 36px; padding:16px 18px; border-radius:6px; display:flex; align-items:center; gap:14px; background:#eef2f8; border:1px solid #c7d3e6; }
+  .status .dot { width:10px; height:10px; border-radius:50%; background:#5d7bb0; flex-shrink:0; box-shadow:0 0 0 4px rgba(93,123,176,0.15); }
   .status .text { flex:1; }
-  .status .label { font-size:10.5px; letter-spacing:1.4px; text-transform:uppercase; font-weight:700; color:#a06a14; margin-bottom:2px; }
-  .status .msg { font-size:14px; color:#3a2c10; font-weight:500; }
+  .status .label { font-size:10.5px; letter-spacing:1.4px; text-transform:uppercase; font-weight:700; color:#3d5580; margin-bottom:2px; }
+  .status .msg { font-size:14px; color:#1a2332; font-weight:500; }
   .kpi-section { padding:24px 36px 8px; }
   .kpi-label { font-size:10.5px; letter-spacing:1.4px; text-transform:uppercase; font-weight:700; color:#5d6b85; margin-bottom:12px; }
   .kpis { display:table; width:100%; border-collapse:separate; border-spacing:8px; margin:0 -8px; }
   .kpi { display:table-cell; background:#f6f7fa; border-radius:6px; padding:14px 14px 12px; vertical-align:top; }
   .kpi .k-lbl { font-size:10.5px; color:#6a7488; letter-spacing:0.6px; text-transform:uppercase; font-weight:600; margin-bottom:6px; }
   .kpi .k-num { font-size:26px; font-weight:600; color:#0f1729; line-height:1; letter-spacing:-0.6px; }
-  .kpi .k-delta { font-size:12px; margin-top:6px; font-weight:500; }
-  .kpi .k-delta.down { color:#c44545; }
-  .kpi .k-delta.up { color:#1f7a3a; }
-  .kpi .k-delta.flat { color:#6a7488; }
+  .kpi .k-delta { font-size:12px; margin-top:6px; font-weight:500; color:#6a7488; }
   section { padding:24px 36px 4px; }
   section h2 { font-size:11px; letter-spacing:1.6px; text-transform:uppercase; font-weight:700; color:#5d6b85; margin:0 0 12px 0; padding-bottom:8px; border-bottom:1px solid #e6e9ef; }
-  section p { font-size:14.5px; color:#2a3142; margin:0 0 12px 0; line-height:1.65; }
+  section p { font-size:14.5px; color:#2a3142; margin:0 0 12px 0; line-height:1.68; }
   section p strong { color:#0f1729; font-weight:600; }
   .decision { margin:8px 36px 0; padding:22px 24px; background:#0f1729; color:#fff; border-radius:6px; }
   .decision .lbl { display:flex; align-items:center; gap:8px; font-size:10.5px; letter-spacing:1.4px; text-transform:uppercase; font-weight:700; color:#f4b955; margin-bottom:10px; }
   .decision .lbl::before { content:"●"; color:#f4b955; font-size:14px; }
   .decision h3 { font-size:18px; font-weight:600; color:#fff; margin:0 0 8px 0; line-height:1.3; }
-  .decision p { font-size:14px; color:#c5cee0; margin:0 0 14px 0; line-height:1.6; }
+  .decision p { font-size:14px; color:#c5cee0; margin:0 0 14px 0; line-height:1.65; }
   .decision p strong { color:#fff; }
   .decision .btn { display:inline-block; background:#f4b955; color:#0f1729; padding:10px 18px; border-radius:4px; text-decoration:none; font-size:13px; font-weight:600; letter-spacing:0.3px; margin-right:8px; }
   .decision .btn-secondary { background:transparent; color:#f4b955; border:1px solid #f4b955; }
-  .market-cards { display:table; width:100%; border-collapse:separate; border-spacing:8px; margin:6px -8px; }
-  .market-card { display:table-cell; background:#f6f7fa; border-radius:6px; padding:18px 18px 16px; vertical-align:top; position:relative; }
-  .market-card .mc-label { font-size:10.5px; color:#6a7488; letter-spacing:1px; text-transform:uppercase; font-weight:700; margin-bottom:14px; }
-  .market-card .mc-delta { font-size:28px; font-weight:700; color:#c44545; line-height:1; letter-spacing:-1px; margin-bottom:4px; }
-  .market-card .mc-delta.flat { color:#a06a14; }
-  .market-card .mc-delta-label { font-size:11.5px; color:#6a7488; font-weight:500; margin-bottom:14px; }
-  .market-card .mc-row { display:flex; justify-content:space-between; padding:6px 0; font-size:13px; color:#2a3142; border-top:1px solid #ecedf2; }
-  .market-card .mc-row .v { font-weight:600; color:#0f1729; }
+  .comp-cards { display:block; margin:6px 0; }
+  .comp-card { background:#f6f7fa; border-radius:6px; padding:16px 18px; margin-bottom:10px; }
+  .comp-card:last-child { margin-bottom:0; }
+  .comp-card .cc-head { display:flex; justify-content:space-between; align-items:baseline; margin-bottom:6px; flex-wrap:wrap; gap:8px; }
+  .comp-card .cc-addr { font-size:15px; font-weight:700; color:#0f1729; }
+  .comp-card .cc-price { font-size:16px; font-weight:700; color:#0f1729; }
+  .comp-card .cc-stats { font-size:12px; color:#6a7488; margin-bottom:8px; }
+  .comp-card .cc-note { font-size:13.5px; color:#3a4154; line-height:1.55; }
+  .comp-card.subject { background:#0f1729; }
+  .comp-card.subject .cc-addr, .comp-card.subject .cc-price { color:#fff; }
+  .comp-card.subject .cc-stats { color:#9da9c1; }
+  .comp-card.subject .cc-note { color:#c5cee0; }
   .hero-stat { padding:28px 36px 8px; border-top:1px solid #e6e9ef; margin-top:12px; }
-  .hero-stat .hs-num { font-size:60px; font-weight:700; color:#0f1729; line-height:0.95; letter-spacing:-3px; margin-bottom:4px; }
-  .hero-stat .hs-num .unit { font-size:26px; color:#6a7488; font-weight:500; letter-spacing:-1px; margin-left:8px; }
-  .hero-stat .hs-title { font-size:19px; font-weight:600; color:#0f1729; line-height:1.25; margin-bottom:6px; letter-spacing:-0.3px; }
-  .hero-stat .hs-sub { font-size:13.5px; color:#6a7488; line-height:1.55; }
-  .hero-stat .hs-sub strong { color:#2a3142; font-weight:600; }
   .agent-table { width:100%; border-collapse:collapse; margin-top:8px; }
   .agent-table th { text-align:left; font-size:10.5px; letter-spacing:1px; text-transform:uppercase; color:#6a7488; font-weight:700; padding:8px 10px 8px 0; border-bottom:1.5px solid #e6e9ef; }
   .agent-table td { padding:9px 10px 9px 0; border-bottom:1px solid #f0f2f6; vertical-align:top; }
   .agent-table td:first-child { font-weight:600; color:#0f1729; font-size:13.5px; white-space:nowrap; width:110px; }
   .agent-table td:last-child { font-size:13px; color:#3a4154; line-height:1.55; }
   .agent-table tr:last-child td { border-bottom:0; }
-  .agent-table .warm { background:#fff8e6; }
-  .concerns-stack { margin-top:18px; }
-  .concern-card { display:flex; gap:18px; padding:18px 20px; background:#f6f7fa; border-radius:6px; margin-bottom:10px; align-items:flex-start; }
-  .concern-card:last-child { margin-bottom:0; }
-  .concern-card .rank { font-size:36px; font-weight:700; color:#c5cee0; line-height:0.9; flex-shrink:0; min-width:38px; letter-spacing:-1.5px; }
-  .concern-card .body { flex:1; }
-  .concern-card .head { display:flex; justify-content:space-between; align-items:baseline; gap:12px; margin-bottom:6px; flex-wrap:wrap; }
-  .concern-card .name { font-size:17px; font-weight:700; color:#0f1729; line-height:1.25; letter-spacing:-0.2px; }
-  .concern-card .count { font-size:10.5px; color:#6a7488; font-weight:600; letter-spacing:0.5px; text-transform:uppercase; background:#fff; padding:3px 9px; border-radius:11px; white-space:nowrap; }
-  .concern-card p { font-size:13.5px; color:#3a4154; margin:0; line-height:1.6; }
-  .concern-card.critical { background:#0f1729; }
-  .concern-card.critical .rank { color:#f4b955; }
-  .concern-card.critical .name { color:#fff; }
-  .concern-card.critical .count { background:#2a3a55; color:#c5cee0; }
-  .concern-card.critical p { color:#c5cee0; }
   .my-actions { list-style:none; padding:0; margin:8px 0 0 0; }
   .my-actions li { padding:10px 0 10px 26px; font-size:14px; color:#2a3142; border-bottom:1px solid #f0f2f6; position:relative; line-height:1.55; }
   .my-actions li:last-child { border-bottom:0; }
@@ -107,17 +88,13 @@
   .financial-table td:first-child { color:#3a4154; }
   .financial-table td:last-child { text-align:right; font-weight:600; color:#0f1729; }
   .financial-table tr.total td { border-top:2px solid #0f1729; border-bottom:0; padding-top:12px; font-weight:700; }
-  .financial-table tr.total td:last-child { color:#c44545; font-size:16px; }
-  .rate-cards { display:table; width:100%; border-collapse:separate; border-spacing:8px; margin:6px -8px; }
-  .rate-card { display:table-cell; background:#f6f7fa; border-radius:6px; padding:14px 14px 12px; vertical-align:top; text-align:center; }
-  .rate-card .rc-num { font-size:20px; font-weight:700; color:#0f1729; }
-  .rate-card .rc-lbl { font-size:10.5px; color:#6a7488; margin-top:4px; }
+  .financial-table tr.total td:last-child { color:#3d5580; font-size:16px; }
   .src { font-size:12px; color:#8a93a5; margin-top:8px; font-style:italic; }
   @media (max-width:540px) {
     .top-bar, .header, .kpi-section, section, .sig, .footer, .hero-stat { padding-left:20px; padding-right:20px; }
     .status, .decision, .appendix { margin-left:20px; margin-right:20px; }
-    .kpis, .market-cards, .rate-cards { display:block; margin:0; }
-    .kpi, .market-card, .rate-card { display:block; margin-bottom:8px; }
+    .kpis { display:block; margin:0; }
+    .kpi { display:block; margin-bottom:8px; }
     .header h1 { font-size:22px; }
   }
 </style>
@@ -126,153 +103,139 @@
   <div class="wrap">
 
     <div class="top-bar">
-      <span>Market &amp; Pricing Report</span>
+      <span>Weekly Update</span>
       <span class="right">August 10, 2026</span>
     </div>
 
     <div class="header">
       <h1>1524 Willard Garden Ct</h1>
-      <div class="meta">San Jose, CA 95126 · 2 bd / 2.5 ba / 1,176 sqft townhouse · MLS ML82055009 · Listed July 21 at $698,888, currently <strong>$799,000</strong></div>
+      <div class="meta">San Jose, CA 95126 &middot; 2 bd / 2.5 ba / 1,176 sqft &middot; Listed July 21 at $698,888, now <strong>$798,888</strong></div>
     </div>
 
     <div class="status">
       <div class="dot"></div>
       <div class="text">
-        <div class="label">Status · Pricing Decision Needed</div>
-        <div class="msg">The $799,000 reprice is now costing us buyers by name, not just by silence. This report replaces the market-context numbers from the version we drafted earlier, which were incomplete, with a full, sourced picture of where Santa Clara County condos actually stand right now.</div>
+        <div class="label">Where things stand</div>
+        <div class="msg">A good week to sit down together and look at the whole picture, not just this week's activity.</div>
       </div>
     </div>
 
     <section>
-      <h2>The Read</h2>
-      <p>Hi Sheila, short version: <strong>the data doesn't support waiting for the market to lift this back to $830,000, and I want to walk through exactly why rather than just tell you that.</strong> Three independent buyers converged within 1.6% of each other three weeks ago, $698,888 to $725,000, without any of them knowing what the others offered. That is the market telling us what this home actually prices at right now. The move to $799,000 didn't find a higher buyer, it actively pushed two of them away this week, one named the price directly as the reason to pass. Santa Clara County condo prices are flat to slightly down over the last year, not rising, and mortgage rates are more likely to move up than down over the next one to three months. I know that's hard to hear when you're trying to get back to what you paid. Let's look at the real numbers together.</p>
+      <h2>How things are going</h2>
+      <p>Hi Sheila, I wanted to check in properly this week rather than just send numbers. A few things happened that are worth talking through together, and I also went and pulled a lot more data than I normally would, because I know how much this decision weighs on you, and I want you working from the fullest picture I can give you.</p>
+      <p>Two people passed on the house this week and actually told us why, which is useful even when it's not what we want to hear. One buyer's agent said his clients weren't interested at the current price. Someone at Sunday's open house told our host it "wasn't worth it in this market." I'd rather you hear that plainly from me than wonder what's going on behind the scenes.</p>
+      <p>Here's what I keep coming back to, though, and it's the reason I'm not worried in the way that number might make you worried: three completely separate buyers, none of whom knew about each other or what the others were offering, all landed within about $25,000 of one another when we were priced between $698,888 and $725,000. That's not a coincidence. That's three independent people telling us, in their own way, what this home is worth to them right now. Maria's $725,000 offer, the one that didn't feel like enough when it came in, has only looked more accurate every week since, because nothing has come in above it.</p>
+    </section>
+
+    <div class="kpi-section">
+      <div class="kpi-label">This week (Aug 4 &ndash; 10)</div>
+      <div class="kpis">
+        <div class="kpi"><div class="k-lbl">Showings</div><div class="k-num">2</div><div class="k-delta">down from 6 last week</div></div>
+        <div class="kpi"><div class="k-lbl">Disclosure activity</div><div class="k-num">8</div><div class="k-delta">down from 9 last week</div></div>
+        <div class="kpi"><div class="k-lbl">Open house groups</div><div class="k-num">7</div><div class="k-delta">1 quiet Sat + 6 Sun</div></div>
+        <div class="kpi"><div class="k-lbl">Days on market</div><div class="k-num">20</div><div class="k-delta">since July 21</div></div>
+      </div>
+    </div>
+
+    <section>
+      <h2>What buyers are telling us</h2>
+      <p>Thomas Nguyen's clients passed and said so directly: "not interested with the new listing price," no hedging, no softening it. Elaine P. loved the home but the stairs and their pet just didn't work together, nothing we can change there. Freda W.'s buyer is asking detailed questions about the HOA and plumbing age, still deciding. Taylor R. mentioned the parking situation, which has come up with a couple of other visitors too, worth having a simple answer ready for (guest parking exists, it's just not obvious on a first walkthrough). Sunday's open house brought six groups through, including one serious buyer with an agent who's still circling. Saturday only pulled one quiet group with no feedback at all, which tells its own story.</p>
+      <p>Since we launched three weeks ago, 60 different agents have engaged with this listing in some way, 23 private showings and 37 who've pulled the disclosure package, several bringing their own buyers in behind them. That's real, sustained interest. What's changed isn't whether people are looking. It's what they're saying once they see the number.</p>
+    </section>
+
+    <section>
+      <h2>What else buyers at this price are looking at right now</h2>
+      <p>I pulled every active condo and townhome in 95126 in your price range, because I think it helps to see exactly what you're up against rather than guess at it. There are three others right now, and I want to walk you through them honestly, including where yours is genuinely better.</p>
+      <div class="comp-cards">
+        <div class="comp-card">
+          <div class="cc-head"><span class="cc-addr">700 Paula Ct</span><span class="cc-price">$799,990</span></div>
+          <div class="cc-stats">2 bd / 2.5 ba &middot; 1,143 sqft &middot; $699.90/sqft &middot; HOA $354/mo &middot; Willow Glen</div>
+          <div class="cc-note">Almost identical to yours in size and price. No private yard mentioned in the listing at all, just shared building access.</div>
+        </div>
+        <div class="comp-card">
+          <div class="cc-head"><span class="cc-addr">412 S Buena Vista Ave</span><span class="cc-price">$739,000</span></div>
+          <div class="cc-stats">2 bd / 2.5 ba &middot; 1,055 sqft &middot; $700.47/sqft &middot; HOA $515/mo &middot; gated, 16 units</div>
+          <div class="cc-note">Smaller than yours, and the HOA runs $215 a month higher. It does have a nicely remodeled kitchen and a small fenced patio, so it's a real, fair comparison, not a lesser one, just a different set of tradeoffs.</div>
+        </div>
+        <div class="comp-card">
+          <div class="cc-head"><span class="cc-addr">337 Bautista Pl</span><span class="cc-price">$799,000</span></div>
+          <div class="cc-stats">2 bd / 2.5 ba &middot; 1,335 sqft &middot; $598.50/sqft &middot; HOA $464/mo &middot; EV charger, offers due Aug 11</div>
+          <div class="cc-note">This is the one I'd actually watch closely. Bigger than yours, same price, lower price per square foot, and offers are due tomorrow. Whatever it closes at will tell us a lot about where this exact segment really sits right now.</div>
+        </div>
+        <div class="comp-card subject">
+          <div class="cc-head"><span class="cc-addr">1524 Willard Garden Ct (yours)</span><span class="cc-price">$798,888</span></div>
+          <div class="cc-stats">2 bd / 2.5 ba &middot; 1,176 sqft &middot; $679.33/sqft &middot; HOA $300/mo</div>
+          <div class="cc-note">Your HOA is the lowest of the group by a real margin, $54 to $215 a month less than the others, and your own listing highlights a genuinely large private yard, which not every one of these has. Those are real advantages. They just aren't enough on their own to clear a price gap this size.</div>
+        </div>
+      </div>
+      <p style="margin-top:16px">I know it's tempting to look at a place like 412 Buena Vista and think, well, theirs is smaller and costs more in HOA fees, so mine should be worth more. And in a fair world, it would count for something, and it does count for something. But buyers are weighing the whole package, size, price, condition, HOA, all at once, and right now the market is pricing all four of these homes within about $100 a square foot of each other despite real differences between them. That tells me buyers see this whole segment as roughly one tier, not as sharply differentiated as any one seller might feel their home deserves to be.</p>
+    </section>
+
+    <section>
+      <h2>On getting to $830,000</h2>
+      <p>You asked directly whether it's realistic to hold out for an offer at $830,000, what you originally paid, and I want to answer that as honestly as I can rather than just tell you what feels encouraging.</p>
+      <p>$830,000 on your 1,176 square feet works out to about $706 a square foot. Nothing currently active or recently offered on your home has reached that number. The closest is 700 Paula Ct at $699.90/sqft, essentially tied with where you're priced now, and even that hasn't sold yet. Three real, independent buyers have already told us, with actual offers, where this specific home prices today, and $706/sqft isn't in that range.</p>
+      <p>I want to be careful here, because "realistic" and "impossible" aren't the same thing. A buyer who falls in love with something specific about your home, the yard, the low HOA, the exact layout, could pay a premium the comps don't fully predict. It happens. But I can't build a pricing strategy around hoping for that buyer to show up before the ones we already have move on. That's really the tradeoff in front of you.</p>
     </section>
 
     <div class="decision">
-      <div class="lbl">Decision Required From You</div>
-      <h3>What "underwater" actually looks like on this sale, and what the market data says about waiting it out</h3>
-      <p>You bought this home for <strong>$830,000</strong>. The current offer in hand is <strong>$735,000</strong>. That's already a real gap, but it understates what you'd actually walk away with once selling costs are factored in.</p>
+      <div class="lbl">Something to think through together</div>
+      <h3>What the numbers actually mean for you, not just for the listing</h3>
+      <p>You bought this home for <strong>$830,000</strong>. Maria's offer, the strongest one so far, was <strong>$725,000</strong>.</p>
       <table class="financial-table">
-        <tr><td>Current offer</td><td>$735,000</td></tr>
-        <tr><td>Estimated selling costs (commission + closing, ~7%)</td><td>&minus;$51,450</td></tr>
-        <tr><td>Estimated net proceeds before loan payoff</td><td>$683,550</td></tr>
-        <tr class="total"><td>Shortfall vs. your $830,000 purchase price</td><td>&minus;$146,450</td></tr>
+        <tr><td>Maria's offer</td><td>$725,000</td></tr>
+        <tr><td>Estimated selling costs (commission + closing, ~7%)</td><td>&minus;$50,750</td></tr>
+        <tr><td>Estimated net proceeds before loan payoff</td><td>$674,250</td></tr>
+        <tr class="total"><td>Difference from your $830,000 purchase price</td><td>&minus;$155,750</td></tr>
       </table>
-      <p style="margin-top:14px">That's the real number we're working with, not the $95,000 gap between the two sale prices alone. I want you to see it clearly before we talk strategy, not have it surface later.</p>
-      <a href="{{GHL_CALENDAR_URL}}" class="btn">Schedule the call</a>
+      <p style="margin-top:14px">I wanted you to see that clearly, not have it surface later as a surprise. It's a hard number. It's also not a number that changes much whether we wait two months or six, based on everything the current market is actually showing us, and I'd rather you make this decision with your eyes open than find that out the hard way down the road.</p>
+      <p>This is genuinely your call, and there's no wrong answer here, just tradeoffs. If it would help to talk through what waiting would realistically look like, month by month, or just to sit with these numbers together before deciding anything, let's find 15 minutes this week.</p>
+      <a href="{{GHL_CALENDAR_URL}}" class="btn">Find a time</a>
       <a href="tel:6503084727" class="btn btn-secondary">Or call: (650) 308-4727</a>
     </div>
 
     <section>
-      <h2>Santa Clara County Condo Market · Where Things Actually Stand</h2>
-      <p>This replaces the market-context section from the earlier draft, which was too thin to make a real decision on. Here's what the current data actually shows, sourced and dated.</p>
-      <div class="market-cards">
-        <div class="market-card">
-          <div class="mc-label">Median Days on Market</div>
-          <div class="mc-delta flat">18-31</div>
-          <div class="mc-delta-label">days, condos, depending on area within the county</div>
-          <div class="mc-row"><span>1524 Willard Garden</span><span class="v">20 days</span></div>
-          <div class="mc-row"><span>95126 zip, condos</span><span class="v">18 days</span></div>
-          <div class="mc-row"><span>Santa Clara County, condos</span><span class="v">31 days</span></div>
-        </div>
-        <div class="market-card">
-          <div class="mc-label">Condo Price Trend, Year Over Year</div>
-          <div class="mc-delta">Flat to -4.8%</div>
-          <div class="mc-delta-label">not appreciating right now</div>
-          <div class="mc-row"><span>County median (Apr 2026)</span><span class="v">$970,000, flat YoY</span></div>
-          <div class="mc-row"><span>County median (Jun 2026)</span><span class="v">down 4.8% YoY</span></div>
-        </div>
-      </div>
-      <p style="margin-top:16px"><strong>The most locally-relevant number:</strong> in your own zip code, 95126, condos and townhouses currently average $650,000 with a price per square foot of $638, meaningfully below your current $799,000 ask ($679/sqft). Sale-to-list ratio for 95126 condos is 103.6% (March 2026), still slightly over asking on average, but down a full point from a year ago, a market that is cooling, not one that has stalled outright.</p>
-      <p>Countywide inventory is tight, 1.5 to 1.6 months of supply as of July 2026, technically still favoring sellers by that measure alone. But tight inventory hasn't translated into rising condo prices this year, and it hasn't been enough to overcome buyer resistance to this specific listing at $799,000. Inventory and price direction are telling two different stories right now, and price direction is the one that determines what this home actually sells for.</p>
-      <div class="src">Sources: Redfin Santa Clara County housing market data (Jun 2026), Redfin/Zillow 95126 zip data (Mar-Aug 2026), Silicon Bay Market Update (Jul 2026), Compass Bay Area Market Reports (Apr 2026).</div>
-    </section>
-
-    <section>
-      <h2>Rates and the Next 3-6 Months</h2>
-      <div class="rate-cards">
-        <div class="rate-card"><div class="rc-num">6.58-6.85%</div><div class="rc-lbl">30-yr fixed today</div></div>
-        <div class="rate-card"><div class="rc-num">6.09-6.22%</div><div class="rc-lbl">Dec 2025 low, since reversed</div></div>
-        <div class="rate-card"><div class="rc-num">65-82%</div><div class="rc-lbl">odds of a Sept Fed hike, up sharply</div></div>
-        <div class="rate-card"><div class="rc-num">3.8%</div><div class="rc-lbl">April CPI, still well above the Fed's 2% target</div></div>
-      </div>
-      <p>Rates bottomed in December 2025 and have climbed back up since, driven in real part by the Iran conflict pushing oil prices and inflation higher. That is not a small factor: markets are now pricing meaningful odds (estimates range 65% to 82% depending on the source) of a Fed rate <strong>hike</strong>, not a cut, at the September meeting, a reversal from where expectations sat earlier this year. Housing economists are no longer expecting rates to fall below 6% in the near term. Higher rates hit condo buyers harder than single-family buyers in this price range, since first-time and move-up condo buyers are typically more payment-sensitive and less likely to be all-cash.</p>
-      <p><strong>Looking further out:</strong> Fannie Mae, the MBA, and Wells Fargo all project rates gradually easing to roughly 6.2-6.4% through 2027. A more optimistic group of six major forecasters sees rates reaching 5.30-5.55% by mid-2027, but that outlook assumes the Iran conflict resolves and the Fed is able to resume cutting, neither of which is certain on that timeline.</p>
-      <div class="src">Sources: HousingWire (Iran conflict/mortgage rate coverage, Jul 2026), Forbes/CME FedWatch (Sept 2026 hike odds), Fannie Mae, MBA, Wells Fargo 2026-2027 rate forecasts, Bankrate.</div>
-    </section>
-
-    <section>
-      <h2>The Honest 3-6 Month and 1-Year Outlook</h2>
-      <p>The broader Bay Area single-family market is forecast to see modest appreciation, roughly 3-6% in 2026, possibly accelerating to 4-7% in 2027 if rates ease and conditions stay favorable. <strong>That forecast is for single-family homes, and condos have not been keeping pace with it.</strong> The data above shows Santa Clara County condo prices flat to down over the last year while single-family prices have continued to grind modestly upward, a real, current divergence between the two property types, not a temporary blip.</p>
-      <p>Putting that together honestly: even in the more optimistic scenario, where condos start participating in Bay Area appreciation again at something like the single-family rate, closing a gap of this size (roughly $95,000 to $146,000 depending on how you measure it) would take multiple years of sustained above-average growth, not the next two quarters. In the next 3 to 6 months specifically, the more likely near-term pressure is upward on rates, not downward, given where the Fed's September decision is trending. I don't see a data-backed case for waiting a few months and getting a meaningfully better outcome.</p>
-    </section>
-
-    <section>
-      <h2>What This Means for Your Decision</h2>
-      <div class="concerns-stack">
-        <div class="concern-card critical">
-          <div class="rank">01</div>
-          <div class="body">
-            <div class="head">
-              <div class="name">My honest recommendation</div>
-              <div class="count">based on the data above</div>
-            </div>
-            <p>The $735,000 offer in hand sits almost exactly where three independent buyers already told us this home clears, $698,888 to $725,000. I'd recommend engaging seriously on that offer, or repricing back into the $725,000-$739,000 range to draw it out into the open again, rather than holding at $799,000 waiting for a recovery the current data doesn't support in any 3-6 month or 1-year window.</p>
-          </div>
-        </div>
-        <div class="concern-card">
-          <div class="rank">02</div>
-          <div class="body">
-            <div class="head">
-              <div class="name">If holding is financially possible</div>
-              <div class="count">a real, separate option</div>
-            </div>
-            <p>If your finances allow you to hold this property for 5+ years rather than sell now, renting it out is worth a real look, current condo values don't have to define the decision if you're not forced to sell into this specific market. That's a different analysis (rental income, carrying costs, tax treatment), and I'd want to run those numbers properly rather than guess at them here. Happy to put that together as a follow-up if it's useful.</p>
-          </div>
-        </div>
-      </div>
-    </section>
-
-    <section>
-      <h2>What I'm Doing This Week</h2>
+      <h2>What I'm doing this week</h2>
       <ul class="my-actions">
-        <li>Following up directly on the two agents who named the $799,000 price as their reason to pass this week, to see if there's a number that brings them back.</li>
-        <li>Preparing the pricing-adjustment paperwork for a move back into the $725,000-$739,000 range, ready the moment you decide.</li>
-        <li>Re-engaging the buyer behind the $735,000 offer to confirm it's still live and see if there's room to firm up terms.</li>
-        <li>Continuing to chase the outstanding disclosure-pull follow-ups from this week.</li>
+        <li>Following up with Thomas Nguyen's team to see if there's a number that brings his clients back to the table.</li>
+        <li>Watching 337 Bautista Pl closely, offers are due tomorrow, and whatever it closes at tells us something real about this exact segment.</li>
+        <li>Re-engaging with Maria's side to see if that $725,000 offer, or something close to it, is still on the table.</li>
+        <li>Putting together a short, ready answer about guest parking for showing agents, since it's come up more than once.</li>
+        <li>Continuing to follow up with the agents who still have disclosures out and haven't responded yet.</li>
       </ul>
     </section>
 
     <div class="appendix">
-      <h2>Appendix · Listing Numbers Since Launch</h2>
+      <h2>The numbers, all in one place</h2>
       <table class="appendix-table">
         <tr><td>Listed</td><td><strong>July 21, 2026</strong></td></tr>
-        <tr><td>List price</td><td>Launched at $698,888 ($594/sqft), now <strong>$799,000</strong> ($679/sqft)</td></tr>
-        <tr><td>Property</td><td>2 bd / 2.5 ba / 1,176 sqft townhouse · MLS ML82055009</td></tr>
-        <tr><td>Purchase price</td><td><strong>$830,000</strong></td></tr>
-        <tr><td>Highest offer received</td><td><strong>$735,000</strong>, not yet accepted</td></tr>
-        <tr><td>Days on market</td><td><strong>20</strong> (vs. 95126 condo median of 18, county median of 31)</td></tr>
-        <tr><td>This week's showings</td><td>2 (down from 6 last week)</td></tr>
+        <tr><td>List price</td><td>Launched at $698,888 ($594/sqft), now <strong>$798,888</strong> ($679/sqft)</td></tr>
+        <tr><td>You paid</td><td><strong>$830,000</strong></td></tr>
+        <tr><td>Best offer so far</td><td><strong>$725,000</strong> from Maria, not yet accepted</td></tr>
+        <tr><td>Total offers received</td><td><strong>3</strong>, highest $725,000</td></tr>
+        <tr><td>Days on market</td><td><strong>20</strong>, vs. 7-13 days for the three active competitors nearby</td></tr>
+        <tr><td>Cumulative interest</td><td>60 unique agents engaged, 23 showings, 37 disclosure pulls, since July 21</td></tr>
       </table>
+      <div class="src">Active comps individually verified via MLS on August 10, 2026. County and zip-level trend figures pulled by your team from MLSListings/Aculist, May 2026, and Santa Clara County RE Report, April 2026, both dated snapshots rather than live pulls.</div>
     </div>
 
     <div class="sig">
-      <p style="margin-top:24px">I know none of this is the news you were hoping for, and I want to make sure you have the real numbers rather than a softened version of them. Let's get 15 minutes on the phone this week to talk through where you want to go from here.</p>
-      <div class="signoff">— Graeham</div>
+      <p style="margin-top:24px">I know none of this is easy to sit with. I wanted you to have the real picture, not a softened version of it, because I think that's what actually helps you make a good decision. Let's talk this week, whenever works for you.</p>
+      <div class="signoff">&mdash; Graeham</div>
       <div class="sig-block">
         <div class="sig-photo"><div class="ph">GW</div></div>
         <div class="sig-info">
           <div class="name">Graeham Watts</div>
           <div class="role">REALTOR</div>
-          <div class="firm">Compass · The Boyenga Team</div>
-          <div class="contact">+1 (650) 308-4727 · <a href="mailto:graehamwatts@gmail.com">graehamwatts@gmail.com</a></div>
+          <div class="firm">Compass &middot; The Boyenga Team</div>
+          <div class="contact">+1 (650) 308-4727 &middot; <a href="mailto:graehamwatts@gmail.com">graehamwatts@gmail.com</a></div>
           <div class="dre">DRE # 01466876</div>
         </div>
       </div>
     </div>
 
     <div class="footer">
-      Confidential market and pricing report prepared for Sheila regarding 1524 Willard Garden Court, San Jose. Professional opinion based on MLS and third-party market data, not a formal appraisal.
+      Confidential update prepared for Sheila regarding 1524 Willard Garden Court, San Jose. Professional opinion based on MLS and third-party market data, not a formal appraisal.
     </div>
 
   </div>
