@@ -1,0 +1,159 @@
+<!DOCTYPE html><html lang="en"><head><meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>2034-2036 Grove St, San Francisco - Home Value &amp; Condo Conversion Analysis | Graeham Watts</title>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/4.4.1/chart.umd.min.js"></script>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700;800&family=Montserrat:wght@700;800&display=swap" rel="stylesheet">
+<style>
+:root{--b:#1A1A1A;--g:#C5A55A;--dg:#A88B3D;--cr:#F5EFDC;--gy:#666;--nv:#343955;--red:#c0392b;--grn:#4f9d69}
+*{margin:0;padding:0;box-sizing:border-box}body{font-family:Inter,sans-serif;color:#1A1A1A;line-height:1.6}
+.nav{position:fixed;top:0;left:0;right:0;height:60px;background:var(--nv);display:flex;align-items:center;padding:0 24px;z-index:9}.nav img{height:34px}
+.wrap{max-width:1040px;margin:0 auto;padding:0 22px}section{padding:34px 0}
+.sh{background:var(--b);color:var(--g);font-family:Montserrat;font-weight:800;letter-spacing:2px;text-transform:uppercase;font-size:17px;padding:12px 18px;margin-bottom:18px;border-left:6px solid var(--g)}
+.hero{background:var(--b);color:#fff;padding:104px 0 46px;text-align:center}
+.hero .nm{color:var(--g);font-family:Montserrat;font-weight:800;font-size:34px;letter-spacing:5px}
+.hero .rl{color:var(--g);letter-spacing:8px;font-size:12px}.hero .lbl{background:var(--g);color:var(--b);display:inline-block;font-family:Montserrat;font-weight:800;letter-spacing:3px;font-size:12px;padding:6px 16px;border-radius:4px;margin-top:18px}
+.hero .ad{font-size:25px;font-weight:700;margin-top:14px}.hero .dt{color:#aaa;margin-top:10px;font-size:13px;max-width:680px;margin-left:auto;margin-right:auto}.hero .cn{color:var(--g);font-size:12px;margin-top:14px}
+p{margin-bottom:13px;font-size:15px;color:#2a2a2a}.lead{font-size:16px}
+.stats{display:flex;flex-wrap:wrap;gap:12px;margin:18px 0}.st{background:var(--b);color:#fff;border-radius:8px;padding:16px;flex:1;min-width:150px;text-align:center}
+.st .n{color:var(--g);font-family:Montserrat;font-weight:800;font-size:21px}.st .l{color:#ccc;font-size:10px;text-transform:uppercase;letter-spacing:.5px;margin-top:4px}
+.st.red .n{color:#ff8a80}.st.grn .n{color:#8fd6a8}
+table{width:100%;border-collapse:collapse;margin:12px 0;font-size:13px;box-shadow:0 1px 5px rgba(0,0,0,.06)}
+th{background:var(--g);color:var(--b);text-align:left;padding:8px 9px;font-size:11px;text-transform:uppercase}td{padding:7px 9px;border-bottom:1px solid #eee;vertical-align:top}tbody tr:nth-child(even){background:var(--cr)}
+.nt{color:var(--gy);font-size:12.5px}.grn{color:var(--grn);font-weight:700}.red{color:var(--red);font-weight:700}
+.tscroll{overflow-x:auto}
+.cards{display:grid;grid-template-columns:1fr 1fr;gap:16px;margin:16px 0}
+.cards3{display:grid;grid-template-columns:1fr 1fr 1fr;gap:14px;margin:16px 0}
+.card{background:#fff;border:1px solid #eee;border-radius:8px;padding:18px;border-left:5px solid var(--g)}
+.card.grn{border-left-color:var(--grn)}.card.red{border-left-color:var(--red)}.card.nv{border-left-color:var(--nv)}
+.card .lbl{font-size:11px;text-transform:uppercase;color:var(--gy);letter-spacing:.5px;font-weight:700}
+.card .val{font-family:Montserrat;font-size:22px;font-weight:800;margin:6px 0}
+.card .ds{font-size:13px;color:#444}
+.cb{background:#fff;border:1px solid #eee;border-radius:8px;padding:16px;margin:14px 0}.cw{position:relative;height:300px}.cap{font-size:12px;color:var(--gy);margin-top:6px;text-align:center}
+.verdict{background:var(--b);color:#fff;border-radius:8px;padding:20px 22px;margin:14px 0}.verdict b{color:var(--g)}
+.key{background:#eef2f8;border-left:6px solid var(--nv);padding:14px 18px;border-radius:8px;margin:12px 0;font-size:13.5px}
+.alert{background:#fff8e6;border-left:6px solid #d98c6a;padding:14px 18px;border-radius:8px;margin:12px 0;font-size:13.5px}
+.dv{height:2px;background:linear-gradient(90deg,var(--g),transparent);margin:24px 0}
+footer{background:var(--b);color:#ddd;padding:28px 0;text-align:center;margin-top:26px}.fn{color:var(--g);font-family:Montserrat;font-weight:800;letter-spacing:3px;font-size:19px}.fl{font-size:12px;margin-top:6px;color:#bbb}.ds2{font-size:10.5px;color:#888;max-width:820px;margin:14px auto 0}
+@media(max-width:760px){.cards,.cards3{grid-template-columns:1fr}}
+</style></head><body>
+<nav class="nav"><img src="https://images.leadconnectorhq.com/image/f_webp/q_80/r_1200/u_https://assets.cdn.filesafe.space/6wuU3haUH7uNeT20E3UZ/media/691256870b647e40e3c2e105.png" alt="Graeham Watts"></nav>
+<header class="hero"><div class="wrap"><div class="nm">GRAEHAM WATTS</div><div class="rl">R E A L T O R</div>
+<div class="lbl">HOME VALUE &amp; CONDO CONVERSION UPDATE</div>
+<div class="ad">2034-2036 Grove St, San Francisco, CA 94117 (North Panhandle / NOPA)</div>
+<div class="dt">Prepared for Angie and Ray, August 2026. Congratulations again on the wedding. Here's an honest look at where the building stands today and what the condo conversion question actually looks like.</div>
+<div class="cn">Graeham Watts. Compass, The Boyenga Team. DRE #01466876. 650-308-4727</div></div></header>
+<div class="wrap">
+
+<section style="padding-top:28px"><div class="sh">Where Things Stand</div>
+<p class="lead">Hi Angie and Ray, since I was your agent on this purchase back in 2023, I wanted to put together a real update on where the building stands today, both as a home and as a potential condo conversion, using the actual numbers rather than a guess.</p>
+<div class="stats">
+<div class="st"><div class="n">$2,365,000</div><div class="l">You paid, closed 3/7/2023</div></div>
+<div class="st grn"><div class="n">$2,400,000-$2,650,000</div><div class="l">Most-likely value today</div></div>
+<div class="st"><div class="n">3,430 sq ft</div><div class="l">6 bed / 2 bath, 2-unit Edwardian, built 1925</div></div>
+<div class="st"><div class="n">$689.50/sf</div><div class="l">What you paid per square foot in 2023</div></div>
+</div>
+<div class="verdict"><b>Your equity picture: real, modest gains since 2023, and a live condo conversion path worth taking seriously, with one real catch to sort out first.</b> This building has sold twice on record: $1,308,000 in 2012 (30 offers, at the height of a bidding war) and $2,365,000 when you bought it in 2023. CoreLogic's own automated estimate today sits at $2,488,600, a real but modest gain given three years have passed, consistent with San Francisco's 2-4 unit market being slower than the single-family market over that stretch. On the conversion side: this is a genuine 2-unit building, which qualifies for San Francisco's "2-Unit Bypass," the fastest path to condo conversion in the city, no lottery required. But that bypass was built for TIC co-owners in separate units, and you own the whole building together. That distinction matters, and it's worth getting a straight answer on before you plan around it.</p></div>
+</section>
+
+<div class="dv"></div>
+
+<section><div class="sh">Your Building</div>
+<div class="tscroll"><table><tbody>
+<tr><th>Address / APN</th><td>2034-2036 Grove St, San Francisco, CA 94117. APN 1189-002F. North Panhandle (NOPA), District 6F.</td></tr>
+<tr><th>Configuration</th><td>2-unit Edwardian, 3,430 sq ft total, 6 bedrooms / 2 full baths across both units (3 bed / 1 bath each). Nearly identical footprints, upper unit (2036) and lower unit (2034), each with a fireplace, formal dining, and its own kitchen and laundry.</td></tr>
+<tr><th>Lot / Building</th><td>3,436 sq ft lot (0.079 acres), built 1925 (Age 101 in county records), 2 stories, wood construction. 2-car garage with internal access from the lower unit, tiered garden, Twin Peaks and Sutro Tower views from the upper unit.</td></tr>
+<tr><th>Ownership</th><td>Hodges 2023 Revocable Trust / Raymon J. Hodges, owner-occupied per county record.</td></tr>
+<tr><th>Zoning</th><td>RH2 (two-family residential), the correct zoning for a legal duplex and a prerequisite for condo conversion eligibility.</td></tr>
+<tr><th>Purchase</th><td>Listed $2,250,000, sold $2,365,000 (105.1% of list), 25 days on market. Listed 1/20/2023, sale 2/14/2023, close of escrow 3/7/2023. Graeham represented you as buyer's agent.</td></tr>
+</tbody></table></div>
+<div class="key"><strong>On the county's assessed value, for context, not as a value estimate:</strong> your 2025 assessed value is $2,460,545, up only 2% from 2024's $2,412,300, which itself jumped 53% from 2023's transitional $1,579,114 as the county caught up to your purchase price. That's a tax figure, not a market read, but it confirms the purchase timeline and price cleanly. Current annual property tax runs $29,908.14.</div>
+</section>
+
+<div class="dv"></div>
+
+<section><div class="sh">The Price History Here Tells a Real Story</div>
+<div class="tscroll"><table><thead><tr><th>Date</th><th>Event</th><th>Price</th><th>Notes</th></tr></thead><tbody>
+<tr><td>Mar 2012</td><td>Listed</td><td>$999,000</td><td>First time on the market in over 40 years</td></tr>
+<tr style="background:#eaf7ef"><td>Apr 2012</td><td>Sold</td><td><strong>$1,308,000</strong></td><td class="grn">131% of list, 30 offers received</td></tr>
+<tr><td>Jan 2023</td><td>Listed</td><td>$2,250,000</td><td>Marketed for owner-use or TIC fast-track condo conversion</td></tr>
+<tr style="background:#eaf7ef"><td>Mar 2023</td><td>Sold (your purchase)</td><td><strong>$2,365,000</strong></td><td class="grn">105.1% of list, 25 days on market</td></tr>
+<tr style="background:#fdf0ee"><td>Aug 2026</td><td>Current estimate</td><td><strong>$2,488,600</strong></td><td>CoreLogic RealAVM, confidence score 47/100</td></tr>
+</tbody></table></div>
+<div class="key"><strong>What this actually shows:</strong> the building appreciated 81% from 2012 to 2023 (11 years), then an estimated 5% from 2023 to today (about 3 years). That deceleration is real and matches the broader pattern: San Francisco's small multi-unit buildings have appreciated much more slowly since 2022 than single-family homes have, largely due to higher rates compressing what investors will pay for rental income, plus rent control limiting upside on any occupied unit. Your own building isn't underperforming some hidden benchmark, it's tracking exactly what this specific property type has done citywide.</div>
+<div class="cb"><div class="cw" style="height:280px"><canvas id="historyChart"></canvas></div><div class="cap"><strong>Every recorded sale at this address, 2012 to today.</strong> The 2012 sale was a genuine bidding-war peak after 40 years off market. Growth since your 2023 purchase has been real but modest. Source: MLS listing history and San Francisco County public records.</div></div>
+</section>
+
+<div class="dv"></div>
+
+<section><div class="sh">San Francisco &amp; NOPA Market Context</div>
+<div class="stats">
+<div class="st grn"><div class="n">$1.7M</div><div class="l">SF median sale price, last 3 months, +16.1% YoY</div></div>
+<div class="st"><div class="n">$1,140/sf</div><div class="l">SF median $/sqft, +16.9% YoY</div></div>
+<div class="st grn"><div class="n">$2,195,000</div><div class="l">94117 (NOPA) median sale price</div></div>
+<div class="st"><div class="n">26 days</div><div class="l">Median DOM in the Panhandle, avg 3 offers</div></div>
+</div>
+<p>San Francisco's overall housing market has had a genuinely strong run this year, single-family and condo prices are both up sharply year over year, and your specific neighborhood, NOPA, carries a real premium (94117's median sale price of $2,195,000 sits well above the citywide figure). That said, this strength has been concentrated in single-family homes and condos, the two-unit and small multi-family segment your building sits in has not moved at the same pace, which is the honest reason your building's own appreciation has been slower than the headline city numbers might suggest.</p>
+<div class="key"><strong>Reading this correctly for a 2-unit building:</strong> the single-family trend is useful context for the neighborhood's overall desirability and for understanding buyer demand generally, but it should not be applied directly to your building's value. If you ever separate the units via condo conversion, each resulting condo would then price much closer to the single-family/condo trend above rather than the income-property trend, which is a meaningful part of the conversion math below.</p>
+</section>
+
+<div class="dv"></div>
+
+<section><div class="sh">What Else Has Traded Nearby</div>
+<p class="lead">Genuine duplex comps in this exact price band and zip code. I want to be upfront that the two closest matches I could verify are from 2018, this specific product type (pre-war 2-unit buildings, this size, this zip) doesn't turn over often, and I'd rather show you real, dated comps than an estimate dressed up as current.</p>
+<div class="tscroll"><table><thead><tr><th>Address</th><th>Sold Price</th><th>SqFt</th><th>$/SqFt</th><th>Sold Date</th><th>Notes</th></tr></thead><tbody>
+<tr style="background:var(--cr);border-left:4px solid var(--g)"><td><strong>2034-2036 Grove St (yours)</strong></td><td><strong>$2,365,000</strong></td><td>3,430</td><td>$689.50</td><td>Mar 2023</td><td>Your own purchase</td></tr>
+<tr><td>751 Haight St</td><td>$3,000,000</td><td>3,641</td><td>$823.95</td><td>Oct 2018</td><td>Legal 2-unit, lives as single-family with legal attic, Lower Haight</td></tr>
+<tr><td>812 Scott St</td><td>$2,900,000</td><td>2,400*</td><td>$1,208</td><td>Nov 2018</td><td>1880s Eastlake Victorian, legal 1bd apt, 2 preemptive offers. *Listing agent noted tax record is wrong, actual is closer to 2,400 sq ft</td></tr>
+</tbody></table></div>
+<div class="key"><strong>How to read the $/sqft gap between these comps and your own purchase:</strong> both comps are fully-renovated, owner-user-style properties marketed as "lives like a single-family," which commands a real premium over a straightforward income-property 2-unit like yours. Your $689.50/sf purchase price is not evidence you overpaid, it reflects your building being marketed and priced as a 2-unit income property rather than a renovated owner-user flip. If you renovate and reposition the building the way these comps were, the data says there's real room to move toward that $800-$1,200/sf range, condition and presentation, not just square footage, is what's driving the difference.</div>
+</section>
+
+<div class="dv"></div>
+
+<section><div class="sh">The Rate Environment</div>
+<div class="stats">
+<div class="st red"><div class="n">6.58-6.85%</div><div class="l">30-yr fixed rate today</div></div>
+<div class="st"><div class="n">6.15-6.22%</div><div class="l">December 2025's low, since risen back up</div></div>
+<div class="st red"><div class="n">55-76%</div><div class="l">Odds of a September Fed rate hike, up sharply from a month ago</div></div>
+<div class="st"><div class="n">3.5-3.75%</div><div class="l">Fed funds target, held July 29, no cut signaled</div></div>
+</div>
+<p>Rates dropped to their 2025 low in December (6.15-6.22%) and have climbed back to today's 6.58-6.85% following the Fed's July 29 decision, a 9-3 vote to hold, with the three dissenting members favoring a hike, not a cut. For a 2-unit building like yours, this cuts two ways: it's part of why 2-4 unit values have lagged single-family homes (investor buyers underwrite against financing costs directly), but it's also why, if you do convert to condos, today's buyer pool for a single-family-equivalent unit is still real, just more rate-sensitive than it was in 2021-2022.</p>
+</section>
+
+<div class="dv"></div>
+
+<section><div class="sh">The Condo Conversion Question, Answered Honestly</div>
+<p class="lead">This is the part I know you're most curious about, so I want to walk through it plainly rather than just say "it's possible."</p>
+<div class="cards">
+<div class="card grn"><div class="lbl">The Good News</div><div class="ds">Your building is zoned RH2 and is a genuine legal 2-unit, which means it qualifies in principle for San Francisco's "2-Unit Bypass," the fastest path to condo conversion in the city. Unlike buildings with 3 to 6 units, a duplex does not have to wait for the annual lottery, which has been on hiatus since 2020 and, as of today, still hasn't resumed. If the lottery is your only other option, the bypass is genuinely the better path available right now.</div></div>
+<div class="card red"><div class="lbl">The Real Catch</div><div class="ds">The 2-Unit Bypass was built for TIC arrangements: two separate owners, each holding at least a 25% interest, each occupying their own unit continuously for at least a year. You own the whole building together, through one trust, as a married couple, not as two separate co-owners in separate units. Whether your specific ownership structure still qualifies, or whether it would need to be restructured first, is a real legal question, not something I can answer with certainty from here.</div></div>
+</div>
+<div class="key"><strong>My honest recommendation:</strong> talk to a condo conversion attorney (Andy Sirkin's office in San Francisco specializes specifically in this) before assuming either way. If you do qualify, or can restructure ownership to qualify, the upside case above (comps trading $800-$1,200/sf once renovated and separated) is real and worth planning around. If you don't qualify under the current bypass rules, the citywide lottery-based Expedited Conversion Program is the fallback, but it has been suspended since 2020 with no confirmed return date as of this report, so that path is a genuine "wait and see," not a near-term option.</div>
+<div class="alert"><strong>One more disclosure item worth remembering:</strong> the 2012 listing for this exact address noted the lower unit was tenant-occupied under protected rent-control status at the time. If your building has any occupancy or eviction history since, that's specifically relevant to bypass eligibility, since the program has a clean-history requirement around elderly, disabled, or catastrophically ill tenants. Worth confirming with your attorney alongside the ownership-structure question.</div>
+</section>
+
+<div class="dv"></div>
+
+<section><div class="sh">What Your Building Is Worth Today, As Is</div>
+<div class="cards3">
+<div class="card grn"><div class="lbl">Likely Range</div><div class="val">$2,300,000-$2,450,000</div><div class="ds">The conservative floor, reflecting the 2-4 unit segment's slower appreciation and CoreLogic's RealAVM low end ($1,893,800, though that range is wide given a 47/100 confidence score).</div></div>
+<div class="card nv"><div class="lbl">Most-Likely Value Today</div><div class="val">$2,400,000-$2,650,000</div><div class="ds"><strong>This is the number I'd actually stand behind as-is, un-renovated, still a straightforward 2-unit rental.</strong> Anchored on your own 2023 purchase plus modest appreciation consistent with the RealAVM point estimate of $2,488,600.</div></div>
+<div class="card red"><div class="lbl">If Renovated and Condo-Converted</div><div class="val">$2,900,000-$3,400,000+</div><div class="ds">Directional, not a firm number, based on the 751 Haight ($823.95/sf) and 812 Scott ($1,208/sf) comps applied to your 3,430 sq ft. Real upside if the conversion and renovation path is legally available to you, contingent entirely on the ownership-structure question above.</div></div>
+</div>
+<p>Professional opinion of value, not a formal appraisal.</p>
+</section>
+
+<div class="dv"></div>
+
+<section><div class="sh">Staying In Touch</div>
+<p>Happy to help however is useful here, whether that's a referral to a condo conversion attorney, pulling more current comps once something closer to your building actually trades, or just talking through the numbers. One quick ask: if you know anyone thinking about buying or selling, I'd be grateful for the introduction, just reply with their name, forward this along, or give me a call.</p>
+</section>
+
+</div>
+<footer><div class="fn">GRAEHAM WATTS</div><div class="fl">REALTOR | Compass, The Boyenga Team | DRE #01466876 | 650-308-4727 | graehamwatts.com</div>
+<div class="ds2">Prepared regarding 2034-2036 Grove St, San Francisco, CA 94117. Comparable sales from MLSListings/SFAR reciprocal data. Public record and assessment data from San Francisco County (Realist/CoreLogic). San Francisco and 94117 market trend figures from Redfin, current as of the data pulled for this report. Condo conversion program information is general and not legal advice; consult a qualified San Francisco real estate attorney to confirm eligibility for your specific ownership structure. Professional opinion of value, not a formal appraisal.</div></footer>
+
+<script>
+new Chart(document.getElementById('historyChart'),{type:'line',data:{labels:['Apr 2012','Mar 2023 (your purchase)','Aug 2026 (est.)'],datasets:[{label:'Price',data:[1308000,2365000,2488600],borderColor:'#C5A55A',backgroundColor:'rgba(197,165,90,0.15)',borderWidth:3,pointBackgroundColor:['#343955','#4f9d69','#C5A55A'],pointRadius:7,fill:true,tension:0.15}]},options:{responsive:true,maintainAspectRatio:false,animation:false,plugins:{legend:{display:false},tooltip:{callbacks:{label:c=>'$'+c.parsed.y.toLocaleString()}}},scales:{x:{ticks:{font:{size:11}}},y:{ticks:{callback:v=>'$'+(v/1000000).toFixed(2)+'M'},grid:{color:'#eee'},beginAtZero:false,min:1000000}}}});
+</script>
+</body></html>
