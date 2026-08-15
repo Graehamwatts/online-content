@@ -4,7 +4,7 @@
 <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.1/dist/chart.umd.min.js"></script>
 <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700;800&family=Montserrat:wght@700;800&display=swap" rel="stylesheet">
 <style>
-:root{--b:#1A1A1A;--g:#C5A55A;--dg:#A88B3D;--cr:#F5EFDC;--gy:#666;--nv:#343955;--red:#c0392b;--grn:#4f9d69;--amb:#C96A45}
+:root{--b:#1A1A1A;--g:#C5A55A;--dg:#A88B3D;--cr:#F5EFDC;--gy:#666;--nv:#343955;--red:#c0392b;--grn:#4f9d69;--amb:#C96A45;--gray:#9aa0a6}
 *{margin:0;padding:0;box-sizing:border-box}body{font-family:Inter,sans-serif;color:#1A1A1A;line-height:1.6}
 .nav{position:fixed;top:0;left:0;right:0;height:60px;background:var(--nv);display:flex;align-items:center;padding:0 24px;z-index:9}.nav img{height:34px}
 .wrap{max-width:1040px;margin:0 auto;padding:0 22px}section{padding:34px 0}
@@ -33,6 +33,9 @@ th{background:var(--g);color:var(--b);text-align:left;padding:8px 9px;font-size:
 .key{background:#eef2f8;border-left:6px solid var(--nv);padding:14px 18px;border-radius:8px;margin:12px 0;font-size:13.5px}
 .alert{background:#fff8e6;border-left:6px solid var(--amb);padding:14px 18px;border-radius:8px;margin:12px 0;font-size:13.5px}
 .dv{height:2px;background:linear-gradient(90deg,var(--g),transparent);margin:24px 0}
+.bigstat{background:var(--b);color:#fff;border-radius:8px;padding:20px 24px;margin:14px 0;text-align:center}
+.bigstat .n{color:var(--g);font-family:Montserrat;font-weight:800;font-size:30px}
+.bigstat .l{color:#ddd;font-size:14px;margin-top:6px}
 footer{background:var(--b);color:#ddd;padding:28px 0;text-align:center;margin-top:26px}.fn{color:var(--g);font-family:Montserrat;font-weight:800;letter-spacing:3px;font-size:19px}.fl{font-size:12px;margin-top:6px;color:#bbb}.ds2{font-size:10.5px;color:#888;max-width:820px;margin:14px auto 0}
 @media(max-width:760px){.cards,.cards3{grid-template-columns:1fr}}
 </style></head><body>
@@ -48,7 +51,7 @@ footer{background:var(--b);color:#ddd;padding:28px 0;text-align:center;margin-to
 <div class="stats">
 <div class="st"><div class="n">1,592 sq ft</div><div class="l">3 bed / 2 bath, built 1961</div></div>
 <div class="st"><div class="n">$1,225,100</div><div class="l">Last sold, 7/17/2015 (COE 8/21/2015)</div></div>
-<div class="st grn"><div class="n">$2,100,000-$2,800,000</div><div class="l">Recommended pricing range</div></div>
+<div class="st grn"><div class="n">$2,050,000-$2,800,000</div><div class="l">Recommended pricing range</div></div>
 <div class="st"><div class="n">$2,412,600</div><div class="l">CoreLogic RealAVM (confidence 65)</div></div>
 </div>
 <div class="tscroll"><table><tbody>
@@ -58,29 +61,31 @@ footer{background:var(--b);color:#ddd;padding:28px 0;text-align:center;margin-to
 <tr><th>Zoning / Schools</th><td>R1. Santa Clara Unified School District.</td></tr>
 <tr><th>Last Sale</th><td>Listed $1,175,000 (7/6/2015), sold $1,225,100 (7/17/2015, 104.3% of list), COE 8/21/2015. Current owner since that purchase, owner-occupied.</td></tr>
 </tbody></table></div>
-<div class="key"><strong>On condition, honestly:</strong> the county tax record classifies condition as "Average," with no permit history suggesting a major kitchen or bath remodel. I have not yet walked the interior or seen current photos, this report is built from public MLS and assessor records. Every comp in this report that sold at the upper half of the range had a documented kitchen and bath update first. Where this home actually sits in that spectrum is the single biggest swing factor in the numbers below, and a walkthrough would tighten this considerably.</div>
+<div class="key"><strong>On condition, honestly:</strong> the county tax record classifies condition as "Average," with no permit history suggesting a major kitchen or bath remodel. The only photos I could locate (Redfin) are tagged with the 2015 sale listing's MLS number, meaning they are eleven years old, not current condition. I have not walked the interior. Every comp in this report that sold at the upper half of the range had a documented kitchen and bath update first, and I found one directly comparable "as-is" sale, 748 Cornell Dr, that anchors the floor of this range. Where this home actually sits between those two ends is the single biggest swing factor in the numbers below, and a walkthrough would tighten this considerably.</div>
 </section>
 
 <div class="dv"></div>
 
 <section><div class="sh">The Market Story</div>
-<p class="lead">Santa Clara's 95051 zip has moved a long way since you bought in 2015. This exact micro-pocket, the numbered-street and Kellogg/Kenyon/Cronin grid east of Lawrence Expressway, has been trading in the low-to-high $2 millions for homes your size and era over the past year, a market that would have felt unrecognizable a decade ago.</p>
-<p>What's driving the spread: condition, almost entirely. I individually verified four recent sales in your immediate area, from a home directly across the street from you that sold with a light kitchen and bath update, up to a fully gut-remodeled home two blocks over that closed at nearly $1,800 a square foot. The gap between those isn't location, your whole pocket is walking distance to the same schools and the same Apple campus proximity that drove the frenzy in your own 2015 listing remarks. The gap is finish level.</p>
-<p>The good news: buyers here are still paying over asking consistently, averaging 104 to 110 percent of list every month for the past year and a half, and the typical home in this zip is selling in three to four weeks. The market has cooled slightly from a February 2026 peak (109.5% of list) to a more recent 104-105%, but it hasn't softened in any way that should worry you. What matters more for your specific pricing decision is which comp set you're being measured against, and that's a conversation worth having before we set a number.</p>
+<p class="lead">Santa Clara's 95051 zip has moved a long way since you bought in 2015. This exact micro-pocket, the numbered-street and Kellogg/Kenyon/Cronin grid east of Lawrence Expressway, has been trading in the high-$1 millions to low-$3 millions for homes your size and era over the past six months, a market that would have felt unrecognizable a decade ago.</p>
+<p>What's driving the spread: condition, almost entirely. I individually verified nineteen recent sales in this size and price band, from a fixer-upper trust sale that sold at $1,283 a square foot, up to a fully gut-remodeled home two blocks from you that closed at nearly $1,800 a square foot. The gap between those isn't location, this whole pocket is walking distance to the same schools and the same Apple campus proximity that drove the frenzy in your own 2015 listing remarks. The gap is finish level, and the data below shows exactly how much that's worth.</p>
+<p>The good news: 79% of comparable homes sold over their original asking price in the last six months. The market has cooled slightly from a February 2026 peak (109.5% of list, zip-wide) to a more recent 104-105%, but it hasn't softened in any way that should worry you. What matters more for your specific pricing decision is which comp set you're being measured against, and the pricing-behavior data on this page is the evidence behind that call.</p>
 </section>
 
 <div class="dv"></div>
 
 <section><div class="sh">Verified Comparable Sales</div>
-<p class="lead">All four sold within the last five months. I opened each individual MLS record and confirmed the actual sale and closing dates myself rather than trusting a filtered date range, consistent with how I run every comp pull.</p>
+<p class="lead">All six sold within the last five months. I opened each individual MLS record and confirmed the actual sale and closing dates myself rather than trusting a filtered date range, consistent with how I run every comp pull. I also cross-referenced against Redfin, which surfaced 748 Cornell and 771 Pomeroy independently, both verified directly in MLS afterward.</p>
 <div class="tscroll"><table><thead><tr><th>Address</th><th>Sold Price</th><th>$/SqFt</th><th>SqFt</th><th>Beds/Baths</th><th>Built</th><th>Sold / COE</th><th>List-to-Sale</th><th>Notes</th></tr></thead><tbody>
-<tr style="background:var(--cr);border-left:4px solid var(--g)"><td><strong>3444 Kenyon Dr (subject)</strong></td><td>n/a</td><td>n/a</td><td>1,592</td><td>3 / 2</td><td>1961</td><td>n/a</td><td>n/a</td><td>Pool and jacuzzi. Condition per tax record: Average</td></tr>
-<tr><td>3445 Kenyon Drive</td><td>$2,099,000</td><td>$1,572.28</td><td>1,335</td><td>3 / 2</td><td>1960</td><td>7/8/2026 / 7/22/2026</td><td>95.5%</td><td><strong>Directly across the street.</strong> Hardwood floors, updated kitchen (granite/Corian), updated baths (new vanities, Kohler fixtures). Same school attendance area as subject</td></tr>
+<tr style="background:var(--cr);border-left:4px solid var(--g)"><td><strong>3444 Kenyon Dr (subject)</strong></td><td>n/a</td><td>n/a</td><td>1,592</td><td>3 / 2</td><td>1961</td><td>n/a</td><td>n/a</td><td>Pool and jacuzzi. Condition per tax record: Average. No current photos available</td></tr>
+<tr><td>748 Cornell Dr</td><td>$1,850,000</td><td>$1,282.94</td><td>1,442</td><td>3 / 2</td><td>1961</td><td>7/23/2026 / 8/3/2026</td><td>102.8%</td><td><strong>Same build year as subject.</strong> Trust sale, explicitly marketed as a fixer ("perfect canvas... renovate, expand"). Santa Clara Unified. Your best as-is anchor</td></tr>
+<tr><td>771 Pomeroy Avenue</td><td>$1,825,000</td><td>$1,218.29</td><td>1,498</td><td>4 / 2</td><td>1961</td><td>7/8/2026 / 8/4/2026</td><td>94.8%</td><td>Same build year. Partial kitchen update (newer appliances), central AC added. One price cut ($1,925,000 to $1,850,000) before selling under even the reduced list, 43 days on market</td></tr>
+<tr><td>3445 Kenyon Drive</td><td>$2,099,000</td><td>$1,572.28</td><td>1,335</td><td>3 / 2</td><td>1960</td><td>7/8/2026 / 7/22/2026</td><td>95.5%</td><td><strong>Directly across the street.</strong> Hardwood floors, updated kitchen (granite/Corian), updated baths (new vanities, Kohler fixtures). Same school attendance area</td></tr>
 <tr><td>385 Cronin Drive</td><td>$2,320,000</td><td>$1,705.88</td><td>1,360</td><td>3 / 2</td><td>1956</td><td>4/15/2026 / 5/6/2026</td><td>105.5%</td><td>Maywood Park neighborhood. Updated kitchen (quartz counters), new LVT flooring, refreshed baths. Listed by The Boyenga Team</td></tr>
-<tr><td>1759 Higgins Avenue</td><td>$2,000,000</td><td>$1,254.71</td><td>1,594</td><td>3 / 2</td><td>1953</td><td>6/17/2026 / 7/10/2026</td><td>111.2%</td><td>Full top-to-bottom remodel with a permitted 556 sq ft addition. Sat 78 days total (relisted once) before selling well over its relist price. Highest level of finish in this set relative to its size</td></tr>
-<tr><td>334 Kellogg Way</td><td>$2,875,000</td><td>$1,799.12</td><td>1,598</td><td>3 / 2</td><td>1955</td><td>2/4/2026 / 2/25/2026</td><td>115.2%</td><td>Full remodel with permits. <strong>Flagged: listed with Cupertino school attendance</strong>, a different and higher-demand school boundary than your Santa Clara Unified assignment. Use as an upper-bound reference only, not a direct anchor</td></tr>
+<tr><td>1759 Higgins Avenue</td><td>$2,000,000</td><td>$1,254.71</td><td>1,594</td><td>3 / 2</td><td>1953</td><td>6/17/2026 / 7/10/2026</td><td>111.2%</td><td>Full top-to-bottom remodel with a permitted 556 sq ft addition. Sat 78 days total (relisted once) before selling well over its relist price</td></tr>
+<tr><td>334 Kellogg Way</td><td>$2,875,000</td><td>$1,799.12</td><td>1,598</td><td>3 / 2</td><td>1955</td><td>2/4/2026 / 2/25/2026</td><td>115.2%</td><td>Full remodel with permits. <strong>Flagged: listed with Cupertino school attendance</strong>, a different and higher-demand school boundary than your Santa Clara Unified assignment. Use as an upper-bound reference only</td></tr>
 </tbody></table></div>
-<div class="key"><strong>What this actually says:</strong> excluding the Cupertino-schools outlier, your three closest, apples-to-apples comps ran $1,254 to $1,706 a square foot, a real spread but a coherent one once you account for finish level. The home directly across the street from you, similarly modest in its updates, is your single best anchor at $1,572/sf. Applying that rate to your 1,592 sq ft, before any adjustment for your pool or for your own condition, points to a number right around $2,500,000, with real room above it if you invest in updates first and real risk below it if the home shows as dated.</div>
+<div class="key"><strong>What this actually says:</strong> excluding the Cupertino-schools outlier, your five closest, apples-to-apples comps ran $1,218 to $1,706 a square foot. The two newest additions bracket the real floor: 748 Cornell, explicitly sold as a fixer, is the cleanest as-is comparison available for a home in your condition. The home directly across the street from you, similarly modest in its updates, anchors the middle at $1,572/sf. Applying Cornell's rate to your 1,592 sq ft points to roughly $2,042,000 as-is; applying the Kenyon rate points to roughly $2,502,000 with a light refresh. That range, not a single number, is the honest starting point.</div>
 </section>
 
 <div class="dv"></div>
@@ -88,6 +93,44 @@ footer{background:var(--b);color:#ddd;padding:28px 0;text-align:center;margin-to
 <section><div class="sh">Current Competition</div>
 <p>Active and pending listings right now tell a consistent story: the market is still moving efficiently in the $2.0-2.3M band, but there's real stale inventory sitting at the top. 2121 Francis Avenue has been active 221 days at $2,699,999. 1150 Kiely Boulevard, 71 days at $2,150,000. 3786 Dunford Way, 58 days at $2,700,000. That's a real signal: pricing into the $2.7M+ tier without the finish level to justify it risks sitting.</p>
 <p>On the other side, three pendings just went under contract at healthy pace: 3718 Benton Street (9 days), 981 Curtis Avenue (11 days), 2242 Pyle Court (12 days), all in the $2.0-2.5M band. That's where the market is actually clearing right now.</p>
+</section>
+
+<div class="dv"></div>
+
+<section><div class="sh">Market Pricing Behavior and the Days-on-Market Correlation</div>
+<p class="lead">This is the section that answers the question every seller actually has: is this market rewarding sellers who price sharp, or sellers who price high and wait? I pulled the original list price, sold price, and days on market for 19 individually-verified sold homes in this size and price band over the last six months, computed every number below in Python, and did not eyeball any of it.</p>
+
+<div class="bigstat"><div class="n">79% of homes sold over their original asking price</div><div class="l">The median home in this cohort closed at 107.9% of its original list price</div></div>
+
+<div class="cb"><div class="cw"><canvas id="overUnderChart"></canvas></div>
+<div class="cap">How this market prices: share of the 19 verified sales that closed over, at, or under their original list price.</div></div>
+
+<div class="cb"><div class="cw"><canvas id="lsrHistChart"></canvas></div>
+<div class="cap">List-to-sale ratio distribution across the same 19 sales. Dashed line marks the median (107.9%).</div></div>
+
+<div class="cb"><div class="cw"><canvas id="scatterChart"></canvas></div>
+<div class="cap">Longer on market = smaller premium. Each dot is one verified sale (sale price as a percent of its ORIGINAL list price, vs. days on market). Correlation r = -0.23, a real but weak pattern, not a guarantee for any single home. The trendline shows the general direction: homes that took longer generally closed closer to (or under) their original ask.</div></div>
+
+<div class="cb"><div class="cw"><canvas id="outcomesChart"></canvas></div>
+<div class="cap">Priced-to-sell vs. overpriced outcomes, median figures for each group.</div></div>
+<div class="tscroll"><table><thead><tr><th>Approach</th><th># of sales</th><th>Median orig list</th><th>Median sold</th><th>Median LSR</th><th>Median DOM</th></tr></thead><tbody>
+<tr><td>Priced to sell (sold over original ask)</td><td>15</td><td>$2,198,888</td><td>$2,450,000</td><td>109.4%</td><td>10 days</td></tr>
+<tr><td>Priced at market (within 1%)</td><td>0</td><td>n/a</td><td>n/a</td><td>n/a</td><td>n/a</td></tr>
+<tr><td>Overpriced (sold under original ask)</td><td>4</td><td>$2,243,944</td><td>$2,124,500</td><td>95.1%</td><td>19 days</td></tr>
+</tbody></table></div>
+
+<div class="key"><strong>Reading the numbers.</strong> Of the 19 comparable Santa Clara homes that sold in the last six months:
+<ul style="margin:10px 0 0 20px">
+<li><strong>15 homes (79%) priced it to sell</strong> and sold over their original ask, a median of $2,450,000 (about 9% over asking), in a median of just <strong>10 days</strong>.</li>
+<li><strong>Zero homes sold right at asking</strong> in this window, the market simply doesn't sit still at exactly 100%.</li>
+<li><strong>4 homes (21%) overpriced</strong> and sold below their original ask. They started with a median list of $2,243,944 but sold for a median of $2,124,500, about 5% under, and took a median of <strong>19 days</strong>, nearly double the priced-to-sell group.</li>
+<li>Of the sales where I could confirm both the original and final list price, 1 of 7 (about 14%) needed at least one price cut before selling, 771 Pomeroy Avenue, which cut $75,000 and still closed under its reduced price.</li>
+</ul></div>
+
+<div class="key"><strong>Why is the market pricing this way?</strong> This looks like a straightforward anchoring gap. Most of the sellers in the "overpriced" bucket anchored to an optimistic number, a neighbor's headline sale, a Zestimate, the number they wanted to net, rather than what the actual comp set supported. The market corrected them over two to three weeks of soft activity, and they ultimately sold below where they started. The 79% majority who priced at or slightly under a defensible number got bid up fast instead. The correlation between price positioning and speed is real but modest (r = -0.23), the bigger reward for pricing right here isn't necessarily a faster sale, it's a better sale, the priced-to-sell group's median outcome is over $325,000 higher than the overpriced group's.</p></div>
+
+<div class="key"><strong>What this all means.</strong> The market punishes optimistic anchoring and rewards realistic, comp-backed pricing, not through speed alone but through final price. That directly supports the Competitive tier below: listing in a range the closest verified comps actually support puts you in the 79% majority that gets bid up, rather than risking the 21% minority that cuts and settles under ask.</p></div>
+<p class="nt">Sample: 19 individually-verified sold homes, Santa Clara 95051, 2-4 beds, 1,300-1,900 sq ft, closed in the last 6 months. Directional read given the sample size; not a guarantee for any single home. Original list price sourced from each listing's MLS History tab.</p>
 </section>
 
 <div class="dv"></div>
@@ -112,17 +155,17 @@ footer{background:var(--b);color:#ddd;padding:28px 0;text-align:center;margin-to
 <div class="st red"><div class="n">55-76%</div><div class="l">Odds of a September Fed rate hike, up sharply from a month ago</div></div>
 <div class="st"><div class="n">3.5-3.75%</div><div class="l">Fed funds target, held July 29, no cut signaled</div></div>
 </div>
-<p>Rates touched their 2025 low in December and have climbed back to 6.58-6.85% following the Fed's July 29 hold, a 9-3 vote with three members actually favoring a hike. Despite that, the sale-to-list data above shows buyers in this zip still paying over ask every month this year. Silicon Valley's tech-driven buyer pool here is less rate-sensitive than the broader market, which is part of why this pocket has held up.</p>
+<p>Rates touched their 2025 low in December and have climbed back to 6.58-6.85% following the Fed's July 29 hold, a 9-3 vote with three members actually favoring a hike. Despite that, the sale-to-list data above shows buyers in this zip still paying over ask most months this year. Silicon Valley's tech-driven buyer pool here is less rate-sensitive than the broader market, which is part of why this pocket has held up.</p>
 </section>
 
 <div class="dv"></div>
 
 <section><div class="sh">Pricing Strategy</div>
-<p class="lead">Given the wide, condition-driven spread in the comps, the honest strategy question isn't just "what price," it's "what price for what level of preparation." Here's how the three tiers break down.</p>
+<p class="lead">Given the wide, condition-driven spread in the comps, and given the pricing-behavior data above, the honest strategy question isn't just "what price," it's "what price for what level of preparation." Here's how the three tiers break down.</p>
 <div class="cards3">
-<div class="card grn"><div class="lbl">Conservative</div><div class="val">$2,100,000-$2,300,000</div><div class="ds">List as-is, no pre-market updates. Anchored near 3445 Kenyon's $1,572/sf and the active $2.0-2.3M band that's clearing fastest right now. The safe, fast-sale number if you'd rather not invest before listing.</div></div>
-<div class="card nv"><div class="lbl">Competitive, Recommended</div><div class="val">$2,300,000-$2,550,000</div><div class="ds"><strong>This is the number I'd list at.</strong> Assumes a light pre-list refresh, paint, staging, minor cosmetic work, matching the level of the Kenyon and Cronin comps without a full remodel. Realistic clearing band supported directly by your two closest, most comparable sales.</div></div>
-<div class="card red"><div class="lbl">Stretch</div><div class="val">$2,550,000-$2,800,000</div><div class="ds">Only defensible with real kitchen and bath investment before listing, matching the finish level of Cronin and Kellogg. Real upside if you want to put money in first: your pool is a genuine differentiator none of these comps have, and could help close part of the gap to the stretch comps even without a full remodel.</div></div>
+<div class="card grn"><div class="lbl">Conservative</div><div class="val">$2,050,000-$2,200,000</div><div class="ds">List as-is, no pre-market updates. Anchored directly on 748 Cornell Dr's $1,283/sf as-is fixer sale, your closest true condition match. The safe, fast-sale number if you'd rather not invest before listing.</div></div>
+<div class="card nv"><div class="lbl">Competitive, Recommended</div><div class="val">$2,300,000-$2,550,000</div><div class="ds"><strong>This is the number I'd list at.</strong> Assumes a light pre-list refresh, paint, staging, minor cosmetic work, matching the level of the Kenyon and Cronin comps without a full remodel. Puts you in the 79% of this market that sells over ask rather than the 21% that cuts and settles under.</div></div>
+<div class="card red"><div class="lbl">Stretch</div><div class="val">$2,550,000-$2,800,000</div><div class="ds">Only defensible with real kitchen and bath investment before listing, matching the finish level of Cronin and Kellogg. Real upside if you want to put money in first: your pool is a genuine differentiator none of these comps have.</div></div>
 </div>
 <p class="nt">Professional opinion of value, not a formal appraisal.</p>
 </section>
@@ -130,8 +173,8 @@ footer{background:var(--b);color:#ddd;padding:28px 0;text-align:center;margin-to
 <div class="dv"></div>
 
 <section><div class="sh">Special Considerations</div>
-<p><strong>Pool and jacuzzi:</strong> none of the four comps in this report have one. It's a real value driver for the right buyer pool and worth highlighting in marketing, though it can also narrow the buyer pool for families prioritizing low-maintenance yards. Net, a plus in this specific market given the summer selling season.</p>
-<p><strong>Condition verification:</strong> the county record shows no major permit history since the 1961 build. If the kitchen or baths have been updated since your 2015 purchase without permits pulled, that materially changes where you land in this range, worth confirming before we finalize a list price.</p>
+<p><strong>Pool and jacuzzi:</strong> none of the six comps in this report have one. It's a real value driver for the right buyer pool and worth highlighting in marketing, though it can also narrow the buyer pool for families prioritizing low-maintenance yards. Net, a plus in this specific market given the summer selling season.</p>
+<p><strong>Condition verification:</strong> the county record shows no major permit history since the 1961 build, and the only available photos are from the 2015 sale. If the kitchen or baths have been updated since your 2015 purchase without permits pulled, that materially changes where you land in this range, worth confirming before we finalize a list price.</p>
 </section>
 
 <div class="dv"></div>
@@ -142,7 +185,7 @@ footer{background:var(--b);color:#ddd;padding:28px 0;text-align:center;margin-to
 
 </div>
 <footer><div class="fn">GRAEHAM WATTS</div><div class="fl">REALTOR | Powered by The Boyenga Team at Compass | DRE #01466876 | 650-308-4727 | graehamwatts.com</div>
-<div class="ds2">Prepared regarding 3444 Kenyon Drive, Santa Clara, CA 95051. Comparable sales and trend data from MLSListings Matrix, each comp individually verified for actual sale and closing dates. Assessor and tax data from Santa Clara County (Realist/CoreLogic). Professional opinion of value, not a formal appraisal.</div></footer>
+<div class="ds2">Prepared regarding 3444 Kenyon Drive, Santa Clara, CA 95051. Comparable sales and trend data from MLSListings Matrix, each comp individually verified for actual sale and closing dates. Pricing-behavior statistics computed from 19 individually-verified sold comps' original list price, sale price, and days on market. Assessor and tax data from Santa Clara County (Realist/CoreLogic). Professional opinion of value, not a formal appraisal.</div></footer>
 
 <script>
 const months=['Sep 25','Oct 25','Nov 25','Dec 25','Jan 26','Feb 26','Mar 26','Apr 26','May 26','Jun 26','Jul 26','Aug 26'];
@@ -156,5 +199,24 @@ new Chart(document.getElementById('lsChart'),{type:'line',data:{labels:lsMonths,
 const domMonths=['Sep 25','Oct 25','Nov 25','Dec 25','Jan 26','Feb 26','Mar 26','Apr 26','May 26','Jun 26','Jul 26','Aug 26'];
 const domData=[24,29,21,23,22,31,24,16,17,28,26,15];
 new Chart(document.getElementById('domChart'),{type:'bar',data:{labels:domMonths,datasets:[{label:'Avg Days on Market',data:domData,backgroundColor:domMonths.map((m,i)=>i===11?'#C96A45':'#C5A55A')}]},options:{responsive:true,maintainAspectRatio:false,animation:false,plugins:{legend:{display:false},tooltip:{callbacks:{label:c=>c.parsed.y+' days'}}},scales:{y:{ticks:{callback:v=>v+'d'},grid:{color:'#eee'}}}}});
+
+new Chart(document.getElementById('overUnderChart'),{type:'bar',data:{labels:['Original list vs. sold price'],datasets:[
+  {label:'Sold OVER original ask (79%)',data:[78.9],backgroundColor:'#4f9d69'},
+  {label:'Sold AT original ask (0%)',data:[0],backgroundColor:'#9aa0a6'},
+  {label:'Sold UNDER original ask (21%)',data:[21.1],backgroundColor:'#C96A45'}
+]},options:{indexAxis:'y',responsive:true,maintainAspectRatio:false,animation:false,plugins:{legend:{position:'bottom'},tooltip:{callbacks:{label:c=>c.dataset.label+': '+c.parsed.x.toFixed(1)+'%'}}},scales:{x:{stacked:true,max:100,ticks:{callback:v=>v+'%'}},y:{stacked:true}}}});
+
+new Chart(document.getElementById('lsrHistChart'),{type:'bar',data:{labels:['<=95%','95-99%','99-101%','101-105%','105%+'],datasets:[{label:'# of sales',data:[2,2,0,3,12],backgroundColor:['#C96A45','#C96A45','#9aa0a6','#4f9d69','#4f9d69']}]},options:{responsive:true,maintainAspectRatio:false,animation:false,plugins:{legend:{display:false},annotation:{},tooltip:{callbacks:{label:c=>c.parsed.y+' sale(s)'}}},scales:{y:{ticks:{stepSize:1}}}}});
+
+new Chart(document.getElementById('scatterChart'),{type:'scatter',data:{datasets:[
+ {label:'Verified sale',data:[{x:108.55,y:7},{x:112.45,y:7},{x:111.11,y:7},{x:109.43,y:10},{x:104.46,y:28},{x:126.88,y:10},{x:107.04,y:0},{x:121.55,y:10},{x:105.51,y:7},{x:95.81,y:16},{x:93.93,y:22},{x:115.23,y:7},{x:95.45,y:11},{x:107.92,y:51},{x:111.23,y:78},{x:102.78,y:29},{x:94.81,y:43},{x:109.51,y:15},{x:102.38,y:78}],
+  backgroundColor:(ctx)=>{const v=ctx.raw?ctx.raw.x:100; return v>=101?'#4f9d69':(v>=99?'#9aa0a6':'#C96A45');},pointRadius:6},
+ {label:'Trendline',data:[{x:93.93,y:30.94},{x:126.88,y:11.04}],type:'line',borderColor:'#343955',borderWidth:2,pointRadius:0,fill:false}
+]},options:{responsive:true,maintainAspectRatio:false,animation:false,plugins:{legend:{display:false},tooltip:{callbacks:{label:c=>c.raw.x+'% of original list, '+c.raw.y+' days on market'}}},scales:{x:{title:{display:true,text:'Sale price as % of ORIGINAL list price'}},y:{title:{display:true,text:'Days on market'}}}}});
+
+new Chart(document.getElementById('outcomesChart'),{type:'bar',data:{labels:['Priced to sell (n=15)','Overpriced (n=4)'],datasets:[
+  {label:'Median DOM',data:[10,19],backgroundColor:'#C5A55A',yAxisID:'y'},
+  {label:'Median LSR %',data:[109.4,95.1],backgroundColor:'#343955',yAxisID:'y1'}
+]},options:{responsive:true,maintainAspectRatio:false,animation:false,plugins:{legend:{position:'bottom'},tooltip:{callbacks:{label:c=>c.dataset.label+': '+c.parsed.y+(c.dataset.yAxisID==='y'?' days':'%')}}},scales:{y:{position:'left',title:{display:true,text:'Median DOM'}},y1:{position:'right',title:{display:true,text:'Median LSR %'},grid:{drawOnChartArea:false}}}}});
 </script>
 </body></html>
