@@ -60,7 +60,7 @@ footer{background:var(--b);color:#ddd;padding:28px 0;text-align:center;margin-to
 <div class="stats">
 <div class="st"><div class="n">2,020 sq ft</div><div class="l">3-4 bed / 2.5 bath, built 2001</div></div>
 <div class="st"><div class="n">$862,000</div><div class="l">Purchased 5/7/2015</div></div>
-<div class="st grn"><div class="n">$1,350,000-$1,620,000</div><div class="l">Value range today</div></div>
+<div class="st grn"><div class="n">$1,350,000-$1,575,000</div><div class="l">Value range today</div></div>
 <div class="st"><div class="n">3,143 sq ft</div><div class="l">Lot size, University Square HOA</div></div>
 </div>
 <div class="tscroll"><table><tbody>
@@ -151,7 +151,7 @@ footer{background:var(--b);color:#ddd;padding:28px 0;text-align:center;margin-to
 <div class="cards3">
 <div class="card grn"><div class="lbl">Likely range</div><div class="val">$1,350,000</div><div class="ds">The defensible floor, anchored on 909 Baines, the exact same 2,020 sq ft floorplan as your home, sold in standard-updated condition with no complex premium applied.</div></div>
 <div class="card nv"><div class="lbl">Most-likely value today</div><div class="val">$1,450,000-$1,500,000</div><div class="ds">Blends in the real University Square premium: Wilks and Oakes are trading $780 to $810 a square foot inside the complex versus Baines' $669 a square foot outside it. This is the headline number, assuming standard-updated condition.</div></div>
-<div class="card red"><div class="lbl">Top of range if updated</div><div class="val">$1,580,000-$1,620,000</div><div class="ds">What Wilks' full-remodel condition, LG/Viking appliances, remodeled baths, new lighting and flooring, would look like applied at your 2,020 sq ft. Reachable if your home shows turnkey.</div></div>
+<div class="card red"><div class="lbl">Top of range if updated</div><div class="val">$1,575,000</div><div class="ds">What Wilks' full-remodel condition, LG/Viking appliances, remodeled baths, new lighting and flooring, would look like applied at your 2,020 sq ft. Reachable if your home shows turnkey.</div></div>
 </div>
 <p class="nt">Professional opinion of value, not a formal appraisal.</p>
 </section>
@@ -161,7 +161,7 @@ footer{background:var(--b);color:#ddd;padding:28px 0;text-align:center;margin-to
 <section><div class="sh">Your Equity Since 2015</div>
 <div class="cb"><div class="cw"><canvas id="priceJourney"></canvas></div>
 <div class="cap">From your $862,000 purchase in 2015 to today's value range. The bars show the Likely, Most-likely, and Top-of-range scenarios.</div></div>
-<p>You bought this home on 5/7/2015 for $862,000. At today's most-likely value, that is roughly $600,000 in value gained since your purchase, before any loan payoff or selling costs, in just over 10 years. Depending on which scenario actually applies once we know more about the home's current condition, that value gained ranges from roughly $488,000 on the low end to roughly $758,000 on the high end. Either way, this has been a strong hold.</p>
+<p>You bought this home on 5/7/2015 for $862,000. At today's most-likely value, that is roughly $600,000 in value gained since your purchase, before any loan payoff or selling costs, in just over 10 years. Depending on which scenario actually applies once we know more about the home's current condition, that value gained ranges from roughly $488,000 on the low end to roughly $713,000 on the high end. Either way, this has been a strong hold.</p>
 </section>
 
 <div class="dv"></div>
@@ -191,7 +191,7 @@ new Chart(document.getElementById('priceDom'),{type:'scatter',data:{datasets:[
 ]},options:{responsive:true,maintainAspectRatio:false,animation:false,plugins:{legend:{display:false},tooltip:{callbacks:{label:c=>'$'+c.raw.x.toLocaleString()+', '+c.raw.y+' days'}}},scales:{x:{title:{display:true,text:'Sold price'},ticks:{callback:v=>'$'+(v/1000000).toFixed(1)+'M'}},y:{title:{display:true,text:'Days on market'}}}}});
 
 new Chart(document.getElementById('priceJourney'),{type:'bar',data:{labels:['2015 Purchase','Likely Range','Most-Likely Value','Top of Range'],datasets:[
-  {label:'Value',data:[862000,1350000,1475000,1600000],
+  {label:'Value',data:[862000,1350000,1475000,1575000],
    backgroundColor:['#1A1A1A','#4f9d69','#343955','#c0392b']}
 ]},options:{responsive:true,maintainAspectRatio:false,animation:false,plugins:{legend:{display:false},tooltip:{callbacks:{label:c=>'$'+c.parsed.y.toLocaleString()}}},scales:{y:{ticks:{callback:v=>'$'+(v/1000000).toFixed(2)+'M'},grid:{color:'#eee'}}}}});
 </script>
