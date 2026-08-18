@@ -32,7 +32,7 @@
   "villain_types": ["none", "zillow_algorithm", "old_marketing"],
 
   "cta_destinations": [
-    { "id": "home_valuation",   "label": "Home valuation request",        "canonical_url": null, "sms_keyword": "VALUE",  "allowed": true, "note": "Build /east-palo-alto/home-valuation/ landing page; until then resolves to SMS keyword VALUE." },
+    { "id": "home_valuation",   "label": "Home valuation request",        "canonical_url": "https://graehamwatts.github.io/online-content/east-palo-alto/home-valuation/", "sms_keyword": "VALUE",  "allowed": true, "note": "LIVE 2026 — second evergreen landing page. Used first for the 09/01/26 card." },
     { "id": "off_market_buyers","label": "Off-market buyer-demand check", "canonical_url": null, "sms_keyword": "BUYERS", "allowed": true, "note": "Build /east-palo-alto/off-market-buyers/ landing page." },
     { "id": "prop_19_guide",    "label": "Prop 19 move-planning guide",   "canonical_url": null, "sms_keyword": "PROP19", "allowed": true, "note": "Build /east-palo-alto/prop-19-guide/ landing page." },
     { "id": "market_report",    "label": "Neighborhood market report",    "canonical_url": null, "sms_keyword": "MARKET", "allowed": true },
