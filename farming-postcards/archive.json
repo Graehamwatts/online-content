@@ -22,8 +22,8 @@
       "cta_line": "Get your street's real numbers",
       "audience": "Both",
       "preview_html": "2026-09-01-neighbor-envy-preview.html",
-      "status": "REVISED v2 — with Peter (headshots + real QR from Switchy)",
-      "notes": "v2 revision 2026-07-27 per Graeham: added a FRONT QR (new structure — first card with two QRs) with simplified front hook 'See what your neighbors got'; back now converts to home valuation. Both QRs are real Switchy short links with Facebook/GA/Google Ads retargeting pixels attached (hi.switchy.io/epa-neighbor-envy-0901-front and -back). Front QR destination is INTERIM (general MLS map search, not EPA-defaulted or sold-filtered) pending a dedicated East Palo Alto sold-properties page — since the QR encodes the Switchy link not the destination, it can be repointed later without reprinting."
+      "status": "FINAL v3 — with Peter (headshots + real QR from Switchy)",
+      "notes": "v3 (final) 2026-07-27: original front/back copy restored after Graeham reviewed v2's simplified wording and preferred the original — 'Someone On Your Block Just Sold...' / 'See The Real Sales On Your Street'. The v2 structural change (a FRONT QR, first card with two QRs) was kept. Both QRs are real Switchy short links with Facebook/GA/Google Ads retargeting pixels attached (hi.switchy.io/epa-neighbor-envy-0901-front and -back). Front QR destination is INTERIM (general MLS map search, not EPA-defaulted or sold-filtered) pending a dedicated East Palo Alto sold-properties page — since the QR encodes the Switchy link not the destination, it can be repointed later without reprinting."
     },
     {
       "id": "2026-08-15-quiet-sale",
