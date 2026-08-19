@@ -57,6 +57,9 @@
   .back-body { font-size: 11px; line-height: 1.5; color: #2a2a2a; margin-top: 10px; font-style: italic; }
   .back-body strong { font-weight: 700; font-style: normal; }
   .cta-line { font-family: 'Anton', sans-serif; font-size: 14px; color: var(--gold); letter-spacing: 0.5px; margin-top: 12px; text-transform: uppercase; }
+  .call-cta { display: flex; align-items: center; gap: 10px; margin-top: 12px; }
+  .call-arrow { width: 44px; height: 30px; flex-shrink: 0; }
+  .call-phone { font-family: 'Anton', sans-serif; font-size: 26px; color: var(--ink); letter-spacing: -0.3px; line-height: 1; }
   .qr-row { display: flex; align-items: center; gap: 10px; margin-top: 10px; }
   .qr-label { font-size: 8.5px; color: #444; font-style: italic; margin-bottom: 4px; }
   .qr-block { width: 70px; height: 70px; background: #fff; border: 1px solid #ccc; position: relative; display: flex; align-items: center; justify-content: center; flex-shrink: 0; }
@@ -79,7 +82,7 @@
 
 <div class="meta">
   <h1>Farming Postcard — September 1, 2026</h1>
-  <p>Archetype: Neighbor Envy (fresh remix) · v3 FINAL · original copy restored, dual QR kept, both Switchy-wrapped with retargeting pixels</p>
+  <p>Archetype: Neighbor Envy (fresh remix) · v4 FINAL · single front QR (Switchy) + back call-to-action, no back QR</p>
 </div>
 
 <div class="label">FRONT</div>
@@ -87,7 +90,7 @@
   <div class="pattern-bg"></div>
   <div class="front-headline">SOMEONE ON YOUR BLOCK JUST SOLD. <span class="gold">HERE'S WHAT THEY GOT.</span></div>
   <div class="front-mid">
-    <div class="front-sub"><span class="bold">FLIP OVER</span> to see the real numbers on your street</div>
+    <div class="front-sub"><span class="bold">SCAN HERE</span> to see what they got</div>
     <div class="front-qr-side">
       <div class="qr-block">
         <svg class="qr-svg" viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg">
@@ -137,29 +140,15 @@
   <div class="back-panel">
     <div class="back-headline">SEE THE REAL SALES ON YOUR STREET — <span class="gold-box">NO GUESSING</span></div>
     <div class="back-body">Every year, a few homes near yours quietly sell — and the real numbers rarely match what people assume. I track exactly what's happening on your specific street, not just your zip code. <strong>Free, and takes 60 seconds.</strong></div>
-    <div class="cta-line">GET YOUR STREET'S REAL NUMBERS</div>
-    <div class="qr-row">
-      <div class="qr-block">
-        <svg class="qr-svg" viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg">
-          <rect width="100" height="100" fill="#fff"/>
-          <g fill="#111">
-            <rect x="5" y="5" width="22" height="22"/><rect x="9" y="9" width="14" height="14" fill="#fff"/><rect x="13" y="13" width="6" height="6" fill="#111"/>
-            <rect x="73" y="5" width="22" height="22"/><rect x="77" y="9" width="14" height="14" fill="#fff"/><rect x="81" y="13" width="6" height="6" fill="#111"/>
-            <rect x="5" y="73" width="22" height="22"/><rect x="9" y="77" width="14" height="14" fill="#fff"/><rect x="13" y="81" width="6" height="6" fill="#111"/>
-            <rect x="35" y="10" width="6" height="6"/><rect x="45" y="10" width="6" height="6"/><rect x="55" y="10" width="6" height="6"/>
-            <rect x="35" y="20" width="6" height="6"/><rect x="55" y="20" width="6" height="6"/><rect x="65" y="20" width="6" height="6"/>
-            <rect x="10" y="35" width="6" height="6"/><rect x="20" y="35" width="6" height="6"/><rect x="35" y="35" width="6" height="6"/><rect x="45" y="35" width="6" height="6"/><rect x="65" y="35" width="6" height="6"/><rect x="80" y="35" width="6" height="6"/><rect x="90" y="35" width="6" height="6"/>
-            <rect x="10" y="45" width="6" height="6"/><rect x="30" y="45" width="6" height="6"/><rect x="40" y="45" width="6" height="6"/><rect x="55" y="45" width="6" height="6"/><rect x="70" y="45" width="6" height="6"/><rect x="85" y="45" width="6" height="6"/>
-            <rect x="15" y="55" width="6" height="6"/><rect x="35" y="55" width="6" height="6"/><rect x="50" y="55" width="6" height="6"/><rect x="65" y="55" width="6" height="6"/><rect x="80" y="55" width="6" height="6"/><rect x="90" y="55" width="6" height="6"/>
-            <rect x="35" y="65" width="6" height="6"/><rect x="45" y="65" width="6" height="6"/><rect x="60" y="65" width="6" height="6"/><rect x="75" y="65" width="6" height="6"/>
-            <rect x="35" y="75" width="6" height="6"/><rect x="50" y="75" width="6" height="6"/><rect x="65" y="75" width="6" height="6"/><rect x="80" y="75" width="6" height="6"/><rect x="90" y="75" width="6" height="6"/>
-            <rect x="35" y="85" width="6" height="6"/><rect x="50" y="85" width="6" height="6"/><rect x="60" y="85" width="6" height="6"/><rect x="80" y="85" width="6" height="6"/>
-          </g>
-        </svg>
-      </div>
-      <div class="qr-side">
-        <div class="qr-label">Scan to see your street's real sale prices</div>
-        <div class="scan-pill">SCAN ME</div>
+    <div class="cta-line">WANT A FREE HOME EVALUATION?</div>
+    <div class="call-cta">
+      <svg class="call-arrow" viewBox="0 0 110 70" xmlns="http://www.w3.org/2000/svg">
+        <path d="M10 55 Q 40 65 70 45 T 100 15" stroke="#C2A14E" stroke-width="6" fill="none" stroke-linecap="round"/>
+        <path d="M85 8 L 102 14 L 92 28 Z" fill="#C2A14E"/>
+      </svg>
+      <div>
+        <div class="cta-line" style="margin-top:0;">CALL ME TODAY!</div>
+        <div class="call-phone">650-308-4727</div>
       </div>
     </div>
   </div>
@@ -186,15 +175,15 @@
 </div>
 
 <div class="draft-notes">
-  <h2>What changed in v3 (FINAL) — read before print</h2>
+  <h2>What changed in v4 (FINAL) — read before print</h2>
   <ul>
-    <li><strong>Front and back copy REVERTED to the original wording</strong> (Graeham preferred it after seeing v2's simplified version). Front headline is back to "SOMEONE ON YOUR BLOCK JUST SOLD. HERE'S WHAT THEY GOT." with the original "FLIP OVER" subline; back is back to "SEE THE REAL SALES ON YOUR STREET — NO GUESSING" / "GET YOUR STREET'S REAL NUMBERS." <strong>Only the structural change survives: the front QR added in v2 stays</strong> — copy reverted, QR addition kept.</li>
-    <li><strong>Both QRs are now real Switchy short links with Graeham's retargeting pixels attached</strong> (Facebook, Google Analytics, Google Ads — pulled from the switchy-engine skill, already wired to his ad accounts). Generate the printed QR codes from Switchy's dashboard (Chrome → find each link → Download QR Code), NOT from the placeholder SVG above:<br>
+    <li><strong>ONE QR only, on the front.</strong> Front subline simplified to "SCAN HERE to see what they got" (pairs directly with the headline's "here's what they got"). The QR is a real Switchy short link with Graeham's retargeting pixels attached (Facebook, GA, Google Ads):<br>
       <strong>FRONT QR</strong> → <code>https://hi.switchy.io/epa-neighbor-envy-0901-front</code><br>
-      <strong>BACK QR</strong> → <code>https://hi.switchy.io/epa-neighbor-envy-0901-back</code></li>
-    <li><strong>Front QR destination is INTERIM.</strong> It currently points to the general MLS map search (listings.graehamwatts.com/idx/map) — not a page defaulted/zoomed to East Palo Alto, and not filtered to sold properties (the "Sold Listings" nav link on the site turned out to be a stub, and IDX Broker's visible status filters don't show a "Sold" option at all — likely an MLS data-permission thing, Graeham is checking). Because the postcard's QR encodes the SWITCHY link and not the destination directly, this can be repointed to the real EPA-sold map page later without reprinting anything — just update the Switchy link's destination.</li>
-    <li><strong>Back QR destination</strong> is the live home-valuation landing page (unchanged from v1): https://graehamwatts.github.io/online-content/east-palo-alto/home-valuation/</li>
-    <li><strong>Differentiation check (still passes):</strong> archetype Neighbor Envy last used 06/01/26 (outside 3-card cooldown); front hook is a fresh remix, not a repeat of 06/01's "last 5 homes... really sell for"; CTA destination (home_valuation) wasn't used on the last 2 cards; villain-free.</li>
+      Generate the printed QR from Switchy's dashboard (Chrome → find the link → Download QR Code), not from the placeholder SVG above.</li>
+    <li><strong>Back QR REMOVED — replaced with a direct call-to-action</strong>, matching Graeham's real 2025 house style (the Sept 2025 "Is Now The Right Time To Sell? Call Me Today!" card): "WANT A FREE HOME EVALUATION?" / "CALL ME TODAY!" with the phone number large, gold arrow pointing at it. No QR, no link — just the phone number, which also still appears in the standard contact block at the bottom.</li>
+    <li><strong>Front QR destination is INTERIM.</strong> It currently points to the general MLS map search (listings.graehamwatts.com/idx/map) — not defaulted to East Palo Alto or filtered to sold properties (the "Sold Listings" nav link on the site is a stub, and IDX Broker's visible status filters don't show "Sold" at all — likely an MLS data-permission thing, Graeham is checking). Since the QR encodes the Switchy link, not the destination directly, this can be repointed to a real EPA-sold map page later without reprinting.</li>
+    <li>The Switchy link minted earlier for a back QR (<code>epa-neighbor-envy-0901-back</code>, → home-valuation page) is no longer used on this card — left live in Switchy, just not printed.</li>
+    <li><strong>Differentiation check (still passes):</strong> archetype Neighbor Envy last used 06/01/26 (outside 3-card cooldown); front hook is a fresh remix; villain-free; CTA channel (front = tracked link, back = direct call) differs from the last 2 cards.</li>
     <li><strong>No fabricated stats.</strong> Copy stays generic — no invented street name, count, or dollar figure.</li>
     <li><strong>Headshots:</strong> pointing pose front, smiling pose back.</li>
     <li><strong>Print spec:</strong> Universal Mail Works, 6.25" × 4.25" with bleed (6" × 4" trim), 300 DPI. Locked elements unchanged.</li>
