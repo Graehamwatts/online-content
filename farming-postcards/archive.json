@@ -16,14 +16,14 @@
       "mail_date": "2026-09-01",
       "archetype": "Neighbor Envy (fresh remix)",
       "lever": "Curiosity + social proof",
-      "front_headline": "Someone On Your Block Just Sold. Here's What They Got.",
-      "back_headline": "See The Real Sales On Your Street — No Guessing",
-      "cta_type": "Landing page (home valuation)",
-      "cta_line": "Get your street's real numbers",
+      "front_headline": "See What Your Neighbors Got",
+      "back_headline": "Now See What Your Home Is Worth",
+      "cta_type": "Dual landing page (front: sold/map search interim; back: home valuation)",
+      "cta_line": "Get your home's real number",
       "audience": "Both",
       "preview_html": "2026-09-01-neighbor-envy-preview.html",
-      "status": "PRINT-READY — with Peter (headshots + real QR)",
-      "notes": "Fresh remix of the archetype (not a repeat of the 06/01/26 card's exact hook). SECOND real landing page live (east-palo-alto/home-valuation/) — CTA destination differs from both of the last 2 cards (Quiet Sale used seller_consultation, Equity used call/text), continuing the move off SMS-only CTAs. No fabricated stats — copy stays generic on purpose."
+      "status": "REVISED v2 — with Peter (headshots + real QR from Switchy)",
+      "notes": "v2 revision 2026-07-27 per Graeham: added a FRONT QR (new structure — first card with two QRs) with simplified front hook 'See what your neighbors got'; back now converts to home valuation. Both QRs are real Switchy short links with Facebook/GA/Google Ads retargeting pixels attached (hi.switchy.io/epa-neighbor-envy-0901-front and -back). Front QR destination is INTERIM (general MLS map search, not EPA-defaulted or sold-filtered) pending a dedicated East Palo Alto sold-properties page — since the QR encodes the Switchy link not the destination, it can be repointed later without reprinting."
     },
     {
       "id": "2026-08-15-quiet-sale",
