@@ -18,12 +18,12 @@
       "lever": "Curiosity + social proof",
       "front_headline": "Someone On Your Block Just Sold. Here's What They Got.",
       "back_headline": "See The Real Sales On Your Street — No Guessing",
-      "cta_type": "Front: Switchy-tracked landing page (sold/map interim). Back: direct call CTA, no QR.",
+      "cta_type": "Front: Switchy-tracked link to a real IDX sold-homes map. Back: direct call CTA, no QR.",
       "cta_line": "Want a free home evaluation? Call me today!",
       "audience": "Both",
       "preview_html": "2026-09-01-neighbor-envy-preview.html",
-      "status": "FINAL v4 — with Peter (headshots + real front QR from Switchy)",
-      "notes": "v4 (final) 2026-07-27: single QR structure — front keeps its Switchy-tracked QR (simplified subline 'SCAN HERE to see what they got'), back QR removed and replaced with a direct call-to-action ('Want a free home evaluation? Call me today!' + large phone number + arrow), matching the real 2025 house style (e.g. the Sept 2025 'Call Me Today!' card). Front QR: hi.switchy.io/epa-neighbor-envy-0901-front. Front QR destination is INTERIM (general MLS map search, not EPA-defaulted or sold-filtered) pending a dedicated East Palo Alto sold-properties page — since the QR encodes the Switchy link not the destination, it can be repointed later without reprinting. (History: v1 built dual-repeat-CTA-free two-page card; v2 added a front QR + simplified copy; v3 reverted copy but kept the front QR; v4 dropped the back QR entirely in favor of a call CTA.)"
+      "status": "FINAL v5 — with Peter (headshots + generate printed QR from Switchy)",
+      "notes": "v5 (final) 2026-08-18: front QR destination RESOLVED — built a dedicated IDX Broker 'Prime Map Search' widget (ID 168164, 'EPA Sold Homes - Postcard') on Graeham's own IDX Broker account, Status=Sold, default location=East Palo Alto CA, sort=Newest. Live, pannable map of real sold MLS properties (confirmed 42 listings, e.g. 2495 Gloria Way sold $1,070,000), already branded with Graeham's header/contact block. MLS Approval confirmed (MLSListings Inc.) — sold-data display is permitted. Front QR: hi.switchy.io/epa-sold-homes-0901 (real Switchy link, Facebook+GA+Google Ads pixels attached) -> listings.graehamwatts.com/idx/widgetpreview.php?widgetid=168164. Back QR removed in favor of a direct call CTA ('Want a free home evaluation? Call me today!' + large phone + arrow), matching the real 2025 house style. A second pixeled Switchy link is also live for future cards: hi.switchy.io/epa-home-eval-0901 -> graehamwatts.com/real-local-comps (home valuation page). (History: v1 dual-QR draft; v2 added front QR + simplified copy; v3 reverted copy, kept front QR; v4 dropped back QR for a call CTA; v5 resolved the front QR's destination from interim to a real live sold-homes map.)"
     },
     {
       "id": "2026-08-15-quiet-sale",
