@@ -1,0 +1,290 @@
+<!DOCTYPE html><html lang="en"><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1.0"><title>Call Sheet (master) — 430 Garden St</title><style>
+:root{--ink:#1a1a1a;--muted:#6b6b6b;--line:#e4e4e4;--bg:#fafafa;--card:#fff;
+--vgreen:#0f7b54;--vbg:#eaf6f0;--ablue:#1f5fae;--abg:#eaf1fb;--epurp:#7a3aa6;--ebg:#f3ecfa;
+--plan:#b5870f;--planbg:#fbf4e2;--warn:#b3261e;--warnbg:#fdeceb;--solo:#0f7b54;--need:#b5870f;}
+*{box-sizing:border-box}
+body{font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,Helvetica,Arial,sans-serif;color:var(--ink);background:var(--bg);margin:0;padding:28px 18px;line-height:1.55;font-size:15.5px}
+.wrap{max-width:960px;margin:0 auto}
+h1{font-size:25px;margin:0 0 2px}h2{font-size:13px;letter-spacing:.06em;text-transform:uppercase;margin:0}
+.sub{color:var(--muted);margin:0 0 18px}
+.banner{background:var(--warnbg);border:1px solid #f3c9c6;color:var(--warn);padding:11px 14px;border-radius:9px;font-size:14px;margin:0 0 18px}
+.geobanner{background:#eaf1fb;border:1px solid #cddcf3;color:#1f5fae;padding:11px 14px;border-radius:9px;font-size:14px;margin:0 0 18px}
+.facts{background:var(--card);border:1px solid var(--line);border-radius:11px;padding:14px 16px;margin:0 0 16px;display:flex;flex-wrap:wrap;gap:6px 26px}
+.facts div{font-size:14px}.facts b{display:block;font-size:11px;color:var(--muted);text-transform:uppercase;letter-spacing:.04em;font-weight:600}
+.how{background:#f0f4f8;border:1px solid #d9e2ec;border-radius:11px;padding:14px 16px;margin:0 0 26px}
+.how h3{margin:0 0 8px;font-size:14px}.how ul{margin:0;padding-left:18px}.how li{margin:4px 0;font-size:14px}.how .tag{font-weight:700}
+section{background:var(--card);border:1px solid var(--line);border-radius:12px;padding:0 0 16px;margin:0 0 18px;overflow:hidden}
+.head{padding:13px 16px;border-bottom:1px solid var(--line);display:flex;align-items:baseline;gap:12px}
+.head .lead{font-size:13px;color:var(--muted);font-weight:400;text-transform:none;letter-spacing:0}
+.body{padding:4px 16px 0}
+.plan .head{background:var(--planbg);border-left:5px solid var(--plan)}
+.vid .head{background:var(--vbg);border-left:5px solid var(--vgreen)}
+.agent .head{background:var(--abg);border-left:5px solid var(--ablue)}
+.editor .head{background:var(--ebg);border-left:5px solid var(--epurp)}
+table{border-collapse:collapse;width:100%;margin:10px 0;font-size:13px}
+th,td{border:1px solid var(--line);padding:7px 9px;text-align:left;vertical-align:top}
+th{background:#f6f6f6;font-size:11px;text-transform:uppercase;letter-spacing:.03em;color:#444}
+td .id{font-family:ui-monospace,Menlo,Consolas,monospace;font-size:12.5px;font-weight:700;white-space:nowrap}
+.id{font-family:ui-monospace,Menlo,Consolas,monospace;font-size:12.5px;font-weight:700}
+.pill{display:inline-block;font-size:10.5px;font-weight:700;padding:1px 7px;border-radius:20px;text-transform:uppercase;letter-spacing:.03em}
+.p-live{background:#e7f3ee;color:var(--vgreen)}.p-vo{background:#eef0f2;color:#555}.p-real{background:#eef4fb;color:var(--ablue)}
+.p-gfx{background:#f3ecfa;color:var(--epurp)}.p-broll{background:#fff3e0;color:#a15c00}.core{background:#fbf0d2;color:#8a5a00}
+.p-solo{background:#e7f3ee;color:var(--solo)}.p-need{background:#fbf4e2;color:var(--need)}
+.line{border-left:3px solid var(--ablue);padding:8px 0 8px 13px;margin:12px 0}
+.line .meta{font-size:12px;color:var(--muted);margin-bottom:3px}.line .says{font-size:16px;font-weight:600}.line .does{font-size:13px;color:#555;margin-top:4px;font-style:italic}
+.glossary{background:#f7faf8;border:1px dashed #bfe0cf;border-radius:9px;padding:10px 14px;margin:10px 0 4px;font-size:13px}.glossary b{color:var(--vgreen)}
+.explain{background:#f7faf8;border:1px solid #d9ece2;border-radius:9px;padding:11px 14px;margin:10px 0;font-size:13.5px}
+.note{font-size:13px;color:var(--muted);margin:8px 0}
+.copyblk{background:#fcfbf6;border:1px solid #ece3c8;border-radius:9px;padding:12px 14px;margin:10px 0}
+.copyblk h4{margin:0 0 4px;font-size:14px}.copyblk .k{font-size:11px;color:var(--muted);text-transform:uppercase;letter-spacing:.04em}
+.copyblk .cap{font-size:14px;color:#2a2a2a;margin:3px 0}
+.idlist{font-family:ui-monospace,Menlo,Consolas,monospace;font-size:12.5px;background:#f6f6f6;border-radius:9px;padding:12px 14px;line-height:1.9}
+.check{font-size:13.5px;margin:4px 0}.check b{color:var(--vgreen)}code{background:#f0f0f0;padding:1px 5px;border-radius:4px;font-size:12.5px}
+footer{color:var(--muted);font-size:12px;text-align:center;margin-top:18px}
+.scriptlib{background:#fcfcfd;border:1px solid var(--line);border-radius:9px;padding:12px 14px;margin:12px 0}
+.scriptlib h4{margin:0 0 4px;font-size:15px}.scriptlib .k{font-size:11px;color:var(--muted);text-transform:uppercase;letter-spacing:.04em;font-weight:600}
+.scrlbl{font-size:11px;text-transform:uppercase;letter-spacing:.04em;color:var(--muted);font-weight:700;margin:9px 0 3px}
+pre.scr{white-space:pre-wrap;font-family:ui-monospace,Menlo,Consolas,monospace;font-size:12.5px;background:#f7f7f9;border-left:3px solid var(--ablue);border-radius:6px;padding:10px 12px;margin:0;line-height:1.55}
+pre.ssml{white-space:pre-wrap;font-family:ui-monospace,Menlo,Consolas,monospace;font-size:12px;background:#f3ecfa;border-left:3px solid var(--epurp);border-radius:6px;padding:10px 12px;margin:0;line-height:1.55;color:#3a2a4a}
+</style></head><body><div class="wrap">
+
+<h1>Listing Call Sheet — 430 Garden St</h1><p class="sub">Hybrid Production · launch plan + shoot brief for one videographer trip</p>
+
+<div class="banner"><b>PRICE NOT YET LOCKED.</b> CMA recommends listing at $998,000 (high $900s). Confirm final list price with Graeham before any copy referencing "under a million" or "high $900s" goes live. Shoot date TBD — coordinate with Wesley.</div>
+
+<div class="geobanner"><b>Shot order fix (per Graeham, 2026-08-26):</b> the shot list below runs as ONE continuous geographic walk — street → front yard → front door → living room → kitchen → bath → bedrooms → bonus room → back door → backyard → detached garage, with drone grouped at the very top instead of scattered through the walk. No more front-yard-to-backyard-to-front-yard bouncing. Every listing shot is also tagged <span class="pill p-solo">SOLO-OK</span> (Wesley can shoot it straight from this brief, no Graeham needed) or <span class="pill p-need">NEEDS GRAEHAM</span> (talking-head or a call only he can make on site).</div>
+
+<div class="facts">
+<div><b>Address</b>430 Garden Street, East Palo Alto, CA 94303</div>
+<div><b>List price</b>$998,000 recommended (captions/static only — never in video)</div>
+<div><b>Beds / Baths</b>2 / 1, plus a rear bonus room (converted sunroom, unpermitted, works as a 3rd bedroom)</div>
+<div><b>Size</b>1,030 sq ft on a 10,113 sq ft lot (0.23 acre, 50 ft x 202 ft deep) — nearly double the typical EPA lot</div>
+<div><b>Built / Systems</b>1923, single-story Ranch · central AC · 1 fireplace · detached 2-car garage (480 sq ft)</div>
+<div><b>Shoot window</b>LONG (~4-5 hrs: Wesley solo block + Graeham block) · date TBD, confirm access</div>
+<div><b>Orientation</b>Both (shoot wide, editor crops per asset)</div>
+<div><b>Avatar look</b>digital_twin (already trained — no capture needed)</div>
+<div><b>Voice</b>ElevenLabs clone</div>
+</div>
+
+<div class="how"><h3>How to read this (30 seconds)</h3><ul>
+<li>Every clip gets a short <span class="tag">Clip ID</span> like <code>GARDEN-L02</code>. Wesley names each file with that ID.</li>
+<li><span class="tag" style="color:var(--plan)">① Launch Content Plan</span> = every post &amp; ad for the listing. <span class="tag" style="color:var(--vgreen)">② Videographer</span> = exactly what to film, in geographic order, each tagged <span class="pill p-solo">SOLO-OK</span> or <span class="pill p-need">NEEDS GRAEHAM</span>. <span class="tag" style="color:var(--ablue)">③ Your packet</span> = Graeham's words + calendar, useful whether he's on site or not. <span class="tag" style="color:var(--epurp)">④ Editor</span> = which clip goes where.</li>
+<li><b>If Graeham can't make the shoot:</b> skip section ③'s live-to-camera lines and section c) avatar plan — Wesley shoots everything tagged SOLO-OK from the written composition notes, and Peter renders all talking-head lines from the digital_twin avatar afterward. Nothing on the shot list depends on Graeham being there to point at anything.</li>
+</ul></div>
+
+<section class="plan"><div class="head"><h2>① Launch Content Plan</h2><span class="lead">Everything we post &amp; run for 430 Garden — powered by this one trip</span></div><div class="body">
+<div style="background:#fbf4e2;border:1px solid #ecdca8;border-left:5px solid #b5870f;border-radius:9px;padding:11px 14px;margin:2px 0 12px;font-size:14px"><b>Content yield from this one shoot:</b> one ~4-5 hr shoot → roughly 10-11 videos + ~6 ads + a 5+ clip neighborhood/EPA B-roll bank, plus talking-head renders from the already-trained digital_twin look with no extra filming.</div>
+
+<p><b>Main listing video.</b> <u>The arc</u>: opens at the curb on the lot (the real hook here, 10,113 sq ft on a street of 5,000 sq ft lots), through the front door into the living space, kitchen, bath, the two bedrooms, the converted sunroom bonus room, out the back into the big yard and the ADU story, closes at the detached garage / driveway with the CTA. No price spoken or on screen. Est. <b>~1.8 min</b>.</p>
+<p><b>Short version (9:16).</b> 30s cut from clips already filmed. Reuses GARDEN-L01 (curb/lot opener), L14 (backyard/ADU), L18 (garage), L23 (CTA).</p>
+<p><b>The launch slate</b> — every post &amp; ad across the 8 phases. <span class="pill core">CORE</span> = always do.</p>
+<table><tr><th>Phase</th><th>★</th><th>Asset</th><th>Type</th><th>O/Paid</th><th>Owner</th><th>Footage</th><th>CTA · keyword</th></tr>
+<tr><td>1 Coming Soon</td><td><span class="pill core">CORE</span></td><td>Coming Soon Teaser Reel</td><td>Reel</td><td>Organic</td><td>Wesley+Peter</td><td class="id">GARDEN-L01,L03</td><td>Comment BUY</td></tr>
+<tr><td>1 Coming Soon</td><td></td><td>"Guess the Lot Size" Story</td><td>Story</td><td>Organic</td><td>Graeham</td><td class="id">photos</td><td>answer next story · LOT</td></tr>
+<tr><td>1 Coming Soon</td><td></td><td>Coming Soon Carousel</td><td>Carousel</td><td>Organic</td><td>Peter</td><td class="id">listing photos</td><td>Comment BUY</td></tr>
+<tr><td>1 Coming Soon</td><td></td><td>Coming Soon GBP</td><td>GBP</td><td>Organic</td><td>John</td><td class="id">1 photo</td><td>Learn more</td></tr>
+<tr><td>1 Coming Soon</td><td><span class="pill core">CORE</span></td><td>Sphere Temperature-Check DM</td><td>DM</td><td>Organic</td><td>Graeham</td><td class="id">none</td><td>worth sharing? · SELL</td></tr>
+<tr><td>2 Just Listed</td><td><span class="pill core">CORE</span></td><td>The Reveal Hero Reel</td><td>Reel</td><td>Organic</td><td>Wesley+Peter</td><td class="id">GARDEN-L01,L14,L18,L23</td><td>Comment TOUR</td></tr>
+<tr><td>2 Just Listed</td><td><span class="pill core">CORE</span></td><td>Hero Photo Carousel</td><td>Carousel</td><td>Organic</td><td>Peter</td><td class="id">listing photos</td><td>Comment TOUR · Save</td></tr>
+<tr><td>2 Just Listed</td><td></td><td>Just Listed Story</td><td>Story</td><td>Organic</td><td>Peter</td><td class="id">photos</td><td>link sticker → IDX</td></tr>
+<tr><td>2 Just Listed</td><td><span class="pill core">CORE</span></td><td>Just Listed GBP</td><td>GBP</td><td>Organic</td><td>John</td><td class="id">geo photo</td><td>Learn more</td></tr>
+<tr><td>2 Just Listed</td><td></td><td>YouTube Property Tour</td><td>YouTube</td><td>Organic</td><td>Wesley+Peter→John</td><td class="id">full L seq</td><td>link → IDX</td></tr>
+<tr><td>2 Just Listed</td><td><span class="pill core">CORE</span></td><td>"Biggest Lot on the Block" Value Carousel</td><td>Carousel</td><td>Organic</td><td>Graeham+Peter</td><td class="id">photos + CMA graphic</td><td>Comment OPTIONS</td></tr>
+<tr><td>2 Just Listed</td><td></td><td>POV Walkthrough (raw)</td><td>Reel</td><td>Organic</td><td>Graeham</td><td class="id">GARDEN-L (live)</td><td>Comment BUY</td></tr>
+<tr><td>2 Just Listed</td><td><span class="pill core">CORE</span></td><td>Just Listed Meta Lead Ad</td><td>Meta Ad</td><td>Paid</td><td>John</td><td class="id">reuse / photos</td><td>Learn more → form · BUY</td></tr>
+<tr><td>2 Just Listed</td><td></td><td>Just Listed Email</td><td>Email</td><td>Organic</td><td>Adrian</td><td class="id">photos</td><td>button → listing page</td></tr>
+<tr><td>3 Disclosure</td><td><span class="pill core">CORE</span></td><td>Disclosure Drop Reel</td><td>Reel</td><td>Organic</td><td>Graeham</td><td class="id">digital_twin (HeyGen)</td><td>Comment DOCS</td></tr>
+<tr><td>3 Disclosure</td><td></td><td>Disclosure Available Post</td><td>Static</td><td>Organic</td><td>Peter</td><td class="id">graphic</td><td>Comment DOCS</td></tr>
+<tr><td>3 Disclosure</td><td></td><td>Disclosure Download Ad</td><td>Meta Ad</td><td>Paid</td><td>John</td><td class="id">graphic</td><td>Download → form · DOCS</td></tr>
+<tr><td>4 Lifestyle</td><td></td><td>ADU / Expansion Explainer Carousel</td><td>Carousel</td><td>Organic</td><td>Graeham+Peter</td><td class="id">L14,L15 + graphic</td><td>Comment OPTIONS</td></tr>
+<tr><td>4 Lifestyle</td><td></td><td>Neighborhood Walkthrough</td><td>Reel</td><td>Organic</td><td>Graeham+Wesley</td><td class="id">GARDEN-B21 (B-roll)</td><td>Comment BUY</td></tr>
+<tr><td>4 Lifestyle</td><td></td><td>Hyper-Local Lead Magnet</td><td>Carousel</td><td>Organic</td><td>John</td><td class="id">graphic</td><td>Comment OPTIONS</td></tr>
+<tr><td>5 Open House</td><td><span class="pill core">CORE</span></td><td>Open House Countdown Story</td><td>Story</td><td>Organic</td><td>Peter</td><td class="id">photos / clips</td><td>Comment OPEN</td></tr>
+<tr><td>5 Open House</td><td></td><td>"This Weekend Only" Reel</td><td>Reel</td><td>Organic</td><td>Graeham+Peter</td><td class="id">reuse / L09</td><td>Comment OPEN</td></tr>
+<tr><td>5 Open House</td><td><span class="pill core">CORE</span></td><td>Open House Geo-Targeted Ad</td><td>Meta Ad</td><td>Paid</td><td>John</td><td class="id">photo / clip</td><td>Learn more / RSVP</td></tr>
+<tr><td>5 Open House</td><td></td><td>Open House GBP Event</td><td>GBP</td><td>Organic</td><td>John</td><td class="id">photo</td><td>event / Learn more</td></tr>
+<tr><td>6 Social Proof</td><td><span class="pill core">CORE</span></td><td>"X Showings / Y Offers" Proof</td><td>Static</td><td>Organic</td><td>Peter</td><td class="id">graphic</td><td>Comment SELL</td></tr>
+<tr><td>6 Social Proof</td><td></td><td>Listing Feature Poll</td><td>Story</td><td>Organic</td><td>Graeham</td><td class="id">photo / clip</td><td>poll → DM</td></tr>
+<tr><td>7 Price (if it stalls)</td><td></td><td>"Improved Price" Announcement</td><td>Static</td><td>Organic</td><td>Peter</td><td class="id">alt photo</td><td>Comment BUY</td></tr>
+<tr><td>8 Sold</td><td><span class="pill core">CORE</span></td><td>"Sold" Reel</td><td>Reel</td><td>Organic</td><td>Graeham+Peter</td><td class="id">reuse + sold sign</td><td>Comment SELL</td></tr>
+<tr><td>8 Sold</td><td></td><td>Client-Posted UGC Sold Sign</td><td>Static</td><td>Organic</td><td>Graeham+Seller</td><td class="id">phone photo</td><td>client tags Graeham</td></tr>
+<tr><td>8 Sold</td><td><span class="pill core">CORE</span></td><td>"Sold → What's Your Home Worth" Ad</td><td>Meta Ad</td><td>Paid</td><td>John</td><td class="id">reuse</td><td>Get estimate · SELL</td></tr>
+<tr><td>8 Sold</td><td></td><td>Just Sold GBP</td><td>GBP</td><td>Organic</td><td>John</td><td class="id">geo photo</td><td>Learn more</td></tr>
+<tr><td>8 Sold</td><td></td><td>"Sold Near You" Neighbor Postcard</td><td>Print</td><td>Organic</td><td>John+Peter</td><td class="id">photo</td><td>scan QR → home value</td></tr>
+</table>
+<p class="note"><b>New keywords to wire in GHL:</b> TOUR, DOCS, OPEN, LOT — or map to existing keywords. <b>Case study:</b> fill AFTER sale — don't publish until closed.</p>
+
+<h3 style="font-size:14px">Ready-to-post copy — CORE assets</h3>
+<div class="copyblk"><h4>Coming Soon Teaser Reel <span class="k">Reel (9:16)</span></h4><div class="cap"><b>Hook:</b> "There's a lot on Garden Street in East Palo Alto that's about to make sense to someone."</div><div class="cap"><b>Body:</b> A classic 1923 ranch on a lot more than double the size of what's typical here. You'll want the details on this one. No price on screen.</div><div class="cap"><b>CTA:</b> Comment BUY and I'll send it the second it's live.</div></div>
+<div class="copyblk"><h4>Sphere Temperature-Check DM <span class="k">DM</span></h4><div class="cap"><b>Hook:</b> "Hey [name], I don't think you're moving, but you always know someone who is."</div><div class="cap"><b>Body:</b> I've got a 2-bed on a 10,000+ sq ft lot about to hit in East Palo Alto, real ADU room, and it won't sit. Worth sharing with anyone watching that pocket under $1M?</div><div class="cap"><b>CTA:</b> soft ask, no link unless they bite.</div></div>
+<div class="copyblk"><h4>The Reveal Hero Reel <span class="k">Reel (9:16)</span></h4><div class="cap"><b>Hook:</b> "Just listed in East Palo Alto, and the lot is nearly double the typical size on this street."</div><div class="cap"><b>Body:</b> 1,030 square feet of classic ranch on a 10,113 square foot lot, room to add an ADU, detached 2-car garage. No price spoken or on screen.</div><div class="cap"><b>CTA:</b> Comment TOUR for the full video + details.</div></div>
+<div class="copyblk"><h4>Hero Photo Carousel <span class="k">Carousel (4:5)</span></h4><div class="cap"><b>Hook:</b> "Just listed: 430 Garden Street. Swipe through."</div><div class="cap"><b>Body:</b> 2 bed, 1 bath plus a bonus room, a detached 2-car garage, and a yard that's more than twice the usual lot here. Listed at $998,000. Price OK in a static caption.</div><div class="cap"><b>CTA:</b> Comment TOUR for the full gallery. Save this one.</div></div>
+<div class="copyblk"><h4>Just Listed GBP <span class="k">Google Business post</span></h4><div class="cap"><b>Hook:</b> "Just listed: classic ranch on an oversized lot in East Palo Alto."</div><div class="cap"><b>Body:</b> 1,030 sq ft, 2 bed / 1 bath plus a bonus room, on a 10,113 sq ft lot with ADU potential.</div><div class="cap"><b>CTA:</b> Learn more</div></div>
+<div class="copyblk"><h4>"Biggest Lot on the Block" Value Carousel <span class="k">Carousel (4:5)</span></h4><div class="cap"><b>Hook:</b> "What a 10,113 sq ft lot actually gets you in East Palo Alto right now."</div><div class="cap"><b>Body:</b> Slide through: the house, the detached garage, and a lot nearly double the neighborhood norm. Static slides, price fine here.</div><div class="cap"><b>CTA:</b> Want the full list of oversized lots in this pocket? Comment OPTIONS.</div></div>
+<div class="copyblk"><h4>Just Listed Meta Lead Ad <span class="k">Meta Ad (Housing category)</span></h4><div class="cap"><b>Hook:</b> "See inside East Palo Alto's newest oversized-lot listing."</div><div class="cap"><b>Body:</b> 2 bed, huge lot, ADU potential. Instant form, 15-mi radius, drive to Graeham's IDX. Curiosity-gap creative, hold back the interior detail shots. DRE# 01466876 on creative.</div><div class="cap"><b>CTA:</b> "Learn more" → instant form → GHL (BUY)</div></div>
+<div class="copyblk"><h4>Disclosure Drop Reel <span class="k">Reel (9:16) — digital_twin avatar</span></h4><div class="cap"><b>Hook:</b> "Most buyers are scared of hidden issues. Here's exactly what's in the packet on this one."</div><div class="cap"><b>Body:</b> Pre-inspected and fully disclosed, including the note on the unpermitted bonus room. Renders from digital_twin, no filming needed.</div><div class="cap"><b>CTA:</b> Comment DOCS and I'll send the full packet.</div></div>
+<div class="copyblk"><h4>Open House Countdown Story <span class="k">Story (9:16)</span></h4><div class="cap"><b>Hook:</b> "Open house this [day], [time]. 430 Garden Street."</div><div class="cap"><b>Body:</b> Countdown + location sticker. Run daily into the weekend.</div><div class="cap"><b>CTA:</b> Comment OPEN for the address + time.</div></div>
+<div class="copyblk"><h4>"X Showings / Y Offers" Proof <span class="k">Static (1:1)</span></h4><div class="cap"><b>Hook:</b> "[X] showings and [Y] offers in the first [Z] days on Garden."</div><div class="cap"><b>Body:</b> Demand is real in this pocket.</div><div class="cap"><b>CTA:</b> Thinking of selling yours? Comment SELL.</div></div>
+<div class="copyblk"><h4>"Sold" Reel <span class="k">Reel (9:16)</span></h4><div class="cap"><b>Hook:</b> "Sold, in East Palo Alto."</div><div class="cap"><b>Body:</b> Recut from the listing clips + a SOLD-sign clip. Never the dollar figure.</div><div class="cap"><b>CTA:</b> Thinking of selling yours? Comment SELL for a private estimate.</div></div>
+<div class="copyblk"><h4>"Sold → What's Your Home Worth" Ad <span class="k">Meta Ad (Housing category)</span></h4><div class="cap"><b>Hook:</b> "Just sold in East Palo Alto. Curious what yours is worth?"</div><div class="cap"><b>Body:</b> Retarget the Just-Listed ad viewers + the database. Instant form → home valuation. DRE# 01466876.</div><div class="cap"><b>CTA:</b> "Get my estimate" → instant form (SELL)</div></div>
+</div></section>
+
+<section class="vid"><div class="head"><h2>② Videographer Packet — for Wesley</h2><span class="lead">LONG shoot (~4-5 hrs). Shoot wide/flexible; name each file with its Clip ID, e.g. GARDEN-L02_both.mp4</span></div><div class="body">
+<div class="glossary"><b>Quick word key:</b> <b>Wide</b>=whole house/room · <b>Medium</b>=waist-up · <b>Close-up</b>=one detail · <b>Push-in</b>=camera eases toward subject · <b>Gimbal walk</b>=operator walks with a stabilizer (smooth) · <b>Pull-back</b>=camera backs away to reveal more.</div>
+
+<div class="explain" style="background:#eaf1fb;border-color:#cddcf3"><b>Why this order:</b> shoot the property exactly like a buyer would walk it, once, in one direction. Drone up top and out of the way first, then curb, then front yard, then straight through the door and through the house room-by-room following the actual floor plan, then out the back, then the detached garage last since it sits off to the side. Never double back to a location already shot.</div>
+
+<p class="note"><b>Plan the window:</b> <b>Block A</b> is Wesley solo (~3 hrs) — drone, neighborhood sweep, all exteriors at golden hour, every interior, details, optional twilight, in the geographic order below. <b>Block B</b> (~2 hrs, if Graeham makes it) is talking-head + POV layered onto the same locations, not a re-walk. <b>Access:</b> confirm access + a tidy interior first.</p>
+
+<p class="note" style="background:#fdeceb;border:1px solid #f3c9c6;border-radius:8px;padding:9px 12px;color:#b3261e"><b>Drone airspace:</b> East Palo Alto sits under Palo Alto Airport (KPAO) controlled airspace — clear LAANC / check B4UFLY before flying. No authorization? Skip the drone shots and get elevated / high-angle ground shots of the lot instead.</p>
+
+<p class="note"><b>If Graeham can't make it:</b> every listing shot below (a) is composed in full so Wesley shoots it solo from this brief, no live direction needed. Talking-head lines in packet ③ render later from the digital_twin avatar off this same script — Wesley doesn't need to capture any of those on this trip unless Graeham is there for Block B.</p>
+
+<h3 style="font-size:14px">a) Shot list — one continuous geographic walk (drone first, then street to backyard to garage)</h3>
+<table><tr><th>Clip ID</th><th>What is in frame</th><th>How to frame it</th><th>Move &amp; size</th><th>Hold</th><th>On site?</th></tr>
+
+<tr><th colspan="7" style="background:#e7efe9;color:#0f7b54;text-align:left">Drone (shoot first, before anyone walks the property)</th></tr>
+<tr><td class="id">GARDEN-L30</td><td>Top-down of the house + the full 10,113 sq ft lot.</td><td>Directly overhead, square to the lot lines so the size reads against the neighbors' smaller parcels.</td><td>Slow descend, top-down. Wide.</td><td>6-8s</td><td><span class="pill p-solo">SOLO-OK</span></td></tr>
+<tr><td class="id">GARDEN-L31</td><td>Pull-back from the roof revealing the block, showing this lot vs the typical 5,000 sq ft parcels around it.</td><td>Start tight on the roof, rise and pull back.</td><td>Pull-back reveal. Wide.</td><td>8-10s</td><td><span class="pill p-solo">SOLO-OK</span></td></tr>
+<tr><td class="id">GARDEN-L32</td><td>Aerial approach down Garden Street toward the house.</td><td>Track down the street at ~40 ft toward the front.</td><td>Forward fly. Wide.</td><td>6-8s</td><td><span class="pill p-solo">SOLO-OK</span></td></tr>
+
+<tr><th colspan="7" style="background:#e7efe9;color:#0f7b54;text-align:left">1. Street / curb approach</th></tr>
+<tr><td class="id">GARDEN-L01</td><td>Front elevation + FOR SALE sign, full street view.</td><td>End of the front walk, centered. ~20% sky, sign in bottom third. Chest height. Sun behind camera.</td><td>2s still then push-in. Wide.</td><td>6-8s</td><td><span class="pill p-solo">SOLO-OK</span></td></tr>
+<tr><td class="id">GARDEN-L02</td><td>Neighboring lots for scale comparison (the 5,000 sq ft norm vs this one).</td><td>Standing at the curb, pan slowly from a neighboring lot line to this one's fence line.</td><td>Slow pan. Wide.</td><td>6-8s</td><td><span class="pill p-solo">SOLO-OK</span></td></tr>
+
+<tr><th colspan="7" style="background:#e7efe9;color:#0f7b54;text-align:left">2. Front yard / facade</th></tr>
+<tr><td class="id">GARDEN-L03</td><td>Full front yard width, showing the depth of the setback.</td><td>From the sidewalk corner, whole yard edge-to-edge.</td><td>Slow track. Wide.</td><td>6-8s</td><td><span class="pill p-solo">SOLO-OK</span></td></tr>
+<tr><td class="id">GARDEN-L04</td><td>Ranch facade detail — 1923 character, fireplace chimney if visible.</td><td>Square to the house, mid-distance, even light.</td><td>Static then push-in. Medium.</td><td>5-6s</td><td><span class="pill p-solo">SOLO-OK</span></td></tr>
+
+<tr><th colspan="7" style="background:#e7efe9;color:#0f7b54;text-align:left">3. Front entry</th></tr>
+<tr><td class="id">GARDEN-L05</td><td>Walk-up approach to the front door.</td><td>Follow from the sidewalk up the walk, POV-ish.</td><td>Gimbal walk forward. Medium.</td><td>6-8s</td><td><span class="pill p-solo">SOLO-OK</span></td></tr>
+<tr><td class="id">GARDEN-L06</td><td>Front door threshold, opening into the living space.</td><td>From just inside, door frame in shot, light spilling in.</td><td>Gimbal walk in. Medium.</td><td>4-6s</td><td><span class="pill p-solo">SOLO-OK</span></td></tr>
+
+<tr><th colspan="7" style="background:#e7efe9;color:#0f7b54;text-align:left">4. Living room (first room past the entry)</th></tr>
+<tr><td class="id">GARDEN-L07</td><td>Living room, widest flow angle including the fireplace.</td><td>Entry corner, room edge-to-edge, window light from the side.</td><td>Gimbal walk in. Wide.</td><td>6-8s</td><td><span class="pill p-solo">SOLO-OK</span></td></tr>
+<tr><td class="id">GARDEN-L08</td><td>Fireplace detail.</td><td>Straight on, mantle to hearth.</td><td>Static then push-in. Medium/CU.</td><td>4-5s</td><td><span class="pill p-solo">SOLO-OK</span></td></tr>
+
+<tr><th colspan="7" style="background:#e7efe9;color:#0f7b54;text-align:left">5. Kitchen (adjacent to living room)</th></tr>
+<tr><td class="id">GARDEN-L09</td><td>Kitchen, counters + working triangle.</td><td>Doorway threshold, show the counter run.</td><td>Slow pan. Medium.</td><td>5-6s</td><td><span class="pill p-solo">SOLO-OK</span></td></tr>
+<tr><td class="id">GARDEN-L10</td><td>Kitchen detail set — fixtures, hardware.</td><td>Tight clean detail framings, even light.</td><td>Static / slow push. Close-up.</td><td>4-5s ea</td><td><span class="pill p-solo">SOLO-OK</span></td></tr>
+
+<tr><th colspan="7" style="background:#e7efe9;color:#0f7b54;text-align:left">6. Bathroom</th></tr>
+<tr><td class="id">GARDEN-L11</td><td>Full bathroom.</td><td>From the doorway, square to the vanity, open shade.</td><td>Static then push-in. Medium/CU.</td><td>4-6s</td><td><span class="pill p-solo">SOLO-OK</span></td></tr>
+
+<tr><th colspan="7" style="background:#e7efe9;color:#0f7b54;text-align:left">7. Bedroom 1</th></tr>
+<tr><td class="id">GARDEN-L12</td><td>Primary bedroom.</td><td>Corner angle, show the window + space.</td><td>Slow pan. Wide.</td><td>5-6s</td><td><span class="pill p-solo">SOLO-OK</span></td></tr>
+
+<tr><th colspan="7" style="background:#e7efe9;color:#0f7b54;text-align:left">8. Bedroom 2</th></tr>
+<tr><td class="id">GARDEN-L13</td><td>Second bedroom.</td><td>Corner angle, natural light.</td><td>Slow pan. Wide.</td><td>5-6s</td><td><span class="pill p-solo">SOLO-OK</span></td></tr>
+
+<tr><th colspan="7" style="background:#e7efe9;color:#0f7b54;text-align:left">9. Hallway connecting to the bonus room</th></tr>
+<tr><td class="id">GARDEN-L14a</td><td>Hallway / flow toward the rear of the house.</td><td>Down the hall, show how the rooms connect.</td><td>Gimbal walk. Medium.</td><td>4-6s</td><td><span class="pill p-solo">SOLO-OK</span></td></tr>
+
+<tr><th colspan="7" style="background:#e7efe9;color:#0f7b54;text-align:left">10. Bonus room (converted rear sunroom, works as a 3rd bedroom)</th></tr>
+<tr><td class="id">GARDEN-L15</td><td>Bonus room — the converted sunroom.</td><td>Doorway angle, show the windows / natural light that made it a sunroom, whole room in frame.</td><td>Static then push-in. Wide.</td><td>5-6s</td><td><span class="pill p-need">NEEDS GRAEHAM</span> — he should be the one to frame the "not a legal bedroom but works as one" caveat correctly on the disclosure side; Wesley can shoot it solo, but hold the room's use language for Graeham's sign-off</td></tr>
+
+<tr><th colspan="7" style="background:#e7efe9;color:#0f7b54;text-align:left">11. Back door / transition outside</th></tr>
+<tr><td class="id">GARDEN-L16</td><td>Back door threshold, opening onto the yard.</td><td>From just inside, door frame in shot, yard visible beyond.</td><td>Gimbal walk out. Medium.</td><td>4-6s</td><td><span class="pill p-solo">SOLO-OK</span></td></tr>
+
+<tr><th colspan="7" style="background:#e7efe9;color:#0f7b54;text-align:left">12. Backyard (the lot is the story here — 10,113 sq ft)</th></tr>
+<tr><td class="id">GARDEN-L17</td><td>Backyard, the full usable lot depth (202 ft deep).</td><td>Back-right corner across the yard to the house, low-ish to show depth and length.</td><td>Pull-back reveal. Wide.</td><td>8-10s</td><td><span class="pill p-solo">SOLO-OK</span></td></tr>
+<tr><td class="id">GARDEN-L18</td><td>Side yard / open buildable space (where an ADU would sit).</td><td>Down the side of the house showing the open setback and depth.</td><td>Slow track. Wide.</td><td>5-6s</td><td><span class="pill p-solo">SOLO-OK</span></td></tr>
+
+<tr><th colspan="7" style="background:#e7efe9;color:#0f7b54;text-align:left">13. Detached garage (last, since it sits off to the side/rear of the lot)</th></tr>
+<tr><td class="id">GARDEN-L19</td><td>Detached 2-car garage exterior (480 sq ft), full lot context.</td><td>Square to the garage door, driveway/path leading in, yard visible in frame.</td><td>Static / slow push. Wide.</td><td>4-6s</td><td><span class="pill p-solo">SOLO-OK</span></td></tr>
+<tr><td class="id">GARDEN-L20</td><td>Detached garage interior.</td><td>Just inside the door, both bays + depth.</td><td>Gimbal walk in. Wide/medium.</td><td>5-6s</td><td><span class="pill p-solo">SOLO-OK</span></td></tr>
+
+<tr><th colspan="7" style="background:#e7efe9;color:#0f7b54;text-align:left">Twilight (optional, shoot last if light allows)</th></tr>
+<tr><td class="id">GARDEN-L21</td><td>Front exterior at dusk, interior lights on.</td><td>Same comp as L01, blue hour, warm windows.</td><td>Static. Wide.</td><td>6-8s</td><td><span class="pill p-solo">SOLO-OK</span></td></tr>
+
+<tr><th colspan="7" style="background:#eef0f2;color:#444;text-align:left">Block B — Graeham on camera (only if he makes it)</th></tr>
+<tr><td class="id">GARDEN-L22</td><td>Graeham to camera at the curb (the lot-size hook).</td><td>Medium close-up, straight-on, house soft behind. Open shade.</td><td>Static / steady. Medium CU.</td><td>2 takes</td><td><span class="pill p-need">NEEDS GRAEHAM</span></td></tr>
+<tr><td class="id">GARDEN-L23</td><td>Graeham in the backyard delivering the lot/ADU story (the CTA).</td><td>Medium, the open lot behind him.</td><td>Static / slow push. Medium.</td><td>2 takes</td><td><span class="pill p-need">NEEDS GRAEHAM</span></td></tr>
+<tr><td class="id">GARDEN-L24</td><td>POV walkthrough, Graeham's phone, raw.</td><td>Selfie/POV through the house, honest take.</td><td>Handheld POV. Medium.</td><td>45-60s</td><td><span class="pill p-need">NEEDS GRAEHAM</span></td></tr>
+</table>
+
+<h3 style="font-size:14px">b) B-roll bank — evergreen EPA neighborhood content, if the window allows</h3>
+<table><tr><th>Clip ID</th><th>What to film</th><th>Feeds which planned content</th></tr>
+<tr><td class="id">GARDEN-B21</td><td>Street-level pass of nearby smaller lots for the size comparison.</td><td>Neighborhood Walkthrough / "biggest lot" content</td></tr>
+<tr><td class="id">GARDEN-B22</td><td>Nearby University Ave retail / local commerce, ground level.</td><td>'Living in East Palo Alto' guide</td></tr>
+<tr><td class="id">GARDEN-B23</td><td>Commute establishing — US-101 access.</td><td>Commute / relocation explainers</td></tr>
+</table>
+<p class="note">No queued content list was provided for this run, so these three are the only evergreen bank shots (generic EPA neighborhood B-roll, not tied to a specific named video). If Graeham has other queued videos that need footage from this trip, send the list and this section gets filled out properly per the long-shoot-mode cap.</p>
+
+<h3 style="font-size:14px">c) Avatar plan — what renders vs what to capture</h3>
+<table><tr><th>Talking-head segment</th><th>Look</th><th>Action</th></tr>
+<tr><td>Reveal Reel narration</td><td>digital_twin (existing)</td><td>Render — no filming, works even if Graeham skips the shoot</td></tr>
+<tr><td>Disclosure Drop (incl. the unpermitted bonus-room note)</td><td>digital_twin (existing)</td><td>Render — no filming</td></tr>
+<tr><td>Listing intro / hero lines</td><td>digital_twin (existing)</td><td>Render — no filming</td></tr>
+<tr><td>"Standing at 430 Garden" curb + backyard talking-heads (L22, L23)</td><td>live Graeham</td><td>Only if he's on site for Block B — otherwise cut these lines and let digital_twin voiceover carry the same beats over B-roll instead</td></tr>
+<tr><td>POV walkthrough</td><td>— none —</td><td>Filmed LIVE (Graeham), skip entirely if he's not there</td></tr>
+</table>
+</div></section>
+
+<section class="agent"><div class="head"><h2>③ Your Packet — the exact script</h2><span class="lead">Every line, in order, and what to do while you say it — works whether you're on site or not</span></div><div class="body">
+<p class="note">Tags: <span class="pill p-live">Live to camera</span> filmed saying it, only if you're there · <span class="pill p-vo">Voiceover</span> recorded audio over footage, works remotely off this script. <b>No price, rate, or credit spoken — anywhere.</b></p>
+
+<div class="line"><div class="meta"><span class="id">GARDEN-L01</span> · <span class="pill p-live">Live to camera (if on site)</span> · at the curb</div><div class="says">"This is the kind of lot you don't see much of anymore in East Palo Alto."</div><div class="does">Walk up the front path toward the door, warm and direct. If you're not there: this line becomes a digital_twin voiceover over L01/L02 instead, same words.</div></div>
+
+<div class="line"><div class="meta"><span class="id">GARDEN-V01</span> · <span class="pill p-vo">Voiceover</span> · over street/lot B-roll</div><div class="says">"430 Garden Street sits on 10,113 square feet, more than double the typical parcel in this pocket. Most homes on this block are on 5,000 square foot lots. This one isn't."</div><div class="does">VO over L02, the neighboring-lot comparison pan. Works with or without you on site.</div></div>
+
+<div class="line"><div class="meta"><span class="id">GARDEN-V02</span> · <span class="pill p-vo">Voiceover</span> · over interior B-roll</div><div class="says">"Inside, it's a classic 1923 single-story ranch. Living room with a working fireplace, a kitchen, one bath, and two bedrooms."</div><div class="does">VO over L07-L13 interior sequence. No face on screen.</div></div>
+
+<div class="line"><div class="meta"><span class="id">GARDEN-V03</span> · <span class="pill p-vo">Voiceover</span> · over bonus room</div><div class="says">"There's also a converted sunroom in the back that works well as a third bedroom. It's not permitted as one, that's disclosed, but it's real flexible space."</div><div class="does">VO over L15. Say the disclosure caveat exactly this way, every time, no shortcuts on the "not permitted" language.</div></div>
+
+<div class="line"><div class="meta"><span class="id">GARDEN-L23</span> · <span class="pill p-live">Live to camera (if on site)</span> · in the backyard</div><div class="says">"But the lot is the real story. Look at how much room is back here. You could add an ADU, or expand the house down the road. On the Peninsula, you're buying the dirt as much as the house."</div><div class="does">Stand in the yard, sweep your hand across the open space. If remote: this becomes VO over L17/L18 instead, same words, first line adjusted to "the lot is the real story here."</div></div>
+
+<div class="line"><div class="meta"><span class="id">GARDEN-V04</span> · <span class="pill p-vo">Voiceover</span> · over garage B-roll</div><div class="says">"And a detached two-car garage, four hundred eighty square feet, off to the side of that same lot."</div><div class="does">VO over L19/L20.</div></div>
+
+<div class="line"><div class="meta"><span class="id">GARDEN-L23</span> · <span class="pill p-live">Live to camera (if on site)</span> · CTA, back at the curb or in the yard</div><div class="says">"Want the full photo set and the disclosures? Comment TOUR and I'll send everything over. I'm Graeham Watts with Compass. Let's get you in to see it."</div><div class="does">Look into the lens, warm and direct. No price spoken. If remote: digital_twin renders this exact line as the closing VO/on-screen avatar.</div></div>
+
+<p class="note"><b>Talking points if you're on site:</b> the oversized lot vs the neighborhood norm, ADU/expansion upside, the bonus room caveat (say it exactly as disclosed), the detached garage. <b>Never</b> who lives in the area, and <b>no school rankings</b> as a selling point (Fair Housing).</p>
+<p class="note"><b>If you can't make the shoot:</b> everything above still gets produced. Wesley shoots every SOLO-OK line from the composition notes in packet ②, and every line marked "Live to camera (if on site)" converts to a digital_twin voiceover using the same words. Nothing in the launch slate is blocked by your absence except the raw POV walkthrough (L24), which just gets dropped from that run's content if you're not there to film it.</p>
+
+<h3 style="font-size:14px">Your launch calendar — what posts when</h3>
+<table><tr><th>When</th><th>Asset</th><th>CTA · keyword</th><th>Owner</th></tr>
+<tr><td>Day -3</td><td>Coming Soon Teaser Reel ★</td><td>Comment BUY</td><td>Wesley+Peter</td></tr>
+<tr><td>Day -2</td><td>Sphere Temperature-Check DM ★</td><td>worth sharing? · SELL</td><td>Graeham</td></tr>
+<tr><td>Day 0</td><td>The Reveal Hero Reel ★ + Hero Carousel ★</td><td>Comment TOUR</td><td>Wesley+Peter / Peter</td></tr>
+<tr><td>Day 0</td><td>Just Listed GBP ★ + Just Listed Meta Lead Ad ★</td><td>Learn more · BUY</td><td>John</td></tr>
+<tr><td>Day 1</td><td>"Biggest Lot on the Block" Value Carousel ★</td><td>Comment OPTIONS</td><td>Graeham+Peter</td></tr>
+<tr><td>Day 1-3</td><td>Disclosure Drop Reel ★ (digital_twin)</td><td>Comment DOCS</td><td>Graeham</td></tr>
+<tr><td>Day 4-7</td><td>Open House Countdown ★ + Geo Ad ★</td><td>Comment OPEN</td><td>Peter / John</td></tr>
+<tr><td>Day 7-14</td><td>"X Showings / Y Offers" Proof ★</td><td>Comment SELL</td><td>Peter</td></tr>
+<tr><td>At close</td><td>"Sold" Reel ★ + Sold→Worth Ad ★</td><td>Comment SELL</td><td>Graeham+Peter / John</td></tr>
+</table>
+</div></section>
+
+<section class="editor"><div class="head"><h2>④ Editor Packet — for the video team</h2><span class="lead">Assembly + exactly which clip goes where, and the aspect per asset</span></div><div class="body">
+<h3 style="font-size:14px">Assembly map — main listing video (in geographic order)</h3>
+<table><tr><th>#</th><th>Clip ID</th><th>What it is</th><th>What it does / audio</th></tr>
+<tr><td>1</td><td class="id">GARDEN-L01/L02</td><td><span class="pill p-live">Curb, live or VO</span></td><td>Cold open (the lot-size hook)</td></tr>
+<tr><td>2</td><td class="id">GARDEN-L07-L13</td><td><span class="pill p-real">Interior walk</span></td><td>VO V02 over the living room → kitchen → bath → bedrooms sequence, in that order</td></tr>
+<tr><td>3</td><td class="id">GARDEN-L15</td><td><span class="pill p-real">Bonus room</span></td><td>VO V03, the disclosure-accurate bonus-room line</td></tr>
+<tr><td>4</td><td class="id">GARDEN-L17/L18</td><td><span class="pill p-real">Backyard</span></td><td>Live or VO, the ADU/lot beat — music dips ~1.5s on the lot reveal</td></tr>
+<tr><td>5</td><td class="id">GARDEN-L19/L20</td><td><span class="pill p-real">Detached garage</span></td><td>VO V04</td></tr>
+<tr><td>6</td><td class="id">GARDEN-L23</td><td><span class="pill p-live">CTA, live or avatar</span></td><td>Comment-TOUR close</td></tr>
+</table>
+<h3 style="font-size:14px">Short version (9:16)</h3>
+<p class="note">In order: L01 (opener) → L17 (backyard/ADU) → L19 (garage) → L23 (CTA). ~30s, no new footage.</p>
+<h3 style="font-size:14px">Derivative render list — the launch posts &amp; ads</h3>
+<table><tr><th>Asset</th><th>Clip IDs reused</th><th>Aspect</th><th>Posts to</th></tr>
+<tr><td>Listing video (long)</td><td class="id">L01,V01,L07-L15,L17,L19,L23 + details</td><td>16:9 + 9:16</td><td>YouTube + Reels</td></tr>
+<tr><td>Reveal Reel</td><td class="id">L01,L14,L18,L23</td><td>9:16</td><td>IG/TikTok/Shorts</td></tr>
+<tr><td>Hero Carousel</td><td class="id">photos L01,L07,L09,L11,L17,L19</td><td>4:5</td><td>IG/FB</td></tr>
+<tr><td>YouTube Property Tour</td><td class="id">full L sequence</td><td>16:9</td><td>YouTube</td></tr>
+<tr><td>ADU/Expansion Carousel</td><td class="id">L17,L18 + graphic</td><td>4:5 / 1:1</td><td>IG/FB</td></tr>
+<tr><td>Neighborhood Walkthrough</td><td class="id">B21 + L02</td><td>9:16</td><td>IG/TikTok</td></tr>
+<tr><td>"Sold" Reel</td><td class="id">L01,L21 + sold-sign clip</td><td>9:16</td><td>IG/TikTok</td></tr>
+</table>
+<h3 style="font-size:14px">Editor rules</h3>
+<div class="explain"><b>No DRE on screen. No price / rate / credit in any video</b> (VO or graphic) — address is fine, never the number. · Bonus-room disclosure line runs exactly as written in packet ③, no shortening. · Graphics built on green screen (watts-motion-graphics). · B-roll = VO or music only, never two voices. · Voice = ElevenLabs clone; talking-head avatar = digital_twin. · Render each asset in its listed aspect; prepend the geo-tagged thumbnail to the 1:1 and 9:16 files.</div>
+</div></section>
+
+<section><div class="head" style="background:#f6f6f6;border-left:5px solid #999"><h2>Every Clip ID at a glance</h2></div><div class="body">
+<div class="idlist">GARDEN-L30  GARDEN-L31  GARDEN-L32  GARDEN-L01  GARDEN-L02  GARDEN-L03  GARDEN-L04  GARDEN-L05  GARDEN-L06  GARDEN-L07  GARDEN-L08  GARDEN-L09  GARDEN-L10  GARDEN-L11  GARDEN-L12  GARDEN-L13  GARDEN-L14a  GARDEN-L15  GARDEN-L16  GARDEN-L17  GARDEN-L18  GARDEN-L19  GARDEN-L20  GARDEN-L21  GARDEN-L22  GARDEN-L23  GARDEN-L24  GARDEN-B21  GARDEN-B22  GARDEN-B23  GARDEN-V01  GARDEN-V02  GARDEN-V03  GARDEN-V04</div>
+<p class="check" style="margin-top:14px"><b>Rules check ✓</b> shot list runs one direction, no backtracking (curb → front yard → entry → living room → kitchen → bath → bed 1 → bed 2 → hallway → bonus room → back door → backyard → garage, drone grouped at the top) · zero DRE on screen · no price/rate/credit in video · clone voice + digital_twin avatar · every listing shot tagged SOLO-OK or NEEDS GRAEHAM · bonus-room disclosure language locked in packet ③.</p>
+</div></section>
+
+<footer>Graeham Watts · Compass · DRE# 01466876 — listing-launch-engine (Hybrid Production); the document is the Call Sheet. A human does the final cut in CapCut; this plans, briefs &amp; organizes.</footer>
+</div></body></html>
