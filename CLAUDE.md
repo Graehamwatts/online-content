@@ -34,14 +34,14 @@ Applies to everything you write for Graeham: CMAs, emails, listing copy, newslet
 - Replace abstractions with concrete specifics: numbers, file paths, real examples.
 - Match length to need. A one-line answer deserves one line; don't pad a report section just because more detail is available. If you're unsure whether something needs explaining or trimming, err toward trimming and let Graeham ask for more.
 
-For a full pass on a specific piece of text or file (53-pattern scan, a 0-100 AI-tell score, or a named voice like `casual`/`professional`/`technical`/`warm`/`blunt`), invoke the `humanizer` skill (`Documents\Skills LLMS\Claude\Skills\skills\humanizer\`) directly. Upgraded 2026-08-19 from a 29-pattern base to Aboudjem/humanizer-skill (MIT), 53 patterns + voice profiles + scoring; same skill name, so nothing else needs to change to pick it up.
+For a full pass on a specific piece of text or file (55-pattern scan, a 0-100 AI-tell score, or a named voice like `casual`/`professional`/`technical`/`warm`/`blunt`), invoke the `humanizer` skill (`Documents\Skills LLMS\Claude\Skills\skills\humanizer\`) directly. Upgraded 2026-08-19 from a 29-pattern base to Aboudjem/humanizer-skill (MIT), then to v0.7.1 on 2026-09-07 (53→55 patterns, plus guardrails against flagging autistic/ADHD writers' naturally low-variance prose and non-native-English formal register as "AI," and an explicit no-fabrication rule); same skill name, so nothing else needs to change to pick it up. Check upstream (github.com/Aboudjem/humanizer-skill) periodically since it's actively maintained.
 
 ## 📬 2026-06-13 — Scheduled reports SEND, never just draft
 
 **Standing rule (Graeham, 2026-06-13):** every recurring report / brief / reminder task must **actually send** its email so it lands in the inbox — do NOT leave Gmail drafts. Default recipients for internal reports are **Graeham (`graehamwatts@gmail.com`) + Adrian (`graehamwattsclientcare@gmail.com`)**, plus any task-specific recipients (John, Peter, Ellie, Maria) as TO/CC per that task's SKILL.md. This overrides any "draft only" wording inside an individual SKILL.md.
 
 - **Send mechanism:** Gmail connector's *send* action (not draft); fallback = SMTP via `skills/switchy-engine/scripts/send_email.py` using the app password at `Documents\Skills LLMS\Claude\Skills\gmail-app-password.txt` (read at send time, never print). For GitHub-Action tasks, SMTP via repo secrets `GMAIL_USERNAME` + `GMAIL_APP_PASSWORD` + `BRIEF_RECIPIENTS` on `online-content`.
-- **Daily Attribution Brief is RETIRED (2026-08-23).** It never actually worked (YAML bug in the never-successfully-deployed `daily-attribution-brief.yml` — confirmed in `DAILY-ATTRIBUTION-BRIEF-BLOCKER.md`, 2026-07-13) and was redundant with `morning-command-center.yml`, which covered the same GHL data daily. Note: `morning-command-center.yml` was itself archived 2026-07-29 and hasn't run since, so there is currently no daily attribution automation running — if that's wanted again, fix/revive `morning-command-center.yml` (proven pattern), don't rebuild the daily-brief path.
+- **Daily Attribution Brief is RETIRED (2026-08-23).** It never actually worked (YAML bug in the never-successfully-deployed `daily-attribution-brief.yml` — confirmed in `Online Content\DAILY-ATTRIBUTION-BRIEF-BLOCKER.md`, 2026-07-13) and was redundant with `morning-command-center.yml`, which covered the same GHL data daily. Note: `morning-command-center.yml` was itself archived 2026-07-29 and hasn't run since, so there is currently no daily attribution automation running — if that's wanted again, fix/revive `morning-command-center.yml` (proven pattern), don't rebuild the daily-brief path.
 - **Exception — client-facing content stays review-first:** anything that goes to an actual client (CMA client section, listing emails) is still SENT to Graeham + Adrian for review, who forward to the client. "Send not draft" means internal reports reach the inbox; it does NOT mean auto-emailing clients.
 
 ## ⚡ 2026-06-09 architecture update — ONE skills folder, junctions everywhere
@@ -86,7 +86,7 @@ Pattern:
 
 ## Deprecated skills — DO NOT USE
 
-Cowork's server can re-register these names in the plugin cache even after cleanup (cache last swept 2026-07-28; re-run `Scheduled/FINAL-FIX-zombie-skills.ps1` if one resurfaces — watch for a stale DRE like `02015066`, which is always wrong). If one appears, don't invoke it — use the replacement instead.
+Cowork's server can re-register these names in the plugin cache even after cleanup. If one appears, don't invoke it — use the replacement instead.
 
 | Deprecated | Use instead |
 |---|---|
@@ -95,6 +95,9 @@ Cowork's server can re-register these names in the plugin cache even after clean
 | `video-prompt-builder` | `cinematic-hooks` |
 | `html-email` | direct git publish to `online-content` |
 | `github-skill-sync` | direct git push |
+| `ghl-crm-audit` | `shared-references/integrations.md` §12 (GoHighLevel CRM) |
+
+**Do NOT run `Scheduled/FINAL-FIX-zombie-skills.ps1`** (audited 2026-09-06). The `SessionEnd` auto-push hook already does the same job strictly better: it mirrors with robocopy `/MIR` (removes extras at *any* depth, not just a hardcoded top-level list), scrubs the manifest with an allowlist rather than a fixed denylist, and checks `LinkType` before touching the cache. The script has no junction guard, only sweeps top-level dirs, and rewrites `manifest.json` in a format the Cowork app rejects. Two sibling scripts in that folder, `PHASE2-graduate-junction.ps1` and `REDIRECT-CACHE.ps1`, were disabled 2026-09-06 because they create the forbidden cache junction; do not re-enable or "fix" their paths.
 
 **Source of truth is always `Documents/Skills LLMS/Claude/Skills/skills/<name>/SKILL.md`**, never the Cowork cache — re-read from there before executing any skill, even one already loaded, since your loaded context may be stale.
 
