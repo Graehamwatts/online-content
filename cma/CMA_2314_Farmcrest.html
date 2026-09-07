@@ -1,0 +1,246 @@
+<!DOCTYPE html>
+<html lang="en"><head>
+<meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Buyer CMA. 2314 Farmcrest Street, Milpitas 95035 | Graeham Watts</title>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/4.4.1/chart.umd.min.js"></script>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700;800&family=Montserrat:wght@700;800&display=swap" rel="stylesheet">
+<style>
+:root{--b:#1A1A1A;--g:#C5A55A;--dg:#A88B3D;--cr:#F5EFDC;--gy:#666;--nv:#343955}
+*{margin:0;padding:0;box-sizing:border-box}body{font-family:Inter,sans-serif;color:#1A1A1A;line-height:1.6}
+.nav{position:fixed;top:0;left:0;right:0;height:60px;background:var(--nv);display:flex;align-items:center;padding:0 24px;z-index:9}.nav img{height:34px}
+.wrap{max-width:1020px;margin:0 auto;padding:0 22px}section{padding:42px 0}
+.sh{background:var(--b);color:var(--g);font-family:Montserrat;font-weight:800;letter-spacing:2px;text-transform:uppercase;font-size:18px;padding:12px 18px;margin-bottom:22px;border-left:6px solid var(--g)}
+.hero{background:var(--b);color:#fff;padding:120px 0 56px;text-align:center}
+.hero .nm{color:var(--g);font-family:Montserrat;font-weight:800;font-size:38px;letter-spacing:5px}
+.hero .rl{color:var(--g);letter-spacing:8px;font-size:12px}.hero .ct{color:var(--g);letter-spacing:3px;font-size:13px;margin-top:24px;text-transform:uppercase}
+.hero .ad{font-size:28px;font-weight:700;margin-top:12px}.hero .dt{color:#aaa;margin-top:12px;font-size:13px}.hero .cn{color:var(--g);font-size:12px;margin-top:20px}
+p{margin-bottom:13px;font-size:15px;color:#2a2a2a}
+.stats{display:flex;flex-wrap:wrap;gap:12px;margin:18px 0}.st{background:var(--b);color:#fff;border-radius:8px;padding:18px;flex:1;min-width:130px;text-align:center}
+.st .n{color:var(--g);font-family:Montserrat;font-weight:800;font-size:24px}.st .l{color:#ccc;font-size:11px;text-transform:uppercase;letter-spacing:1px;margin-top:4px}
+table{width:100%;border-collapse:collapse;margin:12px 0;font-size:13px;box-shadow:0 1px 5px rgba(0,0,0,.06)}
+th{background:var(--g);color:var(--b);text-align:left;padding:9px;font-size:11.5px;text-transform:uppercase}td{padding:8px 9px;border-bottom:1px solid #eee}tbody tr:nth-child(even){background:var(--cr)}
+.tblwrap{overflow-x:auto}
+.rng{display:flex;flex-wrap:wrap;gap:14px;margin:16px 0}.rc{flex:1;min-width:210px;background:#fff;border:1px solid #e6e6e6;border-radius:8px;padding:18px;box-shadow:0 2px 8px rgba(0,0,0,.05)}
+.rc.a{border-left:7px solid #4f9d69}.rc.b{border-left:7px solid var(--g)}.rc.c{border-left:7px solid #d98c6a}
+.rc .rl{font-size:11px;text-transform:uppercase;letter-spacing:1px;color:var(--gy);font-weight:700}.rc .rp{font-family:Montserrat;font-weight:800;font-size:19px;margin:5px 0}.rc .rd{font-size:12.5px;color:#444}
+.cb{background:#fff;border:1px solid #eee;border-radius:8px;padding:16px;margin:14px 0}.cw{position:relative;height:300px}.cap{font-size:12px;color:var(--gy);margin-top:6px;text-align:center}
+.dv{height:2px;background:linear-gradient(90deg,var(--g),transparent);margin:28px 0}
+.card{border-radius:8px;padding:16px 18px;margin:12px 0;background:var(--cr);border-left:6px solid var(--g)}.card h4{font-family:Montserrat;font-size:14px;margin-bottom:5px}
+.alert{background:#fff8e6;border-left:6px solid #d98c6a;padding:14px 18px;border-radius:8px;margin:12px 0;font-size:13.5px}
+.reading{background:linear-gradient(135deg,#fffdf5,#faf3e0);border:2px solid var(--g);border-left:10px solid var(--g);border-radius:10px;padding:22px 24px;margin:18px 0;box-shadow:0 4px 16px rgba(197,165,90,.18)}
+.reading h4{font-family:Montserrat;font-weight:800;letter-spacing:1.5px;text-transform:uppercase;font-size:15px;border-bottom:1px solid #e5d9b8;padding-bottom:8px;margin-bottom:12px}
+.reading ul{list-style:none;margin:0 0 12px 0;padding:0}
+.reading li{font-size:15px;line-height:1.7;padding-left:22px;position:relative;margin-bottom:8px}
+.reading li:before{content:"";position:absolute;left:0;top:8px;width:10px;height:10px;border-radius:50%;background:var(--dot,#999)}
+.reading li.win:before{background:#4f9d69}.reading li.loss:before{background:#d98c6a}.reading li.at:before{background:#999}
+.reading .kicker{border-top:1px solid #e5d9b8;padding-top:10px;font-weight:700;font-size:14.5px}
+footer{background:var(--b);color:#ddd;padding:34px 0;text-align:center;margin-top:30px}.fn{color:var(--g);font-family:Montserrat;font-weight:800;letter-spacing:3px;font-size:19px}.fl{font-size:12px;margin-top:6px;color:#bbb}.ds{font-size:10.5px;color:#888;max-width:700px;margin:16px auto 0}
+.note{font-size:12px;color:var(--gy);font-style:italic;margin-top:6px}
+.tiernote{font-size:11.5px;color:#888}
+</style></head><body>
+<nav class="nav"><img src="https://images.leadconnectorhq.com/image/f_webp/q_80/r_1200/u_https://assets.cdn.filesafe.space/6wuU3haUH7uNeT20E3UZ/media/691256870b647e40e3c2e105.png" alt="Graeham Watts"></nav>
+<header class="hero"><div class="wrap"><div class="nm">GRAEHAM WATTS</div><div class="rl">R E A L T O R</div>
+<div class="ct">Buyer Comparative Market Analysis. Offer Strategy</div>
+<div class="ad">2314 Farmcrest Street, Milpitas, CA 95035</div>
+<div class="dt">Prepared for Paul and his wife, September 2026</div>
+<div class="cn">Graeham Watts. Powered by The Boyenga Team at Compass. DRE #01466876. 650-308-4727</div></div></header>
+<div class="wrap">
+
+<section><div class="sh">The Property</div>
+<div class="tblwrap"><table><tbody>
+<tr><th>Address</th><td>2314 Farmcrest Street, Milpitas, CA 95035</td></tr>
+<tr><th>Community</th><td>Hillcrest Villas (planned-unit development), Area 6, Milpitas</td></tr>
+<tr><th>Configuration</th><td>3 bed / 3 bath (2 full, 1 half), 2-story, attached 2-car garage</td></tr>
+<tr><th>Living Area</th><td>1,953 sq ft (Realist)</td></tr>
+<tr><th>Lot Size</th><td>4,200 sq ft (0.096 acre)</td></tr>
+<tr><th>Year Built</th><td>1989 (age 37)</td></tr>
+<tr><th>HOA</th><td>Hillcrest Villas Owners Association, $207/month. Covers exterior painting, common-area insurance, landscaping/front yard, and the community pool, spa and clubhouse.</td></tr>
+<tr><th>Parcel / Zoning</th><td>APN 088-47-016 / R1-3</td></tr>
+<tr><th>List Price</th><td><strong>$1,938,000 ($992/sqft)</strong></td></tr>
+<tr><th>Listed</th><td>July 21, 2026. 48 days on market as of this analysis, zero price reductions.</td></tr>
+<tr><th>Prior Sale</th><td>$730,000 on September 14, 2009 (last recorded sale, per Santa Clara County records)</td></tr>
+<tr><th>Occupancy</th><td>Vacant</td></tr>
+<tr><th>Schools</th><td>John Sinnott Elementary, Rancho Milpitas Junior High, Milpitas High. All Milpitas Unified.</td></tr>
+<tr><th>Listing Agent</th><td>Thao Dang &amp; Brian Ng, Block Change Real Estate, (408) 972-1367</td></tr>
+</tbody></table></div>
+<div class="stats"><div class="st"><div class="n">$1.94M</div><div class="l">List Price</div></div><div class="st"><div class="n">3 / 3</div><div class="l">Bed / Bath</div></div><div class="st"><div class="n">1,953</div><div class="l">SqFt</div></div><div class="st"><div class="n">48</div><div class="l">Days on Market</div></div></div>
+</section>
+
+<div class="dv"></div>
+
+<section><div class="sh">What 48 Days on Market Actually Tells You</div>
+<p>This is not a structured-offer listing. There is no offer date, no multiple-offer instructions, no sense that the seller is running a competitive process. It is a standard, vacant, at-will listing that has now been on the market for 48 days at its original asking price, with zero reductions.</p>
+<p>That matters because of what the rest of Milpitas is doing right now. Every comparable sale in this size range that has full price history available closed in a median of 12 days and sold over its original asking price. The active and pending competition around this home is moving at a median of about 15 days. This one has sat for 48, roughly three to four times longer than a normally-priced home in this pocket. In a market where correctly priced homes draw bids and close fast, a home sitting this long at an unmoved price is a home priced above where the data says it should be, not a home facing unusual bad luck.</p>
+<p>The seller has been carrying a vacant home for over six weeks with no offers strong enough to accept and no price adjustment yet. That gives you real room to open below list with a number you can defend line by line, which is exactly what the next few sections do.</p>
+</section>
+
+<div class="dv"></div>
+
+<section><div class="sh">Where the Milpitas Market Is Right Now</div>
+<p>Pulling every closed single-family sale in Milpitas between 1,600 and 2,300 square feet over the last six months gives a clean, size-matched read on this pocket: 32 closed sales, ranging from $1,280,000 to $2,400,000. Condition drives that spread far more than square footage does. A 2,001 sqft fully remodeled home on S Park Victoria Drive sold for $2,050,000 ($1,025/sqft) in 4 days. A 2,284 sqft dated home on Smith Lane sat 114 days and closed at $1,425,000 ($624/sqft). Same city, similar size, a $625,000 gap driven almost entirely by finish level.</p>
+<p>Sorting those 32 sales by finish level puts your subject in context. A genuine full remodel, think designer kitchens, spa bathrooms, pools, tends to clear around $1,000 to $1,090 per square foot in this cohort. A clean, tastefully updated home like 2314 Farmcrest, granite counters, stainless appliances, newer flooring, but no gut remodel and no pool, clears closer to $850 to $980 per square foot. A dated or fixer home clears well under $800. At $992/sqft on the list price, 2314 Farmcrest is priced like it belongs in the full-remodel tier. The listing description does not describe a full remodel: no permitted addition, no pool, no wine cellar, no spa-inspired bath. It describes an updated home.</p>
+<p>The single most useful comp in this entire pull is on the same street: 2291 Farmcrest Street, built the same era (1990 versus 1989), sold this window for $1,800,000 on 1,987 sqft, or $906/sqft, in 12 days. That is not a hypothetical adjustment, that is a real closed sale one block away.</p>
+</section>
+
+<div class="dv"></div>
+
+<section><div class="sh">Sold, Pending &amp; Active Comps. Milpitas SFR, 1,600&ndash;2,300 SqFt, Last 6 Months</div>
+<p class="note">Source: MLSListings Matrix, individual listing records pulled and verified directly (32 closed sales, 18 active/pending competitors). Subject highlighted.</p>
+<div class="tblwrap"><table>
+<thead><tr><th>Status</th><th>Address</th><th style="text-align:right">Price</th><th style="text-align:right">$/sqft</th><th>DOM</th><th>Bed/Bath</th><th style="text-align:right">SqFt</th><th>Built</th><th>Tier</th></tr></thead>
+<tbody>
+<tr><td>Sold</td><td>1091 Zamora Court</td><td style="text-align:right">$2,400,000</td><td style="text-align:right">$1,046</td><td style="text-align:center">14</td><td style="text-align:center">4/2.1</td><td style="text-align:right">2,294</td><td style="text-align:center">1983</td><td>Full remodel</td></tr>
+<tr><td>Sold</td><td>640 Calle Del Prado</td><td style="text-align:right">$2,360,000</td><td style="text-align:right">$1,064</td><td style="text-align:center">12</td><td style="text-align:center">3/2</td><td style="text-align:right">2,217</td><td style="text-align:center">1979</td><td>Full remodel</td></tr>
+<tr><td>Sold</td><td>1308 N Hillview Dr</td><td style="text-align:right">$2,228,888</td><td style="text-align:right">$1,005</td><td style="text-align:center">32</td><td style="text-align:center">4/2.1</td><td style="text-align:right">2,218</td><td style="text-align:center">1970</td><td>Full remodel</td></tr>
+<tr><td>Sold</td><td>1252 Belbrook Way</td><td style="text-align:right">$2,150,000</td><td style="text-align:right">$1,025</td><td style="text-align:center">12</td><td style="text-align:center">4/2.1</td><td style="text-align:right">2,097</td><td style="text-align:center">1977</td><td>Full remodel</td></tr>
+<tr><td>Sold</td><td>320 Gerald Circle</td><td style="text-align:right">$2,105,000</td><td style="text-align:right">$972</td><td style="text-align:center">5</td><td style="text-align:center">3/2.1</td><td style="text-align:right">2,166</td><td style="text-align:center">2014</td><td>Updated (PUD)</td></tr>
+<tr><td>Sold</td><td>243 S Park Victoria Dr</td><td style="text-align:right">$2,050,000</td><td style="text-align:right">$1,025</td><td style="text-align:center">4</td><td style="text-align:center">4/2.1</td><td style="text-align:right">2,001</td><td style="text-align:center">1966</td><td>Full remodel</td></tr>
+<tr><td>Sold</td><td>2115 Pedro Avenue</td><td style="text-align:right">$2,025,000</td><td style="text-align:right">$1,052</td><td style="text-align:center">12</td><td style="text-align:center">4/2.1</td><td style="text-align:right">1,924</td><td style="text-align:center">1977</td><td>Full remodel</td></tr>
+<tr><td>Sold</td><td>360 Gerald Circle</td><td style="text-align:right">$2,010,000</td><td style="text-align:right">$928</td><td style="text-align:center">9</td><td style="text-align:center">4/2.1</td><td style="text-align:right">2,166</td><td style="text-align:center">2013</td><td>Updated (PUD)</td></tr>
+<tr><td>Sold</td><td>1621 Tahoe Drive</td><td style="text-align:right">$1,980,000</td><td style="text-align:right">$976</td><td style="text-align:center">19</td><td style="text-align:center">4/3</td><td style="text-align:right">2,029</td><td style="text-align:center">1968</td><td>Updated</td></tr>
+<tr><td>Sold</td><td>207 Redwood Avenue</td><td style="text-align:right">$1,926,000</td><td style="text-align:right">$1,086</td><td style="text-align:center">7</td><td style="text-align:center">4/2.1</td><td style="text-align:right">1,773</td><td style="text-align:center">1977</td><td>Full remodel</td></tr>
+<tr><td>Sold</td><td>1371 Lassen Avenue</td><td style="text-align:right">$1,880,000</td><td style="text-align:right">$1,063</td><td style="text-align:center">17</td><td style="text-align:center">4/3</td><td style="text-align:right">1,769</td><td style="text-align:center">1963</td><td>Full remodel</td></tr>
+<tr><td>Sold</td><td>292 Falcato Drive</td><td style="text-align:right">$1,858,000</td><td style="text-align:right">$973</td><td style="text-align:center">35</td><td style="text-align:center">4/3</td><td style="text-align:right">1,910</td><td style="text-align:center">1977</td><td>Updated</td></tr>
+<tr><td>Sold</td><td>502 Coelho Street</td><td style="text-align:right">$1,838,888</td><td style="text-align:right">$937</td><td style="text-align:center">6</td><td style="text-align:center">4/3</td><td style="text-align:right">1,962</td><td style="text-align:center">1965</td><td>Updated</td></tr>
+<tr><td>Sold</td><td>239 Balboa Dr</td><td style="text-align:right">$1,830,000</td><td style="text-align:right">$970</td><td style="text-align:center">61</td><td style="text-align:center">4/3</td><td style="text-align:right">1,886</td><td style="text-align:center">1991</td><td>Updated</td></tr>
+<tr><td>Sold</td><td>1490 Olympic Drive</td><td style="text-align:right">$1,825,000</td><td style="text-align:right">$1,032</td><td style="text-align:center">16</td><td style="text-align:center">4/2.1</td><td style="text-align:right">1,769</td><td style="text-align:center">1964</td><td>Full remodel</td></tr>
+<tr style="background:#fdf4d8"><td>Sold</td><td><strong>2291 Farmcrest Street</strong> (same street)</td><td style="text-align:right">$1,800,000</td><td style="text-align:right">$906</td><td style="text-align:center">12</td><td style="text-align:center">4/2.1</td><td style="text-align:right">1,987</td><td style="text-align:center">1990</td><td>Updated</td></tr>
+<tr><td>Sold</td><td>1224 Gingerwood Drive</td><td style="text-align:right">$1,690,000</td><td style="text-align:right">$905</td><td style="text-align:center">15</td><td style="text-align:center">4/2.1</td><td style="text-align:right">1,867</td><td style="text-align:center">1991</td><td>Updated</td></tr>
+<tr><td>Sold</td><td>1009 Nicklaus Ave</td><td style="text-align:right">$1,670,000</td><td style="text-align:right">$845</td><td style="text-align:center">12</td><td style="text-align:center">4/2.1</td><td style="text-align:right">1,976</td><td style="text-align:center">1979</td><td>Updated</td></tr>
+<tr><td>Sold</td><td>453 Taylor Drive</td><td style="text-align:right">$1,650,000</td><td style="text-align:right">$1,010</td><td style="text-align:center">8</td><td style="text-align:center">5/2</td><td style="text-align:right">1,634</td><td style="text-align:center">1965</td><td>Full remodel</td></tr>
+<tr><td>Sold</td><td>668 Erie Circle</td><td style="text-align:right">$1,640,000</td><td style="text-align:right">$882</td><td style="text-align:center">22</td><td style="text-align:center">4/2.1</td><td style="text-align:right">1,860</td><td style="text-align:center">1984</td><td>Updated</td></tr>
+<tr><td>Sold</td><td>509 Oroville Road</td><td style="text-align:right">$1,630,000</td><td style="text-align:right">$876</td><td style="text-align:center">5</td><td style="text-align:center">4/2.1</td><td style="text-align:right">1,860</td><td style="text-align:center">1983</td><td>Updated</td></tr>
+<tr><td>Sold</td><td>1574 David Lane</td><td style="text-align:right">$1,620,000</td><td style="text-align:right">$1,009</td><td style="text-align:center">13</td><td style="text-align:center">4/2.1</td><td style="text-align:right">1,605</td><td style="text-align:center">1991</td><td>Full remodel</td></tr>
+<tr><td>Sold</td><td>1759 Tahoe Drive</td><td style="text-align:right">$1,620,000</td><td style="text-align:right">$859</td><td style="text-align:center">19</td><td style="text-align:center">3/2</td><td style="text-align:right">1,886</td><td style="text-align:center">1968</td><td>Updated</td></tr>
+<tr><td>Sold</td><td>560 Cestaric Drive</td><td style="text-align:right">$1,610,000</td><td style="text-align:right">$766</td><td style="text-align:center">9</td><td style="text-align:center">5/2</td><td style="text-align:right">2,101</td><td style="text-align:center">1971</td><td>Dated</td></tr>
+<tr><td>Sold</td><td>513 Glenmoor Circle</td><td style="text-align:right">$1,545,000</td><td style="text-align:right">$943</td><td style="text-align:center">41</td><td style="text-align:center">4/3</td><td style="text-align:right">1,639</td><td style="text-align:center">1986</td><td>Updated</td></tr>
+<tr><td>Sold</td><td>917 Vida Larga Loop</td><td style="text-align:right">$1,435,000</td><td style="text-align:right">$702</td><td style="text-align:center">25</td><td style="text-align:center">3/2.1</td><td style="text-align:right">2,045</td><td style="text-align:center">2006</td><td>Dated</td></tr>
+<tr><td>Sold</td><td>908 Smith Ln</td><td style="text-align:right">$1,425,000</td><td style="text-align:right">$624</td><td style="text-align:center">114</td><td style="text-align:center">4/3.1</td><td style="text-align:right">2,284</td><td style="text-align:center">2012</td><td>Dated</td></tr>
+<tr><td>Sold</td><td>861 Garden Street</td><td style="text-align:right">$1,410,000</td><td style="text-align:right">$817</td><td style="text-align:center">32</td><td style="text-align:center">4/3.1</td><td style="text-align:right">1,726</td><td style="text-align:center">2017</td><td>Dated</td></tr>
+<tr><td>Sold</td><td>915 Ternura Loop</td><td style="text-align:right">$1,378,000</td><td style="text-align:right">$778</td><td style="text-align:center">14</td><td style="text-align:center">3/2.1</td><td style="text-align:right">1,772</td><td style="text-align:center">2006</td><td>Dated</td></tr>
+<tr><td>Sold</td><td>60 Jacklin Pl</td><td style="text-align:right">$1,360,000</td><td style="text-align:right">$831</td><td style="text-align:center">6</td><td style="text-align:center">3/2.1</td><td style="text-align:right">1,637</td><td style="text-align:center">1982</td><td>Dated</td></tr>
+<tr><td>Sold</td><td>479 Dixon Road</td><td style="text-align:right">$1,280,000</td><td style="text-align:right">$760</td><td style="text-align:center">12</td><td style="text-align:center">5/2</td><td style="text-align:right">1,684</td><td style="text-align:center">1960</td><td>Dated</td></tr>
+<tr style="background:#f0f4ff"><td>Active</td><td>1943 Everglades Drive</td><td style="text-align:right">$2,100,000</td><td style="text-align:right">$1,115</td><td style="text-align:center">19</td><td style="text-align:center">4/3</td><td style="text-align:right">1,884</td><td style="text-align:center">1967</td><td>Competition</td></tr>
+<tr style="background:#f0f4ff"><td>Pending</td><td>1071 N Hillview Drive</td><td style="text-align:right">$2,099,000</td><td style="text-align:right">$962</td><td style="text-align:center">5</td><td style="text-align:center">4/3</td><td style="text-align:right">2,183</td><td style="text-align:center">1979</td><td>Competition</td></tr>
+<tr style="background:#f0f4ff"><td>Pending</td><td>1292 Sunrise Way</td><td style="text-align:right">$1,998,888</td><td style="text-align:right">$1,041</td><td style="text-align:center">28</td><td style="text-align:center">4/3</td><td style="text-align:right">1,920</td><td style="text-align:center">2026</td><td>Competition</td></tr>
+<tr style="background:#1A1A1A;color:#fff"><td><strong>Active</strong></td><td><strong>2314 Farmcrest Street (subject)</strong></td><td style="text-align:right"><strong>$1,938,000</strong></td><td style="text-align:right"><strong>$992</strong></td><td style="text-align:center"><strong>48</strong></td><td style="text-align:center">3/2.1</td><td style="text-align:right">1,953</td><td style="text-align:center">1989</td><td>Subject</td></tr>
+<tr style="background:#f0f4ff"><td>Active</td><td>1821 Burley Drive</td><td style="text-align:right">$1,888,888</td><td style="text-align:right">$1,037</td><td style="text-align:center">6</td><td style="text-align:center">4/3</td><td style="text-align:right">1,822</td><td style="text-align:center">1960</td><td>Competition</td></tr>
+<tr style="background:#f0f4ff"><td>Pending</td><td>529 Bryce Court</td><td style="text-align:right">$1,849,999</td><td style="text-align:right">$911</td><td style="text-align:center">49</td><td style="text-align:center">4/2.1</td><td style="text-align:right">2,030</td><td style="text-align:center">1966</td><td>Competition</td></tr>
+<tr style="background:#fff3ec"><td>Active</td><td>1260 Glacier Drive</td><td style="text-align:right">$1,689,000</td><td style="text-align:right">$903</td><td style="text-align:center">202</td><td style="text-align:center">8/4</td><td style="text-align:right">1,870</td><td style="text-align:center">1970</td><td>Stale outlier</td></tr>
+<tr style="background:#fff3ec"><td>Active</td><td>73 Images Circle</td><td style="text-align:right">$1,599,000</td><td style="text-align:right">$855</td><td style="text-align:center">171</td><td style="text-align:center">4/2.1</td><td style="text-align:right">1,869</td><td style="text-align:center">1996</td><td>Stale outlier</td></tr>
+</tbody>
+</table></div>
+<p class="note">Two active outliers (1260 Glacier Drive, DOM 202; 73 Images Circle, DOM 171) are shown for context but excluded from all median calculations below. Full active/pending list (19 total, including subject) available on request; the remaining rows sit in the 3&ndash;41 DOM range and don&rsquo;t change the read.</p>
+</section>
+
+<div class="dv"></div>
+
+<section><div class="sh">The Days-on-Market Gap. The Clearest Signal Here</div>
+<div class="cb"><div class="cw"><canvas id="domChart"></canvas></div><div class="cap">Median days on market: sold comps vs. active/pending competition vs. 2314 Farmcrest. Source: MLSListings Matrix, 32 closed sales and 18 active/pending listings, Milpitas SFR 1,600&ndash;2,300 sqft.</div></div>
+
+<div class="reading">
+<h4>Reading the Numbers</h4>
+<ul>
+<li class="win">The 32 Milpitas sales in this size range that closed in the last 6 months took a <strong>median of just 12 days</strong> to sell.</li>
+<li class="win">The 18 active and pending listings competing for buyers right now (excluding two clear stale outliers) sit at a <strong>median of about 15 days</strong> so far.</li>
+<li class="loss">2314 Farmcrest has been on the market <strong>48 days</strong>, roughly <strong>3 to 4 times longer</strong> than either group, with zero price adjustments.</li>
+<li>Of the 5 comps in this pull with a fully verified original-list-to-sold price history, <strong>every single one (5 of 5) sold over its original asking price</strong>, by a median of 3.0% and an average of 4.7%, closing in a median of just 9 days.</li>
+</ul>
+<div class="kicker">The market is not slow right now. Correctly priced Milpitas homes in this range are selling fast and often over ask. This one isn&rsquo;t one of them, which is exactly the leverage you want walking into an offer.</div>
+</div>
+<p class="tiernote">Directional read: the 5-comp price-history sample above is small by design (original list price required a full record pull per comp); treat the specific percentages as directional, not a guarantee, while the 12-day vs. 48-day DOM comparison is drawn from the full 32-comp dataset and is solid.</p>
+</section>
+
+<div class="dv"></div>
+
+<section><div class="sh">Price Per Square Foot by Condition Tier</div>
+<div class="cb"><div class="cw"><canvas id="tierChart"></canvas></div><div class="cap">Average $/sqft by condition tier across the 32 sold comps, versus 2314 Farmcrest's current list $/sqft. Source: MLSListings Matrix.</div></div>
+<p>Sorting the 32 sold comps by finish level: 11 full-remodel sales averaged <strong>$1,038/sqft</strong>, 13 updated (not gut-remodeled) sales averaged <strong>$921/sqft</strong>, and 8 dated or fixer sales averaged <strong>$754/sqft</strong>. 2314 Farmcrest, an updated home with granite counters, stainless appliances and owned solar but no pool and no gut remodel, is listed at <strong>$992/sqft</strong>, inside the full-remodel band and about 8% above the average of its own actual tier.</p>
+</section>
+
+<div class="dv"></div>
+
+<section><div class="sh">Interest Rate Environment</div>
+<p>Mortgage rates affect your monthly payment and the size of the buyer pool you're competing against. Current 30-year fixed, cross-referenced across four sources as of this week:</p>
+<div class="stats"><div class="st"><div class="n">6.89%</div><div class="l">Mortgage News Daily (9/4)</div></div><div class="st"><div class="n">6.71%</div><div class="l">Freddie Mac Weekly (9/3)</div></div><div class="st"><div class="n">6.79%</div><div class="l">MBA Weekly (9/2)</div></div><div class="st"><div class="n">6.99%</div><div class="l">Zillow Home Loans (9/7)</div></div></div>
+<p>Sources cluster in the <strong>6.7% to 7.0%</strong> range. That's meaningfully higher than the 2020&ndash;21 lows near 3%, which thins the pool of retail buyers who are payment-sensitive, one more reason a vacant, unmoved 48-day listing has real room to negotiate. Confirm your day-of rate with your lender before finalizing any offer terms.</p>
+</section>
+
+<div class="dv"></div>
+
+<section><div class="sh">Three Paths Forward. Offer Strategy</div>
+<p>Your goal here is to land this home at a price the data actually supports, not to win a bidding war, because there isn't one. Three paths, from most conservative to most aggressive:</p>
+
+<div class="card"><h4>Path A. Test the silence.</h4><p><strong>Offer range: $1,760,000 to $1,800,000.</strong> This sits right at the &ldquo;updated&rdquo; tier average and is directly anchored by 2291 Farmcrest ($1,800,000, same street, same era, updated condition). After 48 days with zero showings converting to an accepted offer, there's a real chance the seller engages here rather than lose another month of carrying costs on a vacant home.</p><p>Risk: the seller may not be motivated enough yet to come down this far in one move; be prepared for a counter and have room to move toward Path B.</p></div>
+
+<div class="card"><h4>Path B. Data-backed and defensible. <em>(recommended)</em></h4><p><strong>Offer range: $1,800,000 to $1,850,000.</strong> This is the top of the &ldquo;updated&rdquo; tier's real range, backed directly by 2291 Farmcrest and the broader 13-comp updated cohort (average $921/sqft, this range works out to roughly $922&ndash;$947/sqft). It's a genuine discount off the $1,938,000 list, and it's exactly the kind of number a listing agent has to take seriously after 48 days of silence.</p><p>This is the recommendation. It's grounded in real closed comps in the subject's actual condition tier, not a guess, and it gives the seller a credible reason to finally move off the original number.</p></div>
+
+<div class="card"><h4>Path C. Move fast, still below list.</h4><p><strong>Offer range: $1,870,000 to $1,910,000.</strong> This assumes the HOA amenities (pool, spa, clubhouse) and the owned solar system are worth a real premium over the pure updated-tier average, and prioritizes closing quickly and cleanly over squeezing the last dollar.</p><p>Risk: still a discount to list, but it gives up most of the negotiating room the 48-day DOM has earned you. Only worth it if you've fallen for this specific floor plan or community and want certainty over savings.</p></div>
+</section>
+
+<div class="dv"></div>
+
+<section><div class="sh">Recommended Offer Bands. By Strategy</div>
+<div class="rng">
+<div class="rc a"><div class="rl">Test the silence</div><div class="rp">$1,760,000 to $1,800,000</div><div class="rd">Anchored to the same-street 2291 Farmcrest sale. Biggest discount, most likely to need a round of negotiation.</div></div>
+<div class="rc b"><div class="rl">Data-backed. <em>(recommended)</em></div><div class="rp">$1,800,000 to $1,850,000</div><div class="rd">Top of the updated-tier comp range. Defensible line by line, credible to a listing agent after 48 stale days.</div></div>
+<div class="rc c"><div class="rl">Move fast</div><div class="rp">$1,870,000 to $1,910,000</div><div class="rd">Still below list. Prioritizes speed and certainty over maximum savings.</div></div>
+</div>
+</section>
+
+<div class="dv"></div>
+
+<section><div class="sh">Terms Checklist. Building Your Offer</div>
+<p>With no competing offers on the table, price is your main lever, but clean terms still help move a seller who's been sitting for seven weeks:</p>
+<div class="tblwrap"><table><thead><tr><th>Term</th><th>Suggested</th><th>Why It Matters</th></tr></thead><tbody>
+<tr><td>Financing</td><td>Fully underwritten pre-approval, conventional</td><td>Signals a real, closeable offer to a seller who's likely fielded some soft interest already</td></tr>
+<tr><td>Earnest Money Deposit</td><td>3% of purchase price</td><td>Standard, demonstrates seriousness without needing to overpay to win</td></tr>
+<tr><td>Inspection Contingency</td><td>10&ndash;14 days, standard</td><td>No competitive pressure to waive it. Use the time: the home has been vacant, confirm utilities, systems and the sewer lateral</td></tr>
+<tr><td>HOA Document Review</td><td>Request CC&amp;Rs, reserve study, and minutes; confirm no pending special assessments</td><td>Hillcrest Villas HOA covers pool/spa/clubhouse and exterior maintenance; you want to know its financial health before removing contingencies</td></tr>
+<tr><td>Appraisal Contingency</td><td>Keep in place at any of the three offer bands</td><td>All three recommended ranges sit below or near recent per-sqft comps for this condition tier, so appraisal risk is low, but there's no reason to waive it absent competition</td></tr>
+<tr><td>Close of Escrow</td><td>30 days, or faster if it helps your offer stand out</td><td>Home is vacant; a faster close costs the seller nothing and can be a low-cost way to sweeten a below-list offer</td></tr>
+</tbody></table></div>
+</section>
+
+<div class="dv"></div>
+
+<section><div class="sh">Net Cost To You. By Offer Price</div>
+<p>Estimated cash needed at close and monthly cost. Assumes 20% down, 6.9% 30-year fixed (current market cluster), standard buyer-side closing costs (~1.5%). Add the $207/month Hillcrest Villas HOA dues on top of P&amp;I for your true monthly housing cost, plus property taxes (Santa Clara County base rate runs roughly 1.1&ndash;1.25% of assessed value annually; confirm with title, no Mello-Roos noted on this listing).</p>
+<div class="tblwrap"><table><thead><tr><th style="text-align:right">Offer Price</th><th style="text-align:right">20% Down Payment</th><th style="text-align:right">Closing Costs (~1.5%)</th><th style="text-align:right">Cash to Close</th><th style="text-align:right">Est. Monthly P&amp;I</th><th style="text-align:right">Plus HOA</th></tr></thead><tbody>
+<tr><td style="text-align:right">$1,760,000</td><td style="text-align:right">$352,000</td><td style="text-align:right">$26,400</td><td style="text-align:right">$378,400</td><td style="text-align:right">$9,278</td><td style="text-align:right">$9,485</td></tr>
+<tr><td style="text-align:right">$1,800,000</td><td style="text-align:right">$360,000</td><td style="text-align:right">$27,000</td><td style="text-align:right">$387,000</td><td style="text-align:right">$9,484</td><td style="text-align:right">$9,691</td></tr>
+<tr><td style="text-align:right">$1,850,000</td><td style="text-align:right">$370,000</td><td style="text-align:right">$27,750</td><td style="text-align:right">$397,750</td><td style="text-align:right">$9,748</td><td style="text-align:right">$9,955</td></tr>
+<tr><td style="text-align:right">$1,900,000</td><td style="text-align:right">$380,000</td><td style="text-align:right">$28,500</td><td style="text-align:right">$408,500</td><td style="text-align:right">$10,011</td><td style="text-align:right">$10,218</td></tr>
+<tr><td style="text-align:right">$1,938,000 (list)</td><td style="text-align:right">$387,600</td><td style="text-align:right">$29,070</td><td style="text-align:right">$416,670</td><td style="text-align:right">$10,211</td><td style="text-align:right">$10,418</td></tr>
+</tbody></table></div>
+<p class="note">Monthly figures exclude property tax and homeowners insurance. All-in PITI plus HOA typically runs $1,700 to $2,000/month above the P&amp;I-plus-HOA column shown. If putting more than 20% down, cash-to-close rises and monthly cost drops proportionally.</p>
+</section>
+
+<div class="dv"></div>
+
+<section><div class="sh">Special Considerations</div>
+<div class="card"><h4>HOA financial health, unverified</h4><p>The $207/month HOA covers real value (pool, spa, clubhouse, exterior maintenance), but its reserve fund and any pending special assessments haven't been reviewed yet. Request the CC&amp;Rs, reserve study, and the last 12 months of board minutes as part of your contingency period.</p></div>
+<div class="card"><h4>Owned solar, verify the paperwork</h4><p>The listing states the Tesla solar system is owned outright, not leased, which is a real value-add if confirmed. Get the permit and interconnection documents during inspection; a truly owned system with no lien is worth asking about, but don't take it as settled until you've seen the paperwork.</p></div>
+<div class="card"><h4>Vacant property, utilities have been off</h4><p>The listing notes water was shut off for showings. Have your inspector confirm plumbing, HVAC and irrigation function normally once utilities are restored; a home that's sat vacant for 48 days can develop minor issues (seals, appliances) that a lived-in home wouldn't show.</p></div>
+<div class="card"><h4>Three bedrooms in a four-bedroom market</h4><p>Most of the competitive product in this size range in Milpitas is 4-bedroom. For your family, with a baby on the way, a 3-bedroom PUD may be exactly the right size and easier to maintain, and it likely explains some of why this specific listing has moved slower than its 4-bedroom peers. Worth factoring into your own resale thinking down the line, not just your move-in plan.</p></div>
+</section>
+
+<div class="dv"></div>
+
+<section><div class="sh">Closing</div>
+<p>2314 Farmcrest is a genuinely nice, updated home in a well-located Milpitas community with real schools, real HOA amenities, and an easy commute setup. It's simply priced about where a full remodel would clear, not where its own updated-but-not-remodeled condition actually supports. Forty-eight days without a price cut on a vacant home is the seller's own data working in your favor. Open with a number you can defend, point to 2291 Farmcrest by name, and let the comps do the talking.</p>
+<p>Congratulations on the baby news, and happy to walk through any of these numbers on a call before you write the offer.</p>
+</section>
+
+</div>
+<footer><div class="wrap"><div class="fn">GRAEHAM WATTS</div><div class="fl">Powered by The Boyenga Team at Compass. DRE #01466876</div>
+<div class="fl">650-308-4727. graehamwatts@gmail.com. www.graehamwatts.com</div>
+<div class="ds">Buyer CMA prepared September 2026 for Paul and his wife, prospective buyers of 2314 Farmcrest Street, Milpitas. Professional opinion of value, not a formal appraisal. Comp analysis based on 32 closed sales and active/pending listings in the Milpitas single-family 1,600&ndash;2,300 sqft cohort over the last 6 months, individually verified against MLSListings Matrix records. Verify current mortgage rates with your lender, review HOA and disclosure documents carefully, and consult your tax and legal advisors as needed before submitting an offer.</div></div></footer>
+<script>
+const domCtx = document.getElementById('domChart');
+new Chart(domCtx,{type:'bar',data:{labels:['Sold Comps (32, median)','Active/Pending Competition (median)','2314 Farmcrest (actual)'],datasets:[{label:'Median Days on Market',data:[12.5,15.5,48],backgroundColor:['#4f9d69','#C5A55A','#C96A45'],borderRadius:4}]},options:{responsive:true,maintainAspectRatio:false,plugins:{legend:{display:false},tooltip:{callbacks:{label:c=>c.parsed.y+' days'}}},scales:{y:{beginAtZero:true,ticks:{callback:v=>v+'d'},grid:{color:'#eee'}},x:{grid:{display:false}}}}});
+
+const tierCtx = document.getElementById('tierChart');
+new Chart(tierCtx,{type:'bar',data:{labels:['Full remodel tier avg (11 comps)','Updated tier avg (13 comps, subject tier)','Dated/fixer tier avg (8 comps)','2314 Farmcrest list price'],datasets:[{label:'$/sqft',data:[1038,921,754,992],backgroundColor:['#8a8f9e','#4f9d69','#C96A45','#C5A55A'],borderRadius:4}]},options:{responsive:true,maintainAspectRatio:false,plugins:{legend:{display:false},tooltip:{callbacks:{label:c=>'$'+c.parsed.y+'/sqft'}}},scales:{y:{beginAtZero:true,ticks:{callback:v=>'$'+v},grid:{color:'#eee'}},x:{grid:{display:false},ticks:{autoSkip:false,maxRotation:20,minRotation:0,font:{size:10}}}}}});
+</script>
+</body></html>
