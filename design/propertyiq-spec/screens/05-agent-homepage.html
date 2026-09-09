@@ -134,7 +134,7 @@
     <!-- ELEMENT: site header -->
     <div class="sitehead" id="el-header">
       <div class="avatar">GW</div>
-      <div class="who"><b>Graeham Watts</b><small>Bay Area Real Estate · Intero Real Estate · DRE #01466876</small></div>
+      <div class="who"><b>Graeham Watts</b><small>Bay Area Real Estate · Powered by The Boyenga Team at Compass · DRE #01466876</small></div>
       <nav><a href="#">Search</a><a href="#">Communities</a><a href="#">Sell</a><a href="#">Reviews</a><a href="#">Contact</a></nav>
     </div>
     <div class="anno" style="padding:6px 22px; border-bottom:1px dashed var(--line)">Identity (name, brokerage, DRE, phone) renders ONLY from identity.json / brand vault — read-only on page. The legacy wrong DRE is repo-blocklisted (see the identity.json blocklist); the brand tripwire blocks any render containing it. Nav collapses to hamburger on mobile.</div>
@@ -251,7 +251,7 @@
           <div>
             <div style="display:flex; gap:14px; align-items:center; margin-bottom:12px">
               <div class="avatar" style="width:64px;height:64px; font-size:20px">GW</div>
-              <div><b style="font-size:18px">Graeham Watts</b><div style="font-size:13px;color:var(--mut)">15 years on the Peninsula · Intero Real Estate · DRE #01466876</div></div>
+              <div><b style="font-size:18px">Graeham Watts</b><div style="font-size:13px;color:var(--mut)">15 years on the Peninsula · Powered by The Boyenga Team at Compass · DRE #01466876</div></div>
             </div>
             <p style="font-size:13.5px; color:var(--mut); max-width:48ch; margin-bottom:14px">I grew up here, I've sold 14 homes in this farm, and I built this site so my clients see the same data I do — commutes, schools, zoning, and what your home is really worth.</p>
             <button class="btn-ink" style="padding:12px 22px; border-radius:9px; font-size:13px">Work with me</button>
@@ -295,7 +295,7 @@
       <div class="hsec" id="el-seo-block"><span class="tag">9 · SEO text block — crawlable body copy</span>
         <h2 style="font-size:17px; margin-bottom:8px">Redwood City &amp; East Palo Alto real estate, done with better data</h2>
         <div class="proselike">
-          <p>Graeham Watts is a Redwood City and East Palo Alto real estate agent with Intero Real Estate, serving buyers, sellers, and investors across the Peninsula — Friendly Acres, Redwood Oaks, Centennial, Emerald Hills, and 10 more neighborhoods. This site runs on PropertyIQ: search homes for sale by commute time, school assignment, ADU eligibility, and rental return; get an instant home value backed by live MLS comparables; and read data-driven neighborhood guides updated daily. Whether you're selling a Friendly Acres ranch home or hunting for a duplex with ADU potential in East Palo Alto, the same market intelligence I use professionally is open to you here.</p>
+          <p>Graeham Watts is a Redwood City and East Palo Alto real estate agent with The Boyenga Team at Compass, serving buyers, sellers, and investors across the Peninsula — Friendly Acres, Redwood Oaks, Centennial, Emerald Hills, and 10 more neighborhoods. This site runs on PropertyIQ: search homes for sale by commute time, school assignment, ADU eligibility, and rental return; get an instant home value backed by live MLS comparables; and read data-driven neighborhood guides updated daily. Whether you're selling a Friendly Acres ranch home or hunting for a duplex with ADU potential in East Palo Alto, the same market intelligence I use professionally is open to you here.</p>
         </div>
         <div class="anno" style="margin-top:4px">~120-word templated block (agent name, brokerage, city keywords, neighborhood internal links, feature keywords) auto-generated from brand vault + farm config; agent-editable via CMS-lite with ComplianceProvider + <b>cross-instance uniqueness validator</b> — near-identical white-label pages are Google's named doorway-page pattern, so publish blocks if too similar to another agent's instance.</div>
       </div>
@@ -353,7 +353,7 @@
     </div>
     <div id="el-otto" class="cardbox">
       <b>OTTO SEO layer (invisible on page — dev reference)</b>
-      <div style="color:var(--mut); font-size:12px; margin-top:4px">Title: <span class="num" style="color:var(--ink)">Graeham Watts — Redwood City Real Estate Agent | Intero Real Estate</span><br>Meta: "Redwood City homes with Graeham Watts: search by commute &amp; schools, get instant home values, live market data for 14 neighborhoods."<br>Schema emitted: RealEstateAgent + LocalBusiness (NAP, DRE, areaServed, stars) · WebSite + SearchAction · FAQPage.</div>
+      <div style="color:var(--mut); font-size:12px; margin-top:4px">Title: <span class="num" style="color:var(--ink)">Graeham Watts — Redwood City Real Estate Agent | Powered by The Boyenga Team at Compass</span><br>Meta: "Redwood City homes with Graeham Watts: search by commute &amp; schools, get instant home values, live market data for 14 neighborhoods."<br>Schema emitted: RealEstateAgent + LocalBusiness (NAP, DRE, areaServed, stars) · WebSite + SearchAction · FAQPage.</div>
       <div class="anno" style="margin-top:5px">SearchAtlas/OTTO via shared SeoProvider (Brain §12.12): tuning through template variable slots ONLY; every live change routes through SEO Console preview + approve (Screen 20) with an audit trail — OTTO never deploys directly. Site connection default = Cloudflare Worker, OTTO Pixel fallback. LCP budget &lt; 2.5s: sections static-rendered, widgets (map, value input) lazy-load.</div>
     </div>
   </div>
@@ -517,6 +517,6 @@
       <li>[DECIDE] Section-stack CMS editing surface (in-app vs onboarding-only). Interim: simple reorder/hide panel in Settings &gt; Website [BEST GUESS].</li>
       <li>[DECIDE] "Se habla español" / multilingual toggle per agent. Interim: brand-vault boolean flag rendering the line + multilingual NL search chip.</li>
     </ul>
-    <p class="anno" style="margin-top:20px">Wireframe fidelity — colors are placeholders from the locked PropFlow design language. All addresses/prices/counts are realistic fake data. Agent identity: Graeham Watts, Intero Real Estate, DRE #01466876 (from shared-references/identity.json — never hardcode elsewhere).</p>
+    <p class="anno" style="margin-top:20px">Wireframe fidelity — colors are placeholders from the locked PropFlow design language. All addresses/prices/counts are realistic fake data. Agent identity: Graeham Watts, Powered by The Boyenga Team at Compass, DRE #01466876 (from shared-references/identity.json — never hardcode elsewhere).</p>
   </div>
 </div>

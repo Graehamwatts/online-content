@@ -222,7 +222,7 @@
               <!-- the page itself: consumer chrome inside the preview -->
               <div style="padding:18px; text-align:center">
                 <div class="anno" style="text-align:left; margin-bottom:8px">↓ This preview IS the visitor's page (light consumer chrome — agent-branded top strip, no console rail). Branded mode: agent hero shown. Dashed = editable slot.</div>
-                <div style="display:flex; align-items:center; gap:8px; border:1px solid var(--line); border-radius:8px; padding:6px 10px; font-size:11px; color:var(--mut)"><span class="avatar" style="width:22px; height:22px; font-size:9px">GW</span> Graeham Watts · Intero Real Estate <span style="margin-left:auto" class="anno">agent hero — stripped in Unbranded mode</span></div>
+                <div style="display:flex; align-items:center; gap:8px; border:1px solid var(--line); border-radius:8px; padding:6px 10px; font-size:11px; color:var(--mut)"><span class="avatar" style="width:22px; height:22px; font-size:9px">GW</span> Graeham Watts · Powered by The Boyenga Team at Compass <span style="margin-left:auto" class="anno">agent hero — stripped in Unbranded mode</span></div>
                 <div id="el-headline" class="slot" style="padding:10px; font-size:17px; font-weight:800; margin-top:10px"><span class="tag">headline slot — auto from video title · one-click edit</span>What's your Friendly Acres home worth in 2026?</div>
                 <div id="el-subhead" class="slot" style="border-color:var(--line); padding:8px; margin-top:8px; font-size:12px; color:var(--mut)"><span class="tag" style="color:var(--mut)">subhead — auto-filled from live data</span>Median up 3.1% this year — and 41% of lots here qualify for an ADU. See what that means for yours. <span class="bdg" style="font-size:9px">src: MLS stats · as of Jul 2026</span></div>
                 <div id="el-hero-video" class="slot" style="border-color:var(--line); margin-top:8px; padding:22px; background:var(--surface); font-size:12px; color:var(--mut)"><span class="tag" style="color:var(--mut)">hero video embed</span>▶ "What's your Friendly Acres home worth?" — YouTube embed (CL-0412 render artifact) <button class="btn-ghost" style="font-size:10px; padding:3px 8px">Swap</button> <button class="btn-ghost" style="font-size:10px; padding:3px 8px">Remove</button></div>
@@ -230,7 +230,7 @@
                   <div class="prompt" style="padding:4px"><input placeholder="Street address" aria-label="Street address"><button>Get my value</button></div>
                   <div class="anno" style="margin-top:4px">Valuation gate = address field. Disclosure gates use name + email + phone + buyer/buyer's-agent toggle instead. CTA copy editable. Honest gate copy — no dark patterns; pixel disclosure + DNT/Global Privacy Control respected (Part 5 hard rules).</div>
                 </div>
-                <div id="el-footer" style="margin-top:12px; border:1px solid var(--line); border-radius:8px; padding:8px; font-size:10.5px; color:var(--mut); background:var(--surface)">🔒 <b style="color:var(--ink)">Locked footer (read-only, on Branded AND Unbranded):</b> Graeham Watts · Intero Real Estate · DRE #01466876 · <span title="NAR Fair Housing logo">⌂ Equal Housing</span><div class="anno">Pulled from identity configuration (identity.json) — never hand-typed; the identity.json blocklist applies. Identity config missing → footer cannot render → nothing publishes (hard block).</div></div>
+                <div id="el-footer" style="margin-top:12px; border:1px solid var(--line); border-radius:8px; padding:8px; font-size:10.5px; color:var(--mut); background:var(--surface)">🔒 <b style="color:var(--ink)">Locked footer (read-only, on Branded AND Unbranded):</b> Graeham Watts · Powered by The Boyenga Team at Compass · DRE #01466876 · <span title="NAR Fair Housing logo">⌂ Equal Housing</span><div class="anno">Pulled from identity configuration (identity.json) — never hand-typed; the identity.json blocklist applies. Identity config missing → footer cannot render → nothing publishes (hard block).</div></div>
                 <div id="el-pixels" style="margin-top:8px; font-size:10.5px; color:var(--soft)">Tracking status: <span class="bdg good" style="font-size:9.5px">Meta Pixel ✓</span> <span class="bdg good" style="font-size:9.5px">GA4 ✓</span> <span class="bdg good" style="font-size:9.5px">TikTok pixel ✓</span> <span class="anno">auto-injected — status only, not configurable; hover shows pixel IDs; locked for every role</span></div>
               </div>
 
@@ -250,7 +250,7 @@
                   <div style="font-weight:800; font-size:13px">Friendly Acres Pricing Guide</div>
                   <div style="color:var(--mut)">July 2026 · 9 pages</div>
                   <div style="margin-top:6px; color:var(--mut)">▦ first-page preview — comps table, price/sf trend, ADU note</div>
-                  <div style="margin-top:6px; font-size:9.5px; color:var(--soft)">Branding: headshot · Graeham Watts · DRE #01466876 · Intero</div>
+                  <div style="margin-top:6px; font-size:9.5px; color:var(--soft)">Branding: headshot · Graeham Watts · DRE #01466876 · Compass</div>
                 </div>
                 <div style="display:flex; gap:6px; margin-top:6px"><button class="btn-ghost">Open PDF slot editor</button><span class="bdg good" style="font-size:9.5px">data: MLS stats · as-of Jul 8</span></div>
                 <div class="anno" style="margin-top:5px">Template per container matrix; auto-populated with real Stage-2 signal data (ReportLab/WeasyPrint per MVP1); approved in the same review queue as the page. Every data slot carries source + as-of date or renders "data unavailable" — never a fabricated number.</div>
@@ -452,6 +452,6 @@
       <li><b>[DECIDE] Programmatic-page vendor</b>: SearchAtlas evaluate-first rule — if it covers programmatic local pages/schema/indexing, PropCast orchestrates on top; builder UI must treat renderer as swappable.</li>
       <li><b>[BEST GUESS] Slug editing</b>: allow slug edit pre-publish only; post-publish the URL is durable (matches durable-URL patterns elsewhere in the platform).</li>
     </ul>
-    <p class="anno" style="margin-top:20px">Wireframe fidelity — colors are placeholders from the locked PropFlow design language. All page names/numbers are realistic fake data. Agent identity: Graeham Watts, Intero Real Estate, DRE# 01466876 (from shared-references/identity.json — never hardcode elsewhere). No crime data anywhere on this screen or its containers.</p>
+    <p class="anno" style="margin-top:20px">Wireframe fidelity — colors are placeholders from the locked PropFlow design language. All page names/numbers are realistic fake data. Agent identity: Graeham Watts, Powered by The Boyenga Team at Compass, DRE# 01466876 (from shared-references/identity.json — never hardcode elsewhere). No crime data anywhere on this screen or its containers.</p>
   </div>
 </div>

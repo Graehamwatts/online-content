@@ -184,7 +184,7 @@
           <div class="cardbox">
             <div style="display:grid; grid-template-columns:repeat(2,1fr); gap:6px 16px; font-size:12px">
               <div>Name <b>Graeham Watts</b> <span class="bdg" style="font-size:9.5px">🔒 locked</span></div>
-              <div>Brokerage <b>Intero Real Estate Services</b> <span class="bdg" style="font-size:9.5px">🔒 locked</span></div>
+              <div>Brokerage <b>Powered by The Boyenga Team at Compass Services</b> <span class="bdg" style="font-size:9.5px">🔒 locked</span></div>
               <div>DRE <b class="num">#01466876</b> <span class="bdg" style="font-size:9.5px">🔒 locked</span></div>
               <div>Phone <b class="num">(650) 555-0184</b> <span class="bdg" style="font-size:9.5px">🔒 locked</span></div>
               <div>Email <b>graeham@example-agent.com</b> <span class="bdg" style="font-size:9.5px">🔒 locked</span></div>
@@ -535,7 +535,7 @@
     <table class="dtable">
       <tr><th>Element</th><th>What it shows/does</th><th>Data source</th><th>Interactions</th><th>Spec source</th></tr>
       <tr><td>Emergency stop control</td><td>Kill switch: scope selector (global / tenant / user) + confirmation; halts all Wattson execution &lt;5s — Temporal cancel/pause + connector.stop() + emergency policy flag + voice-session termination. NEVER OS SIGSTOP. Also SMS command (owner-only Stage 1)</td><td>Wattson MB Part 13 (C14/B7.4)</td><td>Click → scope modal → confirm → "STOPPED at hh:mm — resume requires owner"</td><td>Wattson MB Part 13; matrix kill-switch gap (P0)</td></tr>
-      <tr><td>Identity &amp; brand panel</td><td>Graeham Watts · Intero Real Estate · DRE #01466876 — read-only from identity.json; tripwire note; brand vault colors editable, layout never</td><td>shared-references/identity.json</td><td>View; edit colors only; DRE/brokerage/contact locked</td><td>Draft; Skills CLAUDE.md brand rule</td></tr>
+      <tr><td>Identity &amp; brand panel</td><td>Graeham Watts · Powered by The Boyenga Team at Compass · DRE #01466876 — read-only from identity.json; tripwire note; brand vault colors editable, layout never</td><td>shared-references/identity.json</td><td>View; edit colors only; DRE/brokerage/contact locked</td><td>Draft; Skills CLAUDE.md brand rule</td></tr>
       <tr><td>Autonomy matrix</td><td>Playbooks × steps with AUTONOMOUS / REVIEW_REQUIRED / ADVISORY badges; per-step promotion stats (days, unmodified-approval %, incidents)</td><td>StepPermissionMode per step; AutonomyLevel dial</td><td>Tighten anytime; loosen only via promotion</td><td>Wattson MB Part 8; matrix governance gap (P0)</td></tr>
       <tr><td>Promotion flow</td><td>REVIEW_REQUIRED → AUTONOMOUS requires ≥30 consecutive days, success_rate &gt;95% (approved WITHOUT modification), zero incidents 30d, explicit owner approval logged w/ timestamp</td><td>Promotion stats service</td><td>Promote enabled only when all four green; logs to audit</td><td>Wattson MB Part 8</td></tr>
       <tr><td>Never-Autonomous list</td><td>Pinned read-only: client-facing comms, financial categorization, contract-terms modification, MLS listing submission, spend above cap, Reddit posts, GBP review replies, voice price/commitment statements, voice sensitive topics, cloned voice w/o VoiceIdentity, testimonial w/o ReleaseRecord</td><td>Wattson MB Part 8 (permanent)</td><td>none (display only)</td><td>Wattson MB Part 8</td></tr>
@@ -594,6 +594,6 @@
       <li>[DECIDE] Plan-tier bounds on editable rate limits — interim: Stage 1 defaults shown as ceilings; PlanTier is never a permission value (Part 8), tiers bound quantities only.</li>
       <li>[DECIDE] SMS kill-switch command UX (owner-only Stage 1) — interim: documented in the emergency-stop confirmation modal ("you can also text STOP-ALL to your Wattson number"); exact keyword TBD.</li>
     </ul>
-    <p class="anno" style="margin-top:20px">Wireframe fidelity — colors are placeholders from the locked PropFlow design language. All meter values/dates are realistic fake data. Agent identity: Graeham Watts, Intero Real Estate, DRE# 01466876 (from shared-references/identity.json — never hardcode elsewhere).</p>
+    <p class="anno" style="margin-top:20px">Wireframe fidelity — colors are placeholders from the locked PropFlow design language. All meter values/dates are realistic fake data. Agent identity: Graeham Watts, Powered by The Boyenga Team at Compass, DRE# 01466876 (from shared-references/identity.json — never hardcode elsewhere).</p>
   </div>
 </div>

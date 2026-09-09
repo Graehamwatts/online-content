@@ -160,7 +160,7 @@
                 <span class="bdg num">2:41 / 10:00 max</span>
               </div>
               <div class="transcript" style="margin-top:8px; font-style:italic">
-                <div class="ai">Wattson: "Hi, this is Wattson, an AI assistant calling on behalf of Graeham Watts, DRE #01466876, Intero Real Estate." <span class="bdg good" style="font-style:normal">disclosure played ✓ logged</span></div>
+                <div class="ai">Wattson: "Hi, this is Wattson, an AI assistant calling on behalf of Graeham Watts, DRE #01466876, Powered by The Boyenga Team at Compass." <span class="bdg good" style="font-style:normal">disclosure played ✓ logged</span></div>
                 <div class="caller" style="margin-top:4px">Caller: "…yeah I got the card about home values, we're on Poplar, thinking about maybe spring…"</div>
                 <div class="ai" style="margin-top:4px">Wattson: "Happy to help with that. Would a quick chat with Graeham be useful? I can offer Thursday 10 AM or Friday 2 PM." <span class="anno" style="font-style:normal">pre-approved slots only, neutral language — never negotiates price or makes commitments (Never-Autonomous List)</span></div>
                 <div class="anno" style="font-style:normal; margin-top:4px">▍streaming… ElevenLabs Agents webhook → real-time transcript (retention class VOICE_TRANSCRIPT_24M)</div>
@@ -288,7 +288,7 @@
 
           <!-- Disclosure footer -->
           <div id="el-disclosure" class="cardbox" style="background:var(--surface); font-size:11.5px; color:var(--mut)">
-            <b style="color:var(--ink)">🔒 Disclosure (read-only by design)</b> — every call opens with the signed AI disclosure: <i>"Hi, this is Wattson, an AI assistant calling on behalf of [agent_name], [DRE_number], [brokerage_name]."</i> → renders as <i>"…on behalf of Graeham Watts, DRE #01466876, Intero Real Estate."</i>
+            <b style="color:var(--ink)">🔒 Disclosure (read-only by design)</b> — every call opens with the signed AI disclosure: <i>"Hi, this is Wattson, an AI assistant calling on behalf of [agent_name], [DRE_number], [brokerage_name]."</i> → renders as <i>"…on behalf of Graeham Watts, DRE #01466876, Powered by The Boyenga Team at Compass."</i>
             <div class="anno" style="margin-top:4px">Mandatory tokens: agent_name · brokerage_name · DRE_number · region · ai_disclosure_phrase · region_required_language — rendered read-only from identity config (shared-references/identity.json; the identity.json blocklist is enforced repo-wide). The opener is immutable at agent-config level; omission forbidden; logged per call (C21/B6.3). No edit affordance exists on this screen — that is intentional.</div>
           </div>
         </div>
@@ -487,6 +487,6 @@
       <li>[DECIDE] Monthly voice metering/overage display (Brain: base covers ~first $30/mo of voice, overage cost+20% is a List B open item) — interim: show the meter and "overage billing TBD" label, no invented rates.</li>
       <li>[BEST GUESS] Live-call banner persistence app-wide; right-rail layout; caller-source attribution via per-campaign phone numbers.</li>
     </ul>
-    <p class="anno" style="margin-top:20px">Wireframe fidelity — colors are placeholders from the locked PropFlow design language. All caller names/numbers are realistic fake data. Agent identity: Graeham Watts, Intero Real Estate, DRE# 01466876 (from shared-references/identity.json — never hardcode elsewhere; the identity.json blocklist is enforced).</p>
+    <p class="anno" style="margin-top:20px">Wireframe fidelity — colors are placeholders from the locked PropFlow design language. All caller names/numbers are realistic fake data. Agent identity: Graeham Watts, Powered by The Boyenga Team at Compass, DRE# 01466876 (from shared-references/identity.json — never hardcode elsewhere; the identity.json blocklist is enforced).</p>
   </div>
 </div>

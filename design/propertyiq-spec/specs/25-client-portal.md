@@ -11,7 +11,7 @@
 ## Layout
 
 **Desktop:**
-- **Header:** agent avatar + agent name (branding_ref resolved from identity config — pilot: Graeham Watts, DRE 01466876, Intero Real Estate, §9.3), context subtitle ("Your home purchase · 42 Cedar St"), nav: Messages (badge), Docs.
+- **Header:** agent avatar + agent name (branding_ref resolved from identity config — pilot: Graeham Watts, DRE 01466876, Powered by The Boyenga Team at Compass, §9.3), context subtitle ("Your home purchase · 42 Cedar St"), nav: Messages (badge), Docs.
 - **Hero card:** progress statement ("You're on day 11 of 21 — on track for keys July 25 🔑") + a 6-segment client-language stage strip (Offer accepted / Deposit in / Inspection / Loan — this week / Signing / Keys!). Client-friendly labels map to the 7 canonical stages; current stage outlined, complete filled.
 - **Three-card row:** "Your to-dos" (client tasks) · "From {agent}" (milestone video/messages) · "Documents" (shared count, signature needs, wire warning).
 - **Below (12 sections as enabled):** status, tasks, docs, upload, messages, milestones, showing feedback, weekly update embed, settings — per transaction_sections_enabled (§6.11 PortalSection enum).
@@ -64,7 +64,7 @@ PortalRecord: portal_id, mode (TRANSACTION|HOMEOWNER), branding_ref, portal_url,
 ## Rules & compliance
 - Two-tier auth invariant: magic_link_enabled=true and sensitive_actions_require_otp_mfa=true are hard-coded true on the record (§6.11).
 - **No ad pixels** in authenticated transaction portal v1; owned-page analytics only with ComplianceProvider pass + GPC/DNT/opt-out respected (§13.10). Attribution via canonical PORTAL_VIEWED only.
-- Brand lock: footer/emails/invites/doc notices show licensed identity exactly (pilot DRE 01466876, Intero) (§9.3). The identity.json-blocklisted legacy DRE must never appear.
+- Brand lock: footer/emails/invites/doc notices show licensed identity exactly (pilot DRE 01466876, Compass) (§9.3). The identity.json-blocklisted legacy DRE must never appear.
 - No Zillow/Zestimate-branded or -referencing template anywhere in PropClose v1 (§9.7).
 - No school data in v1; future embed must follow the PropSearch factual-display model with no steering/CTA inside the block (§13.7; matrix correction #4).
 - Sold comps: public = aggregates only; detail requires authenticated session (§13.6).

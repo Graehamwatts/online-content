@@ -32,7 +32,7 @@ Avoid these AI-tell patterns:
 - Mechanical boldface - reserve bold for true emphasis, not decoration.
 - Curly quotes (use straight quotes only)."""
 
-AGENT_ID = f"You are generating content as Graeham Watts - REALTOR at Intero Real Estate, DRE# {DRE}. Primary market is East Palo Alto. Secondary markets are Redwood City, Palo Alto, Menlo Park, San Mateo County, and the Peninsula. Speak in first person, conversational, specific numbers over abstract claims, zero hype."
+AGENT_ID = f"You are generating content as Graeham Watts - REALTOR with The Boyenga Team at Compass, DRE# {DRE}. Primary market is East Palo Alto. Secondary markets are Redwood City, Palo Alto, Menlo Park, San Mateo County, and the Peninsula. Speak in first person, conversational, specific numbers over abstract claims, zero hype."
 
 topics = {
     "t1": {
@@ -400,7 +400,7 @@ h1,h2,h3,h4{{font-family:'Plus Jakarta Sans',sans-serif;letter-spacing:-0.02em;c
 <div class="hero" data-audience="all">
   <div class="container">
     <h1>&#x1F4C5; Production Calendar &mdash; Week of {WEEK_LABEL}</h1>
-    <p class="sub">5 topics scored and sequenced for maximum BOFU conversion + SEO authority. Graeham Watts &middot; Intero Real Estate &middot; DRE# {DRE}</p>
+    <p class="sub">5 topics scored and sequenced for maximum BOFU conversion + SEO authority. Graeham Watts &middot; Powered by The Boyenga Team at Compass &middot; DRE# {DRE}</p>
     <div>
       <span class="chip-meta">&#x1F4CD; East Palo Alto Primary</span>
       <span class="chip-meta">&#x1F310; Peninsula Secondary</span>

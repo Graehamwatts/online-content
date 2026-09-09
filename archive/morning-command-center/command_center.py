@@ -151,7 +151,7 @@ html = f"""<!DOCTYPE html><html lang="en"><head><meta charset="UTF-8"><meta name
   {section("📊 Pipeline snapshot", "Where everyone sits right now (open opportunities).", tbl(["Stage", "Count"], snap_html, ""))}
   {section("📈 Lead sources · last 7 days", "Where this week's leads came from.", tbl(["Source", "Leads"], src_rows, "No new leads this week."))}
   <div style="text-align:center;color:#475569;font-size:12px;padding:16px 0">
-    Graeham Watts · Intero Real Estate · DRE# 01466876<br>
+    Graeham Watts · Powered by The Boyenga Team at Compass · DRE# 01466876<br>
     {len(opens)} open opportunities · generated {PT.strftime('%Y-%m-%d %H:%M PT')}
   </div>
 </div></body></html>"""

@@ -274,17 +274,17 @@
                   <div class="pcard">
                     <div class="pchead">SOLD IN 9 DAYS.<br>3 DOORS DOWN.</div>
                     <div class="pcbody"><div class="pcqr"></div>A · Just-sold proof (neighbor-envy archetype) · goal: home-value requests</div>
-                    <div class="contactstrip"><span class="gold">GRAEHAM WATTS</span> · Intero · DRE# 01466876</div>
+                    <div class="contactstrip"><span class="gold">GRAEHAM WATTS</span> · Compass · DRE# 01466876</div>
                   </div>
                   <div class="pcard picked">
                     <div class="pchead">41% OF LOTS HERE CAN ADD AN ADU.<br>IS YOURS ONE?</div>
                     <div class="pcbody"><div class="pcqr"></div>B · ADU eligibility (equity archetype) · goal: ADU-check page visits <span class="bdg good" style="font-size:9px">PICKED</span></div>
-                    <div class="contactstrip"><span class="gold">GRAEHAM WATTS</span> · Intero · DRE# 01466876</div>
+                    <div class="contactstrip"><span class="gold">GRAEHAM WATTS</span> · Compass · DRE# 01466876</div>
                   </div>
                   <div class="pcard">
                     <div class="pchead">YOUR HOME'S REAL NUMBER.<br>NOT THE ZESTIMATE.</div>
                     <div class="pcbody"><div class="pcqr"></div>C · Home-value QR (anti-Zestimate archetype) · goal: value-report scans</div>
-                    <div class="contactstrip"><span class="gold">GRAEHAM WATTS</span> · Intero · DRE# 01466876</div>
+                    <div class="contactstrip"><span class="gold">GRAEHAM WATTS</span> · Compass · DRE# 01466876</div>
                   </div>
                 </div>
                 <div style="display:flex; gap:6px; margin-top:8px; flex-wrap:wrap">
@@ -315,7 +315,7 @@
               <b>Locked contact block (read-only)</b>
               <div class="contactstrip" style="margin-top:6px; font-size:11px; border-radius:6px; padding:9px 12px">
                 <span class="gold">GRAEHAM WATTS</span>
-                <span>· Intero Real Estate</span>
+                <span>· Powered by The Boyenga Team at Compass</span>
                 <span>· DRE# 01466876</span>
                 <span style="margin-left:auto; color:#c9c9c9">gold + black · chevron lockup</span>
                 <span title="read-only">🔒</span>
@@ -510,7 +510,7 @@
       <tr><td>Postcard drop header</td><td>"Aug 1 postcard — pick one of 3 options"</td><td>farming-postcard option cache</td><td>—</td><td>draft s33</td></tr>
       <tr><td>Option cards (3)</td><td>A · Just-sold proof / B · "41% of lots allow an ADU" / C · Home-value QR — previews of 3-5 hook options generated 7 days ahead; archetypes drawn from the 6 historical headline archetypes (equity, buyer-tagged, anti-Zillow, AI search, anti-Zestimate, neighbor envy)</td><td>farming-postcard skill option cache</td><td>click to pick; "regenerate options"; view full 6x4 preview front/back</td><td>draft s33; farming-postcard SKILL</td></tr>
       <tr><td>Rules strip</td><td>Enforced constraints inline: one goal · one QR (labeled e.g. AUG-PC) · locked contact block w/ DRE · audience = farm owners minus Do-Not-Mail (Sharon's list) · print-spec PDF on pick · mail calendar 8th/24th touchpoints server-side</td><td>postcard composer config</td><td>none (rules are non-editable)</td><td>draft s33</td></tr>
-      <tr><td>Locked contact block preview</td><td>The brand-continuity contact strip (Intero + Graeham lockup, gold+black, DRE #01466876) — read-only from identity.json; brand tripwire blocks blocklisted DRE</td><td>identity.json / brand vault</td><td>none</td><td>farming-postcard skill; CLAUDE.md brand rule</td></tr>
+      <tr><td>Locked contact block preview</td><td>The brand-continuity contact strip (Compass + Graeham lockup, gold+black, DRE #01466876) — read-only from identity.json; brand tripwire blocks blocklisted DRE</td><td>identity.json / brand vault</td><td>none</td><td>farming-postcard skill; CLAUDE.md brand rule</td></tr>
       <tr><td>QR label + router</td><td>QR minted through the owned link shortener with campaign label; CTA→landing-page router selection (which landing page the scan hits)</td><td>switchy-engine / link shortener; content_id + UTM</td><td>pick destination from approved pages</td><td>PropCast Brain line 810; farming-postcard</td></tr>
       <tr><td>Audience count card</td><td>Farm owners count minus Do-Not-Mail suppressions, with suppression count shown</td><td>mail list + Do-Not-Mail list</td><td>click → list detail (read-only here)</td><td>draft s33</td></tr>
       <tr><td>Print-spec output</td><td>On pick: 6x4 print-ready PDF (Universal Mail Works specs) + order handoff</td><td>postcard render pipeline</td><td>download PDF; "send to printer" = review-required human step</td><td>farming-postcard skill</td></tr>
@@ -554,6 +554,6 @@
       <li>[DECIDE] Whether newsletter cadence (monthly past-client + farm) is editable here or only in Playbook settings — interim: read-only here, edit in Settings/Playbooks.</li>
       <li>[BEST GUESS] Mail calendar strip and archive rail placement (draft shows only the two cards); segment-variant count fixed at the audience layer, not hardcoded to 3.</li>
     </ul>
-    <p class="anno" style="margin-top:20px">Wireframe fidelity — colors are placeholders from the locked PropFlow design language; postcard gold/black is the locked farming-postcard brand system. All names/numbers are realistic fake data. Agent identity: Graeham Watts, Intero Real Estate, DRE# 01466876 (from shared-references/identity.json — never hardcode elsewhere; the identity.json blocklist is enforced by the brand tripwire). No crime data anywhere on this screen.</p>
+    <p class="anno" style="margin-top:20px">Wireframe fidelity — colors are placeholders from the locked PropFlow design language; postcard gold/black is the locked farming-postcard brand system. All names/numbers are realistic fake data. Agent identity: Graeham Watts, Powered by The Boyenga Team at Compass, DRE# 01466876 (from shared-references/identity.json — never hardcode elsewhere; the identity.json blocklist is enforced by the brand tripwire). No crime data anywhere on this screen.</p>
   </div>
 </div>

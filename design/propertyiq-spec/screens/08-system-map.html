@@ -115,7 +115,7 @@
     <!-- doc-surface chrome: standard tab chrome, NO left rail (spec Layout: "single scrolling document page") -->
     <div class="sitehead">
       <div class="avatar">GW</div>
-      <div class="who"><b>System map</b><small>Internal architecture view · Admin/owner role only · Graeham Watts · Intero Real Estate · DRE# 01466876 (identity locked from the brand vault)</small></div>
+      <div class="who"><b>System map</b><small>Internal architecture view · Admin/owner role only · Graeham Watts · Powered by The Boyenga Team at Compass · DRE# 01466876 (identity locked from the brand vault)</small></div>
       <div style="display:inline-flex; gap:6px; margin-left:10px; align-items:center">
         <span class="anno">Theme demo dots (flow B4 live):</span>
         <span class="swatch" style="background:#2e6b53" title="Watts — deployed theme"></span>
@@ -194,7 +194,7 @@
               <tr><th>Field</th><th>Value (scanned → confirmed)</th><th>Source</th></tr>
               <tr><td>logo</td><td>watts-lockup.svg (from site header)</td><td>site scan</td></tr>
               <tr><td>primary / secondary</td><td class="num"><span class="swatch" style="background:#2e6b53"></span> #2E6B53 · <span class="swatch" style="background:#b07a2e"></span> #B07A2E <span class="bdg good">sanity gate ✓ contrast 7.2:1</span></td><td>dominant-color extraction → step 2</td></tr>
-              <tr><td>agent_name / brokerage / DRE</td><td>Graeham Watts · Intero Real Estate · <span class="num">01466876</span> <span class="bdg">locked — not editable prose</span></td><td>licensed identity record (identity.json pattern)</td></tr>
+              <tr><td>agent_name / brokerage / DRE</td><td>Graeham Watts · Powered by The Boyenga Team at Compass · <span class="num">01466876</span> <span class="bdg">locked — not editable prose</span></td><td>licensed identity record (identity.json pattern)</td></tr>
               <tr><td>markets[]</td><td>East Palo Alto · Menlo Park · Redwood City</td><td>GBP + site scan, human-confirmed</td></tr>
               <tr><td>active theme</td><td class="num">theme v3 · label: cleaned · deployed_at 2026-07-12 09:41</td><td>BrandVault versions</td></tr>
             </table>
@@ -279,7 +279,7 @@
   </div>
 
   <!-- ============ Spec gaps found (Master Brain) ============ -->
-  <div class="note" style="margin-top:26px"><b>Spec gaps found (PropIQ Master Brain V0 — rendered above and noted here):</b> (1) <b>SEO live-site deployments are REVIEW_REQUIRED</b> — never autonomous (Brain §15 restricted-actions list); mesh/OTTO page changes always go through preview → human approval, matching flow B's "never silent retheme" rule. (2) <b>SeoProvider / SearchAtlasOttoAdapter is the ONLY publish path</b> for mesh pages (Brain §18.9, BUILD_NOW): connectSite (cloudflare/pixel/wordpress), previewDeployment before deployOnPageFixes/deploySchema, requestIndexing — PropCast must not build a disconnected SEO generator that bypasses OTTO (annotated in section A). (3) <b>SEO_PAGE_PUBLISHED is a confirmed canonical ledger event</b> (Brain event enum) — used alongside the spec's [BEST GUESS] BRAND_VAULT_* names in the ledger footer. (4) <b>Identity tokens are mandatory render tokens</b> (agent_name, brokerage_name, DRE_number) in every disclosure template and "Brand lock: Graeham Watts · DRE 01466876 · Intero Real Estate" is pinned at Brain line 9 — reinforcing the vault-as-single-source rule; the BrandVault record card renders the locked identity row accordingly.</div>
+  <div class="note" style="margin-top:26px"><b>Spec gaps found (PropIQ Master Brain V0 — rendered above and noted here):</b> (1) <b>SEO live-site deployments are REVIEW_REQUIRED</b> — never autonomous (Brain §15 restricted-actions list); mesh/OTTO page changes always go through preview → human approval, matching flow B's "never silent retheme" rule. (2) <b>SeoProvider / SearchAtlasOttoAdapter is the ONLY publish path</b> for mesh pages (Brain §18.9, BUILD_NOW): connectSite (cloudflare/pixel/wordpress), previewDeployment before deployOnPageFixes/deploySchema, requestIndexing — PropCast must not build a disconnected SEO generator that bypasses OTTO (annotated in section A). (3) <b>SEO_PAGE_PUBLISHED is a confirmed canonical ledger event</b> (Brain event enum) — used alongside the spec's [BEST GUESS] BRAND_VAULT_* names in the ledger footer. (4) <b>Identity tokens are mandatory render tokens</b> (agent_name, brokerage_name, DRE_number) in every disclosure template and "Brand lock: Graeham Watts · DRE 01466876 · Powered by The Boyenga Team at Compass" is pinned at Brain line 9 — reinforcing the vault-as-single-source rule; the BrandVault record card renders the locked identity row accordingly.</div>
 
   <!-- ============ (3) ELEMENT COVERAGE ============ -->
   <h2 style="font-size:20px; margin:34px 0 10px">Element coverage — spec inventory → this page</h2>
@@ -376,6 +376,6 @@
       <li>[DECIDE] Whether section C statuses stay hand-maintained or bind live to the capability matrix JSON. Interim: bind to the matrix (Tab 12) so "done is a checklist, not a claim" stays true automatically; note that C's current amber statuses are stale vs. Tab 12's 2026-07-15 "all designed" banner and must be refreshed.</li>
       <li>[DECIDE] Re-scan on rebrand: auto-detect (periodic diff of agent site) vs manual button. Interim: manual "Re-scan my brand" in Settings; deploy still requires the preview-and-tap step (never silent retheme).</li>
     </ul>
-    <p class="anno" style="margin-top:20px">Wireframe fidelity — colors are placeholders from the locked PropFlow design language. All values are realistic fake data. Agent identity: Graeham Watts, Intero Real Estate, DRE# 01466876 (from shared-references/identity.json — never hardcode elsewhere; the identity.json blocklist is enforced at brand-vault scan-confirm).</p>
+    <p class="anno" style="margin-top:20px">Wireframe fidelity — colors are placeholders from the locked PropFlow design language. All values are realistic fake data. Agent identity: Graeham Watts, Powered by The Boyenga Team at Compass, DRE# 01466876 (from shared-references/identity.json — never hardcode elsewhere; the identity.json blocklist is enforced at brand-vault scan-confirm).</p>
   </div>
 </div>

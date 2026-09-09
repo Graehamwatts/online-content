@@ -64,7 +64,7 @@ PropReachCampaign: campaign_id, campaign_name, status, objective, platforms[], m
 - **Umbrella hard block:** UMBRELLA_AWARENESS cannot launch LEAD_GEN (MB §5.3). 60/30/10 allocation is a planning suggestion only — UI must never auto-shift money (MB §5.4).
 - **Spend law:** ad_spend_change_mode defaults REVIEW_REQUIRED; autonomy only inside owner-set envelope; auto-pause for safety reasons only; performance pause requires performance_pause_auto_allowed=true (MB §2.6).
 - **Sensitive-topic firewall:** no sensitive-topic signals in targeting/audience anywhere on this screen (MB §12.3). School data never in targeting (MB §12.1).
-- **ChatGPT Ads copy** must carry agent name, DRE 01466876, Intero Real Estate from identity config (MB §15.3) — rendered read-only from identity.json.
+- **ChatGPT Ads copy** must carry agent name, DRE 01466876, Powered by The Boyenga Team at Compass from identity config (MB §15.3) — rendered read-only from identity.json.
 - **Approval provenance:** Wattson-drafted campaigns show "requested by Wattson" on the approval card (matrix Wattson item).
 
 ## Cross-links

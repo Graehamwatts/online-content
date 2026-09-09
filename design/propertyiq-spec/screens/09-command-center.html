@@ -504,7 +504,7 @@
                 <div><b style="color:var(--ink)">Google LSA</b> · 3 calls · 1 qualified</div>
               </div>
               <div style="border-top:1px solid var(--line); margin-top:10px; padding-top:10px; font-size:11.5px; color:var(--mut)">
-                <b style="color:var(--ink)">Funnel pages</b> — one per campaign: listing tour gate · home-value capture · open-house RSVP · buyer-guide download. <b>Branded or unbranded</b> per compliance need (unbranded for portal-style teaser ads, branded elsewhere; the licensed-identity DRE footer — DRE# 01466876, Intero Real Estate — stays on both). Per-page UTM + source tag so ad → funnel → valuation → call reads end-to-end in the ledger.
+                <b style="color:var(--ink)">Funnel pages</b> — one per campaign: listing tour gate · home-value capture · open-house RSVP · buyer-guide download. <b>Branded or unbranded</b> per compliance need (unbranded for portal-style teaser ads, branded elsewhere; the licensed-identity DRE footer — DRE# 01466876, Powered by The Boyenga Team at Compass — stays on both). Per-page UTM + source tag so ad → funnel → valuation → call reads end-to-end in the ledger.
                 <div style="margin-top:8px"><button class="btn-ink" style="padding:8px 14px; font-size:12px">+ New funnel page</button> <span class="anno">publish routes through Approvals (matrix P0 Funnel Builder)</span></div>
               </div>
               <div class="anno" style="margin-top:8px">Spend rules (Wattson MB #30 + Part 8): any spend/launch/publish/budget-increase is REVIEW_REQUIRED permanently; null spend envelope = nothing autonomous on spend; daily caps + alert on &gt;3× the 7-day rolling average; auto-pause for safety conditions only. Brand lock: only the tenant's licensed identity appears on public output; the identity.json blocklist number is prohibited everywhere.</div>
@@ -623,7 +623,7 @@
     (4) <b>Command Registry shape (#29)</b> — typed module actions + correlation IDs + approval cards + annotated final reports; each module owns its own execution — added to the Wattson-bar annotation.
     (5) <b>NotificationProvider channels</b> — GHL_TASK | EMAIL | SMS | IN_APP with NOTIFICATION_QUEUED/SENT/FAILED events — added to the 🔔 annotation.
     (6) <b>Security/wire-event separation</b> — wire/security events go to the security audit log, never the Event Ledger — annotated on the escrow-officer comms row.
-    (7) <b>Brand lock</b> — the tenant's licensed identity (DRE# 01466876, Intero Real Estate) on all public-facing output; the identity.json blocklist number prohibited everywhere — annotated on the funnel-pages block.
+    (7) <b>Brand lock</b> — the tenant's licensed identity (DRE# 01466876, Powered by The Boyenga Team at Compass) on all public-facing output; the identity.json blocklist number prohibited everywhere — annotated on the funnel-pages block.
     (8) <b>Dashboard Alert permission mode</b> — the shoot-pipeline card surfaces as ADVISORY_ONLY; nothing dispatches until APPROVED (MB Part 9 step-mode table) — annotated on the shoot card, and the "Send call sheet" button renders disabled pre-approval.
   </div>
 

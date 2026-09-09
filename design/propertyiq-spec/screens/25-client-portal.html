@@ -140,10 +140,10 @@
     <!-- agent-branded consumer header -->
     <div class="sitehead" id="el-branding">
       <div class="avatar">GW</div>
-      <div class="who"><b>Graeham Watts <span class="bdg" style="font-weight:400">Intero Real Estate</span></b><small>Your home purchase · 42 Cedar St, Menlo Park</small></div>
+      <div class="who"><b>Graeham Watts <span class="bdg" style="font-weight:400">Powered by The Boyenga Team at Compass</span></b><small>Your home purchase · 42 Cedar St, Menlo Park</small></div>
       <nav><a href="#">Messages <span class="bdg" style="font-size:9.5px">1</span></a><a href="#">Docs</a></nav>
     </div>
-    <div class="anno" style="padding:6px 22px 0">Header + footer resolve from branding_ref → identity configuration (pilot: Graeham Watts, DRE 01466876, Intero Real Estate — §9.3). Read-only, brand-locked: rendered exactly as resolved, never editable, never hardcoded. The identity.json-blocklisted legacy DRE must never appear on any portal surface.</div>
+    <div class="anno" style="padding:6px 22px 0">Header + footer resolve from branding_ref → identity configuration (pilot: Graeham Watts, DRE 01466876, Powered by The Boyenga Team at Compass — §9.3). Read-only, brand-locked: rendered exactly as resolved, never editable, never hardcoded. The identity.json-blocklisted legacy DRE must never appear on any portal surface.</div>
 
     <div style="padding:14px 22px 0">
       <!-- hero: day counter + stage strip -->
@@ -296,7 +296,7 @@
 
     <!-- licensed footer -->
     <div class="footlic" id="el-footer" style="margin-top:16px">
-      <span><b style="color:var(--ink)">Graeham Watts</b> · REALTOR® · DRE# 01466876 · Intero Real Estate Services</span>
+      <span><b style="color:var(--ink)">Graeham Watts</b> · REALTOR® · DRE# 01466876 · Powered by The Boyenga Team at Compass Services</span>
       <span style="margin-left:auto">Powered by <b style="color:var(--ink)">PropertyIQ</b></span>
     </div>
   </div>
@@ -308,7 +308,7 @@
     <div class="site" data-agent="watts">
       <div class="sitehead">
         <div class="avatar">GW</div>
-        <div class="who"><b>Graeham Watts <span class="bdg" style="font-weight:400">Intero Real Estate</span></b><small>Your home · 42 Cedar St, Menlo Park</small></div>
+        <div class="who"><b>Graeham Watts <span class="bdg" style="font-weight:400">Powered by The Boyenga Team at Compass</span></b><small>Your home · 42 Cedar St, Menlo Park</small></div>
         <nav><a href="#">Messages</a><a href="#">Docs archive</a></nav>
       </div>
       <div style="padding:14px 22px; display:grid; grid-template-columns:1fr 1fr; gap:10px" class="maingrid">
@@ -346,7 +346,7 @@
           <div class="anno" style="margin-top:5px">Past-client touch log: display-only, rendered if PropFlow exposes it; cadence is owned by PropFlow/Wattson, never PropClose (§9.7). homeowner_sections_enabled controls which of these six cards render at all.</div>
         </div>
       </div>
-      <div class="footlic"><span><b style="color:var(--ink)">Graeham Watts</b> · REALTOR® · DRE# 01466876 · Intero Real Estate Services</span><span style="margin-left:auto">Powered by <b style="color:var(--ink)">PropertyIQ</b></span></div>
+      <div class="footlic"><span><b style="color:var(--ink)">Graeham Watts</b> · REALTOR® · DRE# 01466876 · Powered by The Boyenga Team at Compass Services</span><span style="margin-left:auto">Powered by <b style="color:var(--ink)">PropertyIQ</b></span></div>
     </div>
   </div>
 
@@ -445,7 +445,7 @@
     <p><b>Exit points</b> DocuSign signing ceremony (after OTP step-up) · document download (step-up if sensitive) · message thread (routes to PropFlow inbox) · referral CTA → PropFlow referral intake (homeowner mode) · underwriter/equity deep links (homeowner mode) · nothing exits to staff surfaces.</p>
 
     <h2>Layout</h2>
-    <p><b>Desktop:</b> Header — agent avatar + agent name (branding_ref resolved from identity config — pilot: Graeham Watts, DRE 01466876, Intero Real Estate, §9.3), context subtitle ("Your home purchase · 42 Cedar St"), nav: Messages (badge), Docs. Hero card — progress statement ("You're on day 11 of 21 — on track for keys July 25 🔑") + a 6-segment client-language stage strip (Offer accepted / Deposit in / Inspection / Loan — this week / Signing / Keys!). Client-friendly labels map to the 7 canonical stages; current stage outlined, complete filled. Three-card row — "Your to-dos" (client tasks) · "From {agent}" (milestone video/messages) · "Documents" (shared count, signature needs, wire warning). Below (12 sections as enabled): status, tasks, docs, upload, messages, milestones, showing feedback, weekly update embed, settings — per transaction_sections_enabled (§6.11 PortalSection enum). Footer — licensed identity block (agent name, DRE, brokerage — exact brand-lock match) + "Powered by PropertyIQ".</p>
+    <p><b>Desktop:</b> Header — agent avatar + agent name (branding_ref resolved from identity config — pilot: Graeham Watts, DRE 01466876, Powered by The Boyenga Team at Compass, §9.3), context subtitle ("Your home purchase · 42 Cedar St"), nav: Messages (badge), Docs. Hero card — progress statement ("You're on day 11 of 21 — on track for keys July 25 🔑") + a 6-segment client-language stage strip (Offer accepted / Deposit in / Inspection / Loan — this week / Signing / Keys!). Client-friendly labels map to the 7 canonical stages; current stage outlined, complete filled. Three-card row — "Your to-dos" (client tasks) · "From {agent}" (milestone video/messages) · "Documents" (shared count, signature needs, wire warning). Below (12 sections as enabled): status, tasks, docs, upload, messages, milestones, showing feedback, weekly update embed, settings — per transaction_sections_enabled (§6.11 PortalSection enum). Footer — licensed identity block (agent name, DRE, brokerage — exact brand-lock match) + "Powered by PropertyIQ".</p>
     <p><b>Mobile (375px):</b> single column; hero stage strip horizontally scrollable; to-dos first (action bias); sticky bottom bar: Messages · Docs · To-dos. Everything tap-target ≥44px; zero instructions needed.</p>
 
     <h2>Element inventory</h2>
@@ -498,7 +498,7 @@
     <ul>
       <li>Two-tier auth invariant: magic_link_enabled=true and sensitive_actions_require_otp_mfa=true are hard-coded true on the record (§6.11).</li>
       <li><b>No ad pixels</b> in authenticated transaction portal v1; owned-page analytics only with ComplianceProvider pass + GPC/DNT/opt-out respected (§13.10). Attribution via canonical PORTAL_VIEWED only.</li>
-      <li>Brand lock: footer/emails/invites/doc notices show licensed identity exactly (pilot DRE 01466876, Intero) (§9.3). The identity.json-blocklisted legacy DRE must never appear.</li>
+      <li>Brand lock: footer/emails/invites/doc notices show licensed identity exactly (pilot DRE 01466876, Compass) (§9.3). The identity.json-blocklisted legacy DRE must never appear.</li>
       <li>No Zillow/Zestimate-branded or -referencing template anywhere in PropClose v1 (§9.7).</li>
       <li>No school data in v1; future embed must follow the PropSearch factual-display model with no steering/CTA inside the block (§13.7; matrix correction #4).</li>
       <li>Sold comps: public = aggregates only; detail requires authenticated session (§13.6).</li>
@@ -517,6 +517,6 @@
       <li>[DECIDE] Milestone video vendor: assume HeyGen-class avatar API (LipDub/BeHuman candidates) — UI unaffected by vendor choice; consent + disclosure gating fixed regardless.</li>
       <li>[DECIDE] Multiple-transaction clients: interim = one portal per transaction, with the homeowner hub of the primary residence as the durable long-term URL. [BEST GUESS]</li>
     </ul>
-    <p class="anno" style="margin-top:20px">Wireframe fidelity — colors are placeholders from the locked PropFlow design language. All client names/numbers are realistic fake data. Agent identity: Graeham Watts, Intero Real Estate, DRE# 01466876 (from shared-references/identity.json — never hardcode elsewhere). No crime data, no school data, no steering language anywhere on this surface.</p>
+    <p class="anno" style="margin-top:20px">Wireframe fidelity — colors are placeholders from the locked PropFlow design language. All client names/numbers are realistic fake data. Agent identity: Graeham Watts, Powered by The Boyenga Team at Compass, DRE# 01466876 (from shared-references/identity.json — never hardcode elsewhere). No crime data, no school data, no steering language anywhere on this surface.</p>
   </div>
 </div>

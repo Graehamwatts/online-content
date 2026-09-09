@@ -38,7 +38,7 @@ Pull each client's email from GoHighLevel (GHL MCP was NOT connected in the last
 - Three Paths Forward (Listing): Sell+Redeploy / Prep+Timing for top of range / Hold+Rent for long-term holders. Do NOT recommend "wait for rates to drop."
 - Pre-List Prep section OPTIONAL — fold into Path B by default.
 - Run narrative through the `humanizer` skill before publishing. Avoid "straightforward." DRE #01466876 ONLY (the wrong DRE must never appear; verify `grep -o -E "DRE #?[0-9]{8}"` shows only 01466876).
-- Contact footer: Graeham Watts, Intero Real Estate, DRE #01466876, 650-308-4727, graehamwatts@gmail.com, www.graehamwatts.com. Nav logo URL is in the 3 Shorebreeze file.
+- Contact footer: Graeham Watts, Powered by The Boyenga Team at Compass, DRE #01466876, 650-308-4727, graehamwatts@gmail.com, www.graehamwatts.com. Nav logo URL is in the 3 Shorebreeze file.
 
 ## SAVE LOCATIONS (all three, local) + filename
 - `Documents/Claude/Online Content/cmas/`  ← primary, this is what publishes

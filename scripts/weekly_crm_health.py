@@ -697,7 +697,7 @@ tr:not(:last-child) td{border-bottom:1px solid #0e1a2e}
 <body>
 <div class="wrap">
   <div class="topbar">
-    <span>GRAEHAM WATTS &middot; INTERO REAL ESTATE</span>
+    <span>GRAEHAM WATTS &middot; POWERED BY THE BOYENGA TEAM AT COMPASS</span>
     <span>""" + now_pt.strftime('%b %-d %Y %H:%M PT') + """</span>
   </div>
   <div class="header">
@@ -796,7 +796,7 @@ tr:not(:last-child) td{border-bottom:1px solid #0e1a2e}
   </div>
 
   <div class="footer">
-    Graeham Watts &nbsp;&middot;&nbsp; Intero Real Estate &nbsp;&middot;&nbsp; graehamwatts@gmail.com<br>
+    Graeham Watts &nbsp;&middot;&nbsp; Powered by The Boyenga Team at Compass &nbsp;&middot;&nbsp; graehamwatts@gmail.com<br>
     CRM Health &nbsp;&middot;&nbsp; """ + now_pt.strftime('%Y-%m-%d %H:%M PT') + """
   </div>
 </div>

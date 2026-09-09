@@ -327,7 +327,7 @@
             <table class="dtable" style="font-size:11.5px; min-width:760px">
               <tr><th>Role</th><th>Contact / org</th><th>Email · phone</th><th>Portal access</th><th>Doc access scope</th><th></th></tr>
               <tr><td><b>BUYER</b></td><td>Daniel & Mina Kim <span class="anno">contact_id → CRM (14)</span></td><td class="num">d.kim@…com · (650) 555-0134 <span class="anno">PII masked by default — reveal = explicit action + OTP/MFA + audit log §13.3</span></td><td><span class="bdg good">ON</span></td><td>PUBLIC_MARKETING · PARTY</td><td><button class="btn-ghost">Edit scope</button></td></tr>
-              <tr><td><b>AGENT</b></td><td>Graeham Watts · Intero</td><td class="num">masked · masked</td><td><span class="bdg">staff</span></td><td>all except HIGH_SECURITY_WIRE (gated)</td><td></td></tr>
+              <tr><td><b>AGENT</b></td><td>Graeham Watts · Compass</td><td class="num">masked · masked</td><td><span class="bdg">staff</span></td><td>all except HIGH_SECURITY_WIRE (gated)</td><td></td></tr>
               <tr><td><b>TRANSACTION_COORDINATOR</b></td><td>A. Reyes</td><td class="num">masked</td><td><span class="bdg">staff</span></td><td>PARTY · SENSITIVE</td><td></td></tr>
               <tr><td><b>COOPERATING_AGENT</b></td><td>L. Marsh · Ridgeline Realty</td><td class="num">masked</td><td><span class="bdg">OFF</span></td><td>PARTY</td><td><button class="btn-ghost">Invite</button></td></tr>
               <tr><td><b>LENDER</b></td><td>R. Chao · Summit Home Loans</td><td class="num">masked</td><td><span class="bdg">OFF</span></td><td>PARTY (loan docs only)</td><td><button class="btn-ghost">Invite</button></td></tr>
@@ -610,6 +610,6 @@
       <li>[DECIDE] Deal-health chip formula: interim = rule list (deadline states + doc gaps + unconfirmed human updates), rendered as workflow flags; must never be presented as a score (§14).</li>
       <li>[DECIDE] Offer tab computation home: offer ranking math runs in the offer-analyzer service (skills library), not PropClose-local, to respect non-scoring; PropClose displays results. [BEST GUESS]</li>
     </ul>
-    <p class="anno" style="margin-top:20px">Wireframe fidelity — colors are placeholders from the locked PropFlow design language. All party names/numbers are realistic fake data. Agent identity: Graeham Watts, Intero Real Estate, DRE# 01466876 (from shared-references/identity.json — never hardcode elsewhere; the identity.json blocklist value must never appear). No crime data anywhere; no school data on this screen (§13.7).</p>
+    <p class="anno" style="margin-top:20px">Wireframe fidelity — colors are placeholders from the locked PropFlow design language. All party names/numbers are realistic fake data. Agent identity: Graeham Watts, Powered by The Boyenga Team at Compass, DRE# 01466876 (from shared-references/identity.json — never hardcode elsewhere; the identity.json blocklist value must never appear). No crime data anywhere; no school data on this screen (§13.7).</p>
   </div>
 </div>
