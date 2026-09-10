@@ -95,7 +95,7 @@ jobs:
               url,
               "",
               "---",
-              "Graeham Watts · Intero Real Estate",
+              "Graeham Watts · Powered by The Boyenga Team at Compass",
               "This report runs automatically every Monday morning.",
           ]
           with open("/tmp/email_body.txt", "w") as f:
