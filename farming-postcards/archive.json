@@ -8,12 +8,28 @@
     "market": "East Palo Alto / Peninsula",
     "vendor_default": "Universal Mail Works",
     "dashboard_url": "https://graehamwatts.github.io/online-content/farming-postcards/",
-    "last_updated": "2026-07-27"
+    "last_updated": "2026-09-11"
   },
   "cards": [
     {
-      "id": "2026-09-01-neighbor-envy-v2",
-      "mail_date": "2026-09-01",
+      "id": "2026-10-01-prop19-tax-transfer-v2",
+      "mail_date": "2026-10-01",
+      "archetype": "Prop 19 Tax Transfer (2nd run)",
+      "lever": "Education + unlock",
+      "front_headline": "The #1 Reason You Haven't Moved Just Disappeared",
+      "back_headline": "California Changed The Math On Moving For Owners 55+",
+      "cta_type": "Call / text Graeham",
+      "cta_line": "Text \"PROP19\" to 650-308-4727 for the 2-minute version",
+      "audience": "Both (strongest on 55+ long-tenure owners)",
+      "preview_html": "2026-10-01-prop19-tax-transfer-preview.html",
+      "pdf": "pdfs/2026-10-01-prop19-tax-transfer.pdf",
+      "thumbnail": "thumbnails/2026-10-01-prop19-tax-transfer-1.jpg",
+      "status": "PRINT-READY — placeholder headshots, needs Peter's real photos before mailing",
+      "notes": "Second run of Prop 19 Tax Transfer (first was 07/01/26). Fresh headline pair this time so it doesn't reuse 07/01's \"your low tax rate can move with you\" wording/skeleton. Differentiation check passes all 4 axes: archetype off cooldown (last 3 were Equity 08/01, Quiet Sale 08/15, Neighbor Envy 09/15); CTA is call/text, different from the last 2 cards' destinations (seller-consultation, home-valuation front-QR); villain-free; core claim \"tax basis is portable\" last used 07/01, outside the 4-card window. QR is a real static SMS QR (SMSTO:+16503084727:PROP19) — no Prop 19 landing page exists yet, matching how 07/01 and 08/01 were built. Print PDF copied to Graeham's Farming Flyers 2026 folder as 'Farming Postcard EPA 10 01 26.pdf'."
+    },
+    {
+      "id": "2026-09-15-neighbor-envy-v2",
+      "mail_date": "2026-09-15",
       "archetype": "Neighbor Envy (fresh remix)",
       "lever": "Curiosity + social proof",
       "front_headline": "Someone On Your Block Just Sold. Here's What They Got.",
@@ -22,8 +38,8 @@
       "cta_line": "Want a free home evaluation? Call me today!",
       "audience": "Both",
       "preview_html": "2026-09-01-neighbor-envy-preview.html",
-      "status": "FINAL v5 — with Peter (headshots + generate printed QR from Switchy)",
-      "notes": "v5 (final) 2026-08-18: front QR destination RESOLVED — built a dedicated IDX Broker 'Prime Map Search' widget (ID 168164, 'EPA Sold Homes - Postcard') on Graeham's own IDX Broker account, Status=Sold, default location=East Palo Alto CA, sort=Newest. Live, pannable map of real sold MLS properties (confirmed 42 listings, e.g. 2495 Gloria Way sold $1,070,000), already branded with Graeham's header/contact block. MLS Approval confirmed (MLSListings Inc.) — sold-data display is permitted. Front QR: hi.switchy.io/epa-sold-homes-0901 (real Switchy link, Facebook+GA+Google Ads pixels attached) -> listings.graehamwatts.com/idx/widgetpreview.php?widgetid=168164. Back QR removed in favor of a direct call CTA ('Want a free home evaluation? Call me today!' + large phone + arrow), matching the real 2025 house style. A second pixeled Switchy link is also live for future cards: hi.switchy.io/epa-home-eval-0901 -> graehamwatts.com/real-local-comps (home valuation page). (History: v1 dual-QR draft; v2 added front QR + simplified copy; v3 reverted copy, kept front QR; v4 dropped back QR for a call CTA; v5 resolved the front QR's destination from interim to a real live sold-homes map.)"
+      "status": "MAILED",
+      "notes": "DATE CORRECTED 2026-09-11: actually mailed 2026-09-15, not 09-01 as previously logged here (confirmed against the real printed PDF in Graeham's Farming Flyers 2026 folder; no 09-01 card exists). v5 (final) 2026-08-18: front QR destination RESOLVED — built a dedicated IDX Broker 'Prime Map Search' widget (ID 168164, 'EPA Sold Homes - Postcard') on Graeham's own IDX Broker account, Status=Sold, default location=East Palo Alto CA, sort=Newest. Live, pannable map of real sold MLS properties (confirmed 42 listings, e.g. 2495 Gloria Way sold $1,070,000), already branded with Graeham's header/contact block. MLS Approval confirmed (MLSListings Inc.) — sold-data display is permitted. Front QR: hi.switchy.io/epa-sold-homes-0901 (real Switchy link, Facebook+GA+Google Ads pixels attached) -> listings.graehamwatts.com/idx/widgetpreview.php?widgetid=168164. Back QR removed in favor of a direct call CTA ('Want a free home evaluation? Call me today!' + large phone + arrow), matching the real 2025 house style. A second pixeled Switchy link is also live for future cards: hi.switchy.io/epa-home-eval-0901 -> graehamwatts.com/real-local-comps (home valuation page). (History: v1 dual-QR draft; v2 added front QR + simplified copy; v3 reverted copy, kept front QR; v4 dropped back QR for a call CTA; v5 resolved the front QR's destination from interim to a real live sold-homes map.)"
     },
     {
       "id": "2026-08-15-quiet-sale",
