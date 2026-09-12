@@ -1,0 +1,64 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Weekly Attribution Review</title>
+<style>
+* { margin:0; padding:0; box-sizing:border-box; }
+body { font-family:-apple-system,BlinkMacSystemFont,'Segoe UI','Roboto','DM Sans',sans-serif; background:#f5f5f5; color:#0f1729; line-height:1.6; }
+.container { max-width:760px; margin:0 auto; background:#fff; border-radius:8px; overflow:hidden; box-shadow:0 2px 8px rgba(0,0,0,0.1); }
+.header { background:linear-gradient(135deg,#0f1729 0%,#1a2d4d 100%); color:#fff; padding:32px 24px; text-align:center; }
+.header h1 { font-size:24px; font-weight:600; margin-bottom:8px; }
+.header p { font-size:14px; opacity:0.9; }
+.status-strip { background:#27ae60; color:#fff; padding:12px 24px; font-weight:600; text-align:center; font-size:14px; }
+.status-strip.amber { background:#f39c12; }
+.status-strip.red { background:#e74c3c; }
+.content { padding:24px; }
+.kpi-cards { display:grid; grid-template-columns:repeat(4,1fr); gap:12px; margin-bottom:24px; }
+.kpi-card { background:#f8f9fa; border-radius:6px; padding:14px 8px; text-align:center; border-left:4px solid #f4b955; }
+.kpi-card .number { font-size:24px; font-weight:700; color:#0f1729; margin-bottom:4px; }
+.kpi-card .label { font-size:11px; color:#666; text-transform:uppercase; letter-spacing:0.5px; }
+.read-section { background:#f0f4f8; border-radius:6px; padding:16px; margin-bottom:24px; border-left:4px solid #f4b955; }
+.read-section h3 { font-size:12px; text-transform:uppercase; color:#666; margin-bottom:8px; letter-spacing:0.5px; }
+.read-section p { font-size:14px; }
+table { width:100%; border-collapse:collapse; margin-bottom:24px; font-size:12px; }
+th { background:#0f1729; color:#fff; padding:10px; text-align:left; font-weight:600; text-transform:uppercase; font-size:10px; letter-spacing:0.5px; }
+td { padding:10px; border-bottom:1px solid #e0e0e0; }
+tr:nth-child(even) { background:#f8f9fa; }
+.source-name { font-weight:600; color:#0f1729; }
+.count-badge { background:#f4b955; color:#0f1729; padding:3px 8px; border-radius:4px; font-weight:600; font-size:12px; display:inline-block; }
+.footer { background:#f8f9fa; padding:16px 24px; text-align:center; font-size:12px; color:#666; border-top:1px solid #e0e0e0; }
+.footer a { color:#0f1729; text-decoration:none; }
+</style>
+</head>
+<body>
+<div class="container">
+    <div class="header">
+        <h1>Weekly Attribution Review</h1>
+        <p>Week of 2026-09-07</p>
+    </div>
+    <div class="status-strip green">0 leads this week vs 0 last week (→)</div>
+    <div class="content">
+        <div class="kpi-cards">
+            <div class="kpi-card"><div class="number">0</div><div class="label">New Leads</div></div>
+            <div class="kpi-card"><div class="number">0</div><div class="label">Opportunities</div></div>
+            <div class="kpi-card"><div class="number">0</div><div class="label">Closed Wins</div></div>
+            <div class="kpi-card"><div class="number">Unknown</div><div class="label">Top Source</div></div>
+        </div>
+        <div class="read-section">
+            <h3>The Read</h3>
+            <p>0 new leads this week across 0 active sources, → vs last week. Top source: Unknown. 0 closed wins this week.</p>
+        </div>
+        <table>
+            <thead><tr><th>Source</th><th>Leads (this wk)</th><th>Leads (last wk)</th><th>WoW</th><th>Opps</th><th>Won</th></tr></thead>
+            <tbody><tr><td colspan="6">No lead activity this week.</td></tr></tbody>
+        </table>
+    </div>
+    <div class="footer">
+        <p>Weekly Attribution Review &middot; Graeham's CRM automation</p>
+        <p style="margin-top:8px;"><a href="https://graehamwatts.github.io/online-content/dashboards/attribution/">View Attribution Dashboards</a></p>
+    </div>
+</div>
+</body>
+</html>
