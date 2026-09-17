@@ -1,0 +1,268 @@
+<!DOCTYPE html>
+<html lang="en"><head><meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>526 Barto St - Pre-Listing Renovation Analysis | Graeham Watts</title>
+<script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.1/dist/chart.umd.min.js"></script>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700;800&family=Montserrat:wght@700;800&display=swap" rel="stylesheet">
+<style>
+:root{--b:#1A1A1A;--g:#C5A55A;--dg:#A88B3D;--cr:#F5EFDC;--gy:#666;--nv:#343955;--red:#c0392b;--grn:#4f9d69;--amb:#C96A45;--gray:#9aa0a6}
+*{margin:0;padding:0;box-sizing:border-box}body{font-family:Inter,sans-serif;color:#1A1A1A;line-height:1.6}
+.nav{position:fixed;top:0;left:0;right:0;height:60px;background:var(--nv);display:flex;align-items:center;padding:0 24px;z-index:9}.nav img{height:34px}
+.wrap{max-width:1040px;margin:0 auto;padding:0 22px}section{padding:34px 0}
+.sh{background:var(--b);color:var(--g);font-family:Montserrat;font-weight:800;letter-spacing:2px;text-transform:uppercase;font-size:17px;padding:12px 18px;margin-bottom:18px;border-left:6px solid var(--g)}
+.hero{background:var(--b);color:#fff;padding:104px 0 46px;text-align:center}
+.hero .nm{color:var(--g);font-family:Montserrat;font-weight:800;font-size:44px;letter-spacing:6px;line-height:1.12}
+.hero .rl{color:var(--g);letter-spacing:8px;font-size:12px}
+.brandblk{margin:22px auto 0;max-width:520px}
+.brandblk .rule{height:1px;background:linear-gradient(90deg,transparent,rgba(197,165,90,.55),transparent);margin-bottom:18px}
+.brandblk .pb{color:#e8e8e8;font-size:16px;font-weight:600;letter-spacing:.3px;margin-top:14px}
+@media(max-width:760px){.hero .nm{font-size:32px;letter-spacing:3px}.brandblk .pb{font-size:14.5px}}.hero .lbl{background:var(--g);color:var(--b);display:inline-block;font-family:Montserrat;font-weight:800;letter-spacing:3px;font-size:12px;padding:6px 16px;border-radius:4px;margin-top:18px}
+.hero .ad{font-size:25px;font-weight:700;margin-top:14px}.hero .dt{color:#aaa;margin-top:10px;font-size:13px;max-width:680px;margin-left:auto;margin-right:auto}.hero .cn{color:var(--g);font-size:12px;margin-top:14px}
+p{margin-bottom:13px;font-size:15px;color:#2a2a2a}.lead{font-size:16px}
+.stats{display:flex;flex-wrap:wrap;gap:12px;margin:18px 0}.st{background:var(--b);color:#fff;border-radius:8px;padding:16px;flex:1;min-width:150px;text-align:center}
+.st .n{color:var(--g);font-family:Montserrat;font-weight:800;font-size:19px}.st .l{color:#ccc;font-size:10px;text-transform:uppercase;letter-spacing:.5px;margin-top:4px}
+.st.red .n{color:#ff8a80}.st.grn .n{color:#8fd6a8}
+table{width:100%;border-collapse:collapse;margin:12px 0;font-size:13px;box-shadow:0 1px 5px rgba(0,0,0,.06)}
+th{background:var(--g);color:var(--b);text-align:left;padding:8px 9px;font-size:11px;text-transform:uppercase}td{padding:7px 9px;border-bottom:1px solid #eee;vertical-align:top}tbody tr:nth-child(even){background:var(--cr)}
+.nt{color:var(--gy);font-size:12.5px}.grn{color:var(--grn);font-weight:700}.red{color:var(--red);font-weight:700}
+.tscroll{overflow-x:auto}
+.cards{display:grid;grid-template-columns:1fr 1fr;gap:16px;margin:16px 0}
+.cards3{display:grid;grid-template-columns:1fr 1fr 1fr;gap:14px;margin:16px 0}
+.card{background:#fff;border:1px solid #eee;border-radius:8px;padding:18px;border-left:5px solid var(--g)}
+.card.grn{border-left-color:var(--grn)}.card.red{border-left-color:var(--red)}.card.nv{border-left-color:var(--nv)}.card.amb{border-left-color:var(--amb)}
+.card .lbl{font-size:11px;text-transform:uppercase;color:var(--gy);letter-spacing:.5px;font-weight:700}
+.card .val{font-family:Montserrat;font-size:22px;font-weight:800;margin:6px 0}
+.card .ds{font-size:13px;color:#444}
+.cb{background:#fff;border:1px solid #eee;border-radius:8px;padding:16px;margin:14px 0}.cw{position:relative;height:280px}.cap{font-size:12px;color:var(--gy);margin-top:6px;text-align:center}
+.verdict{background:var(--b);color:#fff;border-radius:8px;padding:20px 22px;margin:14px 0}.verdict b{color:var(--g)}
+.key{background:#eef2f8;border-left:6px solid var(--nv);padding:14px 18px;border-radius:8px;margin:12px 0;font-size:13.5px}
+.readnum{background:linear-gradient(180deg,#fffdf6,#fff);border:2px solid var(--g);border-left:10px solid var(--g);padding:22px 26px;border-radius:10px;margin:20px 0;box-shadow:0 3px 14px rgba(197,165,90,.18)}
+.readnum h4{font-family:Montserrat;font-weight:800;font-size:16px;letter-spacing:1.5px;text-transform:uppercase;color:var(--b);margin-bottom:12px;border-bottom:2px solid var(--cr);padding-bottom:8px}
+.readnum ul{margin:12px 0 0 4px;list-style:none}
+.readnum li{position:relative;padding-left:26px;margin-bottom:13px;font-size:15px;line-height:1.62}
+.readnum li:before{content:"";position:absolute;left:0;top:8px;width:10px;height:10px;border-radius:50%;background:var(--g)}
+.readnum li.win:before{background:var(--grn)}.readnum li.lose:before{background:var(--amb)}.readnum li.flat:before{background:var(--gray)}
+.alert{background:#fff8e6;border-left:6px solid var(--amb);padding:14px 18px;border-radius:8px;margin:12px 0;font-size:13.5px}
+.dv{height:2px;background:linear-gradient(90deg,var(--g),transparent);margin:24px 0}
+.bigstat{background:var(--b);color:#fff;border-radius:8px;padding:20px 24px;margin:14px 0;text-align:center}
+.bigstat .n{color:var(--g);font-family:Montserrat;font-weight:800;font-size:28px}
+.bigstat .l{color:#ddd;font-size:14px;margin-top:6px}
+.tierlbl{display:inline-block;font-family:Montserrat;font-weight:800;font-size:11px;letter-spacing:1px;text-transform:uppercase;padding:4px 10px;border-radius:4px;margin-bottom:10px}
+.tierlbl.fixer{background:#fbe3da;color:var(--amb)}.tierlbl.mod{background:#e4f2e9;color:var(--grn)}.tierlbl.full{background:#e6e8f0;color:var(--nv)}.tierlbl.cup{background:#eee;color:#888}
+footer{background:var(--b);color:#ddd;padding:28px 0;text-align:center;margin-top:26px}.fn{color:var(--g);font-family:Montserrat;font-weight:800;letter-spacing:3px;font-size:19px}.fl{font-size:12px;margin-top:6px;color:#bbb}.ds2{font-size:10.5px;color:#888;max-width:820px;margin:14px auto 0}
+@media(max-width:760px){.cards,.cards3{grid-template-columns:1fr}}
+</style></head><body>
+<nav class="nav"><img src="https://images.leadconnectorhq.com/image/f_webp/q_80/r_1200/u_https://assets.cdn.filesafe.space/6wuU3haUH7uNeT20E3UZ/media/691256870b647e40e3c2e105.png" alt="Graeham Watts"></nav>
+<header class="hero"><div class="wrap"><div class="nm">GRAEHAM WATTS</div><div class="rl">R E A L T O R</div>
+<div class="brandblk"><div class="rule"></div>
+<div class="pb">Powered by The Boyenga Team at Compass</div></div>
+<div class="lbl">PRE-LISTING RENOVATION ANALYSIS</div>
+<div class="ad">526 Barto St, Santa Clara, CA 95051</div>
+<div class="dt">Prepared September 2026. As-is value versus a moderate cosmetic renovation versus a full gut remodel, built on individually-verified sales in your exact pocket of Santa Clara.</div>
+<div class="cn">DRE #01466876. 650-308-4727. graehamwatts.com</div></div></header>
+<div class="wrap">
+
+<section style="padding-top:28px"><div class="sh">Subject Property</div>
+<div class="stats">
+<div class="st"><div class="n">1,442 sq ft</div><div class="l">3 bed / 2 bath, built 1964</div></div>
+<div class="st amb"><div class="n">$1,800,000-$1,900,000</div><div class="l">As-is value</div></div>
+<div class="st grn"><div class="n">$2,270,000-$2,320,000</div><div class="l">Moderate reno value</div></div>
+<div class="st"><div class="n">$2,395,000-$2,420,000</div><div class="l">Full gut value (context only)</div></div>
+</div>
+<div class="tscroll"><table><tbody>
+<tr><th>Address / APN</th><td>526 Barto St, Santa Clara, CA 95051. APN 293-20-053.</td></tr>
+<tr><th>Configuration</th><td>3 bedrooms, 2 full baths, 1,442 sq ft, 1 story, built 1964. 1 fireplace, 460 sq ft attached garage.</td></tr>
+<tr><th>Condition</th><td>Mostly a complete fixer. Livable, but barely. Nothing has been meaningfully updated. This places it at the bottom of the condition range for this pocket, in the same tier as the closest direct comp in this report, 748 Cornell Dr, which was explicitly marketed as an as-is fixer.</td></tr>
+<tr><th>Lot</th><td>6,000 sq ft (60' x 100'), 0.138 acres.</td></tr>
+<tr><th>Zoning / Schools</th><td>R1-6L. Santa Clara Unified School District: Sutter Elementary, Buchser Middle, Santa Clara High.</td></tr>
+<tr><th>Last Sale</th><td>No sale on record in MLS or county public records. Long-held ownership.</td></tr>
+</tbody></table></div>
+<div class="key"><strong>Why this analysis exists.</strong> You're deciding whether to list this one as-is or put some money into it first. Roughly $50,000 to $75,000 is the working number for a light cosmetic pass, still pending real vendor quotes, so treat that figure as directional until the bids come in. What follows is what that kind of spend, and a full gut remodel by comparison, actually does to the sale price in this specific pocket of Santa Clara, based on sales I individually verified in MLS rather than an automated valuation.</div>
+</section>
+
+<div class="dv"></div>
+
+<section><div class="sh">The Market Story</div>
+<p class="lead">Santa Clara's 95051 zip, and this specific stretch of small 1950s and 60s ranch tract homes near Cornell, Alexander, Kenyon, and Coolidge, is trading in a wide band right now, roughly $1.8 million at the low end to $2.5 million at the high end for homes your size. That spread is almost entirely about one thing: condition.</p>
+<p>I individually verified twelve recent sales in this exact size and price band, from a trust sale offered explicitly as-is at $1,283 a square foot, up to full gut remodels closing near $1,670 a square foot. Same era of home, same general pocket, same buyer pool. The difference is what's been done to the inside.</p>
+<p>One thing worth flagging directly: several of the highest-priced "renovated" sales in this zip code turned out to carry Cupertino Union school assignment rather than your Santa Clara Unified boundary, a different and materially higher-demand district that adds roughly $100 a square foot on its own, nothing to do with finish level. I checked the school assignment on every comp individually and pulled those out of the pricing math below. They're shown separately, as context, not as evidence for your number.</p>
+<p>Once that's sorted out, the read is simple. Homes in your condition, un-renovated, are selling in the high $1 millions. Homes with a light cosmetic pass, fresh paint, painted or lightly updated cabinets, new counters, are selling for several hundred thousand dollars more, often in under two weeks. Full gut remodels sell for more still, but the incremental gain over a light cosmetic job is small relative to what a full remodel actually costs.</p>
+</section>
+
+<div class="dv"></div>
+
+<section><div class="sh">Verified Comparable Sales, By Condition Tier</div>
+<p class="lead">I opened every one of the following MLS records individually and confirmed the actual sale date, closing date, and school assignment myself, rather than trusting a filtered search. All sold within the last twelve months in Santa Clara 95051, matched to your home's size and era.</p>
+
+<span class="tierlbl fixer">Tier 1: As-Is / Fixer</span>
+<div class="tscroll"><table><thead><tr><th>Address</th><th>Sold Price</th><th>$/SqFt</th><th>SqFt</th><th>Sold / COE</th><th>List-to-Sale</th><th>DOM</th><th>Notes</th></tr></thead><tbody>
+<tr><td><strong>526 Barto St (subject)</strong></td><td>n/a</td><td>n/a</td><td>1,442</td><td>n/a</td><td>n/a</td><td>n/a</td><td>Mostly a complete fixer, livable but barely, nothing meaningfully updated</td></tr>
+<tr><td>748 Cornell Dr</td><td>$1,850,000</td><td>$1,282.94</td><td>1,442</td><td>7/23/2026 / 8/3/2026</td><td>102.8%</td><td>29</td><td><strong>Exact sqft match, same schools, same "Killarney Farms" pocket.</strong> Explicitly marketed "offered as-is... perfect canvas for buyers and investors." Linoleum and carpet flooring, no AC. About as close to a twin of your home as this market produces</td></tr>
+</tbody></table></div>
+
+<span class="tierlbl mod">Tier 2: Moderate / Cosmetic ("Lipstick") Update</span>
+<p class="nt" style="margin-top:-6px">Paint, flooring, counters, cabinet hardware or a cabinet repaint. No permits, no wall removal, no reconfigured floor plan.</p>
+<div class="tscroll"><table><thead><tr><th>Address</th><th>Sold Price</th><th>$/SqFt</th><th>SqFt</th><th>Sold / COE</th><th>List-to-Sale</th><th>DOM</th><th>Notes</th></tr></thead><tbody>
+<tr><td>435 Cypress Ave</td><td>$2,100,888</td><td>$1,580.80</td><td>1,329</td><td>4/8/2026 / 4/29/2026</td><td>116.9%</td><td>7</td><td><strong>The closest match to what you're describing.</strong> New flooring, fresh interior and partial exterior paint, newer quartz counters, <strong>painted cabinetry</strong> (not replaced), newer hardware. Santa Clara Unified</td></tr>
+<tr><td>3445 Kenyon Dr</td><td>$2,099,000</td><td>$1,572.28</td><td>1,335</td><td>7/8/2026 / 7/22/2026</td><td>95.5%</td><td>11</td><td>Original wood kitchen cabinets kept, Corian counters, cosmetic bath fixture refresh (new vanity, new toilets), central AC added. Sold slightly under its ask, the one comp in this whole report that did. Santa Clara Unified</td></tr>
+<tr><td>3048 Alexander Ave</td><td>$2,140,000</td><td>$1,610.23</td><td>1,329</td><td>6/25/2026 / 7/17/2026</td><td>112.6%</td><td>8</td><td>New quartz counters and stainless appliances, cabinet boxes kept with new pull-out hardware, new paint, recessed lighting. Near Sutter Elementary, same elementary as your home. Santa Clara Unified</td></tr>
+<tr><td>2223 Dianne Dr</td><td>$2,460,000</td><td>$1,304.35</td><td>1,886</td><td>9/24/2025 / 10/20/2025</td><td>123.1%</td><td>5</td><td>Fresh paint in and out, new vinyl and carpet flooring, quartz counters, cabinets not replaced. Larger home (1,886 sq ft), which is why the per-square-foot rate reads lower even though the sale price is high. Santa Clara Unified</td></tr>
+</tbody></table></div>
+
+<span class="tierlbl full">Tier 3: Full Gut Remodel (context only, not the current plan)</span>
+<div class="tscroll"><table><thead><tr><th>Address</th><th>Sold Price</th><th>$/SqFt</th><th>SqFt</th><th>Sold / COE</th><th>List-to-Sale</th><th>DOM</th><th>Notes</th></tr></thead><tbody>
+<tr><td>2935 Marietta Dr</td><td>$2,460,000</td><td>$1,679.18</td><td>1,465</td><td>4/29/2026 / 5/22/2026</td><td>123.1%</td><td>6</td><td>Custom remodel completed 2016-2017: quartz counters, custom cabinetry, center island, stainless appliances, remodeled bathroom, updated electrical panel and HVAC. Same 6,000 sq ft lot size as your home. Santa Clara Unified</td></tr>
+<tr><td>2139 Coolidge Dr</td><td>$2,138,888</td><td>$1,660.63</td><td>1,288</td><td>6/2/2026 / 6/26/2026</td><td>113.3%</td><td>5</td><td>Full reconfigured kitchen, both bathrooms remodeled, new roof, new HVAC and ductwork, upgraded electrical panel, copper plumbing. Same build year as your home (1963). Santa Clara Unified</td></tr>
+</tbody></table></div>
+
+<span class="tierlbl cup">Context Only: Cupertino Union Schools (excluded from pricing math)</span>
+<div class="tscroll"><table><thead><tr><th>Address</th><th>Sold Price</th><th>$/SqFt</th><th>SqFt</th><th>Notes</th></tr></thead><tbody>
+<tr><td>150 Gilbert Ave</td><td>$3,590,000</td><td>$1,770.22</td><td>2,028</td><td>Stripped to the studs, full rebuild. Cupertino Union / Fremont Union schools</td></tr>
+<tr><td>3392 Geneva Dr</td><td>$2,963,000</td><td>$2,086.62</td><td>1,420</td><td>Full renovation, 4 offers, 18.6% over ask. Cupertino Union / Fremont Union schools</td></tr>
+<tr><td>141 Muir Ave</td><td>$3,135,000</td><td>$1,726.32</td><td>1,816</td><td>Expanded 2010 plus renovated, marketed on "highly sought-after Cupertino schools." Cupertino Union / Fremont Union schools</td></tr>
+<tr><td>383 Burnett Ave</td><td>$2,450,000</td><td>$1,785.71</td><td>1,372</td><td>Moderate update, new paint, quartz counters. Cupertino Union / Fremont Union schools</td></tr>
+<tr><td>3117 Mauricia Ave</td><td>$2,780,000</td><td>$1,616.28</td><td>1,720</td><td>Traditional finish, not clearly renovated. Cupertino Union / Fremont Union schools</td></tr>
+</tbody></table></div>
+
+<div class="key"><strong>What this actually says.</strong> Inside Santa Clara Unified, your own district, the tiers sort cleanly: as-is sells around $1,283/sqft, a light cosmetic pass sells for roughly $1,570-$1,610/sqft (the tighter three comps at your exact size), and a full gut remodel sells for roughly $1,660-$1,680/sqft. The jump from as-is to lightly updated is large. The further jump from lightly updated to fully gutted is real but much smaller, and it comes on top of a renovation that costs several times what a cosmetic pass costs. That is the entire case for the recommendation below.</div>
+<p class="nt">Sample sizes: 1 direct as-is comp, 4 moderate-tier comps, 2 full-remodel comps. The fixer and full-remodel tiers are thin samples, read them as directional. The moderate tier is the most defensible of the three given four consistent data points.</p>
+</section>
+
+<div class="dv"></div>
+
+<section><div class="sh">Current Competition</div>
+<p>I pulled every active and pending Santa Clara single-family listing in your size and lot-size band as of today: 36 active, 17 pending, 53 total. Median active list price is $1,988,444, median active days on market is about 11.5.</p>
+<p>A handful of actives sitting well above that median DOM are priced right around where an as-is sale would land. <strong>2199 Fordham Dr</strong> has been active 133 days at $1,890,000. <strong>944 White Dr</strong> has been active 105 days at $1,928,000. Neither is confirmed unrenovated from the data I pulled, but both sit at a price point and DOM that tracks the as-is story: sitting, not moving. Compare that to every single one of the moderate and full-remodel sold comps above, every one of which closed in 11 days or less. That pattern, condition-appropriate pricing moves fast, everything else sits, matches exactly what the sold data already showed.</p>
+<p>On the healthier end, several pendings in the $2.0-2.5 million band, the moderate-and-up renovation zone, went under contract in single-digit days: <strong>2621 Monticello Way</strong> (5 days), <strong>3250 Machado Ave</strong> (6 days), <strong>688 Woodhams Rd</strong> (6 days). That's where this market is actually clearing quickly right now.</p>
+</section>
+
+<div class="dv"></div>
+
+<section><div class="sh">Market Pricing Behavior and the Days-on-Market Correlation</div>
+<p class="lead">Beyond the condition tiers, here's how this specific pocket of Santa Clara is pricing overall. I took the original list price, sold price, and days on market for the twelve individually-verified sales above (both Santa Clara Unified and the Cupertino-schooled context sales, since this section is about pricing behavior, not dollar-per-square-foot level) and computed every number in Python.</p>
+
+<div class="bigstat"><div class="n">92% of homes sold over their original asking price</div><div class="l">The median home in this cohort closed at 112.6% of its original list price</div></div>
+
+<div class="cb"><div class="cw"><canvas id="overUnderChart"></canvas></div>
+<div class="cap">How this market prices: share of the 12 verified sales that closed over, at, or under their original list price.</div></div>
+
+<div class="cb"><div class="cw"><canvas id="lsrHistChart"></canvas></div>
+<div class="cap">List-to-sale ratio distribution across the same 12 sales. Dashed line marks the median (112.6%).</div></div>
+
+<div class="cb"><div class="cw"><canvas id="scatterChart"></canvas></div>
+<div class="cap">Longer on market = smaller premium. Each dot is one verified sale (sale price as a percent of its ORIGINAL list price, vs. days on market). Correlation r = -0.45, a moderate pattern, not a guarantee for any single home. Homes that took longer generally closed closer to, or under, their original ask.</div></div>
+
+<div class="cb"><div class="cw"><canvas id="outcomesChart"></canvas></div>
+<div class="cap">What each group actually walked away with. Only one of the twelve sold under its original ask, so the "overpriced" line reflects a single sale, read it as one data point, not a trend.</div></div>
+<div class="tscroll"><table><thead><tr><th>Approach</th><th># of sales</th><th>Median orig list</th><th>Median sold</th><th>Median LSR</th><th>Median DOM</th></tr></thead><tbody>
+<tr><td>Priced to sell (sold over original ask)</td><td>11</td><td>$1,999,000</td><td>$2,460,000</td><td>112.6%</td><td>6 days</td></tr>
+<tr><td>Priced at market (within 1%)</td><td>0</td><td>n/a</td><td>n/a</td><td>n/a</td><td>n/a</td></tr>
+<tr><td>Overpriced (sold under original ask)</td><td>1</td><td>$2,199,000</td><td>$2,099,000</td><td>95.5%</td><td>11 days</td></tr>
+</tbody></table></div>
+
+<div class="readnum"><h4>Reading the numbers</h4>
+<p style="font-size:15px;margin-bottom:4px">Of the 12 verified Santa Clara sales in this size and price band:</p>
+<ul>
+<li class="win"><strong>11 homes (92%) priced it to sell</strong> and sold over their original ask, a median of <strong>$2,460,000</strong> (about 13% over asking), in a median of just <strong>6 days</strong>.</li>
+<li class="flat"><strong>Zero homes sold right at asking</strong> in this window.</li>
+<li class="lose"><strong>1 home (8%) sold under its original ask</strong>: 3445 Kenyon Dr, which still closed in 11 days and is itself one of the strongest condition-matched comps in this report. Even the "under" case here isn't a warning sign, it's a well-priced home that found its buyer quickly.</li>
+</ul>
+<div style="margin-top:16px;padding-top:14px;border-top:2px solid var(--cr);font-size:15.5px"><strong>This is an aggressive seller's market for anything priced at or near what the comps actually support.</strong> There is essentially no penalty here for pricing correctly, and no reward for pricing high and waiting.</div></div>
+
+<div class="key"><strong>Why is the market pricing this way?</strong> Demand in this size and price band is deep and the supply of genuinely renovated, correctly priced homes is thin. Sellers who price at or slightly under a defensible, comp-backed number are getting bid up fast rather than sitting and hoping. There's essentially no "safe" upside to overpricing in this specific cohort right now.</div>
+
+<div class="key"><strong>What this all means.</strong> Whichever condition you list in, price it at what the matching comps actually support, not above it. The zip-wide MLS Stats data below shows the broader market has cooled somewhat since a February 2026 peak. That window doesn't stay open forever, so this is worth acting on rather than sitting on it.</div>
+<p class="nt">Sample: 12 individually-verified sold homes, Santa Clara 95051, 1,288-2,028 sq ft, closed in the last 12 months. Directional read given the sample size, not a guarantee for any single home. Original list price sourced from each listing's MLS record.</p>
+</section>
+
+<div class="dv"></div>
+
+<section><div class="sh">Market Data and Trends</div>
+<p class="lead">These three charts are built from the real monthly figures on MLSListings Matrix's own Stats module, Data tab, for Santa Clara single-family homes citywide (not just this micro-pocket, so the levels run a bit lower than the condition-matched comps above). This install's Stats module only exposes a rolling twelve-month window, not three years, so that's what's shown here.</p>
+<div class="cb"><div class="cw"><canvas id="mlsPriceChart"></canvas></div>
+<div class="cap">Source: MLSListings Matrix Stats, Santa Clara, Single Family Home, Sale Price (Average) by month, Oct 2025-Sep 2026. Sept 2026 is a partial, in-progress month, shown for reference only.</div></div>
+<div class="cb"><div class="cw"><canvas id="mlsLsrChart"></canvas></div>
+<div class="cap">Source: MLSListings Matrix Stats, Santa Clara, Single Family Home, Sale to List Price Ratio by month, Sep 2025-Aug 2026.</div></div>
+<p>Every month in this window closed above 100% of list citywide. The market cooled from a February 2026 peak of 109.5% to 103.0% by August, still comfortably seller-favorable, just less frenzied than earlier this year.</p>
+<div class="cb"><div class="cw"><canvas id="mlsDomChart"></canvas></div>
+<div class="cap">Source: MLSListings Matrix Stats, Santa Clara, Single Family Home, Days to Sell (Average) by month, Sep 2025-Aug 2026.</div></div>
+<p>Days on market has lengthened somewhat in the most recent complete months, from a 12-13 day floor earlier this year to 22-27 days by June through August, tracking the rate increase below.</p>
+</section>
+
+<div class="dv"></div>
+
+<section><div class="sh">The Rate Environment</div>
+<div class="stats">
+<div class="st red"><div class="n">6.76%-7.24%</div><div class="l">30-yr fixed, current range across sources</div></div>
+<div class="st"><div class="n">6.76%</div><div class="l">Freddie Mac PMMS, weekly survey, 9/10/2026</div></div>
+<div class="st red"><div class="n">6.78%</div><div class="l">Bankrate, highest since July 2025</div></div>
+<div class="st"><div class="n">6.97%</div><div class="l">MBA average, highest since May 2025</div></div>
+</div>
+<p>Rates have climbed back toward 7% after touching lower levels late last year, with Freddie Mac's survey at 6.76%, Bankrate at 6.78%, and Mortgage News Daily's daily read running hotter at 7.24% as of mid-September. Both Bankrate and the Mortgage Bankers Association flag this as the highest level in over a year. That climb lines up with the softening DOM and LSR trend above. It hasn't broken the market, the pricing-behavior data still shows a strongly seller-favorable pattern, but it's a real reason not to sit on a decision for months.</p>
+</section>
+
+<div class="dv"></div>
+
+<section><div class="sh">As-Is vs. Renovated: What Your Budget Actually Buys</div>
+
+<div class="bigstat"><div class="l" style="margin:0 0 8px;letter-spacing:2px;text-transform:uppercase;font-size:12px">Value Gained For An Estimated $50,000-$75,000 Reno</div><div class="n" style="font-size:22px;font-weight:800">Roughly $420,000-$425,000</div><div class="l">Comparing the as-is anchor comp to the moderate-tier median, before vendor quotes come back</div></div>
+
+<p class="lead">Here's the direct comparison. As-is, anchored on 748 Cornell Dr, a near-exact twin of your home, this sells for roughly <strong>$1,850,000</strong>. Put in a light cosmetic pass, paint, flooring, counters, cabinet hardware or a repaint, the kind of scope 435 Cypress Ave and 3445 Kenyon Dr actually did, and the comps say this sells for roughly <strong>$2,270,000 to $2,320,000</strong>. That's an increase of roughly $420,000 to $425,000 for a project that's currently estimated at $50,000 to $75,000, pending the actual vendor bids.</p>
+
+<p>Go further, a full gut remodel like 2935 Marietta Dr or 2139 Coolidge Dr, new kitchen, new baths, new systems, and the comps say this sells for roughly <strong>$2,395,000 to $2,420,000</strong>. That's only another $125,000 to $150,000 on top of the moderate scenario, for a renovation that would realistically cost several times the $50,000 to $75,000 light-touch budget. The math on a full gut, at this specific size and price point, doesn't clear the way the moderate scope does. It's included here for reference, as a picture of what the top of this market is actually producing, not as the recommended path.</p>
+
+<p class="lead" style="margin-top:22px">The three paths, side by side:</p>
+<div class="cards3">
+<div class="card amb"><div class="lbl">As-Is, List Now</div><div class="val">$1,800,000-$1,900,000</div><div class="ds">List it in current condition, no work done. Anchored directly on 748 Cornell Dr, an almost exact match in size, era, and schools, sold explicitly as-is.<br><br><b>Pros:</b> No spend, no timeline delay, no vendor risk, fastest possible path to market.<br><b>Cons:</b> Leaves an estimated $420,000+ of achievable value on the table based on what the comps show a light reno buys here.</div></div>
+<div class="card grn"><div class="lbl">Moderate / Lipstick Reno (Recommended)</div><div class="val">$2,270,000-$2,320,000</div><div class="ds">Paint, flooring, counters, cabinet hardware or a cabinet repaint, no permits, no walls touched. Matches the actual scope of 435 Cypress Ave and 3445 Kenyon Dr.<br><br><b>Pros:</b> By far the best return per dollar spent of the three paths, comps sold in 5-11 days, fastest-moving tier in this whole report.<br><b>Cons:</b> Real spend and timeline (get the vendor quotes locked in first), some renovation and holding-cost risk.</div></div>
+<div class="card nv"><div class="lbl">Full Gut Remodel (Context Only)</div><div class="val">$2,395,000-$2,420,000</div><div class="ds">New kitchen, new baths, new systems, the scope 2935 Marietta Dr and 2139 Coolidge Dr actually did. Not the current plan, shown here as reference.<br><br><b>Pros:</b> Highest achievable sale price of the three paths.<br><b>Cons:</b> Only ~$125,000-$150,000 more than the moderate path, for a renovation that costs far more than $50,000-$75,000 and carries a much longer timeline and larger execution risk.</div></div>
+</div>
+<p class="nt">Professional opinion of value, not a formal appraisal.</p>
+</section>
+
+<div class="dv"></div>
+
+<section><div class="sh">Special Considerations</div>
+<p><strong>The $50,000-$75,000 figure is a working estimate, not a bid.</strong> Get the actual vendor quotes locked in before committing to the moderate-reno path. If the real number comes in meaningfully above $75,000, the return is still very likely worth it given the roughly $420,000+ gap between the as-is and moderate-tier comps, but confirm the number before spending it.</p>
+<p><strong>School district is the single biggest pricing trap in this specific search.</strong> Several of the highest-priced "renovated" sales in this zip code carry Cupertino Union school assignment, not your Santa Clara Unified boundary, and that difference alone is worth roughly $100 a square foot. Do not let a Zillow estimate or a casual comparison to one of those sales set expectations, they aren't the same market.</p>
+<p><strong>Sample sizes for the as-is and full-remodel tiers are thin.</strong> One direct comp anchors the as-is number, and two comps anchor the full-remodel number. Both are directionally solid (748 Cornell Dr is about as close to a twin as this market produces, and the two full-remodel comps land within $19 a square foot of each other), but neither is a large sample. The moderate tier, at four consistent comps, is the most statistically defensible of the three.</p>
+</section>
+
+<div class="dv"></div>
+
+<section><div class="sh">Staying In Touch</div>
+<p>Let's get the vendor quotes locked in and talk through timing. Once you know the real renovation number, this analysis tells you almost immediately whether it clears the bar, and in this market it very likely does.</p>
+</section>
+
+</div>
+<footer><div class="fn">GRAEHAM WATTS</div><div class="fl" style="font-size:15px;color:#ddd;margin:8px 0 18px">REALTOR. Powered by The Boyenga Team at Compass.</div>
+<div class="fl">DRE #01466876 | 650-308-4727 | graehamwatts.com</div>
+<div class="ds2">Prepared regarding 526 Barto St, Santa Clara, CA 95051. Comparable sales individually verified in MLSListings Matrix for actual sale, closing date, and school assignment. Pricing-behavior statistics computed from 12 individually-verified sold comps' original list price, sale price, and days on market. Current competition pulled from active MLS listings as of the report date. MLS Stats trend data from MLSListings Matrix Stats, Data tab, Santa Clara Single Family Home, trailing 12 months. Rate data cross-referenced across Freddie Mac PMMS, Bankrate, Mortgage News Daily, and the Mortgage Bankers Association. Professional opinion of value, not a formal appraisal.</div></footer>
+
+<script>
+new Chart(document.getElementById('overUnderChart'),{type:'bar',data:{labels:['Original list vs. sold price'],datasets:[
+  {label:'Sold OVER original ask (92%)',data:[91.7],backgroundColor:'#4f9d69'},
+  {label:'Sold AT original ask (0%)',data:[0],backgroundColor:'#9aa0a6'},
+  {label:'Sold UNDER original ask (8%)',data:[8.3],backgroundColor:'#C96A45'}
+]},options:{indexAxis:'y',responsive:true,maintainAspectRatio:false,animation:false,plugins:{legend:{position:'bottom'},tooltip:{callbacks:{label:c=>c.dataset.label+': '+c.parsed.x.toFixed(1)+'%'}}},scales:{x:{stacked:true,max:100,ticks:{callback:v=>v+'%'}},y:{stacked:true}}}});
+
+new Chart(document.getElementById('lsrHistChart'),{type:'bar',data:{labels:['<=95%','95-99%','99-101%','101-105%','105%+'],datasets:[{label:'# of sales',data:[0,1,0,1,10],backgroundColor:['#C96A45','#C96A45','#9aa0a6','#4f9d69','#4f9d69']}]},options:{responsive:true,maintainAspectRatio:false,animation:false,plugins:{legend:{display:false},tooltip:{callbacks:{label:c=>c.parsed.y+' sale(s)'}}},scales:{y:{ticks:{stepSize:1}}}}});
+
+new Chart(document.getElementById('scatterChart'),{type:'scatter',data:{datasets:[
+ {label:'Verified sale',data:[{x:102.8,y:29},{x:116.9,y:7},{x:95.5,y:11},{x:112.6,y:8},{x:123.1,y:5},{x:123.1,y:6},{x:113.3,y:5},{x:112.6,y:8},{x:118.6,y:5},{x:108.6,y:7},{x:107.0,y:0},{x:111.4,y:6}],
+  backgroundColor:(ctx)=>{const v=ctx.raw?ctx.raw.x:100; return v>=101?'#4f9d69':(v>=99?'#9aa0a6':'#C96A45');},pointRadius:6},
+ {label:'Trendline',data:[{x:95.45,y:14.72},{x:123.12,y:3.70}],type:'line',borderColor:'#343955',borderWidth:2,pointRadius:0,fill:false}
+]},options:{responsive:true,maintainAspectRatio:false,animation:false,plugins:{legend:{display:false},tooltip:{callbacks:{label:c=>c.raw.x+'% of original list, '+c.raw.y+' days on market'}}},scales:{x:{title:{display:true,text:'Sale price as % of ORIGINAL list price'}},y:{title:{display:true,text:'Days on market'}}}}});
+
+new Chart(document.getElementById('outcomesChart'),{type:'line',data:{labels:['Original list price','Final sold price'],datasets:[
+  {label:'Priced to sell (11 homes, sold in 6 days)',data:[1999000,2460000],borderColor:'#4f9d69',backgroundColor:'#4f9d69',borderWidth:4,pointRadius:8,pointHoverRadius:10,tension:0},
+  {label:'Sold under ask (1 home, sold in 11 days)',data:[2199000,2099000],borderColor:'#C96A45',backgroundColor:'#C96A45',borderWidth:4,pointRadius:8,pointHoverRadius:10,borderDash:[7,4],tension:0}
+]},options:{responsive:true,maintainAspectRatio:false,animation:false,layout:{padding:{top:14,right:20,left:6}},plugins:{legend:{position:'bottom',labels:{boxWidth:14,padding:14,font:{size:12}}},tooltip:{callbacks:{label:c=>c.dataset.label.split(' (')[0]+': $'+c.parsed.y.toLocaleString()}}},scales:{y:{ticks:{callback:v=>'$'+(v/1000000).toFixed(2)+'M'},grid:{color:'#eee'},title:{display:true,text:'Median price'}},x:{grid:{display:false},ticks:{font:{size:13}}}}}});
+
+new Chart(document.getElementById('mlsPriceChart'),{type:'line',data:{labels:['Oct 25','Nov 25','Dec 25','Jan 26','Feb 26','Mar 26','Apr 26','May 26','Jun 26','Jul 26','Aug 26','Sep 26*'],datasets:[{label:'Sale Price, Average',data:[2081684,1916952,2005693,2235040,2201033,2155365,2220542,2077144,1862363,2003007,1917494,1957000],borderColor:'#C5A55A',backgroundColor:'rgba(197,165,90,.12)',borderWidth:3,pointRadius:4,tension:.35,fill:true,segment:{borderDash:ctx=>ctx.p1DataIndex===11?[6,4]:undefined}}]},options:{responsive:true,maintainAspectRatio:false,animation:false,plugins:{legend:{display:false},tooltip:{callbacks:{label:c=>'$'+c.parsed.y.toLocaleString()}}},scales:{y:{ticks:{callback:v=>'$'+(v/1000000).toFixed(2)+'M'}}}}});
+
+new Chart(document.getElementById('mlsLsrChart'),{type:'line',data:{labels:['Sep 25','Oct 25','Nov 25','Dec 25','Jan 26','Feb 26','Mar 26','Apr 26','May 26','Jun 26','Jul 26','Aug 26'],datasets:[{label:'Sale to List Ratio',data:[108.0,108.8,105.7,106.0,107.5,109.5,108.5,107.9,105.2,104.3,104.6,103.0],borderColor:'#4f9d69',backgroundColor:'rgba(79,157,105,.12)',borderWidth:3,pointRadius:4,tension:.35,fill:true}]},options:{responsive:true,maintainAspectRatio:false,animation:false,plugins:{legend:{display:false},tooltip:{callbacks:{label:c=>c.parsed.y+'%'}}},scales:{y:{ticks:{callback:v=>v+'%'}}}}});
+
+new Chart(document.getElementById('mlsDomChart'),{type:'line',data:{labels:['Sep 25','Oct 25','Nov 25','Dec 25','Jan 26','Feb 26','Mar 26','Apr 26','May 26','Jun 26','Jul 26','Aug 26'],datasets:[{label:'Days to Sell, Average',data:[22,12,19,21,16,12,13,19,13,24,27,22],borderColor:'#343955',backgroundColor:'rgba(52,57,85,.10)',borderWidth:3,pointRadius:4,tension:.35,fill:true}]},options:{responsive:true,maintainAspectRatio:false,animation:false,plugins:{legend:{display:false},tooltip:{callbacks:{label:c=>c.parsed.y+' days'}}},scales:{y:{ticks:{callback:v=>v+'d'}}}}});
+</script>
+</body></html>
