@@ -133,5 +133,35 @@
     "sent_at": "2026-07-11T02:30:00Z",
     "data_source": "public_fallback",
     "run_id": "pcfs-cma-autobuild-live-repair-2026-07-10"
+  },
+  {
+    "client_name": "Michael Mok",
+    "due_date": "Tue, Sep 29, 2026",
+    "property_address": "111 Wisteria Dr, East Palo Alto, CA 94303",
+    "live_url": "https://graehamwatts.github.io/online-content/cma/CMA_111_Wisteria_Dr.html",
+    "sent_at": "2026-09-28T17:56:21Z",
+    "data_source": "public_fallback",
+    "run_id": "pcfs-cma-autobuild-weekly-2026-09-28",
+    "gmail_message_id": "1a0e928e89f07630"
+  },
+  {
+    "client_name": "Domingo Huerta",
+    "due_date": "Sun, Oct 04, 2026",
+    "property_address": "2565 Fordham St, East Palo Alto, CA 94303",
+    "live_url": "https://graehamwatts.github.io/online-content/cma/CMA_2565_Fordham_St.html",
+    "sent_at": "2026-09-28T17:57:01Z",
+    "data_source": "public_fallback",
+    "run_id": "pcfs-cma-autobuild-weekly-2026-09-28",
+    "gmail_message_id": "1a0e9299c74de2f5"
+  },
+  {
+    "client_name": "Mark Tian",
+    "due_date": "Sat, Oct 03, 2026",
+    "property_address": "4780 Snow Dr, San Jose, CA 95111",
+    "live_url": "https://graehamwatts.github.io/online-content/cma/CMA_4780_Snow_Dr.html",
+    "sent_at": "2026-09-28T17:57:46Z",
+    "data_source": "public_fallback",
+    "run_id": "pcfs-cma-autobuild-weekly-2026-09-28",
+    "gmail_message_id": "1a0e92a45a3ad440"
   }
 ]
