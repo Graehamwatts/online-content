@@ -8,9 +8,24 @@
     "market": "East Palo Alto / Peninsula",
     "vendor_default": "Universal Mail Works",
     "dashboard_url": "https://graehamwatts.github.io/online-content/farming-postcards/",
-    "last_updated": "2026-09-11"
+    "last_updated": "2026-09-30"
   },
   "cards": [
+    {
+      "id": "2026-10-01-seasonal-deadline",
+      "mail_date": "2026-10-01",
+      "archetype": "Seasonal Deadline (new #11)",
+      "lever": "Calendar scarcity",
+      "front_headline": "The Holidays Are 12 Weeks Away. Selling A Home Takes Most Of Them.",
+      "back_headline": "Want To Close Before The Holidays? Start This Month.",
+      "cta_type": "Call / text Graeham",
+      "cta_line": "Call or text me today (text \"TIMELINE\" to 650-308-4727 or scan)",
+      "audience": "Both",
+      "pdf": "pdfs/2026-10-01-seasonal-deadline.pdf",
+      "thumbnail": "thumbnails/2026-10-01-seasonal-deadline-1.jpg",
+      "status": "PRINT-READY: no photos needed. 11x6 with 3 mm bleed and crop marks. Filed in Farming Flyers 2026.",
+      "notes": "Built 2026-09-29/30 at Graeham's request: no video or headshot dependency, strong call to action for the time of year. First card built at the real mailed size (11x6 jumbo; earlier drafts here were 6x4 mocks). New archetype #11. Passes all 4 differentiation axes (archetype new; CTA call/text vs last two cards seller-consultation and home-valuation; villain-free; core claim new). Back has a Call me > Prep > List > Offers > Escrow > Holidays timeline graphic instead of a headshot, and a static SMS QR (SMSTO:+16503084727:TIMELINE, decodes correctly). Lockup follows the Compass handbook: Compass strip wider than the GW logo, Eric and Janelle Boyenga DRE lines under the team logo. To confirm before mailing: the 'list by mid-October to close before the holidays' timing line."
+    },
     {
       "id": "2026-10-01-prop19-tax-transfer-v2",
       "mail_date": "2026-10-01",
@@ -24,7 +39,7 @@
       "preview_html": "2026-10-01-prop19-tax-transfer-preview.html",
       "pdf": "pdfs/2026-10-01-prop19-tax-transfer.pdf",
       "thumbnail": "thumbnails/2026-10-01-prop19-tax-transfer-1.jpg",
-      "status": "PRINT-READY — placeholder headshots, needs Peter's real photos before mailing",
+      "status": "HELD 2026-09-30: replaced for 10/01 by the photo-free Seasonal Deadline card. Never mailed. Needs real headshots and a rebuild at 11x6 (this draft is 6x4).",
       "notes": "Second run of Prop 19 Tax Transfer (first was 07/01/26). Fresh headline pair this time so it doesn't reuse 07/01's \"your low tax rate can move with you\" wording/skeleton. Differentiation check passes all 4 axes: archetype off cooldown (last 3 were Equity 08/01, Quiet Sale 08/15, Neighbor Envy 09/15); CTA is call/text, different from the last 2 cards' destinations (seller-consultation, home-valuation front-QR); villain-free; core claim \"tax basis is portable\" last used 07/01, outside the 4-card window. QR is a real static SMS QR (SMSTO:+16503084727:PROP19) — no Prop 19 landing page exists yet, matching how 07/01 and 08/01 were built. Print PDF copied to Graeham's Farming Flyers 2026 folder as 'Farming Postcard EPA 10 01 26.pdf'."
     },
     {

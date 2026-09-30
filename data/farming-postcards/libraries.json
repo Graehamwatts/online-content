@@ -1,50 +1,198 @@
 {
   "schema_version": "farming_postcard_libraries.v1",
   "note": "Controlled enums the generator must choose from. The LLM proposes only these IDs; Python enforces the 4-axis rules and constructs final URLs. Keep >=6 archetypes and >=7 claims so the cooldowns can never starve a 3-option preview.",
-
   "archetypes": [
-    { "id": "equity",          "slot": "1st",  "label": "Equity / pride in what you've built" },
-    { "id": "buyer_tagged",    "slot": "15th", "label": "A specific buyer is waiting (demand/scarcity)" },
-    { "id": "anti_zillow_pool","slot": "15th", "label": "Serious buyers move off the portals" },
-    { "id": "ai_search",       "slot": "1st",  "label": "Your home is invisible to AI search" },
-    { "id": "anti_zestimate",  "slot": "any",  "label": "The number you've been shown is wrong" },
-    { "id": "neighbor_envy",   "slot": "any",  "label": "What your neighbors' homes really sold for" },
-    { "id": "low_inventory",   "slot": "15th", "label": "Low inventory means your home stands alone" },
-    { "id": "quiet_sale",      "slot": "15th", "label": "Sell without open houses / hassle / strangers" },
-    { "id": "prop_19",         "slot": "1st",  "label": "Carry your low tax base to your next home (55+)" },
-    { "id": "local_proof",     "slot": "any",  "label": "A real, recent nearby sale (proof beats promise)" }
+    {
+      "id": "equity",
+      "slot": "1st",
+      "label": "Equity / pride in what you've built"
+    },
+    {
+      "id": "buyer_tagged",
+      "slot": "15th",
+      "label": "A specific buyer is waiting (demand/scarcity)"
+    },
+    {
+      "id": "anti_zillow_pool",
+      "slot": "15th",
+      "label": "Serious buyers move off the portals"
+    },
+    {
+      "id": "ai_search",
+      "slot": "1st",
+      "label": "Your home is invisible to AI search"
+    },
+    {
+      "id": "anti_zestimate",
+      "slot": "any",
+      "label": "The number you've been shown is wrong"
+    },
+    {
+      "id": "neighbor_envy",
+      "slot": "any",
+      "label": "What your neighbors' homes really sold for"
+    },
+    {
+      "id": "low_inventory",
+      "slot": "15th",
+      "label": "Low inventory means your home stands alone"
+    },
+    {
+      "id": "quiet_sale",
+      "slot": "15th",
+      "label": "Sell without open houses / hassle / strangers"
+    },
+    {
+      "id": "prop_19",
+      "slot": "1st",
+      "label": "Carry your low tax base to your next home (55+)"
+    },
+    {
+      "id": "local_proof",
+      "slot": "any",
+      "label": "A real, recent nearby sale (proof beats promise)"
+    },
+    {
+      "id": "seasonal_deadline",
+      "slot": "any",
+      "label": "The calendar is the deadline (holidays, spring market)"
+    }
   ],
-
   "core_claims": [
-    { "id": "know_your_equity",        "claim": "Knowing your real equity number lets you plan instead of react." },
-    { "id": "wealth_you_built",        "claim": "You've quietly built more wealth in this home than you think." },
-    { "id": "i_have_buyers",           "claim": "I have active buyers searching this area right now." },
-    { "id": "serious_buyers_off_portal","claim": "The buyers who actually close work quietly through agents, not portals." },
-    { "id": "invisible_to_ai_search",  "claim": "Standard listings are becoming invisible to AI-driven search." },
-    { "id": "your_estimate_is_wrong",  "claim": "An algorithm can't see your upgrades; its estimate is off." },
-    { "id": "know_street_comps",       "claim": "The real recent sale prices on your street tell the true story." },
-    { "id": "timing_favors_seller",    "claim": "Low inventory is a window that favors sellers who act." },
-    { "id": "selling_can_be_hassle_free","claim": "Selling doesn't have to mean open houses and strangers." },
-    { "id": "tax_base_is_portable",    "claim": "If you're 55+, you can carry your low tax base statewide (Prop 19)." },
-    { "id": "just_sold_nearby",        "claim": "A real, recent sale this close to you is your market signal." }
+    {
+      "id": "know_your_equity",
+      "claim": "Knowing your real equity number lets you plan instead of react."
+    },
+    {
+      "id": "wealth_you_built",
+      "claim": "You've quietly built more wealth in this home than you think."
+    },
+    {
+      "id": "i_have_buyers",
+      "claim": "I have active buyers searching this area right now."
+    },
+    {
+      "id": "serious_buyers_off_portal",
+      "claim": "The buyers who actually close work quietly through agents, not portals."
+    },
+    {
+      "id": "invisible_to_ai_search",
+      "claim": "Standard listings are becoming invisible to AI-driven search."
+    },
+    {
+      "id": "your_estimate_is_wrong",
+      "claim": "An algorithm can't see your upgrades; its estimate is off."
+    },
+    {
+      "id": "know_street_comps",
+      "claim": "The real recent sale prices on your street tell the true story."
+    },
+    {
+      "id": "timing_favors_seller",
+      "claim": "Low inventory is a window that favors sellers who act."
+    },
+    {
+      "id": "selling_can_be_hassle_free",
+      "claim": "Selling doesn't have to mean open houses and strangers."
+    },
+    {
+      "id": "tax_base_is_portable",
+      "claim": "If you're 55+, you can carry your low tax base statewide (Prop 19)."
+    },
+    {
+      "id": "just_sold_nearby",
+      "claim": "A real, recent sale this close to you is your market signal."
+    },
+    {
+      "id": "year_end_clock",
+      "claim": "A real calendar date (holidays, spring) is the deadline, so the time to start is now."
+    }
   ],
-
-  "villain_types": ["none", "zillow_algorithm", "old_marketing"],
-
+  "villain_types": [
+    "none",
+    "zillow_algorithm",
+    "old_marketing"
+  ],
   "cta_destinations": [
-    { "id": "home_valuation",   "label": "Home valuation request",        "canonical_url": "https://graehamwatts.com/real-local-comps", "sms_keyword": "VALUE",  "allowed": true, "note": "UPGRADED 2026-08-18 — real GHL-native page (funnel 'See What Your Home Could Sell For Right Now'), address-entry form feeding his CRM directly. Replaces the GitHub Pages / mailto-fallback interim. The old GitHub Pages page (east-palo-alto/home-valuation/) is still live but no longer the default." },
-    { "id": "recent_sales_nearby", "label": "Recent sales near you (front-QR curiosity hook)", "canonical_url": "https://graehamwatts.com/recent-sales-near-you", "sms_keyword": "SOLD", "allowed": true, "note": "ADDED 2026-08-18 — real GHL page, cloned from the home-valuation funnel and domain/path-wired live. IMPORTANT: copy is currently IDENTICAL to home_valuation's page ('Check my home value' framing) — the GHL page-builder session hung repeatedly when trying to edit the on-page headline/body to the neighbor-sales-curiosity angle ('see what they got'), so the clone still carries the original copy verbatim. DO NOT point a front-QR 'see what your neighbors got' hook at this URL until the copy is fixed — the mismatch would read as bait-and-switch. Fast-follow: retry the copy edit in a fresh session (the builder may have just been having a bad day), or ask Graeham/his web person to swap the headline directly — it's one text block." },
-    { "id": "off_market_buyers","label": "Off-market buyer-demand check", "canonical_url": null, "sms_keyword": "BUYERS", "allowed": true, "note": "Build /east-palo-alto/off-market-buyers/ landing page." },
-    { "id": "prop_19_guide",    "label": "Prop 19 move-planning guide",   "canonical_url": null, "sms_keyword": "PROP19", "allowed": true, "note": "Build /east-palo-alto/prop-19-guide/ landing page." },
-    { "id": "market_report",    "label": "Neighborhood market report",    "canonical_url": null, "sms_keyword": "MARKET", "allowed": true },
-    { "id": "ai_score_report",  "label": "Property AI-visibility score",   "canonical_url": null, "sms_keyword": "AISCORE","allowed": true },
-    { "id": "seller_consultation","label": "Seller consultation",         "canonical_url": "https://graehamwatts.github.io/online-content/east-palo-alto/seller-consultation/", "sms_keyword": "SELL",   "allowed": true, "note": "LIVE 2026-07-27 — first real evergreen landing page, breaks the SMS-only CTA streak. Call/text is still the page's own primary CTA (no GHL form wired yet), but the QR itself now resolves to a real trackable URL instead of an SMSTO: link." },
-    { "id": "sms_keyword",      "label": "Call / text (generic)",         "canonical_url": null, "sms_keyword": "GRAEHAM","allowed": true, "note": "Terminal fallback channel." }
+    {
+      "id": "home_valuation",
+      "label": "Home valuation request",
+      "canonical_url": "https://graehamwatts.com/real-local-comps",
+      "sms_keyword": "VALUE",
+      "allowed": true,
+      "note": "UPGRADED 2026-08-18 — real GHL-native page (funnel 'See What Your Home Could Sell For Right Now'), address-entry form feeding his CRM directly. Replaces the GitHub Pages / mailto-fallback interim. The old GitHub Pages page (east-palo-alto/home-valuation/) is still live but no longer the default."
+    },
+    {
+      "id": "recent_sales_nearby",
+      "label": "Recent sales near you (front-QR curiosity hook)",
+      "canonical_url": "https://graehamwatts.com/recent-sales-near-you",
+      "sms_keyword": "SOLD",
+      "allowed": true,
+      "note": "ADDED 2026-08-18 — real GHL page, cloned from the home-valuation funnel and domain/path-wired live. IMPORTANT: copy is currently IDENTICAL to home_valuation's page ('Check my home value' framing) — the GHL page-builder session hung repeatedly when trying to edit the on-page headline/body to the neighbor-sales-curiosity angle ('see what they got'), so the clone still carries the original copy verbatim. DO NOT point a front-QR 'see what your neighbors got' hook at this URL until the copy is fixed — the mismatch would read as bait-and-switch. Fast-follow: retry the copy edit in a fresh session (the builder may have just been having a bad day), or ask Graeham/his web person to swap the headline directly — it's one text block."
+    },
+    {
+      "id": "off_market_buyers",
+      "label": "Off-market buyer-demand check",
+      "canonical_url": null,
+      "sms_keyword": "BUYERS",
+      "allowed": true,
+      "note": "Build /east-palo-alto/off-market-buyers/ landing page."
+    },
+    {
+      "id": "prop_19_guide",
+      "label": "Prop 19 move-planning guide",
+      "canonical_url": null,
+      "sms_keyword": "PROP19",
+      "allowed": true,
+      "note": "Build /east-palo-alto/prop-19-guide/ landing page."
+    },
+    {
+      "id": "market_report",
+      "label": "Neighborhood market report",
+      "canonical_url": null,
+      "sms_keyword": "MARKET",
+      "allowed": true
+    },
+    {
+      "id": "ai_score_report",
+      "label": "Property AI-visibility score",
+      "canonical_url": null,
+      "sms_keyword": "AISCORE",
+      "allowed": true
+    },
+    {
+      "id": "seller_consultation",
+      "label": "Seller consultation",
+      "canonical_url": "https://graehamwatts.github.io/online-content/east-palo-alto/seller-consultation/",
+      "sms_keyword": "SELL",
+      "allowed": true,
+      "note": "LIVE 2026-07-27 — first real evergreen landing page, breaks the SMS-only CTA streak. Call/text is still the page's own primary CTA (no GHL form wired yet), but the QR itself now resolves to a real trackable URL instead of an SMSTO: link."
+    },
+    {
+      "id": "sms_keyword",
+      "label": "Call / text (generic)",
+      "canonical_url": null,
+      "sms_keyword": "GRAEHAM",
+      "allowed": true,
+      "note": "Terminal fallback channel."
+    }
   ],
-
   "phone": "+16503084727",
-
-  "banned_villain_terms": ["zillow", "algorithm", "avm", "automated estimate", "online estimate", "portal estimate", "computer estimate", "zestimate"],
-
-  "compliance_bans": ["guaranteed sale", "guarantee a buyer", "we guarantee", "guaranteed price", "guaranteed offer"]
+  "banned_villain_terms": [
+    "zillow",
+    "algorithm",
+    "avm",
+    "automated estimate",
+    "online estimate",
+    "portal estimate",
+    "computer estimate",
+    "zestimate"
+  ],
+  "compliance_bans": [
+    "guaranteed sale",
+    "guarantee a buyer",
+    "we guarantee",
+    "guaranteed price",
+    "guaranteed offer"
+  ]
 }

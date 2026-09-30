@@ -113,11 +113,11 @@
     {
       "drop_date": "2026-10-01",
       "status": "print_ready",
-      "archetype": "prop_19",
+      "archetype": "seasonal_deadline",
       "cta_destination_id": "sms_keyword",
       "villain_type": "none",
-      "core_claim_slug": "tax_base_is_portable",
-      "headline": "The #1 Reason You Haven't Moved Just Disappeared"
+      "core_claim_slug": "year_end_clock",
+      "headline": "The Holidays Are 12 Weeks Away. Selling A Home Takes Most Of Them."
     }
   ]
 }
