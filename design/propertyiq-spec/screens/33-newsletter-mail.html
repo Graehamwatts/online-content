@@ -177,7 +177,7 @@
                   <button class="btn-ghost" style="font-size:10.5px">✎ Rename</button>
                   <span class="bdg" style="margin-left:auto">issue NL-2026-07</span>
                 </div>
-                <div class="anno" style="margin-top:3px">Issue header from the newsletter build record. Cadence: past-client segment runs monthly per Wattson Playbook Library (past-client-monthly-newsletter); the seller weekly-listing-update embed is the WEEKLY email surface — this screen builds the MONTHLY issue. Cadence itself is read-only here; edited in Settings/Playbooks [DECIDE].</div>
+                <div class="anno" style="margin-top:3px">Issue header from the newsletter build record. Cadence: past-client segment runs monthly per Wattson Playbook Library (past-client-monthly-newsletter); the seller weekly report (seller-report skill) is the WEEKLY email surface — this screen builds the MONTHLY issue. Cadence itself is read-only here; edited in Settings/Playbooks [DECIDE].</div>
 
                 <!-- segment chips -->
                 <div id="el-segment-chips" style="display:flex; gap:6px; margin:10px 0 4px; flex-wrap:wrap">
@@ -255,7 +255,7 @@
               </div>
               <div id="el-audience-note" class="cardbox" style="font-size:11.5px">
                 <b>📅 Send audience &amp; cadence</b>
-                <div style="color:var(--mut); margin-top:3px">Past-client segment: monthly per <b style="color:var(--ink)">WPB past-client-monthly-newsletter</b>. Seller weekly-listing-update embed = the weekly surface. This screen builds the monthly issue. <a href="#" style="color:var(--brand)">Cadence board (27) →</a></div>
+                <div style="color:var(--mut); margin-top:3px">Past-client segment: monthly per <b style="color:var(--ink)">WPB past-client-monthly-newsletter</b>. Seller weekly report (seller-report skill) = the weekly surface. This screen builds the monthly issue. <a href="#" style="color:var(--brand)">Cadence board (27) →</a></div>
                 <div class="anno" style="margin-top:4px">Consent + unsubscribe handled by PropFlow/NotificationProvider at send time, outside PropCast (Brain integration table) — this builder only produces the content package (PropCastNewsletterContentPackage).</div>
               </div>
             </div>
@@ -506,7 +506,7 @@
       <tr><td>Compliance chip</td><td>Pass/needs_review from ComplianceProvider (Fair-Housing scan of copy; blocks steering-class language)</td><td>ComplianceProvider</td><td>blocked → shows reason + suggested rewrite</td><td>matrix corrections (consent/compliance everywhere); Screen 24 pattern</td></tr>
       <tr><td>"Approve all 3 → Outbox" button</td><td>One decision ships all segment variants to the Outbox as review-first sends (client-facing = review-first rule)</td><td>approval record</td><td>click → confirm → Outbox items created</td><td>draft s33</td></tr>
       <tr><td>Link policy note</td><td>Newsletter links go to the agent's blog/site, never directly to YouTube; thumbnail embedded as clickable image; utm_medium=newsletter carried for attribution roll-up</td><td>PropCast Brain CRM-email row</td><td>none</td><td>PropCast Brain lines 73/1613/1635</td></tr>
-      <tr><td>Send audience note</td><td>Past-client segment runs monthly per Wattson Playbook Library (past-client-monthly-newsletter); seller weekly-listing-update embed is the weekly surface — this screen builds the monthly issue</td><td>Wattson Playbook Library</td><td>link to cadence board</td><td>PropCast Brain line 73</td></tr>
+      <tr><td>Send audience note</td><td>Past-client segment runs monthly per Wattson Playbook Library (past-client-monthly-newsletter); the seller weekly report (seller-report skill) is the weekly surface — this screen builds the monthly issue</td><td>Wattson Playbook Library</td><td>link to cadence board</td><td>PropCast Brain line 73</td></tr>
       <tr><td>Postcard drop header</td><td>"Aug 1 postcard — pick one of 3 options"</td><td>farming-postcard option cache</td><td>—</td><td>draft s33</td></tr>
       <tr><td>Option cards (3)</td><td>A · Just-sold proof / B · "41% of lots allow an ADU" / C · Home-value QR — previews of 3-5 hook options generated 7 days ahead; archetypes drawn from the 6 historical headline archetypes (equity, buyer-tagged, anti-Zillow, AI search, anti-Zestimate, neighbor envy)</td><td>farming-postcard skill option cache</td><td>click to pick; "regenerate options"; view full 6x4 preview front/back</td><td>draft s33; farming-postcard SKILL</td></tr>
       <tr><td>Rules strip</td><td>Enforced constraints inline: one goal · one QR (labeled e.g. AUG-PC) · locked contact block w/ DRE · audience = farm owners minus Do-Not-Mail (Sharon's list) · print-spec PDF on pick · mail calendar 8th/24th touchpoints server-side</td><td>postcard composer config</td><td>none (rules are non-editable)</td><td>draft s33</td></tr>
