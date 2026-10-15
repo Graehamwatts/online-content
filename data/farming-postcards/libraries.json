@@ -175,6 +175,14 @@
       "sms_keyword": "GRAEHAM",
       "allowed": true,
       "note": "Terminal fallback channel."
+    },
+    {
+      "id": "sold_homes_map",
+      "label": "Recent sold homes on a pannable map (IDX)",
+      "canonical_url": "https://hi.switchy.io/epa-sold-homes-0901",
+      "sms_keyword": "SOLD",
+      "allowed": true,
+      "note": "Live IDX Broker widget 168164 behind a pixeled Switchy link. Switchy rejects .php destinations, so new links to the widget cannot be minted; reuse this one."
     }
   ],
   "phone": "+16503084727",
