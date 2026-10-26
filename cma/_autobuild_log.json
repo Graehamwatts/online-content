@@ -371,5 +371,15 @@
     "sent_at": null,
     "data_source": null,
     "run_id": "pcfs-cma-autobuild-weekly-2026-10-19"
+  },
+  {
+    "client_name": "Kirsten Johnson",
+    "client_email": "johnson.kirsten2020@gmail.com",
+    "due_date": "Fri, Oct 30, 2026",
+    "property_address": "5636 Orchard Park Dr, San Jose, CA 95123",
+    "reason": "Public record (Redfin) shows this home sold Apr 2025, listed by Graeham Watts to buyer Tony Quan (MLSListings #ML81997309) -- Graeham represented Kirsten as the SELLER, not buyer, meaning she no longer owns this address. No current owned home is on file in the due-list feed or in this session. Needs the CRM/master-sheet check for a current address before building.",
+    "status": "held_not_sent",
+    "live_url": null,
+    "run_id": "pcfs-cma-autobuild-weekly-2026-10-26"
   }
 ]
