@@ -381,5 +381,53 @@
     "status": "held_not_sent",
     "live_url": null,
     "run_id": "pcfs-cma-autobuild-weekly-2026-10-26"
+  },
+  {
+    "client_name": "Suman Prasad",
+    "client_email": "gprasad@att.net",
+    "due_date": "Mon, Nov 2, 2026",
+    "property_address": "1651 Larkspur Avenue, Hollister, CA 95023",
+    "live_url": "https://graehamwatts.github.io/online-content/cma/CMA_1651_Larkspur_Ave.html",
+    "value_mid": 790000,
+    "value_low": 735000,
+    "value_high": 850000,
+    "median_psf": 453,
+    "comps_used": 10,
+    "sent_at": "2026-11-02T18:49:27Z",
+    "data_source": "public_fallback",
+    "run_id": "pcfs-cma-autobuild-weekly-2026-11-02",
+    "gmail_message_id": "1a19d98506679a60"
+  },
+  {
+    "client_name": "Irena Gumbert",
+    "client_email": "ngumbert@trsrestored.com",
+    "due_date": "Thu, Nov 5, 2026",
+    "property_address": "2859 Varden Avenue, San Jose, CA 95124",
+    "live_url": "https://graehamwatts.github.io/online-content/cma/CMA_2859_Varden_Ave.html",
+    "value_mid": 2225000,
+    "value_low": 1975000,
+    "value_high": 2600000,
+    "median_psf": 1112,
+    "comps_used": 10,
+    "sent_at": "2026-11-02T18:50:00Z",
+    "data_source": "public_fallback",
+    "run_id": "pcfs-cma-autobuild-weekly-2026-11-02",
+    "gmail_message_id": "1a19d98d7ffed345"
+  },
+  {
+    "client_name": "Julia Guo",
+    "client_email": "juliaguo1717@gmail.com",
+    "due_date": "Thu, Nov 5, 2026",
+    "property_address": "408 Alder Lane, Palo Alto, CA 94306",
+    "live_url": "https://graehamwatts.github.io/online-content/cma/CMA_408_Alder_Ln.html",
+    "value_mid": 3850000,
+    "value_low": 3550000,
+    "value_high": 4200000,
+    "median_psf": 1334,
+    "comps_used": 4,
+    "sent_at": "2026-11-02T18:50:40Z",
+    "data_source": "public_fallback",
+    "run_id": "pcfs-cma-autobuild-weekly-2026-11-02",
+    "gmail_message_id": "1a19d996e3f6b197"
   }
 ]
