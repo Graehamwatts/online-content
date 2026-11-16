@@ -1,145 +1,148 @@
 name: Monday CRM Health Review
-
-on:
-  schedule:
-    # Every Monday at 15:00 UTC = 8:00 AM PT (PDT) / 7:00 AM PT (PST)
-    - cron: '0 15 * * 1'
-  workflow_dispatch:
-    inputs:
-      week_start_override:
-        description: 'Override week start date (YYYY-MM-DD, Monday; blank = auto)'
-        required: false
-        default: ''
-
 env:
   GHL_API_BASE: https://services.leadconnectorhq.com
-  GHL_VERSION:  '2021-07-28'
-
+  GHL_VERSION: '2021-07-28'
 jobs:
   weekly-health:
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v4
-        with:
-          token: ${{ secrets.GITHUB_TOKEN }}
-
-      - uses: actions/setup-python@v5
-        with:
-          python-version: '3.12'
-
-      - name: Install dependencies
-        run: pip install requests pytz
-
-      - name: Generate CRM Health Dashboard
-        id: generate
-        env:
-          GHL_PIT:              ${{ secrets.GHL_PIT }}
-          GHL_LOCATION_ID:      ${{ secrets.GHL_LOCATION_ID }}
-          PYTHONUNBUFFERED:     "1"
-          WEEK_START_OVERRIDE:  ${{ github.event.inputs.week_start_override }}
-        run: python3 scripts/weekly_crm_health.py
-
-      - name: Commit dashboard + history
-        run: |
-          git config user.email "graehamwatts@gmail.com"
-          git config user.name  "Graeham Watts"
-          git remote set-url origin \
-            https://x-access-token:${{ secrets.GITHUB_TOKEN }}@github.com/Graehamwatts/online-content.git
-          git add dashboards/health/
-          git diff --staged --quiet || git commit -m \
-            "CRM Health: ${{ steps.generate.outputs.date_slug }} (score ${{ steps.generate.outputs.health_score }}/${{ steps.generate.outputs.grade }})"
-          git push
-
-      - name: Build email body
-        id: email
-        env:
-          DATE_SLUG: ${{ steps.generate.outputs.date_slug }}
-          HEALTH_SCORE: ${{ steps.generate.outputs.health_score }}
-          GRADE: ${{ steps.generate.outputs.grade }}
-          NEW_OPPS: ${{ steps.generate.outputs.new_opps }}
-          STALE: ${{ steps.generate.outputs.stale_recent }}
-          OLD_ACTIVE: ${{ steps.generate.outputs.old_active }}
-          ACTIVE_OPEN: ${{ steps.generate.outputs.active_open }}
-          CLEARED: ${{ steps.generate.outputs.activity_cleared }}
-        run: |
-          URL="https://graehamwatts.github.io/online-content/dashboards/health/${DATE_SLUG}-health.html"
-          echo "url=${URL}" >> $GITHUB_OUTPUT
-          python3 - << 'PYEOF'
-          import os
-          date_slug  = os.environ.get("DATE_SLUG", "")
-          score      = os.environ.get("HEALTH_SCORE", "")
-          grade      = os.environ.get("GRADE", "")
-          new_opps   = os.environ.get("NEW_OPPS", "")
-          stale      = int(os.environ.get("STALE", "0") or "0")
-          old_active = os.environ.get("OLD_ACTIVE", "")
-          active     = os.environ.get("ACTIVE_OPEN", "")
-          cleared    = os.environ.get("CLEARED", "")
-          url        = f"https://graehamwatts.github.io/online-content/dashboards/health/{date_slug}-health.html"
-          lines = [
-              f"CRM Health Report — Week of {date_slug}",
-              "",
-              f"Score: {score}/100  (Grade {grade})",
-              "",
-              "KEY NUMBERS",
-              f"  New pipeline entries this week:  {new_opps}",
-              f"  Active open deals:                {active}",
-              f"  Leads needing follow-up NOW:      {stale}  (contact-validated)",
-              f"  Leads 90+ days old (cleanup):     {old_active}",
-              f"  Leads cleared by activity check:  {cleared} (were contacted — opp not updated)",
-          ]
-          if stale > 0:
-              lines += ["", f"ACTION REQUIRED: {stale} lead(s) not contacted in 14+ days. See dashboard."]
-          lines += [
-              "",
-              "View full dashboard:",
-              url,
-              "",
-              "---",
-              "Graeham Watts · Powered by The Boyenga Team at Compass",
-              "This report runs automatically every Monday morning.",
-          ]
-          with open("/tmp/email_body.txt", "w") as f:
-              f.write("\n".join(lines))
-          print("Email body written.")
-          PYEOF
-
-      - name: Send email to Graeham
-        uses: dawidd6/action-send-mail@v3
-        with:
-          server_address: smtp.gmail.com
-          server_port:    465
-          secure:         true
-          username:       ${{ secrets.GMAIL_USERNAME }}
-          password:       ${{ secrets.GMAIL_APP_PASSWORD }}
-          subject:        "CRM Health — ${{ steps.generate.outputs.date_slug }} | Score ${{ steps.generate.outputs.health_score }} (${{ steps.generate.outputs.grade }})"
-          to:             graehamwatts@gmail.com
-          from:           "CRM Health Bot <${{ secrets.GMAIL_USERNAME }}>"
-          body:           file:///tmp/email_body.txt
-
-      - name: Send email to Adrian
-        uses: dawidd6/action-send-mail@v3
-        with:
-          server_address: smtp.gmail.com
-          server_port:    465
-          secure:         true
-          username:       ${{ secrets.GMAIL_USERNAME }}
-          password:       ${{ secrets.GMAIL_APP_PASSWORD }}
-          subject:        "CRM Health — ${{ steps.generate.outputs.date_slug }} | Score ${{ steps.generate.outputs.health_score }} (${{ steps.generate.outputs.grade }})"
-          to:             graehamwattsclientcare@gmail.com
-          from:           "CRM Health Bot <${{ secrets.GMAIL_USERNAME }}>"
-          body:           file:///tmp/email_body.txt
-
-      - name: Report result
-        run: |
-          echo "::notice title=CRM Health::Score ${{ steps.generate.outputs.health_score }} \
-          (Grade ${{ steps.generate.outputs.grade }}) | \
-          New: ${{ steps.generate.outputs.new_opps }} | \
-          Stale: ${{ steps.generate.outputs.stale_recent }} | \
-          ${{ steps.email.outputs.url }}"
-          echo "Dashboard: ${{ steps.email.outputs.url }}"
-
-      - name: Notify on failure
-        if: failure()
-        run: |
-          echo "::error::CRM Health Report failed. Check GHL_PIT, GMAIL_USERNAME, GMAIL_APP_PASSWORD secrets."
-
+    - uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262
+      with:
+        token: ${{ secrets.GITHUB_TOKEN }}
+        persist-credentials: true
+    - uses: actions/setup-python@a26af69be951a213d495a4c3e4e4022e16d87065
+      with:
+        python-version: '3.12'
+    - name: Install dependencies
+      run: pip install requests pytz
+    - name: Generate CRM Health Dashboard
+      id: generate
+      env:
+        GHL_PIT: ${{ secrets.GHL_PIT }}
+        GHL_LOCATION_ID: ${{ secrets.GHL_LOCATION_ID }}
+        PYTHONUNBUFFERED: '1'
+        WEEK_START_OVERRIDE: ${{ github.event.inputs.week_start_override }}
+      run: python3 scripts/weekly_crm_health.py
+    - name: Commit dashboard + history
+      run: |
+        git config user.email "graehamwatts@gmail.com"
+        git config user.name  "Graeham Watts"
+        git add dashboards/health/
+        git diff --staged --quiet || git commit -m \
+          "CRM Health: ${WORKFLOW_VALUE_1} (score ${WORKFLOW_VALUE_2}/${WORKFLOW_VALUE_3})"
+        git push
+      env:
+        WORKFLOW_VALUE_1: ${{ steps.generate.outputs.date_slug }}
+        WORKFLOW_VALUE_2: ${{ steps.generate.outputs.health_score }}
+        WORKFLOW_VALUE_3: ${{ steps.generate.outputs.grade }}
+    - name: Build email body
+      id: email
+      env:
+        DATE_SLUG: ${{ steps.generate.outputs.date_slug }}
+        HEALTH_SCORE: ${{ steps.generate.outputs.health_score }}
+        GRADE: ${{ steps.generate.outputs.grade }}
+        NEW_OPPS: ${{ steps.generate.outputs.new_opps }}
+        STALE: ${{ steps.generate.outputs.stale_recent }}
+        OLD_ACTIVE: ${{ steps.generate.outputs.old_active }}
+        ACTIVE_OPEN: ${{ steps.generate.outputs.active_open }}
+        CLEARED: ${{ steps.generate.outputs.activity_cleared }}
+      run: |
+        URL="https://graehamwatts.github.io/online-content/dashboards/health/${DATE_SLUG}-health.html"
+        echo "url=${URL}" >> $GITHUB_OUTPUT
+        python3 - << 'PYEOF'
+        import os
+        date_slug  = os.environ.get("DATE_SLUG", "")
+        score      = os.environ.get("HEALTH_SCORE", "")
+        grade      = os.environ.get("GRADE", "")
+        new_opps   = os.environ.get("NEW_OPPS", "")
+        stale      = int(os.environ.get("STALE", "0") or "0")
+        old_active = os.environ.get("OLD_ACTIVE", "")
+        active     = os.environ.get("ACTIVE_OPEN", "")
+        cleared    = os.environ.get("CLEARED", "")
+        url        = f"https://graehamwatts.github.io/online-content/dashboards/health/{date_slug}-health.html"
+        lines = [
+            f"CRM Health Report — Week of {date_slug}",
+            "",
+            f"Score: {score}/100  (Grade {grade})",
+            "",
+            "KEY NUMBERS",
+            f"  New pipeline entries this week:  {new_opps}",
+            f"  Active open deals:                {active}",
+            f"  Leads needing follow-up NOW:      {stale}  (contact-validated)",
+            f"  Leads 90+ days old (cleanup):     {old_active}",
+            f"  Leads cleared by activity check:  {cleared} (were contacted — opp not updated)",
+        ]
+        if stale > 0:
+            lines += ["", f"ACTION REQUIRED: {stale} lead(s) not contacted in 14+ days. See dashboard."]
+        lines += [
+            "",
+            "View full dashboard:",
+            url,
+            "",
+            "---",
+            "Graeham Watts · Powered by The Boyenga Team at Compass",
+            "This report runs automatically every Monday morning.",
+        ]
+        with open("/tmp/email_body.txt", "w") as f:
+            f.write("\n".join(lines))
+        print("Email body written.")
+        PYEOF
+    - name: Send email to Graeham
+      uses: dawidd6/action-send-mail@4226df7daafa6fc901a43789c49bf7ab309066e7
+      with:
+        server_address: smtp.gmail.com
+        server_port: 465
+        secure: true
+        username: ${{ secrets.GMAIL_USERNAME }}
+        password: ${{ secrets.GMAIL_APP_PASSWORD }}
+        subject: CRM Health — ${{ steps.generate.outputs.date_slug }} | Score ${{ steps.generate.outputs.health_score }} (${{ steps.generate.outputs.grade
+          }})
+        to: graehamwatts@gmail.com
+        from: CRM Health Bot <${{ secrets.GMAIL_USERNAME }}>
+        body: file:///tmp/email_body.txt
+    - name: Send email to Adrian
+      uses: dawidd6/action-send-mail@4226df7daafa6fc901a43789c49bf7ab309066e7
+      with:
+        server_address: smtp.gmail.com
+        server_port: 465
+        secure: true
+        username: ${{ secrets.GMAIL_USERNAME }}
+        password: ${{ secrets.GMAIL_APP_PASSWORD }}
+        subject: CRM Health — ${{ steps.generate.outputs.date_slug }} | Score ${{ steps.generate.outputs.health_score }} (${{ steps.generate.outputs.grade
+          }})
+        to: graehamwattsclientcare@gmail.com
+        from: CRM Health Bot <${{ secrets.GMAIL_USERNAME }}>
+        body: file:///tmp/email_body.txt
+    - name: Report result
+      run: |
+        echo "::notice title=CRM Health::Score ${WORKFLOW_VALUE_1} \
+        (Grade ${WORKFLOW_VALUE_2}) | \
+        New: ${WORKFLOW_VALUE_3} | \
+        Stale: ${WORKFLOW_VALUE_4} | \
+        ${WORKFLOW_VALUE_5}"
+        echo "Dashboard: ${WORKFLOW_VALUE_6}"
+      env:
+        WORKFLOW_VALUE_1: ${{ steps.generate.outputs.health_score }}
+        WORKFLOW_VALUE_2: ${{ steps.generate.outputs.grade }}
+        WORKFLOW_VALUE_3: ${{ steps.generate.outputs.new_opps }}
+        WORKFLOW_VALUE_4: ${{ steps.generate.outputs.stale_recent }}
+        WORKFLOW_VALUE_5: ${{ steps.email.outputs.url }}
+        WORKFLOW_VALUE_6: ${{ steps.email.outputs.url }}
+    - name: Notify on failure
+      if: failure()
+      run: |
+        echo "::error::CRM Health Report failed. Check GHL_PIT, GMAIL_USERNAME, GMAIL_APP_PASSWORD secrets."
+    environment: service-automation
+    permissions:
+      contents: write
+'on':
+  schedule:
+  - cron: 0 15 * * 1
+  workflow_dispatch:
+    inputs:
+      week_start_override:
+        description: Override week start date (YYYY-MM-DD, Monday; blank = auto)
+        required: false
+        default: ''
+permissions:
+  contents: read
