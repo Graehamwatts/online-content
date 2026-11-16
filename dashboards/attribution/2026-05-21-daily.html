@@ -73,13 +73,13 @@
         GHL Private Integration Token
         <span class="badge red">Blocking</span>
       </div>
-      <div class="step">The token file at <code>Online Content/.claude-credentials/ghl-pit.txt</code> still has a placeholder value. The GitHub Action also needs it as a repo secret.</div>
+      <div class="step">The token file at <code>Use the approved private credential workflow; never publish credential locations or values.</code> still has a placeholder value. The GitHub Action also needs it as a repo secret.</div>
       <ol>
         <li>Go to <strong>GoHighLevel &rarr; Settings (gear icon) &rarr; Private Integrations</strong></li>
         <li>Create new integration &rarr; name it <strong>"Claude Attribution"</strong></li>
         <li>Grant <strong>READ</strong> scopes for Contacts and Opportunities</li>
         <li>Copy the <code>pit-...</code> token</li>
-        <li>Replace line 1 of <code>.claude-credentials/ghl-pit.txt</code> with the real token</li>
+        <li>Replace line 1 of <code>Use the approved private credential workflow; never publish credential locations or values.</code> with the real token</li>
         <li>In GitHub: <strong>online-content repo &rarr; Settings &rarr; Secrets and variables &rarr; Actions &rarr; New repository secret</strong> &rarr; Name: <code>GHL_PIT</code>, Value: the same token</li>
         <li>Add a second secret: Name: <code>GHL_LOCATION_ID</code>, Value: <code>6wuU3haUH7uNeT20E3UZ</code></li>
       </ol>
@@ -91,7 +91,7 @@
         GitHub Action Workflow (needs <code>workflow</code> scope on PAT)
         <span class="badge">One-time</span>
       </div>
-      <div class="step">The workflow file is built and tested &mdash; it just can&rsquo;t be deployed automatically because the PAT in <code>Scheduled/property-os-daily-backup/github-pat.txt</code> has <code>repo</code> scope but not <code>workflow</code> scope. Two options:</div>
+      <div class="step">The workflow file is built and tested &mdash; it just can&rsquo;t be deployed automatically because the PAT in <code>Use the approved private credential workflow; never publish credential locations or values.</code> has <code>repo</code> scope but not <code>workflow</code> scope. Two options:</div>
       <ol>
         <li><strong>Option A (easiest):</strong> In GitHub, go to <strong>online-content repo &rarr; .github/scripts &rarr; Add file</strong>, then copy the content from <code>runbooks/daily-attribution-brief-workflow.yml</code> into a new file at <code>.github/workflows/daily-attribution-brief.yml</code></li>
         <li><strong>Option B:</strong> Regenerate the PAT at github.com/settings/tokens with <code>repo</code> + <code>workflow</code> scopes and save it back to the file</li>

@@ -145,7 +145,7 @@ def send(subject, text, html):
     if not rcpts:
         rcpts = ["graehamwatts@gmail.com", "graehamwattsvideo@gmail.com"]
     if os.environ.get("DRY_RUN") == "1":
-        print(f"[DRY_RUN] would send to {rcpts}\n  SUBJECT: {subject}\n--- text ---\n{text}", flush=True)
+        print(f"[DRY_RUN] would send to {len(rcpts)} recipients\n  SUBJECT: {subject}\n--- text ---\n{text}", flush=True)
         return rcpts
     if not (user and pw):
         print("::error::GMAIL_USERNAME/GMAIL_APP_PASSWORD not set — cannot send"); sys.exit(1)
@@ -159,7 +159,7 @@ def send(subject, text, html):
             if mode == "ssl":
                 s = smtplib.SMTP_SSL(host, port, context=ctx, timeout=30)
             s.login(user, pw); s.sendmail(user, rcpts, msg.as_string()); s.quit()
-            print(f"Sent to {', '.join(rcpts)} via {host}:{port}", flush=True)
+            print(f"Sent to {len(rcpts)} recipients via {host}:{port}", flush=True)
             return rcpts
         except Exception as e:
             print(f"  {host}:{port} failed: {e}", flush=True)
@@ -170,7 +170,7 @@ def write_marker(drop, rcpts):
     os.makedirs(STATE_DIR, exist_ok=True)
     rec = {"drop": drop.isoformat(), "status": "reminder_sent",
            "sent_at": datetime.datetime.utcnow().isoformat() + "Z",
-           "recipients": rcpts, "source": os.environ.get("MODE", "remind"),
+           "recipient_count": len(rcpts), "source": os.environ.get("MODE", "remind"),
            "run_url": os.environ.get("GITHUB_RUN_URL", "")}
     with open(marker_path(drop), "w", encoding="utf-8") as f:
         json.dump(rec, f, indent=2)

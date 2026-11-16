@@ -47,7 +47,7 @@
       I checked the repo: the file <code>.github/workflows/daily-attribution-brief.yml</code> exists in the local checkout but has <strong>never been pushed to GitHub</strong>. The local <code>main</code> branch is 13 commits ahead of <code>origin/main</code>, and the entire <code>.github/workflows/</code> directory is still untracked.
     </div>
     <div class="card">
-      I then tried to PUT the workflow file directly via the GitHub Contents API. That call returned <code>404 Not Found</code> as well — which is GitHub's response when the authenticating PAT lacks the <code>workflow</code> scope. The token at <code>Online Content/github-token.txt</code> only carries the <code>repo</code> scope (confirmed via <code>x-oauth-scopes</code> header on <code>GET /user</code>).
+      I then tried to PUT the workflow file directly via the GitHub Contents API. That call returned <code>404 Not Found</code> as well — which is GitHub's response when the authenticating PAT lacks the <code>workflow</code> scope. The token at <code>Use the approved private credential workflow; never publish credential locations or values.</code> only carries the <code>repo</code> scope (confirmed via <code>x-oauth-scopes</code> header on <code>GET /user</code>).
     </div>
   </div>
 
@@ -76,13 +76,13 @@
   <div class="section">
     <h2>Fix this once — three options, pick one</h2>
     <div class="card">
-      <strong>Option A (recommended, 2 min):</strong> Generate a new classic PAT at <code>github.com/settings/tokens</code> with both <code>repo</code> AND <code>workflow</code> scopes. Replace the contents of <code>C:/Users/Graeham Watts/Documents/Claude/Online Content/github-token.txt</code>. From now on, the sandbox can register workflows and trigger dispatches without you opening a terminal.
+      <strong>Option A (recommended, 2 min):</strong> Generate a new classic PAT at <code>github.com/settings/tokens</code> with both <code>repo</code> AND <code>workflow</code> scopes. Replace the contents of <code>Use the approved private credential workflow; never publish credential locations or values.</code>. From now on, the sandbox can register workflows and trigger dispatches without you opening a terminal.
     </div>
     <div class="card">
       <strong>Option B (1 min, manual today):</strong> Open a terminal in the Online Content checkout, then: <code>git add .github/workflows/ && git commit -m "register workflows" && git push</code>. That alone will land the workflow on GitHub. Next 7:15 AM run will execute on the scheduled cron.
     </div>
     <div class="card">
-      <strong>Option C (longer-term):</strong> Migrate this skill to direct sandbox execution. GHL is now reachable from the sandbox (confirmed: <code>services.leadconnectorhq.com</code> returns a real 401 with valid TLS in ~260 ms). If you stash the PIT in a mounted folder — e.g. <code>Online Content/.claude-credentials/ghl-pit.txt</code> (already gitignored) — I can run the pull and render the brief without GitHub Actions at all. Faster, fewer moving parts.
+      <strong>Option C (longer-term):</strong> Migrate this skill to direct sandbox execution. GHL is now reachable from the sandbox (confirmed: <code>services.leadconnectorhq.com</code> returns a real 401 with valid TLS in ~260 ms). If you stash the PIT in a mounted folder — e.g. <code>Use the approved private credential workflow; never publish credential locations or values.</code> (already gitignored) — I can run the pull and render the brief without GitHub Actions at all. Faster, fewer moving parts.
     </div>
   </div>
 

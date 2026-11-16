@@ -1,28 +1,34 @@
 name: Run CRM Health Now
-
-on:
-  workflow_dispatch: {}
-
 jobs:
   run:
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v4
-      - uses: actions/setup-python@v5
-        with:
-          python-version: '3.12'
-      - name: Install deps
-        run: pip install requests
-      - name: Run health check
-        env:
-          GHL_PIT:          ${{ secrets.GHL_PIT }}
-          GHL_LOCATION_ID:  ${{ secrets.GHL_LOCATION_ID }}
-          PYTHONUNBUFFERED: "1"
-        run: python3 scripts/weekly_crm_health.py
-      - name: Commit dashboard output
-        run: |
-          git config user.email "graehamwatts@gmail.com"
-          git config user.name  "Graeham Watts"
-          git add dashboards/health/
-          git diff --staged --quiet || git commit -m "Dashboard update $(date -u +%Y-%m-%d)"
-          git push
+    - uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262
+      with:
+        persist-credentials: true
+    - uses: actions/setup-python@a26af69be951a213d495a4c3e4e4022e16d87065
+      with:
+        python-version: '3.12'
+    - name: Install deps
+      run: pip install requests
+    - name: Run health check
+      env:
+        GHL_PIT: ${{ secrets.GHL_PIT }}
+        GHL_LOCATION_ID: ${{ secrets.GHL_LOCATION_ID }}
+        PYTHONUNBUFFERED: '1'
+      run: python3 scripts/weekly_crm_health.py
+    - name: Commit dashboard output
+      run: |
+        git config user.email "graehamwatts@gmail.com"
+        git config user.name  "Graeham Watts"
+        git add dashboards/health/
+        git diff --staged --quiet || git commit -m "Dashboard update $(date -u +%Y-%m-%d)"
+        git push
+    environment: service-automation
+    permissions:
+      contents: write
+    if: github.ref == 'refs/heads/main' && (github.event_name == 'schedule' || (github.actor == 'Graehamwatts' && github.triggering_actor == 'Graehamwatts'))
+'on':
+  workflow_dispatch: {}
+permissions:
+  contents: read

@@ -228,7 +228,7 @@ def _send(status, today_str, summary, html):
             else:
                 s = smtplib.SMTP_SSL(host, port, context=ctx, timeout=30)
             s.login(user, pw); s.sendmail(user, rcpts, msg.as_string()); s.quit()
-            print(f"Alert emailed to {', '.join(rcpts)} via {host}:{port}", flush=True)
+            print(f"Alert emailed to {len(rcpts)} recipients via {host}:{port}", flush=True)
             return
         except Exception as e:  # noqa: BLE001
             print(f"  {host}:{port} failed: {e}", flush=True)

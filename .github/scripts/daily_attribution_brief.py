@@ -375,8 +375,7 @@ def main():
     elif len(leads) == 0:
         subject = f"Zero leads yesterday — here's what fired the day before ({date_str})"
     else:
-        top_src = max(source_breakdown.items(), key=lambda x: x[1])[0]
-        subject = f"{subject_prefix} — {len(leads)} leads, top: {top_src} ({date_str})"
+        subject = f"{subject_prefix} — {len(leads)} leads ({date_str})"
 
     # expose outputs to next steps
     gh_out = os.environ.get("GITHUB_OUTPUT")

@@ -86,7 +86,7 @@
         <tr>
           <td>Search mounted folders for PIT</td>
           <td class="bad">Not found</td>
-          <td>No <code>ghl-pit.txt</code> anywhere under <code>Online Content/</code>, <code>Scheduled/</code>, or uploads.</td>
+          <td>No <code>Use the approved private credential workflow; never publish credential locations or values.</code> anywhere under <code>Online Content/</code>, <code>Scheduled/</code>, or uploads.</td>
         </tr>
       </tbody>
     </table>
@@ -104,14 +104,14 @@
 
     <div class="recommend">
       <strong>★ Recommended (60 seconds) — Option C, sandbox direct:</strong>
-      Create a file at <code>C:\Users\Graeham Watts\Documents\Claude\Online Content\.claude-credentials\ghl-pit.txt</code> with:<br><br>
+      Create a file at <code>Use the approved private credential workflow; never publish credential locations or values.</code> with:<br><br>
       Line 1: your PIT (starts <code>pit-</code>)<br>
       Line 2: <code>6wuU3haUH7uNeT20E3UZ</code><br><br>
       That path is already in <code>.gitignore</code> so the secret never touches the repo. I'll auto-detect it tomorrow and skip GitHub Actions entirely. Why this is best: cuts two systems out of the dependency chain. Faster, simpler, fewer failure modes.
     </div>
 
     <div class="card amber">
-      <strong>Option A (2 minutes) — fix the PAT:</strong> Go to <code>github.com/settings/tokens</code>, regenerate the classic token with both <code>repo</code> AND <code>workflow</code> scopes checked. Replace contents of <code>Online Content/github-token.txt</code> (same path, one line, no trailing newline). Then I can push the workflow myself. <em>But</em> you'd still need to set Actions Secrets (Option D below) for it to actually pull data.
+      <strong>Option A (2 minutes) — fix the PAT:</strong> Go to <code>github.com/settings/tokens</code>, regenerate the classic token with both <code>repo</code> AND <code>workflow</code> scopes checked. Replace contents of <code>Use the approved private credential workflow; never publish credential locations or values.</code> (same path, one line, no trailing newline). Then I can push the workflow myself. <em>But</em> you'd still need to set Actions Secrets (Option D below) for it to actually pull data.
     </div>
 
     <div class="card amber">

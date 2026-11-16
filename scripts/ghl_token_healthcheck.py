@@ -31,15 +31,15 @@ if user and pw and rcpts:
             "<p>Your daily Command Center and other GHL reports can't pull data until this is fixed. "
             "The token was almost certainly rotated in GHL without updating the saved copy.</p>"
             "<p><b>2-minute fix:</b> GoHighLevel → Settings → Private Integrations → <b>Claude Audit Agent</b> → "
-            "<b>Rotate and expire this token now</b> → copy the new <code>pit-…</code> token, then tell Claude "
-            "\"here's the new GHL token\" (or paste it into Documents\Claude\Skills\ghl-pit.txt line 1) and ask Claude to update the GitHub secret.</p>")
+            "<b>Review the integration credential</b> and update it through the approved private "
+            "credential workflow. Never paste it into chat or public files.</p>")
     msg = MIMEText(body, "html"); msg["Subject"] = f"⚠️ GHL token DOWN (HTTP {code}) — reports paused until fixed"
     msg["From"] = user; msg["To"] = ", ".join(rcpts)
     ctx = ssl.create_default_context()
     try:
         s = smtplib.SMTP("smtp.gmail.com", 587, timeout=30); s.starttls(context=ctx)
         s.login(user, pw); s.sendmail(user, rcpts, msg.as_string()); s.quit()
-        print(f"Alert emailed to {', '.join(rcpts)}")
+        print(f"Alert emailed to {len(rcpts)} recipients")
     except Exception as e:
         print(f"::error::token down AND alert email failed: {e}")
 raise SystemExit(1)

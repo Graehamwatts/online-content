@@ -1,63 +1,67 @@
 name: Friday Attribution Review
-
-on:
-  schedule:
-    # Fridays 16:00 PT (PDT = UTC-7) -> 23:00 UTC. During PST (UTC-8) this
-    # lands at 3pm PT instead of 4pm; close enough for a weekly review.
-    - cron: '0 23 * * 5'
-  workflow_dispatch:
-    inputs:
-      dry_run:
-        description: 'Skip sending email (still commits the dashboard)'
-        type: boolean
-        default: false
-
 jobs:
   weekly-attribution:
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v4
-        with:
-          token: ${{ secrets.GITHUB_TOKEN }}
-
-      - uses: actions/setup-python@v5
-        with:
-          python-version: '3.12'
-
-      - name: Install dependencies
-        run: pip install requests pytz
-
-      - name: Generate Weekly Attribution Review
-        id: generate
-        env:
-          GHL_PIT:            ${{ secrets.GHL_PIT }}
-          GHL_LOCATION_ID:    ${{ secrets.GHL_LOCATION_ID }}
-          GMAIL_USERNAME:     ${{ secrets.GMAIL_USERNAME }}
-          GMAIL_APP_PASSWORD: ${{ secrets.GMAIL_APP_PASSWORD }}
-          BRIEF_RECIPIENTS:   ${{ secrets.BRIEF_RECIPIENTS }}
-          DRY_RUN:            ${{ github.event.inputs.dry_run == 'true' && '1' || '' }}
-          PYTHONUNBUFFERED:   "1"
-        run: python3 scripts/friday_attribution_review.py
-
-      - name: Commit dashboard
-        run: |
-          git config user.email "graehamwatts@gmail.com"
-          git config user.name  "Graeham Watts"
-          git remote set-url origin \
-            https://x-access-token:${{ secrets.GITHUB_TOKEN }}@github.com/Graehamwatts/online-content.git
-          git add dashboards/attribution/
-          git diff --staged --quiet || git commit -m \
-            "Weekly Attribution Review: ${{ steps.generate.outputs.week_label }} (${{ steps.generate.outputs.total_leads }} leads, ${{ steps.generate.outputs.total_wins }} wins)"
-          git push
-
-      - name: Report result
-        run: |
-          echo "::notice title=Weekly Attribution::Week ${{ steps.generate.outputs.week_label }} | \
-          Leads: ${{ steps.generate.outputs.total_leads }} | \
-          Wins: ${{ steps.generate.outputs.total_wins }} | \
-          Top source: ${{ steps.generate.outputs.top_source }}"
-
-      - name: Notify on failure
-        if: failure()
-        run: |
-          echo "::error::Friday Attribution Review failed. Check GHL_PIT, GMAIL_USERNAME, GMAIL_APP_PASSWORD, BRIEF_RECIPIENTS secrets."
+    - uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262
+      with:
+        token: ${{ secrets.GITHUB_TOKEN }}
+        persist-credentials: true
+    - uses: actions/setup-python@a26af69be951a213d495a4c3e4e4022e16d87065
+      with:
+        python-version: '3.12'
+    - name: Install dependencies
+      run: pip install requests pytz
+    - name: Generate Weekly Attribution Review
+      id: generate
+      env:
+        GHL_PIT: ${{ secrets.GHL_PIT }}
+        GHL_LOCATION_ID: ${{ secrets.GHL_LOCATION_ID }}
+        GMAIL_USERNAME: ${{ secrets.GMAIL_USERNAME }}
+        GMAIL_APP_PASSWORD: ${{ secrets.GMAIL_APP_PASSWORD }}
+        BRIEF_RECIPIENTS: ${{ secrets.BRIEF_RECIPIENTS }}
+        DRY_RUN: ${{ github.event.inputs.dry_run == 'true' && '1' || '' }}
+        PYTHONUNBUFFERED: '1'
+      run: python3 scripts/friday_attribution_review.py
+    - name: Commit dashboard
+      run: |
+        git config user.email "graehamwatts@gmail.com"
+        git config user.name  "Graeham Watts"
+        git add dashboards/attribution/
+        git diff --staged --quiet || git commit -m \
+          "Weekly Attribution Review: ${WORKFLOW_VALUE_1} (${WORKFLOW_VALUE_2} leads, ${WORKFLOW_VALUE_3} wins)"
+        git push
+      env:
+        WORKFLOW_VALUE_1: ${{ steps.generate.outputs.week_label }}
+        WORKFLOW_VALUE_2: ${{ steps.generate.outputs.total_leads }}
+        WORKFLOW_VALUE_3: ${{ steps.generate.outputs.total_wins }}
+    - name: Report result
+      run: |
+        echo "::notice title=Weekly Attribution::Week ${WORKFLOW_VALUE_1} | \
+        Leads: ${WORKFLOW_VALUE_2} | \
+        Wins: ${WORKFLOW_VALUE_3} | \
+        Top source: ${WORKFLOW_VALUE_4}"
+      env:
+        WORKFLOW_VALUE_1: ${{ steps.generate.outputs.week_label }}
+        WORKFLOW_VALUE_2: ${{ steps.generate.outputs.total_leads }}
+        WORKFLOW_VALUE_3: ${{ steps.generate.outputs.total_wins }}
+        WORKFLOW_VALUE_4: ${{ steps.generate.outputs.top_source }}
+    - name: Notify on failure
+      if: failure()
+      run: |
+        echo "::error::Friday Attribution Review failed. Check GHL_PIT, GMAIL_USERNAME, GMAIL_APP_PASSWORD, BRIEF_RECIPIENTS secrets."
+    environment: ${{ github.event_name == 'schedule' && 'service-automation-scheduled' || 'service-automation' }}
+    permissions:
+      contents: write
+    if: github.ref == 'refs/heads/main' && (github.event_name == 'schedule' || (github.actor == 'Graehamwatts' && github.triggering_actor == 'Graehamwatts'))
+'on':
+  schedule:
+  - cron: 0 23 * * 5
+  workflow_dispatch:
+    inputs:
+      dry_run:
+        description: Skip sending email (still commits the dashboard)
+        type: boolean
+        default: false
+permissions:
+  contents: read
