@@ -15,7 +15,7 @@ Degrades gracefully:
   - <3 valid after top-up    -> falls back to the deterministic REMINDER (handled by the
                                 reminder script); here we exit nonzero so the workflow alerts.
 
-Env: SAKANA_API_KEY (prod) | local key file fallback for testing.
+Env: SAKANA_API_KEY supplied by the approved runtime; no local key-file fallback.
      SAKANA_BASE_URL (default https://api.sakana.ai/v1), SAKANA_MODEL (default 'fugu').
      GMAIL_USERNAME, GMAIL_APP_PASSWORD, POSTCARD_RECIPIENTS.
      MODE=generate (default) | scheduled ; DRY_RUN=1 ; FORCE_TARGET=YYYY-MM-DD ;
@@ -83,16 +83,8 @@ def feasibility(libs, cons):
 
 
 def resolve_key():
-    k = os.environ.get("SAKANA_API_KEY", "").strip()
-    if k:
-        return k
-    # local-testing fallback only (never committed; lives outside the repos)
-    for p in [r"C:\Users\Graeham Watts\Documents\Claude\fugu\sakana-api-key.txt"]:
-        if os.path.exists(p):
-            v = open(p, encoding="utf-8").read().strip()
-            if v and "PASTE_YOUR" not in v:
-                return v
-    return None
+    # Credentials are supplied by the approved runtime, never local-file fallbacks.
+    return os.environ.get("SAKANA_API_KEY", "").strip() or None
 
 
 def sakana_chat(prompt, model, timeout=180):
@@ -232,6 +224,13 @@ def cta_render(dest_id, libs, drop, letter):
     return {"type": "sms", "value": f"SMSTO:{libs['phone']}:{kw}", "label": f'Text "{kw}" to {libs["phone"]}'}
 
 
+def write_sent_marker(path, drop, recipient_count, option_ids):
+    """Publish delivery metadata only; recipient addresses are never accepted."""
+    with open(path, "w", encoding="utf-8") as output:
+        json.dump({"drop": drop, "sent_at": datetime.datetime.utcnow().isoformat() + "Z",
+                   "recipient_count": recipient_count, "option_ids": option_ids}, output, indent=2)
+
+
 def main():
     today = la_today()
     drop = drop_for_preview(today)
@@ -319,10 +318,8 @@ def main():
         print("::error::SMTP failed — artifact kept, NO sent marker written"); sys.exit(1)
     # sent marker ONLY after SMTP success
     os.makedirs(os.path.join(DATA, "sent"), exist_ok=True)
-    with open(sent_marker, "w", encoding="utf-8") as f:
-        json.dump({"drop": drop_s, "sent_at": datetime.datetime.utcnow().isoformat() + "Z",
-                   "recipients": rcpts, "option_ids": [o["id"] for o in chosen]}, f, indent=2)
-    print(f"Sent {len(chosen)} options for {drop_s} to {rcpts}", flush=True)
+    write_sent_marker(sent_marker, drop_s, len(rcpts), [o["id"] for o in chosen])
+    print(f"Sent {len(chosen)} options for {drop_s} to {len(rcpts)} recipients", flush=True)
 
 
 if __name__ == "__main__":

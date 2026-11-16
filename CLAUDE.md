@@ -40,7 +40,7 @@ For a full pass on a specific piece of text or file (55-pattern scan, a 0-100 AI
 
 **Standing rule (Graeham, 2026-06-13):** every recurring report / brief / reminder task must **actually send** its email so it lands in the inbox — do NOT leave Gmail drafts. Default recipients for internal reports are **Graeham (`graehamwatts@gmail.com`) + Adrian (`graehamwattsclientcare@gmail.com`)**, plus any task-specific recipients (John, Peter, Ellie, Maria) as TO/CC per that task's SKILL.md. This overrides any "draft only" wording inside an individual SKILL.md.
 
-- **Daily Attribution Brief is RETIRED (2026-08-23).** It never actually worked (YAML bug in the never-successfully-deployed `daily-attribution-brief.yml` — confirmed in `Online Content\DAILY-ATTRIBUTION-BRIEF-BLOCKER.md`, 2026-07-13) and was redundant with `morning-command-center.yml`, which covered the same GHL data daily. Note: `morning-command-center.yml` was itself archived 2026-07-29 and hasn't run since, so there is currently no daily attribution automation running — if that's wanted again, fix/revive `morning-command-center.yml` (proven pattern), don't rebuild the daily-brief path.
+- **Daily Attribution Brief and morning-command-center are retired.** Their old workflow templates are neutralized historical notices. Do not copy or revive them; any replacement needs a fresh security review.
 - **Exception — client-facing content stays review-first:** anything that goes to an actual client (CMA client section, listing emails) is still SENT to Graeham + Adrian for review, who forward to the client. "Send not draft" means internal reports reach the inbox; it does NOT mean auto-emailing clients.
 
 ## ⚡ 2026-06-09 architecture update — ONE skills folder, junctions everywhere
@@ -52,13 +52,13 @@ There is now exactly ONE physical copy of the skills toolkit: `Documents\Skills 
 
 **Consequences:** never "sync" skills by hand-copying folders; the hook mirrors the cache automatically at session end. If a zombie skill (video-script-creation-engine, social-media-analyzer, html-email, video-prompt-builder, github-skill-sync, graeham-*) reappears in the cache, run `Documents\Skills LLMS\Claude\Scheduled\FINAL-FIX-zombie-skills.ps1` — the quarterly-skills-audit scheduled task also checks for this. The auto-push hook has a WIPE GUARD: a mass deletion (>20 files) in the Skills repo is restored from git instead of being committed.
 
-**Auto-push on session end:** a Claude Code `SessionEnd` hook (`~/.claude/hooks/auto-push-repos.ps1`, registered in `~/.claude/settings.json`) auto-commits and pushes BOTH the Skills and Online Content repos whenever a session ends, with the brand tripwire (02015066 block) enforced before any Skills push. Log: `~/.claude/auto-push.log`. Sessions no longer need to push manually — but pushing manually is still fine.
+**Publishing:** push a reviewed branch using the authenticated Git helper. No session hook is authority to publish workflow or script edits. Existing dashboard/state publishers remain direct-push automation until the separately reviewed cutover.
 
 **Scheduled tasks migrated to Claude Code (2026-06-09):** the 14 real recurring tasks were registered in Claude Code's scheduler (`~/.claude/scheduled-tasks/`, visible in the app sidebar). Each registered task is a thin wrapper that reads its canonical SKILL.md from `Documents\Skills LLMS\Claude\Scheduled\<task>\SKILL.md` — keep editing those files as the source of truth. The Cowork-side copies of these tasks must be toggled OFF in Cowork's UI to avoid double-fires. `daily-attribution-brief` was NOT registered — it self-runs as a GitHub Actions cron on the online-content repo.
 
 ## Credentials and publishing
 
-Credentials belong in the approved private credential store. Never print or copy them into this public repository, logs, prompts or Git remote URLs. Use an authenticated Git credential helper. Workflow edits require a reviewed pull request. Scheduled automation uses protected environment secrets.
+Credentials belong in the approved private credential store. Never print or copy them into this public repository, logs, prompts or Git remote URLs. Use an authenticated Git credential helper. Workflow edits require a reviewed pull request. After the separate secret cutover, scheduled automation will use environment secrets. Until then, the existing repository secrets remain in place; see .github/SECURITY-CUTOVER.md.
 
 ## Deprecated skills — DO NOT USE
 
@@ -81,17 +81,15 @@ Cowork's server can re-register these names in the plugin cache even after clean
 
 Workspace root: `Documents/Skills LLMS/Claude/`. Contains clones of the `skills` and `online-content` repos (run `ls` for current structure — skill count and subfolder names drift, don't trust a hardcoded list here), plus Cowork-managed dirs (`Artifacts/`, `Scheduled/`, `Projects/`, `Content/` — do not touch). The Obsidian vault is a SIBLING at `C:\Users\Graeham Watts\Documents\Obsidian\`, not nested here — see the `obsidian-vault` skill for its internal layout.
 
-## Two repos, one token
+## Repository placement
 
 
 **Critical placement rule:** skills go to `Skills/`, published HTML content goes to `Online Content/`. Never put emails/newsletters/dashboards in `Skills/`. Skills are tools that PRODUCE online content; the outputs go to the other repo.
 
-(A third repo, **`Graehamwatts/property-os`**, holds the Obsidian vault backup and uses its own separate token — see the token map at the top.)
 
 ## Obsidian vault & its GitHub push
 
 - **Vault (local):** `C:\Users\Graeham Watts\Documents\Obsidian\` — a SIBLING of `Documents\Skills LLMS\Claude\`, **NOT** inside it. Verified as the real vault root (has the `.obsidian` config). Top folders: `01 Team & Agents`, `02 Daily Notes`, `03 Listings`, `04 Clients`, `05 Marketing`, `AI Library`, `Content Intelligence`, `Instagram Saves`, `PropIQ` (renamed from `Prop OS` 2026-06-09), `PropertyCast`, `_Templates`, `rules`. Plain markdown — no token needed to read/write locally.
-- **Vault → GitHub:** the vault is pushed to the **`Graehamwatts/property-os`** repo using the separate **`Obsidian Vault`** token (see token map up top) — via the `property-os-daily-backup` scheduled task (nightly ~11:09 PM) and the `property-os-sync` skill. This is a DIFFERENT token from the shared skills/content one.
 - **Rule:** never commit either Obsidian folder into a repo. If a token ever lands in a synced/backed-up folder, rotate it.
 
 ## Mandatory session protocol
@@ -110,7 +108,7 @@ This is non-negotiable. Skipping the pull causes stale-workspace bugs (the kind 
 
 Use the authenticated Git credential helper to push a reviewed branch and open a pull request.
 
-There is no auto-push. Every change requires an explicit push before the session ends.
+Check the remote branch before handoff; follow the current reviewed publishing procedure. This document does not configure or authorize a session-end push hook.
 
 ## Working with git from Cowork sessions
 

@@ -21,6 +21,7 @@ jobs:
     environment: service-automation
     permissions:
       contents: read
+    if: github.ref == 'refs/heads/main' && (github.event_name == 'schedule' || (github.actor == 'Graehamwatts' && github.triggering_actor == 'Graehamwatts'))
 'on':
   workflow_dispatch:
     inputs:

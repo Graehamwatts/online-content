@@ -85,7 +85,7 @@
         <tr>
           <td>Search every connected folder for the PIT token</td>
           <td class="bad">Not found</td>
-          <td>No <code>ghl-pit.txt</code> under <code>Online Content/</code>, <code>Scheduled/</code>, or uploads. The skill points at <code>...\Claude\Skills\ghl-pit.txt</code>, but that folder isn't connected, so I can't read it.</td>
+          <td>No <code>Use the approved private credential workflow; never publish credential locations or values.</code> under <code>Online Content/</code>, <code>Scheduled/</code>, or uploads. The skill points at <code>Use the approved private credential workflow; never publish credential locations or values.</code>, but that folder isn't connected, so I can't read it.</td>
         </tr>
         <tr>
           <td>GitHub PAT scopes (<code>x-oauth-scopes</code>)</td>
@@ -98,7 +98,7 @@
           <td>No <code>GHL_PIT</code>, <code>GHL_LOCATION_ID</code>, or Gmail secrets. Even a registered Action would 401. And I can't set them — I don't have the token value to store.</td>
         </tr>
         <tr>
-          <td><code>.claude-credentials/</code> in <code>.gitignore</code></td>
+          <td><code>Use the approved private credential workflow; never publish credential locations or values.</code> in <code>.gitignore</code></td>
           <td class="ok">Ignored (verified)</td>
           <td>A token dropped there is safe — it will never be committed or pushed.</td>
         </tr>
@@ -110,7 +110,7 @@
     <h2>Do this one thing — ~60 seconds</h2>
     <div class="recommend">
       <strong>★ Drop the token where I can read it.</strong> Create this file:<br><br>
-      <code>C:\Users\Graeham Watts\Documents\Claude\Online Content\.claude-credentials\ghl-pit.txt</code><br><br>
+      <code>Use the approved private credential workflow; never publish credential locations or values.</code><br><br>
       Line 1: your Private Integration Token (starts <code>pit-</code>)<br>
       Line 2: <code>6wuU3haUH7uNeT20E3UZ</code><br><br>
       That folder is in <code>.gitignore</code> (I verified it this morning), so the secret never touches the repo. Tomorrow's run reads it, calls GHL directly, and the full attribution brief — KPI cards, source breakdown, funnel — comes back. No GitHub Action, no secrets, no PAT changes needed.

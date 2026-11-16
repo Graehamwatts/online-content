@@ -1,32 +1,61 @@
-# Service automation hardening cutover
+# Automation environment design and staged secret cutover
 
-Prepared 16 November 2026. Merge only after independent second-family review.
+Updated 16 November 2026 after Gemini review. This PR can merge after re-review
+without changing existing dashboard/state publication or moving secrets.
 
-All service jobs request the `service-automation` environment. Configure it with
-Graehamwatts approval, no self-approval, no admin bypass and only main allowed.
-Approval is required on scheduled runs too; an owner must approve each run.
+## Environment selection in this PR
 
-**The environment declaration alone does not contain repository secrets.**
-Existing repository secrets remain available to workflows that omit the environment.
-Using the private credential store, populate the environment with the seven existing
-service secret names, validate availability without printing values, then delete the
-repository-scoped equivalents in a coordinated cutover. GitHub cannot export secret
-values. Never copy them through logs, files, prompts or this PR.
+- `schedule` jobs use `service-automation-scheduled`: only the main branch is
+  deployable, no required reviewers, admin bypass disabled. This includes the
+  four active schedules and the already-disabled Monday CRM report if re-enabled.
+- `workflow_dispatch` jobs use `service-automation`: only main, reviewer
+  Graehamwatts, admin bypass disabled, **prevent_self_review=false**. Both actor
+  and triggering actor must be Graehamwatts. The owner can explicitly approve
+  their own dispatched run. This is a deliberate human confirmation gate, not
+  separation of duties; one owner cannot provide two independent identities.
+- Postcard concurrency includes event type. A manual run waiting for approval
+  cannot hold the scheduled-run lock. Scheduled runs still serialize together.
 
-After merging, change the default workflow token to read-only. Write access is explicit
-only for content-committing jobs and the postcard issue fallback. Checkout retains its
-credential only for jobs that push. Changing the default before merge breaks current
-Friday dashboard pushes.
+The manual self-review setting changes explicitly from true to false to remove
+the one-owner approval deadlock. Schedules no longer request human approval.
+Neither environment contains secrets yet. The main ruleset still blocks deletion
+and force pushes; CODEOWNERS review is **not enforced**. We do not claim that
+main-scoping alone makes unattended service secrets safe from repository writers.
 
-Main can safely reject force pushes and deletion now. Requiring PRs for all main writes
-also blocks scheduled dashboard/state commits and the PC's session-end auto-push.
-Migrate those publishers to reviewed PRs before requiring PRs and CODEOWNERS review.
-CODEOWNERS is advisory until that requirement is enabled.
+## Existing secrets remain a known risk
 
-Generation is deliberately paused: its existing output would publish recipient data.
-Only postcard state markers are staged. Restore generation only after a private-output
-change is reviewed. Credential repair and rotation require a separate secure operation.
-No live email, CRM or n8n requests are needed for the local security tests.
+Seven repository-scoped service secrets remain available to repository writers.
+They have not been read, copied, deleted or moved. The environment declarations
+alone cannot stop a writer adding an environment-free workflow on another branch.
+The separately coordinated migration is documented in
+[SECURITY-PUBLISHER-CUTOVER.md](SECURITY-PUBLISHER-CUTOVER.md). Its review and
+publication requirements are gates for **that later cutover**, not this fix PR.
 
-Run tests with Python 3 and PyYAML:
+`POSTCARD_RECIPIENTS` is referenced but absent from repository and both service
+environment secret lists. The postcard scripts currently fall back to the same
+built-in recipients as before. No new recipient choice is made by this PR. The
+owner must explicitly provision/confirm it through the later secure prompt; do
+not silently substitute BRIEF_RECIPIENTS or paste addresses/credentials into chat.
+
+Keep the default workflow token at its existing write setting until the secret
+plan is ready. Before this PR merges, the Friday publisher still inherits write
+permission. After merge all ten workflows declare permissions explicitly, which
+removes that particular token-default dependency; the coordinated cutover still
+must verify other publishers before changing the default. PR-review approval
+by the token remains disabled.
+
+## Public output and retired templates
+
+Reminder and generator markers store recipient counts, never recipient lists.
+Recipient addresses are not printed in service success/dry-run messages. No
+existing marker recipient fields were found in the current checkout. Generator
+mode stays paused as in the first PR revision; removing the known marker leak
+alone does not authorize model-generated content publication.
+
+The three old workflow templates are inert YAML documents with no jobs/triggers.
+The retired daily script no longer exports untrusted source labels in its
+single-line subject output. History is retained; see the implementation report
+for historical exposure inventory. New automation requires a fresh review.
+
+Run offline checks with Python and PyYAML:
 `python -m unittest discover -s tests -p test_workflow_security.py`.

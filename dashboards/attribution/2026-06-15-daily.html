@@ -72,7 +72,7 @@ Network path to GHL is open (no allowlist block) — the token itself is the cau
     <h2>How to Fix (≈5 min)</h2>
     <ol class="fix-list">
       <li>In GoHighLevel: <strong>Settings → Private Integrations</strong>, revoke the old token and create a new one with the same scopes (contacts, opportunities, locations/custom fields). Copy the new <code>pit-…</code> value.</li>
-      <li>Update the local credential file — line 1 = new token, line 2 = location id (unchanged): <code>Documents/Claude/Online Content/.claude-credentials/ghl-pit.txt</code> and the mirror at <code>Documents/Claude/Skills/ghl-pit.txt</code>.</li>
+      <li>Update the local credential file — line 1 = new token, line 2 = location id (unchanged): <code>Use the approved private credential workflow; never publish credential locations or values.</code> and the mirror at <code>Use the approved private credential workflow; never publish credential locations or values.</code>.</li>
       <li>Update the GitHub repo secret <code>GHL_PIT</code> on <code>Graehamwatts/online-content</code> (Settings → Secrets → Actions) so the scheduled Action uses the new token too.</li>
       <li>Re-run: trigger the <code>daily-attribution-brief.yml</code> workflow (Run workflow → leave date blank for yesterday, or set <code>2026-06-15</code>) to backfill this brief.</li>
     </ol>

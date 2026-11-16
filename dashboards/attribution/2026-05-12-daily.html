@@ -81,7 +81,7 @@ WORKFLOW .github/workflows/daily-attribution-brief.yml  not present
     <div class="actions">
       <ol>
         <li>Generate a fine-grained PAT (or classic PAT with <code>repo</code> + <code>workflow</code> scopes) for <b>Graehamwatts/online-content</b>. Save to <code>C:\Users\Graeham Watts\Documents\GitHub Credentials\pat-skills-and-pages.txt</code> — that's the path this skill expects.</li>
-        <li>In repo → Settings → Secrets and variables → Actions, add three repository secrets: <code>GHL_PIT</code> (value: contents of <code>ghl-pit.txt</code> line 1), <code>GHL_LOCATION_ID</code> = <code>6wuU3haUH7uNeT20E3UZ</code>, and <code>GMAIL_APP_PASSWORD</code> (Gmail app-specific password for graehamwatts@gmail.com).</li>
+        <li>In repo → Settings → Secrets and variables → Actions, add three repository secrets: <code>GHL_PIT</code> (value: contents of <code>Use the approved private credential workflow; never publish credential locations or values.</code> line 1), <code>GHL_LOCATION_ID</code> = <code>6wuU3haUH7uNeT20E3UZ</code>, and <code>GMAIL_APP_PASSWORD</code> (Gmail app-specific password for graehamwatts@gmail.com).</li>
         <li>Drop the workflow file at <code>.github/workflows/daily-attribution-brief.yml</code> — the YAML is attached in the outputs folder of this run, plus a copy is included in the email signature below. The cron is set to <code>15 14 * * 1-5</code> (7:15 AM Pacific Mon-Fri).</li>
       </ol>
     </div>

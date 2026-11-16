@@ -2,7 +2,7 @@ name: Farming Postcard Preview
 permissions:
   contents: read
 concurrency:
-  group: farming-postcard-preview-${{ github.ref }}
+  group: farming-postcard-preview-${{ github.ref }}-${{ github.event_name }}
   cancel-in-progress: false
 jobs:
   postcard-preview:
@@ -49,14 +49,16 @@ jobs:
       if: failure()
       env:
         GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        GITHUB_RUN_URL: ${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }}
       run: |
         gh issue create \
           --title "Postcard preview FAILED ($(date -u +%Y-%m-%d), mode ${MODE:-unknown})" \
           --body "The farming-postcard preview workflow failed. SMTP may be down, so this issue is the backup alert. Run: ${GITHUB_RUN_URL}. If a drop is near, generate options manually via the farming-postcard skill."
-    environment: service-automation
+    environment: ${{ github.event_name == 'schedule' && 'service-automation-scheduled' || 'service-automation' }}
     permissions:
       contents: write
       issues: write
+    if: github.ref == 'refs/heads/main' && (github.event_name == 'schedule' || (github.actor == 'Graehamwatts' && github.triggering_actor == 'Graehamwatts'))
 'on':
   schedule:
   - cron: 17 15 8,24 * *

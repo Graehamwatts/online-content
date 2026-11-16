@@ -66,7 +66,7 @@ Run ID: 26454235316 · Status: failure</div>
     <div class="check-row"><div class="dot green"></div><span>GHL API reachable from GitHub Actions → <strong style="color:#22c55e">Yes</strong></span></div>
     <div class="check-row"><div class="dot red"></div><span>Python bucket_source function → <strong style="color:#ef4444">Bug</strong> (int field, no .lower() guard)</span></div>
     <div class="check-row"><div class="dot red"></div><span>PAT workflow scope → <strong style="color:#ef4444">Missing</strong> (can't push fix to .github/workflows/)</span></div>
-    <div class="check-row"><div class="dot red"></div><span>Local GHL PIT (ghl-pit.txt) → <strong style="color:#ef4444">Placeholder</strong> (token never filled in)</span></div>
+    <div class="check-row"><div class="dot red"></div><span>Use the approved private credential workflow; never publish credential locations or values.<strong style="color:#ef4444">Placeholder</strong> (token never filled in)</span></div>
     <div class="check-row"><div class="dot red"></div><span>Windsor.ai connector → <strong style="color:#ef4444">License expired</strong></span></div>
   </div>
 
@@ -93,7 +93,7 @@ Run ID: 26454235316 · Status: failure</div>
           <div class="title">Fill in your local GHL PIT (also works)</div>
           <div class="desc">
             Go to <strong>GHL → Settings → Private Integrations → Create</strong> → name it "Claude Attribution" → grant Read: Contacts + Opportunities → copy the <code style="background:#0f1729;padding:1px 5px;border-radius:3px">pit-...</code> key.<br><br>
-            Paste it as Line 1 of: <code style="background:#0f1729;padding:1px 5px;border-radius:3px">Documents\Claude\Online Content\.claude-credentials\ghl-pit.txt</code><br><br>
+            Paste it as Line 1 of: <code style="background:#0f1729;padding:1px 5px;border-radius:3px">Use the approved private credential workflow; never publish credential locations or values.</code><br><br>
             With a local PIT, I can run the attribution script directly without needing the GitHub Action or workflow scope.
           </div>
         </div>

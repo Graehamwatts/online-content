@@ -48,7 +48,7 @@ Filename pattern: `CMA_[street_number]_[street_name_underscored].html` (no speci
 
 ## GitHub publishing
 
-Personal Access Token is at `C:\Users\Graeham Watts\Documents\Claude\Online Content\github-token.txt`. Use it to push via the GitHub Contents API:
+Use the approved private credential workflow and authenticated Git helper. Never paste credentials into chat, files in this public repository, or Git URLs.
 
 - **Repo:** `Graehamwatts/online-content`
 - **Path on repo:** `cmas/CMA_[address].html`

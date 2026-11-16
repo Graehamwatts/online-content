@@ -50,9 +50,10 @@ jobs:
       if: failure()
       run: |
         echo "::error::Friday Attribution Review failed. Check GHL_PIT, GMAIL_USERNAME, GMAIL_APP_PASSWORD, BRIEF_RECIPIENTS secrets."
-    environment: service-automation
+    environment: ${{ github.event_name == 'schedule' && 'service-automation-scheduled' || 'service-automation' }}
     permissions:
       contents: write
+    if: github.ref == 'refs/heads/main' && (github.event_name == 'schedule' || (github.actor == 'Graehamwatts' && github.triggering_actor == 'Graehamwatts'))
 'on':
   schedule:
   - cron: 0 23 * * 5

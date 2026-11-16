@@ -69,14 +69,13 @@
   <div class="section">
     <h2>Decision required</h2>
     <div class="decide">
-      <strong>Spend 5 minutes today before Monday's brief fires.</strong> Three options ranked best to worst: <strong>(A)</strong> Regenerate the GitHub PAT at <code>github.com/settings/tokens</code> with the <code>workflow</code> scope checked, paste it over <code>Documents\Claude\Online Content\github-token.txt</code>, and I'll auto-deploy both workflow files (daily + weekly) on my next run. <strong>(B)</strong> Manually paste the two YAML files into <code>.github/workflows/</code> via the GitHub web UI and add the four secrets — 5 minutes, no PAT regen needed. <strong>(C)</strong> Leave it broken — Monday's daily brief and next Friday's weekly review will both be another setup-failure email. Recommended: A or B. The four secrets to add are listed in step 3 below.
+      <strong>Spend 5 minutes today before Monday's brief fires.</strong> Three options ranked best to worst: <strong>(A)</strong> Regenerate the GitHub PAT at <code>github.com/settings/tokens</code> with the <code>workflow</code> scope checked, paste it over <code>Use the approved private credential workflow; never publish credential locations or values.</code>, and I'll auto-deploy both workflow files (daily + weekly) on my next run. <strong>(B)</strong> Manually paste the two YAML files into <code>.github/workflows/</code> via the GitHub web UI and add the four secrets — 5 minutes, no PAT regen needed. <strong>(C)</strong> Leave it broken — Monday's daily brief and next Friday's weekly review will both be another setup-failure email. Recommended: A or B. The four secrets to add are listed in step 3 below.
     </div>
   </div>
 
   <div class="section">
     <h2>Diagnostic — exactly what I tried this afternoon</h2>
-    <div class="errblock"><span class="label">[16:00:01 PT]</span> Loading credentials path: Documents\Claude\Skills\ghl-pit.txt
-   <span class="warn">↳ File not present in mounted folders (Skills dir not synced to Cowork mount).</span>
+    <div class="errblock"><span class="label">[16:00:01 PT]</span>Use the approved private credential workflow; never publish credential locations or values.<span class="warn">↳ File not present in mounted folders (Skills dir not synced to Cowork mount).</span>
 
 <span class="label">[16:00:02 PT]</span> POST https://services.leadconnectorhq.com/contacts/search
    <span class="warn">↳ Sandbox egress blocked (services.leadconnectorhq.com is on Cowork allowlist denylist).</span>
@@ -111,14 +110,14 @@
   <div class="section">
     <h2>5-minute fix — same as the daily brief, still unresolved</h2>
     <div class="steps">
-      <div class="step"><div class="step-num">1</div><div class="step-body"><strong>Re-issue the GitHub PAT with <code>workflow</code> scope.</strong> Open <code>github.com/settings/tokens</code> → find the token starting <code>ghp_wVVM…</code> → <strong>Regenerate</strong> → check BOTH <code>repo</code> AND <code>workflow</code>. Paste the new token over <code>Documents\Claude\Online Content\github-token.txt</code> and <code>Documents\Claude\Scheduled\property-os-daily-backup\github-pat.txt</code>. On my next run I'll auto-deploy the workflow files.</div></div>
+      <div class="step"><div class="step-num">1</div><div class="step-body"><strong>Re-issue the GitHub PAT with <code>workflow</code> scope.</strong> Open <code>github.com/settings/tokens</code> → find the token starting <code>[redacted historical token fragment]…</code> → <strong>Regenerate</strong> → check BOTH <code>repo</code> AND <code>workflow</code>. Paste the new token over <code>Use the approved private credential workflow; never publish credential locations or values.</code> and <code>Use the approved private credential workflow; never publish credential locations or values.</code>. On my next run I'll auto-deploy the workflow files.</div></div>
       <div class="step"><div class="step-num">2</div><div class="step-body"><strong>OR — one-shot manual install (no PAT regen).</strong> Open <code>Documents\Claude\Online Content\runbooks\daily-attribution-brief-workflow.yml</code>, copy contents, paste into a new file at <code>.github/workflows/daily-attribution-brief.yml</code> in the GitHub web UI → commit. Do the same for the Friday workflow once it's drafted (I can hand-draft it on my next run if step 1 is done).</div></div>
       <div class="step"><div class="step-num">3</div><div class="step-body"><strong>Add the 4 repo secrets</strong> at <code>github.com/Graehamwatts/online-content/settings/secrets/actions</code>:
-        <br>• <code>GHL_PIT</code> = line 1 of <code>Documents\Claude\Skills\ghl-pit.txt</code> (Private Integration Token starting <code>pit-</code>)
+        <br>• <code>GHL_PIT</code> = line 1 of <code>Use the approved private credential workflow; never publish credential locations or values.</code> (Private Integration Token starting <code>pit-</code>)
         <br>• <code>GHL_LOCATION_ID</code> = <code>6wuU3haUH7uNeT20E3UZ</code>
         <br>• <code>GMAIL_USER</code> = <code>graehamwatts@gmail.com</code>
         <br>• <code>GMAIL_APP_PASSWORD</code> = 16-char app password generated at <code>myaccount.google.com/apppasswords</code></div></div>
-      <div class="step"><div class="step-num">4</div><div class="step-body"><strong>Re-sync the Skills folder to Cowork.</strong> The <code>Documents\Claude\Skills\ghl-pit.txt</code> file isn't currently visible in the Cowork mount, only the Online Content and Scheduled folders are. Re-select the Skills folder in the Cowork picker, or move the PIT file into one of the already-mounted folders.</div></div>
+      <div class="step"><div class="step-num">4</div><div class="step-body"><strong>Re-sync the Skills folder to Cowork.</strong> The <code>Use the approved private credential workflow; never publish credential locations or values.</code> file isn't currently visible in the Cowork mount, only the Online Content and Scheduled folders are. Re-select the Skills folder in the Cowork picker, or move the PIT file into one of the already-mounted folders.</div></div>
       <div class="step"><div class="step-num">5</div><div class="step-body"><strong>Smoke-test before Monday 7:15 AM.</strong> After steps 1-3, open the repo → <strong>Actions</strong> → run <strong>Daily Attribution Brief</strong> manually with date blank. You should get a real-data brief in &lt;90 seconds. Friday's weekly will then auto-fire next Friday at 4:00 PM with real numbers.</div></div>
     </div>
   </div>

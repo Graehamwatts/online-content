@@ -18,9 +18,10 @@ jobs:
         BRIEF_RECIPIENTS: ${{ secrets.BRIEF_RECIPIENTS }}
         PYTHONUNBUFFERED: '1'
       run: python3 scripts/ghl_token_healthcheck.py
-    environment: service-automation
+    environment: ${{ github.event_name == 'schedule' && 'service-automation-scheduled' || 'service-automation' }}
     permissions:
       contents: read
+    if: github.ref == 'refs/heads/main' && (github.event_name == 'schedule' || (github.actor == 'Graehamwatts' && github.triggering_actor == 'Graehamwatts'))
 'on':
   schedule:
   - cron: 0 13 * * 1

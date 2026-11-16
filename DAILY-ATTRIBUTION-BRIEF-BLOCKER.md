@@ -1,7 +1,7 @@
 # Daily Attribution Brief — Execution Blocker (FINAL — Jul 13, 2026)
 
 **Status**: Task is functionally redundant. Not a token problem — never verify
-against `.claude-credentials/ghl-pit.txt` again, see why below.
+Use the approved private credential workflow and authenticated Git helper. Never paste credentials into chat, files in this public repository, or Git URLs.
 
 > This supersedes both prior versions of this doc (2026-06-30 and 2026-07-03).
 > Both were wrong in different ways. This version was verified against the
@@ -26,7 +26,7 @@ Two independent things are true at once, and prior runs conflated them:
 
 2. **The `GHL_PIT` GitHub secret has been valid the whole time.** Every prior
    "401 — token is a placeholder" diagnosis (Jun 29 – Jul 7) was reading
-   `.claude-credentials/ghl-pit.txt`, a local file that this task's design
+Use the approved private credential workflow and authenticated Git helper. Never paste credentials into chat, files in this public repository, or Git URLs.
    happens to check — never the real secret. Proof: `scripts/command_center.py`
    uses the same `GHL_PIT` secret and has run successfully every business day,
    including Jul 13 (run `29266632202`), pulling live GHL data. **Do not

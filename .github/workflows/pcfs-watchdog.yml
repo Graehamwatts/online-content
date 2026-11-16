@@ -19,9 +19,10 @@ jobs:
         GMAIL_APP_PASSWORD: ${{ secrets.GMAIL_APP_PASSWORD }}
         BRIEF_RECIPIENTS: ${{ secrets.BRIEF_RECIPIENTS }}
       run: python scripts/pcfs_watchdog.py
-    environment: service-automation
+    environment: ${{ github.event_name == 'schedule' && 'service-automation-scheduled' || 'service-automation' }}
     permissions:
       contents: read
+    if: github.ref == 'refs/heads/main' && (github.event_name == 'schedule' || (github.actor == 'Graehamwatts' && github.triggering_actor == 'Graehamwatts'))
 'on':
   schedule:
   - cron: 23 19 * * *
