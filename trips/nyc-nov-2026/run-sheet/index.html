@@ -1,0 +1,283 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="robots" content="noindex, nofollow">
+<title>NYC Run Sheet</title>
+<link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin><link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&family=JetBrains+Mono:wght@400;500&family=Space+Grotesk:wght@500;600;700&display=swap">
+<style>
+/* Layout: one column of step cards, a sticky day switcher on top. Subway-sign blue on cool paper. */
+:root{--bg:#EDF0F4;--card:#FFFFFF;--ink:#141A22;--mute:#58636F;--line:#D3D9E0;--accent:#1B4FD6;--accent-soft:#E2EAFD;--good:#127744;--good-soft:#DDF3E6;--warn:#9A5200;--warn-soft:#FBEBD3;--plain-soft:#E6EAEF;
+--display:"Space Grotesk","Helvetica Neue",Arial,sans-serif;--body:"Inter","Helvetica Neue",Arial,sans-serif;--mono:"JetBrains Mono",ui-monospace,Menlo,Consolas,monospace}
+@media (prefers-color-scheme:dark){:root:not([data-theme="light"]){--bg:#0E1218;--card:#161C25;--ink:#E6EBF1;--mute:#9AA6B3;--line:#27303B;--accent:#7499FF;--accent-soft:#1B2848;--good:#5ACB93;--good-soft:#14301F;--warn:#F2A650;--warn-soft:#3A2810;--plain-soft:#212A35;color-scheme:dark}}
+:root[data-theme="dark"]{--bg:#0E1218;--card:#161C25;--ink:#E6EBF1;--mute:#9AA6B3;--line:#27303B;--accent:#7499FF;--accent-soft:#1B2848;--good:#5ACB93;--good-soft:#14301F;--warn:#F2A650;--warn-soft:#3A2810;--plain-soft:#212A35;color-scheme:dark}
+*{box-sizing:border-box}
+html{scroll-behavior:smooth;scroll-padding-top:72px}
+body{margin:0;background:var(--bg);color:var(--ink);font-family:var(--body);font-size:16px;line-height:1.5;padding-left:max(16px,env(safe-area-inset-left,0px));padding-right:max(16px,env(safe-area-inset-right,0px));padding-block:0 48px}
+body::before{content:"";position:fixed;inset:0 0 auto;height:env(safe-area-inset-top,0px);background:var(--bg);z-index:10}
+.wrap{max-width:760px;margin:0 auto}
+a{color:var(--accent);text-underline-offset:2px}
+.mono{font-family:var(--mono);font-variant-numeric:tabular-nums}
+.top{padding:28px 0 8px}
+.top h1{font-family:var(--display);font-size:clamp(28px,6vw,40px);line-height:1.05;margin:0 0 8px;letter-spacing:-.02em;text-wrap:balance}
+.top p{margin:0;color:var(--mute);max-width:60ch}
+.key{display:flex;flex-wrap:wrap;gap:8px;margin:14px 0 0;padding:0;list-style:none;font-size:13px;color:var(--mute)}
+.key li{display:flex;align-items:center;gap:6px}
+nav.days{position:sticky;top:env(safe-area-inset-top,0px);z-index:9;background:var(--bg);padding:10px 0;margin-top:8px;display:flex;gap:6px;border-bottom:1px solid var(--line)}
+nav.days a{flex:1;text-align:center;text-decoration:none;color:var(--ink);font-family:var(--display);font-weight:600;font-size:15px;padding:9px 0;border-radius:8px;background:var(--plain-soft)}
+nav.days a:hover,nav.days a:focus-visible{background:var(--accent);color:#fff;outline:none}
+.panel{background:var(--card);border:1px solid var(--line);border-radius:12px;padding:18px;margin-top:18px}
+.panel h2{font-family:var(--display);font-size:20px;margin:0 0 4px}
+.panel .sub{margin:0 0 12px;color:var(--mute);font-size:14px}
+.todo{list-style:none;margin:0;padding:0;display:grid;gap:0}
+.todo li{display:flex;justify-content:space-between;gap:14px;padding:10px 0;border-top:1px solid var(--line)}
+.todo li:first-child{border-top:0}
+.todo .what{display:flex;flex-direction:column;min-width:0}
+.todo small{color:var(--mute);font-size:13px}
+.todo .act{text-align:right;font-size:14px;max-width:46%;overflow-wrap:anywhere}
+.booked{list-style:none;margin:0;padding:0;display:grid;grid-template-columns:repeat(auto-fit,minmax(230px,1fr));gap:8px 18px;font-size:15px}
+.booked .mono{font-size:13px;color:var(--good);margin-right:6px}
+.day{padding-top:34px}
+.day header{margin-bottom:14px}
+.date{font-family:var(--mono);font-size:12px;text-transform:uppercase;letter-spacing:.08em;color:var(--accent);margin:0 0 6px}
+.day h2{font-family:var(--display);font-size:clamp(24px,5vw,32px);line-height:1.12;margin:0 0 6px;text-wrap:balance;letter-spacing:-.015em}
+.intro{margin:0 0 12px;color:var(--mute);max-width:62ch}
+.glance{margin:0;padding:12px 14px;list-style:none;background:var(--card);border:1px solid var(--line);border-radius:10px;display:grid;grid-template-columns:repeat(auto-fit,minmax(210px,1fr));gap:4px 16px;font-size:14px}
+.glance a{color:var(--ink);text-decoration:none;display:block;padding:2px 0}
+.glance a:hover{color:var(--accent)}
+.glance b{font-family:var(--mono);font-weight:500;font-size:12.5px;color:var(--accent);display:inline-block;min-width:50px}
+.step{display:grid;grid-template-columns:76px minmax(0,1fr);gap:0 14px;background:var(--card);border:1px solid var(--line);border-radius:12px;padding:16px 16px 16px 14px;margin-top:12px;transition:opacity .15s}
+.step.is-done{opacity:.55}
+.step.is-done h3{text-decoration:line-through}
+.time{display:flex;flex-direction:column;align-items:flex-start;gap:10px}
+.time>span{font-family:var(--mono);font-weight:500;font-size:15px;color:var(--accent);font-variant-numeric:tabular-nums}
+.done{position:relative;width:26px;height:26px;cursor:pointer}
+.done input{position:absolute;inset:0;opacity:0;margin:0;cursor:pointer}
+.done i{position:absolute;inset:0;border:2px solid var(--line);border-radius:7px;background:var(--bg)}
+.done input:checked+i{background:var(--good);border-color:var(--good)}
+.done input:checked+i::after{content:"";position:absolute;left:8px;top:3px;width:6px;height:12px;border:solid #fff;border-width:0 2.5px 2.5px 0;transform:rotate(45deg)}
+.done input:focus-visible+i{outline:2px solid var(--accent);outline-offset:2px}
+.main{min-width:0}
+.main h3{font-family:var(--display);font-size:19px;line-height:1.2;margin:0 0 6px;letter-spacing:-.005em}
+.tags{display:flex;flex-wrap:wrap;gap:6px;margin:0 0 10px}
+.tag{font-family:var(--mono);font-size:11px;letter-spacing:.06em;text-transform:uppercase;padding:3px 8px;border-radius:5px;font-weight:500}
+.tag.good{background:var(--good-soft);color:var(--good)}
+.tag.warn{background:var(--warn-soft);color:var(--warn)}
+.tag.plain{background:var(--plain-soft);color:var(--mute)}
+dl{margin:0;display:grid;gap:8px}
+.r{display:grid;grid-template-columns:78px minmax(0,1fr);gap:10px}
+dt{font-family:var(--mono);font-size:11.5px;letter-spacing:.06em;text-transform:uppercase;color:var(--mute);padding-top:3px}
+dd{margin:0;overflow-wrap:anywhere}
+.plans{margin-top:14px;padding-top:12px;border-top:1px dashed var(--line)}
+.plans h4{margin:0 0 8px;font-family:var(--mono);font-size:11.5px;letter-spacing:.06em;text-transform:uppercase;color:var(--mute);font-weight:500}
+.plans ul{list-style:none;margin:0;padding:0;display:grid;gap:9px}
+.plans li{display:grid;grid-template-columns:26px minmax(0,1fr);gap:10px;font-size:15px}
+.pl{font-family:var(--display);font-weight:700;font-size:13px;width:24px;height:24px;border-radius:50%;background:var(--accent-soft);color:var(--accent);display:grid;place-items:center;margin-top:1px}
+.pt{overflow-wrap:anywhere}
+.phones{list-style:none;margin:0;padding:0;display:grid;grid-template-columns:repeat(auto-fit,minmax(240px,1fr));gap:0 24px;font-size:15px}
+.phones li{display:flex;justify-content:space-between;gap:12px;padding:8px 0;border-top:1px solid var(--line)}
+.foot{margin-top:28px;color:var(--mute);font-size:13px}
+@media (max-width:520px){
+ .step{grid-template-columns:minmax(0,1fr);padding:14px}
+ .time{flex-direction:row;align-items:center;justify-content:space-between;margin-bottom:6px}
+ .r{grid-template-columns:minmax(0,1fr);gap:1px}
+ dt{padding-top:0}
+ .todo li{flex-direction:column;gap:4px}.todo .act{text-align:left;max-width:100%}
+}
+@media (prefers-reduced-motion:reduce){html{scroll-behavior:auto}.step{transition:none}}
+</style>
+</head>
+<body>
+<div class="wrap">
+<div class="top">
+  <h1>New York, Nov 18 to 22</h1>
+  <p>Follow it top to bottom. Every step says where to go, how to get there, how long it takes, what to do and where to eat, then the Plan B, C and D if something falls through. Tick a step when you've done it.</p>
+  <ul class="key"><li><span class="tag good">Booked</span></li><li><span class="tag warn">Book first</span></li><li><span class="tag plain">Free</span></li><li>Letters are your backups, in order</li></ul>
+</div>
+<nav class="days" aria-label="Jump to a day"><a href="#wed">Wed</a><a href="#thu">Thu</a><a href="#fri">Fri</a><a href="#sat">Sat</a><a href="#sun">Sun</a></nav>
+
+<div class="panel" id="todo">
+  <h2>Still to book</h2>
+  <p class="sub">Do these first. Anything that needs a card is yours to enter.</p>
+  <ul class="todo"><li><span class="what"><b>Intrepid, Thu 10:30am, 1 adult</b><small>Needs your card. Timed tickets, it sells by slot.</small></span><span class="act"><a href="https://www.intrepidmuseum.org/" target="_blank" rel="noopener">intrepidmuseum.org</a></span></li><li><span class="what"><b>Call Bar Centrale for Thu after the show</b><small>Phone only, bar closes 11:30pm.</small></span><span class="act">(212) 581-3130</span></li><li><span class="what"><b>Pastis, Sat 11:00am, 3 people</b><small>Backup: The Standard Grill.</small></span><span class="act"><a href="https://pastisnyc.com/" target="_blank" rel="noopener">pastisnyc.com</a> · (212) 929-4844</span></li><li><span class="what"><b>Radio City Stage Door Tour, Sat 1:00pm, 3 tickets</b><small>Sells out in the holiday season.</small></span><span class="act"><a href="https://www.rockettes.com/christmas/travel-experiences/travel-radio-city-stage-door-tour/" target="_blank" rel="noopener">rockettes.com</a></span></li><li><span class="what"><b>Rockefeller rink, Sat 2:45pm, 3 skaters</b><small>From about $22 for General Skate.</small></span><span class="act"><a href="https://www.rockefellercenter.com/tickets/the-rink-at-rockefeller-center/" target="_blank" rel="noopener">rockefellercenter.com</a></span></li><li><span class="what"><b>Optional: NYPL tour, Fri 2:00pm</b><small>Free, 20 people, tickets online.</small></span><span class="act"><a href="https://www.nypl.org/connect/tours/schwarzman" target="_blank" rel="noopener">nypl.org</a></span></li><li><span class="what"><b>Optional: Palm Court, Sat 4:15pm, 3 people</b><small>Only as an indoor backup to the carriage ride.</small></span><span class="act"><a href="https://www.theplazany.com/dining/the-palm-court" target="_blank" rel="noopener">theplazany.com</a></span></li></ul>
+</div>
+<div class="panel">
+  <h2>Already booked</h2>
+  <p class="sub">Nothing to do for these except show up.</p>
+  <ul class="booked"><li><span class="mono">Thu 5:00pm</span> Tavola, 2 people</li><li><span class="mono">Thu 7:00pm</span> Michelle Wolf, The Town Hall</li><li><span class="mono">Fri 6:00pm</span> Friendsgiving at Deb's</li><li><span class="mono">Sat 7:30pm</span> Bourbon Steak</li><li><span class="mono">Sat 10:15pm</span> Raines Law Room, 4 guests</li></ul>
+</div>
+
+<section class="day" id="wed">
+  <header><p class="date">Wednesday, Nov 18</p><h2>Arrival night</h2><p class="intro">You land late. One job: get to Deb's.</p>
+  <ol class="glance"><li><a href="#s-wed-0"><b>10:29p</b> Land at JFK and cab to Deb's</a></li></ol></header>
+  <article class="step" id="s-wed-0" data-sid="s-wed-0">
+  <div class="time"><span>10:29p</span><label class="done"><input type="checkbox" aria-label="Mark done: Land at JFK and cab to Deb&#x27;s"><i></i></label></div>
+  <div class="main"><h3>Land at JFK and cab to Deb's</h3><dl><div class="r"><dt>Where</dt><dd>JFK arrivals, then the yellow-cab line outside the terminal (not a driver who approaches you inside).</dd></div><div class="r"><dt>Get there</dt><dd>Cab to 9th Ave and 38th St, 40 to 50 minutes at that hour. Flat fare plus tolls and surcharges, roughly $90 to $110 with tip.</dd></div><div class="r"><dt>Do</dt><dd>Bags, cab line, text Deb when you're 10 minutes out. Nothing else tonight.</dd></div></dl><div class="plans"><h4>If it falls through, or you want something else</h4><ul><li><span class="pl">B</span><span class="pt">Uber or Lyft from the airport pickup area. Similar price, and you can watch the driver arrive.</span></li><li><span class="pl">C</span><span class="pt">AirTrain and subway. It works, but it is slow with luggage after 11pm. Only if the cab line is a mess.</span></li></ul></div></div>
+</article>
+</section><section class="day" id="thu">
+  <header><p class="date">Thursday, Nov 19</p><h2>Your own day, then Tavola at 5 and the show at 7</h2><p class="intro">Sleep in. You are on your own until you meet everyone at Tavola. Be at Deb's door by 4:45.</p>
+  <ol class="glance"><li><a href="#s-thu-0"><b>9:30a</b> Breakfast to go</a></li><li><a href="#s-thu-1"><b>10:30a</b> Intrepid and the shuttle</a></li><li><a href="#s-thu-2"><b>1:00p</b> Lunch</a></li><li><a href="#s-thu-3"><b>2:00p</b> Free afternoon</a></li><li><a href="#s-thu-4"><b>4:45p</b> Back at Deb's</a></li><li><a href="#s-thu-5"><b>5:00p</b> Dinner at Tavola</a></li><li><a href="#s-thu-6"><b>6:30p</b> Walk to the show</a></li><li><a href="#s-thu-7"><b>7:00p</b> Michelle Wolf</a></li><li><a href="#s-thu-8"><b>9:15p</b> Bar Centrale</a></li></ol></header>
+  <article class="step" id="s-thu-0" data-sid="s-thu-0">
+  <div class="time"><span>9:30a</span><label class="done"><input type="checkbox" aria-label="Mark done: Breakfast to go at Fresh From Hell"><i></i></label></div>
+  <div class="main"><h3>Breakfast to go at Fresh From Hell</h3><dl><div class="r"><dt>Where</dt><dd>Fresh From Hell, 9th Ave between 46th and 47th.</dd></div><div class="r"><dt>Get there</dt><dd>Walk north on 9th Ave, 8 blocks, about 9 minutes.</dd></div><div class="r"><dt>How long</dt><dd>15 minutes.</dd></div><div class="r"><dt>Do</dt><dd>Order at the counter and take it with you. Açai bowl with house granola, coconut oatmeal, Greek yogurt with fruit, or a sprouted bagel with their cashew cream cheese, plus a cold-pressed juice. Eat it on the walk west.</dd></div><div class="r"><dt>Check</dt><dd>I couldn't confirm the counter's opening time. Look it up on Google Maps the night before.</dd></div></dl><div class="plans"><h4>If it falls through, or you want something else</h4><ul><li><span class="pl">B</span><span class="pt">Pure Ktchn, 352 W 46th St (8th to 9th Aves). Vegan counter, açai bowls and green smoothies. Listed 9am to 9pm Monday to Saturday. 2 minutes off your route.</span></li><li><span class="pl">C</span><span class="pt">Gotham West Market, 600 11th Ave. Food hall with coffee and breakfast counters, opens early (listings say 7:30am). It's on the way to the pier.</span></li></ul></div></div>
+</article>
+<article class="step" id="s-thu-1" data-sid="s-thu-1">
+  <div class="time"><span>10:30a</span><label class="done"><input type="checkbox" aria-label="Mark done: The Intrepid and Space Shuttle Enterprise"><i></i></label></div>
+  <div class="main"><h3>The Intrepid and Space Shuttle Enterprise</h3><div class="tags"><span class="tag warn">Book first</span></div><dl><div class="r"><dt>Where</dt><dd>Intrepid Museum, Pier 86, W 46th St and 12th Ave.</dd></div><div class="r"><dt>Get there</dt><dd>Walk west on 46th from Fresh From Hell, about 12 minutes. You should be at the door by 10:20.</dd></div><div class="r"><dt>How long</dt><dd>About 2.5 hours. You'll be out around 1:00.</dd></div><div class="r"><dt>Do</dt><dd>Shuttle pavilion first: Enterprise is NASA's first orbiter. Then the jets on the flight deck, then the hangar deck exhibits. The flight simulators and 4D theater (the Exploreum) close at 3pm today, so do them in the morning.</dd></div><div class="r"><dt>Ticket</dt><dd>Timed 10:30 entry, 1 adult, about $32 online. Open 10am to 5pm, last entry 4pm. <a href="https://www.intrepidmuseum.org/" target="_blank" rel="noopener">Buy tickets</a>. You enter the card.</dd></div></dl><div class="plans"><h4>If it falls through, or you want something else</h4><ul><li><span class="pl">B</span><span class="pt">MoMA, the Brancusi show: about 210 sculptures, tools and photos from his Paris studio. Timed ticket, 11 W 53rd, 10-minute cab from Deb's. <a href="https://www.moma.org/" target="_blank" rel="noopener">MoMA</a></span></li><li><span class="pl">C</span><span class="pt">Circle Line from Pier 83, right next to the Intrepid. About 90 minutes down the Hudson to the Statue of Liberty and back. Check sailing times for the day. <a href="https://www.circleline.com/" target="_blank" rel="noopener">Circle Line</a></span></li></ul></div></div>
+</article>
+<article class="step" id="s-thu-2" data-sid="s-thu-2">
+  <div class="time"><span>1:00p</span><label class="done"><input type="checkbox" aria-label="Mark done: Healthy lunch near the pier"><i></i></label></div>
+  <div class="main"><h3>Healthy lunch near the pier</h3><div class="tags"><span class="tag plain">Free</span></div><dl><div class="r"><dt>Where</dt><dd>Gotham West Market, 600 11th Ave at W 44th.</dd></div><div class="r"><dt>Get there</dt><dd>8-minute walk from the pier.</dd></div><div class="r"><dt>How long</dt><dd>45 minutes.</dd></div><div class="r"><dt>Eat</dt><dd>Keep it light, dinner is pasta and pizza. Older write-ups list Indie Fresh (healthy), Choza Taqueria (salads and bowls) and Uma Temakeria (hand rolls). Vendors change, so check when you walk in.</dd></div></dl><div class="plans"><h4>If it falls through, or you want something else</h4><ul><li><span class="pl">B</span><span class="pt">Pure Ktchn, 352 W 46th St. Vegan bowls and smoothies, about 12 minutes east of the pier and on the way back.</span></li><li><span class="pl">C</span><span class="pt">Fresh From Hell again, 9th Ave between 46th and 47th. Build-your-own salad bar, soups, sandwiches on good bread. <a href="https://www.freshfromhell.com/" target="_blank" rel="noopener">Menu</a></span></li></ul></div></div>
+</article>
+<article class="step" id="s-thu-3" data-sid="s-thu-3">
+  <div class="time"><span>2:00p</span><label class="done"><input type="checkbox" aria-label="Mark done: Free afternoon, back at Deb&#x27;s by 4:45"><i></i></label></div>
+  <div class="main"><h3>Free afternoon, back at Deb's by 4:45</h3><div class="tags"><span class="tag plain">Free</span></div><dl><div class="r"><dt>Do</dt><dd>Nothing here is booked. Pick one, or just wander.</dd></div><div class="r"><dt>Leave by</dt><dd>4:15 from the pier to be at Deb's by 4:45 (19 minutes on foot, 10 by cab).</dd></div></dl><div class="plans"><h4>If it falls through, or you want something else</h4><ul><li><span class="pl">A</span><span class="pt">Hudson River Greenway. Flat walk south along the water from the pier to Hudson Yards (about 40 minutes), then about 12 minutes east to Deb's.</span></li><li><span class="pl">B</span><span class="pt">Bryant Park Winter Village as the lights come on around 4:15. About 180 kiosks around a rink, free to walk. 15-minute cab from the pier, 15 back to Deb's. <a href="https://bryantpark.org/amenities/bank-of-america-winter-village-at-bryant-park" target="_blank" rel="noopener">Winter Village</a></span></li><li><span class="pl">C</span><span class="pt">Circle Line cruise from Pier 83 (about 90 minutes), if you didn't do it in the morning.</span></li></ul></div></div>
+</article>
+<article class="step" id="s-thu-4" data-sid="s-thu-4">
+  <div class="time"><span>4:45p</span><label class="done"><input type="checkbox" aria-label="Mark done: Be at Deb&#x27;s, rest and change"><i></i></label></div>
+  <div class="main"><h3>Be at Deb's, rest and change</h3><dl><div class="r"><dt>Where</dt><dd>Deb's place, 9th Ave and 38th St.</dd></div><div class="r"><dt>Do</dt><dd>Drop your bag, wash up. Tavola is one block away.</dd></div></dl></div>
+</article>
+<article class="step" id="s-thu-5" data-sid="s-thu-5">
+  <div class="time"><span>5:00p</span><label class="done"><input type="checkbox" aria-label="Mark done: Dinner at Tavola"><i></i></label></div>
+  <div class="main"><h3>Dinner at Tavola</h3><div class="tags"><span class="tag good">Booked</span></div><dl><div class="r"><dt>Where</dt><dd>Tavola, 488 9th Ave (37th to 38th St). (212) 273-1181.</dd></div><div class="r"><dt>Get there</dt><dd>1 minute from Deb's.</dd></div><div class="r"><dt>How long</dt><dd>90 minutes. Yelp tables have a 90-minute maximum, so you are done by 6:30.</dd></div><div class="r"><dt>Eat</dt><dd>Hell's Kitchen Italian with a wood-burning oven. Wood-fired pizza and pasta. Dressed down, tables close together. Booked Thu 5:00pm for 2.</dd></div></dl><div class="plans"><h4>If it falls through, or you want something else</h4><ul><li><span class="pl">B</span><span class="pt">Joe Allen, 326 W 46th. On Restaurant Row since 1965, used to getting people out before curtain. Book 5:30 on OpenTable and leave by 6:35. <a href="https://www.opentable.com/joe-allen-new-york" target="_blank" rel="noopener">Book</a></span></li><li><span class="pl">C</span><span class="pt">Becco, 355 W 46th. A salad, then unlimited servings of three pastas. Fast and generous. <a href="https://www.opentable.com/r/becco-new-york" target="_blank" rel="noopener">OpenTable</a></span></li></ul></div></div>
+</article>
+<article class="step" id="s-thu-6" data-sid="s-thu-6">
+  <div class="time"><span>6:30p</span><label class="done"><input type="checkbox" aria-label="Mark done: Walk to The Town Hall"><i></i></label></div>
+  <div class="main"><h3>Walk to The Town Hall</h3><dl><div class="r"><dt>Where</dt><dd>The Town Hall, 123 W 43rd St.</dd></div><div class="r"><dt>Get there</dt><dd>About 16 minutes on foot or 7 by cab. Leave Tavola by 6:30.</dd></div><div class="r"><dt>Do</dt><dd>Arrive by 6:40. Doors usually open 30 minutes before the show.</dd></div></dl></div>
+</article>
+<article class="step" id="s-thu-7" data-sid="s-thu-7">
+  <div class="time"><span>7:00p</span><label class="done"><input type="checkbox" aria-label="Mark done: Michelle Wolf: Best Job in the World"><i></i></label></div>
+  <div class="main"><h3>Michelle Wolf: Best Job in the World</h3><div class="tags"><span class="tag good">Booked</span></div><dl><div class="r"><dt>Where</dt><dd>The Town Hall, 123 W 43rd St.</dd></div><div class="r"><dt>How long</dt><dd>7:00 to about 9:00pm.</dd></div><div class="r"><dt>Do</dt><dd>A 1921 hall with famously good acoustics. <a href="https://www.thetownhall.org/event/michelle-wolf-best-job-in-the-world" target="_blank" rel="noopener">Event page</a></dd></div></dl></div>
+</article>
+<article class="step" id="s-thu-8" data-sid="s-thu-8">
+  <div class="time"><span>9:15p</span><label class="done"><input type="checkbox" aria-label="Mark done: Bar Centrale after the show"><i></i></label></div>
+  <div class="main"><h3>Bar Centrale after the show</h3><div class="tags"><span class="tag warn">Call to book</span></div><dl><div class="r"><dt>Where</dt><dd>324 W 46th St. No sign: an unmarked door beside Joe Allen, then a flight of stairs.</dd></div><div class="r"><dt>Get there</dt><dd>12 minutes on foot from the Town Hall.</dd></div><div class="r"><dt>Book</dt><dd>Phone only: (212) 581-3130. They open a week ahead, so you can call today. Tell them your party size and ask for 9:15 or 9:30. The bar closes at 11:30pm. Business casual.</dd></div><div class="r"><dt>Home</dt><dd>Bar Centrale to Deb's is 10 minutes on foot or 6 by cab.</dd></div></dl><div class="plans"><h4>If it falls through, or you want something else</h4><ul><li><span class="pl">B</span><span class="pt">The Campbell, inside Grand Central, about 12 minutes east on foot. Book on Resy (9:30 and 10pm were open on Nov 14).</span></li><li><span class="pl">C</span><span class="pt">Madame George, 45 W 45th St. Plush live-music cocktail den, 4 minutes from the theater. OpenTable.</span></li><li><span class="pl">D</span><span class="pt">Dear Irving on Hudson, 310 W 40th St, 40th floor of the Aliz Hotel. Velvet, chandeliers and a skyline view, two blocks from Deb's. Resy.</span></li></ul></div></div>
+</article>
+</section><section class="day" id="fri">
+  <header><p class="date">Friday, Nov 20</p><h2>The bridge by day, Deb's by 5, Friendsgiving at 6</h2><p class="intro">One outing, then back to help set up. The hard deadline is 5:00 at Deb's.</p>
+  <ol class="glance"><li><a href="#s-fri-0"><b>10:00a</b> Subway and DUMBO</a></li><li><a href="#s-fri-1"><b>11:00a</b> Brooklyn Bridge</a></li><li><a href="#s-fri-2"><b>12:00p</b> Lunch</a></li><li><a href="#s-fri-3"><b>1:00p</b> Grand Central</a></li><li><a href="#s-fri-4"><b>2:00p</b> Library tour</a></li><li><a href="#s-fri-5"><b>4:15p</b> Head to Deb's</a></li><li><a href="#s-fri-6"><b>5:00p</b> Help set up</a></li><li><a href="#s-fri-7"><b>6:00p</b> Friendsgiving</a></li><li><a href="#s-fri-8"><b>10:00p</b> Optional bar</a></li></ol></header>
+  <article class="step" id="s-fri-0" data-sid="s-fri-0">
+  <div class="time"><span>10:00a</span><label class="done"><input type="checkbox" aria-label="Mark done: Subway to Brooklyn, a stop in DUMBO"><i></i></label></div>
+  <div class="main"><h3>Subway to Brooklyn, a stop in DUMBO</h3><dl><div class="r"><dt>Where</dt><dd>Penn Station (8th Ave and 34th St), then the A or C toward Brooklyn, getting off at High St.</dd></div><div class="r"><dt>Get there</dt><dd>Leave Deb's at 10:00. 9 minutes on foot to Penn Station, then about 20 minutes on the train. You're at High St around 10:35.</dd></div><div class="r"><dt>Do</dt><dd>Walk to Washington St at Water St in DUMBO, 6 minutes from the station. It's the famous shot of the Manhattan Bridge framed between old warehouses. Ten minutes of photos, then walk to the Brooklyn Bridge entrance.</dd></div></dl><div class="plans"><h4>If it falls through, or you want something else</h4><ul><li><span class="pl">B</span><span class="pt">Cab from Deb's straight to DUMBO, about 25 to 30 minutes. Skip the subway if it's pouring.</span></li></ul></div></div>
+</article>
+<article class="step" id="s-fri-1" data-sid="s-fri-1">
+  <div class="time"><span>11:00a</span><label class="done"><input type="checkbox" aria-label="Mark done: Walk the Brooklyn Bridge to Manhattan"><i></i></label></div>
+  <div class="main"><h3>Walk the Brooklyn Bridge to Manhattan</h3><div class="tags"><span class="tag plain">Free</span></div><dl><div class="r"><dt>Where</dt><dd>From the DUMBO side across the raised wooden walkway, ending at City Hall.</dd></div><div class="r"><dt>How long</dt><dd>1.1 miles, 30 to 40 minutes with photo stops. You come off around 11:50.</dd></div><div class="r"><dt>Do</dt><dd>Walk toward Manhattan so the skyline is in front of you the whole way. No ticket, no line. Weekday mornings are quieter.</dd></div></dl><div class="plans"><h4>If it falls through, or you want something else</h4><ul><li><span class="pl">B</span><span class="pt">Raining: MoMA for the Brancusi show. Timed ticket, book that morning. Cab from Deb's at 10:45, an hour and a quarter inside, then a 10-minute cab to Grand Central for lunch. <a href="https://www.moma.org/" target="_blank" rel="noopener">MoMA</a></span></li><li><span class="pl">C</span><span class="pt">Or move the bridge to Sunday morning: leave Deb's at 9, walk it, back by noon for the 12:45 airport cab. Sunday brunch becomes coffee to go in DUMBO.</span></li></ul></div></div>
+</article>
+<article class="step" id="s-fri-2" data-sid="s-fri-2">
+  <div class="time"><span>12:00p</span><label class="done"><input type="checkbox" aria-label="Mark done: Healthy lunch near City Hall"><i></i></label></div>
+  <div class="main"><h3>Healthy lunch near City Hall</h3><div class="tags"><span class="tag plain">Free</span></div><dl><div class="r"><dt>Where</dt><dd>Sweetgreen or Chopt on Chambers St (about 125 Chambers). Listings disagree on which one is at that address, either works. Check it on Google Maps before you walk.</dd></div><div class="r"><dt>Get there</dt><dd>5 to 8 minutes on foot from the City Hall end of the bridge.</dd></div><div class="r"><dt>How long</dt><dd>45 minutes.</dd></div><div class="r"><dt>Eat</dt><dd>Salads and warm grain bowls.</dd></div></dl><div class="plans"><h4>If it falls through, or you want something else</h4><ul><li><span class="pl">B</span><span class="pt">Sit-down instead: Grand Central Oyster Bar, lower level. Open since 1913, the pan roast is the classic order. Weekdays only. Book 12:30 on <a href="https://www.opentable.com/grand-central-oyster-bar-reservations-new-york" target="_blank" rel="noopener">OpenTable</a> or call 212-490-6650. 15 minutes from City Hall on the 4/5/6.</span></li><li><span class="pl">C</span><span class="pt">Eating before the walk: Sweetgreen, 50 Washington St in DUMBO. Same street as the photo spot.</span></li><li><span class="pl">D</span><span class="pt">Mulberry & Vine in DUMBO Heights. Health-focused counter with rotating bowls, about $12. The listing is undated, so confirm it's open.</span></li></ul></div></div>
+</article>
+<article class="step" id="s-fri-3" data-sid="s-fri-3">
+  <div class="time"><span>1:00p</span><label class="done"><input type="checkbox" aria-label="Mark done: Grand Central Terminal"><i></i></label></div>
+  <div class="main"><h3>Grand Central Terminal</h3><div class="tags"><span class="tag plain">Free</span></div><dl><div class="r"><dt>Where</dt><dd>Grand Central, 42nd St and Park Ave.</dd></div><div class="r"><dt>Get there</dt><dd>4, 5 or 6 train from Brooklyn Bridge-City Hall to Grand Central-42 St, about 15 minutes (30 by cab).</dd></div><div class="r"><dt>How long</dt><dd>45 minutes of nothing in particular.</dd></div><div class="r"><dt>Do</dt><dd>Look up at the painted ceiling in the main concourse. Then the Whispering Gallery outside the Oyster Bar: stand in opposite corners of the tiled arch and whisper into the wall. The other person hears you clearly 30 feet away.</dd></div></dl><div class="plans"><h4>If it falls through, or you want something else</h4><ul><li><span class="pl">B</span><span class="pt">The Chrysler Building lobby, 3 minutes east at Lexington and 42nd. Red marble, chrome, painted ceiling. Free on weekdays, ten minutes is enough. The building recently changed hands, so check the door is open.</span></li><li><span class="pl">C</span><span class="pt">Cipriani Dolci on the balcony above the main concourse, for a Bellini and a view of the hall. Call (212) 973-0999.</span></li></ul></div></div>
+</article>
+<article class="step" id="s-fri-4" data-sid="s-fri-4">
+  <div class="time"><span>2:00p</span><label class="done"><input type="checkbox" aria-label="Mark done: New York Public Library tour"><i></i></label></div>
+  <div class="main"><h3>New York Public Library tour</h3><div class="tags"><span class="tag warn">Ticket needed</span></div><dl><div class="r"><dt>Where</dt><dd>Stephen A. Schwarzman Building, 5th Ave at 42nd St. Meet in the Visitor Center.</dd></div><div class="r"><dt>Get there</dt><dd>7 minutes on foot from Grand Central.</dd></div><div class="r"><dt>How long</dt><dd>One hour. Free.</dd></div><div class="r"><dt>Do</dt><dd>The 2:00 docent tour covers the history, architecture and collections and ends in the Rose Main Reading Room. Limited to 20 people, tickets online, released each Sunday for the week (Nov 15), so check for a seat today. <a href="https://www.nypl.org/connect/tours/schwarzman" target="_blank" rel="noopener">Book the tour</a></dd></div></dl><div class="plans"><h4>If it falls through, or you want something else</h4><ul><li><span class="pl">B</span><span class="pt">No ticket: the 3:00 Rose Main Reading Room tour (15 minutes, sign up in the McGraw Rotunda on the 3rd floor at 2:30, first 25 people). Then the 3:30 Treasures exhibition tour (45 minutes, sign up at the exhibition entrance at 3:15, first 15 people). The 1:30 Reading Room tour also runs, sign up at 1:00.</span></li><li><span class="pl">C</span><span class="pt">SUMMIT One Vanderbilt, next to Grand Central. Timed ticket, 2:00 or 2:30 slot, about $45, allow 90 minutes. <a href="https://summitov.com/tickets/" target="_blank" rel="noopener">Tickets</a></span></li><li><span class="pl">D</span><span class="pt">The Morgan Library, 10 minutes from Grand Central. J.P. Morgan's 1906 private library, about $25 timed ticket, an hour is plenty. <a href="https://www.themorgan.org/visit" target="_blank" rel="noopener">Tickets</a></span></li></ul></div></div>
+</article>
+<article class="step" id="s-fri-5" data-sid="s-fri-5">
+  <div class="time"><span>4:15p</span><label class="done"><input type="checkbox" aria-label="Mark done: Head to Deb&#x27;s"><i></i></label></div>
+  <div class="main"><h3>Head to Deb's</h3><dl><div class="r"><dt>Get there</dt><dd>Library to Deb's: 17 minutes on foot or 10 by cab. From Grand Central: 12 by cab.</dd></div><div class="r"><dt>Do</dt><dd>Leave by 4:30 at the very latest. You need to be at the door at 5:00.</dd></div></dl></div>
+</article>
+<article class="step" id="s-fri-6" data-sid="s-fri-6">
+  <div class="time"><span>5:00p</span><label class="done"><input type="checkbox" aria-label="Mark done: At Deb&#x27;s to help set up Friendsgiving"><i></i></label></div>
+  <div class="main"><h3>At Deb's to help set up Friendsgiving</h3><div class="tags"><span class="tag good">Fixed</span></div><dl><div class="r"><dt>Where</dt><dd>Deb's place.</dd></div><div class="r"><dt>Do</dt><dd>Help set up. This is the one fixed time of your day.</dd></div></dl></div>
+</article>
+<article class="step" id="s-fri-7" data-sid="s-fri-7">
+  <div class="time"><span>6:00p</span><label class="done"><input type="checkbox" aria-label="Mark done: Friendsgiving at Deb&#x27;s"><i></i></label></div>
+  <div class="main"><h3>Friendsgiving at Deb's</h3><div class="tags"><span class="tag good">Fixed</span></div><dl><div class="r"><dt>Where</dt><dd>Deb's place, you're already there.</dd></div><div class="r"><dt>Do</dt><dd>Drinks and catered Thanksgiving bites. Then the group heads out.</dd></div></dl></div>
+</article>
+<article class="step" id="s-fri-8" data-sid="s-fri-8">
+  <div class="time"><span>10:00p</span><label class="done"><input type="checkbox" aria-label="Mark done: After Friendsgiving: optional, nothing booked"><i></i></label></div>
+  <div class="main"><h3>After Friendsgiving: optional, nothing booked</h3><dl><div class="r"><dt>Do</dt><dd>Only if the group wants a drink. Saturday is the speakeasy night, so this is a placeholder. Raines both nights is fine.</dd></div></dl><div class="plans"><h4>If it falls through, or you want something else</h4><ul><li><span class="pl">A</span><span class="pt">Raines Law Room at The William, 24 E 39th St. 8 to 10 minutes by cab. Tables were open for Friday as of Nov 14. <a href="https://resy.com/cities/new-york-ny/venues/the-raines-law-room-at-the-william" target="_blank" rel="noopener">Resy</a></span></li><li><span class="pl">B</span><span class="pt">Dear Irving on Hudson, 310 W 40th, two blocks from Deb's. Resy only showed 4:00 to 4:30pm tables for 4 on Friday as of Nov 17, so treat it as early or walk-in.</span></li><li><span class="pl">C</span><span class="pt">Patent Pending, 49 W 27th. Through a coffee shop to a door in the back. Book a table on its website. 10-minute cab.</span></li><li><span class="pl">D</span><span class="pt">The Flatiron Room NoMad, 37 W 26th. Leather, dark wood, a wall of 1,000 whiskies, live jazz most nights. 212-725-3866.</span></li></ul></div></div>
+</article>
+</section><section class="day" id="sat">
+  <header><p class="date">Saturday, Nov 21</p><h2>The big day: High Line, Radio City, rink, carriage, steak, speakeasy</h2><p class="intro">Three of you all day, Deb joins. Sunset is at 4:35pm, which the carriage ride is timed around.</p>
+  <ol class="glance"><li><a href="#s-sat-0"><b>10:00a</b> High Line</a></li><li><a href="#s-sat-1"><b>11:00a</b> Brunch at Pastis</a></li><li><a href="#s-sat-2"><b>12:15p</b> Cab to Radio City</a></li><li><a href="#s-sat-3"><b>1:00p</b> Stage Door Tour</a></li><li><a href="#s-sat-4"><b>2:00p</b> Free time at Rock Center</a></li><li><a href="#s-sat-5"><b>2:45p</b> Ice skating</a></li><li><a href="#s-sat-6"><b>3:50p</b> Walk to the park</a></li><li><a href="#s-sat-7"><b>4:15p</b> Carriage ride</a></li><li><a href="#s-sat-8"><b>5:00p</b> Back to Deb's</a></li><li><a href="#s-sat-9"><b>7:10p</b> Cab to dinner</a></li><li><a href="#s-sat-10"><b>7:30p</b> Bourbon Steak</a></li><li><a href="#s-sat-11"><b>9:45p</b> Raines, table for 4</a></li></ol></header>
+  <article class="step" id="s-sat-0" data-sid="s-sat-0">
+  <div class="time"><span>10:00a</span><label class="done"><input type="checkbox" aria-label="Mark done: Walk to the High Line and go south"><i></i></label></div>
+  <div class="main"><h3>Walk to the High Line and go south</h3><div class="tags"><span class="tag plain">Free</span></div><dl><div class="r"><dt>Where</dt><dd>Enter at Hudson Yards, W 34th St and 12th Ave. Walk south to Gansevoort St.</dd></div><div class="r"><dt>Get there</dt><dd>About 12 minutes on foot from Deb's (5 by cab). Leave at 10:00.</dd></div><div class="r"><dt>How long</dt><dd>About 40 minutes of walking, so you finish around 11:00. Free, opens 7am.</dd></div><div class="r"><dt>Do</dt><dd>Elevated park past the Chelsea galleries and between buildings. <a href="https://www.thehighline.org/" target="_blank" rel="noopener">High Line map</a></dd></div></dl><div class="plans"><h4>If it falls through, or you want something else</h4><ul><li><span class="pl">B</span><span class="pt">Little Island, a park on 132 concrete tulips over the Hudson, 5 minutes from the High Line's end. Free, no line in November. <a href="https://littleisland.org/" target="_blank" rel="noopener">Little Island</a></span></li><li><span class="pl">C</span><span class="pt">The Whitney, artport: A History of Internet Art. Opens this very day, at the High Line's south end. Timed ticket. <a href="https://whitney.org/exhibitions/artport-25" target="_blank" rel="noopener">Whitney</a></span></li><li><span class="pl">D</span><span class="pt">Cold or wet: The Met's Krasner and Pollock show. Timed tickets online, cab up at 10, cab down to brunch. <a href="https://www.metmuseum.org/" target="_blank" rel="noopener">The Met</a></span></li></ul></div></div>
+</article>
+<article class="step" id="s-sat-1" data-sid="s-sat-1">
+  <div class="time"><span>11:00a</span><label class="done"><input type="checkbox" aria-label="Mark done: Brunch at Pastis"><i></i></label></div>
+  <div class="main"><h3>Brunch at Pastis</h3><div class="tags"><span class="tag warn">Book first</span></div><dl><div class="r"><dt>Where</dt><dd>Pastis, 52 Gansevoort St, Meatpacking District. (212) 929-4844.</dd></div><div class="r"><dt>Get there</dt><dd>3 minutes on foot from the High Line's south end.</dd></div><div class="r"><dt>How long</dt><dd>Ask for the check at 12:05, so you're in the cab by 12:15.</dd></div><div class="r"><dt>Eat</dt><dd>Paris-style brasserie, steak frites, croque monsieur, good eggs. Book 11:00 for 3. <a href="https://pastisnyc.com/" target="_blank" rel="noopener">Book Pastis</a></dd></div></dl><div class="plans"><h4>If it falls through, or you want something else</h4><ul><li><span class="pl">B</span><span class="pt">The Standard Grill, 848 Washington St, 2 minutes away under the High Line. Weekend brunch from 11 in a wood-paneled room. <a href="https://www.standardhotels.com/new-york/features/the-standard-grill" target="_blank" rel="noopener">Book</a></span></li></ul></div></div>
+</article>
+<article class="step" id="s-sat-2" data-sid="s-sat-2">
+  <div class="time"><span>12:15p</span><label class="done"><input type="checkbox" aria-label="Mark done: Cab to Radio City"><i></i></label></div>
+  <div class="main"><h3>Cab to Radio City</h3><dl><div class="r"><dt>Where</dt><dd>Radio City Music Hall, 1260 6th Ave at 50th St.</dd></div><div class="r"><dt>Get there</dt><dd>Cab, 20 to 25 minutes (2.6 miles). You arrive around 12:40, which leaves time to look at the lobby.</dd></div><div class="r"><dt>Do</dt><dd>Tell the driver 50th St between 5th and 6th. The tour's Executive Entrance is on 50th.</dd></div></dl></div>
+</article>
+<article class="step" id="s-sat-3" data-sid="s-sat-3">
+  <div class="time"><span>1:00p</span><label class="done"><input type="checkbox" aria-label="Mark done: Radio City Stage Door Tour"><i></i></label></div>
+  <div class="main"><h3>Radio City Stage Door Tour</h3><div class="tags"><span class="tag warn">Book first</span></div><dl><div class="r"><dt>Where</dt><dd>Radio City Music Hall, Executive Entrance on 50th St between 5th and 6th Aves.</dd></div><div class="r"><dt>How long</dt><dd>About an hour. You're out around 2:00. Tours leave every 30 minutes on Saturday, 10:30am to 4:00pm.</dd></div><div class="r"><dt>Do</dt><dd>A guided walk through the 1932 Art Deco hall and backstage. Reserve a time ahead, since it sells out in this season. Book 3 tickets. <a href="https://www.rockettes.com/christmas/travel-experiences/travel-radio-city-stage-door-tour/" target="_blank" rel="noopener">Book the tour</a></dd></div></dl><div class="plans"><h4>If it falls through, or you want something else</h4><ul><li><span class="pl">B</span><span class="pt">The Rockettes show instead. The 1:00 matinee runs 90 minutes with no intermission and ends about 2:30. Leave Pastis at 12:10 for the 12:35 bag check. All sales final. If 1:00 sells out, take the 10:00 and flip the day. <a href="https://www.rockettes.com/christmas/calendar/" target="_blank" rel="noopener">Buy tickets</a></span></li><li><span class="pl">C</span><span class="pt">The Rockefeller Center Tour. 75-minute walking tour of the Art Deco buildings, sculpture and history, from $27, timed. Saturday slots vary by source, choose one on the official page. <a href="https://www.rockefellercenter.com/tickets/rockefeller-center-tour/" target="_blank" rel="noopener">Book the tour</a></span></li><li><span class="pl">D</span><span class="pt">The NBC Studio Tour at 30 Rock. 75 to 90 minutes behind the scenes. Enter on 6th Ave between 49th and 50th, 3 minutes from Radio City. One recent source lists adults at $84, and none gave confident Saturday times, so check first. No children 7 and under. <a href="https://www.nbc.com/nbc-insider/about-the-tour-nbc-studios-30-rock-how-to-get-tickets" target="_blank" rel="noopener">NBC's tour page</a></span></li><li><span class="pl">E</span><span class="pt">Top of the Rock, on the same plaza. Timed 1:00 or 1:30 entry, about an hour, and you're beside the rink for 2:45. <a href="https://www.rockefellercenter.com/attractions/top-of-the-rock-observation-deck/" target="_blank" rel="noopener">Tickets</a></span></li><li><span class="pl">F</span><span class="pt">Carnegie Hall's tour (Saturday 11:30 and 12:30) clashes with brunch, so it works only if you skip Pastis. The Rose Museum is open Monday to Saturday, 11 to 4:30. 12 minutes on foot from the rink. <a href="https://www.carnegiehall.org/Visit/Tour/Tours" target="_blank" rel="noopener">Carnegie Hall tours</a></span></li></ul></div></div>
+</article>
+<article class="step" id="s-sat-4" data-sid="s-sat-4">
+  <div class="time"><span>2:00p</span><label class="done"><input type="checkbox" aria-label="Mark done: Rockefeller Center, 45 free minutes"><i></i></label></div>
+  <div class="main"><h3>Rockefeller Center, 45 free minutes</h3><div class="tags"><span class="tag plain">Free</span></div><dl><div class="r"><dt>Where</dt><dd>Rockefeller Plaza, between 49th and 50th St. 3 minutes on foot from Radio City.</dd></div><div class="r"><dt>Do</dt><dd>Walk the plaza and the holiday decorations. The tree is usually up by now but dark until the lighting in early December, so expect scaffolding. Warm up with a hot chocolate before the rink.</dd></div><div class="r"><dt>Skip</dt><dd>The Saks Fifth Avenue windows and light show don't unveil until Monday Nov 23.</dd></div></dl></div>
+</article>
+<article class="step" id="s-sat-5" data-sid="s-sat-5">
+  <div class="time"><span>2:45p</span><label class="done"><input type="checkbox" aria-label="Mark done: Skate at The Rink at Rockefeller Center"><i></i></label></div>
+  <div class="main"><h3>Skate at The Rink at Rockefeller Center</h3><div class="tags"><span class="tag warn">Book first</span></div><dl><div class="r"><dt>Where</dt><dd>Rockefeller Plaza, 49th to 50th St.</dd></div><div class="r"><dt>How long</dt><dd>About an hour. Leave by 3:50.</dd></div><div class="r"><dt>Do</dt><dd>Your one skate of the trip. Book a timed General Skate slot (from about $22) for 3, or the VIP Skate, which opened Nov 14 with the new Skate House. <a href="https://www.rockefellercenter.com/tickets/the-rink-at-rockefeller-center/" target="_blank" rel="noopener">Reserve skate time</a></dd></div></dl><div class="plans"><h4>If it falls through, or you want something else</h4><ul><li><span class="pl">B</span><span class="pt">Wollman Rink in Central Park. A swap, not a second skate: bigger rink with the skyline over the trees, timed tickets online, close to the carriage line. Book a 3:15 slot and walk up 6th Ave. <a href="https://wollmanrinknyc.com/" target="_blank" rel="noopener">Wollman tickets</a></span></li></ul></div></div>
+</article>
+<article class="step" id="s-sat-6" data-sid="s-sat-6">
+  <div class="time"><span>3:50p</span><label class="done"><input type="checkbox" aria-label="Mark done: Walk up Fifth Avenue to Central Park South"><i></i></label></div>
+  <div class="main"><h3>Walk up Fifth Avenue to Central Park South</h3><div class="tags"><span class="tag plain">Free</span></div><dl><div class="r"><dt>Where</dt><dd>From the rink to the carriage line at 5th Ave and 59th St.</dd></div><div class="r"><dt>Get there</dt><dd>12 minutes on foot (8 by cab). Walk up Fifth Avenue.</dd></div><div class="r"><dt>Do</dt><dd>Go inside St. Patrick's Cathedral at 50th to 51st St for ten minutes. The 1879 Gothic Revival interior is on your route.</dd></div></dl></div>
+</article>
+<article class="step" id="s-sat-7" data-sid="s-sat-7">
+  <div class="time"><span>4:15p</span><label class="done"><input type="checkbox" aria-label="Mark done: Horse-carriage ride at sunset"><i></i></label></div>
+  <div class="main"><h3>Horse-carriage ride at sunset</h3><div class="tags"><span class="tag plain">Free</span></div><dl><div class="r"><dt>Where</dt><dd>Carriage line, Central Park South between 5th and 6th Aves.</dd></div><div class="r"><dt>How long</dt><dd>20 to 45 minutes. Sunset is 4:35.</dd></div><div class="r"><dt>Do</dt><dd>No booking. Pick a driver and agree the route and the posted city fare before you get in. Bring a scarf. Carriages are still running: Romanch's Law passed the Council 40 to 7 on Oct 22, but it phases them out by June 1, 2028, so nothing stops rides now.</dd></div></dl><div class="plans"><h4>If it falls through, or you want something else</h4><ul><li><span class="pl">B</span><span class="pt">The Palm Court at The Plaza, 5th Ave and 59th, the same corner. Holiday afternoon tea or a drink under the stained-glass skylight. Book 4:15 for 3 on OpenTable and cancel if you ride. (212) 546-5300. <a href="https://www.theplazany.com/dining/the-palm-court" target="_blank" rel="noopener">Book</a></span></li><li><span class="pl">C</span><span class="pt">The Grand Salon at the Baccarat Hotel, 28 W 53rd, 8 minutes from the rink. Cocktails by the fire under crystal chandeliers. About a $75 per person minimum for non-guests. <a href="https://www.opentable.com/r/grand-salon-and-bar-at-baccarat-hotel-new-york" target="_blank" rel="noopener">Book</a></span></li><li><span class="pl">D</span><span class="pt">A private pedicab tour of Central Park with blankets. About $28 to $180 depending on operator and length. Most want 2 or more riders, so check it seats three. <a href="https://www.hellotickets.com/us/new-york/central-park-pedicab-tour/a/pa-32" target="_blank" rel="noopener">See a tour</a></span></li><li><span class="pl">E</span><span class="pt">Top of the Rock at sunset. Book a 4:00 entry, 3 minutes from the rink. <a href="https://www.rockefellercenter.com/attractions/top-of-the-rock-observation-deck/" target="_blank" rel="noopener">Tickets</a></span></li><li><span class="pl">F</span><span class="pt">Free: enter the park at 5th Ave and 59th, walk the Mall to Bethesda Terrace (about 20 minutes) and watch the sunset from the arcade.</span></li></ul></div></div>
+</article>
+<article class="step" id="s-sat-8" data-sid="s-sat-8">
+  <div class="time"><span>5:00p</span><label class="done"><input type="checkbox" aria-label="Mark done: Cab back to Deb&#x27;s to change"><i></i></label></div>
+  <div class="main"><h3>Cab back to Deb's to change</h3><dl><div class="r"><dt>Get there</dt><dd>15 minutes by cab from Central Park South. You're back around 5:15.</dd></div><div class="r"><dt>Do</dt><dd>Two hours to rest and dress. Jacket, no sneakers.</dd></div></dl></div>
+</article>
+<article class="step" id="s-sat-9" data-sid="s-sat-9">
+  <div class="time"><span>7:10p</span><label class="done"><input type="checkbox" aria-label="Mark done: Leave for Bourbon Steak"><i></i></label></div>
+  <div class="main"><h3>Leave for Bourbon Steak</h3><dl><div class="r"><dt>Get there</dt><dd>14 minutes by cab from Deb's to Central Park South. Leave at 7:10 for 7:30.</dd></div></dl></div>
+</article>
+<article class="step" id="s-sat-10" data-sid="s-sat-10">
+  <div class="time"><span>7:30p</span><label class="done"><input type="checkbox" aria-label="Mark done: Dinner at Bourbon Steak"><i></i></label></div>
+  <div class="main"><h3>Dinner at Bourbon Steak</h3><div class="tags"><span class="tag good">Booked</span></div><dl><div class="r"><dt>Where</dt><dd>Bourbon Steak New York, Essex House, 160 Central Park South. 212-484-5120.</dd></div><div class="r"><dt>How long</dt><dd>About two hours. The bar and lounge stay open until 1am if dinner runs long.</dd></div><div class="r"><dt>Eat</dt><dd>Michael Mina's steakhouse inside the 1931 Essex House, facing the park. Booked. <a href="https://michaelmina.net/restaurants/bourbon-steak/new-york" target="_blank" rel="noopener">Menu</a></dd></div></dl></div>
+</article>
+<article class="step" id="s-sat-11" data-sid="s-sat-11">
+  <div class="time"><span>9:45p</span><label class="done"><input type="checkbox" aria-label="Mark done: Cab to Raines Law Room"><i></i></label></div>
+  <div class="main"><h3>Cab to Raines Law Room</h3><div class="tags"><span class="tag good">Booked</span></div><dl><div class="r"><dt>Where</dt><dd>Raines Law Room at The William, 24 E 39th St (Madison and Park).</dd></div><div class="r"><dt>Get there</dt><dd>13 minutes by cab from Bourbon Steak. Table for 4 at 10:15pm.</dd></div><div class="r"><dt>Do</dt><dd>Parlor rooms in a Murray Hill hotel: velvet curtains, tufted leather armchairs, a fireplace. Cancel free before 6:15pm Saturday. After that, or if you're 15 minutes late, it's $15 plus tax per guest.</dd></div><div class="r"><dt>Home</dt><dd>Raines to Deb's is 10 minutes by cab.</dd></div></dl><div class="plans"><h4>If it falls through, or you want something else</h4><ul><li><span class="pl">B</span><span class="pt">Attaboy, 134 Eldridge St (Lower East Side). Mostly walk-in, parties up to 6, a few tables on OpenTable. A wait is possible on a Saturday night. <a href="https://www.opentable.com/r/attaboy-new-york" target="_blank" rel="noopener">OpenTable</a></span></li><li><span class="pl">C</span><span class="pt">Angel's Share, 45 Grove St (West Village). Seated only, groups up to 4, walk-in only per its listing, so go early.</span></li><li><span class="pl">D</span><span class="pt">Please Don't Tell, 113 St Marks Pl. In through the phone booth at Crif Dogs. Resy takes up to 4, but only 12:45 and 1:00am were left on Nov 17. <a href="https://resy.com/cities/new-york-ny/venues/pdt?date=2026-11-21&seats=4" target="_blank" rel="noopener">Resy</a></span></li><li><span class="pl">E</span><span class="pt">The Back Room, 102 Norfolk St (Lower East Side). A Prohibition-era room behind a metal gate. Walk-ins are fine for fewer than 5, but weekends are busy. Call (212) 228-5098.</span></li><li><span class="pl">F</span><span class="pt">Employees Only, 510 Hudson St (West Village). Dinner reservations through 11pm on Resy, drinks at the bar are walk-in. <a href="https://employeesonlynyc.com/reservations" target="_blank" rel="noopener">Reservations</a></span></li></ul></div></div>
+</article>
+</section><section class="day" id="sun">
+  <header><p class="date">Sunday, Nov 22</p><h2>Brunch, then fly home</h2><p class="intro">The Sunday before Thanksgiving week is one of the busiest travel days of the year. Leave early.</p>
+  <ol class="glance"><li><a href="#s-sun-0"><b>11:00a</b> Brunch at Marseille</a></li><li><a href="#s-sun-1"><b>12:45p</b> Leave for JFK</a></li></ol></header>
+  <article class="step" id="s-sun-0" data-sid="s-sun-0">
+  <div class="time"><span>11:00a</span><label class="done"><input type="checkbox" aria-label="Mark done: Brunch at Marseille"><i></i></label></div>
+  <div class="main"><h3>Brunch at Marseille</h3><div class="tags"><span class="tag warn">Book first</span></div><dl><div class="r"><dt>Where</dt><dd>Marseille, 630 9th Ave at 44th St. 212-333-2323.</dd></div><div class="r"><dt>Get there</dt><dd>6 blocks up 9th Ave, about 7 minutes on foot. No cab needed with your bag.</dd></div><div class="r"><dt>How long</dt><dd>An hour and a half at most.</dd></div><div class="r"><dt>Eat</dt><dd>Paris-style brasserie, a Hell's Kitchen brunch fixture. <a href="https://www.opentable.com/r/marseille-new-york" target="_blank" rel="noopener">Book on OpenTable</a></dd></div></dl><div class="plans"><h4>If it falls through, or you want something else</h4><ul><li><span class="pl">B</span><span class="pt">Grab-and-go from Fresh From Hell, 9th Ave between 46th and 47th, if you're running late.</span></li><li><span class="pl">C</span><span class="pt">If the Brooklyn Bridge moved here because of rain: leave Deb's at 9, A/C to High St, walk back to City Hall and take the subway home. You're back by noon. Skip the sit-down brunch.</span></li></ul></div></div>
+</article>
+<article class="step" id="s-sun-1" data-sid="s-sun-1">
+  <div class="time"><span>12:45p</span><label class="done"><input type="checkbox" aria-label="Mark done: Leave for JFK"><i></i></label></div>
+  <div class="main"><h3>Leave for JFK</h3><dl><div class="r"><dt>Where</dt><dd>JFK Terminal 5, JetBlue. Flight at 3:45pm.</dd></div><div class="r"><dt>Get there</dt><dd>Cab from Deb's, 45 to 60 minutes on a heavy travel day, so you arrive around 2:00. Check in on the JetBlue app first.</dd></div><div class="r"><dt>Do</dt><dd>Leave by 12:45 even if it feels early.</dd></div></dl></div>
+</article>
+</section>
+
+<div class="panel">
+  <h2>Phone numbers</h2>
+  <p class="sub">Tap and hold to copy.</p>
+  <ul class="phones"><li><span>Tavola</span><span class="mono">(212) 273-1181</span></li><li><span>Bar Centrale</span><span class="mono">(212) 581-3130</span></li><li><span>Pastis</span><span class="mono">(212) 929-4844</span></li><li><span>Palm Court</span><span class="mono">(212) 546-5300</span></li><li><span>Bourbon Steak</span><span class="mono">212-484-5120</span></li><li><span>Marseille</span><span class="mono">212-333-2323</span></li><li><span>Oyster Bar</span><span class="mono">212-490-6650</span></li><li><span>The Back Room</span><span class="mono">(212) 228-5098</span></li><li><span>Flatiron Room</span><span class="mono">212-725-3866</span></li><li><span>Cipriani Dolci</span><span class="mono">(212) 973-0999</span></li></ul>
+</div>
+<p class="foot">Walking times are an easy city pace. Cab times are daytime traffic and run longer at rush hour. They are estimates, not live traffic. Prices, hours and availability were checked online between Nov 14 and 18, 2026, so confirm anything that matters the day before.</p>
+</div>
+<script>
+(function(){
+  var KEY="nyc-run-sheet-done", done={};
+  try{done=JSON.parse(localStorage.getItem(KEY)||"{}")}catch(e){done={}}
+  document.querySelectorAll(".step").forEach(function(el){
+    var id=el.getAttribute("data-sid"), cb=el.querySelector("input");
+    if(done[id]){cb.checked=true;el.classList.add("is-done")}
+    cb.addEventListener("change",function(){
+      el.classList.toggle("is-done",cb.checked);
+      if(cb.checked){done[id]=1}else{delete done[id]}
+      try{localStorage.setItem(KEY,JSON.stringify(done))}catch(e){}
+    });
+  });
+})();
+</script>
+</body>
+</html>
